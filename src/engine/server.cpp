@@ -147,7 +147,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 
 	pos = host.Find('/');
 	if (pos != -1) {
-		path = CServerPath(host.Mid(pos));
+		path = CServerPath(host.Mid(pos).ToStdWstring());
 		host = host.Left(pos);
 	}
 

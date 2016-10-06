@@ -45,7 +45,7 @@ public:
 	bool UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, Filetype type = file, int64_t size = -1);
 	bool RemoveFile(const CServer &server, const CServerPath &path, const wxString& filename);
 	void InvalidateServer(const CServer& server);
-	void RemoveDir(const CServer& server, const CServerPath& path, const wxString& filename, const CServerPath& target);
+	void RemoveDir(const CServer& server, const CServerPath& path, std::wstring const& filename, CServerPath const& target);
 	void Rename(const CServer& server, const CServerPath& pathFrom, const wxString& fileFrom, const CServerPath& pathTo, const wxString& fileTo);
 
 protected:

@@ -96,19 +96,23 @@ void CPathCache::InvalidatePath(tServerCache & serverCache, CServerPath const& p
 
 	if (target.empty() && !subdir.empty()) {
 		target = path;
-		if (!target.AddSegment(subdir))
+		if (!target.AddSegment(subdir.ToStdWstring())) {
 			return;
+		}
 	}
 
 	if (!target.empty()) {
 		// Unfortunately O(n), don't know of a faster way.
 		for (serverIter = serverCache.begin(); serverIter != serverCache.end(); ) {
-			if (serverIter->second == target || target.IsParentOf(serverIter->second, false))
+			if (serverIter->second == target || target.IsParentOf(serverIter->second, false)) {
 				serverCache.erase(serverIter++);
-			else if (serverIter->first.source == target || target.IsParentOf(serverIter->first.source, false))
+			}
+			else if (serverIter->first.source == target || target.IsParentOf(serverIter->first.source, false)) {
 				serverCache.erase(serverIter++);
-			else
+			}
+			else {
 				++serverIter;
+			}
 		}
 	}
 }

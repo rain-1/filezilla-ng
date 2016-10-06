@@ -233,20 +233,20 @@ void CQueueStorage::Impl::ReadLocalPaths()
 
 void CQueueStorage::Impl::ReadRemotePaths()
 {
-	if (!selectRemotePathQuery_)
+	if (!selectRemotePathQuery_) {
 		return;
+	}
 
 	int res;
-	do
-	{
+	do {
 		res = sqlite3_step(selectRemotePathQuery_);
-		if (res == SQLITE_ROW)
-		{
+		if (res == SQLITE_ROW) {
 			int64_t id = GetColumnInt64(selectRemotePathQuery_, path_table_column_names::id);
-			wxString remotePathRaw = GetColumnText(selectRemotePathQuery_, path_table_column_names::path);
+			std::wstring remotePathRaw = GetColumnText(selectRemotePathQuery_, path_table_column_names::path).ToStdWstring();
 			CServerPath remotePath;
-			if (id > 0 && !remotePathRaw.empty() && remotePath.SetSafePath(remotePathRaw))
+			if (id > 0 && !remotePathRaw.empty() && remotePath.SetSafePath(remotePathRaw)) {
 				reverseRemotePaths_[id] = remotePath;
+			}
 		}
 	}
 	while (res == SQLITE_BUSY || res == SQLITE_ROW);

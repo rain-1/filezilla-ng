@@ -71,7 +71,7 @@ public:
 	CServerPath path;
 	CServerPath currentPath;
 	CServerPath commonParent;
-	std::vector<wxString> segments;
+	std::vector<std::wstring> segments;
 };
 
 class CChangeDirOpData : public COpData
@@ -89,7 +89,7 @@ public:
 	}
 
 	CServerPath path;
-	wxString subDir;
+	std::wstring subDir;
 	bool tryMkdOnFail;
 	CServerPath target;
 
@@ -129,7 +129,7 @@ public:
 							 CFileTransferCommand::t_transferSettings const& transferSettings);
 	virtual int RawCommand(const wxString& command = wxString());
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
-	virtual int RemoveDir(const CServerPath& path = CServerPath(), const wxString& subDir = wxString());
+	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
 	virtual int Mkdir(const CServerPath& path);
 	virtual int Rename(const CRenameCommand& command);
 	virtual int Chmod(const CChmodCommand& command);

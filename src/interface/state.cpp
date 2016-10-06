@@ -654,10 +654,12 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const w
 	}
 
 	CServerPath path = m_pDirectoryListing->path;
-	if (subdir == _T("..") && path.HasParent())
+	if (subdir == _T("..") && path.HasParent()) {
 		path = path.GetParent();
-	else if (!subdir.empty())
-		path.AddSegment(subdir);
+	}
+	else if (!subdir.empty()) {
+		path.AddSegment(subdir.ToStdWstring());
+	}
 
 	UploadDroppedFiles(pFileDataObject, path, queueOnly);
 }
@@ -1111,29 +1113,33 @@ CLocalPath CState::GetSynchronizedDirectory(CServerPath remote_path)
 
 CServerPath CState::GetSynchronizedDirectory(CLocalPath local_path)
 {
-	std::list<wxString> segments;
+	std::list<std::wstring> segments;
 	while (local_path.HasParent() && local_path != m_sync_browse.local_root) {
 		wxString last;
 		local_path.MakeParent(&last);
-		segments.push_front(last);
+		segments.push_front(last.ToStdWstring());
 	}
-	if (local_path != m_sync_browse.local_root)
+	if (local_path != m_sync_browse.local_root) {
 		return CServerPath();
+	}
 
 	CServerPath remote_path = m_sync_browse.remote_root;
-	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); ++iter)
-		remote_path.AddSegment(*iter);
+	for (auto const& segment : segments) {
+		remote_path.AddSegment(segment);
+	}
 
 	return remote_path;
 }
 
 bool CState::RefreshRemote()
 {
-	if (!m_pCommandQueue)
+	if (!m_pCommandQueue) {
 		return false;
+	}
 
-	if (!IsRemoteConnected() || !IsRemoteIdle(true))
+	if (!IsRemoteConnected() || !IsRemoteIdle(true)) {
 		return false;
+	}
 
 	return ChangeRemoteDir(GetRemotePath(), _T(""), LIST_FLAG_REFRESH);
 }

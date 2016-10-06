@@ -254,47 +254,57 @@ void CRemoteDataObject::Finalize()
 bool CRemoteDataObject::SetData(size_t len, const void* buf)
 {
 	char* data = (char*)buf;
-	if (!len || data[len - 1] != 0)
+	if (!len || data[len - 1] != 0) {
 		return false;
+	}
 
-	if (!m_xmlFile.ParseData(data))
+	if (!m_xmlFile.ParseData(data)) {
 		return false;
+	}
 
 	auto element = m_xmlFile.GetElement();
-	if (!element || !(element = element.child("RemoteDataObject")))
+	if (!element || !(element = element.child("RemoteDataObject"))) {
 		return false;
+	}
 
 	m_processId = GetTextElementInt(element, "ProcessId", -1);
-	if (m_processId == -1)
+	if (m_processId == -1) {
 		return false;
+	}
 
 	auto server = element.child("Server");
-	if (!server || !::GetServer(server, m_server))
+	if (!server || !::GetServer(server, m_server)) {
 		return false;
+	}
 
-	wxString path = GetTextElement(element, "Path");
-	if (path.empty() || !m_path.SetSafePath(path))
+	std::wstring path = GetTextElement(element, "Path").ToStdWstring();
+	if (path.empty() || !m_path.SetSafePath(path)) {
 		return false;
+	}
 
 	m_fileList.clear();
 	auto files = element.child("Files");
-	if (!files)
+	if (!files) {
 		return false;
+	}
 
 	for (auto file = files.child("File"); file; file = file.next_sibling("File")) {
 		t_fileInfo info;
 		info.name = GetTextElement(file, "Name");
-		if (info.name.empty())
+		if (info.name.empty()) {
 			return false;
+		}
 
 		const int dir = GetTextElementInt(file, "Dir", -1);
-		if (dir == -1)
+		if (dir == -1) {
 			return false;
+		}
 		info.dir = dir == 1;
 
 		info.size = GetTextElementInt(file, "Size", -2);
-		if (info.size <= -2)
+		if (info.size <= -2) {
 			return false;
+		}
 
 		info.link = GetTextElementBool(file, "Link", false);
 

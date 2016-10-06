@@ -334,7 +334,7 @@ bool CDirectoryCache::GetChangeTime(fz::monotonic_clock& time, const CServer &se
 	return false;
 }
 
-void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, const wxString& filename, const CServerPath&)
+void CDirectoryCache::RemoveDir(CServer const& server, CServerPath const& path, std::wstring const& filename, CServerPath const&)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -342,12 +342,14 @@ void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, 
 	// Perhaps just throw away the complete cache?
 
 	tServerIter sit = GetServerEntry(server);
-	if (sit == m_serverList.end())
+	if (sit == m_serverList.end()) {
 		return;
+	}
 
 	CServerPath absolutePath = path;
-	if (!absolutePath.AddSegment(filename))
+	if (!absolutePath.AddSegment(filename)) {
 		absolutePath.clear();
+	}
 
 	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ) {
 		auto & entry = const_cast<CCacheEntry&>(*iter);
@@ -374,33 +376,30 @@ void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom,
 	fz::scoped_lock lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
-	if (sit == m_serverList.end())
+	if (sit == m_serverList.end()) {
 		return;
+	}
 
 	tCacheIter iter;
 	bool is_outdated = false;
 	bool found = Lookup(iter, sit, pathFrom, true, is_outdated);
 	if (found) {
 		auto & listing = const_cast<CDirectoryListing&>(iter->listing);
-		if (pathFrom == pathTo)
-		{
+		if (pathFrom == pathTo) {
 			RemoveFile(server, pathFrom, fileTo);
 			unsigned int i;
-			for (i = 0; i < listing.GetCount(); i++)
-			{
-				if (listing[i].name == fileFrom)
+			for (i = 0; i < listing.GetCount(); ++i) {
+				if (listing[i].name == fileFrom) {
 					break;
+				}
 			}
-			if (i != listing.GetCount())
-			{
-				if (listing[i].is_dir())
-				{
-					RemoveDir(server, pathFrom, fileFrom, CServerPath());
-					RemoveDir(server, pathFrom, fileTo, CServerPath());
+			if (i != listing.GetCount()) {
+				if (listing[i].is_dir()) {
+					RemoveDir(server, pathFrom, fileFrom.ToStdWstring(), CServerPath());
+					RemoveDir(server, pathFrom, fileTo.ToStdWstring(), CServerPath());
 					UpdateFile(server, pathFrom, fileTo, true, dir);
 				}
-				else
-				{
+				else {
 					listing[i].name = fileTo;
 					listing[i].flags |= CDirentry::flag_unsure;
 					listing.m_flags |= CDirectoryListing::unsure_unknown;
@@ -411,17 +410,18 @@ void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom,
 		}
 		else {
 			unsigned int i;
-			for (i = 0; i < listing.GetCount(); i++) {
-				if (listing[i].name == fileFrom)
+			for (i = 0; i < listing.GetCount(); ++i) {
+				if (listing[i].name == fileFrom) {
 					break;
+				}
 			}
 			if (i != listing.GetCount()) {
 				if (listing[i].is_dir()) {
-					RemoveDir(server, pathFrom, fileFrom, CServerPath());
+					RemoveDir(server, pathFrom, fileFrom.ToStdWstring(), CServerPath());
 					UpdateFile(server, pathTo, fileTo, true, dir);
 				}
 				else {
-					RemoveFile(server, pathFrom, fileFrom);
+					RemoveFile(server, pathFrom, fileFrom.ToStdWstring());
 					UpdateFile(server, pathTo, fileTo, true, file);
 				}
 			}

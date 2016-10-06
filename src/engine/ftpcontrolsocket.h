@@ -59,7 +59,7 @@ protected:
 	int DeleteSend();
 	int DeleteParseResponse();
 
-	virtual int RemoveDir(const CServerPath& path, const wxString& subDir);
+	virtual int RemoveDir(CServerPath const& path, std::wstring const& subDir);
 	int RemoveDirSubcommandResult(int prevResult);
 	int RemoveDirSend();
 	int RemoveDirParseResponse();

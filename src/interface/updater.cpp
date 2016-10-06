@@ -307,7 +307,7 @@ bool CUpdater::CreateTransferCommand(wxString const& url, std::wstring const& lo
 	if (!s.ParseUrl(url, 0, wxString(), wxString(), error, path) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS)) {
 		return false;
 	}
-	std::wstring file = path.GetLastSegment().ToStdWstring();
+	std::wstring file = path.GetLastSegment();
 	path = path.GetParent();
 
 	pending_commands_.emplace_back(new CFileTransferCommand(local_file, path, file, true, transferSettings));
