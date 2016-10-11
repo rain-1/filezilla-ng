@@ -38,7 +38,7 @@ public:
 
 	int64_t GetFile(CFileItem** pItem, int64_t server);
 
-	static wxString GetDatabaseFilename();
+	static std::wstring GetDatabaseFilename();
 
 private:
 	Impl* d_;
