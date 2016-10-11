@@ -119,7 +119,7 @@ public:
 	{
 	}
 
-	wxString challenge; // Used for interactive logons
+	std::wstring challenge; // Used for interactive logons
 	bool waitChallenge;
 	bool waitForAsyncRequest;
 	bool gotPassword;
@@ -226,27 +226,28 @@ void CFtpControlSocket::OnReceive()
 				p == 0)
 			{
 				int len = i - (start - m_receiveBuffer);
-				if (!len)
-				{
+				if (!len) {
 					++start;
 					continue;
 				}
 
 				p = 0;
-				wxString line = ConvToLocal(start, i + 1 - (start - m_receiveBuffer));
+				std::wstring line = ConvToLocal(start, i + 1 - (start - m_receiveBuffer));
 				start = m_receiveBuffer + i + 1;
 
 				ParseLine(line);
 
 				// Abort if connection got closed
-				if (!m_pCurrentServer)
+				if (!m_pCurrentServer) {
 					return;
+				}
 			}
 		}
 		memmove(m_receiveBuffer, start, m_bufferLen - (start - m_receiveBuffer));
 		m_bufferLen -= (start -m_receiveBuffer);
-		if (m_bufferLen > MAXLINELEN)
+		if (m_bufferLen > MAXLINELEN) {
 			m_bufferLen = MAXLINELEN;
+		}
 	}
 }
 
@@ -306,7 +307,7 @@ void CFtpControlSocket::ParseFeat(wxString line)
 		CServerCapabilities::SetCapability(*m_pCurrentServer, epsv_command, yes);
 }
 
-void CFtpControlSocket::ParseLine(wxString line)
+void CFtpControlSocket::ParseLine(std::wstring line)
 {
 	m_rtt.Stop();
 	LogMessageRaw(MessageType::Response, line);
@@ -315,7 +316,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 	if (m_pCurOpData && m_pCurOpData->opId == Command::connect) {
 		CFtpLogonOpData* pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
 		if (pData->waitChallenge) {
-			wxString& challenge = pData->challenge;
+			std::wstring& challenge = pData->challenge;
 			if (!challenge.empty())
 #ifdef __WXMSW__
 				challenge += _T("\r\n");
@@ -329,7 +330,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 		}
 		else if (pData->opState == LOGON_WELCOME) {
 			if (!pData->gotFirstWelcomeLine) {
-				if (line.Upper().Left(3) == _T("SSH")) {
+				if (fz::str_tolower_ascii(line).substr(0, 3) == _T("ssh")) {
 					LogMessage(MessageType::Error, _("Cannot establish FTP connection to an SFTP server. Please select proper protocol."));
 					DoClose(FZ_REPLY_CRITICALERROR);
 					return;
@@ -339,9 +340,9 @@ void CFtpControlSocket::ParseLine(wxString line)
 		}
 	}
 	//Check for multi-line responses
-	if (line.Len() > 3) {
+	if (line.size() > 3) {
 		if (!m_MultilineResponseCode.empty()) {
-			if (line.Left(4) == m_MultilineResponseCode) {
+			if (line.substr(0, 4) == m_MultilineResponseCode) {
 				// end of multi-line found
 				m_MultilineResponseCode.clear();
 				m_Response = line;
@@ -349,13 +350,14 @@ void CFtpControlSocket::ParseLine(wxString line)
 				m_Response = _T("");
 				m_MultilineResponseLines.clear();
 			}
-			else
+			else {
 				m_MultilineResponseLines.push_back(line);
+			}
 		}
 		// start of new multi-line
-		else if (line.GetChar(3) == '-') {
+		else if (line[3] == '-') {
 			// DDD<SP> is the end of a multi-line response
-			m_MultilineResponseCode = line.Left(3) + _T(" ");
+			m_MultilineResponseCode = line.substr(0, 3) + _T(" ");
 			m_MultilineResponseLines.push_back(line);
 		}
 		else {
@@ -857,8 +859,8 @@ int CFtpControlSocket::LogonParseResponse()
 			else if (m_Response.Len() > 12 && m_Response.Mid(3, 9).Upper() == _T(" NONSTOP "))
 				m_pCurrentServer->SetType(HPNONSTOP);
 
-			if (!m_MultilineResponseLines.empty() && m_MultilineResponseLines.front().Mid(4, 4).Upper() == _T("Z/VM")) {
-				CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_MultilineResponseLines.front().Mid(4) + _T(" ") + m_Response.Mid(4));
+			if (!m_MultilineResponseLines.empty() && fz::str_tolower_ascii(m_MultilineResponseLines.front().substr(4, 4)) == _T("z/vm")) {
+				CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_MultilineResponseLines.front().substr(4) + _T(" ") + m_Response.Mid(4));
 				m_pCurrentServer->SetType(ZVM);
 			}
 		}

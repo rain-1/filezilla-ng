@@ -88,7 +88,7 @@ protected:
 	bool SendCommand(wxString const& str, bool maskArgs = false, bool measureRTT = true);
 
 	// Parse the latest reply line from the server
-	void ParseLine(wxString line);
+	void ParseLine(std::wstring line);
 
 	// Parse the actual response and delegate it to the handlers.
 	// It's the last line in a multi-line response.
@@ -124,8 +124,8 @@ protected:
 	bool GetLoginSequence(const CServer& server);
 
 	wxString m_Response;
-	wxString m_MultilineResponseCode;
-	std::vector<wxString> m_MultilineResponseLines;
+	std::wstring m_MultilineResponseCode;
+	std::vector<std::wstring> m_MultilineResponseLines;
 
 	CTransferSocket *m_pTransferSocket;
 

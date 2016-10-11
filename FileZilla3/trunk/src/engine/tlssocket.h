@@ -96,7 +96,7 @@ protected:
 	bool GetSortedPeerCertificates(gnutls_x509_crt_t *& certs, unsigned int & certs_size);
 
 	bool ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out);
-	std::vector<wxString> GetCertSubjectAltNames(gnutls_x509_crt_t cert);
+	std::vector<std::wstring> GetCertSubjectAltNames(gnutls_x509_crt_t cert);
 
 	bool m_canReadFromSocket{true};
 	bool m_canWriteToSocket{true};

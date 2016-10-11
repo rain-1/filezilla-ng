@@ -190,7 +190,7 @@ public:
 		keyfile
 	};
 
-	CInteractiveLoginNotification(type t, const wxString& challenge, bool repeated);
+	CInteractiveLoginNotification(type t, std::wstring const& challenge, bool repeated);
 	virtual RequestId GetRequestID() const;
 
 	// Set to true if you have set a password
@@ -199,7 +199,7 @@ public:
 	// Set password by calling server.SetUser
 	CServer server;
 
-	const wxString& GetChallenge() const { return m_challenge; }
+	std::wstring const& GetChallenge() const { return m_challenge; }
 
 	type GetType() const { return m_type; }
 
@@ -207,7 +207,7 @@ public:
 
 protected:
 	// Password prompt string as given by the server
-	wxString const m_challenge;
+	std::wstring const m_challenge;
 
 	type const m_type;
 
@@ -272,12 +272,12 @@ protected:
 class CHostKeyNotification final : public CAsyncRequestNotification
 {
 public:
-	CHostKeyNotification(wxString host, int port, wxString fingerprint, bool changed = false);
+	CHostKeyNotification(std::wstring const& host, int port, std::wstring const& fingerprint, bool changed = false);
 	virtual RequestId GetRequestID() const;
 
-	wxString GetHost() const;
+	std::wstring GetHost() const;
 	int GetPort() const;
-	wxString GetFingerprint() const;
+	std::wstring GetFingerprint() const;
 
 	// Set to true if you trust the server
 	bool m_trust{};
@@ -288,9 +288,9 @@ public:
 
 protected:
 
-	const wxString m_host;
+	const std::wstring m_host;
 	const int m_port;
-	const wxString m_fingerprint;
+	const std::wstring m_fingerprint;
 	const bool m_changed;
 };
 
@@ -314,14 +314,14 @@ public:
 	CCertificate(
 		unsigned char const* rawData, unsigned int len,
 		fz::datetime const& activationTime, fz::datetime const& expirationTime,
-		wxString const& serial,
-		wxString const& pkalgoname, unsigned int bits,
-		wxString const& signalgoname,
-		wxString const& fingerprint_sha256,
-		wxString const& fingerprint_sha1,
-		wxString const& issuer,
-		wxString const& subject,
-		std::vector<wxString> const& altSubjectNames);
+		std::wstring const& serial,
+		std::wstring const& pkalgoname, unsigned int bits,
+		std::wstring const& signalgoname,
+		std::wstring const& fingerprint_sha256,
+		std::wstring const& fingerprint_sha1,
+		std::wstring const& issuer,
+		std::wstring const& subject,
+		std::vector<std::wstring> const& altSubjectNames);
 
 	CCertificate(CCertificate const& op);
 	~CCertificate();
@@ -330,21 +330,21 @@ public:
 	fz::datetime GetActivationTime() const { return m_activationTime; }
 	fz::datetime GetExpirationTime() const { return m_expirationTime; }
 
-	const wxString& GetSerial() const { return m_serial; }
-	const wxString& GetPkAlgoName() const { return m_pkalgoname; }
+	std::wstring const& GetSerial() const { return m_serial; }
+	std::wstring const& GetPkAlgoName() const { return m_pkalgoname; }
 	unsigned int GetPkAlgoBits() const { return m_pkalgobits; }
 
-	const wxString& GetSignatureAlgorithm() const { return m_signalgoname; }
+	std::wstring const& GetSignatureAlgorithm() const { return m_signalgoname; }
 
-	const wxString& GetFingerPrintSHA256() const { return m_fingerprint_sha256; }
-	const wxString& GetFingerPrintSHA1() const { return m_fingerprint_sha1; }
+	std::wstring const& GetFingerPrintSHA256() const { return m_fingerprint_sha256; }
+	std::wstring const& GetFingerPrintSHA1() const { return m_fingerprint_sha1; }
 
-	const wxString& GetSubject() const { return m_subject; }
-	const wxString& GetIssuer() const { return m_issuer; }
+	std::wstring const& GetSubject() const { return m_subject; }
+	std::wstring const& GetIssuer() const { return m_issuer; }
 
 	CCertificate& operator=(CCertificate const& op);
 
-	std::vector<wxString> const& GetAltSubjectNames() const { return m_altSubjectNames; }
+	std::vector<std::wstring> const& GetAltSubjectNames() const { return m_altSubjectNames; }
 
 private:
 	fz::datetime m_activationTime;
@@ -353,45 +353,45 @@ private:
 	unsigned char* m_rawData{};
 	unsigned int m_len{};
 
-	wxString m_serial;
-	wxString m_pkalgoname;
+	std::wstring m_serial;
+	std::wstring m_pkalgoname;
 	unsigned int m_pkalgobits{};
 
-	wxString m_signalgoname;
+	std::wstring m_signalgoname;
 
-	wxString m_fingerprint_sha256;
-	wxString m_fingerprint_sha1;
+	std::wstring m_fingerprint_sha256;
+	std::wstring m_fingerprint_sha1;
 
-	wxString m_issuer;
-	wxString m_subject;
+	std::wstring m_issuer;
+	std::wstring m_subject;
 
-	std::vector<wxString> m_altSubjectNames;
+	std::vector<std::wstring> m_altSubjectNames;
 };
 
 class CCertificateNotification final : public CAsyncRequestNotification
 {
 public:
-	CCertificateNotification(const wxString& host, unsigned int port,
-		const wxString& protocol,
-		const wxString& keyExchange,
-		const wxString& sessionCipher,
-		const wxString& sessionMac,
+	CCertificateNotification(std::wstring const& host, unsigned int port,
+		std::wstring const& protocol,
+		std::wstring const& keyExchange,
+		std::wstring const& sessionCipher,
+		std::wstring const& sessionMac,
 		int algorithmWarnings,
 		std::vector<CCertificate> && certificates);
 	virtual RequestId GetRequestID() const { return reqId_certificate; }
 
-	const wxString& GetHost() const { return m_host; }
+	std::wstring const& GetHost() const { return m_host; }
 	unsigned int GetPort() const { return m_port; }
 
-	const wxString& GetSessionCipher() const { return m_sessionCipher; }
-	const wxString& GetSessionMac() const { return m_sessionMac; }
+	std::wstring const& GetSessionCipher() const { return m_sessionCipher; }
+	std::wstring const& GetSessionMac() const { return m_sessionMac; }
 
 	bool m_trusted{};
 
 	const std::vector<CCertificate> GetCertificates() const { return m_certificates; }
 
-	const wxString& GetProtocol() const { return m_protocol; }
-	const wxString& GetKeyExchange() const { return m_keyExchange; }
+	std::wstring const& GetProtocol() const { return m_protocol; }
+	std::wstring const& GetKeyExchange() const { return m_keyExchange; }
 
 	enum algorithm_warnings_t
 	{
@@ -404,13 +404,13 @@ public:
 	int GetAlgorithmWarnings() const { return m_algorithmWarnings; }
 
 private:
-	wxString m_host;
+	std::wstring m_host;
 	unsigned int m_port{};
 
-	wxString m_protocol;
-	wxString m_keyExchange;
-	wxString m_sessionCipher;
-	wxString m_sessionMac;
+	std::wstring m_protocol;
+	std::wstring m_keyExchange;
+	std::wstring m_sessionCipher;
+	std::wstring m_sessionMac;
 	int m_algorithmWarnings{};
 
 	std::vector<CCertificate> m_certificates;
@@ -419,14 +419,14 @@ private:
 class CSftpEncryptionNotification : public CNotificationHelper<nId_sftp_encryption>
 {
 public:
-	wxString hostKey;
-	wxString kexAlgorithm;
-	wxString kexHash;
-	wxString kexCurve;
-	wxString cipherClientToServer;
-	wxString cipherServerToClient;
-	wxString macClientToServer;
-	wxString macServerToClient;
+	std::wstring hostKey;
+	std::wstring kexAlgorithm;
+	std::wstring kexHash;
+	std::wstring kexCurve;
+	std::wstring cipherClientToServer;
+	std::wstring cipherServerToClient;
+	std::wstring macClientToServer;
+	std::wstring macServerToClient;
 };
 
 class CLocalDirCreatedNotification : public CNotificationHelper<nId_local_dir_created>
