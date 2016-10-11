@@ -134,7 +134,7 @@ bool CSiteManager::Load(pugi::xml_node element, CSiteManagerXmlHandler& handler)
 bool CSiteManager::ReadBookmarkElement(Bookmark & bookmark, pugi::xml_node element)
 {
 	bookmark.m_localDir = GetTextElement(element, "LocalDir");
-	bookmark.m_remoteDir.SetSafePath(GetTextElement(element, "RemoteDir").ToStdWstring());
+	bookmark.m_remoteDir.SetSafePath(GetTextElement(element, "RemoteDir"));
 
 	if (bookmark.m_localDir.empty() && bookmark.m_remoteDir.empty()) {
 		return false;

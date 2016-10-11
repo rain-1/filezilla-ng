@@ -277,7 +277,7 @@ bool CRemoteDataObject::SetData(size_t len, const void* buf)
 		return false;
 	}
 
-	std::wstring path = GetTextElement(element, "Path").ToStdWstring();
+	std::wstring path = GetTextElement(element, "Path");
 	if (path.empty() || !m_path.SetSafePath(path)) {
 		return false;
 	}

@@ -234,11 +234,11 @@ wxString GetTextElement_Trimmed(pugi::xml_node node, const char* name)
 	return t;
 }
 
-wxString GetTextElement(pugi::xml_node node, const char* name)
+std::wstring GetTextElement(pugi::xml_node node, const char* name)
 {
 	wxASSERT(node);
 
-	return ConvLocal(node.child_value(name));
+	return fz::to_wstring_from_utf8(node.child_value(name));
 }
 
 wxString GetTextElement_Trimmed(pugi::xml_node node)
@@ -250,11 +250,11 @@ wxString GetTextElement_Trimmed(pugi::xml_node node)
 	return t;
 }
 
-wxString GetTextElement(pugi::xml_node node)
+std::wstring GetTextElement(pugi::xml_node node)
 {
 	wxASSERT(node);
 
-	return ConvLocal(node.child_value());
+	return fz::to_wstring_from_utf8(node.child_value());
 }
 
 int64_t GetTextElementInt(pugi::xml_node node, const char* name, int defValue /*=0*/)
@@ -364,7 +364,7 @@ bool GetServer(pugi::xml_node node, CServer& server)
 {
 	wxASSERT(node);
 
-	std::wstring host = GetTextElement(node, "Host").ToStdWstring();
+	std::wstring host = GetTextElement(node, "Host");
 	if (host.empty()) {
 		return false;
 	}
@@ -399,7 +399,7 @@ bool GetServer(pugi::xml_node node, CServer& server)
 	server.SetLogonType(static_cast<LogonType>(logonType));
 
 	if (server.GetLogonType() != ANONYMOUS) {
-		std::wstring user = GetTextElement(node, "User").ToStdWstring();
+		std::wstring user = GetTextElement(node, "User");
 
 		std::wstring pass, key;
 		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType) {
@@ -416,12 +416,12 @@ bool GetServer(pugi::xml_node node, CServer& server)
 					server.SetLogonType(ASK);
 				}
 				else {
-					pass = GetTextElement(passElement).ToStdWstring();
+					pass = GetTextElement(passElement);
 				}
 			}
 		}
 		else if ((long)KEY == logonType) {
-			key = GetTextElement(node, "Keyfile").ToStdWstring();
+			key = GetTextElement(node, "Keyfile");
 
 			// password should be empty if we're using a key file
 			pass.clear();
@@ -434,7 +434,7 @@ bool GetServer(pugi::xml_node node, CServer& server)
 		}
 
 		if ((long)ACCOUNT == logonType) {
-			std::wstring account = GetTextElement(node, "Account").ToStdWstring();
+			std::wstring account = GetTextElement(node, "Account");
 			if (account.empty()) {
 				return false;
 			}
@@ -468,7 +468,7 @@ bool GetServer(pugi::xml_node node, CServer& server)
 		server.SetEncodingType(ENCODING_UTF8);
 	}
 	else if (encodingType == _T("Custom")) {
-		std::wstring customEncoding = GetTextElement(node, "CustomEncoding").ToStdWstring();
+		std::wstring customEncoding = GetTextElement(node, "CustomEncoding");
 		if (customEncoding.empty()) {
 			return false;
 		}
@@ -485,7 +485,7 @@ bool GetServer(pugi::xml_node node, CServer& server)
 		auto element = node.child("PostLoginCommands");
 		if (element) {
 			for (auto commandElement = element.child("Command"); commandElement; commandElement = commandElement.next_sibling("Command")) {
-				std::wstring command = ConvLocal(commandElement.child_value()).ToStdWstring();
+				std::wstring command = fz::to_wstring_from_utf8(commandElement.child_value());
 				if (!command.empty()) {
 					postLoginCommands.emplace_back(std::move(command));
 				}

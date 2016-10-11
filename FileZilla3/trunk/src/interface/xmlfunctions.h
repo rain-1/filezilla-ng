@@ -94,11 +94,11 @@ void AddTextElement(pugi::xml_node node, int64_t value);
 void AddTextElementRaw(pugi::xml_node node, const char* value);
 
 // Get string from named child element
-wxString GetTextElement(pugi::xml_node node, const char* name);
+std::wstring GetTextElement(pugi::xml_node node, const char* name);
 wxString GetTextElement_Trimmed(pugi::xml_node node, const char* name);
 
 // Get string from current element
-wxString GetTextElement(pugi::xml_node node);
+std::wstring GetTextElement(pugi::xml_node node);
 wxString GetTextElement_Trimmed(pugi::xml_node node);
 
 // Get (64-bit) integer from named element
