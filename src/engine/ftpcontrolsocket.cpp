@@ -4137,7 +4137,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 		if (!pData->host.empty() && pData->host[0] == '[') {
 			// Probably IPv6 address
 			pos = pData->host.find(']');
-			if (pos == std::wstring::npos < 0) {
+			if (pos == std::wstring::npos) {
 				LogMessage(MessageType::Error, _("Proxy host starts with '[' but no closing bracket found."));
 				DoClose(FZ_REPLY_CRITICALERROR);
 				return FZ_REPLY_ERROR;
