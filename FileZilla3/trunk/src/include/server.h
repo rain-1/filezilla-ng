@@ -85,12 +85,12 @@ public:
 
 	ServerProtocol GetProtocol() const;
 	ServerType GetType() const;
-	wxString GetHost() const;
+	std::wstring GetHost() const;
 	unsigned int GetPort() const;
 	LogonType GetLogonType() const;
-	wxString GetUser() const;
-	wxString GetPass() const;
-	wxString GetAccount() const;
+	std::wstring GetUser() const;
+	std::wstring GetPass() const;
+	std::wstring GetAccount() const;
 	std::wstring GetKeyFile() const;
 	int GetTimezoneOffset() const;
 	PasvMode GetPasvMode() const;
@@ -120,7 +120,7 @@ public:
 	void SetPasvMode(PasvMode pasvMode);
 	void MaximumMultipleConnections(int maximum);
 
-	wxString Format(ServerFormat formatType) const;
+	std::wstring Format(ServerFormat formatType) const;
 
 	bool SetEncodingType(CharsetEncoding type, const wxString& encoding = wxString());
 	bool SetCustomEncoding(const wxString& encoding);
@@ -165,12 +165,12 @@ protected:
 
 	ServerProtocol m_protocol;
 	ServerType m_type;
-	wxString m_host;
+	std::wstring m_host;
 	unsigned int m_port;
 	LogonType m_logonType;
-	wxString m_user;
-	wxString m_pass;
-	wxString m_account;
+	std::wstring m_user;
+	std::wstring m_pass;
+	std::wstring m_account;
 	std::wstring m_keyFile;
 	int m_timezoneOffset;
 	PasvMode m_pasvMode;

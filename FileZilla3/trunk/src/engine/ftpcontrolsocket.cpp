@@ -583,9 +583,9 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	else if (pData->ftp_proxy_type == 4) {
 		std::wstring proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		std::wstring proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
-		std::wstring host = server.Format(ServerFormat::with_optional_port).ToStdWstring();
-		std::wstring user = server.GetUser().ToStdWstring();
-		std::wstring account = server.GetAccount().ToStdWstring();
+		std::wstring host = server.Format(ServerFormat::with_optional_port);
+		std::wstring user = server.GetUser();
+		std::wstring account = server.GetAccount();
 		fz::replace_substrings(proxyUser, _T("%"), _T("%%"));
 		fz::replace_substrings(proxyPass, _T("%"), _T("%%"));
 		fz::replace_substrings(host, _T("%"), _T("%%"));
@@ -774,30 +774,29 @@ int CFtpControlSocket::LogonParseResponse()
 
 		if (code != 2 && code != 3) {
 			if( cmd.type == loginCommandType::user || cmd.type == loginCommandType::pass ) {
-				wxString const user = m_pCurrentServer->GetUser();
-				if( user.StartsWith(_T(" ")) || user.EndsWith(_T(" ")) ) {
+				auto const user = m_pCurrentServer->GetUser();
+				if (!user.empty() && (user.front() == ' ' || user.back() == ' ')) {
 					LogMessage(MessageType::Status, _("Check your login credentials. The entered username starts or ends with a space character."));
 				}
-				wxString const pw = m_pCurrentServer->GetPass();
-				if( pw.StartsWith(_T(" ")) || pw.EndsWith(_T(" ")) ) {
+				auto const pw = m_pCurrentServer->GetPass();
+				if (!pw.empty() && (pw.front() == ' ' || pw.back() == ' ')) {
 					LogMessage(MessageType::Status, _("Check your login credentials. The entered password starts or ends with a space character."));
 				}
 			}
 
-			if (m_pCurrentServer->GetEncodingType() == ENCODING_AUTO && m_useUTF8)
-			{
+			if (m_pCurrentServer->GetEncodingType() == ENCODING_AUTO && m_useUTF8) {
 				// Fall back to local charset for the case that the server might not
 				// support UTF8 and the login data contains non-ascii characters.
 				bool asciiOnly = true;
-				for (unsigned int i = 0; i < m_pCurrentServer->GetUser().Length(); ++i)
-					if ((unsigned int)m_pCurrentServer->GetUser()[i] > 127)
-						asciiOnly = false;
-				for (unsigned int i = 0; i < m_pCurrentServer->GetPass().Length(); ++i)
-					if ((unsigned int)m_pCurrentServer->GetPass()[i] > 127)
-						asciiOnly = false;
-				for (unsigned int i = 0; i < m_pCurrentServer->GetAccount().Length(); ++i)
-					if ((unsigned int)m_pCurrentServer->GetAccount()[i] > 127)
-						asciiOnly = false;
+				if (!fz::str_is_ascii(m_pCurrentServer->GetUser())) {
+					asciiOnly = false;
+				}
+				if (!fz::str_is_ascii(m_pCurrentServer->GetPass())) {
+					asciiOnly = false;
+				}
+				if (!fz::str_is_ascii(m_pCurrentServer->GetAccount())) {
+					asciiOnly = false;
+				}
 				if (!asciiOnly) {
 					if (pData->ftp_proxy_type) {
 						LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Cannot fall back to local charset since using proxy."));
@@ -809,11 +808,11 @@ int CFtpControlSocket::LogonParseResponse()
 					}
 					LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Trying local charset."));
 					m_useUTF8 = false;
-					if (!GetLoginSequence(*m_pCurrentServer))
-					{
+					if (!GetLoginSequence(*m_pCurrentServer)) {
 						int error = FZ_REPLY_DISCONNECTED;
-						if (cmd.type == loginCommandType::pass && code == 5)
+						if (cmd.type == loginCommandType::pass && code == 5) {
 							error |= FZ_REPLY_PASSWORDFAILED;
+						}
 						DoClose(error);
 						return FZ_REPLY_ERROR;
 					}

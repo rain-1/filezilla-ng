@@ -37,7 +37,7 @@ public:
 
 	TlsState GetState() const { return m_tlsState; }
 
-	wxString GetProtocolName();
+	std::wstring GetProtocolName();
 	wxString GetKeyExchange();
 	wxString GetCipherName();
 	wxString GetMacName();
