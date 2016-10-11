@@ -383,27 +383,28 @@ bool CManualTransfer::UpdateServer()
 		return false;
 	}
 
-	wxString host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue);
+	std::wstring host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue).ToStdWstring();
 	// SetHost does not accept URL syntax
 	if (!host.empty() && host[0] == '[') {
-		host.RemoveLast();
-		host = host.Mid(1);
+		host = host.substr(1, host.size() - 2);
 	}
 	server.SetHost(host, port);
 
 	const wxString& protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection);
 	const ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);
-	if (protocol != UNKNOWN)
+	if (protocol != UNKNOWN) {
 		server.SetProtocol(protocol);
-	else
+	}
+	else {
 		server.SetProtocol(FTP);
+	}
 
-	LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
+	LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection).ToStdWstring());
 	server.SetLogonType(logon_type);
 
-	server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue),
-		xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue));
-	server.SetAccount(xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue));
+	server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue).ToStdWstring(),
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring());
+	server.SetAccount(xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue).ToStdWstring());
 
 	delete m_pServer;
 	m_pServer = new CServer(server);
@@ -420,7 +421,7 @@ bool CManualTransfer::VerifyServer()
 		return false;
 	}
 
-	LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
+	LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection).ToStdWstring());
 
 	wxString protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection);
 	ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);

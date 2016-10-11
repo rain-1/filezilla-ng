@@ -11,28 +11,28 @@ class CLoginManager
 public:
 	static CLoginManager& Get() { return m_theLoginManager; }
 
-	bool GetPassword(CServer& server, bool silent, wxString const& name = wxString(), wxString const& challenge = wxString(), bool canRemember = true);
+	bool GetPassword(CServer& server, bool silent, std::wstring const& name = std::wstring(), std::wstring const& challenge = std::wstring(), bool canRemember = true);
 
-	void CachedPasswordFailed(const CServer& server, wxString const& challenge = wxString());
+	void CachedPasswordFailed(const CServer& server, std::wstring const& challenge = std::wstring());
 
-	void RememberPassword(CServer & server, wxString const& challenge = wxString());
+	void RememberPassword(CServer & server, std::wstring const& challenge = std::wstring());
 
 protected:
-	bool DisplayDialog(CServer& server, wxString const& name, wxString challenge, bool canRemember);
+	bool DisplayDialog(CServer& server, std::wstring const& name, std::wstring const& challenge, bool canRemember);
 
 	static CLoginManager m_theLoginManager;
 
 	// Session password cache for Ask-type servers
 	struct t_passwordcache
 	{
-		wxString host;
+		std::wstring host;
 		unsigned int port;
-		wxString user;
-		wxString password;
-		wxString challenge;
+		std::wstring user;
+		std::wstring password;
+		std::wstring challenge;
 	};
 	
-	std::list<t_passwordcache>::iterator FindItem(CServer const& server, wxString const& challenge);
+	std::list<t_passwordcache>::iterator FindItem(CServer const& server, std::wstring const& challenge);
 	
 	std::list<t_passwordcache> m_passwordCache;
 };
