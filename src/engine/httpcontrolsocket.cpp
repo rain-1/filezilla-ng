@@ -649,7 +649,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					m_current_uri = pData->m_newLocation;
 
 					// International domain names
-					wxString host = ConvertDomainName(m_current_uri.GetServer());
+					wxString host = ConvertDomainName(m_current_uri.GetServer().ToStdWstring());
 
 					int res = InternalConnect(host, static_cast<unsigned short>(port), protocol == HTTPS);
 					if (res == FZ_REPLY_WOULDBLOCK)

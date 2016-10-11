@@ -44,16 +44,6 @@ CControlSocket::CControlSocket(CFileZillaEnginePrivate & engine)
 	, event_handler(engine.event_loop_)
 	, engine_(engine)
 {
-	m_pCurOpData = 0;
-	m_nOpState = 0;
-	m_pCurrentServer = 0;
-
-	m_pCSConv = 0;
-	m_useUTF8 = false;
-
-	m_closed = false;
-
-	m_invalidateCurrentPath = false;
 }
 
 CControlSocket::~CControlSocket()
@@ -63,7 +53,6 @@ CControlSocket::~CControlSocket()
 	DoClose();
 
 	delete m_pCSConv;
-	m_pCSConv = 0;
 }
 
 int CControlSocket::Disconnect()
@@ -76,15 +65,16 @@ int CControlSocket::Disconnect()
 
 Command CControlSocket::GetCurrentCommandId() const
 {
-	if (m_pCurOpData)
+	if (m_pCurOpData) {
 		return m_pCurOpData->opId;
+	}
 
 	return engine_.GetCurrentCommandId();
 }
 
 void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpData *pData)
 {
-	bool tmp;
+	bool tmp{};
 
 	CTransferStatus const status = engine_.transfer_status_.Get(tmp);
 	if (!status.empty() && (nErrorCode == FZ_REPLY_OK || status.madeProgress)) {
@@ -245,24 +235,24 @@ int CControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 	return nErrorCode;
 }
 
-wxString CControlSocket::ConvertDomainName(wxString const& domain)
+std::wstring CControlSocket::ConvertDomainName(std::wstring const& domain)
 {
-#ifdef __WXMSW__
-	int len = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.wc_str(), domain.size() + 1, 0, 0);
+#ifdef FZ_WINDOWS
+	int len = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.c_str(), domain.size() + 1, 0, 0);
 	if (!len) {
 		LogMessage(MessageType::Debug_Warning, _T("Could not convert domain name"));
 		return domain;
 	}
 
 	wchar_t* output = new wchar_t[len];
-	int res = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.wc_str(), domain.size() + 1, output, len);
+	int res = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.c_str(), domain.size() + 1, output, len);
 	if (!res) {
 		delete [] output;
 		LogMessage(MessageType::Debug_Warning, _T("Could not convert domain name"));
 		return domain;
 	}
 
-	wxString ret(output);
+	std::wstring ret(output);
 	delete [] output;
 	return ret;
 #elif defined(AI_IDN)
@@ -276,7 +266,7 @@ wxString CControlSocket::ConvertDomainName(wxString const& domain)
 		return domain;
 	}
 
-	wxString result = wxConvCurrent->cMB2WX(output);
+	std::wstring result = fz::to_wstring(std::string(output));
 	idn_free(output);
 	return result;
 #endif
@@ -284,12 +274,13 @@ wxString CControlSocket::ConvertDomainName(wxString const& domain)
 
 void CControlSocket::Cancel()
 {
-	if (GetCurrentCommandId() != Command::none)
-	{
-		if (GetCurrentCommandId() == Command::connect)
+	if (GetCurrentCommandId() != Command::none) {
+		if (GetCurrentCommandId() == Command::connect) {
 			DoClose(FZ_REPLY_CANCELED);
-		else
+		}
+		else {
 			ResetOperation(FZ_REPLY_CANCELED);
+		}
 	}
 }
 
@@ -298,43 +289,48 @@ const CServer* CControlSocket::GetCurrentServer() const
 	return m_pCurrentServer;
 }
 
-bool CControlSocket::ParsePwdReply(wxString reply, bool unquoted /*=false*/, const CServerPath& defaultPath /*=CServerPath()*/)
+bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPath const& defaultPath)
 {
-	if (!unquoted)
-	{
-		int pos1 = reply.Find('"');
-		int pos2 = reply.Find('"', true);
-		if (pos1 == -1 || pos1 >= pos2) {
-			pos1 = reply.Find('\'');
-			pos2 = reply.Find('\'', true);
+	if (!unquoted) {
+		size_t pos1 = reply.find('"');
+		size_t pos2 = reply.rfind('"');
+		// Due to searching the same character, pos1 is npos iff pos2 is npos
 
-			if (pos1 != -1 && pos1 < pos2)
+		if (pos1 == std::wstring::npos || pos1 >= pos2) {
+			pos1 = reply.find('\'');
+			pos2 = reply.rfind('\'');
+
+			if (pos1 != std::wstring::npos && pos1 < pos2) {
 				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Broken server sending single-quoted path instead of double-quoted path."));
-		}
-		if (pos1 == -1 || pos1 >= pos2) {
-			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Broken server, no quoted path found in pwd reply, trying first token as path"));
-			pos1 = reply.Find(' ');
-			if (pos1 != -1) {
-				reply = reply.Mid(pos1 + 1);
-				pos2 = reply.Find(' ');
-				if (pos2 != -1)
-					reply = reply.Left(pos2);
 			}
-			else
+		}
+		if (pos1 == std::wstring::npos || pos1 >= pos2) {
+			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Broken server, no quoted path found in pwd reply, trying first token as path"));
+			pos1 = reply.find(' ');
+			if (pos1 != std::wstring::npos) {
+				reply = reply.substr(pos1 + 1);
+				pos2 = reply.find(' ');
+				if (pos2 != std::wstring::npos)
+					reply = reply.substr(0, pos2);
+			}
+			else {
 				reply.clear();
+			}
 		}
 		else {
-			reply = reply.Mid(pos1 + 1, pos2 - pos1 - 1);
-			reply.Replace(_T("\"\""), _T("\""));
+			reply = reply.substr(pos1 + 1, pos2 - pos1 - 1);
+			fz::replace_substrings(reply, L"\"\"", L"\"");
 		}
 	}
 
 	m_CurrentPath.SetType(m_pCurrentServer->GetType());
-	if (reply.empty() || !m_CurrentPath.SetPath(reply.ToStdWstring())) {
-		if (reply.empty())
+	if (reply.empty() || !m_CurrentPath.SetPath(reply)) {
+		if (reply.empty()) {
 			LogMessage(MessageType::Error, _("Server returned empty path."));
-		else
+		}
+		else {
 			LogMessage(MessageType::Error, _("Failed to parse returned path."));
+		}
 
 		if (!defaultPath.empty()) {
 			LogMessage(MessageType::Debug_Warning, _T("Assuming path is '%s'."), defaultPath.GetPath());
@@ -1008,12 +1004,11 @@ void CRealControlSocket::OnClose(int error)
 	DoClose();
 }
 
-int CRealControlSocket::Connect(const CServer &server)
+int CRealControlSocket::Connect(CServer const& server)
 {
 	SetWait(true);
 
-	if (server.GetEncodingType() == ENCODING_CUSTOM)
-	{
+	if (server.GetEncodingType() == ENCODING_CUSTOM) {
 		LogMessage(MessageType::Debug_Info, _T("Using custom encoding: %s"), server.GetCustomEncoding());
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 	}
@@ -1022,7 +1017,7 @@ int CRealControlSocket::Connect(const CServer &server)
 	m_pCurrentServer = new CServer(server);
 
 	// International domain names
-	m_pCurrentServer->SetHost(ConvertDomainName(server.GetHost()), server.GetPort());
+	m_pCurrentServer->SetHost(ConvertDomainName(server.GetHost().ToStdWstring()), server.GetPort());
 
 	return ContinueConnect();
 }
@@ -1333,7 +1328,7 @@ int CControlSocket::FileTransfer(std::wstring const&, CServerPath const&,
 	return FZ_REPLY_NOTSUPPORTED;
 }
 
-int CControlSocket::RawCommand(const wxString&)
+int CControlSocket::RawCommand(std::wstring const&)
 {
 	return FZ_REPLY_NOTSUPPORTED;
 }

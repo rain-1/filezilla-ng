@@ -36,11 +36,6 @@
 
 CRawTransferOpData::CRawTransferOpData()
 	: COpData(Command::rawtransfer)
-	, pOldData()
-	, bPasv(true)
-	, bTriedPasv()
-	, bTriedActive()
-	, port()
 {
 }
 
@@ -1912,7 +1907,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 		if (code != 2 && code != 3) {
 			error = true;
 		}
-		else if (ParsePwdReply(m_Response)) {
+		else if (ParsePwdReply(m_Response.ToStdWstring())) {
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
 		}
@@ -1967,7 +1962,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 				pData->opState = cwd_cwd_subdir;
 			}
 		}
-		else if (ParsePwdReply(m_Response, false, pData->path)) {
+		else if (ParsePwdReply(m_Response.ToStdWstring(), false, pData->path)) {
 			if (pData->target.empty()) {
 				engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 			}
@@ -2034,7 +2029,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 					error = true;
 				}
 			}
-			else if (ParsePwdReply(m_Response, false, assumedPath)) {
+			else if (ParsePwdReply(m_Response.ToStdWstring(), false, assumedPath)) {
 				if (pData->target.empty()) {
 					engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 				}
@@ -2784,16 +2779,16 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 class CRawCommandOpData : public COpData
 {
 public:
-	CRawCommandOpData(const wxString& command)
+	CRawCommandOpData(std::wstring const& command)
 		: COpData(Command::raw)
 	{
 		m_command = command;
 	}
 
-	wxString m_command;
+	std::wstring m_command;
 };
 
-int CFtpControlSocket::RawCommand(const wxString& command)
+int CFtpControlSocket::RawCommand(std::wstring const& command)
 {
 	wxASSERT(!command.empty());
 
