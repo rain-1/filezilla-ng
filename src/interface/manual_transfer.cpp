@@ -390,8 +390,8 @@ bool CManualTransfer::UpdateServer()
 	}
 	server.SetHost(host, port);
 
-	const wxString& protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection);
-	const ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);
+	std::wstring const protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection).ToStdWstring();
+	ServerProtocol const protocol = CServer::GetProtocolFromName(protocolName);
 	if (protocol != UNKNOWN) {
 		server.SetProtocol(protocol);
 	}
@@ -423,7 +423,7 @@ bool CManualTransfer::VerifyServer()
 
 	LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection).ToStdWstring());
 
-	wxString protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection);
+	std::wstring protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection).ToStdWstring();
 	ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);
 	if (protocol == SFTP &&
 		logon_type == ACCOUNT)
@@ -470,8 +470,9 @@ bool CManualTransfer::VerifyServer()
 	xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString::Format(_T("%d"), server.GetPort()));
 
 	protocolName = CServer::GetProtocolName(server.GetProtocol());
-	if (protocolName.empty())
+	if (protocolName.empty()) {
 		CServer::GetProtocolName(FTP);
+	}
 	xrc_call(*this, "ID_PROTOCOL", &wxChoice::SetStringSelection, protocolName);
 
 	// Require username for non-anonymous, non-ask logon type

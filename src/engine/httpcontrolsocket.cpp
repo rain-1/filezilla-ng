@@ -525,12 +525,9 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 	for (;;) {
 		// Find line ending
 		unsigned int i = 0;
-		for (i = 0; (i + 1) < m_recvBufferPos; i++)
-		{
-			if (m_pRecvBuffer[i] == '\r')
-			{
-				if (m_pRecvBuffer[i + 1] != '\n')
-				{
+		for (i = 0; (i + 1) < m_recvBufferPos; i++) {
+			if (m_pRecvBuffer[i] == '\r') {
+				if (m_pRecvBuffer[i + 1] != '\n') {
 					LogMessage(MessageType::Error, _("Malformed reply, server not sending proper line endings"));
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
@@ -538,10 +535,8 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				break;
 			}
 		}
-		if ((i + 1) >= m_recvBufferPos)
-		{
-			if (m_recvBufferPos == m_recvBufferLen)
-			{
+		if ((i + 1) >= m_recvBufferPos) {
+			if (m_recvBufferPos == m_recvBufferLen) {
 				// We don't support header lines larger than 4096
 				LogMessage(MessageType::Error, _("Too long header line"));
 				ResetOperation(FZ_REPLY_ERROR);
@@ -552,14 +547,13 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 
 		m_pRecvBuffer[i] = 0;
 		wxString const line = wxString(m_pRecvBuffer, wxConvLocal);
-		if (!line.empty())
+		if (!line.empty()) {
 			LogMessageRaw(MessageType::Response, line);
+		}
 
-		if (pData->m_responseCode == -1)
-		{
+		if (pData->m_responseCode == -1) {
 			pData->m_responseString = line;
-			if (m_recvBufferPos < 16 || memcmp(m_pRecvBuffer, "HTTP/1.", 7))
-			{
+			if (m_recvBufferPos < 16 || memcmp(m_pRecvBuffer, "HTTP/1.", 7)) {
 				// Invalid HTTP Status-Line
 				LogMessage(MessageType::Error, _("Invalid HTTP Response"));
 				ResetOperation(FZ_REPLY_ERROR);
@@ -578,14 +572,14 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 
 			pData->m_responseCode = (m_pRecvBuffer[9] - '0') * 100 + (m_pRecvBuffer[10] - '0') * 10 + m_pRecvBuffer[11] - '0';
 
-			if( pData->m_responseCode == 416 ) {
+			if (pData->m_responseCode == 416) {
 				CHttpFileTransferOpData* pTransfer = static_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
-				if( pTransfer->resume ) {
+				if (pTransfer->resume) {
 					// Sad, the server does not like our attempt to resume.
 					// Get full file instead.
 					pTransfer->resume = false;
 					int res = OpenFile(pTransfer);
-					if( res != FZ_REPLY_OK ) {
+					if (res != FZ_REPLY_OK) {
 						return res;
 					}
 					pData->m_newLocation = m_current_uri;
@@ -593,30 +587,25 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				}
 			}
 
-			if (pData->m_responseCode >= 400)
-			{
+			if (pData->m_responseCode >= 400) {
 				// Failed request
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
 
-			if (pData->m_responseCode == 305)
-			{
+			if (pData->m_responseCode == 305) {
 				// Unsupported redirect
 				LogMessage(MessageType::Error, _("Unsupported redirect"));
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
 		}
-		else
-		{
-			if (!i)
-			{
+		else {
+			if (!i) {
 				// End of header, data from now on
 
 				// Redirect if neccessary
-				if (pData->m_responseCode >= 300)
-				{
+				if (pData->m_responseCode >= 300) {
 					if (pData->m_redirectionCount++ == 6) {
 						LogMessage(MessageType::Error, _("Too many redirects"));
 						ResetOperation(FZ_REPLY_ERROR);
@@ -626,21 +615,21 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					ResetSocket();
 					ResetHttpData(pData);
 
-					if( !pData->m_newLocation.HasScheme() || !pData->m_newLocation.HasServer() || !pData->m_newLocation.HasPath() ) {
+					if (!pData->m_newLocation.HasScheme() || !pData->m_newLocation.HasServer() || !pData->m_newLocation.HasPath()) {
 						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported URI: %s"), m_current_uri.BuildURI());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
 
-					ServerProtocol protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.GetScheme());
-					if( protocol != HTTP && protocol != HTTPS ) {
+					ServerProtocol protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.GetScheme().ToStdWstring());
+					if (protocol != HTTP && protocol != HTTPS) {
 						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
 
 					long port = CServer::GetDefaultPort(protocol);
-					if( pData->m_newLocation.HasPort() && (!pData->m_newLocation.GetPort().ToLong(&port) || port < 1 || port > 65535) ) {
+					if (pData->m_newLocation.HasPort() && (!pData->m_newLocation.GetPort().ToLong(&port) || port < 1 || port > 65535)) {
 						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
@@ -652,17 +641,18 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					wxString host = ConvertDomainName(m_current_uri.GetServer().ToStdWstring());
 
 					int res = InternalConnect(host, static_cast<unsigned short>(port), protocol == HTTPS);
-					if (res == FZ_REPLY_WOULDBLOCK)
+					if (res == FZ_REPLY_WOULDBLOCK) {
 						res |= FZ_REPLY_REDIRECTED;
+					}
 					return res;
 				}
 
-				if( pData->m_pOpData && pData->m_pOpData->opId == Command::transfer) {
+				if (pData->m_pOpData && pData->m_pOpData->opId == Command::transfer) {
 					CHttpFileTransferOpData* pTransfer = static_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
-					if( pTransfer->resume && pData->m_responseCode != 206 ) {
+					if (pTransfer->resume && pData->m_responseCode != 206) {
 						pTransfer->resume = false;
 						int res = OpenFile(pTransfer);
-						if( res != FZ_REPLY_OK ) {
+						if (res != FZ_REPLY_OK) {
 							return res;
 						}
 					}
@@ -673,13 +663,12 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				memmove(m_pRecvBuffer, m_pRecvBuffer + 2, m_recvBufferPos - 2);
 				m_recvBufferPos -= 2;
 
-				if (m_recvBufferPos)
-				{
+				if (m_recvBufferPos) {
 					int res;
-					if (pData->m_transferEncoding == pData->chunked)
+					if (pData->m_transferEncoding == pData->chunked) {
 						res = OnChunkedData(pData);
-					else
-					{
+					}
+					else {
 						pData->m_receivedData += m_recvBufferPos;
 						res = ProcessData(m_pRecvBuffer, m_recvBufferPos);
 						m_recvBufferPos = 0;
@@ -689,28 +678,26 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 
 				return FZ_REPLY_WOULDBLOCK;
 			}
-			if (m_recvBufferPos > 12 && !memcmp(m_pRecvBuffer, "Location: ", 10))
-			{
+			if (m_recvBufferPos > 12 && !memcmp(m_pRecvBuffer, "Location: ", 10)) {
 				pData->m_newLocation = wxURI(wxString(m_pRecvBuffer + 10, wxConvLocal));
 				pData->m_newLocation.Resolve(m_current_uri);
 			}
-			else if (m_recvBufferPos > 21 && !memcmp(m_pRecvBuffer, "Transfer-Encoding: ", 19))
-			{
-				if (!strcmp(m_pRecvBuffer + 19, "chunked"))
+			else if (m_recvBufferPos > 21 && !memcmp(m_pRecvBuffer, "Transfer-Encoding: ", 19)) {
+				if (!strcmp(m_pRecvBuffer + 19, "chunked")) {
 					pData->m_transferEncoding = CHttpOpData::chunked;
-				else if (!strcmp(m_pRecvBuffer + 19, "identity"))
+				}
+				else if (!strcmp(m_pRecvBuffer + 19, "identity")) {
 					pData->m_transferEncoding = CHttpOpData::identity;
-				else
+				}
+				else {
 					pData->m_transferEncoding = CHttpOpData::unknown;
+				}
 			}
-			else if (i > 16 && !memcmp(m_pRecvBuffer, "Content-Length: ", 16))
-			{
+			else if (i > 16 && !memcmp(m_pRecvBuffer, "Content-Length: ", 16)) {
 				pData->m_totalSize = 0;
 				char* p = m_pRecvBuffer + 16;
-				while (*p)
-				{
-					if (*p < '0' || *p > '9')
-					{
+				while (*p) {
+					if (*p < '0' || *p > '9') {
 						LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
@@ -723,8 +710,9 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 		memmove(m_pRecvBuffer, m_pRecvBuffer + i + 2, m_recvBufferPos - i - 2);
 		m_recvBufferPos -= i + 2;
 
-		if (!m_recvBufferPos)
+		if (!m_recvBufferPos) {
 			break;
+		}
 	}
 
 	return FZ_REPLY_WOULDBLOCK;
