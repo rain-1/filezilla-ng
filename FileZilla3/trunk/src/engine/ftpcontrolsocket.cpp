@@ -1214,12 +1214,6 @@ class CFtpListOpData : public COpData, public CFtpTransferOpData
 public:
 	CFtpListOpData()
 		: COpData(Command::list)
-		, fallback_to_current()
-		, m_pDirectoryListingParser()
-		, refresh()
-		, viewHiddenCheck()
-		, viewHidden()
-		, mdtm_index()
 	{
 	}
 
@@ -1229,22 +1223,22 @@ public:
 	}
 
 	CServerPath path;
-	wxString subDir;
-	bool fallback_to_current;
+	std::wstring subDir;
+	bool fallback_to_current{};
 
-	CDirectoryListingParser* m_pDirectoryListingParser;
+	CDirectoryListingParser* m_pDirectoryListingParser{};
 
 	CDirectoryListing directoryListing;
 
 	// Set to true to get a directory listing even if a cache
 	// lookup can be made after finding out true remote directory
-	bool refresh;
+	bool refresh{};
 
-	bool viewHiddenCheck;
-	bool viewHidden; // Uses LIST -a command
+	bool viewHiddenCheck{};
+	bool viewHidden{}; // Uses LIST -a command
 
 	// Listing index for list_mdtm
-	int mdtm_index;
+	int mdtm_index{};
 
 	fz::monotonic_clock m_time_before_locking;
 };
@@ -1258,13 +1252,13 @@ enum listStates
 	list_mdtm
 };
 
-int CFtpControlSocket::List(CServerPath path, wxString subDir, int flags)
+int CFtpControlSocket::List(CServerPath path, std::wstring const& subDir, int flags)
 {
 	CServerPath newPath = m_CurrentPath;
 	if (!path.empty()) {
 		newPath = path;
 	}
-	if (!newPath.ChangePath(subDir.ToStdWstring())) {
+	if (!newPath.ChangePath(subDir)) {
 		newPath.clear();
 	}
 
@@ -1284,16 +1278,18 @@ int CFtpControlSocket::List(CServerPath path, wxString subDir, int flags)
 
 	pData->opState = list_waitcwd;
 
-	if (path.GetType() == DEFAULT)
+	if (path.GetType() == DEFAULT) {
 		path.SetType(m_pCurrentServer->GetType());
+	}
 	pData->path = path;
 	pData->subDir = subDir;
 	pData->refresh = (flags & LIST_FLAG_REFRESH) != 0;
 	pData->fallback_to_current = !path.empty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
 
 	int res = ChangeDir(path, subDir, (flags & LIST_FLAG_LINK) != 0);
-	if (res != FZ_REPLY_OK)
+	if (res != FZ_REPLY_OK) {
 		return res;
+	}
 
 	return ParseSubcommandResult(FZ_REPLY_OK);
 }
@@ -4141,16 +4137,16 @@ int CFtpControlSocket::Connect(const CServer &server)
 	{
 		pData->host = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_HOST);
 
-		int pos = -1;
+		size_t pos = -1;
 		if (!pData->host.empty() && pData->host[0] == '[') {
 			// Probably IPv6 address
-			pos = pData->host.Find(']');
-			if (pos < 0) {
+			pos = pData->host.find(']');
+			if (pos == std::wstring::npos < 0) {
 				LogMessage(MessageType::Error, _("Proxy host starts with '[' but no closing bracket found."));
 				DoClose(FZ_REPLY_CRITICALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			if (pData->host.size() > static_cast<size_t>(pos + 1) && pData->host[pos + 1]) {
+			if (pData->host.size() > (pos + 1) && pData->host[pos + 1]) {
 				if (pData->host[pos + 1] != ':') {
 					LogMessage(MessageType::Error, _("Invalid proxy host, after closing bracket only colon and port may follow."));
 					DoClose(FZ_REPLY_CRITICALERROR);
@@ -4158,21 +4154,21 @@ int CFtpControlSocket::Connect(const CServer &server)
 				}
 				++pos;
 			}
-			else
-				pos = -1;
+			else {
+				pos = std::wstring::npos;
+			}
 		}
-		else
-			pos = pData->host.Find(':');
+		else {
+			pos = pData->host.find(':');
+		}
 
-		if (pos != -1) {
-			unsigned long port = 0;
-			if (!pData->host.Mid(pos + 1).ToULong(&port))
-				port = 0;
-			pData->host = pData->host.Left(pos);
-			pData->port = port;
+		if (pos != std::wstring::npos) {
+			pData->port = fz::to_integral<unsigned int>(pData->host.substr(pos + 1));
+			pData->host = pData->host.substr(0, pos);
 		}
-		else
+		else {
 			pData->port = 21;
+		}
 
 		if (pData->host.empty() || pData->port < 1 || pData->port > 65535) {
 			LogMessage(MessageType::Error, _("Proxy set but proxy host or port invalid"));

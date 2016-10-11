@@ -32,13 +32,6 @@ std::list<CControlSocket::t_lockInfo> CControlSocket::m_lockInfoList;
 COpData::COpData(Command op_Id)
 	: opId(op_Id)
 {
-	opState = 0;
-
-	pNextOpData = 0;
-
-	waitForAsyncRequest = false;
-
-	holdsLock = false;
 }
 
 COpData::~COpData()
@@ -1328,7 +1321,7 @@ void CControlSocket::CreateLocalDir(std::wstring const & local_file)
 	engine_.AddNotification(n);
 }
 
-int CControlSocket::List(CServerPath, wxString, int)
+int CControlSocket::List(CServerPath, std::wstring const&, int)
 {
 	return FZ_REPLY_NOTSUPPORTED;
 }

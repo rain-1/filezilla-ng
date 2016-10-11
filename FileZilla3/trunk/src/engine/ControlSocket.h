@@ -14,13 +14,13 @@ public:
 	COpData(COpData const&) = delete;
 	COpData& operator=(COpData const&) = delete;
 
-	int opState;
+	int opState{};
 	Command const opId;
 
-	bool waitForAsyncRequest;
-	bool holdsLock;
+	bool waitForAsyncRequest{};
+	bool holdsLock{};
 
-	COpData *pNextOpData;
+	COpData *pNextOpData{};
 };
 
 class CConnectOpData : public COpData
@@ -28,12 +28,11 @@ class CConnectOpData : public COpData
 public:
 	CConnectOpData()
 		: COpData(Command::connect)
-		, port(0)
 	{
 	}
 
-	wxString host;
-	unsigned int port;
+	std::wstring host;
+	unsigned int port{};
 };
 
 class CFileTransferOpData : public COpData
@@ -80,8 +79,6 @@ public:
 	CChangeDirOpData()
 		: COpData(Command::cwd)
 	{
-		tryMkdOnFail = false;
-		link_discovery = false;
 	}
 
 	virtual ~CChangeDirOpData()
@@ -90,10 +87,10 @@ public:
 
 	CServerPath path;
 	std::wstring subDir;
-	bool tryMkdOnFail;
+	bool tryMkdOnFail{};
 	CServerPath target;
 
-	bool link_discovery;
+	bool link_discovery{};
 };
 
 enum class TransferEndReason
@@ -123,7 +120,7 @@ public:
 	virtual int Connect(const CServer &server) = 0;
 	virtual int Disconnect();
 	virtual void Cancel();
-	virtual int List(CServerPath path = CServerPath(), wxString subDir = wxString(), int flags = 0);
+	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
 							 CFileTransferCommand::t_transferSettings const& transferSettings);
