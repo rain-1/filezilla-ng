@@ -183,7 +183,7 @@ void CBookmarksDialog::LoadGlobalBookmarks()
 		}
 
 		local_dir = GetTextElement(bookmark, "LocalDir");
-		remote_dir_raw = GetTextElement(bookmark, "RemoteDir").ToStdWstring();
+		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
 		if (!remote_dir_raw.empty()) {
 			if (!remote_dir.SetSafePath(remote_dir_raw)) {
 				continue;
@@ -718,7 +718,7 @@ bool CBookmarksDialog::GetGlobalBookmarks(std::list<wxString> &bookmarks)
 			continue;
 
 		local_dir = GetTextElement(bookmark, "LocalDir");
-		remote_dir_raw = GetTextElement(bookmark, "RemoteDir").ToStdWstring();
+		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
 		if (!remote_dir_raw.empty()) {
 			if (!remote_dir.SetSafePath(remote_dir_raw)) {
 				continue;
@@ -754,7 +754,7 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 		}
 
 		local_dir = GetTextElement(bookmark, "LocalDir");
-		remote_dir_raw = GetTextElement(bookmark, "RemoteDir").ToStdWstring();
+		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
 		if (!remote_dir_raw.empty()) {
 			if (!remote_dir.SetSafePath(remote_dir_raw)) {
 				return false;

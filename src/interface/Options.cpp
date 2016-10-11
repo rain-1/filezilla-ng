@@ -700,7 +700,7 @@ void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string
 	if (iter != nameOptionMap.end()) {
 		if (!allowDefault && options[iter->second].flags == default_only)
 			return;
-		std::wstring value = GetTextElement(option).ToStdWstring();
+		std::wstring value = GetTextElement(option);
 		if (options[iter->second].flags == default_priority) {
 			if (allowDefault) {
 				fz::scoped_lock l(m_sync_);

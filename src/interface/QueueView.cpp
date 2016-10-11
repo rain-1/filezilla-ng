@@ -1560,9 +1560,9 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 			CServerPath previousRemotePath;
 
 			for (auto file = xServer.child("File"); file; file = file.next_sibling("File")) {
-				std::wstring localFile = GetTextElement(file, "LocalFile").ToStdWstring();
-				std::wstring remoteFile = GetTextElement(file, "RemoteFile").ToStdWstring();
-				std::wstring safeRemotePath = GetTextElement(file, "RemotePath").ToStdWstring();
+				std::wstring localFile = GetTextElement(file, "LocalFile");
+				std::wstring remoteFile = GetTextElement(file, "RemoteFile");
+				std::wstring safeRemotePath = GetTextElement(file, "RemotePath");
 				bool download = GetTextElementInt(file, "Download") != 0;
 				int64_t size = GetTextElementInt(file, "Size", -1);
 				unsigned char errorCount = static_cast<unsigned char>(GetTextElementInt(file, "ErrorCount"));
@@ -1614,15 +1614,15 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 
 				bool download = GetTextElementInt(folder, "Download") != 0;
 				if (download) {
-					std::wstring localFile = GetTextElement(folder, "LocalFile").ToStdWstring();
+					std::wstring localFile = GetTextElement(folder, "LocalFile");
 					if (localFile.empty()) {
 						continue;
 					}
 					folderItem = new CFolderItem(pServerItem, true, CLocalPath(localFile));
 				}
 				else {
-					std::wstring remoteFile = GetTextElement(folder, "RemoteFile").ToStdWstring();
-					std::wstring safeRemotePath = GetTextElement(folder, "RemotePath").ToStdWstring();
+					std::wstring remoteFile = GetTextElement(folder, "RemoteFile");
+					std::wstring safeRemotePath = GetTextElement(folder, "RemotePath");
 					if (safeRemotePath.empty()) {
 						continue;
 					}
