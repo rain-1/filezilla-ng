@@ -50,7 +50,8 @@ CPowerManagement::~CPowerManagement()
 
 void CPowerManagement::OnStateChange(CState*, t_statechange_notifications, wxString const&, void const*)
 {
-	if (m_pMainFrame->GetQueue()->IsActive()) {
+	auto const queue = m_pMainFrame->GetQueue();
+	if (queue && queue->IsActive()) {
 		DoSetBusy();
 		return;
 	}
