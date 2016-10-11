@@ -127,7 +127,7 @@ public:
 	STDMETHODIMP LockServer(BOOL);
 
 protected:
-	unsigned long FReferenceCounter;
+	unsigned long FReferenceCounter{};
 };
 
 //---------------------------------------------------------------------------
@@ -150,10 +150,10 @@ public:
 									 LPCTSTR SrcFile, DWORD SrcAttribs, LPCTSTR DestFile, DWORD DestAttribs);
 
 protected:
-	unsigned long FReferenceCounter;
+	unsigned long FReferenceCounter{};
 	LPDATAOBJECT FDataObj;
 	HANDLE FMutex;
-	unsigned long FLastTicks;
+	unsigned long FLastTicks{};
 };
 
 //---------------------------------------------------------------------------
@@ -600,8 +600,6 @@ CShellExtClassFactory::CShellExtClassFactory()
 {
 	DEBUG_MSG("CShellExtClassFactory");
 
-	FReferenceCounter = 0;
-
 	GRefThisDll++;
 }
 
@@ -697,11 +695,9 @@ CShellExt::CShellExt()
 {
 	DEBUG_MSG("CShellExt enter");
 
-	FReferenceCounter = 0L;
 	FDataObj = NULL;
 
 	FMutex = CreateMutex(NULL, false, DRAG_EXT_MUTEX);
-	FLastTicks = 0;
 
 	GRefThisDll++;
 
