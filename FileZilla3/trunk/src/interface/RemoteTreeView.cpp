@@ -568,13 +568,15 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 
 	wxString const path = listing.path.GetPath();
 
-	std::vector<wxString> dirs;
+	std::vector<std::wstring> dirs;
 	for (unsigned int i = 0; i < listing.GetCount(); ++i) {
-		if (!listing[i].is_dir())
+		if (!listing[i].is_dir()) {
 			continue;
+		}
 
-		if (!filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time))
+		if (!filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time)) {
 			dirs.push_back(listing[i].name);
+		}
 	}
 
 	auto const& sortFunc = CFileListCtrlSortBase::GetCmpFunction(m_nameSortMode);
@@ -584,11 +586,11 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 	child = GetLastChild(parent);
 	auto iter = dirs.rbegin();
 	while (child && iter != dirs.rend()) {
-		int cmp = sortFunc(GetItemText(child), *iter);
+		int cmp = sortFunc(GetItemText(child).ToStdWstring(), *iter);
 
 		if (!cmp) {
 			CServerPath childPath = listing.path;
-			childPath.AddSegment(iter->ToStdWstring());
+			childPath.AddSegment(*iter);
 
 			CDirectoryListing subListing;
 			if (m_state.m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
@@ -617,7 +619,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 		else if (cmp < 0) {
 			// New directory
 			CServerPath childPath = listing.path;
-			childPath.AddSegment(iter->ToStdWstring());
+			childPath.AddSegment(*iter);
 
 			CDirectoryListing subListing;
 			if (m_state.m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
@@ -653,7 +655,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 	}
 	while (iter != dirs.rend()) {
 		CServerPath childPath = listing.path;
-		childPath.AddSegment(iter->ToStdWstring());
+		childPath.AddSegment(*iter);
 
 		CDirectoryListing subListing;
 		if (m_state.m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {

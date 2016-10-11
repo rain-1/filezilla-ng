@@ -99,7 +99,7 @@ public:
 		return CmpNatural(str1.c_str(), str2.c_str());
 	}
 
-	static int CmpNatural(wxChar const* p1, wxChar const* p2)
+	static int CmpNatural(wchar_t const* p1, wchar_t const* p2)
 	{
 		int res = 0;
 		int zeroCount = 0;
@@ -142,7 +142,7 @@ public:
 		return res;         //same length, compare first different digit in the sequence
 	}
 
-	typedef int (* CompareFunction)(const wxString&, const wxString&);
+	typedef int (* CompareFunction)(std::wstring const&, std::wstring const&);
 	static CompareFunction GetCmpFunction(NameSortMode mode)
 	{
 		switch (mode)
