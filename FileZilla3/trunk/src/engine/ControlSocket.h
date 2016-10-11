@@ -124,7 +124,7 @@ public:
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
 							 CFileTransferCommand::t_transferSettings const& transferSettings);
-	virtual int RawCommand(const wxString& command = wxString());
+	virtual int RawCommand(std::wstring const& command = std::wstring());
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
 	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
 	virtual int Mkdir(const CServerPath& path);
@@ -171,7 +171,7 @@ protected:
 	fz::duration GetTimezoneOffset() const;
 
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
-	bool m_closed;
+	bool m_closed{};
 
 	virtual int ResetOperation(int nErrorCode);
 
@@ -182,23 +182,22 @@ protected:
 	// Called by ResetOperation if there's a queued operation
 	virtual int ParseSubcommandResult(int prevResult);
 
-	wxString ConvertDomainName(wxString const& domain);
+	std::wstring ConvertDomainName(std::wstring const& domain);
 
 	int CheckOverwriteFile();
 
 	void CreateLocalDir(std::wstring const& local_file);
 
-	bool ParsePwdReply(wxString reply, bool unquoted = false, const CServerPath& defaultPath = CServerPath());
+	bool ParsePwdReply(std::wstring reply, bool unquoted = false, const CServerPath& defaultPath = CServerPath());
 
-	COpData *m_pCurOpData;
-	int m_nOpState;
+	COpData *m_pCurOpData{};
 	CFileZillaEnginePrivate & engine_;
-	CServer *m_pCurrentServer;
+	CServer *m_pCurrentServer{};
 
 	CServerPath m_CurrentPath;
 
-	wxCSConv *m_pCSConv;
-	bool m_useUTF8;
+	wxCSConv *m_pCSConv{};
+	bool m_useUTF8{};
 
 	// Timeout data
 	fz::timer_id m_timer{};
@@ -251,7 +250,7 @@ protected:
 	// End cache locking stuff
 	// -----------------------
 
-	bool m_invalidateCurrentPath;
+	bool m_invalidateCurrentPath{};
 
 	virtual void operator()(fz::event_base const& ev);
 

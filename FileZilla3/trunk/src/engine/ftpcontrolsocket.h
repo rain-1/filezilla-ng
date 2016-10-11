@@ -50,7 +50,7 @@ protected:
 	int FileTransferSend();
 	int FileTransferTestResumeCapability();
 
-	virtual int RawCommand(const wxString& command);
+	virtual int RawCommand(std::wstring const& command);
 	int RawCommandSend();
 	int RawCommandParseResponse();
 
@@ -191,16 +191,16 @@ class CRawTransferOpData final : public COpData
 {
 public:
 	CRawTransferOpData();
-	wxString cmd;
+	std::wstring cmd;
 
-	CFtpTransferOpData* pOldData;
+	CFtpTransferOpData* pOldData{};
 
-	bool bPasv;
-	bool bTriedPasv;
-	bool bTriedActive;
+	bool bPasv{true};
+	bool bTriedPasv{};
+	bool bTriedActive{};
 
 	wxString host;
-	int port;
+	int port{};
 };
 
 #endif

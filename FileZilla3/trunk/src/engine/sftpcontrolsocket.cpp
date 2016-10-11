@@ -1215,8 +1215,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 
 int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& reply)
 {
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1226,15 +1225,16 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& 
 	switch (pData->opState)
 	{
 	case cwd_pwd:
-		if (!successful || reply.empty())
+		if (!successful || reply.empty()) {
 			error = true;
-		if (ParsePwdReply(reply))
-		{
+		}
+		if (ParsePwdReply(reply.ToStdWstring())) {
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
 		}
-		else
+		else {
 			error = true;
+		}
 		break;
 	case cwd_cwd:
 		if (!successful)
@@ -1252,7 +1252,7 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& 
 		}
 		else if (reply.empty())
 			error = true;
-		else if (ParsePwdReply(reply)) {
+		else if (ParsePwdReply(reply.ToStdWstring())) {
 			engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 
 			if (pData->subDir.empty()) {
@@ -1267,25 +1267,25 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& 
 			error = true;
 		break;
 	case cwd_cwd_subdir:
-		if (!successful || reply.empty())
-		{
-			if (pData->link_discovery)
-			{
+		if (!successful || reply.empty()) {
+			if (pData->link_discovery) {
 				LogMessage(MessageType::Debug_Info, _T("Symlink does not link to a directory, probably a file"));
 				ResetOperation(FZ_REPLY_LINKNOTDIR);
 				return FZ_REPLY_ERROR;
 			}
-			else
+			else {
 				error = true;
+			}
 		}
-		else if (ParsePwdReply(reply)) {
+		else if (ParsePwdReply(reply.ToStdWstring())) {
 			engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
 		}
-		else
+		else {
 			error = true;
+		}
 		break;
 	default:
 		error = true;
