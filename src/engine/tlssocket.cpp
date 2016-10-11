@@ -969,14 +969,16 @@ void CTlsSocket::TrustCurrentCert(bool trusted)
 	Failure(0, true);
 }
 
-static wxString bin2hex(const unsigned char* in, size_t size)
+static std::wstring bin2hex(const unsigned char* in, size_t size)
 {
-	wxString str;
-	for (size_t i = 0; i < size; i++)
-	{
-		if (i)
-			str += _T(":");
-		str += wxString::Format(_T("%.2x"), (int)in[i]);
+	std::wstring str;
+	str.reserve(size * 3);
+	for (size_t i = 0; i < size; ++i) {
+		if (i) {
+			str += ':';
+		}
+		str += fz::int_to_hex_char<wchar_t>(in[i] >> 4);
+		str += fz::int_to_hex_char<wchar_t>(in[i] & 0xf);
 	}
 
 	return str;
@@ -1378,9 +1380,9 @@ int CTlsSocket::VerifyCertificate()
 	int const algorithmWarnings = GetAlgorithmWarnings();
 
 	CCertificateNotification *pNotification = new CCertificateNotification(
-		m_pOwner->GetCurrentServer()->GetHost().ToStdWstring(),
+		m_pOwner->GetCurrentServer()->GetHost(),
 		m_pOwner->GetCurrentServer()->GetPort(),
-		GetProtocolName().ToStdWstring(),
+		GetProtocolName(),
 		GetKeyExchange().ToStdWstring(),
 		GetCipherName().ToStdWstring(),
 		GetMacName().ToStdWstring(),
@@ -1397,13 +1399,14 @@ void CTlsSocket::OnRateAvailable(CRateLimiter::rate_direction)
 {
 }
 
-wxString CTlsSocket::GetProtocolName()
+std::wstring CTlsSocket::GetProtocolName()
 {
-	wxString protocol = _("unknown");
+	std::wstring protocol = _("unknown").ToStdWstring();
 
 	const char* s = gnutls_protocol_get_name( gnutls_protocol_get_version( m_session ) );
-	if (s && *s)
-		protocol = wxString(s, wxConvUTF8);
+	if (s && *s) {
+		protocol = fz::to_wstring_from_utf8(s);
+	}
 
 	return protocol;
 }

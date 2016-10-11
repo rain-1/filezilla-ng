@@ -201,11 +201,10 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 		return false;
 	}
 
-	m_host = host;
+	m_host = host.ToStdWstring();
 
 	if (m_host[0] == '[') {
-		m_host.RemoveLast();
-		m_host = m_host.Mid(1);
+		m_host = m_host.substr(1, m_host.size() - 2);
 	}
 
 	m_port = port;
@@ -240,7 +239,7 @@ ServerType CServer::GetType() const
 	return m_type;
 }
 
-wxString CServer::GetHost() const
+std::wstring CServer::GetHost() const
 {
 	return m_host;
 }
@@ -250,26 +249,29 @@ unsigned int CServer::GetPort() const
 	return m_port;
 }
 
-wxString CServer::GetUser() const
+std::wstring CServer::GetUser() const
 {
-	if (m_logonType == ANONYMOUS)
-		return _T("anonymous");
+	if (m_logonType == ANONYMOUS) {
+		return L"anonymous";
+	}
 
 	return m_user;
 }
 
-wxString CServer::GetPass() const
+std::wstring CServer::GetPass() const
 {
-	if (m_logonType == ANONYMOUS)
-		return _T("anon@localhost");
+	if (m_logonType == ANONYMOUS) {
+		return L"anon@localhost";
+	}
 
 	return m_pass;
 }
 
-wxString CServer::GetAccount() const
+std::wstring CServer::GetAccount() const
 {
-	if (m_logonType != ACCOUNT)
-		return wxString();
+	if (m_logonType != ACCOUNT) {
+		return std::wstring();
+	}
 
 	return m_account;
 }
@@ -374,11 +376,13 @@ bool CServer::operator<(const CServer &op) const
 	else if (m_type > op.m_type)
 		return false;
 
-	int cmp = m_host.Cmp(op.m_host);
-	if (cmp < 0)
+	int cmp = m_host.compare(op.m_host);
+	if (cmp < 0) {
 		return true;
-	else if (cmp > 0)
+	}
+	else if (cmp > 0) {
 		return false;
+	}
 
 	if (m_port < op.m_port)
 		return true;
@@ -392,7 +396,7 @@ bool CServer::operator<(const CServer &op) const
 
 	if (m_logonType != ANONYMOUS)
 	{
-		cmp = m_user.Cmp(op.m_user);
+		cmp = m_user.compare(op.m_user);
 		if (cmp < 0)
 			return true;
 		else if (cmp > 0)
@@ -400,7 +404,7 @@ bool CServer::operator<(const CServer &op) const
 
 		if (m_logonType == NORMAL)
 		{
-			cmp = m_pass.Cmp(op.m_pass);
+			cmp = m_pass.compare(op.m_pass);
 			if (cmp < 0)
 				return true;
 			else if (cmp > 0)
@@ -408,13 +412,13 @@ bool CServer::operator<(const CServer &op) const
 		}
 		else if (m_logonType == ACCOUNT)
 		{
-			cmp = m_pass.Cmp(op.m_pass);
+			cmp = m_pass.compare(op.m_pass);
 			if (cmp < 0)
 				return true;
 			else if (cmp > 0)
 				return false;
 
-			cmp = m_account.Cmp(op.m_account);
+			cmp = m_account.compare(op.m_account);
 			if (cmp < 0)
 				return true;
 			else if (cmp > 0)
@@ -638,20 +642,22 @@ int CServer::MaximumMultipleConnections() const
 	return m_maximumMultipleConnections;
 }
 
-wxString CServer::Format(ServerFormat formatType) const
+std::wstring CServer::Format(ServerFormat formatType) const
 {
-	t_protocolInfo const& info = GetProtocolInfo(m_protocol);
-	wxString server = m_host;
+	std::wstring server = m_host;
 
-	if (server.Find(':') != -1)
+	t_protocolInfo const& info = GetProtocolInfo(m_protocol);
+
+	if (server.find(':') != std::wstring::npos) {
 		server = _T("[") + server + _T("]");
+	}
 
 	if (formatType == ServerFormat::host_only) {
 		return server;
 	}
 	
 	if (m_port != GetDefaultPort(m_protocol)) {
-		server += wxString::Format(_T(":%d"), m_port);
+		server += fz::sprintf(L":%d", m_port);
 	}
 
 	if (formatType == ServerFormat::with_optional_port) {
@@ -659,7 +665,7 @@ wxString CServer::Format(ServerFormat formatType) const
 	}
 		
 	if (m_logonType != ANONYMOUS) {
-		auto user = GetUser().ToStdWstring();
+		auto user = GetUser();
 		// For now, only escape if formatting for URL.
 		// Open question: Do we need some form of escapement for presentation within the GUI,
 		// that deals e.g. with whitespace but does not touch Unicode characters?
@@ -668,7 +674,7 @@ wxString CServer::Format(ServerFormat formatType) const
 		}
 		if (!user.empty()) {
 			if (formatType == ServerFormat::url_with_password) {
-				auto pass = GetPass().ToStdWstring();
+				auto pass = GetPass();
 				if (!pass.empty()) {
 					if (formatType == ServerFormat::url || formatType == ServerFormat::url_with_password) {
 						pass = url_encode(pass);

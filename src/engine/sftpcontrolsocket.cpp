@@ -598,7 +598,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 					return;
 				}
 
-				std::wstring const pass = m_pCurrentServer->GetPass().ToStdWstring();
+				std::wstring const pass = m_pCurrentServer->GetPass();
 				std::wstring show = _T("Pass: ");
 				show.append(pass.size(), '*');
 				SendCommand(pass, show);
@@ -753,7 +753,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 				DoClose(FZ_REPLY_CANCELED);
 				return false;
 			}
-			std::wstring const pass = pInteractiveLoginNotification->server.GetPass().ToStdWstring();
+			std::wstring const pass = pInteractiveLoginNotification->server.GetPass();
 			m_pCurrentServer->SetUser(m_pCurrentServer->GetUser(), pass);
 			std::wstring show = L"Pass: ";
 			show.append(pass.size(), '*');
