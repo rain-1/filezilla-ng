@@ -996,28 +996,28 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 		size = 0;
 	}
 
-	wxString serial = bin2hex(buffer, size);
+	std::wstring serial = bin2hex(buffer, size);
 
 	unsigned int pkBits;
 	int pkAlgo = gnutls_x509_crt_get_pk_algorithm(cert, &pkBits);
-	wxString pkAlgoName;
+	std::wstring pkAlgoName;
 	if (pkAlgo >= 0) {
 		const char* pAlgo = gnutls_pk_algorithm_get_name((gnutls_pk_algorithm_t)pkAlgo);
 		if (pAlgo) {
-			pkAlgoName = wxString(pAlgo, wxConvUTF8);
+			pkAlgoName = fz::to_wstring_from_utf8(pAlgo);
 		}
 	}
 
 	int signAlgo = gnutls_x509_crt_get_signature_algorithm(cert);
-	wxString signAlgoName;
+	std::wstring signAlgoName;
 	if (signAlgo >= 0) {
 		const char* pAlgo = gnutls_sign_algorithm_get_name((gnutls_sign_algorithm_t)signAlgo);
 		if (pAlgo) {
-			signAlgoName = wxString(pAlgo, wxConvUTF8);
+			signAlgoName = fz::to_wstring_from_utf8(pAlgo);
 		}
 	}
 
-	wxString subject, issuer;
+	std::wstring subject, issuer;
 
 	size = 0;
 	res = gnutls_x509_crt_get_dn(cert, 0, &size);
@@ -1026,7 +1026,7 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 		dn[size] = 0;
 		if (!(res = gnutls_x509_crt_get_dn(cert, dn, &size))) {
 			dn[size] = 0;
-			subject = wxString(dn, wxConvUTF8);
+			subject = fz::to_wstring_from_utf8(dn);
 		}
 		else {
 			LogError(res, _T("gnutls_x509_crt_get_dn"));
@@ -1041,7 +1041,7 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 		return false;
 	}
 
-	std::vector<wxString> alt_subject_names = GetCertSubjectAltNames(cert);
+	std::vector<std::wstring> alt_subject_names = GetCertSubjectAltNames(cert);
 
 	size = 0;
 	res = gnutls_x509_crt_get_issuer_dn(cert, 0, &size);
@@ -1050,7 +1050,7 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 		dn[size] = 0;
 		if (!(res = gnutls_x509_crt_get_issuer_dn(cert, dn, &size))) {
 			dn[size] = 0;
-			issuer = wxString(dn, wxConvUTF8);
+			issuer = fz::to_wstring_from_utf8(dn);
 		}
 		else {
 			LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
@@ -1065,8 +1065,8 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 		return false;
 	}
 
-	wxString fingerprint_sha256;
-	wxString fingerprint_sha1;
+	std::wstring fingerprint_sha256;
+	std::wstring fingerprint_sha1;
 
 	unsigned char digest[100];
 	size = sizeof(digest) - 1;
@@ -1101,9 +1101,9 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 }
 
 
-std::vector<wxString> CTlsSocket::GetCertSubjectAltNames(gnutls_x509_crt_t cert)
+std::vector<std::wstring> CTlsSocket::GetCertSubjectAltNames(gnutls_x509_crt_t cert)
 {
-	std::vector<wxString> ret;
+	std::vector<std::wstring> ret;
 
 	char san[4096];
 	for (unsigned int i = 0; i < 10000; ++i) { // I assume this is a sane limit
@@ -1117,15 +1117,15 @@ std::vector<wxString> CTlsSocket::GetCertSubjectAltNames(gnutls_x509_crt_t cert)
 		}
 
 		if (type_or_error == GNUTLS_SAN_DNSNAME || type_or_error == GNUTLS_SAN_RFC822NAME) {
-			wxString dns = wxString(san, wxConvUTF8);
+			std::wstring dns = fz::to_wstring_from_utf8(san);
 			if (!dns.empty()) {
-				ret.push_back(dns);
+				ret.emplace_back(std::move(dns));
 			}
 		}
 		else if (type_or_error == GNUTLS_SAN_IPADDRESS) {
-			wxString ip = CSocket::AddressToString(san, san_size);
+			std::wstring ip = fz::to_wstring(CSocket::AddressToString(san, san_size));
 			if (!ip.empty()) {
-				ret.push_back(ip);
+				ret.emplace_back(std::move(ip));
 			}
 		}
 	}
@@ -1378,12 +1378,12 @@ int CTlsSocket::VerifyCertificate()
 	int const algorithmWarnings = GetAlgorithmWarnings();
 
 	CCertificateNotification *pNotification = new CCertificateNotification(
-		m_pOwner->GetCurrentServer()->GetHost(),
+		m_pOwner->GetCurrentServer()->GetHost().ToStdWstring(),
 		m_pOwner->GetCurrentServer()->GetPort(),
-		GetProtocolName(),
-		GetKeyExchange(),
-		GetCipherName(),
-		GetMacName(),
+		GetProtocolName().ToStdWstring(),
+		GetKeyExchange().ToStdWstring(),
+		GetCipherName().ToStdWstring(),
+		GetMacName().ToStdWstring(),
 		algorithmWarnings,
 		std::move(certificates));
 

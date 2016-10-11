@@ -127,8 +127,8 @@ protected:
 	void OnSftpEvent(sftp_message const& message);
 	void OnTerminate(std::wstring const& error);
 
-	wxString m_requestPreamble;
-	wxString m_requestInstruction;
+	std::wstring m_requestPreamble;
+	std::wstring m_requestInstruction;
 
 	CSftpEncryptionNotification m_sftpEncryptionDetails;
 };

@@ -248,7 +248,7 @@ public:
 	{
 	}
 
-	wxString lastChallenge;
+	std::wstring lastChallenge;
 	CInteractiveLoginNotification::type lastChallengeType{CInteractiveLoginNotification::interactive};
 	bool criticalFailure{};
 
@@ -570,7 +570,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 					t = CInteractiveLoginNotification::keyfile;
 				}
 
-				wxString challenge;
+				std::wstring challenge;
 				if (!m_requestPreamble.empty() && t != CInteractiveLoginNotification::keyfile) {
 					challenge += m_requestPreamble + _T("\n");
 				}

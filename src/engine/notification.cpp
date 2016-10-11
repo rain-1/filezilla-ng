@@ -10,7 +10,7 @@ RequestId CFileExistsNotification::GetRequestID() const
 	return reqId_fileexists;
 }
 
-CInteractiveLoginNotification::CInteractiveLoginNotification(type t, const wxString& challenge, bool repeated)
+CInteractiveLoginNotification::CInteractiveLoginNotification(type t, std::wstring const& challenge, bool repeated)
 	: m_challenge(challenge)
 	, m_type(t)
 	, m_repeated(repeated)
@@ -37,7 +37,7 @@ CTransferStatus const& CTransferStatusNotification::GetStatus() const
 	return status_;
 }
 
-CHostKeyNotification::CHostKeyNotification(wxString host, int port, wxString fingerprint, bool changed /*=false*/)
+CHostKeyNotification::CHostKeyNotification(std::wstring const& host, int port, std::wstring const& fingerprint, bool changed)
 	: m_host(host), m_port(port), m_fingerprint(fingerprint), m_changed(changed)
 {
 }
@@ -47,7 +47,7 @@ RequestId CHostKeyNotification::GetRequestID() const
 	return m_changed ? reqId_hostkeyChanged : reqId_hostkey;
 }
 
-wxString CHostKeyNotification::GetHost() const
+std::wstring CHostKeyNotification::GetHost() const
 {
 	return m_host;
 }
@@ -57,7 +57,7 @@ int CHostKeyNotification::GetPort() const
 	return m_port;
 }
 
-wxString CHostKeyNotification::GetFingerprint() const
+std::wstring CHostKeyNotification::GetFingerprint() const
 {
 	return m_fingerprint;
 }
@@ -83,14 +83,14 @@ char* CDataNotification::Detach(int& len)
 CCertificate::CCertificate(
 		unsigned char const* rawData, unsigned int len,
 		fz::datetime const& activationTime, fz::datetime const& expirationTime,
-		wxString const& serial,
-		wxString const& pkalgoname, unsigned int bits,
-		wxString const& signalgoname,
-		wxString const& fingerprint_sha256,
-		wxString const& fingerprint_sha1,
-		wxString const& issuer,
-		wxString const& subject,
-		std::vector<wxString> const& altSubjectNames)
+		std::wstring const& serial,
+		std::wstring const& pkalgoname, unsigned int bits,
+		std::wstring const& signalgoname,
+		std::wstring const& fingerprint_sha256,
+		std::wstring const& fingerprint_sha1,
+		std::wstring const& issuer,
+		std::wstring const& subject,
+		std::vector<std::wstring> const& altSubjectNames)
 	: m_activationTime(activationTime)
 	, m_expirationTime(expirationTime)
 	, m_len(len)
@@ -119,11 +119,13 @@ CCertificate::CCertificate(const CCertificate &op)
 			m_rawData = new unsigned char[op.m_len];
 			memcpy(m_rawData, op.m_rawData, op.m_len);
 		}
-		else
+		else {
 			m_rawData = 0;
+		}
 	}
-	else
+	else {
 		m_rawData = 0;
+	}
 	m_len = op.m_len;
 
 	m_activationTime = op.m_activationTime;
@@ -186,21 +188,20 @@ CCertificate& CCertificate::operator=(const CCertificate &op)
 	return *this;
 }
 
-CCertificateNotification::CCertificateNotification(const wxString& host, unsigned int port,
-		const wxString& protocol,
-		const wxString& keyExchange,
-		const wxString& sessionCipher,
-		const wxString& sessionMac,
+CCertificateNotification::CCertificateNotification(std::wstring const& host, unsigned int port,
+		std::wstring const& protocol,
+		std::wstring const& keyExchange,
+		std::wstring const& sessionCipher,
+		std::wstring const& sessionMac,
 		int algorithmWarnings,
 		std::vector<CCertificate> && certificates)
-	: m_protocol(protocol)
+	: m_host(host)
+	, m_port(port)
+	, m_protocol(protocol)
 	, m_keyExchange(keyExchange)
+	, m_sessionCipher(sessionCipher)
+	, m_sessionMac(sessionMac)
 	, m_algorithmWarnings(algorithmWarnings)
 	, m_certificates(certificates)
 {
-	m_host = host;
-	m_port = port;
-
-	m_sessionCipher = sessionCipher;
-	m_sessionMac = sessionMac;
 }
