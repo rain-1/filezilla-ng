@@ -1083,20 +1083,20 @@ bool CSiteManagerDialog::Verify()
 			}
 		}
 
-		wxString const remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue();
+		std::wstring const remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue().ToStdWstring();
 		if (!remotePathRaw.empty()) {
-			const wxString serverType = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetStringSelection();
+			std::wstring serverType = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetStringSelection().ToStdWstring();
 
 			CServerPath remotePath;
 			remotePath.SetType(CServer::GetServerTypeFromName(serverType));
-			if (!remotePath.SetPath(remotePathRaw.ToStdWstring())) {
+			if (!remotePath.SetPath(remotePathRaw)) {
 				XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetFocus();
 				wxMessageBoxEx(_("Default remote path cannot be parsed. Make sure it is a valid absolute path for the selected server type."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
 			}
 		}
 
-		const wxString localPath = XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->GetValue();
+		std::wstring const localPath = XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->GetValue().ToStdWstring();
 		if (XRCCTRL(*this, "ID_SYNC", wxCheckBox)->GetValue()) {
 			if (remotePathRaw.empty() || localPath.empty()) {
 				XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetFocus();
@@ -1383,27 +1383,26 @@ bool CSiteManagerDialog::UpdateServer(Site &server, const wxString &name)
 	if (!xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue).ToULong(&port) || !port || port > 65535) {
 		port = CServer::GetDefaultPort(protocol);
 	}
-	wxString host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue);
+	std::wstring host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue).ToStdWstring();
 	// SetHost does not accept URL syntax
 	if (!host.empty() && host[0] == '[') {
-		host.RemoveLast();
-		host = host.Mid(1);
+		host = host.substr(1, host.size() - 2);
 	}
 	server.m_server.SetHost(host, port);
 
 	auto logon_type = GetLogonType();
 	server.m_server.SetLogonType(logon_type);
 
-	server.m_server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue),
-							xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue));
-	server.m_server.SetAccount(xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue));
+	server.m_server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue).ToStdWstring(),
+							xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring());
+	server.m_server.SetAccount(xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue).ToStdWstring());
 
-	server.m_server.SetKeyFile(xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue));
+	server.m_server.SetKeyFile(xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue).ToStdWstring());
 
 	server.m_comments = xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::GetValue);
 	server.m_colour = CSiteManager::GetColourFromIndex(xrc_call(*this, "ID_COLOR", &wxChoice::GetSelection));
 
-	const wxString serverType = xrc_call(*this, "ID_SERVERTYPE", &wxChoice::GetStringSelection);
+	std::wstring const serverType = xrc_call(*this, "ID_SERVERTYPE", &wxChoice::GetStringSelection).ToStdWstring();
 	server.m_server.SetType(CServer::GetServerTypeFromName(serverType));
 
 	server.m_default_bookmark.m_localDir = xrc_call(*this, "ID_LOCALDIR", &wxTextCtrl::GetValue);
@@ -1434,11 +1433,12 @@ bool CSiteManagerDialog::UpdateServer(Site &server, const wxString &name)
 	if (xrc_call(*this, "ID_CHARSET_UTF8", &wxRadioButton::GetValue))
 		server.m_server.SetEncodingType(ENCODING_UTF8);
 	else if (xrc_call(*this, "ID_CHARSET_CUSTOM", &wxRadioButton::GetValue)) {
-		wxString encoding = xrc_call(*this, "ID_ENCODING", &wxTextCtrl::GetValue);
+		std::wstring encoding = xrc_call(*this, "ID_ENCODING", &wxTextCtrl::GetValue).ToStdWstring();
 		server.m_server.SetEncodingType(ENCODING_CUSTOM, encoding);
 	}
-	else
+	else {
 		server.m_server.SetEncodingType(ENCODING_AUTO);
+	}
 
 	if (xrc_call(*this, "ID_BYPASSPROXY", &wxCheckBox::GetValue))
 		server.m_server.SetBypassProxy(true);
@@ -2435,5 +2435,5 @@ ServerProtocol CSiteManagerDialog::GetProtocol() const
 
 LogonType CSiteManagerDialog::GetLogonType() const
 {
-	return CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
+	return CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection).ToStdWstring());
 }

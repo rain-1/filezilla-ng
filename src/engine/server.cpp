@@ -7,22 +7,22 @@ struct t_protocolInfo
 	bool alwaysShowPrefix;
 	unsigned int defaultPort;
 	const bool translateable;
-	const wxChar* const name;
+	const wchar_t* const name;
 	bool supportsPostlogin;
 };
 
 static const t_protocolInfo protocolInfos[] = {
-	{ FTP,          _T("ftp"),    false, 21,  true,  TRANSLATE_T("FTP - File Transfer Protocol with optional encryption"),                 true  },
+	{ FTP,          _T("ftp"),    false, 21,  true,  TRANSLATE_T("FTP - File Transfer Protocol with optional encryption"), true  },
 	{ SFTP,         _T("sftp"),   true,  22,  false, _T("SFTP - SSH File Transfer Protocol"),                              false },
-	{ HTTP,         _T("http"),   true,  80,  false, _T("HTTP - Hypertext Transfer Protocol"),                             false  },
-	{ HTTPS,        _T("https"),  true, 443,  true,  TRANSLATE_T("HTTPS - HTTP over TLS"),                                 false  },
-	{ FTPS,         _T("ftps"),   true, 990,  true,  TRANSLATE_T("FTPS - FTP over implicit TLS"),                      true  },
-	{ FTPES,        _T("ftpes"),  true,  21,  true,  TRANSLATE_T("FTPES - FTP over explicit TLS"),                     true  },
-	{ INSECURE_FTP, _T("ftp"),    false, 21,  true,  TRANSLATE_T("FTP - Insecure File Transfer Protocol"), true  },
+	{ HTTP,         _T("http"),   true,  80,  false, _T("HTTP - Hypertext Transfer Protocol"),                             false },
+	{ HTTPS,        _T("https"),  true, 443,  true,  TRANSLATE_T("HTTPS - HTTP over TLS"),                                 false },
+	{ FTPS,         _T("ftps"),   true, 990,  true,  TRANSLATE_T("FTPS - FTP over implicit TLS"),                          true  },
+	{ FTPES,        _T("ftpes"),  true,  21,  true,  TRANSLATE_T("FTPES - FTP over explicit TLS"),                         true  },
+	{ INSECURE_FTP, _T("ftp"),    false, 21,  true,  TRANSLATE_T("FTP - Insecure File Transfer Protocol"),                 true  },
 	{ UNKNOWN,      _T(""),       false, 21,  false, _T(""), false }
 };
 
-static const wxString typeNames[SERVERTYPE_MAX] = {
+static const std::wstring typeNames[SERVERTYPE_MAX] = {
 	TRANSLATE_T("Default (Autodetect)"),
 	_T("Unix"),
 	_T("VMS"),
@@ -39,10 +39,10 @@ static const wxString typeNames[SERVERTYPE_MAX] = {
 static const t_protocolInfo& GetProtocolInfo(ServerProtocol protocol)
 {
 	unsigned int i = 0;
-	for ( ; protocolInfos[i].protocol != UNKNOWN; ++i)
-	{
-		if (protocolInfos[i].protocol == protocol)
+	for ( ; protocolInfos[i].protocol != UNKNOWN; ++i) {
+		if (protocolInfos[i].protocol == protocol) {
 			break;
+		}
 	}
 	return protocolInfos[i];
 }
@@ -83,12 +83,11 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 	if (pos != -1) {
 		wxString protocol = host.Left(pos).Lower();
 		host = host.Mid(pos + 3);
-		if (protocol.Left(3) == _T("fz_"))
+		if (protocol.Left(3) == _T("fz_")) {
 			protocol = protocol.Mid(3);
+		}
 		m_protocol = GetProtocolFromPrefix(protocol.Lower());
-		if (m_protocol == UNKNOWN)
-		{
-			// TODO: http:// once WebDAV is officially supported
+		if (m_protocol == UNKNOWN) {
 			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
 			return false;
 		}
@@ -504,7 +503,7 @@ bool CServer::EqualsNoPass(const CServer &op) const
 	return true;
 }
 
-CServer::CServer(ServerProtocol protocol, ServerType type, wxString host, unsigned int port, wxString user, wxString pass, wxString account)
+CServer::CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int port, std::wstring const& user, std::wstring const& pass, std::wstring const& account)
 {
 	Initialize();
 	m_protocol = protocol;
@@ -517,7 +516,7 @@ CServer::CServer(ServerProtocol protocol, ServerType type, wxString host, unsign
 	m_account = account;
 }
 
-CServer::CServer(ServerProtocol protocol, ServerType type, wxString host, unsigned int port)
+CServer::CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int port)
 {
 	Initialize();
 	m_protocol = protocol;
@@ -552,55 +551,63 @@ void CServer::SetProtocol(ServerProtocol serverProtocol)
 	m_protocol = serverProtocol;
 }
 
-bool CServer::SetHost(wxString host, unsigned int port)
+bool CServer::SetHost(std::wstring const& host, unsigned int port)
 {
-	if (host.empty())
+	if (host.empty()) {
 		return false;
+	}
 
-	if (port < 1 || port > 65535)
+	if (port < 1 || port > 65535) {
 		return false;
+	}
 
 	m_host = host;
 	m_port = port;
 
-	if (m_protocol == UNKNOWN)
+	if (m_protocol == UNKNOWN) {
 		m_protocol = GetProtocolFromPort(m_port);
+	}
 
 	return true;
 }
 
-bool CServer::SetUser(const wxString& user, const wxString& pass)
+bool CServer::SetUser(std::wstring const& user, std::wstring const& pass)
 {
-	if (m_logonType == ANONYMOUS)
+	if (m_logonType == ANONYMOUS) {
 		return true;
+	}
 
 	if (user.empty()) {
-		if (m_logonType != ASK && m_logonType != INTERACTIVE)
+		if (m_logonType != ASK && m_logonType != INTERACTIVE) {
 			return false;
+		}
 		m_pass.clear();
 	}
-	else
+	else {
 		m_pass = pass;
+	}
 
 	m_user = user;
 
 	return true;
 }
 
-bool CServer::SetAccount(const wxString& account)
+bool CServer::SetAccount(std::wstring const& account)
 {
-	if (m_logonType != ACCOUNT)
+	if (m_logonType != ACCOUNT) {
 		return false;
+	}
 
 	m_account = account;
 
 	return true;
 }
 
-bool CServer::SetKeyFile(const wxString& keyFile)
+bool CServer::SetKeyFile(std::wstring const& keyFile)
 {
-	if (m_logonType != KEY)
+	if (m_logonType != KEY) {
 		return false;
+	}
 
 	m_keyFile = keyFile;
 
@@ -609,8 +616,9 @@ bool CServer::SetKeyFile(const wxString& keyFile)
 
 bool CServer::SetTimezoneOffset(int minutes)
 {
-	if (minutes > (60 * 24) || minutes < (-60 * 24))
+	if (minutes > (60 * 24) || minutes < (-60 * 24)) {
 		return false;
+	}
 
 	m_timezoneOffset = minutes;
 
@@ -719,10 +727,11 @@ void CServer::Initialize()
 	m_bypassProxy = false;
 }
 
-bool CServer::SetEncodingType(CharsetEncoding type, const wxString& encoding)
+bool CServer::SetEncodingType(CharsetEncoding type, std::wstring const& encoding)
 {
-	if (type == ENCODING_CUSTOM && encoding.empty())
+	if (type == ENCODING_CUSTOM && encoding.empty()) {
 		return false;
+	}
 
 	m_encodingType = type;
 	m_customEncoding = encoding;
@@ -730,10 +739,11 @@ bool CServer::SetEncodingType(CharsetEncoding type, const wxString& encoding)
 	return true;
 }
 
-bool CServer::SetCustomEncoding(const wxString& encoding)
+bool CServer::SetCustomEncoding(std::wstring const& encoding)
 {
-	if (encoding.empty())
+	if (encoding.empty()) {
 		return false;
+	}
 
 	m_encodingType = ENCODING_CUSTOM;
 	m_customEncoding = encoding;
@@ -811,7 +821,7 @@ ServerProtocol CServer::GetProtocolFromName(const wxString& name)
 	return UNKNOWN;
 }
 
-bool CServer::SetPostLoginCommands(const std::vector<wxString>& postLoginCommands)
+bool CServer::SetPostLoginCommands(const std::vector<std::wstring>& postLoginCommands)
 {
 	if (!SupportsPostLoginCommands(m_protocol)) {
 		m_postLoginCommands.clear();
@@ -856,30 +866,32 @@ bool CServer::GetBypassProxy() const
 
 bool CServer::ProtocolHasDataTypeConcept(const ServerProtocol protocol)
 {
-	if (protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP)
+	if (protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP) {
 		return true;
+	}
 
 	return false;
 }
 
-wxString CServer::GetNameFromServerType(ServerType type)
+std::wstring CServer::GetNameFromServerType(ServerType type)
 {
 	wxASSERT(type != SERVERTYPE_MAX);
-	return wxGetTranslation(typeNames[type]);
+	return wxGetTranslation(typeNames[type]).ToStdWstring();
 }
 
-ServerType CServer::GetServerTypeFromName(const wxString& name)
+ServerType CServer::GetServerTypeFromName(std::wstring const& name)
 {
 	for (int i = 0; i < SERVERTYPE_MAX; ++i) {
 		ServerType type = static_cast<ServerType>(i);
-		if (name == CServer::GetNameFromServerType(type))
+		if (name == CServer::GetNameFromServerType(type)) {
 			return type;
+		}
 	}
 
 	return DEFAULT;
 }
 
-LogonType CServer::GetLogonTypeFromName(const wxString& name)
+LogonType CServer::GetLogonTypeFromName(std::wstring const& name)
 {
 	if (name == _("Normal"))
 		return NORMAL;
@@ -895,23 +907,23 @@ LogonType CServer::GetLogonTypeFromName(const wxString& name)
 		return ANONYMOUS;
 }
 
-wxString CServer::GetNameFromLogonType(LogonType type)
+std::wstring CServer::GetNameFromLogonType(LogonType type)
 {
 	wxASSERT(type != LOGONTYPE_MAX);
 
 	switch (type)
 	{
 	case NORMAL:
-		return _("Normal");
+		return _("Normal").ToStdWstring();
 	case ASK:
-		return _("Ask for password");
+		return _("Ask for password").ToStdWstring();
 	case KEY:
-		return _("Key file");
+		return _("Key file").ToStdWstring();
 	case INTERACTIVE:
-		return _("Interactive");
+		return _("Interactive").ToStdWstring();
 	case ACCOUNT:
-		return _("Account");
+		return _("Account").ToStdWstring();
 	default:
-		return _("Anonymous");
+		return _("Anonymous").ToStdWstring();
 	}
 }

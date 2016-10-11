@@ -1,5 +1,5 @@
-#ifndef __SERVER_H__
-#define __SERVER_H__
+#ifndef FILEZILLA_ENGINE_SERVER_HEADER
+#define FILEZILLA_ENGINE_SERVER_HEADER
 
 enum ServerProtocol
 {
@@ -77,9 +77,8 @@ public:
 	// No error checking is done in the constructors
 	CServer();
 	CServer(wxString host, unsigned int);
-	CServer(wxString host, unsigned int, wxString user, wxString pass = wxString());
-	CServer(ServerProtocol protocol, ServerType type, wxString host, unsigned int);
-	CServer(ServerProtocol protocol, ServerType type, wxString host, unsigned int, wxString user, wxString pass = wxString(), wxString account = wxString());
+	CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int);
+	CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int, std::wstring const& user, std::wstring const& pass = std::wstring(), std::wstring const& account = std::wstring());
 
 	void SetType(ServerType type);
 
@@ -103,12 +102,12 @@ public:
 	bool ParseUrl(wxString host, wxString port, wxString user, wxString pass, wxString &error, CServerPath &path);
 
 	void SetProtocol(ServerProtocol serverProtocol);
-	bool SetHost(wxString Host, unsigned int port);
+	bool SetHost(std::wstring const& host, unsigned int port);
 
 	void SetLogonType(LogonType logonType);
-	bool SetUser(const wxString& user, const wxString& pass = wxString());
-	bool SetAccount(const wxString& account);
-	bool SetKeyFile(const wxString& keyFile);
+	bool SetUser(std::wstring const& user, std::wstring const& pass = std::wstring());
+	bool SetAccount(std::wstring const& account);
+	bool SetKeyFile(std::wstring const& keyFile);
 
 	CServer& operator=(const CServer &op);
 	bool operator==(const CServer &op) const;
@@ -122,8 +121,8 @@ public:
 
 	std::wstring Format(ServerFormat formatType) const;
 
-	bool SetEncodingType(CharsetEncoding type, const wxString& encoding = wxString());
-	bool SetCustomEncoding(const wxString& encoding);
+	bool SetEncodingType(CharsetEncoding type, std::wstring const& encoding = std::wstring());
+	bool SetCustomEncoding(std::wstring const& encoding);
 	CharsetEncoding GetEncodingType() const;
 	wxString GetCustomEncoding() const;
 
@@ -141,8 +140,8 @@ public:
 	static bool ProtocolHasDataTypeConcept(ServerProtocol const protocol);
 
 	// These commands will be executed after a successful login.
-	const std::vector<wxString>& GetPostLoginCommands() const { return m_postLoginCommands; }
-	bool SetPostLoginCommands(const std::vector<wxString>& postLoginCommands);
+	std::vector<std::wstring> const& GetPostLoginCommands() const { return m_postLoginCommands; }
+	bool SetPostLoginCommands(std::vector<std::wstring> const& postLoginCommands);
 	static bool SupportsPostLoginCommands(ServerProtocol const protocol);
 
 	void SetBypassProxy(bool val);
@@ -152,11 +151,11 @@ public:
 	void SetName(std::wstring const& name) { m_name = name; }
 	std::wstring GetName() const { return m_name; }
 
-	static wxString GetNameFromServerType(ServerType type);
-	static ServerType GetServerTypeFromName(const wxString& name);
+	static std::wstring GetNameFromServerType(ServerType type);
+	static ServerType GetServerTypeFromName(std::wstring const& name);
 
-	static wxString GetNameFromLogonType(LogonType type);
-	static LogonType GetLogonTypeFromName(const wxString& name);
+	static std::wstring GetNameFromLogonType(LogonType type);
+	static LogonType GetLogonTypeFromName(std::wstring const& name);
 
 	explicit operator bool() const { return !m_host.empty(); }
 
@@ -176,10 +175,10 @@ protected:
 	PasvMode m_pasvMode;
 	int m_maximumMultipleConnections;
 	CharsetEncoding m_encodingType;
-	wxString m_customEncoding;
+	std::wstring m_customEncoding;
 	std::wstring m_name;
 
-	std::vector<wxString> m_postLoginCommands;
+	std::vector<std::wstring> m_postLoginCommands;
 	bool m_bypassProxy;
 };
 

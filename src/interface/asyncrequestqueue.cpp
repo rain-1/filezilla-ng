@@ -123,8 +123,9 @@ bool CAsyncRequestQueue::AddRequest(CFileZillaEngine *pEngine, std::unique_ptr<C
 
 bool CAsyncRequestQueue::ProcessNextRequest()
 {
-	if (m_requestList.empty())
+	if (m_requestList.empty()) {
 		return true;
+	}
 
 	t_queueEntry &entry = m_requestList.front();
 
@@ -146,23 +147,27 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 		}
 		bool canRemember = notification.GetType() == CInteractiveLoginNotification::keyfile;
 
-		if (CLoginManager::Get().GetPassword(notification.server, true, wxString(), notification.GetChallenge(), canRemember))
+		if (CLoginManager::Get().GetPassword(notification.server, true, std::wstring(), notification.GetChallenge(), canRemember)) {
 			notification.passwordSet = true;
+		}
 		else {
 			// Retry with prompt
 
-			if (!CheckWindowState())
+			if (!CheckWindowState()) {
 				return false;
+			}
 
-			if (CLoginManager::Get().GetPassword(notification.server, false, wxString(), notification.GetChallenge(), canRemember))
+			if (CLoginManager::Get().GetPassword(notification.server, false, std::wstring(), notification.GetChallenge(), canRemember)) {
 				notification.passwordSet = true;
+			}
 		}
 
 		entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification));
 	}
 	else if (entry.pNotification->GetRequestID() == reqId_hostkey || entry.pNotification->GetRequestID() == reqId_hostkeyChanged) {
-		if (!CheckWindowState())
+		if (!CheckWindowState()) {
 			return false;
+		}
 
 		auto & notification = static_cast<CHostKeyNotification&>(*entry.pNotification.get());
 
@@ -170,14 +175,16 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 			notification.m_trust = true;
 			notification.m_alwaysTrust = false;
 		}
-		else
+		else {
 			CVerifyHostkeyDialog::ShowVerificationDialog(m_pMainFrame, notification);
+		}
 
 		entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification));
 	}
 	else if (entry.pNotification->GetRequestID() == reqId_certificate) {
-		if (!CheckWindowState())
+		if (!CheckWindowState()) {
 			return false;
+		}
 
 		auto & notification = static_cast<CCertificateNotification&>(*entry.pNotification.get());
 		m_pVerifyCertDlg->ShowVerificationDialog(notification);

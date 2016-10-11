@@ -119,14 +119,6 @@ _column path_table_columns[] = {
 	{ _T("path"), Column_type::text, not_null }
 };
 
-struct fast_equal
-{
-	bool operator()(wxString const& lhs, wxString const& rhs) const
-	{
-		return lhs == rhs;
-	}
-};
-
 class CQueueStorage::Impl
 {
 public:
@@ -167,11 +159,11 @@ public:
 
 	bool Bind(sqlite3_stmt* statement, int index, int value);
 	bool Bind(sqlite3_stmt* statement, int index, int64_t value);
-	bool Bind(sqlite3_stmt* statement, int index, const wxString& value);
+	bool Bind(sqlite3_stmt* statement, int index, std::wstring const& value);
 	bool Bind(sqlite3_stmt* statement, int index, const char* const value);
 	bool BindNull(sqlite3_stmt* statement, int index);
 
-	wxString GetColumnText(sqlite3_stmt* statement, int index, bool shrink = true);
+	std::wstring GetColumnText(sqlite3_stmt* statement, int index);
 	int64_t GetColumnInt64(sqlite3_stmt* statement, int index, int64_t def = 0);
 	int GetColumnInt(sqlite3_stmt* statement, int index, int def = 0);
 
@@ -192,15 +184,11 @@ public:
 	sqlite3_stmt* selectLocalPathQuery_;
 	sqlite3_stmt* selectRemotePathQuery_;
 
-#ifndef __WXMSW__
-	wxMBConvUTF16 utf16_;
-#endif
-
 	// Caches to speed up saving and loading
 	void ClearCaches();
 
-	std::unordered_map<wxString, int64_t, wxStringHash, fast_equal> localPaths_;
-	std::unordered_map<wxString, int64_t, wxStringHash> remotePaths_; // No need for fast_equal as GetSafePath returns unshared string anyhow
+	std::unordered_map<wxString, int64_t, wxStringHash> localPaths_;
+	std::unordered_map<wxString, int64_t, wxStringHash> remotePaths_;
 
 	std::map<int64_t, CLocalPath> reverseLocalPaths_;
 	std::map<int64_t, CServerPath> reverseRemotePaths_;
@@ -209,20 +197,20 @@ public:
 
 void CQueueStorage::Impl::ReadLocalPaths()
 {
-	if (!selectLocalPathQuery_)
+	if (!selectLocalPathQuery_) {
 		return;
+	}
 
 	int res;
-	do
-	{
+	do {
 		res = sqlite3_step(selectLocalPathQuery_);
-		if (res == SQLITE_ROW)
-		{
+		if (res == SQLITE_ROW) {
 			int64_t id = GetColumnInt64(selectLocalPathQuery_, path_table_column_names::id);
-			wxString localPathRaw = GetColumnText(selectLocalPathQuery_, path_table_column_names::path);
+			std::wstring localPathRaw = GetColumnText(selectLocalPathQuery_, path_table_column_names::path);
 			CLocalPath localPath;
-			if (id > 0 && !localPathRaw.empty() && localPath.SetPath(localPathRaw.ToStdWstring()))
+			if (id > 0 && !localPathRaw.empty() && localPath.SetPath(localPathRaw)) {
 				reverseLocalPaths_[id] = localPath;
+			}
 		}
 	}
 	while (res == SQLITE_BUSY || res == SQLITE_ROW);
@@ -242,7 +230,7 @@ void CQueueStorage::Impl::ReadRemotePaths()
 		res = sqlite3_step(selectRemotePathQuery_);
 		if (res == SQLITE_ROW) {
 			int64_t id = GetColumnInt64(selectRemotePathQuery_, path_table_column_names::id);
-			std::wstring remotePathRaw = GetColumnText(selectRemotePathQuery_, path_table_column_names::path).ToStdWstring();
+			std::wstring remotePathRaw = GetColumnText(selectRemotePathQuery_, path_table_column_names::path);
 			CServerPath remotePath;
 			if (id > 0 && !remotePathRaw.empty() && remotePath.SetSafePath(remotePathRaw)) {
 				reverseRemotePaths_[id] = remotePath;
@@ -313,9 +301,10 @@ void CQueueStorage::Impl::ClearCaches()
 
 int64_t CQueueStorage::Impl::SaveLocalPath(const CLocalPath& path)
 {
-	std::unordered_map<wxString, int64_t, wxStringHash, fast_equal>::const_iterator it = localPaths_.find(path.GetPath());
-	if (it != localPaths_.end())
+	std::unordered_map<wxString, int64_t, wxStringHash>::const_iterator it = localPaths_.find(path.GetPath());
+	if (it != localPaths_.end()) {
 		return it->second;
+	}
 
 	Bind(insertLocalPathQuery_, path_table_column_names::path, path.GetPath());
 
@@ -326,8 +315,7 @@ int64_t CQueueStorage::Impl::SaveLocalPath(const CLocalPath& path)
 
 	sqlite3_reset(insertLocalPathQuery_);
 
-	if (res == SQLITE_DONE)
-	{
+	if (res == SQLITE_DONE) {
 		int64_t id = sqlite3_last_insert_rowid(db_);
 		localPaths_[path.GetPath()] = id;
 		return id;
@@ -476,15 +464,17 @@ sqlite3_stmt* CQueueStorage::Impl::PrepareStatement(const wxString& query)
 
 bool CQueueStorage::Impl::PrepareStatements()
 {
-	if (!db_)
+	if (!db_) {
 		return false;
+	}
 
 	insertServerQuery_ = PrepareInsertStatement(_T("servers"), server_table_columns, sizeof(server_table_columns) / sizeof(_column));
 	insertFileQuery_ = PrepareInsertStatement(_T("files"), file_table_columns, sizeof(file_table_columns) / sizeof(_column));
 	insertLocalPathQuery_ = PrepareInsertStatement(_T("local_paths"), path_table_columns, sizeof(path_table_columns) / sizeof(_column));
 	insertRemotePathQuery_ = PrepareInsertStatement(_T("remote_paths"), path_table_columns, sizeof(path_table_columns) / sizeof(_column));
-	if (!insertServerQuery_ || !insertFileQuery_ || !insertLocalPathQuery_ || !insertRemotePathQuery_)
+	if (!insertServerQuery_ || !insertFileQuery_ || !insertLocalPathQuery_ || !insertRemotePathQuery_) {
 		return false;
+	}
 
 	{
 		wxString query = _T("SELECT ");
@@ -543,25 +533,13 @@ bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, int64_t value
 	return res == SQLITE_OK;
 }
 
-
-#ifndef __WXMSW__
-extern "C" {
-static void custom_free(void* v)
+bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, std::wstring const& value)
 {
-	char* s = static_cast<char*>(v);
-	delete [] s;
-}
-}
-#endif
-
-bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, const wxString& value)
-{
-#ifdef __WXMSW__
-	return sqlite3_bind_text16(statement, index, value.wc_str(), value.length() * 2, SQLITE_TRANSIENT) == SQLITE_OK;
+#ifdef FZ_WINDOWS
+	return sqlite3_bind_text16(statement, index, value.c_str(), value.size() * 2, SQLITE_TRANSIENT) == SQLITE_OK;
 #else
-	char* out = new char[value.size() * 2];
-	size_t outlen = utf16_.FromWChar(out, value.size() * 2, value.c_str(), value.size());
-	bool ret = sqlite3_bind_text16(statement, index, out, outlen, custom_free) == SQLITE_OK;
+	std::string utf8 = fz::to_utf8(value);
+	bool ret = sqlite3_bind_text(statement, index, utf8.c_str(), utf8.size(), SQLITE_TRANSIENT) == SQLITE_OK;
 	return ret;
 #endif
 }
@@ -652,27 +630,31 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 	}
 
 	if (CServer::SupportsPostLoginCommands(server.GetProtocol())) {
-		const std::vector<wxString>& postLoginCommands = server.GetPostLoginCommands();
+		std::vector<std::wstring> const& postLoginCommands = server.GetPostLoginCommands();
 		if (!postLoginCommands.empty()) {
-			wxString commands;
-			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); ++iter) {
+			std::wstring commands;
+			for (auto const& command : commands) {
 				if (!commands.empty())
 					commands += _T("\n");
-				commands += *iter;
+				commands += command;
 			}
 			Bind(insertServerQuery_, server_table_column_names::post_login_commands, commands);
 		}
-		else
+		else {
 			BindNull(insertServerQuery_, server_table_column_names::post_login_commands);
+		}
 	}
-	else
+	else {
 		BindNull(insertServerQuery_, server_table_column_names::post_login_commands);
+	}
 
 	Bind(insertServerQuery_, server_table_column_names::bypass_proxy, server.GetBypassProxy() ? 1 : 0);
-	if (!server.GetName().empty())
+	if (!server.GetName().empty()) {
 		Bind(insertServerQuery_, server_table_column_names::name, server.GetName());
-	else
+	}
+	else {
 		BindNull(insertServerQuery_, server_table_column_names::name);
+	}
 
 	int res;
 	do {
@@ -749,26 +731,31 @@ bool CQueueStorage::Impl::SaveFile(const CFileItem& file)
 
 bool CQueueStorage::Impl::SaveDirectory(const CFolderItem& directory)
 {
-	if (directory.Download())
+	if (directory.Download()) {
 		BindNull(insertFileQuery_, file_table_column_names::source_file);
-	else
+	}
+	else {
 		Bind(insertFileQuery_, file_table_column_names::source_file, directory.GetSourceFile());
+	}
 	BindNull(insertFileQuery_, file_table_column_names::target_file);
 
 	int64_t localPathId = directory.Download() ? SaveLocalPath(directory.GetLocalPath()) : -1;
 	int64_t remotePathId = directory.Download() ? -1 : SaveRemotePath(directory.GetRemotePath());
-	if (localPathId == -1 && remotePathId == -1)
+	if (localPathId == -1 && remotePathId == -1) {
 		return false;
+	}
 
 	Bind(insertFileQuery_, file_table_column_names::local_path, localPathId);
 	Bind(insertFileQuery_, file_table_column_names::remote_path, remotePathId);
 
 	Bind(insertFileQuery_, file_table_column_names::download, directory.Download() ? 1 : 0);
 	BindNull(insertFileQuery_, file_table_column_names::size);
-	if (directory.m_errorCount)
+	if (directory.m_errorCount) {
 		Bind(insertFileQuery_, file_table_column_names::error_count, directory.m_errorCount);
-	else
+	}
+	else {
 		BindNull(insertFileQuery_, file_table_column_names::error_count);
+	}
 	Bind(insertFileQuery_, file_table_column_names::priority, static_cast<int>(directory.GetPriority()));
 	BindNull(insertFileQuery_, file_table_column_names::ascii_file);
 
@@ -785,28 +772,23 @@ bool CQueueStorage::Impl::SaveDirectory(const CFolderItem& directory)
 }
 
 
-wxString CQueueStorage::Impl::GetColumnText(sqlite3_stmt* statement, int index, bool shrink)
+std::wstring CQueueStorage::Impl::GetColumnText(sqlite3_stmt* statement, int index)
 {
-	wxString ret;
+	std::wstring ret;
 
-#ifdef __WXMSW__
-	(void)shrink;
-	const wxChar* text = static_cast<const wxChar*>(sqlite3_column_text16(statement, index));
-	if (text)
-		ret = text;
-#else
-	const char* text = static_cast<const char*>(sqlite3_column_text16(statement, index));
-	int len = sqlite3_column_bytes16(statement, index);
-	if (text)
-	{
-		wxStringBuffer buffer(ret, len);
-		wxChar* out = buffer;
-
-		int outlen = utf16_.ToWChar( out, len, text, len );
-		buffer[outlen] = 0;
+#ifdef FZ_WINDOWS
+	static_assert(sizeof(wchar_t) == 2, "wchar_t not of size 2");
+	wchar_t const* text = static_cast<wchar_t const*>(sqlite3_column_text16(statement, index));
+	if (text) {
+		ret.assign(text, sqlite3_column_bytes16(statement, index));
 	}
-	if (shrink)
-		ret.Shrink();
+#else
+	char const* text = reinterpret_cast<char const*>(sqlite3_column_text(statement, index));
+	int len = sqlite3_column_bytes(statement, index);
+	if (text) {
+		std::string utf8(text, len);
+		ret = fz::to_wstring_from_utf8(utf8);
+	}
 #endif
 
 	return ret;
@@ -814,128 +796,131 @@ wxString CQueueStorage::Impl::GetColumnText(sqlite3_stmt* statement, int index, 
 
 int64_t CQueueStorage::Impl::GetColumnInt64(sqlite3_stmt* statement, int index, int64_t def)
 {
-	if (sqlite3_column_type(statement, index) == SQLITE_NULL)
+	if (sqlite3_column_type(statement, index) == SQLITE_NULL) {
 		return def;
-	else
+	}
+	else {
 		return sqlite3_column_int64(statement, index);
+	}
 }
 
 int CQueueStorage::Impl::GetColumnInt(sqlite3_stmt* statement, int index, int def)
 {
-	if (sqlite3_column_type(statement, index) == SQLITE_NULL)
+	if (sqlite3_column_type(statement, index) == SQLITE_NULL) {
 		return def;
-	else
+	}
+	else {
 		return sqlite3_column_int(statement, index);
+	}
 }
 
 int64_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 {
 	server = CServer();
 
-	wxString host = GetColumnText(selectServersQuery_, server_table_column_names::host);
-	if (host.empty())
+	std::wstring host = GetColumnText(selectServersQuery_, server_table_column_names::host);
+	if (host.empty()) {
 		return INVALID_DATA;
+	}
 
 	int port = GetColumnInt(selectServersQuery_, server_table_column_names::port);
-	if (port < 1 || port > 65535)
+	if (port < 1 || port > 65535) {
 		return INVALID_DATA;
+	}
 
-	if (!server.SetHost(host, port))
+	if (!server.SetHost(host, port)) {
 		return INVALID_DATA;
+	}
 
 	int const protocol = GetColumnInt(selectServersQuery_, server_table_column_names::protocol);
-	if (protocol < 0 || protocol > MAX_VALUE)
+	if (protocol < 0 || protocol > MAX_VALUE) {
 		return INVALID_DATA;
+	}
 	server.SetProtocol(static_cast<ServerProtocol>(protocol));
 
 	int type = GetColumnInt(selectServersQuery_, server_table_column_names::type);
-	if (type < 0 || type >= SERVERTYPE_MAX)
+	if (type < 0 || type >= SERVERTYPE_MAX) {
 		return INVALID_DATA;
+	}
 
 	server.SetType(static_cast<ServerType>(type));
 
 	int logonType = GetColumnInt(selectServersQuery_, server_table_column_names::logontype);
-	if (logonType < 0 || logonType >= LOGONTYPE_MAX)
+	if (logonType < 0 || logonType >= LOGONTYPE_MAX) {
 		return INVALID_DATA;
+	}
 
 	server.SetLogonType(static_cast<LogonType>(logonType));
 
-	if (server.GetLogonType() != ANONYMOUS)
-	{
-		wxString user = GetColumnText(selectServersQuery_, server_table_column_names::user);
+	if (server.GetLogonType() != ANONYMOUS) {
+		std::wstring user = GetColumnText(selectServersQuery_, server_table_column_names::user);
 
-		wxString pass;
-		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType)
+		std::wstring pass;
+		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType) {
 			pass = GetColumnText(selectServersQuery_, server_table_column_names::password);
+		}
 
-		if (!server.SetUser(user, pass))
+		if (!server.SetUser(user, pass)) {
 			return INVALID_DATA;
+		}
 
-		if ((long)ACCOUNT == logonType)
-		{
-			wxString account = GetColumnText(selectServersQuery_, server_table_column_names::account);
-			if (account.empty())
+		if ((long)ACCOUNT == logonType) {
+			std::wstring account = GetColumnText(selectServersQuery_, server_table_column_names::account);
+			if (account.empty()) {
 				return INVALID_DATA;
-			if (!server.SetAccount(account))
+			}
+			if (!server.SetAccount(account)) {
 				return INVALID_DATA;
+			}
 		}
 	}
 
 	int timezoneOffset = GetColumnInt(selectServersQuery_, server_table_column_names::timezone_offset);
-	if (!server.SetTimezoneOffset(timezoneOffset))
+	if (!server.SetTimezoneOffset(timezoneOffset)) {
 		return INVALID_DATA;
+	}
 
 	wxString pasvMode = GetColumnText(selectServersQuery_, server_table_column_names::transfer_mode);
-	if (pasvMode == _T("passive"))
+	if (pasvMode == _T("passive")) {
 		server.SetPasvMode(MODE_PASSIVE);
-	else if (pasvMode == _T("active"))
+	}
+	else if (pasvMode == _T("active")) {
 		server.SetPasvMode(MODE_ACTIVE);
-	else
+	}
+	else {
 		server.SetPasvMode(MODE_DEFAULT);
+	}
 
 	int maximumMultipleConnections = GetColumnInt(selectServersQuery_, server_table_column_names::max_connections);
-	if (maximumMultipleConnections < 0)
+	if (maximumMultipleConnections < 0) {
 		return INVALID_DATA;
+	}
 	server.MaximumMultipleConnections(maximumMultipleConnections);
 
-	wxString encodingType = GetColumnText(selectServersQuery_, server_table_column_names::encoding);
-	if (encodingType.empty() || encodingType == _T("Auto"))
+	std::wstring encodingType = GetColumnText(selectServersQuery_, server_table_column_names::encoding);
+	if (encodingType.empty() || encodingType == _T("Auto")) {
 		server.SetEncodingType(ENCODING_AUTO);
-	else if (encodingType == _T("UTF-8"))
+	}
+	else if (encodingType == _T("UTF-8")) {
 		server.SetEncodingType(ENCODING_UTF8);
-	else
-	{
-		if (!server.SetEncodingType(ENCODING_CUSTOM, encodingType))
+	}
+	else {
+		if (!server.SetEncodingType(ENCODING_CUSTOM, encodingType)) {
 			return INVALID_DATA;
+		}
 	}
 
 	if (CServer::SupportsPostLoginCommands(server.GetProtocol())) {
-		std::vector<wxString> postLoginCommands;
-
-		wxString commands = GetColumnText(selectServersQuery_, server_table_column_names::post_login_commands);
-		while (!commands.empty())
-		{
-			int pos = commands.Find('\n');
-			if (!pos)
-				commands = commands.Mid(1);
-			else if (pos == -1)
-			{
-				postLoginCommands.push_back(commands);
-				commands.clear();
-			}
-			else
-			{
-				postLoginCommands.push_back(commands.Left(pos));
-				commands = commands.Mid(pos + 1);
-			}
-		}
-		if (!server.SetPostLoginCommands(postLoginCommands))
+		std::wstring const commands = GetColumnText(selectServersQuery_, server_table_column_names::post_login_commands);
+		std::vector<std::wstring> postLoginCommands = fz::strtok(commands, '\n');
+		if (!server.SetPostLoginCommands(postLoginCommands)) {
 			return INVALID_DATA;
+		}
 	}
 
 
 	server.SetBypassProxy(GetColumnInt(selectServersQuery_, server_table_column_names::bypass_proxy) == 1 );
-	server.SetName(GetColumnText(selectServersQuery_, server_table_column_names::name).ToStdWstring());
+	server.SetName(GetColumnText(selectServersQuery_, server_table_column_names::name));
 
 	return GetColumnInt64(selectServersQuery_, server_table_column_names::id);
 }
@@ -943,8 +928,8 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 
 int64_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 {
-	std::wstring sourceFile = GetColumnText(selectFilesQuery_, file_table_column_names::source_file).ToStdWstring();
-	std::wstring targetFile = GetColumnText(selectFilesQuery_, file_table_column_names::target_file).ToStdWstring();
+	std::wstring sourceFile = GetColumnText(selectFilesQuery_, file_table_column_names::source_file);
+	std::wstring targetFile = GetColumnText(selectFilesQuery_, file_table_column_names::target_file);
 
 	int64_t localPathId = GetColumnInt64(selectFilesQuery_, file_table_column_names::local_path, false);
 	int64_t remotePathId = GetColumnInt64(selectFilesQuery_, file_table_column_names::remote_path, false);
@@ -991,8 +976,9 @@ int64_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 		fileItem->SetPriorityRaw(QueuePriority(priority));
 		fileItem->m_errorCount = errorCount;
 
-		if (overwrite_action > 0 && overwrite_action < CFileExistsNotification::ACTION_COUNT)
+		if (overwrite_action > 0 && overwrite_action < CFileExistsNotification::ACTION_COUNT) {
 			fileItem->m_defaultFileExistsAction = (CFileExistsNotification::OverwriteAction)overwrite_action;
+		}
 	}
 
 	return GetColumnInt64(selectFilesQuery_, file_table_column_names::id);
@@ -1002,11 +988,11 @@ CQueueStorage::CQueueStorage()
 : d_(new Impl)
 {
 	int ret = sqlite3_open(GetDatabaseFilename().ToUTF8(), &d_->db_ );
-	if (ret != SQLITE_OK)
+	if (ret != SQLITE_OK) {
 		d_->db_ = 0;
+	}
 
-	if (sqlite3_exec(d_->db_, "PRAGMA encoding=\"UTF-16le\"", 0, 0, 0) == SQLITE_OK)
-	{
+	if (sqlite3_exec(d_->db_, "PRAGMA encoding=\"UTF-16le\"", 0, 0, 0) == SQLITE_OK) {
 		d_->MigrateSchema();
 		d_->CreateTables();
 		d_->PrepareStatements();
