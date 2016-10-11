@@ -406,7 +406,7 @@ bool GetServer(pugi::xml_node node, CServer& server)
 			auto passElement = node.child("Pass");
 			if (passElement) {
 
-				std::wstring encoding = GetTextAttribute(passElement, "encoding");
+				std::wstring encoding = GetTextAttribute(passElement, "encoding").ToStdWstring();
 
 				if (encoding == _T("base64")) {
 					std::string decoded = fz::base64_decode(passElement.child_value());
