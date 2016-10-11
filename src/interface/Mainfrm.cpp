@@ -928,7 +928,9 @@ void CMainFrame::DoOnEngineEvent(CFileZillaEngine* engine)
 			}
 			break;
 		case nId_transferstatus:
-			m_pQueueView->ProcessNotification(pState->m_pEngine, std::move(pNotification));
+			if (m_pQueueView) {
+				m_pQueueView->ProcessNotification(pState->m_pEngine, std::move(pNotification));
+			}
 			break;
 		case nId_sftp_encryption:
 			{
@@ -1967,7 +1969,9 @@ void CMainFrame::CheckChangedSettings()
 	CAutoAsciiFiles::SettingsChanged();
 
 #if FZ_MANUALUPDATECHECK
-	m_pUpdater->Init();
+	if (m_pUpdater) {
+		m_pUpdater->Init();
+	}
 #endif
 }
 
