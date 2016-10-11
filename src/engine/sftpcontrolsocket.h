@@ -49,7 +49,7 @@ public:
 
 	virtual int Connect(const CServer &server);
 
-	virtual int List(CServerPath path = CServerPath(), wxString subDir = _T(""), int flags = 0);
+	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
 	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
 	virtual int Mkdir(const CServerPath& path);

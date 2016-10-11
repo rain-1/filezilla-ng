@@ -773,10 +773,6 @@ class CSftpListOpData final : public COpData
 public:
 	CSftpListOpData()
 		: COpData(Command::list)
-		, pParser()
-		, refresh()
-		, fallback_to_current()
-		, mtime_index()
 	{
 	}
 
@@ -785,18 +781,18 @@ public:
 		delete pParser;
 	}
 
-	CDirectoryListingParser* pParser;
+	CDirectoryListingParser* pParser{};
 
 	CServerPath path;
-	wxString subDir;
+	std::wstring subDir;
 
 	// Set to true to get a directory listing even if a cache
 	// lookup can be made after finding out true remote directory
-	bool refresh;
-	bool fallback_to_current;
+	bool refresh{};
+	bool fallback_to_current{};
 
 	CDirectoryListing directoryListing;
-	int mtime_index;
+	int mtime_index{};
 
 	fz::monotonic_clock m_time_before_locking;
 };
@@ -810,13 +806,13 @@ enum listStates
 	list_mtime
 };
 
-int CSftpControlSocket::List(CServerPath path, wxString subDir, int flags)
+int CSftpControlSocket::List(CServerPath path, std::wstring const& subDir, int flags)
 {
 	CServerPath newPath = m_CurrentPath;
 	if (!path.empty()) {
 		newPath = path;
 	}
-	if (!newPath.ChangePath(subDir.ToStdWstring())) {
+	if (!newPath.ChangePath(subDir)) {
 		newPath.clear();
 	}
 
@@ -924,8 +920,9 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 					int serveroffset = static_cast<int>((date - listTime).get_seconds());
 					if (!pData->directoryListing[pData->mtime_index].has_seconds()) {
 						// Round offset to full minutes
-						if (serveroffset < 0)
+						if (serveroffset < 0) {
 							serveroffset -= 59;
+						}
 						serveroffset -= serveroffset % 60;
 					}
 
@@ -1033,8 +1030,9 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 			pData->path.clear();
 			pData->subDir = _T("");
 			int res = ChangeDir();
-			if (res != FZ_REPLY_OK)
+			if (res != FZ_REPLY_OK) {
 				return res;
+			}
 		}
 		else {
 			ResetOperation(prevResult);
