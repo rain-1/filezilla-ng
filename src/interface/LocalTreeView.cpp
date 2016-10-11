@@ -737,7 +737,7 @@ void CLocalTreeView::RefreshListing()
 		}
 
 		// Step 2: Enumerate subdirectories on disk and sort them
-		std::vector<wxString> dirs;
+		std::vector<std::wstring> dirs;
 
 		fz::native_string file;
 		static int64_t const size(-1);
@@ -756,7 +756,7 @@ void CLocalTreeView::RefreshListing()
 				continue;
 			}
 
-			dirs.push_back(wfile);
+			dirs.emplace_back(std::move(wfile));
 		}
 		auto const& sortFunc = CFileListCtrlSortBase::GetCmpFunction(m_nameSortMode);
 		std::sort(dirs.begin(), dirs.end(), [&](auto const& lhs, auto const& rhs) { return sortFunc(lhs, rhs) < 0; });
