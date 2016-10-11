@@ -3,7 +3,7 @@
 struct t_protocolInfo
 {
 	const ServerProtocol protocol;
-	const wxString prefix;
+	std::wstring const prefix;
 	bool alwaysShowPrefix;
 	unsigned int defaultPort;
 	const bool translateable;
@@ -86,7 +86,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 		if (protocol.Left(3) == _T("fz_")) {
 			protocol = protocol.Mid(3);
 		}
-		m_protocol = GetProtocolFromPrefix(protocol.Lower());
+		m_protocol = GetProtocolFromPrefix(protocol.ToStdWstring());
 		if (m_protocol == UNKNOWN) {
 			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
 			return false;
@@ -756,7 +756,7 @@ CharsetEncoding CServer::GetEncodingType() const
 	return m_encodingType;
 }
 
-wxString CServer::GetCustomEncoding() const
+std::wstring CServer::GetCustomEncoding() const
 {
 	return m_customEncoding;
 }
@@ -783,37 +783,39 @@ ServerProtocol CServer::GetProtocolFromPort(unsigned int port, bool defaultOnly 
 	return FTP;
 }
 
-wxString CServer::GetProtocolName(ServerProtocol protocol)
+std::wstring CServer::GetProtocolName(ServerProtocol protocol)
 {
-	const t_protocolInfo *protocolInfo = protocolInfos;
-	while (protocolInfo->protocol != UNKNOWN)
-	{
-		if (protocolInfo->protocol != protocol)
-		{
+	t_protocolInfo const* protocolInfo = protocolInfos;
+	while (protocolInfo->protocol != UNKNOWN) {
+		if (protocolInfo->protocol != protocol) {
 			++protocolInfo;
 			continue;
 		}
 
-		if (protocolInfo->translateable)
-			return wxGetTranslation(protocolInfo->name);
-		else
+		if (protocolInfo->translateable) {
+			return wxGetTranslation(protocolInfo->name).ToStdWstring();
+		}
+		else {
 			return protocolInfo->name;
+		}
 	}
 
-	return wxString();
+	return std::wstring();
 }
 
-ServerProtocol CServer::GetProtocolFromName(const wxString& name)
+ServerProtocol CServer::GetProtocolFromName(std::wstring const& name)
 {
 	const t_protocolInfo *protocolInfo = protocolInfos;
 	while (protocolInfo->protocol != UNKNOWN) {
 		if (protocolInfo->translateable) {
-			if (wxGetTranslation(protocolInfo->name) == name)
+			if (wxGetTranslation(protocolInfo->name) == name) {
 				return protocolInfo->protocol;
+			}
 		}
 		else {
-			if (protocolInfo->name == name)
+			if (protocolInfo->name == name) {
 				return protocolInfo->protocol;
+			}
 		}
 		++protocolInfo;
 	}
@@ -837,17 +839,19 @@ bool CServer::SupportsPostLoginCommands(ServerProtocol const protocol)
 	return protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP;
 }
 
-ServerProtocol CServer::GetProtocolFromPrefix(const wxString& prefix)
+ServerProtocol CServer::GetProtocolFromPrefix(std::wstring const& prefix)
 {
+	std::wstring lower = fz::str_tolower_ascii(prefix);
 	for (unsigned int i = 0; protocolInfos[i].protocol != UNKNOWN; ++i) {
-		if (!protocolInfos[i].prefix.CmpNoCase(prefix))
+		if (protocolInfos[i].prefix == lower) {
 			return protocolInfos[i].protocol;
+		}
 	}
 
 	return UNKNOWN;
 }
 
-wxString CServer::GetPrefixFromProtocol(const ServerProtocol protocol)
+std::wstring CServer::GetPrefixFromProtocol(ServerProtocol const protocol)
 {
 	const t_protocolInfo& info = GetProtocolInfo(protocol);
 
@@ -856,12 +860,12 @@ wxString CServer::GetPrefixFromProtocol(const ServerProtocol protocol)
 
 void CServer::SetBypassProxy(bool val)
 {
-  m_bypassProxy = val;
+	m_bypassProxy = val;
 }
 
 bool CServer::GetBypassProxy() const
 {
-  return m_bypassProxy;
+	return m_bypassProxy;
 }
 
 bool CServer::ProtocolHasDataTypeConcept(const ServerProtocol protocol)

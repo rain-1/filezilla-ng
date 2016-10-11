@@ -76,7 +76,6 @@ public:
 
 	// No error checking is done in the constructors
 	CServer();
-	CServer(wxString host, unsigned int);
 	CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int);
 	CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int, std::wstring const& user, std::wstring const& pass = std::wstring(), std::wstring const& account = std::wstring());
 
@@ -124,16 +123,16 @@ public:
 	bool SetEncodingType(CharsetEncoding type, std::wstring const& encoding = std::wstring());
 	bool SetCustomEncoding(std::wstring const& encoding);
 	CharsetEncoding GetEncodingType() const;
-	wxString GetCustomEncoding() const;
+	std::wstring GetCustomEncoding() const;
 
 	static unsigned int GetDefaultPort(ServerProtocol protocol);
 	static ServerProtocol GetProtocolFromPort(unsigned int port, bool defaultOnly = false);
 
-	static wxString GetProtocolName(ServerProtocol protocol);
-	static ServerProtocol GetProtocolFromName(const wxString& name);
+	static std::wstring GetProtocolName(ServerProtocol protocol);
+	static ServerProtocol GetProtocolFromName(std::wstring const& name);
 
-	static ServerProtocol GetProtocolFromPrefix(const wxString& prefix);
-	static wxString GetPrefixFromProtocol(const ServerProtocol protocol);
+	static ServerProtocol GetProtocolFromPrefix(std::wstring const& prefix);
+	static std::wstring GetPrefixFromProtocol(ServerProtocol const protocol);
 
 	// Some protocol distinguish between ASCII and binary files for line-ending
 	// conversion.
