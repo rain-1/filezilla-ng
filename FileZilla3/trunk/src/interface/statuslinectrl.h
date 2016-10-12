@@ -25,7 +25,7 @@ public:
 protected:
 	void InitFieldOffsets();
 
-	void DrawRightAlignedText(wxDC& dc, wxString text, int x, int y);
+	void DrawRightAlignedText(wxDC& dc, wxString const& text, int x, int y);
 	void DrawProgressBar(wxDC& dc, int x, int y, int height, int bar_split, int permill);
 
 	CQueueView* m_pParent;

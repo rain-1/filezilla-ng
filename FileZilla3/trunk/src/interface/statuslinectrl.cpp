@@ -296,7 +296,7 @@ void CStatusLineCtrl::OnTimer(wxTimerEvent&)
 		m_transferStatusTimer.Stop();
 }
 
-void CStatusLineCtrl::DrawRightAlignedText(wxDC& dc, wxString text, int x, int y)
+void CStatusLineCtrl::DrawRightAlignedText(wxDC& dc, wxString const& text, int x, int y)
 {
 	wxCoord w, h;
 	dc.GetTextExtent(text, &w, &h);
