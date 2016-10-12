@@ -1,25 +1,27 @@
-#ifndef __BUILDINFO_H__
-#define __BUILDINFO_H__
+#ifndef FILEZILLA_BUILDINFO_HEADER
+#define FILEZILLA_BUILDINFO_HEADER
 
-class CBuildInfo
+#include <string>
+
+class CBuildInfo final
 {
-protected:
-	CBuildInfo() {}
+public:
+	CBuildInfo() = delete;
 
 public:
 
-	static wxString GetVersion();
-	static int64_t ConvertToVersionNumber(const wxChar* version);
-	static wxString GetBuildDateString();
-	static wxString GetBuildTimeString();
+	static std::wstring GetVersion();
+	static int64_t ConvertToVersionNumber(wchar_t const* version);
+	static std::wstring GetBuildDateString();
+	static std::wstring GetBuildTimeString();
 	static fz::datetime GetBuildDate();
-	static wxString GetBuildType();
-	static wxString GetCompiler();
-	static wxString GetCompilerFlags();
-	static wxString GetHostname();
-	static wxString GetBuildSystem();
+	static std::wstring GetBuildType();
+	static std::wstring GetCompiler();
+	static std::wstring GetCompilerFlags();
+	static std::wstring GetHostname();
+	static std::wstring GetBuildSystem();
 	static bool IsUnstable(); // Returns true on beta or rc releases.
-	static wxString GetCPUCaps(char separator = ',');
+	static std::wstring GetCPUCaps(char separator = ',');
 };
 
-#endif //__BUILDINFO_H__
+#endif

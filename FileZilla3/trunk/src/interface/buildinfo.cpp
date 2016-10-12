@@ -1,96 +1,106 @@
 #include <filezilla.h>
 #include "buildinfo.h"
 
-wxString CBuildInfo::GetVersion()
+#include <libfilezilla/format.hpp>
+
+std::wstring CBuildInfo::GetVersion()
 {
-	return wxString(PACKAGE_VERSION, wxConvLocal);
+	return fz::to_wstring(PACKAGE_VERSION);
 }
 
-wxString CBuildInfo::GetBuildDateString()
+std::wstring CBuildInfo::GetBuildDateString()
 {
 	// Get build date. Unfortunately it is in the ugly Mmm dd yyyy format.
 	// Make a good yyyy-mm-dd out of it
-	wxString date(__DATE__, wxConvLocal);
-	while (date.Replace(_T("  "), _T(" ")));
-
-	const wxChar months[][4] = { _T("Jan"), _T("Feb"), _T("Mar"),
-								_T("Apr"), _T("May"), _T("Jun"),
-								_T("Jul"), _T("Aug"), _T("Sep"),
-								_T("Oct"), _T("Nov"), _T("Dec") };
-
-	int pos = date.Find(_T(" "));
-	if (pos == -1)
-		return date;
-
-	wxString month = date.Left(pos);
-	int i = 0;
-	for (i = 0; i < 12; ++i) {
-		if (months[i] == month)
-			break;
+	std::wstring date = fz::to_wstring(__DATE__);
+	while (date.find(L"  ") != std::wstring::npos) {
+		fz::replace_substrings(date, L"  ", L" ");
 	}
-	if (i == 12)
-		return date;
 
-	wxString tmp = date.Mid(pos + 1);
-	pos = tmp.Find(_T(" "));
-	if (pos == -1)
-		return date;
+	wchar_t const months[][4] = { L"Jan", L"Feb", L"Mar",
+								L"Apr", L"May", L"Jun",
+								L"Jul", L"Aug", L"Sep",
+								L"Oct", L"Nov", L"Dec" };
 
-	long day;
-	if (!tmp.Left(pos).ToLong(&day))
+	size_t pos = date.find(' ');
+	if (pos == std::wstring::npos) {
 		return date;
+	}
 
-	long year;
-	if (!tmp.Mid(pos + 1).ToLong(&year))
+	std::wstring month = date.substr(0, pos);
+	size_t i = 0;
+	for (i = 0; i < 12; ++i) {
+		if (months[i] == month) {
+			break;
+		}
+	}
+	if (i == 12) {
 		return date;
+	}
 
-	return wxString::Format(_T("%04d-%02d-%02d"), (int)year, i + 1, (int)day);
+	std::wstring tmp = date.substr(pos + 1);
+	pos = tmp.find(' ');
+	if (pos == std::wstring::npos) {
+		return date;
+	}
+
+	auto day = fz::to_integral<unsigned int>(tmp.substr(0, pos));
+	if (!day) {
+		return date;
+	}
+	
+	auto year = fz::to_integral<unsigned int>(tmp.substr(pos + 1));
+	if (!year) {
+		return date;
+	}
+
+	return fz::sprintf(L"%04d-%02d-%02d", year, i + 1, day);
 }
 
-wxString CBuildInfo::GetBuildTimeString()
+std::wstring CBuildInfo::GetBuildTimeString()
 {
-	return wxString(__TIME__, wxConvLocal);
+	return fz::to_wstring(__TIME__);
 }
 
 fz::datetime CBuildInfo::GetBuildDate()
 {
-	fz::datetime date(GetBuildDateString().ToStdWstring(), fz::datetime::utc);
+	fz::datetime date(GetBuildDateString(), fz::datetime::utc);
 	return date;
 }
 
-wxString CBuildInfo::GetCompiler()
+std::wstring CBuildInfo::GetCompiler()
 {
 #ifdef USED_COMPILER
-	return wxString(USED_COMPILER, wxConvLocal);
+	return fz::to_wstring(USED_COMPILER);
 #elif defined __VISUALC__
 	int version = __VISUALC__;
-	return wxString::Format(_T("Visual C++ %d"), version);
+	return fz::sprintf(L"Visual C++ %d", version);
 #else
-	return _T("Unknown compiler");
+	return L"Unknown compiler";
 #endif
 }
 
-wxString CBuildInfo::GetCompilerFlags()
+std::wstring CBuildInfo::GetCompilerFlags()
 {
 #ifndef USED_CXXFLAGS
-	return wxString();
+	return std::wstring();
 #else
-	wxString flags(USED_CXXFLAGS, wxConvLocal);
-	return flags;
+	return fz::to_wstring(USED_CXXFLAGS);
 #endif
 }
 
-wxString CBuildInfo::GetBuildType()
+std::wstring CBuildInfo::GetBuildType()
 {
 #ifdef BUILDTYPE
-	wxString buildtype(BUILDTYPE, wxConvLocal);
-	if (buildtype == _T("official") || buildtype == _T("nightly"))
+	std::wstring buildtype = fz::to_wstring(BUILDTYPE);
+	if (buildtype == L"official" || buildtype == L"nightly") {
 		return buildtype;
+	}
 #endif
-	return wxString();
+	return std::wstring();
 }
 
-int64_t CBuildInfo::ConvertToVersionNumber(const wxChar* version)
+int64_t CBuildInfo::ConvertToVersionNumber(wchar_t const* version)
 {
 	// Crude conversion from version string into number for easy comparison
 	// Supported version formats:
@@ -113,8 +123,9 @@ int64_t CBuildInfo::ConvertToVersionNumber(const wxChar* version)
 	// which in turn corresponds to the simple 64-bit number 2254026754228227
 	// And these can be compared easily
 
-	if (*version < '0' || *version > '9')
+	if (!version || *version < '0' || *version > '9') {
 		return -1;
+	}
 
 	int64_t v{};
 	int segment{};
@@ -140,39 +151,40 @@ int64_t CBuildInfo::ConvertToVersionNumber(const wxChar* version)
 	v <<= (5 - shifts) * 10;
 
 	// Make sure final releases have a higher version number than rc or beta releases
-	if ((v & 0x0FFFFF) == 0)
+	if ((v & 0x0FFFFF) == 0) {
 		v |= 0x080000;
+	}
 
 	return v;
 }
 
-wxString CBuildInfo::GetHostname()
+std::wstring CBuildInfo::GetHostname()
 {
 #ifndef USED_HOST
-	return wxString();
+	return std::wstring();
 #else
-	wxString flags(USED_HOST, wxConvLocal);
-	return flags;
+	return fz::to_wstring(USED_HOST);
 #endif
 }
 
-wxString CBuildInfo::GetBuildSystem()
+std::wstring CBuildInfo::GetBuildSystem()
 {
 #ifndef USED_BUILD
-	return wxString();
+	return std::wstring();
 #else
-	wxString flags(USED_BUILD, wxConvLocal);
-	return flags;
+	return fz::to_wstring(USED_BUILD);
 #endif
 }
 
 bool CBuildInfo::IsUnstable()
 {
-	if (GetVersion().Find(_T("beta")) != -1)
+	if (GetVersion().find(L"beta") != std::wstring::npos) {
 		return true;
+	}
 
-	if (GetVersion().Find(_T("rc")) != -1)
+	if (GetVersion().find(L"rc") != std::wstring::npos) {
 		return true;
+	}
 
 	return false;
 }
@@ -202,9 +214,9 @@ namespace {
 #endif
 #endif
 
-wxString CBuildInfo::GetCPUCaps(char separator)
+std::wstring CBuildInfo::GetCPUCaps(char separator)
 {
-	wxString ret;
+	std::wstring ret;
 
 #if HAVE_CPUID
 	int reg[4];
@@ -213,21 +225,21 @@ wxString CBuildInfo::GetCPUCaps(char separator)
 	int const max = reg[0];
 
 	// function (aka leave), subfunction (subleave), register, bit, description
-	std::tuple<int, int, int, int, wxString> const caps[] = {
-		std::make_tuple(1, 0, 3, 25, _T("sse")),
-		std::make_tuple(1, 0, 3, 26, _T("sse2")),
-		std::make_tuple(1, 0, 2, 0,  _T("sse3")),
-		std::make_tuple(1, 0, 2, 9,  _T("ssse3")),
-		std::make_tuple(1, 0, 2, 19, _T("sse4.1")),
-		std::make_tuple(1, 0, 2, 20, _T("sse4.2")),
-		std::make_tuple(1, 0, 2, 28, _T("avx")),
-		std::make_tuple(7, 0, 1, 5,  _T("avx2")),
-		std::make_tuple(1, 0, 2, 25, _T("aes")),
-		std::make_tuple(1, 0, 2, 1,  _T("pclmulqdq")),
-		std::make_tuple(1, 0, 2, 30, _T("rdrnd")),
-		std::make_tuple(7, 0, 1, 3,  _T("bmi2")),
-		std::make_tuple(7, 0, 1, 8,  _T("bmi2")),
-		std::make_tuple(7, 0, 1, 19, _T("adx"))
+	std::tuple<int, int, int, int, std::wstring> const caps[] = {
+		std::make_tuple(1, 0, 3, 25, L"sse"),
+		std::make_tuple(1, 0, 3, 26, L"sse2"),
+		std::make_tuple(1, 0, 2, 0,  L"sse3"),
+		std::make_tuple(1, 0, 2, 9,  L"ssse3"),
+		std::make_tuple(1, 0, 2, 19, L"sse4.1"),
+		std::make_tuple(1, 0, 2, 20, L"sse4.2"),
+		std::make_tuple(1, 0, 2, 28, L"avx"),
+		std::make_tuple(7, 0, 1, 5,  L"avx2"),
+		std::make_tuple(1, 0, 2, 25, L"aes"),
+		std::make_tuple(1, 0, 2, 1,  L"pclmulqdq"),
+		std::make_tuple(1, 0, 2, 30, L"rdrnd"),
+		std::make_tuple(7, 0, 1, 3,  L"bmi2"),
+		std::make_tuple(7, 0, 1, 8,  L"bmi2"),
+		std::make_tuple(7, 0, 1, 19, L"adx")
 	};
 
 	for (auto const& cap : caps) {
