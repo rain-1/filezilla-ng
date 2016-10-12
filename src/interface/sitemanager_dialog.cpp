@@ -955,7 +955,7 @@ bool CSiteManagerDialog::Verify()
 		return true;
 
 	if (data->m_site) {
-		const wxString& host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
+		std::wstring const host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue).ToStdWstring();
 		if (host.empty()) {
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(_("You have to enter a hostname."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
@@ -998,10 +998,10 @@ bool CSiteManagerDialog::Verify()
 		server.SetLogonType(logon_type);
 		server.SetProtocol(protocol);
 
-		wxString port = XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue();
+		std::wstring port = xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue).ToStdWstring();
 		CServerPath path;
-		wxString error;
-		if (!server.ParseUrl(host, port, wxString(), wxString(), error, path)) {
+		std::wstring error;
+		if (!server.ParseUrl(host, port, std::wstring(), std::wstring(), error, path)) {
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(error, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
