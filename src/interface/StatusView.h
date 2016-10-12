@@ -17,7 +17,7 @@ public:
 	virtual ~CStatusView();
 
 	void AddToLog(CLogmsgNotification const& pNotification);
-	void AddToLog(MessageType messagetype, const wxString& message, fz::datetime const& time);
+	void AddToLog(MessageType messagetype, std::wstring const& message, fz::datetime const& time);
 
 	void InitDefAttr();
 
@@ -28,7 +28,6 @@ public:
 private:
 
 	int m_nLineCount{};
-	wxString m_Content;
 	CFastTextCtrl *m_pTextCtrl{};
 
 	void OnOptionsChanged(changed_options_t const& options);
@@ -45,8 +44,8 @@ private:
 
 	struct t_attributeCache
 	{
-		wxString prefix;
-		int len;
+		std::wstring prefix;
+		size_t len;
 		wxTextAttr attr;
 #ifdef __WXMSW__
 		CHARFORMAT2 cf;
@@ -62,14 +61,17 @@ private:
 	struct t_line
 	{
 		MessageType messagetype;
-		wxString message;
+		std::wstring message;
 		fz::datetime time;
 	};
 	std::list<t_line> m_hiddenLines;
 
 	bool m_showTimestamps{};
 	fz::datetime m_lastTime;
-	wxString m_lastTimeString;
+	std::wstring m_lastTimeString;
+
+	// Re-using the same string to format the message in avoids uneeded allocations
+	std::wstring m_formattedMessage;
 };
 
 #endif

@@ -35,7 +35,7 @@ public:
 		::SendMessage((HWND)GetHandle(), EM_REPLACESEL, 0, (LPARAM)_T(""));
 	}
 
-	void AppendText(const wxString& text, int lineCount, const CHARFORMAT2& cf)
+	void AppendText(std::wstring const& text, int lineCount, const CHARFORMAT2& cf)
 	{
 		HWND hwnd = (HWND)GetHWND();
 
@@ -45,7 +45,7 @@ public:
 		::SendMessage(hwnd, EM_EXSETSEL, 0, (LPARAM)&range);
 		::SendMessage(hwnd, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
 		m_updatesCount = -2; // suppress any update event
-		::SendMessage(hwnd, EM_REPLACESEL, 0, reinterpret_cast<LPARAM>(static_cast<wxChar const*>(text.c_str())));
+		::SendMessage(hwnd, EM_REPLACESEL, 0, reinterpret_cast<LPARAM>(text.c_str()));
 		::SendMessage(hwnd, EM_LINESCROLL, (WPARAM)0, (LPARAM)lineCount);
 	}
 #endif
@@ -129,7 +129,7 @@ void CStatusView::AddToLog(CLogmsgNotification const& notification)
 	AddToLog(notification.msgType, notification.msg, fz::datetime::now());
 }
 
-void CStatusView::AddToLog(MessageType messagetype, const wxString& message, fz::datetime const& time)
+void CStatusView::AddToLog(MessageType messagetype, std::wstring const& message, fz::datetime const& time)
 {
 	if (!m_shown) {
 		if (m_hiddenLines.size() >= MAX_LINECOUNT) {
@@ -149,16 +149,16 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, fz:
 		return;
 	}
 
-	const int messageLength = message.Length();
+	size_t const messageLength = message.size();
 
-	wxString prefix;
-	prefix.Alloc(25 + messageLength);
+	// This does not clear storage
+	m_formattedMessage.clear();
 
 	if (m_nLineCount)
 #ifdef __WXMSW__
-		prefix = _T("\r\n");
+		m_formattedMessage = _T("\r\n");
 #else
-		prefix = _T("\n");
+		m_formattedMessage = _T("\n");
 #endif
 
 	if (m_nLineCount >= MAX_LINECOUNT) {
@@ -179,7 +179,7 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, fz:
 	}
 #endif
 
-	int lineLength = m_attributeCache[static_cast<int>(messagetype)].len + messageLength;
+	size_t lineLength = m_attributeCache[static_cast<int>(messagetype)].len + messageLength;
 
 	if (m_showTimestamps) {
 		if (time != m_lastTime) {
@@ -191,8 +191,8 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, fz:
 			m_lastTimeString = time.format(_T("%H:%M:%S "), fz::datetime::local);
 #endif
 		}
-		prefix += m_lastTimeString;
-		lineLength += m_lastTimeString.Len();
+		m_formattedMessage += m_lastTimeString;
+		lineLength += m_lastTimeString.size();
 	}
 
 #ifdef __WXMAC__
@@ -201,7 +201,7 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, fz:
 	m_pTextCtrl->SetDefaultColor(m_attributeCache[static_cast<int>(messagetype)].attr.GetTextColour());
 #endif
 
-	prefix += m_attributeCache[static_cast<int>(messagetype)].prefix;
+	m_formattedMessage += m_attributeCache[static_cast<int>(messagetype)].prefix;
 
 	if (m_rtl) {
 		// Unicode control characters that control reading direction
@@ -216,24 +216,24 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, fz:
 		if (messagetype == MessageType::Command || messagetype == MessageType::Response || messagetype >= MessageType::Debug_Warning) {
 			// Commands, responses and debug message contain English text,
 			// set LTR reading order for them.
-			prefix += LTR_MARK;
-			prefix += LTR_EMBED;
+			m_formattedMessage += LTR_MARK;
+			m_formattedMessage += LTR_EMBED;
 			lineLength += 2;
 		}
 	}
 
-	prefix += message;
+	m_formattedMessage += message;
 #if defined(__WXGTK__)
 	// AppendText always calls SetInsertionPointEnd, which is very expensive.
 	// This check however is negligible.
 	if (m_pTextCtrl->GetInsertionPoint() != m_pTextCtrl->GetLastPosition())
-		m_pTextCtrl->AppendText(prefix);
+		m_pTextCtrl->AppendText(m_formattedMessage);
 	else
-		m_pTextCtrl->WriteText(prefix);
+		m_pTextCtrl->WriteText(m_formattedMessage);
 #elif defined(__WXMAC__)
-	m_pTextCtrl->WriteText(prefix);
+	m_pTextCtrl->WriteText(m_formattedMessage);
 #else
-	m_pTextCtrl->AppendText(prefix, m_nLineCount, m_attributeCache[static_cast<int>(messagetype)].cf);
+	m_pTextCtrl->AppendText(m_formattedMessage, m_nLineCount, m_attributeCache[static_cast<int>(messagetype)].cf);
 #endif
 
 	if (m_nLineCount >= MAX_LINECOUNT) {
@@ -339,18 +339,18 @@ void CStatusView::InitDefAttr()
 #endif
 		switch (static_cast<MessageType>(i)) {
 		case MessageType::Error:
-			entry.prefix = _("Error:");
+			entry.prefix = _("Error:").ToStdWstring();
 			entry.attr.SetTextColour(wxColour(255, 0, 0));
 			break;
 		case MessageType::Command:
-			entry.prefix = _("Command:");
+			entry.prefix = _("Command:").ToStdWstring();
 			if (is_dark)
 				entry.attr.SetTextColour(wxColour(128, 128, 255));
 			else
 				entry.attr.SetTextColour(wxColour(0, 0, 128));
 			break;
 		case MessageType::Response:
-			entry.prefix = _("Response:");
+			entry.prefix = _("Response:").ToStdWstring();
 			if (is_dark)
 				entry.attr.SetTextColour(wxColour(128, 255, 128));
 			else
@@ -360,21 +360,21 @@ void CStatusView::InitDefAttr()
 		case MessageType::Debug_Info:
 		case MessageType::Debug_Verbose:
 		case MessageType::Debug_Debug:
-			entry.prefix = _("Trace:");
+			entry.prefix = _("Trace:").ToStdWstring();
 			if (is_dark)
 				entry.attr.SetTextColour(wxColour(255, 128, 255));
 			else
 				entry.attr.SetTextColour(wxColour(128, 0, 128));
 			break;
 		case MessageType::RawList:
-			entry.prefix = _("Listing:");
+			entry.prefix = _("Listing:").ToStdWstring();
 			if (is_dark)
 				entry.attr.SetTextColour(wxColour(128, 255, 255));
 			else
 				entry.attr.SetTextColour(wxColour(0, 128, 128));
 			break;
 		default:
-			entry.prefix = _("Status:");
+			entry.prefix = _("Status:").ToStdWstring();
 			entry.attr.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 			break;
 		}
@@ -384,10 +384,10 @@ void CStatusView::InitDefAttr()
 		dc.GetTextExtent(entry.prefix, &width, &height);
 		wxASSERT(width <= maxPrefixWidth);
 		wxCoord spaces = (maxPrefixWidth - width) / spaceWidth;
-		entry.prefix += wxString(spaces, ' ');
+		entry.prefix += std::wstring(spaces, ' ');
 #endif
 		entry.prefix += _T("\t");
-		entry.len = entry.prefix.Length();
+		entry.len = entry.prefix.size();
 
 #ifdef __WXMSW__
 		m_pTextCtrl->SetStyle(m_pTextCtrl->GetInsertionPoint(), m_pTextCtrl->GetInsertionPoint(), entry.attr);
