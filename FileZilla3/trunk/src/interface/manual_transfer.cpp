@@ -414,7 +414,7 @@ bool CManualTransfer::UpdateServer()
 
 bool CManualTransfer::VerifyServer()
 {
-	const wxString& host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue);
+	std::wstring const host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue).ToStdWstring();
 	if (host.empty()) {
 		xrc_call(*this, "ID_HOST", &wxTextCtrl::SetFocus);
 		wxMessageBoxEx(_("You have to enter a hostname."));
@@ -459,8 +459,8 @@ bool CManualTransfer::VerifyServer()
 		server.SetProtocol(protocol);
 
 	CServerPath path;
-	wxString error;
-	if (!server.ParseUrl(host, xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue), wxString(), wxString(), error, path)) {
+	std::wstring error;
+	if (!server.ParseUrl(host, xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue).ToStdWstring(), std::wstring(), std::wstring(), error, path)) {
 		xrc_call(*this, "ID_HOST", &wxTextCtrl::SetFocus);
 		wxMessageBoxEx(error);
 		return false;

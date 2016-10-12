@@ -288,8 +288,8 @@ bool CUpdater::CreateConnectCommand(wxString const& url)
 {
 	CServer s;
 	CServerPath path;
-	wxString error;
-	if( !s.ParseUrl( url, 0, wxString(), wxString(), error, path ) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS) ) {
+	std::wstring error;
+	if (!s.ParseUrl(url.ToStdWstring(), 0, std::wstring(), std::wstring(), error, path) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS)) {
 		return false;
 	}
 
@@ -303,8 +303,8 @@ bool CUpdater::CreateTransferCommand(wxString const& url, std::wstring const& lo
 
 	CServer s;
 	CServerPath path;
-	wxString error;
-	if (!s.ParseUrl(url, 0, wxString(), wxString(), error, path) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS)) {
+	std::wstring error;
+	if (!s.ParseUrl(url.ToStdWstring(), 0, std::wstring(), std::wstring(), error, path) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS)) {
 		return false;
 	}
 	std::wstring file = path.GetLastSegment();
@@ -457,7 +457,7 @@ void CUpdater::ProcessOperation(COperationNotification const& operation)
 		}
 	}
 	else if (state_ == UpdaterState::checking) {
-		COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTVERSION, CBuildInfo::GetVersion().ToStdWstring());
+		COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTVERSION, CBuildInfo::GetVersion());
 		s = ProcessFinishedData(true);
 	}
 	else {

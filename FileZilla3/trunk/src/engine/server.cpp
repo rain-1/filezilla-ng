@@ -52,155 +52,145 @@ CServer::CServer()
 	Initialize();
 }
 
-bool CServer::ParseUrl(wxString host, wxString port, wxString user, wxString pass, wxString &error, CServerPath &path)
+bool CServer::ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path)
 {
 	unsigned long nPort = 0;
-	if (!port.empty())
-	{
-		port.Trim(false);
-		port.Trim(true);
-		if (port.size() > 5 || !port.ToULong(&nPort) || !nPort || nPort > 65535)
-		{
-			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
-			error += _T("\n");
-			error += _("You can leave the port field empty to use the default port.");
+	if (!port.empty()) {
+		auto nPort = fz::to_integral<unsigned int>(fz::trimmed(port));
+		if (port.size() > 5 || !nPort || nPort > 65535) {
+			error = _("Invalid port given. The port has to be a value from 1 to 65535.").ToStdWstring();
+			error += L"\n";
+			error += _("You can leave the port field empty to use the default port.").ToStdWstring();
 			return false;
 		}
 	}
 	return ParseUrl(host, nPort, user, pass, error, path);
 }
 
-bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString pass, wxString &error, CServerPath &path)
+bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, std::wstring pass, std::wstring &error, CServerPath &path)
 {
 	m_type = DEFAULT;
 
 	if (host.empty()) {
-		error = _("No host given, please enter a host.");
+		error = _("No host given, please enter a host.").ToStdWstring();
 		return false;
 	}
 
-	int pos = host.Find(_T("://"));
-	if (pos != -1) {
-		wxString protocol = host.Left(pos).Lower();
-		host = host.Mid(pos + 3);
-		if (protocol.Left(3) == _T("fz_")) {
-			protocol = protocol.Mid(3);
+	size_t pos = host.find(L"://");
+	if (pos != std::wstring::npos) {
+		std::wstring protocol = fz::str_tolower_ascii(host.substr(0, pos));
+		host = host.substr(pos + 3);
+		if (protocol.substr(0, 3) == L"fz_") {
+			protocol = protocol.substr(3);
 		}
-		m_protocol = GetProtocolFromPrefix(protocol.ToStdWstring());
+		m_protocol = GetProtocolFromPrefix(protocol);
 		if (m_protocol == UNKNOWN) {
-			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
+			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).").ToStdWstring();
 			return false;
 		}
 	}
 
-	pos = host.Find('@');
-	if (pos != -1) {
+	pos = host.find('@');
+	if (pos != std::wstring::npos) {
 		// Check if it's something like
 		//   user@name:password@host:port/path
 		// => If there are multiple at signs, username/port ends at last at before
 		// the first slash. (Since host and port never contain any at sign)
 
-		int slash = host.Mid(pos + 1).Find('/');
-		if (slash != -1)
-			slash += pos + 1;
+		size_t slash = host.find('/', pos + 1);
 
-		int next_at = host.Mid(pos + 1).Find('@');
-		while (next_at != -1) {
-			next_at += pos + 1;
-			if (slash != -1 && next_at > slash)
+		size_t next_at = host.find('@', pos + 1);
+		while (next_at != std::wstring::npos) {
+			if (slash != std::wstring::npos  && next_at > slash) {
 				break;
+			}
 
 			pos = next_at;
-			next_at = host.Mid(pos + 1).Find('@');
+			next_at = host.find('@', next_at + 1);
 		}
 
-		user = host.Left(pos);
-		host = host.Mid(pos + 1);
+		user = host.substr(0, pos);
+		host = host.substr(pos + 1);
 
 		// Extract password (if any) from username
-		pos = user.Find(':');
-		if (pos != -1) {
-			pass = user.Mid(pos + 1);
-			user = user.Left(pos);
+		pos = user.find(':');
+		if (pos != std::wstring::npos) {
+			pass = user.substr(pos + 1);
+			user = user.substr(0, pos);
 		}
 
 		// Remove leading and trailing whitespace
-		user.Trim(true);
-		user.Trim(false);
+		fz::trim(user);
 
 		if (user.empty()) {
-			error = _("Invalid username given.");
+			error = _("Invalid username given.").ToStdWstring();
 			return false;
 		}
 	}
 	else {
 		// Remove leading and trailing whitespace
-		user.Trim(true);
-		user.Trim(false);
+		fz::trim(user);
 
 		if (user.empty() && m_logonType != ASK && m_logonType != INTERACTIVE) {
-			user = _T("anonymous");
-			pass = _T("anonymous@example.com");
+			user = L"anonymous";
+			pass = L"anonymous@example.com";
 		}
 	}
 
-	pos = host.Find('/');
-	if (pos != -1) {
-		path = CServerPath(host.Mid(pos).ToStdWstring());
-		host = host.Left(pos);
+	pos = host.find('/');
+	if (pos != std::wstring::npos) {
+		path = CServerPath(host.substr(pos));
+		host = host.substr(0, pos);
 	}
 
 	if (!host.empty() && host[0] == '[') {
 		// Probably IPv6 address
-		pos = host.Find(']');
-		if (pos == -1) {
-			error = _("Host starts with '[' but no closing bracket found.");
+		pos = host.find(']');
+		if (pos == std::wstring::npos) {
+			error = _("Host starts with '[' but no closing bracket found.").ToStdWstring();
 			return false;
 		}
-		if (pos + 1 < static_cast<int>(host.Len()) ) {
+		if (pos < host.size() - 1 ) {
 			if (host[pos + 1] != ':') {
-				error = _("Invalid host, after closing bracket only colon and port may follow.");
+				error = _("Invalid host, after closing bracket only colon and port may follow.").ToStdWstring();
 				return false;
 			}
 			++pos;
 		}
 		else
-			pos = -1;
-	}
-	else
-		pos = host.Find(':');
-	if (pos != -1) {
-		if (!pos) {
-			error = _("No host given, please enter a host.");
-			return false;
-		}
-
-		long tmp;
-		if (!host.Mid(pos + 1).ToLong(&tmp) || tmp < 1 || tmp > 65535) {
-			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
-			return false;
-		}
-		port = tmp;
-		host = host.Left(pos);
+			pos = std::wstring::npos;
 	}
 	else {
-		if (!port)
-			port = GetDefaultPort(m_protocol);
-		else if (port > 65535) {
-			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
+		pos = host.find(':');
+	}
+	if (pos != std::wstring::npos) {
+		if (!pos) {
+			error = _("No host given, please enter a host.").ToStdWstring();
 			return false;
+		}
+
+		port = fz::to_integral<unsigned int>(host.substr(pos + 1));
+		host = host.substr(0, pos);
+	}
+	else {
+		if (!port) {
+			port = GetDefaultPort(m_protocol);
 		}
 	}
 
-	host.Trim(true);
-	host.Trim(false);
+	if (port < 1 || port > 65535) {
+		error = _("Invalid port given. The port has to be a value from 1 to 65535.").ToStdWstring();
+		return false;
+	}
+	
+	fz::trim(host);
 
 	if (host.empty()) {
-		error = _("No host given, please enter a host.");
+		error = _("No host given, please enter a host.").ToStdWstring();
 		return false;
 	}
 
-	m_host = host.ToStdWstring();
+	m_host = host;
 
 	if (m_host[0] == '[') {
 		m_host = m_host.substr(1, m_host.size() - 2);
@@ -211,19 +201,25 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 	m_pass = pass;
 	m_account.clear();
 	if (m_logonType != ASK && m_logonType != INTERACTIVE) {
-		if (m_user.empty())
+		if (m_user.empty()) {
 			m_logonType = ANONYMOUS;
-		else if (m_user == _T("anonymous"))
-			if (m_pass.empty() || m_pass == _T("anonymous@example.com"))
+		}
+		else if (m_user == "anonymous") {
+			if (m_pass.empty() || m_pass == L"anonymous@example.com") {
 				m_logonType = ANONYMOUS;
-			else
+			}
+			else {
 				m_logonType = NORMAL;
-		else
+			}
+		}
+		else {
 			m_logonType = NORMAL;
+		}
 	}
 
-	if (m_protocol == UNKNOWN)
+	if (m_protocol == UNKNOWN) {
 		m_protocol = GetProtocolFromPort(port);
+	}
 
 	return true;
 }
@@ -537,16 +533,17 @@ LogonType CServer::GetLogonType() const
 
 void CServer::SetLogonType(LogonType logonType)
 {
-	wxASSERT(logonType != LOGONTYPE_MAX);
+	assert(logonType != LOGONTYPE_MAX);
 	m_logonType = logonType;
 }
 
 void CServer::SetProtocol(ServerProtocol serverProtocol)
 {
-	wxASSERT(serverProtocol != UNKNOWN);
+	assert(serverProtocol != UNKNOWN);
 
-	if (!GetProtocolInfo(serverProtocol).supportsPostlogin)
+	if (!GetProtocolInfo(serverProtocol).supportsPostlogin) {
 		m_postLoginCommands.clear();
+	}
 
 	m_protocol = serverProtocol;
 }
@@ -879,7 +876,7 @@ bool CServer::ProtocolHasDataTypeConcept(const ServerProtocol protocol)
 
 std::wstring CServer::GetNameFromServerType(ServerType type)
 {
-	wxASSERT(type != SERVERTYPE_MAX);
+	assert(type != SERVERTYPE_MAX);
 	return wxGetTranslation(typeNames[type]).ToStdWstring();
 }
 
@@ -913,7 +910,7 @@ LogonType CServer::GetLogonTypeFromName(std::wstring const& name)
 
 std::wstring CServer::GetNameFromLogonType(LogonType type)
 {
-	wxASSERT(type != LOGONTYPE_MAX);
+	assert(type != LOGONTYPE_MAX);
 
 	switch (type)
 	{

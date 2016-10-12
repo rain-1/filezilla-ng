@@ -2353,20 +2353,22 @@ void CMainFrame::ProcessCommandLine()
 		}
 	}
 
-	wxString param = pCommandLine->GetParameter();
+	std::wstring param = pCommandLine->GetParameter().ToStdWstring();
 	if (!param.empty()) {
-		wxString error;
+		std::wstring error;
 
 		CServer server;
 
 		wxString logontype = pCommandLine->GetOption(CCommandLine::logontype);
-		if (logontype == _T("ask"))
+		if (logontype == _T("ask")) {
 			server.SetLogonType(ASK);
-		else if (logontype == _T("interactive"))
+		}
+		else if (logontype == _T("interactive")) {
 			server.SetLogonType(INTERACTIVE);
+		}
 
 		CServerPath path;
-		if (!server.ParseUrl(param, 0, _T(""), _T(""), error, path)) {
+		if (!server.ParseUrl(param, 0, std::wstring(), std::wstring(), error, path)) {
 			wxString str = _("Parameter not a valid URL");
 			str += _T("\n") + error;
 			wxMessageBoxEx(error, _("Syntax error in command line"));
@@ -2379,8 +2381,9 @@ void CMainFrame::ProcessCommandLine()
 		else if (server.GetLogonType() == ASK ||
 			(server.GetLogonType() == INTERACTIVE && server.GetUser().empty()))
 		{
-			if (!CLoginManager::Get().GetPassword(server, false))
+			if (!CLoginManager::Get().GetPassword(server, false)) {
 				return;
+			}
 		}
 
 		Site site;

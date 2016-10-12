@@ -97,8 +97,8 @@ public:
 
 	// Return true if URL could be parsed correctly, false otherwise.
 	// If parsing fails, pError is filled with the reason and the CServer instance may be left an undefined state.
-	bool ParseUrl(wxString host, unsigned int port, wxString user, wxString pass, wxString &error, CServerPath &path);
-	bool ParseUrl(wxString host, wxString port, wxString user, wxString pass, wxString &error, CServerPath &path);
+	bool ParseUrl(std::wstring host, unsigned int port, std::wstring user, std::wstring pass, std::wstring &error, CServerPath &path);
+	bool ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path);
 
 	void SetProtocol(ServerProtocol serverProtocol);
 	bool SetHost(std::wstring const& host, unsigned int port);

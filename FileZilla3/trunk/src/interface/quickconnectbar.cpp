@@ -67,14 +67,14 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 		return;
 	}
 
-	wxString host = m_pHost->GetValue();
-	wxString user = m_pUser->GetValue();
-	wxString pass = m_pPass->GetValue();
-	wxString port = m_pPort->GetValue();
+	std::wstring host = m_pHost->GetValue().ToStdWstring();
+	std::wstring user = m_pUser->GetValue().ToStdWstring();
+	std::wstring pass = m_pPass->GetValue().ToStdWstring();
+	std::wstring port = m_pPort->GetValue().ToStdWstring();
 
 	CServer server;
 
-	wxString error;
+	std::wstring error;
 
 	CServerPath path;
 	if (!server.ParseUrl(host, port, user, pass, error, path)) {
