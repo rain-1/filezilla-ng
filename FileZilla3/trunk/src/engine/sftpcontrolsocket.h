@@ -9,6 +9,7 @@ enum class sftpEvent {
 	Done,
 	Error,
 	Verbose,
+	Info,
 	Status,
 	Recv,
 	Send,
