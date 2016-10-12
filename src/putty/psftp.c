@@ -475,12 +475,12 @@ int sftp_get_file(char *fname, char *outfname, int recurse, int restart)
 	    
 	offset = get_file_posn(file);
 	uint64_decimal(offset, decbuf);
-	fzprintf(sftpStatus, "reget: restarting at file position %s", decbuf);
+	fzprintf(sftpInfo, "reget: restarting at file position %s", decbuf);
     } else {
 	offset = uint64_make(0, 0);
     }
 
-    fzprintf(sftpStatus, "remote:%s => local:%s", fname, outfname);
+    fzprintf(sftpInfo, "remote:%s => local:%s", fname, outfname);
 
     fz_timer_init(&timer);
     winterval = 0;
@@ -730,14 +730,14 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
 	}
 	offset = attrs.size;
 	uint64_decimal(offset, decbuf);
-	fzprintf(sftpStatus, "reput: restarting at file position %s", decbuf);
+	fzprintf(sftpInfo, "reput: restarting at file position %s", decbuf);
 	if (seek_file((WFile *)file, offset, FROM_START) != 0)
 	    seek_file((WFile *)file, uint64_make(0,0), FROM_END);    /* *shrug* */
     } else {
 	offset = uint64_make(0, 0);
     }
 
-    fzprintf(sftpStatus, "local:%s => remote:%s\n", fname, outfname);
+    fzprintf(sftpInfo, "local:%s => remote:%s\n", fname, outfname);
 
     /*
      * FIXME: we can use FXP_FSTAT here to get the file size, and

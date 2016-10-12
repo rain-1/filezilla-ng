@@ -16,7 +16,7 @@
 
 #include <cwchar>
 
-#define FZSFTP_PROTOCOL_VERSION 6
+#define FZSFTP_PROTOCOL_VERSION 7
 
 struct sftp_message
 {
@@ -145,6 +145,7 @@ protected:
 			case sftpEvent::Done:
 			case sftpEvent::Error:
 			case sftpEvent::Verbose:
+			case sftpEvent::Info:
 			case sftpEvent::Status:
 			case sftpEvent::Transfer:
 			case sftpEvent::AskPassword:
@@ -501,6 +502,9 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 		break;
 	case sftpEvent::Verbose:
 		LogMessageRaw(MessageType::Debug_Info, message.text[0]);
+		break;
+	case sftpEvent::Info:
+		LogMessageRaw(MessageType::Command, message.text[0]); // Not exactly the right message type, but it's a silent one.
 		break;
 	case sftpEvent::Status:
 		LogMessageRaw(MessageType::Status, message.text[0]);

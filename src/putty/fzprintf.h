@@ -1,4 +1,4 @@
-#define FZSFTP_PROTOCOL_VERSION 6
+#define FZSFTP_PROTOCOL_VERSION 7
 
 typedef enum
 {
@@ -7,6 +7,7 @@ typedef enum
     sftpDone,
     sftpError,
     sftpVerbose,
+	sftpInfo,
     sftpStatus,
     sftpRecv, /* socket */
     sftpSend, /* socket */
