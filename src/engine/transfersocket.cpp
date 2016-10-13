@@ -127,10 +127,12 @@ void CTransferSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int 
 	}
 
 	if (m_pSocketServer) {
-		if (t == SocketEventType::connection)
+		if (t == SocketEventType::connection) {
 			OnAccept(error);
-		else
+		}
+		else {
 			controlSocket_.LogMessage(MessageType::Debug_Info, _T("Unhandled socket event %d from listening socket"), t);
+		}
 		return;
 	}
 
@@ -173,8 +175,9 @@ void CTransferSocket::OnAccept(int error)
 
 	m_pSocket = m_pSocketServer->Accept(error);
 	if (!m_pSocket) {
-		if (error == EAGAIN)
+		if (error == EAGAIN) {
 			controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("No pending connection"));
+		}
 		else {
 			controlSocket_.LogMessage(MessageType::Status, _("Could not accept connection: %s"), CSocket::GetErrorDescription(error));
 			TransferEnd(TransferEndReason::transfer_failure);
@@ -211,8 +214,9 @@ void CTransferSocket::OnConnect()
 		}
 	}
 
-	if (m_bActive)
+	if (m_bActive) {
 		TriggerPostponedEvents();
+	}
 }
 
 void CTransferSocket::OnReceive()
@@ -242,14 +246,14 @@ void CTransferSocket::OnReceive()
 					controlSocket_.LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
 					TransferEnd(TransferEndReason::transfer_failure);
 				}
-				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
+				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound)) {
 					TransferEnd(TransferEndReason::successful);
+				}
 				return;
 			}
 
 			if (numread > 0) {
-				if (!m_pDirectoryListingParser->AddData(pBuffer, numread))
-				{
+				if (!m_pDirectoryListingParser->AddData(pBuffer, numread)) {
 					TransferEnd(TransferEndReason::transfer_failure);
 					return;
 				}
@@ -276,8 +280,9 @@ void CTransferSocket::OnReceive()
 		// Otherwise this behaves like a livelock on very large files written to a very fast
 		// SSD downloaded from a very fast server.
 		for (int i = 0; i < 100; ++i) {
-			if (!CheckGetNextWriteBuffer())
+			if (!CheckGetNextWriteBuffer()) {
 				return;
+			}
 
 			numread = m_pBackend->Read(m_pTransferBuffer, m_transferBufferLen, error);
 			if (numread <= 0) {
@@ -322,10 +327,10 @@ void CTransferSocket::OnReceive()
 					TransferEnd(TransferEndReason::transfer_failure);
 				}
 				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound)) {
-					if (m_transferBufferLen == 1)
+					if (m_transferBufferLen == 1) {
 						TransferEnd(TransferEndReason::successful);
-					else
-					{
+					}
+					else {
 						controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Server incorrectly sent %d bytes"), m_transferBufferLen);
 						TransferEnd(TransferEndReason::failed_resumetest);
 					}
@@ -366,8 +371,9 @@ void CTransferSocket::OnSend()
 		return;
 	}
 
-	if (m_transferMode != TransferMode::upload)
+	if (m_transferMode != TransferMode::upload) {
 		return;
+	}
 
 	int error;
 	int written;
@@ -376,12 +382,14 @@ void CTransferSocket::OnSend()
 	// Otherwise this behaves like a livelock on very large files read from a very fast
 	// SSD uploaded to a very fast server.
 	for (int i = 0; i < 100; ++i) {
-		if (!CheckGetNextReadBuffer())
+		if (!CheckGetNextReadBuffer()) {
 			return;
+		}
 
 		written = m_pBackend->Write(m_pTransferBuffer, m_transferBufferLen, error);
-		if (written <= 0)
+		if (written <= 0) {
 			break;
+		}
 
 		controlSocket_.SetActive(CFileZillaEngine::send);
 		if (m_madeProgress == 1) {
@@ -545,8 +553,9 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 
 void CTransferSocket::SetActive()
 {
-	if (m_transferEndReason != TransferEndReason::none)
+	if (m_transferEndReason != TransferEndReason::none) {
 		return;
+	}
 	if (m_transferMode == TransferMode::download || m_transferMode == TransferMode::upload) {
 		if (ioThread_) {
 			ioThread_->SetEventHandler(this);
@@ -554,11 +563,13 @@ void CTransferSocket::SetActive()
 	}
 
 	m_bActive = true;
-	if (!m_pSocket)
+	if (!m_pSocket) {
 		return;
+	}
 
-	if (m_pSocket->GetState() == CSocket::connected || m_pSocket->GetState() == CSocket::closing)
+	if (m_pSocket->GetState() == CSocket::connected || m_pSocket->GetState() == CSocket::closing) {
 		TriggerPostponedEvents();
+	}
 }
 
 void CTransferSocket::TransferEnd(TransferEndReason reason)
@@ -611,8 +622,9 @@ CSocket* CTransferSocket::CreateSocketServer()
 
 	int low = engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS_LOW);
 	int high = engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS_HIGH);
-	if (low > high)
+	if (low > high) {
 		low = high;
+	}
 
 	if (start < low || start > high) {
 		start = fz::random_number(low, high);
@@ -624,10 +636,12 @@ CSocket* CTransferSocket::CreateSocketServer()
 	int count = high - low + 1;
 	while (count--) {
 		pServer = CreateSocketServer(start++);
-		if (pServer)
+		if (pServer) {
 			break;
-		if (start > high)
+		}
+		if (start > high) {
 			start = low;
+		}
 	}
 
 	return pServer;
@@ -638,14 +652,17 @@ bool CTransferSocket::CheckGetNextWriteBuffer()
 	if (!m_transferBufferLen) {
 		int res = ioThread_->GetNextWriteBuffer(&m_pTransferBuffer);
 
-		if (res == IO_Again)
+		if (res == IO_Again) {
 			return false;
+		}
 		else if (res == IO_Error) {
 			wxString error = ioThread_->GetError();
-			if (error.empty() )
+			if (error.empty()) {
 				controlSocket_.LogMessage(MessageType::Error, _("Can't write data to file."));
-			else
+			}
+			else {
 				controlSocket_.LogMessage(MessageType::Error, _("Can't write data to file: %s"), error);
+			}
 			TransferEnd(TransferEndReason::transfer_failure_critical);
 			return false;
 		}
@@ -689,13 +706,16 @@ bool CTransferSocket::CheckGetNextReadBuffer()
 
 void CTransferSocket::OnIOThreadEvent()
 {
-	if (!m_bActive || m_transferEndReason != TransferEndReason::none)
+	if (!m_bActive || m_transferEndReason != TransferEndReason::none) {
 		return;
+	}
 
-	if (m_transferMode == TransferMode::download)
+	if (m_transferMode == TransferMode::download) {
 		OnReceive();
-	else if (m_transferMode == TransferMode::upload)
+	}
+	else if (m_transferMode == TransferMode::upload) {
 		OnSend();
+	}
 }
 
 void CTransferSocket::FinalizeWrite()
@@ -703,17 +723,21 @@ void CTransferSocket::FinalizeWrite()
 	bool res = ioThread_->Finalize(BUFFERSIZE - m_transferBufferLen);
 	m_transferBufferLen = BUFFERSIZE;
 
-	if (m_transferEndReason != TransferEndReason::none)
+	if (m_transferEndReason != TransferEndReason::none) {
 		return;
+	}
 
-	if (res)
+	if (res) {
 		TransferEnd(TransferEndReason::successful);
+	}
 	else {
-		wxString error = ioThread_->GetError();
-		if (error.empty())
+		std::wstring error = ioThread_->GetError();
+		if (error.empty()) {
 			controlSocket_.LogMessage(MessageType::Error, _("Can't write data to file."));
-		else
+		}
+		else {
 			controlSocket_.LogMessage(MessageType::Error, _("Can't write data to file: %s"), error);
+		}
 		TransferEnd(TransferEndReason::transfer_failure_critical);
 	}
 }
@@ -735,8 +759,7 @@ bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 	bool try_resume = CServerCapabilities::GetCapability(*controlSocket_.m_pCurrentServer, tls_resume) != no;
 
 	int res = m_pTlsSocket->Handshake(pPrimaryTlsSocket, try_resume);
-	if (res && res != FZ_REPLY_WOULDBLOCK)
-	{
+	if (res && res != FZ_REPLY_WOULDBLOCK) {
 		delete m_pTlsSocket;
 		m_pTlsSocket = 0;
 		return false;
@@ -755,24 +778,28 @@ void CTransferSocket::TriggerPostponedEvents()
 		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Executing postponed receive"));
 		m_postponedReceive = false;
 		OnReceive();
-		if (m_transferEndReason != TransferEndReason::none)
+		if (m_transferEndReason != TransferEndReason::none) {
 			return;
+		}
 	}
 	if (m_postponedSend) {
 		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Executing postponed send"));
 		m_postponedSend = false;
 		OnSend();
-		if (m_transferEndReason != TransferEndReason::none)
+		if (m_transferEndReason != TransferEndReason::none) {
 			return;
+		}
 	}
-	if (m_onCloseCalled)
+	if (m_onCloseCalled) {
 		OnClose(0);
+	}
 }
 
 bool CTransferSocket::InitBackend()
 {
-	if (m_pBackend)
+	if (m_pBackend) {
 		return true;
+	}
 
 #ifdef FZ_WINDOWS
 	// For send buffer tuning
@@ -780,11 +807,13 @@ bool CTransferSocket::InitBackend()
 #endif
 
 	if (controlSocket_.m_protectDataChannel) {
-		if (!InitTls(controlSocket_.m_pTlsSocket))
+		if (!InitTls(controlSocket_.m_pTlsSocket)) {
 			return false;
+		}
 	}
-	else
+	else {
 		m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
+	}
 
 	return true;
 }

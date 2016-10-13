@@ -11,8 +11,8 @@ enum class lib_dependency
 	count
 };
 
-wxString GetDependencyName(lib_dependency d);
-wxString GetDependencyVersion(lib_dependency d);
+std::wstring GetDependencyName(lib_dependency d);
+std::wstring GetDependencyVersion(lib_dependency d);
 
 std::string ListTlsCiphers(std::string const& priority);
 

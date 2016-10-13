@@ -405,10 +405,10 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 {
 	fz::scoped_lock lock(mutex_);
 
-	wxASSERT(m_pControlSocket);
+	assert(m_pControlSocket);
 
 	const CServer* const pOwnServer = m_pControlSocket->GetCurrentServer();
-	wxASSERT(pOwnServer);
+	assert(pOwnServer);
 
 	m_lastListDir = path;
 

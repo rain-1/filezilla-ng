@@ -12,7 +12,7 @@
 #include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 	#define mutex mutex_override // Sadly on some platforms system headers include conflicting names
 	#include <netdb.h>
 	#undef mutex

@@ -76,7 +76,7 @@ protected:
 wxString ConvLocal(const char *value);
 
 void SetTextAttribute(pugi::xml_node node, const char* name, const wxString& value);
-wxString GetTextAttribute(pugi::xml_node node, const char* name);
+std::wstring GetTextAttribute(pugi::xml_node node, const char* name);
 
 int GetAttributeInt(pugi::xml_node node, const char* name);
 void SetAttributeInt(pugi::xml_node node, const char* name, int value);
@@ -95,11 +95,11 @@ void AddTextElementRaw(pugi::xml_node node, const char* value);
 
 // Get string from named child element
 std::wstring GetTextElement(pugi::xml_node node, const char* name);
-wxString GetTextElement_Trimmed(pugi::xml_node node, const char* name);
+std::wstring GetTextElement_Trimmed(pugi::xml_node node, const char* name);
 
 // Get string from current element
 std::wstring GetTextElement(pugi::xml_node node);
-wxString GetTextElement_Trimmed(pugi::xml_node node);
+std::wstring GetTextElement_Trimmed(pugi::xml_node node);
 
 // Get (64-bit) integer from named element
 int64_t GetTextElementInt(pugi::xml_node node, const char* name, int defValue = 0);

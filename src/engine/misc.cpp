@@ -10,7 +10,7 @@
 #include <random>
 #include <cstdint>
 
-wxString GetDependencyVersion(lib_dependency d)
+std::wstring GetDependencyVersion(lib_dependency d)
 {
 	switch (d) {
 	case lib_dependency::wxwidgets:
@@ -18,29 +18,30 @@ wxString GetDependencyVersion(lib_dependency d)
 	case lib_dependency::gnutls:
 		{
 			const char* v = gnutls_check_version(0);
-			if (!v || !*v)
-				return _T("unknown");
+			if (!v || !*v) {
+				return L"unknown";
+			}
 
-			return wxString(v, wxConvLibc);
+			return fz::to_wstring(v);
 		}
 	case lib_dependency::sqlite:
-		return wxString::FromUTF8(sqlite3_libversion());
+		return fz::to_wstring_from_utf8(sqlite3_libversion());
 	default:
-		return wxString();
+		return std::wstring();
 	}
 }
 
-wxString GetDependencyName(lib_dependency d)
+std::wstring GetDependencyName(lib_dependency d)
 {
 	switch (d) {
 	case lib_dependency::wxwidgets:
-		return _T("wxWidgets");
+		return L"wxWidgets";
 	case lib_dependency::gnutls:
-		return _T("GnuTLS");
+		return L"GnuTLS";
 	case lib_dependency::sqlite:
-		return _T("SQLite");
+		return L"SQLite";
 	default:
-		return wxString();
+		return std::wstring();
 	}
 }
 

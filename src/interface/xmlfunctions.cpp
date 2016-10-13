@@ -225,13 +225,9 @@ void AddTextElementRaw(pugi::xml_node node, const char* value)
 	}
 }
 
-wxString GetTextElement_Trimmed(pugi::xml_node node, const char* name)
+std::wstring GetTextElement_Trimmed(pugi::xml_node node, const char* name)
 {
-	wxString t = GetTextElement(node, name);
-	t.Trim(true);
-	t.Trim(false);
-
-	return t;
+	return fz::trimmed(GetTextElement(node, name));
 }
 
 std::wstring GetTextElement(pugi::xml_node node, const char* name)
@@ -241,13 +237,9 @@ std::wstring GetTextElement(pugi::xml_node node, const char* name)
 	return fz::to_wstring_from_utf8(node.child_value(name));
 }
 
-wxString GetTextElement_Trimmed(pugi::xml_node node)
+std::wstring GetTextElement_Trimmed(pugi::xml_node node)
 {
-	wxString t = GetTextElement(node);
-	t.Trim(true);
-	t.Trim(false);
-
-	return t;
+	return fz::trimmed(GetTextElement(node));
 }
 
 std::wstring GetTextElement(pugi::xml_node node)
@@ -406,7 +398,7 @@ bool GetServer(pugi::xml_node node, CServer& server)
 			auto passElement = node.child("Pass");
 			if (passElement) {
 
-				std::wstring encoding = GetTextAttribute(passElement, "encoding").ToStdWstring();
+				std::wstring encoding = GetTextAttribute(passElement, "encoding");
 
 				if (encoding == _T("base64")) {
 					std::string decoded = fz::base64_decode(passElement.child_value());
@@ -497,10 +489,10 @@ bool GetServer(pugi::xml_node node, CServer& server)
 	}
 
 	server.SetBypassProxy(GetTextElementInt(node, "BypassProxy", false) == 1);
-	server.SetName(GetTextElement_Trimmed(node, "Name").ToStdWstring());
+	server.SetName(GetTextElement_Trimmed(node, "Name"));
 
 	if (server.GetName().empty()) {
-		server.SetName(GetTextElement_Trimmed(node).ToStdWstring());
+		server.SetName(GetTextElement_Trimmed(node));
 	}
 
 	return true;
@@ -612,12 +604,12 @@ void SetTextAttribute(pugi::xml_node node, const char* name, const wxString& val
 	attribute.set_value(utf8);
 }
 
-wxString GetTextAttribute(pugi::xml_node node, const char* name)
+std::wstring GetTextAttribute(pugi::xml_node node, const char* name)
 {
 	wxASSERT(node);
 
 	const char* value = node.attribute(name).value();
-	return ConvLocal(value);
+	return fz::to_wstring_from_utf8(value);
 }
 
 pugi::xml_node FindElementWithAttribute(pugi::xml_node node, const char* element, const char* attribute, const char* value)
