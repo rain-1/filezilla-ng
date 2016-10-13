@@ -47,16 +47,16 @@ enum capabilityNames
 class CCapabilities final
 {
 public:
-	capabilities GetCapability(capabilityNames name, wxString* pOption = 0) const;
+	capabilities GetCapability(capabilityNames name, std::wstring* pOption = 0) const;
 	capabilities GetCapability(capabilityNames name, int* pOption) const;
-	void SetCapability(capabilityNames name, capabilities cap, const wxString& option = _T(""));
+	void SetCapability(capabilityNames name, capabilities cap, std::wstring const& option = std::wstring());
 	void SetCapability(capabilityNames name, capabilities cap, int option);
 
 protected:
 	struct t_cap
 	{
 		capabilities cap;
-		wxString option;
+		std::wstring option;
 		int number;
 	};
 	std::map<capabilityNames, t_cap> m_capabilityMap;
@@ -66,10 +66,10 @@ class CServerCapabilities final
 {
 public:
 	// If return value isn't 'yes', pOptions remains unchanged
-	static capabilities GetCapability(const CServer& server, capabilityNames name, wxString* pOption = 0);
+	static capabilities GetCapability(const CServer& server, capabilityNames name, std::wstring* pOption = 0);
 	static capabilities GetCapability(const CServer& server, capabilityNames name, int* option);
 
-	static void SetCapability(const CServer& server, capabilityNames name, capabilities cap, const wxString& option = _T(""));
+	static void SetCapability(const CServer& server, capabilityNames name, capabilities cap, std::wstring const& option = std::wstring());
 	static void SetCapability(const CServer& server, capabilityNames name, capabilities cap, int option);
 
 protected:

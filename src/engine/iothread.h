@@ -33,7 +33,7 @@ public:
 	~CIOThread();
 
 	bool Create(fz::thread_pool& pool, std::unique_ptr<fz::file> && pFile, bool read, bool binary);
-	virtual void Destroy(); // Only call that might be blocking
+	void Destroy(); // Only call that might be blocking
 
 	// Call before first call to one of the GetNext*Buffer functions
 	// This handler will receive the CIOThreadEvent events. The events
