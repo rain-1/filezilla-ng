@@ -75,7 +75,7 @@ protected:
 
 	void ProcessReply(int result, std::wstring const& reply);
 
-	int ConnectParseResponse(bool successful, const wxString& reply);
+	int ConnectParseResponse(bool successful, std::wstring const& reply);
 	int ConnectSend();
 
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
@@ -83,37 +83,37 @@ protected:
 							 CFileTransferCommand::t_transferSettings const& transferSettings);
 	int FileTransferSubcommandResult(int prevResult);
 	int FileTransferSend();
-	int FileTransferParseResponse(int result, const wxString& reply);
+	int FileTransferParseResponse(int result, std::wstring const& reply);
 
 	int ListSubcommandResult(int prevResult);
 	int ListSend();
-	int ListParseResponse(bool successful, const wxString& reply);
+	int ListParseResponse(bool successful, std::wstring const& reply);
 	int ListParseEntry(std::wstring && entry, std::wstring const& stime, std::wstring && name);
 	int ListCheckTimezoneDetection();
 
-	int ChangeDir(CServerPath path = CServerPath(), wxString subDir = wxString(), bool link_discovery = false);
-	int ChangeDirParseResponse(bool successful, const wxString& reply);
+	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
+	int ChangeDirParseResponse(bool successful, std::wstring const& reply);
 	int ChangeDirSubcommandResult(int prevResult);
 	int ChangeDirSend();
 
-	int MkdirParseResponse(bool successful, const wxString& reply);
+	int MkdirParseResponse(bool successful, std::wstring const& reply);
 	int MkdirSend();
 
-	int DeleteParseResponse(bool successful, const wxString& reply);
+	int DeleteParseResponse(bool successful, std::wstring const& reply);
 	int DeleteSend();
 
-	int RemoveDirParseResponse(bool successful, const wxString& reply);
+	int RemoveDirParseResponse(bool successful, std::wstring const& reply);
 
-	int ChmodParseResponse(bool successful, const wxString& reply);
+	int ChmodParseResponse(bool successful, std::wstring const& reply);
 	int ChmodSubcommandResult(int prevResult);
 	int ChmodSend();
 
-	int RenameParseResponse(bool successful, const wxString& reply);
+	int RenameParseResponse(bool successful, std::wstring const& reply);
 	int RenameSubcommandResult(int prevResult);
 	int RenameSend();
 
 	bool SendCommand(std::wstring const& cmd, std::wstring const& show = std::wstring());
-	bool AddToStream(const wxString& cmd, bool force_utf8 = false);
+	bool AddToStream(std::wstring const& cmd, bool force_utf8 = false);
 
 	virtual void OnRateAvailable(CRateLimiter::rate_direction direction);
 	void OnQuotaRequest(CRateLimiter::rate_direction direction);

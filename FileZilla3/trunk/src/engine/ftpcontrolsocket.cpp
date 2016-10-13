@@ -90,7 +90,7 @@ struct t_loginCommand
 	bool hide_arguments;
 	loginCommandType type;
 
-	wxString command;
+	std::wstring command;
 };
 
 class CFtpLogonOpData : public CConnectOpData
@@ -215,8 +215,9 @@ void CFtpControlSocket::OnReceive()
 		if (read < 0) {
 			if (error != EAGAIN) {
 				LogMessage(MessageType::Error, _("Could not read from socket: %s"), CSocket::GetErrorDescription(error));
-				if (GetCurrentCommandId() != Command::connect)
+				if (GetCurrentCommandId() != Command::connect) {
 					LogMessage(MessageType::Error, _("Disconnected from server"));
+				}
 				DoClose();
 			}
 			return;
@@ -267,26 +268,30 @@ void CFtpControlSocket::OnReceive()
 }
 
 namespace {
-bool HasFeature(wxString const& line, wxString const& feature)
+bool HasFeature(std::wstring const& line, std::wstring const& feature)
 {
-	return line == feature || line.StartsWith(feature + _T(" "));
+	if (line == feature) {
+		return true;
+	}
+	return line.size() > feature.size() && line.substr(0, feature.size()) == feature && line[feature.size()] == ' ';
 }
 }
 
-void CFtpControlSocket::ParseFeat(wxString line)
+void CFtpControlSocket::ParseFeat(std::wstring const& line)
 {
-	line.Trim(false);
-	wxString up = line.Upper();
+	std::wstring up = fz::str_toupper_ascii(fz::trimmed(line));
 
-	if (HasFeature(up, _T("UTF8")))
+	if (HasFeature(up, _T("UTF8"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
-	else if (HasFeature(up, _T("CLNT")))
+	}
+	else if (HasFeature(up, _T("CLNT"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, yes);
+	}
 	else if (HasFeature(up, _T("MLSD"))) {
-		wxString facts;
+		std::wstring facts;
 		// FEAT output for MLST overrides MLSD
 		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command, &facts) != yes || facts.empty()) {
-			facts = line.Mid(5);
+			facts = line.substr(5);
 		}
 		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, facts);
 
@@ -294,7 +299,7 @@ void CFtpControlSocket::ParseFeat(wxString line)
 		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 	}
 	else if (HasFeature(up, _T("MLST"))) {
-		wxString facts = line.Mid(5);
+		std::wstring facts = line.substr(5);
 		// FEAT output for MLST overrides MLSD
 		if (facts.empty()) {
 			if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command, &facts) != yes) {
@@ -306,20 +311,27 @@ void CFtpControlSocket::ParseFeat(wxString line)
 		// MLST/MLSD specs require use of UTC
 		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 	}
-	else if (HasFeature(up, _T("MODE Z")))
+	else if (HasFeature(up, _T("MODE Z"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, mode_z_support, yes);
-	else if (HasFeature(up, _T("MFMT")))
+	}
+	else if (HasFeature(up, _T("MFMT"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, mfmt_command, yes);
-	else if (HasFeature(up, _T("MDTM")))
+	}
+	else if (HasFeature(up, _T("MDTM"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, mdtm_command, yes);
-	else if (HasFeature(up, _T("SIZE")))
+	}
+	else if (HasFeature(up, _T("SIZE"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
-	else if (HasFeature(up, _T("TVFS")))
+	}
+	else if (HasFeature(up, _T("TVFS"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, yes);
-	else if (HasFeature(up, _T("REST STREAM")))
+	}
+	else if (HasFeature(up, _T("REST STREAM"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, rest_stream, yes);
-	else if (HasFeature(up, _T("EPSV")))
+	}
+	else if (HasFeature(up, _T("EPSV"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, epsv_command, yes);
+	}
 }
 
 void CFtpControlSocket::ParseLine(std::wstring line)
@@ -393,7 +405,7 @@ void CFtpControlSocket::OnConnect()
 		if (!m_pTlsSocket) {
 			LogMessage(MessageType::Status, _("Connection established, initializing TLS..."));
 
-			wxASSERT(!m_pTlsSocket);
+			assert(!m_pTlsSocket);
 			delete m_pBackend;
 			m_pTlsSocket = new CTlsSocket(this, *m_pSocket, this);
 			m_pBackend = m_pTlsSocket;
@@ -418,8 +430,9 @@ void CFtpControlSocket::OnConnect()
 		SendNextCommand();
 		return;
 	}
-	else
+	else {
 		LogMessage(MessageType::Status, _("Connection established, waiting for welcome message..."));
+	}
 	m_pendingReplies = 1;
 	m_repliesToSkip = 0;
 	Logon();
@@ -427,33 +440,35 @@ void CFtpControlSocket::OnConnect()
 
 void CFtpControlSocket::ParseResponse()
 {
-	if( m_Response.empty() ) {
+	if (m_Response.empty()) {
 		LogMessage(MessageType::Debug_Warning, _T("No reply in ParseResponse"));
 		return;
 	}
 
 	if (m_Response[0] != '1') {
-		if (m_pendingReplies > 0)
+		if (m_pendingReplies > 0) {
 			m_pendingReplies--;
+		}
 		else {
 			LogMessage(MessageType::Debug_Warning, _T("Unexpected reply, no reply was pending."));
 			return;
 		}
 	}
 
-	if (m_repliesToSkip)
-	{
+	if (m_repliesToSkip) {
 		LogMessage(MessageType::Debug_Info, _T("Skipping reply after cancelled operation or keepalive command."));
-		if (m_Response[0] != '1')
-			m_repliesToSkip--;
+		if (m_Response[0] != '1') {
+			--m_repliesToSkip;
+		}
 
-		if (!m_repliesToSkip)
-		{
+		if (!m_repliesToSkip) {
 			SetWait(false);
-			if (!m_pCurOpData)
+			if (!m_pCurOpData) {
 				StartKeepaliveTimer();
-			else if (!m_pendingReplies)
+			}
+			else if (!m_pendingReplies) {
 				SendNextCommand();
+			}
 		}
 
 		return;
@@ -505,7 +520,7 @@ void CFtpControlSocket::ParseResponse()
 	}
 }
 
-bool CFtpControlSocket::GetLoginSequence(const CServer& server)
+bool CFtpControlSocket::GetLoginSequence(CServer const& server)
 {
 	CFtpLogonOpData *pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
 	pData->loginSequence.clear();
@@ -529,7 +544,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		}
 	}
 	else if (pData->ftp_proxy_type == 1) {
-		const wxString& proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
+		std::wstring const proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		if (!proxyUser.empty()) {
 			// Proxy logon (if credendials are set)
 			t_loginCommand cmd = {false, false, loginCommandType::other, _T("USER ") + proxyUser};
@@ -571,10 +586,12 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 
 		// Site or Open
 		t_loginCommand cmd = {false, false, loginCommandType::user, _T("")};
-		if (pData->ftp_proxy_type == 2)
+		if (pData->ftp_proxy_type == 2) {
 			cmd.command = _T("SITE ") + server.Format(ServerFormat::with_optional_port);
-		else
+		}
+		else {
 			cmd.command = _T("OPEN ") + server.Format(ServerFormat::with_optional_port);
+		}
 		pData->loginSequence.push_back(cmd);
 
 		// User
@@ -707,10 +724,12 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 int CFtpControlSocket::Logon()
 {
 	const CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
-	if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != no)
+	if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != no) {
 		m_useUTF8 = true;
-	else if (encoding == ENCODING_UTF8)
+	}
+	else if (encoding == ENCODING_UTF8) {
 		m_useUTF8 = true;
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -780,15 +799,16 @@ int CFtpControlSocket::LogonParseResponse()
 			pData->neededCommands[LOGON_AUTH_SSL] = 0;
 			pData->opState = LOGON_AUTH_WAIT;
 
-			if (res == FZ_REPLY_WOULDBLOCK)
+			if (res == FZ_REPLY_WOULDBLOCK) {
 				return FZ_REPLY_WOULDBLOCK;
+			}
 		}
 	}
 	else if (pData->opState == LOGON_LOGON) {
 		t_loginCommand cmd = pData->loginSequence.front();
 
 		if (code != 2 && code != 3) {
-			if( cmd.type == loginCommandType::user || cmd.type == loginCommandType::pass ) {
+			if (cmd.type == loginCommandType::user || cmd.type == loginCommandType::pass) {
 				auto const user = m_pCurrentServer->GetUser();
 				if (!user.empty() && (user.front() == ' ' || user.back() == ' ')) {
 					LogMessage(MessageType::Status, _("Check your login credentials. The entered username starts or ends with a space character."));
@@ -816,8 +836,9 @@ int CFtpControlSocket::LogonParseResponse()
 					if (pData->ftp_proxy_type) {
 						LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Cannot fall back to local charset since using proxy."));
 						int error = FZ_REPLY_DISCONNECTED;
-						if (cmd.type == loginCommandType::pass && code == 5)
+						if (cmd.type == loginCommandType::pass && code == 5) {
 							error |= FZ_REPLY_PASSWORDFAILED;
+						}
 						DoClose(error);
 						return FZ_REPLY_ERROR;
 					}
@@ -836,21 +857,24 @@ int CFtpControlSocket::LogonParseResponse()
 			}
 
 			int error = FZ_REPLY_DISCONNECTED;
-			if (cmd.type == loginCommandType::pass && code == 5)
+			if (cmd.type == loginCommandType::pass && code == 5) {
 				error |= FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED;
+			}
 			DoClose(error);
 			return FZ_REPLY_ERROR;
 		}
 
 		pData->loginSequence.pop_front();
 		if (code == 2) {
-			while (!pData->loginSequence.empty() && pData->loginSequence.front().optional)
+			while (!pData->loginSequence.empty() && pData->loginSequence.front().optional) {
 				pData->loginSequence.pop_front();
+			}
 		}
 		else if (code == 3 && pData->loginSequence.empty()) {
 			LogMessage(MessageType::Error, _("Login sequence fully executed yet not logged in. Aborting."));
-			if (cmd.type == loginCommandType::pass && m_pCurrentServer->GetAccount().empty())
+			if (cmd.type == loginCommandType::pass && m_pCurrentServer->GetAccount().empty()) {
 				LogMessage(MessageType::Error, _("Server might require an account. Try specifying an account using the Site Manager"));
+			}
 			DoClose(FZ_REPLY_CRITICALERROR);
 			return FZ_REPLY_ERROR;
 		}
@@ -862,24 +886,28 @@ int CFtpControlSocket::LogonParseResponse()
 		}
 	}
 	else if (pData->opState == LOGON_SYST) {
-		if (code == 2)
-			CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_Response.Mid(4));
-		else
+		if (code == 2) {
+			CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_Response.substr(4));
+		}
+		else {
 			CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, no);
+		}
 
 		if (m_pCurrentServer->GetType() == DEFAULT && code == 2) {
-			if (m_Response.Length() > 7 && m_Response.Mid(3, 4) == _T(" MVS"))
+			if (m_Response.size() > 7 && m_Response.substr(3, 4) == _T(" MVS")) {
 				m_pCurrentServer->SetType(MVS);
-			else if (m_Response.Len() > 12 && m_Response.Mid(3, 9).Upper() == _T(" NONSTOP "))
+			}
+			else if (m_Response.size() > 12 && fz::str_toupper_ascii(m_Response.substr(3, 9)) == _T(" NONSTOP ")) {
 				m_pCurrentServer->SetType(HPNONSTOP);
+			}
 
 			if (!m_MultilineResponseLines.empty() && fz::str_tolower_ascii(m_MultilineResponseLines.front().substr(4, 4)) == _T("z/vm")) {
-				CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_MultilineResponseLines.front().substr(4) + _T(" ") + m_Response.Mid(4));
+				CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_MultilineResponseLines.front().substr(4) + _T(" ") + m_Response.substr(4));
 				m_pCurrentServer->SetType(ZVM);
 			}
 		}
 
-		if (m_Response.Find(_T("FileZilla")) != -1) {
+		if (m_Response.find(_T("FileZilla")) != std::wstring::npos) {
 			pData->neededCommands[LOGON_CLNT] = 0;
 			pData->neededCommands[LOGON_OPTSUTF8] = 0;
 		}
@@ -887,32 +915,37 @@ int CFtpControlSocket::LogonParseResponse()
 	else if (pData->opState == LOGON_FEAT) {
 		if (code == 2) {
 			CServerCapabilities::SetCapability(*GetCurrentServer(), feat_command, yes);
-			if (CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes)
+			if (CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes) {
 				CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, no);
-			if (CServerCapabilities::GetCapability(*m_pCurrentServer, clnt_command) != yes)
+			}
+			if (CServerCapabilities::GetCapability(*m_pCurrentServer, clnt_command) != yes) {
 				CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, no);
+			}
 		}
-		else
+		else {
 			CServerCapabilities::SetCapability(*GetCurrentServer(), feat_command, no);
+		}
 
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, tvfs_support) != yes)
+		if (CServerCapabilities::GetCapability(*m_pCurrentServer, tvfs_support) != yes) {
 			CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, no);
+		}
 
 		const CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
-		if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes)
-		{
+		if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes) {
 			LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
 			m_useUTF8 = false;
 		}
 	}
 	else if (pData->opState == LOGON_PROT) {
-		if (code == 2 || code == 3)
+		if (code == 2 || code == 3) {
 			m_protectDataChannel = true;
+		}
 	}
 	else if (pData->opState == LOGON_CUSTOMCOMMANDS) {
 		++pData->customCommandIndex;
-		if (pData->customCommandIndex < m_pCurrentServer->GetPostLoginCommands().size())
+		if (pData->customCommandIndex < m_pCurrentServer->GetPostLoginCommands().size()) {
 			return SendNextCommand();
+		}
 	}
 
 	for (;;) {
@@ -925,24 +958,29 @@ int CFtpControlSocket::LogonParseResponse()
 			return true;
 		}
 
-		if (!pData->neededCommands[pData->opState])
+		if (!pData->neededCommands[pData->opState]) {
 			continue;
+		}
 		else if (pData->opState == LOGON_SYST) {
-			wxString system;
+			std::wstring system;
 			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), syst_command, &system);
-			if (cap == unknown)
+			if (cap == unknown) {
 				break;
+			}
 			else if (cap == yes) {
 				if (m_pCurrentServer->GetType() == DEFAULT) {
-					if (system.Left(3) == _T("MVS"))
+					if (system.substr(0, 3) == _T("MVS")) {
 						m_pCurrentServer->SetType(MVS);
-					else if (system.Left(4).Upper() == _T("Z/VM"))
+					}
+					else if (fz::str_toupper_ascii(system.substr(0, 4)) == _T("Z/VM")) {
 						m_pCurrentServer->SetType(ZVM);
-					else if (system.Left(8).Upper() == _T("NONSTOP "))
+					}
+					else if (fz::str_toupper_ascii(system.substr(0, 8)) == _T("NONSTOP ")) {
 						m_pCurrentServer->SetType(HPNONSTOP);
+					}
 				}
 
-				if (system.Find(_T("FileZilla")) != -1) {
+				if (system.find(_T("FileZilla")) != std::wstring::npos) {
 					pData->neededCommands[LOGON_CLNT] = 0;
 					pData->neededCommands[LOGON_OPTSUTF8] = 0;
 				}
@@ -950,8 +988,9 @@ int CFtpControlSocket::LogonParseResponse()
 		}
 		else if (pData->opState == LOGON_FEAT) {
 			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), feat_command);
-			if (cap == unknown)
+			if (cap == unknown) {
 				break;
+			}
 			const CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
 			if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes) {
 				LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
@@ -959,59 +998,65 @@ int CFtpControlSocket::LogonParseResponse()
 			}
 		}
 		else if (pData->opState == LOGON_CLNT) {
-			if (!m_useUTF8)
+			if (!m_useUTF8) {
 				continue;
+			}
 
-			if (CServerCapabilities::GetCapability(*GetCurrentServer(), clnt_command) == yes)
+			if (CServerCapabilities::GetCapability(*GetCurrentServer(), clnt_command) == yes) {
 				break;
+			}
 		}
 		else if (pData->opState == LOGON_OPTSUTF8) {
-			if (!m_useUTF8)
+			if (!m_useUTF8) {
 				continue;
+			}
 
-			if (CServerCapabilities::GetCapability(*GetCurrentServer(), utf8_command) == yes)
+			if (CServerCapabilities::GetCapability(*GetCurrentServer(), utf8_command) == yes) {
 				break;
+			}
 		}
 		else if (pData->opState == LOGON_OPTSMLST) {
-			wxString facts;
-			if (CServerCapabilities::GetCapability(*GetCurrentServer(), mlsd_command, &facts) != yes)
+			std::wstring facts;
+			if (CServerCapabilities::GetCapability(*GetCurrentServer(), mlsd_command, &facts) != yes) {
 				continue;
+			}
 			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), opst_mlst_command);
 			if (cap == unknown) {
 				facts = fz::str_tolower_ascii(facts);
 
 				bool had_unset = false;
-				wxString opts_facts;
+				std::wstring opts_facts;
 
 				// Create a list of all facts understood by both FZ and the server.
 				// Check if there's any supported fact not enabled by default, should that
 				// be the case we need to send OPTS MLST
 				while (!facts.empty()) {
-					int delim = facts.Find(';');
-					if (delim == -1)
+					size_t delim = facts.find(';');
+					if (delim == std::wstring::npos) {
 						break;
+					}
 
 					if (!delim) {
-						facts = facts.Mid(1);
+						facts = facts.substr(1);
 						continue;
 					}
 
 					bool enabled;
-					wxString fact;
+					std::wstring fact;
 
 					if (facts[delim - 1] == '*') {
 						if (delim == 1) {
-							facts = facts.Mid(delim + 1);
+							facts = facts.substr(delim + 1);
 							continue;
 						}
 						enabled = true;
-						fact = facts.Left(delim - 1);
+						fact = facts.substr(0, delim - 1);
 					}
 					else {
 						enabled = false;
-						fact = facts.Left(delim);
+						fact = facts.substr(0, delim);
 					}
-					facts = facts.Mid(delim + 1);
+					facts = facts.substr(delim + 1);
 
 					if (fact == _T("type") ||
 						fact == _T("size") ||
@@ -1034,14 +1079,17 @@ int CFtpControlSocket::LogonParseResponse()
 					CServerCapabilities::SetCapability(*GetCurrentServer(), opst_mlst_command, yes, opts_facts);
 					break;
 				}
-				else
+				else {
 					CServerCapabilities::SetCapability(*GetCurrentServer(), opst_mlst_command, no);
+				}
 			}
-			else if (cap == yes)
+			else if (cap == yes) {
 				break;
+			}
 		}
-		else
+		else {
 			break;
+		}
 	}
 
 	return SendNextCommand();
@@ -1049,8 +1097,7 @@ int CFtpControlSocket::LogonParseResponse()
 
 int CFtpControlSocket::LogonSend()
 {
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("LogonParseResponse without m_pCurOpData called"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_INTERNALERROR;
@@ -1082,41 +1129,46 @@ int CFtpControlSocket::LogonSend()
 			case loginCommandType::user:
 				if (m_pCurrentServer->GetLogonType() == INTERACTIVE) {
 					pData->waitChallenge = true;
-					pData->challenge = _T("");
+					pData->challenge.clear();
 				}
 
-				if (cmd.command.empty())
+				if (cmd.command.empty()) {
 					res = SendCommand(_T("USER ") + m_pCurrentServer->GetUser());
-				else
+				}
+				else {
 					res = SendCommand(cmd.command);
+				}
 				break;
 			case loginCommandType::pass:
 				if (!pData->challenge.empty()) {
 					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(CInteractiveLoginNotification::interactive, pData->challenge, false);
 					pNotification->server = *m_pCurrentServer;
-					pData->challenge = _T("");
+					pData->challenge.clear();
 
 					SendAsyncRequest(pNotification);
 
 					return FZ_REPLY_WOULDBLOCK;
 				}
 
-				if (cmd.command.empty())
+				if (cmd.command.empty()) {
 					res = SendCommand(_T("PASS ") + m_pCurrentServer->GetPass(), true);
+				}
 				else {
-					wxString c = cmd.command;
-					wxString pass = m_pCurrentServer->GetPass();
-					pass.Replace(_T("%"), _T("%%"));
-					c.Replace(_T("%p"), pass);
-					c.Replace(_T("%%"), _T("%"));
+					std::wstring c = cmd.command;
+					std::wstring pass = m_pCurrentServer->GetPass();
+					fz::replace_substrings(pass, _T("%"), _T("%%"));
+					fz::replace_substrings(c, _T("%p"), pass);
+					fz::replace_substrings(c, _T("%%"), _T("%"));
 					res = SendCommand(c, true);
 				}
 				break;
 			case loginCommandType::account:
-				if (cmd.command.empty())
+				if (cmd.command.empty()) {
 					res = SendCommand(_T("ACCT ") + m_pCurrentServer->GetAccount());
-				else
+				}
+				else {
 					res = SendCommand(cmd.command);
+				}
 				break;
 			case loginCommandType::other:
 				wxASSERT(!cmd.command.empty());
@@ -1154,8 +1206,7 @@ int CFtpControlSocket::LogonSend()
 		res = SendCommand(_T("PROT P"));
 		break;
 	case LOGON_CUSTOMCOMMANDS:
-		if (pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size())
-		{
+		if (pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()) {
 			LogMessage(MessageType::Debug_Warning, _T("pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()"));
 			DoClose(FZ_REPLY_INTERNALERROR);
 			return FZ_REPLY_ERROR;
@@ -1164,7 +1215,7 @@ int CFtpControlSocket::LogonSend()
 		break;
 	case LOGON_OPTSMLST:
 		{
-			wxString args;
+			std::wstring args;
 			CServerCapabilities::GetCapability(*GetCurrentServer(), opst_mlst_command, &args);
 			res = SendCommand(_T("OPTS MLST " + args));
 		}
@@ -1173,8 +1224,9 @@ int CFtpControlSocket::LogonSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!res)
+	if (!res) {
 		return FZ_REPLY_ERROR;
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -1192,30 +1244,31 @@ int CFtpControlSocket::GetReplyCode() const
 	}
 }
 
-bool CFtpControlSocket::SendCommand(wxString const& str, bool maskArgs, bool measureRTT)
+bool CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool measureRTT)
 {
-	int pos;
-	if (maskArgs && (pos = str.Find(_T(" "))) != -1)
-	{
-		wxString stars('*', str.Length() - pos - 1);
-		LogMessageRaw(MessageType::Command, str.Left(pos + 1) + stars);
+	size_t pos;
+	if (maskArgs && (pos = str.find(' ')) != std::wstring::npos) {
+		std::wstring stars(str.size() - pos - 1, '*');
+		LogMessageRaw(MessageType::Command, str.substr(0, pos + 1) + stars);
 	}
-	else
+	else {
 		LogMessageRaw(MessageType::Command, str);
+	}
 
-	wxCharBuffer buffer = ConvToServer(str + _T("\r\n"));
-	if (!buffer)
-	{
-		LogMessage(MessageType::Error, _T("Failed to convert command to 8 bit charset"));
+	std::string buffer = ConvToServer(str);
+	if (buffer.empty()) {
+		LogMessage(MessageType::Error, _("Failed to convert command to 8 bit charset"));
 		return false;
 	}
-	unsigned int len = (unsigned int)strlen(buffer);
-	bool res = CRealControlSocket::Send(buffer, len);
-	if (res)
+	buffer += "\r\n";
+	bool res = CRealControlSocket::Send(buffer.c_str(), buffer.size());
+	if (res) {
 		++m_pendingReplies;
+	}
 
-	if (measureRTT)
+	if (measureRTT) {
 		m_rtt.Start();
+	}
 
 	return res;
 }
@@ -1377,8 +1430,9 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 
 		// Assume that a server supporting UTF-8 does not send EBCDIC listings.
 		listingEncoding::type encoding = listingEncoding::unknown;
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) == yes)
+		if (CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) == yes) {
 			encoding = listingEncoding::normal;
+		}
 
 		pData->m_pDirectoryListingParser = new CDirectoryListingParser(this, *m_pCurrentServer, encoding);
 
@@ -1388,23 +1442,29 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		engine_.transfer_status_.Init(-1, 0, true);
 
 		pData->opState = list_waittransfer;
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command) == yes)
+		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command) == yes) {
 			return Transfer(_T("MLSD"), pData);
+		}
 		else {
 			if (engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES)) {
 				capabilities cap = CServerCapabilities::GetCapability(*m_pCurrentServer, list_hidden_support);
-				if (cap == unknown)
+				if (cap == unknown) {
 					pData->viewHiddenCheck = true;
-				else if (cap == yes)
+				}
+				else if (cap == yes) {
 					pData->viewHidden = true;
-				else
+				}
+				else {
 					LogMessage(MessageType::Debug_Info, _("View hidden option set, but unsupported by server"));
+				}
 			}
 
-			if (pData->viewHidden)
+			if (pData->viewHidden) {
 				return Transfer(_T("LIST -a"), pData);
-			else
+			}
+			else {
 				return Transfer(_T("LIST"), pData);
+			}
 		}
 	}
 	else if (pData->opState == list_waittransfer) {
@@ -1443,8 +1503,9 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			SetAlive();
 
 			int res = ListCheckTimezoneDetection(listing);
-			if (res != FZ_REPLY_OK)
+			if (res != FZ_REPLY_OK) {
 				return res;
+			}
 
 			engine_.GetDirectoryCache().Store(listing, *m_pCurrentServer);
 
@@ -1490,8 +1551,9 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 				}
 
 				int res = ListCheckTimezoneDetection(listing);
-				if (res != FZ_REPLY_OK)
+				if (res != FZ_REPLY_OK) {
 					return res;
+				}
 
 				engine_.GetDirectoryCache().Store(listing, *m_pCurrentServer);
 
@@ -1511,8 +1573,9 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 						CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, no);
 
 						int res = ListCheckTimezoneDetection(pData->directoryListing);
-						if (res != FZ_REPLY_OK)
+						if (res != FZ_REPLY_OK) {
 							return res;
+						}
 
 						engine_.GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
 
@@ -1523,8 +1586,9 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 					}
 				}
 
-				if (prevResult & FZ_REPLY_ERROR)
+				if (prevResult & FZ_REPLY_ERROR) {
 					engine_.SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, true);
+				}
 			}
 
 			ResetOperation(FZ_REPLY_ERROR);
@@ -1578,11 +1642,13 @@ int CFtpControlSocket::ListSend()
 	}
 	if (pData->opState == list_mdtm) {
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
-		wxString cmd = _T("MDTM ") + m_CurrentPath.FormatFilename(pData->directoryListing[pData->mdtm_index].name, true);
-		if (!SendCommand(cmd))
+		std::wstring cmd = L"MDTM " + m_CurrentPath.FormatFilename(pData->directoryListing[pData->mdtm_index].name, true);
+		if (!SendCommand(cmd)) {
 			return FZ_REPLY_ERROR;
-		else
+		}
+		else {
 			return FZ_REPLY_WOULDBLOCK;
+		}
 	}
 
 	LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("invalid opstate"));
@@ -1594,8 +1660,7 @@ int CFtpControlSocket::ListParseResponse()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ListParseResponse()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1612,9 +1677,9 @@ int CFtpControlSocket::ListParseResponse()
 
 	// First condition prevents problems with concurrent MDTM
 	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown &&
-		m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16)
+		m_Response.substr(0, 4) == _T("213 ") && m_Response.size() > 16)
 	{
-		fz::datetime date(m_Response.Mid(4).ToStdWstring(), fz::datetime::utc);
+		fz::datetime date(m_Response.substr(4), fz::datetime::utc);
 		if (!date.empty()) {
 			wxASSERT(pData->directoryListing[pData->mdtm_index].has_date());
 			fz::datetime listTime = pData->directoryListing[pData->mdtm_index].time;
@@ -1623,8 +1688,9 @@ int CFtpControlSocket::ListParseResponse()
 			int serveroffset = static_cast<int>((date - listTime).get_seconds());
 			if (!pData->directoryListing[pData->mdtm_index].has_seconds()) {
 				// Round offset to full minutes
-				if (serveroffset < 0)
+				if (serveroffset < 0) {
 					serveroffset -= 59;
+				}
 				serveroffset -= serveroffset % 60;
 			}
 
@@ -1646,8 +1712,9 @@ int CFtpControlSocket::ListParseResponse()
 			CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 		}
 	}
-	else
+	else {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
+	}
 
 	engine_.GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
 
@@ -1663,12 +1730,11 @@ int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
 
 	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
 
-	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown)
-	{
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) != yes)
+	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown) {
+		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) != yes) {
 			CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
-		else
-		{
+		}
+		else {
 			const int count = listing.GetCount();
 			for (int i = 0; i < count; ++i) {
 				if (!listing[i].is_dir() && listing[i].has_time()) {
@@ -1699,13 +1765,16 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 	if (m_pCurOpData && m_pCurOpData->opId == Command::transfer) {
 		CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
 		if (pData->tranferCommandSent) {
-			if (pData->transferEndReason == TransferEndReason::transfer_failure_critical)
+			if (pData->transferEndReason == TransferEndReason::transfer_failure_critical) {
 				nErrorCode |= FZ_REPLY_CRITICALERROR | FZ_REPLY_WRITEFAILED;
-			if (pData->transferEndReason != TransferEndReason::transfer_command_failure_immediate || GetReplyCode() != 5)
+			}
+			if (pData->transferEndReason != TransferEndReason::transfer_command_failure_immediate || GetReplyCode() != 5) {
 				pData->transferInitiated = true;
+			}
 			else {
-				if (nErrorCode == FZ_REPLY_ERROR)
+				if (nErrorCode == FZ_REPLY_ERROR) {
 					nErrorCode |= FZ_REPLY_CRITICALERROR;
+				}
 			}
 		}
 		if (nErrorCode != FZ_REPLY_OK && pData->download && !pData->fileDidExist) {
@@ -1724,28 +1793,32 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 	}
 	if (m_pCurOpData && m_pCurOpData->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
 		CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
-		if (pData->m_needSendListing)
+		if (pData->m_needSendListing) {
 			engine_.SendDirectoryListingNotification(pData->path, false, true, false);
+		}
 	}
 
 	if (m_pCurOpData && m_pCurOpData->opId == Command::rawtransfer &&
 		nErrorCode != FZ_REPLY_OK)
 	{
 		CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
-		if (pData->pOldData->transferEndReason == TransferEndReason::successful)
-		{
-			if ((nErrorCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT)
+		if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
+			if ((nErrorCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT) {
 				pData->pOldData->transferEndReason = TransferEndReason::timeout;
-			else if (!pData->pOldData->tranferCommandSent)
+			}
+			else if (!pData->pOldData->tranferCommandSent) {
 				pData->pOldData->transferEndReason = TransferEndReason::pre_transfer_command_failure;
-			else
+			}
+			else {
 				pData->pOldData->transferEndReason = TransferEndReason::failure;
+			}
 		}
 	}
 
 	m_lastCommandCompletionTime = fz::monotonic_clock::now();
-	if (m_pCurOpData && !(nErrorCode & FZ_REPLY_DISCONNECTED))
+	if (m_pCurOpData && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
 		StartKeepaliveTimer();
+	}
 	else {
 		stop_timer(m_idleTimer);
 		m_idleTimer = 0;
@@ -1813,16 +1886,10 @@ int CFtpControlSocket::SendNextCommand()
 class CFtpChangeDirOpData : public CChangeDirOpData
 {
 public:
-	CFtpChangeDirOpData()
-	{
-		tried_cdup = false;
-	}
+	CFtpChangeDirOpData() = default;
+	virtual ~CFtpChangeDirOpData() = default;
 
-	virtual ~CFtpChangeDirOpData()
-	{
-	}
-
-	bool tried_cdup;
+	bool tried_cdup{};
 };
 
 enum cwdStates
@@ -1923,7 +1990,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 		if (code != 2 && code != 3) {
 			error = true;
 		}
-		else if (ParsePwdReply(m_Response.ToStdWstring())) {
+		else if (ParsePwdReply(m_Response)) {
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
 		}
@@ -1978,7 +2045,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 				pData->opState = cwd_cwd_subdir;
 			}
 		}
-		else if (ParsePwdReply(m_Response.ToStdWstring(), false, pData->path)) {
+		else if (ParsePwdReply(m_Response, false, pData->path)) {
 			if (pData->target.empty()) {
 				engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 			}
@@ -1996,7 +2063,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 		break;
 	case cwd_cwd_subdir:
 		if (code != 2 && code != 3) {
-			if (pData->subDir == _T("..") && !pData->tried_cdup && m_Response.Left(2) == _T("50")) {
+			if (pData->subDir == _T("..") && !pData->tried_cdup && m_Response.substr(0, 2) == _T("50")) {
 				// CDUP command not implemented, try again using CWD ..
 				pData->tried_cdup = true;
 			}
@@ -2045,7 +2112,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 					error = true;
 				}
 			}
-			else if (ParsePwdReply(m_Response.ToStdWstring(), false, assumedPath)) {
+			else if (ParsePwdReply(m_Response, false, assumedPath)) {
 				if (pData->target.empty()) {
 					engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 				}
@@ -2085,7 +2152,7 @@ int CFtpControlSocket::ChangeDirSend()
 	}
 	CFtpChangeDirOpData *pData = static_cast<CFtpChangeDirOpData *>(m_pCurOpData);
 
-	wxString cmd;
+	std::wstring cmd;
 	switch (pData->opState)
 	{
 	case cwd_pwd:
@@ -2094,37 +2161,39 @@ int CFtpControlSocket::ChangeDirSend()
 		cmd = _T("PWD");
 		break;
 	case cwd_cwd:
-		if (pData->tryMkdOnFail && !pData->holdsLock)
-		{
-			if (IsLocked(lock_mkdir, pData->path))
-			{
+		if (pData->tryMkdOnFail && !pData->holdsLock) {
+			if (IsLocked(lock_mkdir, pData->path)) {
 				// Some other engine is already creating this directory or
 				// performing an action that will lead to its creation
 				pData->tryMkdOnFail = false;
 			}
-			if (!TryLockCache(lock_mkdir, pData->path))
+			if (!TryLockCache(lock_mkdir, pData->path)) {
 				return FZ_REPLY_WOULDBLOCK;
+			}
 		}
 		cmd = _T("CWD ") + pData->path.GetPath();
 		m_CurrentPath.clear();
 		break;
 	case cwd_cwd_subdir:
-		if (pData->subDir.empty())
-		{
+		if (pData->subDir.empty()) {
 			ResetOperation(FZ_REPLY_INTERNALERROR);
 			return FZ_REPLY_ERROR;
 		}
-		else if (pData->subDir == _T("..") && !pData->tried_cdup)
+		else if (pData->subDir == _T("..") && !pData->tried_cdup) {
 			cmd = _T("CDUP");
-		else
+		}
+		else {
 			cmd = _T("CWD ") + pData->path.FormatSubdir(pData->subDir);
+		}
 		m_CurrentPath.clear();
 		break;
 	}
 
-	if (!cmd.empty())
-		if (!SendCommand(cmd))
+	if (!cmd.empty()) {
+		if (!SendCommand(cmd)) {
 			return FZ_REPLY_ERROR;
+		}
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -2136,15 +2205,17 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::FileTransfer()"));
 
 	if (localFile.empty()) {
-		if (!download)
+		if (!download) {
 			ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
-		else
+		}
+		else {
 			ResetOperation(FZ_REPLY_SYNTAXERROR);
+		}
 		return FZ_REPLY_ERROR;
 	}
 
 	if (download) {
-		wxString filename = remotePath.FormatFilename(remoteFile);
+		std::wstring filename = remotePath.FormatFilename(remoteFile);
 		LogMessage(MessageType::Status, _("Starting download of %s"), filename);
 	}
 	else {
@@ -2163,17 +2234,20 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 
 	int64_t size;
 	bool isLink;
-	if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file)
+	if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file) {
 		pData->localFileSize = size;
+	}
 
 	pData->opState = filetransfer_waitcwd;
 
-	if (pData->remotePath.GetType() == DEFAULT)
+	if (pData->remotePath.GetType() == DEFAULT) {
 		pData->remotePath.SetType(m_pCurrentServer->GetType());
+	}
 
 	int res = ChangeDir(pData->remotePath);
-	if (res != FZ_REPLY_OK)
+	if (res != FZ_REPLY_OK) {
 		return res;
+	}
 
 	return ParseSubcommandResult(FZ_REPLY_OK);
 }
@@ -2200,9 +2274,9 @@ int CFtpControlSocket::FileTransferParseResponse()
 	case filetransfer_size:
 		if (code != 2 && code != 3) {
 			if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == yes ||
-				!m_Response.Mid(4).CmpNoCase(_T("file not found")) ||
-				(wxString(pData->remotePath.FormatFilename(pData->remoteFile)).Lower().Find(_T("file not found")) == -1 &&
-				 m_Response.Lower().Find(_T("file not found")) != -1))
+				fz::str_tolower_ascii(m_Response.substr(4)) == _T("file not found") ||
+				(fz::str_tolower_ascii(pData->remotePath.FormatFilename(pData->remoteFile)).find(_T("file not found")) == std::wstring::npos &&
+				 fz::str_tolower_ascii(m_Response).find(_T("file not found")) != std::wstring::npos))
 			{
 				// Server supports SIZE command but command failed. Most likely MDTM will fail as well, so
 				// skip it.
@@ -2219,21 +2293,19 @@ int CFtpControlSocket::FileTransferParseResponse()
 		}
 		else {
 			pData->opState = filetransfer_mdtm;
-			if (m_Response.Left(4) == _T("213 ") && m_Response.Length() > 4) {
+			if (m_Response.substr(0, 4) == _T("213 ") && m_Response.size() > 4) {
 				if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == unknown) {
 					CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
 				}
-				wxString str = m_Response.Mid(4);
+				std::wstring str = m_Response.substr(4);
 				int64_t size = 0;
-				const wxChar *buf = str.c_str();
-				while (*buf) {
-					if (*buf < '0' || *buf > '9') {
+				for (auto c : str) {
+					if (c < '0' || c > '9') {
 						break;
 					}
 
 					size *= 10;
-					size += *buf - '0';
-					++buf;
+					size += c - '0';
 				}
 				pData->remoteFileSize = size;
 			}
@@ -2244,8 +2316,8 @@ int CFtpControlSocket::FileTransferParseResponse()
 		break;
 	case filetransfer_mdtm:
 		pData->opState = filetransfer_resumetest;
-		if (m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16) {
-			pData->fileTime = fz::datetime(m_Response.Mid(4).ToStdWstring(), fz::datetime::utc);
+		if (m_Response.substr(0, 4) == _T("213 ") && m_Response.size() > 16) {
+			pData->fileTime = fz::datetime(m_Response.substr(4), fz::datetime::utc);
 			if (!pData->fileTime.empty()) {
 				pData->fileTime += fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 			}
@@ -2303,17 +2375,20 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				{
 					pData->opState = filetransfer_mdtm;
 				}
-				else
+				else {
 					pData->opState = filetransfer_resumetest;
+				}
 			}
 			else {
-				if (entry.is_unsure())
+				if (entry.is_unsure()) {
 					pData->opState = filetransfer_waitlist;
+				}
 				else {
 					if (matchedCase) {
 						pData->remoteFileSize = entry.size;
-						if (entry.has_date())
+						if (entry.has_date()) {
 							pData->fileTime = entry.time;
+						}
 
 						if (pData->download &&
 							!entry.has_time() &&
@@ -2322,24 +2397,28 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 						{
 							pData->opState = filetransfer_mdtm;
 						}
-						else
+						else {
 							pData->opState = filetransfer_resumetest;
+						}
 					}
-					else
+					else {
 						pData->opState = filetransfer_size;
+					}
 				}
 			}
 			if (pData->opState == filetransfer_waitlist) {
 				int res = List(CServerPath(), _T(""), LIST_FLAG_REFRESH);
-				if (res != FZ_REPLY_OK)
+				if (res != FZ_REPLY_OK) {
 					return res;
+				}
 				ResetOperation(FZ_REPLY_INTERNALERROR);
 				return FZ_REPLY_ERROR;
 			}
 			else if (pData->opState == filetransfer_resumetest) {
 				int res = CheckOverwriteFile();
-				if (res != FZ_REPLY_OK)
+				if (res != FZ_REPLY_OK) {
 					return res;
+				}
 			}
 		}
 		else {
@@ -2354,22 +2433,25 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			bool matchedCase;
 			bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
 			if (!found) {
-				if (!dirDidExist)
+				if (!dirDidExist) {
 					pData->opState = filetransfer_size;
+				}
 				else if (pData->download &&
 					engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 					CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 				{
 					pData->opState = filetransfer_mdtm;
 				}
-				else
+				else {
 					pData->opState = filetransfer_resumetest;
+				}
 			}
 			else {
 				if (matchedCase && !entry.is_unsure()) {
 					pData->remoteFileSize = entry.size;
-					if (entry.has_date())
+					if (entry.has_date()) {
 						pData->fileTime = entry.time;
+					}
 
 					if (pData->download &&
 						!entry.has_time() &&
@@ -2378,21 +2460,25 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 					{
 						pData->opState = filetransfer_mdtm;
 					}
-					else
+					else {
 						pData->opState = filetransfer_resumetest;
+					}
 				}
-				else
+				else {
 					pData->opState = filetransfer_size;
+				}
 			}
 
 			if (pData->opState == filetransfer_resumetest) {
 				int res = CheckOverwriteFile();
-				if (res != FZ_REPLY_OK)
+				if (res != FZ_REPLY_OK) {
 					return res;
+				}
 			}
 		}
-		else
+		else {
 			pData->opState = filetransfer_size;
+		}
 	}
 	else if (pData->opState == filetransfer_waittransfer) {
 		if (prevResult == FZ_REPLY_OK && engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS)) {
@@ -2409,8 +2495,9 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			else if (pData->download && !pData->fileTime.empty()) {
 				delete pData->pIOThread;
 				pData->pIOThread = 0;
-				if (!fz::local_filesys::set_modification_time(fz::to_native(pData->localFile), pData->fileTime))
+				if (!fz::local_filesys::set_modification_time(fz::to_native(pData->localFile), pData->fileTime)) {
 					LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Could not set modification time"));
+				}
 			}
 		}
 		ResetOperation(prevResult);
@@ -2431,14 +2518,17 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				ResetOperation(prevResult | FZ_REPLY_CRITICALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			else
+			else {
 				ResetOperation(prevResult);
+			}
 			return prevResult;
 		}
-		if (pData->localFileSize > (1ll << 32))
+		if (pData->localFileSize > (1ll << 32)) {
 			CServerCapabilities::SetCapability(*m_pCurrentServer, resume4GBbug, no);
-		else
+		}
+		else {
 			CServerCapabilities::SetCapability(*m_pCurrentServer, resume2GBbug, no);
+		}
 
 		pData->opState = filetransfer_transfer;
 	}
@@ -2458,7 +2548,7 @@ int CFtpControlSocket::FileTransferSend()
 
 	CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
 
-	wxString cmd;
+	std::wstring cmd;
 	switch (pData->opState)
 	{
 	case filetransfer_size:
@@ -2471,8 +2561,7 @@ int CFtpControlSocket::FileTransferSend()
 		break;
 	case filetransfer_resumetest:
 	case filetransfer_transfer:
-		if (m_pTransferSocket)
-		{
+		if (m_pTransferSocket) {
 			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Verbose, _T("m_pTransferSocket != 0"));
 			delete m_pTransferSocket;
 			m_pTransferSocket = 0;
@@ -2529,10 +2618,7 @@ int CFtpControlSocket::FileTransferSend()
 					pData->localFileSize = 0;
 				}
 
-				if (pData->resume)
-					pData->resumeOffset = pData->localFileSize;
-				else
-					pData->resumeOffset = 0;
+				pData->resumeOffset = pData->resume ? pData->localFileSize : 0;
 
 				engine_.transfer_status_.Init(pData->remoteFileSize, startOffset, false);
 
@@ -2544,8 +2630,9 @@ int CFtpControlSocket::FileTransferSend()
 						auto oldPos = pFile->seek(0, fz::file::current);
 						if (oldPos >= 0) {
 							if (pFile->seek(sizeToPreallocate, fz::file::end) == pData->remoteFileSize) {
-								if (!pFile->truncate())
+								if (!pFile->truncate()) {
 									LogMessage(MessageType::Debug_Warning, _T("Could not preallocate the file"));
+								}
 							}
 							pFile->seek(oldPos, fz::file::begin);
 						}
@@ -2590,17 +2677,19 @@ int CFtpControlSocket::FileTransferSend()
 
 						// Assume native 64 bit type exists
 						if (pFile->seek(startOffset, fz::file::begin) == wxInvalidOffset) {
-							wxString const s = std::to_wstring(startOffset);
+							std::wstring const s = std::to_wstring(startOffset);
 							LogMessage(MessageType::Error, _("Could not seek to offset %s within file"), s);
 							ResetOperation(FZ_REPLY_ERROR);
 							return FZ_REPLY_ERROR;
 						}
 					}
-					else
+					else {
 						startOffset = 0;
+					}
 				}
-				else
+				else {
 					startOffset = 0;
+				}
 
 				if (CServerCapabilities::GetCapability(*m_pCurrentServer, rest_stream) == yes) {
 					// Use REST + STOR if resuming
@@ -2629,22 +2718,25 @@ int CFtpControlSocket::FileTransferSend()
 		m_pTransferSocket->m_binaryMode = pData->transferSettings.binary;
 		m_pTransferSocket->SetIOThread(pData->pIOThread);
 
-		if (pData->download)
+		if (pData->download) {
 			cmd = _T("RETR ");
+		}
 		else if (pData->resume) {
-			if (CServerCapabilities::GetCapability(*m_pCurrentServer, rest_stream) == yes)
+			if (CServerCapabilities::GetCapability(*m_pCurrentServer, rest_stream) == yes) {
 				cmd = _T("STOR "); // In this case REST gets sent since resume offset was set earlier
+			}
 			else {
-				wxASSERT(pData->resumeOffset == 0);
+				assert(pData->resumeOffset == 0);
 				cmd = _T("APPE ");
 			}
 		}
-		else
+		else {
 			cmd = _T("STOR ");
+		}
 		cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
 		pData->opState = filetransfer_waittransfer;
-		return Transfer(cmd.ToStdWstring(), pData);
+		return Transfer(cmd, pData);
 	case filetransfer_mfmt:
 		{
 			cmd = _T("MFMT ");
@@ -2661,9 +2753,11 @@ int CFtpControlSocket::FileTransferSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!cmd.empty())
-		if (!SendCommand(cmd))
+	if (!cmd.empty()) {
+		if (!SendCommand(cmd)) {
 			return FZ_REPLY_ERROR;
+		}
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -2676,25 +2770,25 @@ void CFtpControlSocket::TransferEnd()
 	// We can safely ignore it.
 	// It does not cause problems, since before creating the next transfer socket, other
 	// messages which were added to the queue later than this one will be processed first.
-	if (!m_pCurOpData || !m_pTransferSocket || GetCurrentCommandId() != Command::rawtransfer)
-	{
+	if (!m_pCurOpData || !m_pTransferSocket || GetCurrentCommandId() != Command::rawtransfer) {
 		LogMessage(MessageType::Debug_Verbose, _T("Call to TransferEnd at unusual time, ignoring"));
 		return;
 	}
 
 	TransferEndReason reason = m_pTransferSocket->GetTransferEndreason();
-	if (reason == TransferEndReason::none)
-	{
+	if (reason == TransferEndReason::none) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Call to TransferEnd at unusual time"));
 		return;
 	}
 
-	if (reason == TransferEndReason::successful)
+	if (reason == TransferEndReason::successful) {
 		SetAlive();
+	}
 
 	CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
-	if (pData->pOldData->transferEndReason == TransferEndReason::successful)
+	if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
 		pData->pOldData->transferEndReason = reason;
+	}
 
 	switch (m_pCurOpData->opState)
 	{
@@ -2715,10 +2809,8 @@ void CFtpControlSocket::TransferEnd()
 
 bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
 {
-	if (m_pCurOpData)
-	{
-		if (!m_pCurOpData->waitForAsyncRequest)
-		{
+	if (m_pCurOpData) {
+		if (!m_pCurOpData->waitForAsyncRequest) {
 			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Not waiting for request reply, ignoring request reply %d"), pNotification->GetRequestID());
 			return false;
 		}
@@ -2730,7 +2822,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 	{
 	case reqId_fileexists:
 		{
-                        if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer) {
+			if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer) {
 				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pNotification->GetRequestID());
 				return false;
 			}
@@ -2741,8 +2833,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 		break;
 	case reqId_interactiveLogin:
 		{
-			if (!m_pCurOpData || m_pCurOpData->opId != Command::connect)
-			{
+			if (!m_pCurOpData || m_pCurOpData->opId != Command::connect) {
 				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %d"), pNotification->GetRequestID());
 				return false;
 			}
@@ -2750,8 +2841,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 			CFtpLogonOpData* pData = static_cast<CFtpLogonOpData*>(m_pCurOpData);
 
 			CInteractiveLoginNotification *pInteractiveLoginNotification = static_cast<CInteractiveLoginNotification *>(pNotification);
-			if (!pInteractiveLoginNotification->passwordSet)
-			{
+			if (!pInteractiveLoginNotification->passwordSet) {
 				ResetOperation(FZ_REPLY_CANCELED);
 				return false;
 			}
@@ -2805,7 +2895,7 @@ public:
 
 int CFtpControlSocket::RawCommand(std::wstring const& command)
 {
-	wxASSERT(!command.empty());
+	assert(!command.empty());
 
 	m_pCurOpData = new CRawCommandOpData(command);
 
@@ -2816,8 +2906,7 @@ int CFtpControlSocket::RawCommandSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RawCommandSend"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -2855,7 +2944,7 @@ int CFtpControlSocket::RawCommandParseResponse()
 
 int CFtpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)
 {
-	wxASSERT(!m_pCurOpData);
+	assert(!m_pCurOpData);
 	CFtpDeleteOpData *pData = new CFtpDeleteOpData();
 	m_pCurOpData = pData;
 	pData->path = path;
@@ -2885,8 +2974,9 @@ int CFtpControlSocket::DeleteSubcommandResult(int prevResult)
 
 	CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
 
-	if (prevResult != FZ_REPLY_OK)
+	if (prevResult != FZ_REPLY_OK) {
 		pData->omitPath = false;
+	}
 
 	return SendNextCommand();
 }
@@ -2922,8 +3012,9 @@ int CFtpControlSocket::DeleteSend()
 
 	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
 
-	if (!SendCommand(L"DELE " + filename))
+	if (!SendCommand(L"DELE " + filename)) {
 		return FZ_REPLY_ERROR;
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -2941,8 +3032,9 @@ int CFtpControlSocket::DeleteParseResponse()
 	CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
 
 	int code = GetReplyCode();
-	if (code != 2 && code != 3)
+	if (code != 2 && code != 3) {
 		pData->m_deleteFailed = true;
+	}
 	else {
 		const wxString& file = pData->files.front();
 
@@ -2954,14 +3046,16 @@ int CFtpControlSocket::DeleteParseResponse()
 			pData->m_time = now;
 			pData->m_needSendListing = false;
 		}
-		else
+		else {
 			pData->m_needSendListing = true;
+		}
 	}
 
 	pData->files.pop_front();
 
-	if (!pData->files.empty())
+	if (!pData->files.empty()) {
 		return SendNextCommand();
+	}
 
 	return ResetOperation(pData->m_deleteFailed ? FZ_REPLY_ERROR : FZ_REPLY_OK);
 }
@@ -2985,7 +3079,7 @@ public:
 
 int CFtpControlSocket::RemoveDir(const CServerPath& path, std::wstring const& subDir)
 {
-	wxASSERT(!m_pCurOpData);
+	assert(!m_pCurOpData);
 	CFtpRemoveDirOpData *pData = new CFtpRemoveDirOpData();
 	m_pCurOpData = pData;
 	pData->path = path;
@@ -3033,8 +3127,7 @@ int CFtpControlSocket::RemoveDirSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RemoveDirSend()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -3045,8 +3138,7 @@ int CFtpControlSocket::RemoveDirSend()
 	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, pData->subDir);
 
 	CServerPath path(engine_.GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir));
-	if (path.empty())
-	{
+	if (path.empty()) {
 		path = pData->path;
 		path.AddSegment(pData->subDir);
 	}
@@ -3054,14 +3146,16 @@ int CFtpControlSocket::RemoveDirSend()
 
 	engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
 
-	if (pData->omitPath)
-	{
-		if (!SendCommand(_T("RMD ") + pData->subDir))
+	if (pData->omitPath) {
+		if (!SendCommand(_T("RMD ") + pData->subDir)) {
 			return FZ_REPLY_ERROR;
+		}
 	}
-	else
-		if (!SendCommand(_T("RMD ") + pData->fullPath.GetPath()))
+	else {
+		if (!SendCommand(_T("RMD ") + pData->fullPath.GetPath())) {
 			return FZ_REPLY_ERROR;
+		}
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -3070,8 +3164,7 @@ int CFtpControlSocket::RemoveDirParseResponse()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RemoveDirParseResponse()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -3080,8 +3173,7 @@ int CFtpControlSocket::RemoveDirParseResponse()
 	CFtpRemoveDirOpData *pData = static_cast<CFtpRemoveDirOpData *>(m_pCurOpData);
 
 	int code = GetReplyCode();
-	if (code != 2 && code != 3)
-	{
+	if (code != 2 && code != 3) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -3101,15 +3193,16 @@ enum mkdStates
 	mkd_tryfull
 };
 
-int CFtpControlSocket::Mkdir(const CServerPath& path)
+int CFtpControlSocket::Mkdir(CServerPath const& path)
 {
 	/* Directory creation works like this: First find a parent directory into
 	 * which we can CWD, then create the subdirs one by one. If either part
 	 * fails, try MKD with the full path directly.
 	 */
 
-	if (!m_pCurOpData)
+	if (!m_pCurOpData) {
 		LogMessage(MessageType::Status, _("Creating directory '%s'..."), path.GetPath());
+	}
 
 	CMkdirOpData *pData = new CMkdirOpData;
 	pData->path = path;
@@ -3121,22 +3214,27 @@ int CFtpControlSocket::Mkdir(const CServerPath& path)
 			return FZ_REPLY_OK;
 		}
 
-		if (m_CurrentPath.IsParentOf(path, false))
+		if (m_CurrentPath.IsParentOf(path, false)) {
 			pData->commonParent = m_CurrentPath;
-		else
+		}
+		else {
 			pData->commonParent = path.GetCommonParent(m_CurrentPath);
+		}
 	}
 
-	if (!path.HasParent())
+	if (!path.HasParent()) {
 		pData->opState = mkd_tryfull;
+	}
 	else {
 		pData->currentPath = path.GetParent();
 		pData->segments.push_back(path.GetLastSegment());
 
-		if (pData->currentPath == m_CurrentPath)
+		if (pData->currentPath == m_CurrentPath) {
 			pData->opState = mkd_mkdsub;
-		else
+		}
+		else {
 			pData->opState = mkd_findparent;
+		}
 	}
 
 	pData->pNextOpData = m_pCurOpData;
@@ -3166,15 +3264,17 @@ int CFtpControlSocket::MkdirParseResponse()
 			m_CurrentPath = pData->currentPath;
 			pData->opState = mkd_mkdsub;
 		}
-		else if (pData->currentPath == pData->commonParent)
+		else if (pData->currentPath == pData->commonParent) {
 			pData->opState = mkd_tryfull;
+		}
 		else if (pData->currentPath.HasParent()) {
 			const CServerPath& parent = pData->currentPath.GetParent();
 			pData->segments.push_back(pData->currentPath.GetLastSegment());
 			pData->currentPath = parent;
 		}
-		else
+		else {
 			pData->opState = mkd_tryfull;
+		}
 		break;
 	case mkd_mkdsub:
 		if (code != 2 && code != 3) {
@@ -3185,13 +3285,13 @@ int CFtpControlSocket::MkdirParseResponse()
 			//         contain this substring as the path might be returned in the reply.
 			// Case 3: Substrng of response contains "file exists". pData->path may not
 			//         contain this substring as the path might be returned in the reply.
-			wxString const response = m_Response.Mid(4).Lower();
-			wxString const path = wxString(pData->path.GetPath()).Lower();
+			std::wstring const response = fz::str_tolower_ascii(m_Response.substr(4));
+			std::wstring const path = fz::str_tolower_ascii(pData->path.GetPath());
 			if (response != _T("directory already exists") &&
-				(path.Find(_T("already exists")) != -1 ||
-				 response.Find(_T("already exists")) == -1) &&
-				(path.Find(_T("file exists")) != -1 ||
-				 response.Find(_T("file exists")) == -1)
+				(path.find(_T("already exists")) != std::wstring::npos ||
+				 response.find(_T("already exists")) == std::wstring::npos) &&
+				(path.find(_T("file exists")) != std::wstring::npos ||
+				 response.find(_T("file exists")) == std::wstring::npos)
 				)
 			{
 				pData->opState = mkd_tryfull;
@@ -3226,8 +3326,9 @@ int CFtpControlSocket::MkdirParseResponse()
 				ResetOperation(result);
 				return result;
 			}
-			else
+			else {
 				pData->opState = mkd_cwdsub;
+			}
 		}
 		break;
 	case mkd_cwdsub:
@@ -3235,12 +3336,14 @@ int CFtpControlSocket::MkdirParseResponse()
 			m_CurrentPath = pData->currentPath;
 			pData->opState = mkd_mkdsub;
 		}
-		else
+		else {
 			pData->opState = mkd_tryfull;
+		}
 		break;
 	case mkd_tryfull:
-		if (code != 2 && code != 3)
+		if (code != 2 && code != 3) {
 			error = true;
+		}
 		else {
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
@@ -3274,8 +3377,9 @@ int CFtpControlSocket::MkdirSend()
 	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
 
 	if (!pData->holdsLock) {
-		if (!TryLockCache(lock_mkdir, pData->path))
+		if (!TryLockCache(lock_mkdir, pData->path)) {
 			return FZ_REPLY_WOULDBLOCK;
+		}
 	}
 
 	bool res;
@@ -3298,8 +3402,9 @@ int CFtpControlSocket::MkdirSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!res)
+	if (!res) {
 		return FZ_REPLY_ERROR;
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -3328,8 +3433,7 @@ enum renameStates
 
 int CFtpControlSocket::Rename(CRenameCommand const& command)
 {
-	if (m_pCurOpData)
-	{
+	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData not empty"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -3342,8 +3446,9 @@ int CFtpControlSocket::Rename(CRenameCommand const& command)
 	m_pCurOpData = pData;
 
 	int res = ChangeDir(command.GetFromPath());
-	if (res != FZ_REPLY_OK)
+	if (res != FZ_REPLY_OK) {
 		return res;
+	}
 
 	return SendNextCommand();
 }
@@ -3351,24 +3456,22 @@ int CFtpControlSocket::Rename(CRenameCommand const& command)
 int CFtpControlSocket::RenameParseResponse()
 {
 	CFtpRenameOpData *pData = static_cast<CFtpRenameOpData*>(m_pCurOpData);
-	if (!pData)
-	{
+	if (!pData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	int code = GetReplyCode();
-	if (code != 2 && code != 3)
-	{
+	if (code != 2 && code != 3) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (pData->opState == rename_rnfrom)
+	if (pData->opState == rename_rnfrom) {
 		pData->opState = rename_rnto;
-	else
-	{
+	}
+	else {
 		const CServerPath& fromPath = pData->m_cmd.GetFromPath();
 		const CServerPath& toPath = pData->m_cmd.GetToPath();
 		engine_.GetDirectoryCache().Rename(*m_pCurrentServer, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
@@ -3389,15 +3492,15 @@ int CFtpControlSocket::RenameSubcommandResult(int prevResult)
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RenameSubcommandResult()"));
 
 	CFtpRenameOpData *pData = static_cast<CFtpRenameOpData*>(m_pCurOpData);
-	if (!pData)
-	{
+	if (!pData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (prevResult != FZ_REPLY_OK)
+	if (prevResult != FZ_REPLY_OK) {
 		pData->m_useAbsolute = true;
+	}
 
 	return SendNextCommand();
 }
@@ -3407,8 +3510,7 @@ int CFtpControlSocket::RenameSend()
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RenameSend()"));
 
 	CFtpRenameOpData *pData = static_cast<CFtpRenameOpData*>(m_pCurOpData);
-	if (!pData)
-	{
+	if (!pData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -3444,8 +3546,7 @@ int CFtpControlSocket::RenameSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!res)
-	{
+	if (!res) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -3489,8 +3590,9 @@ int CFtpControlSocket::Chmod(CChmodCommand const& command)
 	m_pCurOpData = pData;
 
 	int res = ChangeDir(command.GetPath());
-	if (res != FZ_REPLY_OK)
+	if (res != FZ_REPLY_OK) {
 		return res;
+	}
 
 	return SendNextCommand();
 }
@@ -3539,16 +3641,14 @@ int CFtpControlSocket::ChmodSend()
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ChmodSend()"));
 
 	CFtpChmodOpData *pData = static_cast<CFtpChmodOpData*>(m_pCurOpData);
-	if (!pData)
-	{
+	if (!pData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	bool res;
-	switch (pData->opState)
-	{
+	switch (pData->opState) {
 	case chmod_chmod:
 		res = SendCommand(_T("SITE CHMOD ") + pData->m_cmd.GetPermission() + _T(" ") + pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
 		break;
@@ -3558,8 +3658,7 @@ int CFtpControlSocket::ChmodSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!res)
-	{
+	if (!res) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -3573,15 +3672,15 @@ bool CFtpControlSocket::IsMisleadingListResponse() const
 	// for example they return "550 no members found"
 	// Other servers return "550 No files found."
 
-	if (!m_Response.CmpNoCase(_T("550 No members found."))) {
+	if (!fz::stricmp(m_Response, _T("550 No members found."))) {
 		return true;
 	}
 
-	if (!m_Response.CmpNoCase(_T("550 No data sets found."))) {
+	if (!fz::stricmp(m_Response, _T("550 No data sets found."))) {
 		return true;
 	}
 
-	if (!m_Response.CmpNoCase(_T("550 No files found."))) {
+	if (fz::str_tolower_ascii(m_Response) == _T("550 no files found.")) {
 		return true;
 	}
 
@@ -3590,22 +3689,19 @@ bool CFtpControlSocket::IsMisleadingListResponse() const
 
 bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 {
-	int pos = m_Response.Find(_T("(|||"));
-	if (pos == -1) {
+	size_t pos = m_Response.find(L"(|||");
+	if (pos == std::wstring::npos) {
 		return false;
 	}
 
-	int pos2 = m_Response.Mid(pos + 4).Find(_T("|)"));
-	if (pos2 <= 0) {
+	size_t pos2 = m_Response.substr(pos + 4).find(L"|)", pos + 4);
+	if (pos2 == std::wstring::npos || !pos2) {
 		return false;
 	}
 
-	wxString number = m_Response.Mid(pos + 4, pos2);
-	unsigned long port;
-	if (!number.ToULong(&port)) {
-		return false;
-	}
-
+	std::wstring number = m_Response.substr(pos + 4, pos2 - pos - 4);
+	auto port = fz::to_integral<unsigned int>(number);
+	
 	if (port == 0 || port > 65535) {
 		return false;
 	}
@@ -3632,7 +3728,7 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 	}
 
 	std::wsmatch m;
-	if (!std::regex_search(m_Response.ToStdWstring(), m, *m_pasvReplyRegex)) {
+	if (!std::regex_search(m_Response, m, *m_pasvReplyRegex)) {
 		return false;
 	}
 
@@ -3703,9 +3799,9 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 		}
 
 		if (mode == 1) {
-			wxString ip = engine_.GetOptions().GetOption(OPTION_EXTERNALIP);
+			std::wstring ip = engine_.GetOptions().GetOption(OPTION_EXTERNALIP);
 			if (!ip.empty()) {
-				address = ip;
+				address = fz::to_string(ip);
 				return FZ_REPLY_OK;
 			}
 
@@ -3985,15 +4081,13 @@ int CFtpControlSocket::TransferSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::TransferSend()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!m_pTransferSocket)
-	{
+	if (!m_pTransferSocket) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pTransferSocket"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -4002,16 +4096,18 @@ int CFtpControlSocket::TransferSend()
 	CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
 	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
 
-	wxString cmd;
+	std::wstring cmd;
 	bool measureRTT = false;
 	switch (pData->opState)
 	{
 	case rawtransfer_type:
 		m_lastTypeBinary = -1;
-		if (pData->pOldData->binary)
+		if (pData->pOldData->binary) {
 			cmd = _T("TYPE I");
-		else
+		}
+		else {
 			cmd = _T("TYPE A");
+		}
 		measureRTT = true;
 		break;
 	case rawtransfer_port_pasv:
@@ -4021,16 +4117,19 @@ int CFtpControlSocket::TransferSend()
 		else {
 			std::string address;
 			int res = GetExternalIPAddress(address);
-			if (res == FZ_REPLY_WOULDBLOCK)
+			if (res == FZ_REPLY_WOULDBLOCK) {
 				return res;
+			}
 			else if (res == FZ_REPLY_OK) {
 				std::wstring portArgument = m_pTransferSocket->SetupActiveTransfer(address);
 				if (!portArgument.empty()) {
 					pData->bTriedActive = true;
-					if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
+					if (m_pSocket->GetAddressFamily() == CSocket::ipv6) {
 						cmd = _T("EPRT " + portArgument);
-					else
+					}
+					else {
 						cmd = _T("PORT " + portArgument);
+					}
 					break;
 				}
 			}
@@ -4048,15 +4147,14 @@ int CFtpControlSocket::TransferSend()
 		break;
 	case rawtransfer_rest:
 		cmd = _T("REST ") + std::to_wstring(pData->pOldData->resumeOffset);
-		if (pData->pOldData->resumeOffset > 0)
+		if (pData->pOldData->resumeOffset > 0) {
 			m_sentRestartOffset = true;
+		}
 		measureRTT = true;
 		break;
 	case rawtransfer_transfer:
-		if (pData->bPasv)
-		{
-			if (!m_pTransferSocket->SetupPassiveTransfer(pData->host, pData->port))
-			{
+		if (pData->bPasv) {
+			if (!m_pTransferSocket->SetupPassiveTransfer(pData->host, pData->port)) {
 				LogMessage(MessageType::Error, _("Could not establish connection to server"));
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
@@ -4079,9 +4177,11 @@ int CFtpControlSocket::TransferSend()
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
-	if (!cmd.empty())
-		if (!SendCommand(cmd, false, measureRTT))
+	if (!cmd.empty()) {
+		if (!SendCommand(cmd, false, measureRTT)) {
 			return FZ_REPLY_ERROR;
+		}
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -4266,43 +4366,52 @@ void CFtpControlSocket::OnTimer(fz::timer_id id)
 		return;
 	}
 
-	if (m_pCurOpData)
+	if (m_pCurOpData) {
 		return;
+	}
 
-	if (m_pendingReplies || m_repliesToSkip)
+	if (m_pendingReplies || m_repliesToSkip) {
 		return;
+	}
 
 	LogMessage(MessageType::Status, _("Sending keep-alive command"));
 
-	wxString cmd;
+	std::wstring cmd;
 	int i = fz::random_number(0, 2);
-	if (!i)
+	if (!i) {
 		cmd = _T("NOOP");
-	else if (i == 1)
-	{
-		if (m_lastTypeBinary)
-			cmd = _T("TYPE I");
-		else
-			cmd = _T("TYPE A");
 	}
-	else
+	else if (i == 1) {
+		if (m_lastTypeBinary) {
+			cmd = _T("TYPE I");
+		}
+		else {
+			cmd = _T("TYPE A");
+		}
+	}
+	else {
 		cmd = _T("PWD");
+	}
 
-	if (!SendCommand(cmd))
+	if (!SendCommand(cmd)) {
 		return;
+	}
 	++m_repliesToSkip;
 }
 
 void CFtpControlSocket::StartKeepaliveTimer()
 {
-	if (!engine_.GetOptions().GetOptionVal(OPTION_FTP_SENDKEEPALIVE))
+	if (!engine_.GetOptions().GetOptionVal(OPTION_FTP_SENDKEEPALIVE)) {
 		return;
+	}
 
-	if (m_repliesToSkip || m_pendingReplies)
+	if (m_repliesToSkip || m_pendingReplies) {
 		return;
+	}
 
-	if (!m_lastCommandCompletionTime)
+	if (!m_lastCommandCompletionTime) {
 		return;
+	}
 
 	fz::duration const span = fz::monotonic_clock::now() - m_lastCommandCompletionTime;
 	if (span.get_minutes() >= 30) {
@@ -4316,8 +4425,7 @@ void CFtpControlSocket::StartKeepaliveTimer()
 int CFtpControlSocket::ParseSubcommandResult(int prevResult)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ParseSubcommandResult(%d)"), prevResult);
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("ParseSubcommandResult called without active operation"));
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;

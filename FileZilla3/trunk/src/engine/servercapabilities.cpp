@@ -3,7 +3,7 @@
 
 std::map<CServer, CCapabilities> CServerCapabilities::m_serverMap;
 
-capabilities CCapabilities::GetCapability(capabilityNames name, wxString* pOption) const
+capabilities CCapabilities::GetCapability(capabilityNames name, std::wstring* pOption) const
 {
 	const std::map<capabilityNames, CCapabilities::t_cap>::const_iterator iter = m_capabilityMap.find(name);
 	if (iter == m_capabilityMap.end()) {
@@ -29,9 +29,9 @@ capabilities CCapabilities::GetCapability(capabilityNames name, int* pOption) co
 	return iter->second.cap;
 }
 
-void CCapabilities::SetCapability(capabilityNames name, capabilities cap, const wxString& option)
+void CCapabilities::SetCapability(capabilityNames name, capabilities cap, std::wstring const& option)
 {
-	wxASSERT(cap == yes || option.empty());
+	assert(cap == yes || option.empty());
 	CCapabilities::t_cap tcap;
 	tcap.cap = cap;
 	tcap.option = option;
@@ -42,7 +42,7 @@ void CCapabilities::SetCapability(capabilityNames name, capabilities cap, const 
 
 void CCapabilities::SetCapability(capabilityNames name, capabilities cap, int option)
 {
-	wxASSERT(cap == yes || option == 0);
+	assert(cap == yes || option == 0);
 	CCapabilities::t_cap tcap;
 	tcap.cap = cap;
 	tcap.number = option;
@@ -50,7 +50,7 @@ void CCapabilities::SetCapability(capabilityNames name, capabilities cap, int op
 	m_capabilityMap[name] = tcap;
 }
 
-capabilities CServerCapabilities::GetCapability(const CServer& server, capabilityNames name, wxString* pOption)
+capabilities CServerCapabilities::GetCapability(const CServer& server, capabilityNames name, std::wstring* pOption)
 {
 	const std::map<CServer, CCapabilities>::const_iterator iter = m_serverMap.find(server);
 	if (iter == m_serverMap.end()) {
@@ -70,7 +70,7 @@ capabilities CServerCapabilities::GetCapability(const CServer& server, capabilit
 	return iter->second.GetCapability(name, pOption);
 }
 
-void CServerCapabilities::SetCapability(const CServer& server, capabilityNames name, capabilities cap, const wxString& option)
+void CServerCapabilities::SetCapability(const CServer& server, capabilityNames name, capabilities cap, std::wstring const& option)
 {
 	const std::map<CServer, CCapabilities>::iterator iter = m_serverMap.find(server);
 	if (iter == m_serverMap.end()) {

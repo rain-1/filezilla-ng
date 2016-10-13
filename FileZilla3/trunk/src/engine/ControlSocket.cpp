@@ -507,25 +507,26 @@ wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_
 	return res;
 }
 
-wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8)
+std::string CControlSocket::ConvToServer(std::wstring const& str, bool force_utf8)
 {
+	std::string ret;
 	if (m_useUTF8 || force_utf8) {
-		wxCharBuffer const buffer = str.utf8_str();
-		if (buffer || force_utf8)
-			return buffer;
+		ret = fz::to_utf8(str);
+		if (!ret.empty() || force_utf8) {
+			return ret;
+		}
 	}
 
 	if (m_pCSConv) {
-		wxCharBuffer const buffer = str.mb_str(*m_pCSConv);
-		if (buffer)
-			return buffer;
+		wxCharBuffer const buffer = wxString(str).mb_str(*m_pCSConv);
+		if (buffer) {
+			ret = buffer;
+			return ret;
+		}
 	}
 
-	wxCharBuffer buffer = str.mb_str(*wxConvCurrent);
-	if (!buffer)
-		buffer = str.To8BitData();
-
-	return buffer;
+	ret = fz::to_string(str);
+	return ret;
 }
 
 void CControlSocket::OnTimer(fz::timer_id)

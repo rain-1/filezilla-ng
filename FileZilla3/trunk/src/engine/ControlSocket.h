@@ -148,7 +148,7 @@ public:
 	std::wstring ConvToLocal(const char* buffer, size_t len);
 	wchar_t* ConvToLocalBuffer(const char* buffer, size_t len, size_t& outlen);
 	wchar_t* ConvToLocalBuffer(const char* buffer, wxMBConv& conv, size_t len, size_t& outlen);
-	wxCharBuffer ConvToServer(const wxString& str, bool force_utf8 = false);
+	std::string ConvToServer(std::wstring const&, bool force_utf8 = false);
 
 	void SetActive(CFileZillaEngine::_direction direction);
 

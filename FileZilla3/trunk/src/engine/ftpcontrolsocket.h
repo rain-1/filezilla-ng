@@ -85,7 +85,7 @@ protected:
 	virtual void OnConnect();
 	virtual void OnReceive();
 
-	bool SendCommand(wxString const& str, bool maskArgs = false, bool measureRTT = true);
+	bool SendCommand(std::wstring const& str, bool maskArgs = false, bool measureRTT = true);
 
 	// Parse the latest reply line from the server
 	void ParseLine(std::wstring line);
@@ -94,7 +94,7 @@ protected:
 	// It's the last line in a multi-line response.
 	void ParseResponse();
 
-	void ParseFeat(wxString line);
+	void ParseFeat(std::wstring const& line);
 
 	virtual int SendNextCommand();
 	virtual int ParseSubcommandResult(int prevResult);
@@ -123,7 +123,7 @@ protected:
 
 	bool GetLoginSequence(const CServer& server);
 
-	wxString m_Response;
+	std::wstring m_Response;
 	std::wstring m_MultilineResponseCode;
 	std::vector<std::wstring> m_MultilineResponseLines;
 
