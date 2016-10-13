@@ -555,7 +555,7 @@ bool CFtpControlSocket::GetLoginSequence(CServer const& server)
 			pData->loginSequence.push_back(cmd);
 		}
 		// User@host
-		t_loginCommand cmd = {false, false, loginCommandType::user, wxString::Format(_T("USER %s@%s"), server.GetUser(), server.Format(ServerFormat::with_optional_port))};
+		t_loginCommand cmd = {false, false, loginCommandType::user, fz::sprintf(L"USER %s@%s", server.GetUser(), server.Format(ServerFormat::with_optional_port))};
 		pData->loginSequence.push_back(cmd);
 
 		// Password
@@ -573,7 +573,7 @@ bool CFtpControlSocket::GetLoginSequence(CServer const& server)
 		}
 	}
 	else if (pData->ftp_proxy_type == 2 || pData->ftp_proxy_type == 3) {
-		const wxString& proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
+		std::wstring const proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		if (!proxyUser.empty()) {
 			// Proxy logon (if credendials are set)
 			t_loginCommand cmd = {false, false, loginCommandType::other, _T("USER ") + proxyUser};
@@ -3036,7 +3036,7 @@ int CFtpControlSocket::DeleteParseResponse()
 		pData->m_deleteFailed = true;
 	}
 	else {
-		const wxString& file = pData->files.front();
+		std::wstring const& file = pData->files.front();
 
 		engine_.GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
 

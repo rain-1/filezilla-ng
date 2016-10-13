@@ -557,8 +557,8 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 	case sftpEvent::AskHostkey:
 	case sftpEvent::AskHostkeyChanged:
 		{
-			long port = 0;
-			if (!wxString(message.text[1]).ToLong(&port)) {
+			auto port = fz::to_integral<int>(message.text[1]);
+			if (port <= 0 || port > 65535) {
 				DoClose(FZ_REPLY_INTERNALERROR);
 				break;
 			}
@@ -577,7 +577,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 		else {
 			CSftpConnectOpData *pData = static_cast<CSftpConnectOpData*>(m_pCurOpData);
 
-			wxString const challengeIdentifier = m_requestPreamble + _T("\n") + m_requestInstruction + _T("\n") + message.text[0];
+			std::wstring const challengeIdentifier = m_requestPreamble + _T("\n") + m_requestInstruction + _T("\n") + message.text[0];
 
 			CInteractiveLoginNotification::type t = CInteractiveLoginNotification::interactive;
 			if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_requestPreamble == _T("SSH key passphrase")) {
@@ -2077,7 +2077,7 @@ int CSftpControlSocket::DeleteParseResponse(bool successful, std::wstring const&
 		pData->m_deleteFailed = true;
 	}
 	else {
-		const wxString& file = pData->files.front();
+		std::wstring const& file = pData->files.front();
 
 		engine_.GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
 
