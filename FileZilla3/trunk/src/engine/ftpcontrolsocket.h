@@ -37,7 +37,7 @@ protected:
 	int ListSend();
 	int ListCheckTimezoneDetection(CDirectoryListing& listing);
 
-	int ChangeDir(CServerPath path = CServerPath(), wxString subDir = _T(""), bool link_discovery = false);
+	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
 	int ChangeDirParseResponse();
 	int ChangeDirSubcommandResult(int prevResult);
 	int ChangeDirSend();
@@ -78,7 +78,7 @@ protected:
 	virtual int ChmodSubcommandResult(int prevResult);
 	virtual int ChmodSend();
 
-	virtual int Transfer(const wxString& cmd, CFtpTransferOpData* oldData);
+	virtual int Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData);
 	virtual int TransferParseResponse();
 	virtual int TransferSend();
 
@@ -105,7 +105,7 @@ protected:
 	int LogonParseResponse();
 	int LogonSend();
 
-	wxString GetPassiveCommand(CRawTransferOpData& data);
+	std::wstring GetPassiveCommand(CRawTransferOpData& data);
 	bool ParsePasvResponse(CRawTransferOpData* pData);
 	bool ParseEpsvResponse(CRawTransferOpData* pData);
 
@@ -185,22 +185,6 @@ public:
 
 	CIOThread *pIOThread{};
 	bool fileDidExist{true};
-};
-
-class CRawTransferOpData final : public COpData
-{
-public:
-	CRawTransferOpData();
-	std::wstring cmd;
-
-	CFtpTransferOpData* pOldData{};
-
-	bool bPasv{true};
-	bool bTriedPasv{};
-	bool bTriedActive{};
-
-	wxString host;
-	int port{};
 };
 
 #endif

@@ -34,11 +34,6 @@
 #define LOGON_CUSTOMCOMMANDS 12
 #define LOGON_DONE		13
 
-CRawTransferOpData::CRawTransferOpData()
-	: COpData(Command::rawtransfer)
-{
-}
-
 CFtpFileTransferOpData::CFtpFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
 	: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
 {
@@ -156,6 +151,26 @@ public:
 
 	// Set to true if deletion of at least one file failed
 	bool m_deleteFailed{};
+};
+
+class CRawTransferOpData final : public COpData
+{
+public:
+	CRawTransferOpData()
+		: COpData(Command::rawtransfer)
+	{
+	}
+
+	std::wstring cmd;
+
+	CFtpTransferOpData* pOldData{};
+
+	bool bPasv{true};
+	bool bTriedPasv{};
+	bool bTriedActive{};
+
+	std::wstring host;
+	int port{};
 };
 
 CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
@@ -1820,7 +1835,7 @@ enum cwdStates
 	cwd_pwd_subdir
 };
 
-int CFtpControlSocket::ChangeDir(CServerPath path, wxString subDir, bool link_discovery)
+int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool link_discovery)
 {
 	cwdStates state = cwd_init;
 
@@ -1847,7 +1862,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, wxString subDir, bool link_di
 				}
 
 				path = target;
-				subDir = _T("");
+				subDir.clear();
 				state = cwd_cwd;
 			}
 			else {
@@ -1883,7 +1898,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, wxString subDir, bool link_di
 		!static_cast<CFtpFileTransferOpData *>(pData->pNextOpData)->download)
 	{
 		pData->tryMkdOnFail = true;
-		wxASSERT(subDir.empty());
+		assert(subDir.empty());
 	}
 
 
@@ -2053,7 +2068,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 	return SendNextCommand();
 }
 
-int CFtpControlSocket::ChangeDirSubcommandResult(int WXUNUSED(prevResult))
+int CFtpControlSocket::ChangeDirSubcommandResult(int)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ChangeDirSubcommandResult()"));
 
@@ -2064,8 +2079,7 @@ int CFtpControlSocket::ChangeDirSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ChangeDirSend()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -2630,7 +2644,7 @@ int CFtpControlSocket::FileTransferSend()
 		cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
 		pData->opState = filetransfer_waittransfer;
-		return Transfer(cmd, pData);
+		return Transfer(cmd.ToStdWstring(), pData);
 	case filetransfer_mfmt:
 		{
 			cmd = _T("MFMT ");
@@ -3559,14 +3573,17 @@ bool CFtpControlSocket::IsMisleadingListResponse() const
 	// for example they return "550 no members found"
 	// Other servers return "550 No files found."
 
-	if (!m_Response.CmpNoCase(_T("550 No members found.")))
+	if (!m_Response.CmpNoCase(_T("550 No members found."))) {
 		return true;
+	}
 
-	if (!m_Response.CmpNoCase(_T("550 No data sets found.")))
+	if (!m_Response.CmpNoCase(_T("550 No data sets found."))) {
 		return true;
+	}
 
-	if (!m_Response.CmpNoCase(_T("550 No files found.")))
+	if (!m_Response.CmpNoCase(_T("550 No files found."))) {
 		return true;
+	}
 
 	return false;
 }
@@ -3574,20 +3591,24 @@ bool CFtpControlSocket::IsMisleadingListResponse() const
 bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 {
 	int pos = m_Response.Find(_T("(|||"));
-	if (pos == -1)
+	if (pos == -1) {
 		return false;
+	}
 
 	int pos2 = m_Response.Mid(pos + 4).Find(_T("|)"));
-	if (pos2 <= 0)
+	if (pos2 <= 0) {
 		return false;
+	}
 
 	wxString number = m_Response.Mid(pos + 4, pos2);
 	unsigned long port;
-	if (!number.ToULong(&port))
-		 return false;
+	if (!number.ToULong(&port)) {
+		return false;
+	}
 
-	if (port == 0 || port > 65535)
-	   return false;
+	if (port == 0 || port > 65535) {
+		return false;
+	}
 
 	pData->port = port;
 
@@ -3595,7 +3616,7 @@ bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 		pData->host = m_pCurrentServer->GetHost();
 	}
 	else {
-		pData->host = m_pSocket->GetPeerIP();
+		pData->host = fz::to_wstring(m_pSocket->GetPeerIP());
 	}
 	return true;
 }
@@ -3617,30 +3638,37 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 
 	pData->host = m[2].str();
 
-	int i = pData->host.Find(',', true);
-	long number = 0;
-	if (i == -1 || !pData->host.Mid(i + 1).ToLong(&number)) {
+	size_t i = pData->host.rfind(',');
+	if (i == std::wstring::npos) {
+		return false;
+	}
+	auto number = fz::to_integral<unsigned int>(pData->host.substr(i + 1));
+	if (number > 255) {
 		return false;
 	}
 
 	pData->port = number; //get ls byte of server socket
-	pData->host = pData->host.Left(i);
-	i = pData->host.Find(',', true);
-	if (i == -1 || !pData->host.Mid(i + 1).ToLong(&number)) {
+	pData->host = pData->host.substr(0, i);
+	i = pData->host.rfind(',');
+	if (i == std::string::npos) {
+		return false;
+	}
+	number = fz::to_integral<unsigned int>(pData->host.substr(i + 1));
+	if (number > 255) {
 		return false;
 	}
 
 	pData->port += 256 * number; //add ms byte of server socket
-	pData->host = pData-> host.Left(i);
-	pData->host.Replace(_T(","), _T("."));
+	pData->host = pData-> host.substr(0, i);
+	fz::replace_substrings(pData->host, L",", L".");
 
 	if (m_pProxyBackend) {
 		// We do not have any information about the proxy's inner workings
 		return true;
 	}
 
-	std::string const peerIP = m_pSocket->GetPeerIP();
-	if (!fz::is_routable_address(pData->host.ToStdWstring()) && fz::is_routable_address(peerIP)) {
+	std::wstring const peerIP = fz::to_wstring(m_pSocket->GetPeerIP());
+	if (!fz::is_routable_address(pData->host) && fz::is_routable_address(peerIP)) {
 		if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive) {
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Using server address instead."));
 			LogMessage(MessageType::Debug_Info, _T("  Reply: %s, peer: %s"), pData->host, peerIP);
@@ -3746,9 +3774,9 @@ void CFtpControlSocket::OnExternalIPAddress()
 	SendNextCommand();
 }
 
-int CFtpControlSocket::Transfer(const wxString& cmd, CFtpTransferOpData* oldData)
+int CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData)
 {
-	wxASSERT(oldData);
+	assert(oldData);
 	oldData->tranferCommandSent = false;
 
 	CRawTransferOpData *pData = new CRawTransferOpData;
@@ -3759,8 +3787,7 @@ int CFtpControlSocket::Transfer(const wxString& cmd, CFtpTransferOpData* oldData
 	pData->pOldData = oldData;
 	pData->pOldData->transferEndReason = TransferEndReason::successful;
 
-	if (m_pProxyBackend)
-	{
+	if (m_pProxyBackend) {
 		// Only passive suported
 		// Theoretically could use reverse proxy ability in SOCKS5, but
 		// it is too fragile to set up with all those broken routers and
@@ -3769,8 +3796,7 @@ int CFtpControlSocket::Transfer(const wxString& cmd, CFtpTransferOpData* oldData
 		pData->bPasv = true;
 		pData->bTriedActive = true;
 	}
-	else
-	{
+	else {
 		switch (m_pCurrentServer->GetPasvMode())
 		{
 		case MODE_PASSIVE:
@@ -3787,9 +3813,12 @@ int CFtpControlSocket::Transfer(const wxString& cmd, CFtpTransferOpData* oldData
 
 	if ((pData->pOldData->binary && m_lastTypeBinary == 1) ||
 		(!pData->pOldData->binary && m_lastTypeBinary == 0))
+	{
 		pData->opState = rawtransfer_port_pasv;
-	else
+	}
+	else {
 		pData->opState = rawtransfer_type;
+	}
 
 	return SendNextCommand();
 }
@@ -4332,23 +4361,23 @@ void CFtpControlSocket::operator()(fz::event_base const& ev)
 	CRealControlSocket::operator()(ev);
 }
 
-wxString CFtpControlSocket::GetPassiveCommand(CRawTransferOpData& data)
+std::wstring CFtpControlSocket::GetPassiveCommand(CRawTransferOpData& data)
 {
-	wxString ret = _T("PASV");
+	std::wstring ret = L"PASV";
 
-	wxASSERT(data.bPasv);
+	assert(data.bPasv);
 	data.bTriedPasv = true;
 
 	if (m_pProxyBackend) {
 		// We don't actually know the address family the other end of the proxy uses to reach the server. Hence prefer EPSV
 		// if the server supports it.
 		if (CServerCapabilities::GetCapability(*m_pCurrentServer, epsv_command) == yes) {
-			ret = _T("EPSV");
+			ret = L"EPSV";
 		}
 	}
 	else if (m_pSocket->GetAddressFamily() == CSocket::ipv6) {
 		// EPSV is mandatory for IPv6, don't check capabilities
-		ret = _T("EPSV");
+		ret = L"EPSV";
 	}
 	return ret;
 }

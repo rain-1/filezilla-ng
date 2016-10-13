@@ -1,7 +1,3 @@
-// FileZillaEngine.cpp: Implementierung der Klasse CFileZillaEngine.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include <filezilla.h>
 #include "ControlSocket.h"
 #include "directorycache.h"

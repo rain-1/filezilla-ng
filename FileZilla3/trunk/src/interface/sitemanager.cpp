@@ -105,7 +105,7 @@ bool CSiteManager::Load(pugi::xml_node element, CSiteManagerXmlHandler& handler)
 
 	for (auto child = element.first_child(); child; child = child.next_sibling()) {
 		if (!strcmp(child.name(), "Folder")) {
-			std::wstring name = GetTextElement_Trimmed(child).ToStdWstring();
+			std::wstring name = GetTextElement_Trimmed(child);
 			if (name.empty()) {
 				continue;
 			}
