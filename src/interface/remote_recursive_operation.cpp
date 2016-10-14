@@ -250,7 +250,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 
 	std::deque<std::wstring> filesToDelete;
 
-	wxString const remotePath = pDirectoryListing->path.GetPath();
+	std::wstring const remotePath = pDirectoryListing->path.GetPath();
 
 	if (m_operationMode == recursive_synchronize_download && !dir.localDir.empty()) {
 		// Step one in synchronization: Delete local files not on the server
@@ -275,7 +275,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 
 				// Local item isn't filtered
 
-				int remoteIndex = pDirectoryListing->FindFile_CmpCase(name);
+				int remoteIndex = pDirectoryListing->FindFile_CmpCase(fz::to_wstring(name));
 				if (remoteIndex != -1) {
 					CDirentry const& entry = (*pDirectoryListing)[remoteIndex];
 					if (!filter.FilenameFiltered(m_filters.second, entry.name, remotePath, entry.is_dir(), entry.size, 0, entry.time)) {
