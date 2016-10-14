@@ -36,7 +36,7 @@ void CIOThread::Close()
 
 bool CIOThread::Create(fz::thread_pool& pool, std::unique_ptr<fz::file> && pFile, bool read, bool binary)
 {
-	wxASSERT(pFile);
+	assert(pFile);
 
 	Close();
 
@@ -192,7 +192,7 @@ int CIOThread::GetNextWriteBuffer(char** pBuffer)
 
 bool CIOThread::Finalize(int len)
 {
-	wxASSERT(m_pFile);
+	assert(m_pFile);
 
 	Destroy();
 
@@ -208,7 +208,7 @@ bool CIOThread::Finalize(int len)
 	if (!WriteToFile(m_buffers[m_curAppBuf], len))
 		return false;
 
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 	if (!m_binary && m_wasCarriageReturn) {
 		const char CR = '\r';
 		if (m_pFile->write(&CR, 1) != 1)
@@ -223,7 +223,7 @@ bool CIOThread::Finalize(int len)
 
 int CIOThread::GetNextReadBuffer(char** pBuffer)
 {
-	wxASSERT(m_read);
+	assert(m_read);
 
 	int newBuf = (m_curAppBuf + 1) % BUFFERCOUNT;
 
@@ -280,12 +280,12 @@ int64_t CIOThread::ReadFromFile(char* pBuffer, int64_t maxLen)
 	// In binary mode, no conversion has to be done.
 	// Also, under Windows the native newline format is already identical
 	// to the newline format of the FTP protocol
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 	if (m_binary)
 #endif
 		return m_pFile->read(pBuffer, maxLen);
 
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 
 	// In the worst case, length will doubled: If reading
 	// only LFs from the file
@@ -327,11 +327,11 @@ bool CIOThread::WriteToFile(char* pBuffer, int64_t len)
 	// In binary mode, no conversion has to be done.
 	// Also, under Windows the native newline format is already identical
 	// to the newline format of the FTP protocol
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 	if (m_binary) {
 #endif
 		return DoWrite(pBuffer, len);
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 	}
 	else {
 
