@@ -1,17 +1,17 @@
 #include <filezilla.h>
 #include "sizeformatting_base.h"
 #include "optionsbase.h"
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 #include <langinfo.h>
 #endif
 #include <math.h>
 
 namespace {
-const wxChar prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
+wchar_t const prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
 
-wxString ToString(int64_t n, wxChar const* const sepBegin = 0, wxChar const* const sepEnd = 0)
+std::wstring ToString(int64_t n, wchar_t const* const sepBegin = 0, wchar_t const* const sepEnd = 0)
 {
-	wxString ret;
+	std::wstring ret;
 	if (!n) {
 		ret = _T("0");
 	}
@@ -22,9 +22,9 @@ wxString ToString(int64_t n, wxChar const* const sepBegin = 0, wxChar const* con
 			neg = true;
 		}
 
-		wxChar buf[60];
-		wxChar * const end = &buf[sizeof(buf) / sizeof(wxChar) - 1];
-		wxChar * p = end;
+		wchar_t buf[60];
+		wchar_t * const end = &buf[sizeof(buf) / sizeof(wchar_t) - 1];
+		wchar_t * p = end;
 
 		int d = 0;
 		while (n != 0) {
@@ -32,8 +32,8 @@ wxString ToString(int64_t n, wxChar const* const sepBegin = 0, wxChar const* con
 			n /= 10;
 
 			if (sepBegin && !(++d % 3) && n != 0) {
-				wxChar *q = p - (sepEnd - sepBegin);
-				for (wxChar const* s = sepBegin; s != sepEnd; ++s) {
+				wchar_t *q = p - (sepEnd - sepBegin);
+				for (wchar_t const* s = sepBegin; s != sepEnd; ++s) {
 					*q++ = *s;
 				}
 				p -= sepEnd - sepBegin;
@@ -50,31 +50,34 @@ wxString ToString(int64_t n, wxChar const* const sepBegin = 0, wxChar const* con
 }
 }
 
-wxString CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix, CSizeFormatBase::_format format, bool thousands_separator, int num_decimal_places)
+std::wstring CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix, CSizeFormatBase::_format format, bool thousands_separator, int num_decimal_places)
 {
-	wxASSERT(format != formats_count);
-	wxASSERT(size >= 0);
-	if( size < 0 ) {
+	assert(format != formats_count);
+	assert(size >= 0);
+	if (size < 0) {
 		size = 0;
 	}
 
 	if (format == bytes) {
-		wxString result = FormatNumber(pOptions, size, &thousands_separator);
+		std::wstring result = FormatNumber(pOptions, size, &thousands_separator);
 
-		if (!add_bytes_suffix)
+		if (!add_bytes_suffix) {
 			return result;
+		}
 		else {
-			return wxString::Format(wxPLURAL_LL("%s byte", "%s bytes", size), result);
+			return fz::sprintf(wxPLURAL_LL("%s byte", "%s bytes", size), result);
 		}
 	}
 
-	wxString places;
+	std::wstring places;
 
 	int divider;
-	if (format == si1000)
+	if (format == si1000) {
 		divider = 1000;
-	else
+	}
+	else {
 		divider = 1024;
+	}
 
 	// Exponent (2^(10p) or 10^(3p) depending on option
 	int p = 0;
@@ -84,15 +87,17 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_
 	bool clipped = false;
 	while (r > divider && p < 6) {
 		int64_t const rr = r / divider;
-		if (remainder != 0)
+		if (remainder != 0) {
 			clipped = true;
+		}
 		remainder = static_cast<int>(r - rr * divider);
 		r = rr;
 		++p;
 	}
 	if (!num_decimal_places) {
-		if (remainder != 0 || clipped)
+		if (remainder != 0 || clipped) {
 			++r;
+		}
 	}
 	else if (p) { // Don't add decimal places on exact bytes
 		if (format != si1000) {
@@ -124,94 +129,104 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_
 		}
 
 		if (num_decimal_places != 3) {
-			if (remainder % divider)
+			if (remainder % divider) {
 				clipped = true;
+			}
 			remainder /= divider;
 		}
 
-		if (clipped)
+		if (clipped) {
 			remainder++;
+		}
 		if (remainder > max) {
 			r++;
 			remainder = 0;
 		}
 
-		wxChar fmt[] = _T("%00d");
+		wchar_t fmt[] = L"%00d";
 		fmt[2] = '0' + num_decimal_places;
-		places.Printf(fmt, remainder);
+		places = fz::sprintf(fmt, remainder);
 	}
 
-	wxString result = ToString(r, 0, 0);
+	std::wstring result = ToString(r, 0, 0);
 	if (!places.empty()) {
-		const wxString& sep = GetRadixSeparator();
+		std::wstring const& sep = GetRadixSeparator();
 
 		result += sep;
 		result += places;
 	}
 	result += ' ';
 
-	static wxChar byte_unit = 0;
+	static wchar_t byte_unit = 0;
 	if (!byte_unit) {
-		wxString t = _("B <Unit symbol for bytes. Only translate first letter>");
+		std::wstring t = _("B <Unit symbol for bytes. Only translate first letter>").ToStdWstring(); // @translator: Only translate first letter.
 		byte_unit = t[0];
 	}
 
-	if (!p)
+	if (!p) {
 		return result + byte_unit;
+	}
 
 	result += prefix[p];
-	if (format == iec)
+	if (format == iec) {
 		result += 'i';
+	}
 
 	result += byte_unit;
 
 	return result;
 }
 
-wxString CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix /*=false*/)
+std::wstring CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix)
 {
-	const _format format = _format(pOptions->GetOptionVal(OPTION_SIZE_FORMAT));
-	const bool thousands_separator = pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
-	const int num_decimal_places = pOptions->GetOptionVal(OPTION_SIZE_DECIMALPLACES);
+	_format const format = _format(pOptions->GetOptionVal(OPTION_SIZE_FORMAT));
+	bool const thousands_separator = pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
+	int const num_decimal_places = pOptions->GetOptionVal(OPTION_SIZE_DECIMALPLACES);
 
 	return Format(pOptions, size, add_bytes_suffix, format, thousands_separator, num_decimal_places);
 }
 
-wxString CSizeFormatBase::FormatUnit(COptionsBase* pOptions, int64_t size, CSizeFormatBase::_unit unit, int base /*=1024*/)
+std::wstring CSizeFormatBase::FormatUnit(COptionsBase* pOptions, int64_t size, CSizeFormatBase::_unit unit, int base)
 {
 	_format format = _format(pOptions->GetOptionVal(OPTION_SIZE_FORMAT));
-	if (base == 1000)
+	if (base == 1000) {
 		format = si1000;
-	else if (format != si1024)
+	}
+	else if (format != si1024) {
 		format = iec;
-	return wxString::Format(_T("%s %s"), FormatNumber(pOptions, size), GetUnit(pOptions, unit, format));
+	}
+	return FormatNumber(pOptions, size) + L" " + GetUnit(pOptions, unit, format);
 }
 
-wxString CSizeFormatBase::GetUnitWithBase(COptionsBase* pOptions, _unit unit, int base)
+std::wstring CSizeFormatBase::GetUnitWithBase(COptionsBase* pOptions, _unit unit, int base)
 {
 	_format format = _format(pOptions->GetOptionVal(OPTION_SIZE_FORMAT));
-	if (base == 1000)
+	if (base == 1000) {
 		format = si1000;
-	else if (format != si1024)
+	}
+	else if (format != si1024) {
 		format = iec;
+	}
 	return GetUnit(pOptions, unit, format);
 }
 
-wxString CSizeFormatBase::GetUnit(COptionsBase* pOptions, _unit unit, CSizeFormatBase::_format format /*=formats_count*/)
+std::wstring CSizeFormatBase::GetUnit(COptionsBase* pOptions, _unit unit, CSizeFormatBase::_format format)
 {
-	wxString ret;
-	if (unit != byte)
+	std::wstring ret;
+	if (unit != byte) {
 		ret = prefix[unit];
+	}
 
-	if (format == formats_count)
+	if (format == formats_count) {
 		format = _format(pOptions->GetOptionVal(OPTION_SIZE_FORMAT));
-	if (format == iec || format == bytes)
+	}
+	if (format == iec || format == bytes) {
 		ret += 'i';
+	}
 
-	static wxChar byte_unit = 0;
-	if (!byte_unit)
-	{
-		wxString t = _("B <Unit symbol for bytes. Only translate first letter>");
+	static wchar_t byte_unit = 0;
+	if (!byte_unit) {
+		std::wstring t = _("B <Unit symbol for bytes. Only translate first letter>").ToStdWstring(); // @translator: Only translate first letter.
 		byte_unit = t[0];
 	}
 
@@ -220,70 +235,72 @@ wxString CSizeFormatBase::GetUnit(COptionsBase* pOptions, _unit unit, CSizeForma
 	return ret;
 }
 
-const wxString& CSizeFormatBase::GetThousandsSeparator()
+namespace {
+std::wstring DoGetThousandsSeparator()
 {
-	static wxString sep;
-	static bool separator_initialized = false;
-	if (!separator_initialized)
-	{
-		separator_initialized = true;
-#ifdef __WXMSW__
-		wxChar tmp[5];
-		int count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, tmp, 5);
-		if (count)
-			sep = tmp;
-#else
-		char* chr = nl_langinfo(THOUSEP);
-		if (chr && *chr)
-		{
-			sep = wxString(chr, wxConvLibc);
-		}
-#endif
-		if (sep.size() > 5) {
-			sep = sep.Left(5);
-		}
+	std::wstring sep;
+#ifdef FZ_WINDOWS
+	wchar_t tmp[5];
+	int count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, tmp, 5);
+	if (count) {
+		sep = tmp;
 	}
-
+#else
+	char* chr = nl_langinfo(THOUSEP);
+	if (chr && *chr) {
+		sep = fz::to_wstring(chr);
+	}
+#endif
+	if (sep.size() > 5) {
+		sep = sep.substr(0, 5);
+	}
 	return sep;
 }
 
-const wxString& CSizeFormatBase::GetRadixSeparator()
+std::wstring DoGetRadixSeparator()
 {
-	static wxString sep;
-	static bool separator_initialized = false;
-	if (!separator_initialized)
-	{
-		separator_initialized = true;
-
-#ifdef __WXMSW__
-		wxChar tmp[5];
-		int count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, tmp, 5);
-		if (!count)
-			sep = _T(".");
-		else
-		{
-			tmp[4] = 0;
-			sep = tmp;
-		}
-#else
-		char* chr = nl_langinfo(RADIXCHAR);
-		if (!chr || !*chr)
-			sep = _T(".");
-		else
-		{
-			sep = wxString(chr, wxConvLibc);
-		}
-#endif
+	std::wstring sep;
+#ifdef FZ_WINDOWS
+	wchar_t tmp[5];
+	int count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, tmp, 5);
+	if (!count) {
+		sep = _T(".");
 	}
+	else {
+		tmp[4] = 0;
+		sep = tmp;
+	}
+#else
+	char* chr = nl_langinfo(RADIXCHAR);
+	if (!chr || !*chr) {
+		sep = _T(".");
+	}
+	else {
+		sep = fz::to_wstring(chr);
+	}
+#endif
 
 	return sep;
 }
+}
 
-wxString CSizeFormatBase::FormatNumber(COptionsBase* pOptions, int64_t size, bool* thousands_separator /*=0*/)
+std::wstring const& CSizeFormatBase::GetThousandsSeparator()
 {
-	wxString sep;
-	wxChar const* sepBegin = 0;
-	wxChar const* sepEnd = 0;
+	static std::wstring const sep = DoGetThousandsSeparator();
+	return sep;
+}
+
+std::wstring const& CSizeFormatBase::GetRadixSeparator()
+{
+	static std::wstring const sep = DoGetRadixSeparator();
+	return sep;
+}
+
+std::wstring CSizeFormatBase::FormatNumber(COptionsBase* pOptions, int64_t size, bool* thousands_separator)
+{
+	std::wstring sep;
+	wchar_t const* sepBegin = 0;
+	wchar_t const* sepEnd = 0;
 
 	if ((!thousands_separator || *thousands_separator) && pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0) {
 		sep = GetThousandsSeparator();

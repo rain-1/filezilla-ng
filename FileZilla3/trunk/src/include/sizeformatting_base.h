@@ -1,5 +1,5 @@
-#ifndef __SIZEFORMATTING_BASE_H__
-#define __SIZEFORMATTING_BASE_H__
+#ifndef FILEZILLA_ENGINE_SIZEFORMATTING_BASE_HEADER
+#define FILEZILLA_ENGINE_SIZEFORMATTING_BASE_HEADER
 
 class COptionsBase;
 class CSizeFormatBase
@@ -28,17 +28,17 @@ public:
 		exa
 	};
 
-	static wxString FormatNumber(COptionsBase* pOptions, int64_t size, bool* thousands_separator = 0);
+	static std::wstring FormatNumber(COptionsBase* pOptions, int64_t size, bool* thousands_separator = 0);
 
-	static wxString GetUnitWithBase(COptionsBase* pOptions, _unit unit, int base);
-	static wxString GetUnit(COptionsBase* pOptions, _unit unit, _format = formats_count);
-	static wxString FormatUnit(COptionsBase* pOptions, int64_t size, _unit unit, int base = 1024);
+	static std::wstring GetUnitWithBase(COptionsBase* pOptions, _unit unit, int base);
+	static std::wstring GetUnit(COptionsBase* pOptions, _unit unit, _format = formats_count);
+	static std::wstring FormatUnit(COptionsBase* pOptions, int64_t size, _unit unit, int base = 1024);
 
-	static wxString Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix, _format format, bool thousands_separator, int num_decimal_places);
-	static wxString Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix = false);
+	static std::wstring Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix, _format format, bool thousands_separator, int num_decimal_places);
+	static std::wstring Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix = false);
 
-	static const wxString& GetThousandsSeparator();
-	static const wxString& GetRadixSeparator();
+	static std::wstring const& GetThousandsSeparator();
+	static std::wstring const& GetRadixSeparator();
 };
 
-#endif //__SIZEFORMATTING_BASE_H__
+#endif

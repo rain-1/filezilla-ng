@@ -159,7 +159,7 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 #else
 		"\n",
 #endif
-		now.format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::local), m_pid, engine_.GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], fz::to_utf8(msg));
+		now.format("%Y-%m-%d %H:%M:%S", fz::datetime::local), m_pid, engine_.GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], fz::to_utf8(msg));
 
 #ifdef FZ_WINDOWS
 	if (m_max_size) {
@@ -172,26 +172,27 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 			// Recheck on a new handle. Proteced with a mutex against other processes
 			HANDLE hMutex = ::CreateMutex(0, true, _T("FileZilla 3 Logrotate Mutex"));
 			if (!hMutex) {
-				wxString error = wxSysErrorMsg();
+				DWORD err = GetLastError();
 				l.unlock();
-				LogMessage(MessageType::Error, _("Could not create logging mutex: %s"), error);
+				LogMessage(MessageType::Error, _("Could not create logging mutex: %s"), GetSystemErrorDescription(err));
 				return;
 			}
 
 			HANDLE hFile = CreateFile(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 			if (hFile == INVALID_HANDLE_VALUE) {
-				wxString error = wxSysErrorMsg();
+				DWORD err = GetLastError();
 
 				// Oh dear..
 				ReleaseMutex(hMutex);
 				CloseHandle(hMutex);
 
 				l.unlock(); // Avoid recursion
-				LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
+				LogMessage(MessageType::Error, _("Could not open log file: %s"), GetSystemErrorDescription(err));
 				return;
 			}
 
-			wxString error;
+			DWORD err{};
+			std::wstring error;
 			if (GetFileSizeEx(hFile, &size) && size.QuadPart > m_max_size) {
 				CloseHandle(hFile);
 
@@ -199,27 +200,28 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 				// a handle. Move it far away first.
 				// Todo: Handle the case in which logdir and tmpdir are on different volumes.
 				// (Why is everthing so needlessly complex on MSW?)
-				wxString tmp = wxFileName::CreateTempFileName(_T("fz3"));
-				MoveFileEx((m_file + _T(".1")).c_str(), tmp.wc_str(), MOVEFILE_REPLACE_EXISTING);
-				DeleteFile(tmp.wc_str());
+				std::wstring tmp = wxFileName::CreateTempFileName(_T("fz3")).ToStdWstring();
+				MoveFileEx((m_file + _T(".1")).c_str(), tmp.c_str(), MOVEFILE_REPLACE_EXISTING);
+				DeleteFile(tmp.c_str());
 				MoveFileEx(m_file.c_str(), (m_file + _T(".1")).c_str(), MOVEFILE_REPLACE_EXISTING);
 				m_log_fd = CreateFile(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 				if (m_log_fd == INVALID_HANDLE_VALUE) {
 					// If this function would return bool, I'd return FILE_NOT_FOUND here.
-					error = wxSysErrorMsg();
+					err = GetLastError();
 				}
 			}
-			else
+			else {
 				m_log_fd = hFile;
+			}
 
 			if (hMutex) {
 				ReleaseMutex(hMutex);
 				CloseHandle(hMutex);
 			}
 
-			if (!error.empty()) {
+			if (err) {
 				l.unlock(); // Avoid recursion
-				LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
+				LogMessage(MessageType::Error, _("Could not open log file: %s"), GetSystemErrorDescription(err));
 				return;
 			}
 		}
@@ -228,10 +230,11 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 	DWORD written;
 	BOOL res = WriteFile(m_log_fd, out.c_str(), len, &written, 0);
 	if (!res || written != len) {
+		DWORD err = GetLastError();
 		CloseHandle(m_log_fd);
 		m_log_fd = INVALID_HANDLE_VALUE;
 		l.unlock(); // Avoid recursion
-		LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
+		LogMessage(MessageType::Error, _("Could not write to log file: %s"), GetSystemErrorDescription(err));
 	}
 #else
 	if (m_max_size) {

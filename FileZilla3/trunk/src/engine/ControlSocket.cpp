@@ -86,7 +86,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 			elapsed);
 
 		int64_t transferred = status.currentOffset - status.startOffset;
-		wxString size = CSizeFormatBase::Format(&engine_.GetOptions(), transferred, true);
+		std::wstring size = CSizeFormatBase::Format(&engine_.GetOptions(), transferred, true);
 
 		MessageType msgType = MessageType::Error;
 		wxString msg;
