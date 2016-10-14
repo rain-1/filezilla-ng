@@ -43,8 +43,6 @@ bool CDirentry::operator==(const CDirentry &op) const
 
 const CDirentry& CDirectoryListing::operator[](unsigned int index) const
 {
-	// Commented out, too heavy speed penalty
-	// wxASSERT(index < m_entryCount);
 	return *(*m_entries)[index];
 }
 
@@ -103,7 +101,7 @@ void CDirectoryListing::GetFilenames(std::vector<std::wstring> &names) const
 		names.push_back((*m_entries)[i]->name);
 }
 
-int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
+int CDirectoryListing::FindFile_CmpCase(std::wstring const& name) const
 {
 	if (!m_entries || m_entries->empty()) {
 		return -1;
@@ -131,8 +129,9 @@ int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
 		std::wstring const& entry_name = (*entry_iter)->name;
 		searchmap_case.insert(std::pair<std::wstring const, unsigned int>(entry_name, i));
 
-		if (entry_name == name)
+		if (entry_name == name) {
 			return i;
+		}
 	}
 
 	// Map is complete, item not in it
@@ -141,18 +140,21 @@ int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
 
 int CDirectoryListing::FindFile_CmpNoCase(wxString name) const
 {
-	if (!m_entries || m_entries->empty())
+	if (!m_entries || m_entries->empty()) {
 		return -1;
+	}
 
-	if (!m_searchmap_nocase)
+	if (!m_searchmap_nocase) {
 		m_searchmap_nocase.get();
+	}
 
 	name.MakeLower();
 
 	// Search map
 	auto iter = m_searchmap_nocase->find(to_wstring(name));
-	if (iter != m_searchmap_nocase->end())
+	if (iter != m_searchmap_nocase->end()) {
 		return iter->second;
+	}
 
 	unsigned int i = m_searchmap_nocase->size();
 	if (i == m_entries->size()) {
@@ -168,8 +170,9 @@ int CDirectoryListing::FindFile_CmpNoCase(wxString name) const
 		entry_name.MakeLower();
 		searchmap_nocase.insert(std::pair<std::wstring const, unsigned int>(to_wstring(entry_name), i));
 
-		if (entry_name == name)
+		if (entry_name == name) {
 			return i;
+		}
 	}
 
 	// Map is complete, item not in it
@@ -178,8 +181,9 @@ int CDirectoryListing::FindFile_CmpNoCase(wxString name) const
 
 void CDirectoryListing::ClearFindMap()
 {
-	if (!m_searchmap_case)
+	if (!m_searchmap_case) {
 		return;
+	}
 
 	m_searchmap_case.clear();
 	m_searchmap_nocase.clear();

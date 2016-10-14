@@ -109,7 +109,7 @@ bool CDirectoryCache::DoesExist(const CServer &server, const CServerPath &path, 
 	return false;
 }
 
-bool CDirectoryCache::LookupFile(CDirentry &entry, const CServer &server, const CServerPath &path, const wxString& file, bool &dirDidExist, bool &matchedCase)
+bool CDirectoryCache::LookupFile(CDirentry &entry, CServer const& server, CServerPath const& path, std::wstring const& file, bool &dirDidExist, bool &matchedCase)
 {
 	fz::scoped_lock lock(mutex_);
 
