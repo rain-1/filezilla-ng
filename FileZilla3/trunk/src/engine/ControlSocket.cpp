@@ -144,11 +144,11 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			return ResetOperation(nErrorCode);
 	}
 
-	wxString prefix;
+	std::wstring prefix;
 	if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR &&
 		(!m_pCurOpData || m_pCurOpData->opId != Command::transfer))
 	{
-		prefix = _("Critical error:") + _T(" ");
+		prefix = _("Critical error:").ToStdWstring() + _T(" ");
 	}
 
 	if (m_pCurOpData) {
@@ -156,7 +156,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		switch (commandId)
 		{
 		case Command::none:
-			if( !prefix.empty() ) {
+			if (!prefix.empty()) {
 				LogMessage(MessageType::Error, _("Critical error"));
 			}
 			break;
@@ -1025,7 +1025,7 @@ int CRealControlSocket::Connect(CServer const& server)
 
 int CRealControlSocket::ContinueConnect()
 {
-	wxString host;
+	std::wstring host;
 	unsigned int port = 0;
 
 	const int proxy_type = engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
@@ -1060,7 +1060,7 @@ int CRealControlSocket::ContinueConnect()
 			port = m_pCurrentServer->GetPort();
 		}
 	}
-	if (fz::get_address_type(host.ToStdWstring()) == fz::address_type::unknown) {
+	if (fz::get_address_type(host) == fz::address_type::unknown) {
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 	}
 
@@ -1131,7 +1131,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		else {
 			if (pData->download) {
-				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
+				std::wstring filename = pData->remotePath.FormatFilename(pData->remoteFile);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
 			else {
@@ -1148,7 +1148,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		else {
 			if (pData->download) {
-				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
+				std::wstring filename = pData->remotePath.FormatFilename(pData->remoteFile);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
 			else {
@@ -1252,7 +1252,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		break;
 	case CFileExistsNotification::skip:
 		if (pData->download) {
-			wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
+			std::wstring filename = pData->remotePath.FormatFilename(pData->remoteFile);
 			LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 		}
 		else {

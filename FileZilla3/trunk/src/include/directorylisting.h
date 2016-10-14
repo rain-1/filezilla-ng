@@ -83,7 +83,7 @@ public:
 
 	void Append(CDirentry&& entry);
 
-	int FindFile_CmpCase(const wxString& name) const;
+	int FindFile_CmpCase(std::wstring const& name) const;
 	int FindFile_CmpNoCase(wxString name) const;
 
 	void ClearFindMap();

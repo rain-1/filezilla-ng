@@ -1133,8 +1133,8 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			return false;
 
 		// Some servers use times only for files newer than 6 months
-		if( year <= 0 ) {
-			wxASSERT( month != -1 && day != -1 );
+		if (year <= 0) {
+			assert(month != -1 && day != -1);
 			tm const t = fz::datetime::now().get_tm(fz::datetime::utc);
 			year = t.tm_year + 1900;
 			int const currentDayOfYear = t.tm_mday + 31 * t.tm_mon;
@@ -1335,9 +1335,9 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 		gotYear = true;
 	}
 
-	wxASSERT(gotYear);
-	wxASSERT(gotMonth);
-	wxASSERT(gotDay);
+	assert(gotYear);
+	assert(gotMonth);
+	assert(gotDay);
 
 	if (!entry.time.set(fz::datetime::utc, year, month, day)) {
 		return false;
@@ -1930,7 +1930,7 @@ bool CDirectoryListingParser::AddLine(std::wstring && line, std::wstring && name
 	return true;
 }
 
-CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
+CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 {
 	while (!m_DataList.empty()) {
 		// Trim empty lines and spaces
@@ -2033,13 +2033,13 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 			m_pControlSocket->LogMessageRaw(MessageType::RawList, buffer);
 		}
 		else {
-			wxString str(res, wxConvUTF8);
-			if (str.empty()) {
-				str = wxString(res, wxConvLocal);
-				if (str.empty())
-					str = wxString(res, wxConvISO8859_1);
+			buffer = fz::to_wstring_from_utf8(res);
+			if (buffer.empty()) {
+				buffer = fz::to_wstring(res);
+				if (buffer.empty()) {
+					buffer = wxString(res, wxConvISO8859_1).ToStdWstring();
+				}
 			}
-			buffer = str.ToStdWstring();
 		}
 		delete [] res;
 

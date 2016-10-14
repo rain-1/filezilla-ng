@@ -40,7 +40,7 @@ public:
 	bool GetChangeTime(fz::monotonic_clock& time, const CServer &server, const CServerPath &path);
 	bool Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
 	bool DoesExist(const CServer &server, const CServerPath &path, int &hasUnsureEntries, bool &is_outdated);
-	bool LookupFile(CDirentry &entry, const CServer &server, const CServerPath &path, const wxString& file, bool &dirDidExist, bool &matchedCase);
+	bool LookupFile(CDirentry &entry, CServer const& server, CServerPath const& path, std::wstring const& file, bool &dirDidExist, bool &matchedCase);
 	bool InvalidateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool *wasDir = 0);
 	bool UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, Filetype type = file, int64_t size = -1);
 	bool RemoveFile(const CServer &server, const CServerPath &path, const wxString& filename);
