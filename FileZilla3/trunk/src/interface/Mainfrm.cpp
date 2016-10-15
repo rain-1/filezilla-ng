@@ -619,6 +619,15 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 	else if (event.GetId() == XRCID("ID_CLEARCACHE_LAYOUT")) {
 		CWrapEngine::ClearCache();
 	}
+	else if (event.GetId() == XRCID("ID_CLEAR_UPDATER")) {
+#if FZ_MANUALUPDATECHECK
+		if (m_pUpdater) {
+			COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTDATE, std::wstring());
+			COptions::Get()->SetOption(OPTION_UPDATECHECK_NEWVERSION, std::wstring());
+			m_pUpdater->Init();
+		}
+#endif
+	}
 	else if (event.GetId() == XRCID("ID_MENU_TRANSFER_FILEEXISTS")) {
 		CDefaultFileExistsDlg dlg;
 		if (!dlg.Load(this, false))
