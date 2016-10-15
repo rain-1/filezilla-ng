@@ -798,7 +798,7 @@ std::wstring CQueueStorage::Impl::GetColumnText(sqlite3_stmt* statement, int ind
 	static_assert(sizeof(wchar_t) == 2, "wchar_t not of size 2");
 	wchar_t const* text = static_cast<wchar_t const*>(sqlite3_column_text16(statement, index));
 	if (text) {
-		ret.assign(text, sqlite3_column_bytes16(statement, index));
+		ret.assign(text, sqlite3_column_bytes16(statement, index) / 2);
 	}
 #else
 	char const* text = reinterpret_cast<char const*>(sqlite3_column_text(statement, index));
