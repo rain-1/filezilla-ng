@@ -4,7 +4,6 @@
 #include "queue.h"
 
 #include <sqlite3.h>
-#include <wx/wx.h>
 
 #include <unordered_map>
 
@@ -173,8 +172,8 @@ public:
 	// Caches to speed up saving and loading
 	void ClearCaches();
 
-	std::unordered_map<wxString, int64_t, wxStringHash> localPaths_;
-	std::unordered_map<wxString, int64_t, wxStringHash> remotePaths_;
+	std::unordered_map<std::wstring, int64_t> localPaths_;
+	std::unordered_map<std::wstring, int64_t> remotePaths_;
 
 	std::map<int64_t, CLocalPath> reverseLocalPaths_;
 	std::map<int64_t, CServerPath> reverseRemotePaths_;
@@ -292,7 +291,7 @@ void CQueueStorage::Impl::ClearCaches()
 
 int64_t CQueueStorage::Impl::SaveLocalPath(CLocalPath const& path)
 {
-	std::unordered_map<wxString, int64_t, wxStringHash>::const_iterator it = localPaths_.find(path.GetPath());
+	auto it = localPaths_.find(path.GetPath());
 	if (it != localPaths_.end()) {
 		return it->second;
 	}
@@ -318,10 +317,11 @@ int64_t CQueueStorage::Impl::SaveLocalPath(CLocalPath const& path)
 
 int64_t CQueueStorage::Impl::SaveRemotePath(CServerPath const& path)
 {
-	wxString const& safePath = path.GetSafePath();
-	std::unordered_map<wxString, int64_t, wxStringHash>::const_iterator it = remotePaths_.find(safePath);
-	if (it != remotePaths_.end())
+	std::wstring const& safePath = path.GetSafePath();
+	auto it = remotePaths_.find(safePath);
+	if (it != remotePaths_.end()) {
 		return it->second;
+	}
 
 	Bind(insertRemotePathQuery_, path_table_column_names::path, safePath);
 
@@ -345,7 +345,7 @@ int64_t CQueueStorage::Impl::SaveRemotePath(CServerPath const& path)
 std::string CQueueStorage::Impl::CreateColumnDefs(_column const* columns, size_t count)
 {
 	std::string query = "(";
-	for (unsigned int i = 0; i < count; ++i) {
+	for (size_t i = 0; i < count; ++i) {
 		if (i) {
 			query += ", ";
 		}
@@ -1169,9 +1169,7 @@ bool CQueueStorage::Clear()
 
 std::wstring CQueueStorage::GetDatabaseFilename()
 {
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("queue.sqlite3"));
-
-	return file.GetFullPath().ToStdWstring();
+	return COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR) + L"queue.sqlite3";
 }
 
 bool CQueueStorage::BeginTransaction()
