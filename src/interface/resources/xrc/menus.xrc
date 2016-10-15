@@ -439,10 +439,12 @@
     <object class="wxMenuItem" name="ID_CLEARCACHE_LAYOUT">
       <label>Clear &amp;layout cache</label>
     </object>
-    <object class="separator"/>
     <object class="wxMenuItem" name="ID_CIPHERS">
       <label>&amp;TLS Ciphers</label>
       <help>Shows available TLS ciphers</help>
+    </object>
+    <object class="wxMenuItem" name="ID_CLEAR_UPDATER">
+      <label>Clear auto&amp;update data</label>
     </object>
   </object>
   <object class="wxMenu" name="ID_MENU_QUEUE_FAILED">
