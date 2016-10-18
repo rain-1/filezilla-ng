@@ -72,17 +72,14 @@ CFilterConditionsDialog::CFilterConditionsDialog()
 	m_button_size = wxSize(-1, -1);
 }
 
-bool CFilterConditionsDialog::CreateListControl(int conditions /*=common*/)
+bool CFilterConditionsDialog::CreateListControl(int conditions)
 {
-	wxScrolledWindow* wnd = XRCCTRL(*this, "ID_CONDITIONS", wxScrolledWindow);
-	if (!wnd)
+	m_pListCtrl = XRCCTRL(*this, "ID_CONDITIONS", wxCustomHeightListCtrl);
+	if (!m_pListCtrl) {
 		return false;
-
-	m_pListCtrl = new wxCustomHeightListCtrl(this, wxID_ANY, wxDefaultPosition, wnd->GetSize(), wxVSCROLL|wxSUNKEN_BORDER|wxTAB_TRAVERSAL);
-	if (!m_pListCtrl)
-		return false;
+	}
 	m_pListCtrl->AllowSelection(false);
-	ReplaceControl(wnd, m_pListCtrl);
+
 	CalcMinListWidth();
 
 	if (stringConditionTypes.empty())

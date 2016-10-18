@@ -1305,8 +1305,10 @@
                 <border>5</border>
               </object>
               <object class="sizeritem">
-                <object class="wxScrolledWindow" name="ID_CONDITIONS">
+                <object class="wxScrolledWindow" name="ID_CONDITIONS" subclass="wxCustomHeightListCtrl">
                   <size>350,200</size>
+                  <style>wxVSCROLL|wxSUNKEN_BORDER|wxTAB_TRAVERSAL</style>
+                  <bg>wxSYS_COLOUR_WINDOW</bg>
                 </object>
                 <option>1</option>
                 <flag>wxGROW</flag>
@@ -3087,8 +3089,10 @@
       <object class="sizeritem">
         <object class="wxFlexGridSizer">
           <object class="sizeritem">
-            <object class="wxScrolledWindow" name="ID_CONDITIONS">
+            <object class="wxScrolledWindow" name="ID_CONDITIONS" subclass="wxCustomHeightListCtrl">
               <size>350,120</size>
+              <style>wxVSCROLL|wxSUNKEN_BORDER|wxTAB_TRAVERSAL</style>
+              <bg>wxSYS_COLOUR_WINDOW</bg>
             </object>
             <flag>wxGROW</flag>
           </object>

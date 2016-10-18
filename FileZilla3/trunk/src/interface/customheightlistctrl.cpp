@@ -1,20 +1,15 @@
 #include <filezilla.h>
 #include "customheightlistctrl.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxCustomHeightListCtrl, wxScrolledWindow)
+
 BEGIN_EVENT_TABLE(wxCustomHeightListCtrl, wxScrolledWindow)
 EVT_MOUSE_EVENTS(wxCustomHeightListCtrl::OnMouseEvent)
 END_EVENT_TABLE()
 
-wxCustomHeightListCtrl::wxCustomHeightListCtrl(wxWindow* parent, wxWindowID id /*=-1*/, const wxPoint& pos /*=wxDefaultPosition*/, const wxSize& size /*=wxDefaultSize*/, long style /*=wxHSCROLL|wxVSCROLL*/, const wxString& name /*=_T("scrolledWindow")*/)
+wxCustomHeightListCtrl::wxCustomHeightListCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 	: wxScrolledWindow(parent, id, pos, size, style, name)
 {
-	m_lineHeight = 20;
-	m_lineCount = 0;
-	m_focusedLine = -1;
-
-	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-
-	m_allow_selection = true;
 }
 
 void wxCustomHeightListCtrl::SetLineHeight(int height)
@@ -30,17 +25,19 @@ void wxCustomHeightListCtrl::SetLineHeight(int height)
 
 void wxCustomHeightListCtrl::SetLineCount(int count)
 {
-	if (count < m_lineCount)
-	{
+	if (count < m_lineCount) {
 		std::set<int> selectedLines = m_selectedLines;
 		m_selectedLines.clear();
-		for (std::set<int>::const_iterator iter = selectedLines.begin(); iter != selectedLines.end(); ++iter)
-			if (*iter < count)
+		for (std::set<int>::const_iterator iter = selectedLines.begin(); iter != selectedLines.end(); ++iter) {
+			if (*iter < count) {
 				m_selectedLines.insert(*iter);
+			}
+		}
 	}
 	m_lineCount = count;
-	if (m_focusedLine >= count)
+	if (m_focusedLine >= count) {
 		m_focusedLine = -1;
+	}
 
 	int posx, posy;
 	GetViewStart(&posx, &posy);
@@ -59,11 +56,9 @@ void wxCustomHeightListCtrl::SetLineCount(int count)
 	GetViewStart(&new_view.x, &new_view.y);
 	int delta_y = m_lineHeight *(old_view.y - new_view.y);
 
-	if (delta_y)
-	{
+	if (delta_y) {
 		wxWindowList::compatibility_iterator iter = GetChildren().GetFirst();
-		while (iter)
-		{
+		while (iter) {
 			wxWindow* child = iter->GetData();
 			wxPoint pos = child->GetPosition();
 			pos.y -= delta_y;
@@ -89,16 +84,16 @@ void wxCustomHeightListCtrl::OnDraw(wxDC& dc)
 	dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
 	dc.SetPen(*wxTRANSPARENT_PEN);
 
-	for (std::set<int>::const_iterator iter = m_selectedLines.begin(); iter != m_selectedLines.end(); ++iter)
-	{
-		if (*iter == m_focusedLine)
+	for (std::set<int>::const_iterator iter = m_selectedLines.begin(); iter != m_selectedLines.end(); ++iter) {
+		if (*iter == m_focusedLine) {
 			dc.SetPen(wxPen(wxColour(0, 0, 0), 1, wxDOT));
-		else
+		}
+		else {
 			dc.SetPen(*wxTRANSPARENT_PEN);
+		}
 		dc.DrawRectangle(0, m_lineHeight * *iter, size.GetWidth(), m_lineHeight);
 	}
-	if (m_focusedLine != -1 && m_selectedLines.find(m_focusedLine) == m_selectedLines.end())
-	{
+	if (m_focusedLine != -1 && m_selectedLines.find(m_focusedLine) == m_selectedLines.end()) {
 		dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
 		dc.SetPen(wxPen(wxColour(0, 0, 0), 1, wxDOT));
 		dc.DrawRectangle(0, m_lineHeight * m_focusedLine, size.GetWidth(), m_lineHeight);
@@ -108,55 +103,45 @@ void wxCustomHeightListCtrl::OnDraw(wxDC& dc)
 void wxCustomHeightListCtrl::OnMouseEvent(wxMouseEvent& event)
 {
 	bool changed = false;
-	if (event.ButtonDown() && m_allow_selection)
-	{
+	if (event.ButtonDown() && m_allow_selection) {
 		wxPoint pos = event.GetPosition();
 		int x, y;
 		CalcUnscrolledPosition(pos.x, pos.y, &x, &y);
-		if (y > m_lineHeight * m_lineCount)
-		{
+		if (y > m_lineHeight * m_lineCount) {
 			m_focusedLine = -1;
 			m_selectedLines.clear();
 			changed = true;
 		}
-		else
-		{
+		else {
 			int line = y / m_lineHeight;
-			if (event.ShiftDown())
-			{
-				if (line < m_focusedLine)
-				{
-					for (int i = line; i <= m_focusedLine; i++)
-					{
-						if (m_selectedLines.find(i) == m_selectedLines.end())
-						{
+			if (event.ShiftDown()) {
+				if (line < m_focusedLine) {
+					for (int i = line; i <= m_focusedLine; ++i) {
+						if (m_selectedLines.find(i) == m_selectedLines.end()) {
 							changed = true;
 							m_selectedLines.insert(i);
 						}
 					}
 				}
-				else
-				{
-					for (int i = line; i >= m_focusedLine; i--)
-					{
-						if (m_selectedLines.find(i) == m_selectedLines.end())
-						{
+				else {
+					for (int i = line; i >= m_focusedLine; --i) {
+						if (m_selectedLines.find(i) == m_selectedLines.end()) {
 							changed = true;
 							m_selectedLines.insert(i);
 						}
 					}
 				}
 			}
-			else if (event.ControlDown())
-			{
-				if (m_selectedLines.find(line) == m_selectedLines.end())
+			else if (event.ControlDown()) {
+				if (m_selectedLines.find(line) == m_selectedLines.end()) {
 					m_selectedLines.insert(line);
-				else
+				}
+				else {
 					m_selectedLines.erase(line);
+				}
 				changed = true;
 			}
-			else
-			{
+			else {
 				m_selectedLines.clear();
 				m_selectedLines.insert(line);
 				changed = true;
@@ -170,8 +155,7 @@ void wxCustomHeightListCtrl::OnMouseEvent(wxMouseEvent& event)
 
 	event.Skip();
 
-	if (changed)
-	{
+	if (changed) {
 		wxCommandEvent evt(wxEVT_COMMAND_LISTBOX_SELECTED, GetId());
 		ProcessEvent(evt);
 	}
@@ -194,8 +178,9 @@ void wxCustomHeightListCtrl::SelectLine(int line)
 {
 	m_selectedLines.clear();
 	m_focusedLine = line;
-	if (line != -1)
+	if (line != -1) {
 		m_selectedLines.insert(line);
+	}
 
 	Refresh();
 }
@@ -203,6 +188,7 @@ void wxCustomHeightListCtrl::SelectLine(int line)
 void wxCustomHeightListCtrl::AllowSelection(bool allow_selection)
 {
 	m_allow_selection = allow_selection;
-	if (!allow_selection)
+	if (!allow_selection) {
 		ClearSelection();
+	}
 }
