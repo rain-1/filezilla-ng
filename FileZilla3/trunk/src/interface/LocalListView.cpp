@@ -1091,7 +1091,7 @@ bool CLocalListView::OnAcceptRename(const wxListEvent& event)
 #ifdef __WXMSW__
 	data->label.clear();
 #endif
-	m_state.RefreshLocal();
+	CallAfter([&](){m_state.RefreshLocal();});
 
 	return true;
 }
