@@ -52,8 +52,8 @@ public:
 
 	wxString name;
 
-	bool filterFiles{};
-	bool filterDirs{};
+	bool filterFiles{true};
+	bool filterDirs{true};
 	t_matchType matchType{all};
 
 	// Filenames on Windows ignore case
