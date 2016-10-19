@@ -276,8 +276,9 @@ bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 void CQueueView::QueueFile_Finish(const bool start)
 {
 	bool need_refresh = false;
-	if (m_insertionStart >= 0 && m_insertionStart <= GetTopItem() + GetCountPerPage() + 1)
+	if (m_insertionStart >= 0 && m_insertionStart <= GetTopItem() + GetCountPerPage() + 1) {
 		need_refresh = true;
+	}
 	CommitChanges();
 
 	if (!m_activeMode && start) {
@@ -293,8 +294,9 @@ void CQueueView::QueueFile_Finish(const bool start)
 
 	UpdateStatusLinePositions();
 
-	if (need_refresh)
+	if (need_refresh) {
 		RefreshListOnly(false);
+	}
 }
 
 // Defined in RemoteListView.cpp

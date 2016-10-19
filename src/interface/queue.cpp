@@ -100,7 +100,7 @@ bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy, bool forward)
 				delete pItem;
 
 			if (iter - m_children.begin() - m_removed_at_front <= 10) {
-				m_removed_at_front++;
+				++m_removed_at_front;
 				unsigned int end = iter - m_children.begin();
 				int c = 0;
 				for (int i = end; i >= m_removed_at_front; i--, c++)
@@ -121,7 +121,7 @@ bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy, bool forward)
 				delete *iter;
 
 				if (iter - m_children.begin() - m_removed_at_front <= 10) {
-					m_removed_at_front++;
+					++m_removed_at_front;
 					unsigned int end = iter - m_children.begin();
 					for (int i = end; i >= m_removed_at_front; i--)
 						m_children[i] = m_children[i - 1];
@@ -279,8 +279,9 @@ void CFileItem::SetActive(const bool active)
 
 void CFileItem::SaveItem(pugi::xml_node& element) const
 {
-	if (m_edit != CEditHandler::none || !element)
+	if (m_edit != CEditHandler::none || !element) {
 		return;
+	}
 
 	auto file = element.append_child("File");
 
@@ -288,21 +289,26 @@ void CFileItem::SaveItem(pugi::xml_node& element) const
 	AddTextElement(file, "RemoteFile", GetRemoteFile());
 	AddTextElement(file, "RemotePath", m_remotePath.GetSafePath());
 	AddTextElementRaw(file, "Download", Download() ? "1" : "0");
-	if (m_size != -1)
+	if (m_size != -1) {
 		AddTextElement(file, "Size", m_size);
-	if (m_errorCount)
+	}
+	if (m_errorCount) {
 		AddTextElement(file, "ErrorCount", m_errorCount);
-	if (m_priority != QueuePriority::normal)
+	}
+	if (m_priority != QueuePriority::normal) {
 		AddTextElement(file, "Priority", static_cast<int>(m_priority));
+	}
 	AddTextElementRaw(file, "DataType", Ascii() ? "0" : "1");
-	if (m_defaultFileExistsAction != CFileExistsNotification::unknown)
+	if (m_defaultFileExistsAction != CFileExistsNotification::unknown) {
 		AddTextElement(file, "OverwriteAction", m_defaultFileExistsAction);
+	}
 }
 
 bool CFileItem::TryRemoveAll()
 {
-	if (!IsActive())
+	if (!IsActive()) {
 		return true;
+	}
 
 	set_pending_remove(true);
 	return false;
@@ -310,10 +316,12 @@ bool CFileItem::TryRemoveAll()
 
 void CFileItem::SetTargetFile(wxString const& file)
 {
-	if (!file.empty() && file != m_sourceFile)
+	if (!file.empty() && file != m_sourceFile) {
 		m_targetFile = fz::sparse_optional<std::wstring>(to_wstring(file));
-	else
+	}
+	else {
 		m_targetFile.clear();
+	}
 }
 
 void CFileItem::SetStatusMessage(CFileItem::Status status)
@@ -752,13 +760,6 @@ CQueueViewBase::CQueueViewBase(CQueue* parent, int index, const wxString& title)
 	, m_title(title)
 {
 	m_pQueue = parent;
-	m_insertionStart = -1;
-	m_insertionCount = 0;
-	m_itemCount = 0;
-	m_allowBackgroundErase = true;
-
-	m_fileCount = 0;
-	m_fileCountChanged = false;
 
 	// Create and assign the image list for the queue
 	wxSize s = CThemeProvider::GetIconSize(iconSizeSmall);
@@ -775,8 +776,9 @@ CQueueViewBase::CQueueViewBase(CQueue* parent, int index, const wxString& title)
 
 CQueueViewBase::~CQueueViewBase()
 {
-	for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-		delete *iter;
+	for (auto server : m_serverList) {
+		delete server;
+	}
 }
 
 CQueueItem* CQueueViewBase::GetQueueItem(unsigned int item) const
@@ -993,20 +995,18 @@ void CQueueViewBase::UpdateSelections_ItemAdded(int added)
 #ifndef __WXMSW__
 	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
 	const int selection_count = GetSelectedItemCount();
-	if (!selection_count)
+	if (!selection_count) {
 		return;
+	}
 #endif
 
 	// Go through all items, keep record of the previous selected item
 	int item = GetNextItem(added - 1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 
 	int prevItem = -1;
-	while (item != -1)
-	{
-		if (prevItem != -1)
-		{
-			if (prevItem + 1 != item)
-			{
+	while (item != -1) {
+		if (prevItem != -1) {
+			if (prevItem + 1 != item) {
 				// Previous selected item was not the direct predecessor
 				// That means we have to select the successor of prevItem
 				// and unselect current item
@@ -1014,8 +1014,7 @@ void CQueueViewBase::UpdateSelections_ItemAdded(int added)
 				SetItemState(item, 0, wxLIST_STATE_SELECTED);
 			}
 		}
-		else
-		{
+		else {
 			// First selected item, no predecessor yet. We have to unselect
 			SetItemState(item, 0, wxLIST_STATE_SELECTED);
 		}
@@ -1023,8 +1022,7 @@ void CQueueViewBase::UpdateSelections_ItemAdded(int added)
 
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	}
-	if (prevItem != -1 && prevItem < m_itemCount - 1)
-	{
+	if (prevItem != -1 && prevItem < m_itemCount - 1) {
 		// Move the very last selected item
 		SetItemState(prevItem + 1, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 	}
@@ -1034,18 +1032,19 @@ void CQueueViewBase::UpdateSelections_ItemAdded(int added)
 
 void CQueueViewBase::UpdateSelections_ItemRangeAdded(int added, int count)
 {
+	wxASSERT(GetItemCount() == m_itemCount);
 #ifndef __WXMSW__
 	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
 	const int selection_count = GetSelectedItemCount();
-	if (!selection_count)
+	if (!selection_count) {
 		return;
+	}
 #endif
 
 	std::deque<int> itemsToSelect;
 
 	// Go through all selected items
 	int item = GetNextItem(added - 1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-
 	while (item != -1) {
 		// Select new items preceding to current one
 		while (!itemsToSelect.empty() && itemsToSelect.front() < item) {
@@ -1059,7 +1058,6 @@ void CQueueViewBase::UpdateSelections_ItemRangeAdded(int added, int count)
 			SetItemState(item, 0, wxLIST_STATE_SELECTED);
 		}
 
-		itemsToSelect.push_back(item + count);
 		if (item + count < GetItemCount()) {
 			// On generic list controls, new items may be selected by default after
 			// increasing the item count: Internally it sometimes keeps track
@@ -1192,11 +1190,10 @@ CServerItem* CQueueViewBase::CreateServerItem(const CServer& server)
 {
 	CServerItem* pItem = GetServerItem(server);
 
-	if (!pItem)
-	{
+	if (!pItem) {
 		pItem = new CServerItem(server);
 		m_serverList.push_back(pItem);
-		m_itemCount++;
+		++m_itemCount;
 
 		wxASSERT(m_insertionStart == -1);
 		wxASSERT(m_insertionCount == 0);
@@ -1212,20 +1209,22 @@ void CQueueViewBase::CommitChanges()
 {
 	SaveSetItemCount(m_itemCount);
 
-	if (m_insertionStart != -1)
-	{
+	if (m_insertionStart != -1) {
 		wxASSERT(m_insertionCount != 0);
-		if (m_insertionCount == 1)
+		if (m_insertionCount == 1) {
 			UpdateSelections_ItemAdded(m_insertionStart);
-		else
+		}
+		else {
 			UpdateSelections_ItemRangeAdded(m_insertionStart, m_insertionCount);
+		}
 
 		m_insertionStart = -1;
 		m_insertionCount = 0;
 	}
 
-	if (m_fileCountChanged)
+	if (m_fileCountChanged) {
 		DisplayNumberQueuedFiles();
+	}
 }
 
 void CQueueViewBase::DisplayNumberQueuedFiles()
@@ -1256,9 +1255,11 @@ void CQueueViewBase::InsertItem(CServerItem* pServerItem, CQueueItem* pItem)
 	pServerItem->AddChild(pItem);
 	m_itemCount++;
 
-	if (m_insertionStart == -1)
+	if (m_insertionStart == -1) {
+		assert(!m_insertionCount);
 		m_insertionStart = newIndex;
-	m_insertionCount++;
+	}
+	++m_insertionCount;
 
 	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder) {
 		m_fileCount++;
