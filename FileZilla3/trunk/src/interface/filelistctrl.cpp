@@ -1043,20 +1043,22 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnKeyDown(wxKeyEvent& e
 
 	const int code = event.GetKeyCode();
 	const int mods = event.GetModifiers();
-	if (code == 'A' && (mods == wxMOD_CMD || mods == (wxMOD_CONTROL | wxMOD_META)))
-	{
-		for (unsigned int i = m_hasParent ? 1 : 0; i < m_indexMapping.size(); i++)
-		{
+	if (code == 'A' && (mods == wxMOD_CMD || mods == (wxMOD_CONTROL | wxMOD_META))) {
+		for (unsigned int i = m_hasParent ? 1 : 0; i < m_indexMapping.size(); ++i) {
 			const CFileData& data = m_fileData[m_indexMapping[i]];
-			if (data.comparison_flags != fill)
+			if (data.comparison_flags != fill) {
 				SetSelection(i, true);
-			else
+			}
+			else {
 				SetSelection(i, false);
+			}
 		}
-		if (m_hasParent)
+		if (m_hasParent && GetItemCount()) {
 			SetSelection(0, false);
-		if (m_pFilelistStatusBar)
+		}
+		if (m_pFilelistStatusBar) {
 			m_pFilelistStatusBar->SelectAll();
+		}
 	}
 	else if (code == WXK_BACK ||
 			(code == WXK_UP && event.GetModifiers() == CursorModifierKey) ||
@@ -1065,8 +1067,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnKeyDown(wxKeyEvent& e
 	{
 		OnNavigationEvent(false);
 	}
-	else
+	else {
 		event.Skip();
+	}
 }
 
 template<class CFileData> void CFileListCtrl<CFileData>::UpdateSelections_ItemsAdded(std::vector<int> const& added_indexes)
