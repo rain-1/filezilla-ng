@@ -352,11 +352,11 @@ protected:
 	void DisplayNumberQueuedFiles();
 
 	// Position at which insertions start and number of insertions
-	int m_insertionStart;
-	unsigned int m_insertionCount;
+	int m_insertionStart{-1};
+	unsigned int m_insertionCount{};
 
-	int m_fileCount;
-	bool m_fileCountChanged;
+	int m_fileCount{};
+	bool m_fileCountChanged{};
 
 	// Selection management.
 	void UpdateSelections_ItemAdded(int added);
@@ -364,8 +364,8 @@ protected:
 	void UpdateSelections_ItemRemoved(int removed);
 	void UpdateSelections_ItemRangeRemoved(int removed, int count);
 
-	int m_itemCount;
-	bool m_allowBackgroundErase;
+	int m_itemCount{};
+	bool m_allowBackgroundErase{true};
 
 	std::vector<CServerItem*> m_serverList;
 
