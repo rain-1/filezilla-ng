@@ -46,7 +46,7 @@ public:
 	bool RemoveFile(const CServer &server, const CServerPath &path, const wxString& filename);
 	void InvalidateServer(const CServer& server);
 	void RemoveDir(const CServer& server, const CServerPath& path, std::wstring const& filename, CServerPath const& target);
-	void Rename(const CServer& server, const CServerPath& pathFrom, const wxString& fileFrom, const CServerPath& pathTo, const wxString& fileTo);
+	void Rename(CServer const& server, CServerPath const& pathFrom, std::wstring const& fileFrom, const CServerPath& pathTo, std::wstring const& fileTo);
 
 protected:
 

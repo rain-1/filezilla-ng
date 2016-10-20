@@ -371,7 +371,7 @@ void CDirectoryCache::RemoveDir(CServer const& server, CServerPath const& path, 
 	RemoveFile(server, path, filename);
 }
 
-void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom, const wxString& fileFrom, const CServerPath& pathTo, const wxString& fileTo)
+void CDirectoryCache::Rename(CServer const& server, CServerPath const& pathFrom, std::wstring const& fileFrom, const CServerPath& pathTo, std::wstring const& fileTo)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -395,8 +395,8 @@ void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom,
 			}
 			if (i != listing.GetCount()) {
 				if (listing[i].is_dir()) {
-					RemoveDir(server, pathFrom, fileFrom.ToStdWstring(), CServerPath());
-					RemoveDir(server, pathFrom, fileTo.ToStdWstring(), CServerPath());
+					RemoveDir(server, pathFrom, fileFrom, CServerPath());
+					RemoveDir(server, pathFrom, fileTo, CServerPath());
 					UpdateFile(server, pathFrom, fileTo, true, dir);
 				}
 				else {
@@ -417,11 +417,11 @@ void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom,
 			}
 			if (i != listing.GetCount()) {
 				if (listing[i].is_dir()) {
-					RemoveDir(server, pathFrom, fileFrom.ToStdWstring(), CServerPath());
+					RemoveDir(server, pathFrom, fileFrom, CServerPath());
 					UpdateFile(server, pathTo, fileTo, true, dir);
 				}
 				else {
-					RemoveFile(server, pathFrom, fileFrom.ToStdWstring());
+					RemoveFile(server, pathFrom, fileFrom);
 					UpdateFile(server, pathTo, fileTo, true, file);
 				}
 			}
