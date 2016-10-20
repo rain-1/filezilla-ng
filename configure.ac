@@ -188,6 +188,7 @@ if test "$buildmain" = "yes"; then
   CXXFLAGS_OLD="$CXXFLAGS"
   CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
   CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
+
   AC_MSG_CHECKING([positional printf argument support in wxWidgets])
   AC_COMPILE_IFELSE(
     [AC_LANG_PROGRAM([[
@@ -202,6 +203,22 @@ if test "$buildmain" = "yes"; then
         AC_MSG_FAILURE([Positional printf argument support in wxWidgets is required by FileZilla. Please rebuild wxWidgets and pass --enable-printfposparam to its configure script.])
       ]
     )
+
+  AC_MSG_CHECKING([GUI support in wxWidgets])
+  AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM([[
+          #include <wx/wx.h>
+          #if !wxUSE_GUI
+            #error wx compiled without wxUSE_GUI
+          #endif
+        ]])],
+      AC_MSG_RESULT([yes]),
+      [
+        AC_MSG_RESULT([no])
+        AC_MSG_FAILURE([GUI support in wxWidgets is required by FileZilla. Please rebuild wxWidgets and pass --enable-gui to its configure script.])
+      ]
+    )
+
   CPPFLAGS="$CPPFLAGS_OLD"
   CXXFLAGS="$CXXFLAGS_OLD"
   AC_LANG_POP
