@@ -392,8 +392,9 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<
 	{
 	case nId_logmsg:
 		m_pMainFrame->GetStatusView()->AddToLog(static_cast<CLogmsgNotification&>(*pNotification.get()));
-		if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2)
+		if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2) {
 			m_pQueue->Highlight(3);
+		}
 		break;
 	case nId_operation:
 		ProcessReply(pEngineData, static_cast<COperationNotification&>(*pNotification.get()));
@@ -444,8 +445,7 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<
 		}
 		break;
 	case nId_transferstatus:
-		if (pEngineData->pItem && pEngineData->pStatusLineCtrl)
-		{
+		if (pEngineData->pItem && pEngineData->pStatusLineCtrl) {
 			auto const& transferStatusNotification = static_cast<CTransferStatusNotification const&>(*pNotification.get());
 			CTransferStatus const& status = transferStatusNotification.GetStatus();
 			if (pEngineData->active) {
@@ -462,9 +462,10 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<
 	case nId_local_dir_created:
 		{
 			auto const& localDirCreatedNotification = static_cast<CLocalDirCreatedNotification const&>(*pNotification.get());
-			const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-			for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-				(*iter)->LocalDirCreated(localDirCreatedNotification.dir);
+			const std::vector<CState*> const* pStates = CContextManager::Get()->GetAllStates();
+			for (auto state : *pStates) {
+				state->LocalDirCreated(localDirCreatedNotification.dir);
+			}
 		}
 		break;
 	default:
@@ -476,51 +477,51 @@ bool CQueueView::CanStartTransfer(const CServerItem& server_item, t_EngineData *
 {
 	const CServer &server = server_item.GetServer();
 	const int max_count = server.MaximumMultipleConnections();
-	if (!max_count)
+	if (!max_count) {
 		return true;
+	}
 
 	int active_count = server_item.m_activeCount;
 
 	CState* browsingStateOnSameServer = 0;
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-	{
-		CState* pState = *iter;
+	for (auto pState : *pStates) {
 		const CServer* pBrowsingServer = pState->GetServer();
-		if (!pBrowsingServer)
+		if (!pBrowsingServer) {
 			continue;
+		}
 
-		if (*pBrowsingServer == server)
-		{
+		if (*pBrowsingServer == server) {
 			active_count++;
 			browsingStateOnSameServer = pState;
 			break;
 		}
 	}
 
-	if (active_count < max_count)
+	if (active_count < max_count) {
 		return true;
+	}
 
 	// Max count has been reached
 
 	pEngineData = GetIdleEngine(&server, true);
-	if (pEngineData)
-	{
+	if (pEngineData) {
 		// If we got an idle engine connected to this very server, start the
 		// transfer anyhow. Let's not get this connection go to waste.
-		if (pEngineData->lastServer == server && pEngineData->pEngine->IsConnected())
+		if (pEngineData->lastServer == server && pEngineData->pEngine->IsConnected()) {
 			return true;
+		}
 	}
 
-	if (!browsingStateOnSameServer || active_count > 1)
+	if (!browsingStateOnSameServer || active_count > 1) {
 		return false;
+	}
 
 	// At this point the following holds:
 	// max_count is limited to 1, only connection to server is held by the browsing connection
 
 	pEngineData = GetEngineData(browsingStateOnSameServer->m_pEngine);
-	if (pEngineData)
-	{
+	if (pEngineData) {
 		wxASSERT(pEngineData->transient);
 		return pEngineData->transient && !pEngineData->active;
 	}
@@ -535,28 +536,33 @@ bool CQueueView::CanStartTransfer(const CServerItem& server_item, t_EngineData *
 
 bool CQueueView::TryStartNextTransfer()
 {
-	if (m_quit || !m_activeMode)
+	if (m_quit || !m_activeMode) {
 		return false;
+	}
 
 	// Check transfer limit
-	if (m_activeCount >= COptions::Get()->GetOptionVal(OPTION_NUMTRANSFERS))
+	if (m_activeCount >= COptions::Get()->GetOptionVal(OPTION_NUMTRANSFERS)) {
 		return false;
+	}
 
 	// Check limits for concurrent up/downloads
 	const int maxDownloads = COptions::Get()->GetOptionVal(OPTION_CONCURRENTDOWNLOADLIMIT);
 	const int maxUploads = COptions::Get()->GetOptionVal(OPTION_CONCURRENTUPLOADLIMIT);
 	TransferDirection wantedDirection;
-	if (maxDownloads && m_activeCountDown >= maxDownloads)
-	{
-		if (maxUploads && m_activeCountUp >= maxUploads)
+	if (maxDownloads && m_activeCountDown >= maxDownloads) {
+		if (maxUploads && m_activeCountUp >= maxUploads) {
 			return false;
-		else
+		}
+		else {
 			wantedDirection = TransferDirection::upload;
+		}
 	}
-	else if (maxUploads && m_activeCountUp >= maxUploads)
+	else if (maxUploads && m_activeCountUp >= maxUploads) {
 		wantedDirection = TransferDirection::download;
-	else
+	}
+	else {
 		wantedDirection = TransferDirection::both;
+	}
 
 	struct t_bestMatch
 	{
@@ -572,18 +578,16 @@ bool CQueueView::TryStartNextTransfer()
 
 	// Find inactive file. Check all servers for
 	// the file with the highest priority
-	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-	{
+	for (auto const& currentServerItem : m_serverList) {
 		t_EngineData* pEngineData = 0;
-		CServerItem* currentServerItem = *iter;
-
-		if (!CanStartTransfer(*currentServerItem, pEngineData))
+		
+		if (!CanStartTransfer(*currentServerItem, pEngineData)) {
 			continue;
+		}
 
 		CFileItem* newFileItem = currentServerItem->GetIdleChild(m_activeMode == 1, wantedDirection);
 
-		while (newFileItem && newFileItem->Download() && newFileItem->GetType() == QueueItemType::Folder)
-		{
+		while (newFileItem && newFileItem->Download() && newFileItem->GetType() == QueueItemType::Folder) {
 			CLocalPath localPath(newFileItem->GetLocalPath());
 			localPath.AddSegment(newFileItem->GetLocalFile());
 			wxFileName::Mkdir(localPath.GetPath(), 0777, wxPATH_MKDIR_FULL);
@@ -593,38 +597,42 @@ bool CQueueView::TryStartNextTransfer()
 			}
 			if (RemoveItem(newFileItem, true)) {
 				// Server got deleted. Unfortunately we have to start over now
-				if (m_serverList.empty())
+				if (m_serverList.empty()) {
 					return false;
+				}
 
 				return true;
 			}
 			newFileItem = currentServerItem->GetIdleChild(m_activeMode == 1, wantedDirection);
 		}
 
-		if (!newFileItem)
+		if (!newFileItem) {
 			continue;
+		}
 
-		if (!bestMatch.fileItem || newFileItem->GetPriority() > bestMatch.fileItem->GetPriority())
-		{
+		if (!bestMatch.fileItem || newFileItem->GetPriority() > bestMatch.fileItem->GetPriority()) {
 			bestMatch.serverItem = currentServerItem;
 			bestMatch.fileItem = newFileItem;
 			bestMatch.pEngineData = pEngineData;
-			if (newFileItem->GetPriority() == QueuePriority::highest)
+			if (newFileItem->GetPriority() == QueuePriority::highest) {
 				break;
+			}
 		}
 	}
-	if (!bestMatch.fileItem)
+	if (!bestMatch.fileItem) {
 		return false;
+	}
 
 	// Find idle engine
 	t_EngineData* pEngineData;
-	if (bestMatch.pEngineData)
+	if (bestMatch.pEngineData) {
 		pEngineData = bestMatch.pEngineData;
-	else
-	{
+	}
+	else {
 		pEngineData = GetIdleEngine(&bestMatch.serverItem->GetServer());
-		if (!pEngineData)
+		if (!pEngineData) {
 			return false;
+		}
 	}
 
 	// Now we have both inactive engine and file.
@@ -639,31 +647,39 @@ bool CQueueView::TryStartNextTransfer()
 	pEngineData->m_idleDisconnectTimer = 0;
 	bestMatch.serverItem->m_activeCount++;
 	m_activeCount++;
-	if (bestMatch.fileItem->Download())
+	if (bestMatch.fileItem->Download()) {
 		m_activeCountDown++;
-	else
+	}
+	else {
 		m_activeCountUp++;
+	}
 
-	const CServer oldServer = pEngineData->lastServer;
+	CServer const oldServer = pEngineData->lastServer;
 	pEngineData->lastServer = bestMatch.serverItem->GetServer();
 
 	if (pEngineData->state != t_EngineData::waitprimary) {
 		if (!pEngineData->pEngine->IsConnected()) {
 			if (pEngineData->lastServer.GetLogonType() == ASK) {
-				if (CLoginManager::Get().GetPassword(pEngineData->lastServer, true))
+				if (CLoginManager::Get().GetPassword(pEngineData->lastServer, true)) {
 					pEngineData->state = t_EngineData::connect;
-				else
+				}
+				else {
 					pEngineData->state = t_EngineData::askpassword;
+				}
 			}
-			else
+			else {
 				pEngineData->state = t_EngineData::connect;
+			}
 		}
-		else if (oldServer != bestMatch.serverItem->GetServer())
+		else if (oldServer != bestMatch.serverItem->GetServer()) {
 			pEngineData->state = t_EngineData::disconnect;
-		else if (pEngineData->pItem->GetType() == QueueItemType::File)
+		}
+		else if (pEngineData->pItem->GetType() == QueueItemType::File) {
 			pEngineData->state = t_EngineData::transfer;
-		else
+		}
+		else {
 			pEngineData->state = t_EngineData::mkdir;
+		}
 	}
 
 	if (bestMatch.fileItem->GetType() == QueueItemType::File) {
@@ -681,10 +697,10 @@ bool CQueueView::TryStartNextTransfer()
 #endif
 		rect.SetHeight(GetLineHeight());
 		m_allowBackgroundErase = false;
-		if (!pEngineData->pStatusLineCtrl)
+		if (!pEngineData->pStatusLineCtrl) {
 			pEngineData->pStatusLineCtrl = new CStatusLineCtrl(this, pEngineData, rect);
-		else
-		{
+		}
+		else {
 			pEngineData->pStatusLineCtrl->ClearTransferStatus();
 			pEngineData->pStatusLineCtrl->SetSize(rect);
 			pEngineData->pStatusLineCtrl->Show();
@@ -717,8 +733,9 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 	if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 		ResetReason reason;
 		if (pEngineData->pItem) {
-			if (pEngineData->pItem->pending_remove())
+			if (pEngineData->pItem->pending_remove()) {
 				reason = remove;
+			}
 			else {
 				if (pEngineData->pItem->GetType() == QueueItemType::File && ((CFileItem*)pEngineData->pItem)->made_progress()) {
 					CFileItem* pItem = (CFileItem*)pEngineData->pItem;
@@ -729,8 +746,9 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 			}
 			pEngineData->pItem->SetStatusMessage(CFileItem::interrupted);
 		}
-		else
+		else {
 			reason = reset;
+		}
 		ResetEngine(*pEngineData, reason);
 		return;
 	}
@@ -754,37 +772,48 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 			return;
 		}
 		else if (replyCode == FZ_REPLY_OK) {
-			if (pEngineData->pItem->GetType() == QueueItemType::File)
+			if (pEngineData->pItem->GetType() == QueueItemType::File) {
 				pEngineData->state = t_EngineData::transfer;
-			else
+			}
+			else {
 				pEngineData->state = t_EngineData::mkdir;
-			if (pEngineData->active && pEngineData->pStatusLineCtrl)
+			}
+			if (pEngineData->active && pEngineData->pStatusLineCtrl) {
 				pEngineData->pStatusLineCtrl->ClearTransferStatus();
+			}
 		}
 		else {
-			if (replyCode & FZ_REPLY_PASSWORDFAILED)
+			if (replyCode & FZ_REPLY_PASSWORDFAILED) {
 				CLoginManager::Get().CachedPasswordFailed(pEngineData->lastServer);
+			}
 
-			if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
+			if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 				pEngineData->pItem->SetStatusMessage(CFileItem::none);
-			else if (replyCode & FZ_REPLY_PASSWORDFAILED)
+			}
+			else if (replyCode & FZ_REPLY_PASSWORDFAILED) {
 				pEngineData->pItem->SetStatusMessage(CFileItem::incorrect_password);
-			else if ((replyCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT)
+			}
+			else if ((replyCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT) {
 				pEngineData->pItem->SetStatusMessage(CFileItem::timeout);
-			else if (replyCode & FZ_REPLY_DISCONNECTED)
+			}
+			else if (replyCode & FZ_REPLY_DISCONNECTED) {
 				pEngineData->pItem->SetStatusMessage(CFileItem::disconnected);
-			else
+			}
+			else {
 				pEngineData->pItem->SetStatusMessage(CFileItem::connection_failed);
+			}
 
 			if (replyCode != (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED) ||
 				!IsOtherEngineConnected(pEngineData))
 			{
-				if (!IncreaseErrorCount(*pEngineData))
+				if (!IncreaseErrorCount(*pEngineData)) {
 					return;
+				}
 			}
 
-			if (!pEngineData->transient)
+			if (!pEngineData->transient) {
 				SwitchEngine(&pEngineData);
+			}
 		}
 		break;
 	case t_EngineData::transfer:
@@ -807,14 +836,16 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 			pItem->set_made_progress(false);
 			pItem->m_onetime_action = CFileExistsNotification::resume;
 		}
-		else
-		{
-			if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
+		else {
+			if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 				pEngineData->pItem->SetStatusMessage(CFileItem::none);
-			else if ((replyCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT)
+			}
+			else if ((replyCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT) {
 				pEngineData->pItem->SetStatusMessage(CFileItem::timeout);
-			else if (replyCode & FZ_REPLY_DISCONNECTED)
+			}
+			else if (replyCode & FZ_REPLY_DISCONNECTED) {
 				pEngineData->pItem->SetStatusMessage(CFileItem::disconnected);
+			}
 			else if ((replyCode & FZ_REPLY_WRITEFAILED) == FZ_REPLY_WRITEFAILED) {
 				pEngineData->pItem->SetStatusMessage(CFileItem::local_file_unwriteable);
 				ResetEngine(*pEngineData, failure);
@@ -825,10 +856,12 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 				ResetEngine(*pEngineData, failure);
 				return;
 			}
-			else
+			else {
 				pEngineData->pItem->SetStatusMessage(CFileItem::could_not_start);
-			if (!IncreaseErrorCount(*pEngineData))
+			}
+			if (!IncreaseErrorCount(*pEngineData)) {
 				return;
+			}
 
 			if (replyCode & FZ_REPLY_DISCONNECTED && pEngineData->transient) {
 				ResetEngine(*pEngineData, retry);
@@ -841,27 +874,25 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 		}
 		break;
 	case t_EngineData::mkdir:
-		if (replyCode == FZ_REPLY_OK)
-		{
+		if (replyCode == FZ_REPLY_OK) {
 			ResetEngine(*pEngineData, success);
 			return;
 		}
-		if (replyCode & FZ_REPLY_DISCONNECTED)
-		{
-			if (!IncreaseErrorCount(*pEngineData))
+		if (replyCode & FZ_REPLY_DISCONNECTED) {
+			if (!IncreaseErrorCount(*pEngineData)) {
 				return;
+			}
 
-			if (pEngineData->transient)
-			{
+			if (pEngineData->transient) {
 				ResetEngine(*pEngineData, retry);
 				return;
 			}
 
-			if (!SwitchEngine(&pEngineData))
+			if (!SwitchEngine(&pEngineData)) {
 				pEngineData->state = t_EngineData::connect;
+			}
 		}
-		else
-		{
+		else {
 			// Cannot retry
 			ResetEngine(*pEngineData, failure);
 			return;
@@ -876,16 +907,19 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 	}
 
 	if (pEngineData->state == t_EngineData::connect && pEngineData->lastServer.GetLogonType() == ASK) {
-		if (!CLoginManager::Get().GetPassword(pEngineData->lastServer, true))
+		if (!CLoginManager::Get().GetPassword(pEngineData->lastServer, true)) {
 			pEngineData->state = t_EngineData::askpassword;
+		}
 	}
 
 	if (!m_activeMode) {
 		ResetReason reason;
-		if (pEngineData->pItem && pEngineData->pItem->pending_remove())
+		if (pEngineData->pItem && pEngineData->pItem->pending_remove()) {
 			reason = remove;
-		else
+		}
+		else {
 			reason = reset;
+		}
 		ResetEngine(*pEngineData, reason);
 		return;
 	}
@@ -895,8 +929,9 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 
 void CQueueView::ResetEngine(t_EngineData& data, const ResetReason reason)
 {
-	if (!data.active)
+	if (!data.active) {
 		return;
+	}
 
 	m_waitStatusLineUpdate = true;
 
@@ -938,10 +973,12 @@ void CQueueView::ResetEngine(t_EngineData& data, const ResetReason reason)
 				if (pFileItem->m_edit == CEditHandler::remote) {
 					pEditHandler->FinishTransfer(reason == success, pFileItem->GetRemoteFile(), pFileItem->GetRemotePath(), pServerItem->GetServer());
 				}
-				else
+				else {
 					pEditHandler->FinishTransfer(reason == success, pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile());
-				if (reason == success)
+				}
+				if (reason == success) {
 					pFileItem->m_edit = CEditHandler::none;
+				}
 			}
 
 			if (reason == failure) {
@@ -952,22 +989,26 @@ void CQueueView::ResetEngine(t_EngineData& data, const ResetReason reason)
 
 		wxASSERT(data.pItem->IsActive());
 		wxASSERT(data.pItem->m_pEngineData == &data);
-		if (data.pItem->IsActive())
+		if (data.pItem->IsActive()) {
 			data.pItem->SetActive(false);
+		}
 		if (data.pItem->Download()) {
 			wxASSERT(m_activeCountDown > 0);
-			if (m_activeCountDown > 0)
+			if (m_activeCountDown > 0) {
 				m_activeCountDown--;
+			}
 		}
 		else {
 			wxASSERT(m_activeCountUp > 0);
-			if (m_activeCountUp > 0)
+			if (m_activeCountUp > 0) {
 				m_activeCountUp--;
+			}
 		}
 
 		if (reason == reset) {
-			if (!data.pItem->queued())
+			if (!data.pItem->queued()) {
 				static_cast<CServerItem*>(data.pItem->GetTopLevelItem())->QueueImmediateFile(data.pItem);
+			}
 		}
 		else if (reason == failure) {
 			if (data.pItem->GetType() == QueueItemType::File || data.pItem->GetType() == QueueItemType::Folder) {
@@ -986,8 +1027,9 @@ void CQueueView::ResetEngine(t_EngineData& data, const ResetReason reason)
 		else if (reason == success) {
 			if (data.pItem->GetType() == QueueItemType::File || data.pItem->GetType() == QueueItemType::Folder) {
 				CQueueViewSuccessful* pQueueViewSuccessful = m_pQueue->GetQueueView_Successful();
-				if (pQueueViewSuccessful->AutoClear())
+				if (pQueueViewSuccessful->AutoClear()) {
 					RemoveItem(data.pItem, true);
+				}
 				else {
 					const CServer server = ((CServerItem*)data.pItem->GetTopLevelItem())->GetServer();
 
@@ -1001,29 +1043,34 @@ void CQueueView::ResetEngine(t_EngineData& data, const ResetReason reason)
 					pQueueViewSuccessful->CommitChanges();
 				}
 			}
-			else
+			else {
 				RemoveItem(data.pItem, true);
+			}
 		}
 		else if (reason == retry) {
 		}
-		else
+		else {
 			RemoveItem(data.pItem, true);
+		}
 		data.pItem = 0;
 	}
 	wxASSERT(m_activeCount > 0);
-	if (m_activeCount > 0)
+	if (m_activeCount > 0) {
 		m_activeCount--;
+	}
 	data.active = false;
 
 	if (data.state == t_EngineData::waitprimary && data.pEngine) {
 		const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
 			CState* pState = *iter;
-			if (pState->m_pEngine != data.pEngine)
+			if (pState->m_pEngine != data.pEngine) {
 				continue;
+			}
 			CCommandQueue* pCommandQueue = pState->m_pCommandQueue;
-			if (pCommandQueue)
+			if (pCommandQueue) {
 				pCommandQueue->RequestExclusiveEngine(false);
+			}
 			break;
 		}
 	}
@@ -1040,21 +1087,22 @@ bool CQueueView::RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount
 {
 	// RemoveItem assumes that the item has already been removed from all engines
 
-	if (item->GetType() == QueueItemType::File)
-	{
+	if (item->GetType() == QueueItemType::File) {
 		// Update size information
 		const CFileItem* const pFileItem = (const CFileItem* const)item;
 		int64_t size = pFileItem->GetSize();
 		if (size < 0) {
 			m_filesWithUnknownSize--;
 			wxASSERT(m_filesWithUnknownSize >= 0);
-			if (!m_filesWithUnknownSize && updateItemCount)
+			if (!m_filesWithUnknownSize && updateItemCount) {
 				DisplayQueueSize();
+			}
 		}
 		else if (size > 0) {
 			m_totalQueueSize -= size;
-			if (updateItemCount)
+			if (updateItemCount) {
 				DisplayQueueSize();
+			}
 			wxASSERT(m_totalQueueSize >= 0);
 		}
 	}
@@ -1081,8 +1129,9 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			CState* pState = 0;
 			const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 			for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
-				if ((*iter)->m_pEngine != engineData.pEngine)
+				if ((*iter)->m_pEngine != engineData.pEngine) {
 					continue;
+				}
 				pState = *iter;
 				break;
 			}
@@ -1099,16 +1148,20 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 		if (engineData.state == t_EngineData::disconnect) {
 			engineData.pItem->SetStatusMessage(CFileItem::disconnecting);
 			RefreshItem(engineData.pItem);
-			if (engineData.pEngine->Execute(CDisconnectCommand()) == FZ_REPLY_WOULDBLOCK)
+			if (engineData.pEngine->Execute(CDisconnectCommand()) == FZ_REPLY_WOULDBLOCK) {
 				return;
+			}
 
-			if (engineData.lastServer.GetLogonType() == ASK && !CLoginManager::Get().GetPassword(engineData.lastServer, true))
+			if (engineData.lastServer.GetLogonType() == ASK && !CLoginManager::Get().GetPassword(engineData.lastServer, true)) {
 				engineData.state = t_EngineData::askpassword;
-			else
+			}
+			else {
 				engineData.state = t_EngineData::connect;
+			}
 
-			if (engineData.active && engineData.pStatusLineCtrl)
+			if (engineData.active && engineData.pStatusLineCtrl) {
 				engineData.pStatusLineCtrl->ClearTransferStatus();
+			}
 		}
 
 		if (engineData.state == t_EngineData::askpassword) {
@@ -1139,16 +1192,19 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			if (res == FZ_REPLY_OK) {
 				if (engineData.pItem->GetType() == QueueItemType::File) {
 					engineData.state = t_EngineData::transfer;
-					if (engineData.active && engineData.pStatusLineCtrl)
+					if (engineData.active && engineData.pStatusLineCtrl) {
 						engineData.pStatusLineCtrl->ClearTransferStatus();
+					}
 				}
-				else
+				else {
 					engineData.state = t_EngineData::mkdir;
+				}
 				break;
 			}
 
-			if (!IncreaseErrorCount(engineData))
+			if (!IncreaseErrorCount(engineData)) {
 				return;
+			}
 			continue;
 		}
 
@@ -1163,8 +1219,9 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			int res = engineData.pEngine->Execute(CFileTransferCommand(fileItem->GetLocalPath().GetPath() + fileItem->GetLocalFile(), fileItem->GetRemotePath(),
 												fileItem->GetRemoteFile(), fileItem->Download(), transferSettings));
 			wxASSERT((res & FZ_REPLY_BUSY) != FZ_REPLY_BUSY);
-			if (res == FZ_REPLY_WOULDBLOCK)
+			if (res == FZ_REPLY_WOULDBLOCK) {
 				return;
+			}
 
 			if (res == FZ_REPLY_NOTCONNECTED) {
 				if (engineData.transient) {
@@ -1181,8 +1238,9 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 				return;
 			}
 
-			if (!IncreaseErrorCount(engineData))
+			if (!IncreaseErrorCount(engineData)) {
 				return;
+			}
 			continue;
 		}
 
@@ -1195,8 +1253,9 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			int res = engineData.pEngine->Execute(CMkdirCommand(fileItem->GetRemotePath()));
 
 			wxASSERT((res & FZ_REPLY_BUSY) != FZ_REPLY_BUSY);
-			if (res == FZ_REPLY_WOULDBLOCK)
+			if (res == FZ_REPLY_WOULDBLOCK) {
 				return;
+			}
 
 			if (res == FZ_REPLY_NOTCONNECTED) {
 				if (engineData.transient) {
@@ -1224,8 +1283,8 @@ bool CQueueView::SetActive(bool active)
 {
 	if (!active) {
 		m_activeMode = 0;
-		for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
-			(*iter)->QueueImmediateFiles();
+		for (auto const& serverItem : m_serverList) {
+			serverItem->QueueImmediateFiles();
 		}
 
 		const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
@@ -1252,18 +1311,21 @@ bool CQueueView::SetActive(bool active)
 		// Send active engines the cancel command
 		for (unsigned int engineIndex = 0; engineIndex < m_engineData.size(); ++engineIndex) {
 			t_EngineData* const pEngineData = m_engineData[engineIndex];
-			if (!pEngineData->active)
+			if (!pEngineData->active) {
 				continue;
+			}
 
 			if (pEngineData->state == t_EngineData::waitprimary) {
-				if (pEngineData->pItem)
+				if (pEngineData->pItem) {
 					pEngineData->pItem->SetStatusMessage(CFileItem::interrupted);
+				}
 				ResetEngine(*pEngineData, reset);
 			}
 			else {
 				wxASSERT(pEngineData->pEngine);
-				if (!pEngineData->pEngine)
+				if (!pEngineData->pEngine) {
 					continue;
+				}
 				pEngineData->pEngine->Cancel();
 			}
 		}
@@ -1290,8 +1352,9 @@ bool CQueueView::SetActive(bool active)
 
 bool CQueueView::Quit()
 {
-	if (!m_quit)
+	if (!m_quit) {
 		m_quit = 1;
+	}
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	if (m_actionAfterWarnDialog) {
@@ -1363,15 +1426,17 @@ void CQueueView::CheckQueueState()
 		ActionAfter();
 	}
 
-	if (m_quit)
+	if (m_quit) {
 		m_pMainFrame->Close();
+	}
 }
 
 bool CQueueView::IncreaseErrorCount(t_EngineData& engineData)
 {
 	++engineData.pItem->m_errorCount;
-	if (engineData.pItem->m_errorCount <= COptions::Get()->GetOptionVal(OPTION_RECONNECTCOUNT))
+	if (engineData.pItem->m_errorCount <= COptions::Get()->GetOptionVal(OPTION_RECONNECTCOUNT)) {
 		return true;
+	}
 
 	ResetEngine(engineData, failure);
 
@@ -1380,8 +1445,9 @@ bool CQueueView::IncreaseErrorCount(t_EngineData& engineData)
 
 void CQueueView::UpdateStatusLinePositions()
 {
-	if (m_waitStatusLineUpdate)
+	if (m_waitStatusLineUpdate) {
 		return;
+	}
 
 	m_lastTopItem = GetTopItem();
 	int bottomItem = m_lastTopItem + GetCountPerPage();
@@ -1415,8 +1481,9 @@ void CQueueView::CalculateQueueSize()
 	m_fileCount = 0;
 
 	m_filesWithUnknownSize = 0;
-	for (std::vector<CServerItem*>::const_iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-		m_totalQueueSize += (*iter)->GetTotalSize(m_filesWithUnknownSize, m_fileCount);
+	for (auto const& serverItem : m_serverList) {
+		m_totalQueueSize += serverItem->GetTotalSize(m_filesWithUnknownSize, m_fileCount);
+	}
 
 	DisplayQueueSize();
 	DisplayNumberQueuedFiles();
@@ -1679,8 +1746,9 @@ void CQueueView::OnPostScroll()
 void CQueueView::OnContextMenu(wxContextMenuEvent&)
 {
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_QUEUE"));
-	if (!pMenu)
+	if (!pMenu) {
 		return;
+	}
 
 	bool has_selection = HasSelection();
 
@@ -1792,15 +1860,17 @@ void CQueueView::RemoveAll()
 #endif
 	{
 		int item;
-		while ((item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
+		while ((item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 			SetItemState(item, 0, wxLIST_STATE_SELECTED);
+		}
 	}
 
 	std::vector<CServerItem*> newServerList;
 	m_itemCount = 0;
 	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
-		if ((*iter)->TryRemoveAll())
+		if ((*iter)->TryRemoveAll()) {
 			delete *iter;
+		}
 		else {
 			newServerList.push_back(*iter);
 			m_itemCount += 1 + (*iter)->GetChildrenCount(true);
@@ -1826,8 +1896,9 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 {
 #ifndef __WXMSW__
 	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
-	if (!GetSelectedItemCount())
+	if (!GetSelectedItemCount()) {
 		return;
+	}
 #endif
 
 	std::list<std::pair<long, CQueueItem*>> selectedItems;
@@ -1835,8 +1906,9 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 	long skipTo = -1;
 	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-		if (item == -1)
+		if (item == -1) {
 			break;
+		}
 		SetItemState(item, 0, wxLIST_STATE_SELECTED);
 
 		if (item <= skipTo) {
@@ -1863,8 +1935,9 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 		CQueueItem* pItem = selectedItem.second;
 		selectedItems.pop_front();
 
-		if (pItem->GetType() == QueueItemType::Status)
+		if (pItem->GetType() == QueueItemType::Status) {
 			continue;
+		}
 		else if (pItem->GetType() == QueueItemType::Server) {
 			CServerItem* pServer = (CServerItem*)pItem;
 			StopItem(pServer, false);
@@ -1887,8 +1960,9 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 		if (!pTopLevelItem->GetChild(1)) {
 			// Parent will get deleted
 			// If next selected item is parent, remove it from list
-			if (!selectedItems.empty() && selectedItems.front().second == pTopLevelItem)
+			if (!selectedItems.empty() && selectedItems.front().second == pTopLevelItem) {
 				selectedItems.pop_front();
+			}
 		}
 
 		int topItemIndex = GetItemIndex(pTopLevelItem);
@@ -2331,8 +2405,9 @@ void CQueueView::CommitChanges()
 void CQueueView::OnTimer(wxTimerEvent& event)
 {
 	const int id = event.GetId();
-	if (id == -1)
+	if (id == -1) {
 		return;
+	}
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	if (id == m_actionAfterTimerId) {
 		OnActionAfterTimerTick();
@@ -2350,8 +2425,9 @@ void CQueueView::OnTimer(wxTimerEvent& event)
 			delete pData->m_idleDisconnectTimer;
 			pData->m_idleDisconnectTimer = 0;
 
-			if (pData->pEngine->IsConnected())
+			if (pData->pEngine->IsConnected()) {
 				pData->pEngine->Execute(CDisconnectCommand());
+			}
 		}
 	}
 
@@ -2663,22 +2739,27 @@ void CQueueView::OnActionAfterTimerTick()
 
 bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 {
-	if (m_engineData.size() < 2)
+	if (m_engineData.size() < 2) {
 		return false;
+	}
 
 	t_EngineData* pEngineData = *ppEngineData;
 	for (auto & pNewEngineData : m_engineData) {
-		if (pNewEngineData == pEngineData)
+		if (pNewEngineData == pEngineData) {
 			continue;
+		}
 
-		if (pNewEngineData->active || pNewEngineData->transient)
+		if (pNewEngineData->active || pNewEngineData->transient) {
 			continue;
+		}
 
-		if (pNewEngineData->lastServer != pEngineData->lastServer)
+		if (pNewEngineData->lastServer != pEngineData->lastServer) {
 			continue;
+		}
 
-		if (!pNewEngineData->pEngine->IsConnected())
+		if (!pNewEngineData->pEngine->IsConnected()) {
 			continue;
+		}
 
 		wxASSERT(!pNewEngineData->pItem);
 		pNewEngineData->pItem = pEngineData->pItem;
@@ -2703,12 +2784,15 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 		}
 
 		// Set new state
-		if (pNewEngineData->pItem->GetType() == QueueItemType::File)
+		if (pNewEngineData->pItem->GetType() == QueueItemType::File) {
 			pNewEngineData->state = t_EngineData::transfer;
-		else
+		}
+		else {
 			pNewEngineData->state = t_EngineData::mkdir;
-		if (pNewEngineData->pStatusLineCtrl)
+		}
+		if (pNewEngineData->pStatusLineCtrl) {
 			pNewEngineData->pStatusLineCtrl->ClearTransferStatus();
+		}
 
 		pEngineData->state = t_EngineData::none;
 
@@ -2887,18 +2971,20 @@ wxFileOffset CQueueView::GetCurrentSpeed(bool countDownload, bool countUpload)
 void CQueueView::ReleaseExclusiveEngineLock(CFileZillaEngine* pEngine)
 {
 	wxASSERT(pEngine);
-	if (!pEngine)
+	if (!pEngine) {
 		return;
+	}
 
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-	{
+	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
 		CState* pState = *iter;
-		if (pState->m_pEngine != pEngine)
+		if (pState->m_pEngine != pEngine) {
 			continue;
+		}
 		CCommandQueue *pCommandQueue = pState->m_pCommandQueue;
-		if (pCommandQueue)
+		if (pCommandQueue) {
 			pCommandQueue->ReleaseEngine();
+		}
 
 		break;
 	}
@@ -2912,20 +2998,20 @@ void CQueueView::ReleaseExclusiveEngineLock(CFileZillaEngine* pEngine)
 
 WXLRESULT CQueueView::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-	if (nMsg == WM_DWMCOMPOSITIONCHANGED || nMsg == WM_THEMECHANGED)
-	{
+	if (nMsg == WM_DWMCOMPOSITIONCHANGED || nMsg == WM_THEMECHANGED) {
 		m_line_height = -1;
-		if (!m_resize_timer.IsRunning())
+		if (!m_resize_timer.IsRunning()) {
 			m_resize_timer.Start(250, true);
+		}
 	}
-	else if (nMsg == WM_LBUTTONDOWN)
-	{
+	else if (nMsg == WM_LBUTTONDOWN) {
 		// If clicking a partially selected item, Windows starts an internal timer with the double-click interval (as seen in the
 		// disassembly). After the timer expires, the given item is selected. But there's a huge bug in Windows: We don't get
 		// notified about this change in scroll position in any way (verified using Spy++), so on left button down, start our
 		// own timer with a slightly higher interval.
-		if (!m_resize_timer.IsRunning())
+		if (!m_resize_timer.IsRunning()) {
 			m_resize_timer.Start(GetDoubleClickTime() + 5, true);
+		}
 	}
 	return CQueueViewBase::MSWWindowProc(nMsg, wParam, lParam);
 }
@@ -2933,8 +3019,9 @@ WXLRESULT CQueueView::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 
 void CQueueView::OnOptionsChanged(changed_options_t const&)
 {
-	if (m_activeMode)
+	if (m_activeMode) {
 		AdvanceQueue();
+	}
 }
 
 std::shared_ptr<CActionAfterBlocker> CQueueView::GetActionAfterBlocker()
