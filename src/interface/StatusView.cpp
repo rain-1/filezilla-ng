@@ -375,7 +375,7 @@ void CStatusView::InitDefAttr()
 			break;
 		default:
 			entry.prefix = _("Status:").ToStdWstring();
-			entry.attr.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+			entry.attr.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
 			break;
 		}
 
