@@ -62,17 +62,20 @@ int CFZPuttyGenInterface::IsKeyFileEncrypted()
 bool CFZPuttyGenInterface::LoadKeyFile(std::wstring& keyFile, bool silent, std::wstring& comment, std::wstring& data)
 {
 	if (!LoadProcess(silent)) {
+		comment = _("Could not load key file");
 		return false;
 	}
 
 	int needs_conversion = NeedsConversion(keyFile, silent);
 	if (needs_conversion < 0) {
+		comment = _("Could not load key file");
 		return false;
 	}
 
 	ReplyCode code;
 	if (needs_conversion) {
 		if (silent) {
+			comment = _("Could not load key file");
 			return false;
 		}
 
@@ -138,16 +141,22 @@ bool CFZPuttyGenInterface::LoadKeyFile(std::wstring& keyFile, bool silent, std::
 	}
 	
 	if (!Send(L"fingerprint")) {
+		comment = _("Could not load key file");
 		return false;
 	}
 	code = GetReply(data);
 	if (code != success) {
+		comment = _("Could not load key file");
+		data.clear();
 		return false;
 	}
 
 	Send(L"comment");
 	code = GetReply(comment);
 	if (code != success) {
+		comment = _("Could not load key file");
+		data.clear();
+		comment.clear();
 		return false;
 	}
 
