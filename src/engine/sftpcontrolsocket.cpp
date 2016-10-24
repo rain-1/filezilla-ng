@@ -9,7 +9,6 @@
 #include "sftpcontrolsocket.h"
 
 #include <libfilezilla/event_loop.hpp>
-#include <libfilezilla/file.hpp>
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/process.hpp>
 #include <libfilezilla/thread_pool.hpp>
