@@ -406,16 +406,14 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, std::wstring const
 int CSftpControlSocket::ConnectSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ConnectSend()"));
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		DoClose(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	CSftpConnectOpData *pData = static_cast<CSftpConnectOpData *>(m_pCurOpData);
-	if (!pData)
-	{
+	if (!pData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData of wrong type"));
 		DoClose(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -466,9 +464,9 @@ int CSftpControlSocket::ConnectSend()
 			res = SendCommand(L"keyfile \"" + *pData->keyfile_ + L"\"");
 		}
 		else {
-			LogMessage(MessageType::Status, _("Skipping non-existing key file \"%s\""));
+			LogMessage(MessageType::Status, _("Skipping non-existing key file \"%s\""), *pData->keyfile_);
 		}
-		pData->keyfile_++;
+		++pData->keyfile_;
 		break;
 	case connect_open:
 		res = SendCommand(fz::sprintf(L"open \"%s@%s\" %d", m_pCurrentServer->GetUser(), m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort()));
@@ -479,10 +477,12 @@ int CSftpControlSocket::ConnectSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (res)
+	if (res) {
 		return FZ_REPLY_WOULDBLOCK;
-	else
+	}
+	else {
 		return FZ_REPLY_ERROR;
+	}
 }
 
 void CSftpControlSocket::OnSftpEvent(sftp_message const& message)

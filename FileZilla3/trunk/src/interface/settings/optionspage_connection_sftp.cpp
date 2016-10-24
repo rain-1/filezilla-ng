@@ -99,8 +99,19 @@ void COptionsPageConnectionSFTP::OnRemove(wxCommandEvent&)
 
 bool COptionsPageConnectionSFTP::AddKey(std::wstring keyFile, bool silent)
 {
+	keyFile += 'f';
+	wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
+	if (!pKeys) {
+		return false;
+	}
+
 	std::wstring comment, data;
 	if (!m_pFzpg->LoadKeyFile(keyFile, silent, comment, data)) {
+		if (silent) {
+			int index = pKeys->InsertItem(pKeys->GetItemCount(), keyFile);
+			pKeys->SetItem(index, 1, comment);
+			pKeys->SetItem(index, 2, data);
+		}
 		return false;
 	}
 
@@ -111,7 +122,6 @@ bool COptionsPageConnectionSFTP::AddKey(std::wstring keyFile, bool silent)
 		return false;
 	}
 
-	wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
 	int index = pKeys->InsertItem(pKeys->GetItemCount(), keyFile);
 	pKeys->SetItem(index, 1, comment);
 	pKeys->SetItem(index, 2, data);
