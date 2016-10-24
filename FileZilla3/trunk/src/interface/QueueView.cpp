@@ -462,7 +462,7 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<
 	case nId_local_dir_created:
 		{
 			auto const& localDirCreatedNotification = static_cast<CLocalDirCreatedNotification const&>(*pNotification.get());
-			const std::vector<CState*> const* pStates = CContextManager::Get()->GetAllStates();
+			std::vector<CState*> const* pStates = CContextManager::Get()->GetAllStates();
 			for (auto state : *pStates) {
 				state->LocalDirCreated(localDirCreatedNotification.dir);
 			}
