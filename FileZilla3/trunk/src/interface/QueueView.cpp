@@ -1452,6 +1452,12 @@ void CQueueView::UpdateStatusLinePositions()
 	m_lastTopItem = GetTopItem();
 	int bottomItem = m_lastTopItem + GetCountPerPage();
 
+	wxRect lineRect = GetClientRect();
+	lineRect.SetHeight(GetLineHeight());
+#ifdef __WXMSW__
+	lineRect.y += m_header_height;
+#endif
+
 	for (auto pCtrl : m_statusLineList) {
 		int index = GetItemIndex(pCtrl->GetItem()) + 1;
 		if (index < m_lastTopItem || index > bottomItem) {
@@ -1459,13 +1465,9 @@ void CQueueView::UpdateStatusLinePositions()
 			continue;
 		}
 
-		wxRect rect = GetClientRect();
-		rect.y = GetLineHeight() * (index - m_lastTopItem);
-#ifdef __WXMSW__
-		rect.y += m_header_height;
-#endif
-		rect.SetHeight(GetLineHeight());
-
+		wxRect rect = lineRect;
+		rect.y += GetLineHeight() * (index - m_lastTopItem);
+		
 		m_allowBackgroundErase = bottomItem + 1 >= m_itemCount;
 		pCtrl->SetSize(rect);
 		m_allowBackgroundErase = false;
