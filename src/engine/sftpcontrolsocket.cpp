@@ -9,6 +9,7 @@
 #include "sftpcontrolsocket.h"
 
 #include <libfilezilla/event_loop.hpp>
+#include <libfilezilla/file.hpp>
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/process.hpp>
 #include <libfilezilla/thread_pool.hpp>
@@ -462,7 +463,13 @@ int CSftpControlSocket::ConnectSend()
 		}
 		break;
 	case connect_keys:
-		res = SendCommand(L"keyfile \"" + *(pData->keyfile_++) + L"\"");
+		if (fz::local_filesys::get_file_type(fz::to_native(*pData->keyfile_), true) == fz::local_filesys::file) {
+			res = SendCommand(L"keyfile \"" + *pData->keyfile_ + L"\"");
+		}
+		else {
+			LogMessage(MessageType::Status, _("Skipping non-existing key file \"%s\""));
+		}
+		pData->keyfile_++;
 		break;
 	case connect_open:
 		res = SendCommand(fz::sprintf(L"open \"%s@%s\" %d", m_pCurrentServer->GetUser(), m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort()));
