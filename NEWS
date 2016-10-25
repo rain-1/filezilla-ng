@@ -10,6 +10,17 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.22.2-rc1 (2016-10-25)
+
++ Building and running FileZilla now depends on libfilezilla >= 0.8.0 (https://lib.filezilla-project.org/).
+- Non-existing key files are no longer silently dropped from the SFTP page in the settings dialog
+- Further abbreviate log output if transferring files using SFTP
+- Generic proxy usernames and passwords containing non-ASCII characters are again handled correctly
+- Fixed an assertion if Ctrl+A is pressed in an empty file list
+- *nix: Fixed color of status message in the message log
+- *nix, OS X: Fixed an assertion adding files to the queue after having selected a large range of items
+- *nix, OS X: Fixed an assertion due to a timing issue when renaming local files
+
 3.22.1 (2016-10-03)
 
 - OS X: Work around a nasty bug in XCode where programs explicitly compiled for older versions of OS X were silently pulling in features exclusive to the new version, resulting in crashes at runtime
