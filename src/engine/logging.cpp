@@ -5,7 +5,6 @@
 #ifdef FZ_WINDOWS
 #include <wx/filename.h>
 #endif
-#include <wx/log.h>
 
 #include <errno.h>
 
@@ -96,14 +95,15 @@ bool CLogging::InitLogFile(fz::scoped_lock& l) const
 
 #ifdef FZ_WINDOWS
 	m_log_fd = CreateFile(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-	if (m_log_fd == INVALID_HANDLE_VALUE)
+	if (m_log_fd == INVALID_HANDLE_VALUE) {
+		DWORD err = GetLastError();
 #else
 	m_log_fd = open(m_file.c_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
-	if (m_log_fd == -1)
+	if (m_log_fd == -1) {
+		int err = errno;
 #endif
-	{
 		l.unlock(); //Avoid recursion
-		LogMessage(MessageType::Error, _("Could not open log file: %s"), wxSysErrorMsg());
+		LogMessage(MessageType::Error, _("Could not open log file: %s"), GetSystemErrorDescription(err));
 		return false;
 	}
 
@@ -255,13 +255,13 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 			// Ignore any other failures
 			int fd = open(m_file.c_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
 			if (fd == -1) {
-				wxString error = wxSysErrorMsg();
+				int err = errno;
 
 				close(m_log_fd);
 				m_log_fd = -1;
 
 				l.unlock(); // Avoid recursion
-				LogMessage(MessageType::Error, error);
+				LogMessage(MessageType::Error, _("Could not open log file: %s"), GetSystemErrorDescription(err));
 				return;
 			}
 			struct stat buf2;
@@ -285,8 +285,9 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 			// Get the new file
 			m_log_fd = open(m_file.c_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
 			if (m_log_fd == -1) {
+				int err = errno;
 				l.unlock(); // Avoid recursion
-				LogMessage(MessageType::Error, _("Could not open log file: %s"), wxSysErrorMsg());
+				LogMessage(MessageType::Error, _("Could not open log file: %s"), GetSystemErrorDescription(err));
 				return;
 			}
 
@@ -298,11 +299,12 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 	}
 	size_t written = write(m_log_fd, out.c_str(), out.size());
 	if (written != out.size()) {
+		int err = errno;
 		close(m_log_fd);
 		m_log_fd = -1;
 
 		l.unlock(); // Avoid recursion
-		LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
+		LogMessage(MessageType::Error, _("Could not write to log file: %s"), GetSystemErrorDescription(err));
 	}
 #endif
 }
