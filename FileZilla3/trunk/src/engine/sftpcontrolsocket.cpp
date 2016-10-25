@@ -13,6 +13,7 @@
 #include <libfilezilla/process.hpp>
 #include <libfilezilla/thread_pool.hpp>
 
+#include <algorithm>
 #include <cwchar>
 
 #define FZSFTP_PROTOCOL_VERSION 7
@@ -302,6 +303,17 @@ int CSftpControlSocket::Connect(const CServer &server)
 	else {
 		pData->keyfiles_ = fz::strtok(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES), L"\r\n");
 	}
+
+	pData->keyfiles_.erase(
+		std::remove_if(pData->keyfiles_.begin(), pData->keyfiles_.end(),
+			[this](std::wstring const& keyfile) {
+				if (fz::local_filesys::get_file_type(fz::to_native(keyfile), true) != fz::local_filesys::file) {
+					LogMessage(MessageType::Status, _("Skipping non-existing key file \"%s\""), keyfile);
+					return true;
+				}
+				return false;
+		}), pData->keyfiles_.end());
+
 	pData->keyfile_ = pData->keyfiles_.cbegin();
 
 	m_pProcess = new fz::process();
@@ -458,13 +470,7 @@ int CSftpControlSocket::ConnectSend()
 		}
 		break;
 	case connect_keys:
-		if (fz::local_filesys::get_file_type(fz::to_native(*pData->keyfile_), true) == fz::local_filesys::file) {
-			res = SendCommand(L"keyfile \"" + *pData->keyfile_ + L"\"");
-		}
-		else {
-			LogMessage(MessageType::Status, _("Skipping non-existing key file \"%s\""), *pData->keyfile_);
-		}
-		++pData->keyfile_;
+		res = SendCommand(L"keyfile \"" + *(pData->keyfile_++) + L"\"");
 		break;
 	case connect_open:
 		res = SendCommand(fz::sprintf(L"open \"%s@%s\" %d", m_pCurrentServer->GetUser(), m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort()));
@@ -485,11 +491,13 @@ int CSftpControlSocket::ConnectSend()
 
 void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 {
-	if (!m_pCurrentServer)
+	if (!m_pCurrentServer) {
 		return;
+	}
 
-	if (!m_pInputThread)
+	if (!m_pInputThread) {
 		return;
+	}
 
 	switch (message.type)
 	{
