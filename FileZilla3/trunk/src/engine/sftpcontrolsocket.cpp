@@ -13,8 +13,6 @@
 #include <libfilezilla/process.hpp>
 #include <libfilezilla/thread_pool.hpp>
 
-#include <wx/log.h>
-
 #include <cwchar>
 
 #define FZSFTP_PROTOCOL_VERSION 7

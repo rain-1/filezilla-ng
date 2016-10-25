@@ -38,7 +38,11 @@ unique_static_cast(std::unique_ptr<Base>&& p)
 std::wstring url_encode(std::wstring const& s, bool keep_slashes = false);
 
 #if FZ_WINDOWS
-std::wstring GetSystemErrorDescription(DWORD err);
+DWORD GetSystemErrorCode();
+fz::native_string GetSystemErrorDescription(DWORD err);
+#else
+int GetSystemErrorCode();
+fz::native_string GetSystemErrorDescription(int err);
 #endif
 
 #endif

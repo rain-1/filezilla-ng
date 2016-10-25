@@ -4,8 +4,6 @@
 
 #include <libfilezilla/file.hpp>
 
-#include <wx/log.h>
-
 CIOThread::CIOThread()
 {
 	m_buffers[0] = new char[BUFFERSIZE*BUFFERCOUNT];
@@ -387,9 +385,9 @@ bool CIOThread::DoWrite(const char* pBuffer, int64_t len)
 		return true;
 	}
 
-	int code = wxSysErrorCode();
+	auto err = GetSystemErrorCode();
 
-	std::wstring const error = wxSysErrorMsg(code);
+	std::wstring const error = fz::to_wstring(GetSystemErrorDescription(err));
 
 	fz::scoped_lock locker(m_mutex);
 	m_error_description = error;

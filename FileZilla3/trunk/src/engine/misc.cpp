@@ -119,6 +119,11 @@ std::wstring url_encode(std::wstring const& s, bool keep_slashes)
 }
 
 #if FZ_WINDOWS
+DWORD GetSystemErrorCode()
+{
+	return GetLastError();
+}
+
 std::wstring GetSystemErrorDescription(DWORD err)
 {
 	wchar_t* buf{};
@@ -129,5 +134,46 @@ std::wstring GetSystemErrorDescription(DWORD err)
 	LocalFree(buf);
 
 	return ret;
+}
+#else
+int GetSystemErrorCode()
+{
+	return errno;
+}
+
+namespace {
+inline std::string ProcessStrerrorResult(int ret, char* buf, int err)
+{
+	// For XSI strerror_r
+	std::string s;
+	if (!ret) {
+		buf[999] = 0;
+		s = buf;
+	}
+	else {
+		s = fz::to_string(fz::sprintf(_("Unknown error %d"), err));
+	}
+	return s;
+}
+
+inline std::string ProcessStrerrorResult(char* ret, char*, int err)
+{
+	// For GNU strerror_r
+	std::string s;
+	if (ret) {
+		s = ret;
+	}
+	else {
+		s = fz::to_string(fz::sprintf(_("Unknown error %d"), err));
+	}
+	return s;
+}
+}
+
+std::string GetSystemErrorDescription(int err)
+{
+	char buf[1000];
+	auto ret = strerror_r(err, buf, 1000);
+	return ProcessStrerrorResult(ret, buf, err);
 }
 #endif
