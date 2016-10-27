@@ -3694,8 +3694,8 @@ bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 		return false;
 	}
 
-	size_t pos2 = m_Response.substr(pos + 4).find(L"|)", pos + 4);
-	if (pos2 == std::wstring::npos || !pos2) {
+	size_t pos2 = m_Response.find(L"|)", pos + 4);
+	if (pos2 == std::wstring::npos || pos2 == pos + 4) {
 		return false;
 	}
 
