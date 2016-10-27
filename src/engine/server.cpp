@@ -54,9 +54,9 @@ CServer::CServer()
 
 bool CServer::ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path)
 {
-	unsigned long nPort = 0;
+	unsigned int nPort = 0;
 	if (!port.empty()) {
-		auto nPort = fz::to_integral<unsigned int>(fz::trimmed(port));
+		nPort = fz::to_integral<unsigned int>(fz::trimmed(port));
 		if (port.size() > 5 || !nPort || nPort > 65535) {
 			error = _("Invalid port given. The port has to be a value from 1 to 65535.").ToStdWstring();
 			error += L"\n";
