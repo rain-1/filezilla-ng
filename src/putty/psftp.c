@@ -1780,8 +1780,8 @@ int sftp_cmd_mv(struct sftp_command *cmd)
      * argument which is a wildcard, we _require_ that the
      * destination is a directory.
      */
-	/*FZ: Force dest_is_dir to FALSE. See #11047 */
-	ctx->dest_is_dir = FALSE; /*check_is_dir(ctx->dstfname);*/
+    /*FZ: Force dest_is_dir to FALSE. See #11047 */
+    ctx->dest_is_dir = FALSE; /*check_is_dir(ctx->dstfname);*/
     if ((cmd->nwords > 3 || is_wildcard(cmd->words[1])) && !ctx->dest_is_dir) {
 	fzprintf(sftpError, "mv: multiple or wildcard arguments require the destination"
 	       " to be a directory");
