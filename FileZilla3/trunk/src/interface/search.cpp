@@ -708,7 +708,7 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 	}
 	else {
 		recursion_root root(m_remote_search_root, true);
-		root.add_dir_to_visit_restricted(m_remote_search_root, _T(""), true);
+		root.add_dir_to_visit_restricted(m_remote_search_root, std::wstring(), true);
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 		ActiveFilters const filters; // Empty, recurse into everything
 		m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, m_remote_search_root);
@@ -1017,7 +1017,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		}
 
 		recursion_root root(dir, true);
-		root.add_dir_to_visit(dir, _T(""), target_path, false);
+		root.add_dir_to_visit(dir, std::wstring(), target_path, false);
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	ActiveFilters const filters; // Empty, recurse into everything
@@ -1200,7 +1200,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	}
 
 	for (auto path : selected_dirs) {
-		wxString segment;
+		std::wstring segment;
 		if (path.HasParent()) {
 			segment = path.GetLastSegment();
 			path = path.GetParent();

@@ -976,7 +976,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 
 		if (pChmodDlg->Recursive()) {
 			// Start recursion
-			root.add_dir_to_visit(path, _T(""), CLocalPath());
+			root.add_dir_to_visit(path, std::wstring(), CLocalPath());
 		}
 	}
 	else {
@@ -984,7 +984,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 			root.add_dir_to_visit_restricted(path.GetParent(), name, pChmodDlg->Recursive());
 		}
 		else {
-			root.add_dir_to_visit_restricted(path, _T(""), pChmodDlg->Recursive());
+			root.add_dir_to_visit_restricted(path, std::wstring(), pChmodDlg->Recursive());
 		}
 	}
 
@@ -1036,7 +1036,7 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 	localDir.AddSegment(CQueueView::ReplaceInvalidCharacters(name));
 
 	recursion_root root(path, true);
-	root.add_dir_to_visit(path, _T(""), localDir);
+	root.add_dir_to_visit(path, std::wstring(), localDir);
 	CRemoteRecursiveOperation* pRecursiveOperation = m_state.GetRemoteRecursiveOperation();
 	pRecursiveOperation->AddRecursionRoot(std::move(root));
 
@@ -1073,7 +1073,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 	recursion_root root;
 	CServerPath startDir;
 	if (hasParent) {
-		const wxString& name = GetItemText(m_contextMenuItem);
+		std::wstring const name = GetItemText(m_contextMenuItem).ToStdWstring();
 		startDir = pathToDelete.GetParent();
 		root = recursion_root(startDir, !hasParent);
 		root.add_dir_to_visit(startDir, name);
@@ -1081,7 +1081,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 	else {
 		startDir = pathToDelete;
 		root = recursion_root(startDir, !hasParent);
-		root.add_dir_to_visit(startDir, _T(""));
+		root.add_dir_to_visit(startDir, std::wstring());
 	}
 	pRecursiveOperation->AddRecursionRoot(std::move(root));
 

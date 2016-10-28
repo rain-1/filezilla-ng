@@ -13,10 +13,10 @@ public:
 	recursion_root() = default;
 	recursion_root(CServerPath const& start_dir, bool allow_parent);
 
-	void add_dir_to_visit(CServerPath const& path, wxString const& subdir, CLocalPath const& localDir = CLocalPath(), bool is_link = false);
+	void add_dir_to_visit(CServerPath const& path, std::wstring const& subdir, CLocalPath const& localDir = CLocalPath(), bool is_link = false);
 
 	// Queue a directory but restrict processing to the named subdirectory
-	void add_dir_to_visit_restricted(CServerPath const& path, wxString const& restrict, bool recurse);
+	void add_dir_to_visit_restricted(CServerPath const& path, std::wstring const& restrict, bool recurse);
 
 	bool empty() const { return m_dirsToVisit.empty(); }
 
@@ -29,7 +29,7 @@ private:
 		CServerPath parent;
 		std::wstring subdir;
 		CLocalPath localDir;
-		fz::sparse_optional<wxString> restrict;
+		fz::sparse_optional<std::wstring> restrict;
 
 		// Symlink target might be outside actual start dir. Yet
 		// sometimes user wants to download symlink target contents
