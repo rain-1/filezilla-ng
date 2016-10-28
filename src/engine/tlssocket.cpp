@@ -1437,7 +1437,7 @@ wxString CTlsSocket::GetMacName()
 	if (mac && *mac)
 		return wxString(mac, wxConvUTF8);
 	else
-		return _T("unknown");
+		return _("unknown");
 }
 
 std::string CTlsSocket::ListTlsCiphers(std::string priority)
