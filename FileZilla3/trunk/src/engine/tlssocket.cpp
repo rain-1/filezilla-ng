@@ -21,10 +21,11 @@ char const ciphers[] = "SECURE256:+SECURE128:-ARCFOUR-128:-3DES-CBC:-MD5:+SIGN-A
 CControlSocket* pLoggingControlSocket;
 void log_func(int level, const char* msg)
 {
-	if (!msg || !pLoggingControlSocket)
+	if (!msg || !pLoggingControlSocket) {
 		return;
-	wxString s(msg, wxConvLocal);
-	s.Trim();
+	}
+	std::wstring s = fz::to_wstring(msg);
+	fz::trim(s);
 	pLoggingControlSocket->LogMessage(MessageType::Debug_Debug, _T("tls: %d %s"), level, s);
 }
 #endif
@@ -280,7 +281,7 @@ void CTlsSocket::UninitSession()
 }
 
 
-void CTlsSocket::LogError(int code, const wxString& function, MessageType logLevel)
+void CTlsSocket::LogError(int code, std::wstring const& function, MessageType logLevel)
 {
 	if (code == GNUTLS_E_WARNING_ALERT_RECEIVED || code == GNUTLS_E_FATAL_ALERT_RECEIVED) {
 		PrintAlert(logLevel);
@@ -304,17 +305,20 @@ void CTlsSocket::LogError(int code, const wxString& function, MessageType logLev
 	else {
 		const char* error = gnutls_strerror(code);
 		if (error) {
-			wxString str(error, wxConvLocal);
-			if (function.empty())
-				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d: %s"), code, str);
-			else
-				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d in %s: %s"), code, function, str);
+			if (function.empty()) {
+				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d: %s"), code, error);
+			}
+			else {
+				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d in %s: %s"), code, function, error);
+			}
 		}
 		else {
-			if (function.empty())
+			if (function.empty()) {
 				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d"), code);
-			else
+			}
+			else {
 				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d in %s"), code, function);
+			}
 		}
 	}
 }
@@ -324,11 +328,11 @@ void CTlsSocket::PrintAlert(MessageType logLevel)
 	gnutls_alert_description_t last_alert = gnutls_alert_get(m_session);
 	const char* alert = gnutls_alert_get_name(last_alert);
 	if (alert) {
-		wxString str(alert, wxConvLocal);
-		m_pOwner->LogMessage(logLevel, _("Received TLS alert from the server: %s (%d)"), str, last_alert);
+		m_pOwner->LogMessage(logLevel, _("Received TLS alert from the server: %s (%d)"), alert, last_alert);
 	}
-	else
+	else {
 		m_pOwner->LogMessage(logLevel, _("Received unknown TLS alert %d from the server"), last_alert);
+	}
 }
 
 ssize_t CTlsSocket::PushFunction(gnutls_transport_ptr_t ptr, const void* data, size_t len)
@@ -625,19 +629,21 @@ int CTlsSocket::ContinueHandshake()
 	if (!res) {
 		m_pOwner->LogMessage(MessageType::Debug_Info, _T("TLS Handshake successful"));
 
-		if (ResumedSession())
+		if (ResumedSession()) {
 			m_pOwner->LogMessage(MessageType::Debug_Info, _T("TLS Session resumed"));
+		}
 
-		const wxString protocol = GetProtocolName();
-		const wxString keyExchange = GetKeyExchange();
-		const wxString cipherName = GetCipherName();
-		const wxString macName = GetMacName();
+		std::wstring const protocol = GetProtocolName();
+		std::wstring const keyExchange = GetKeyExchange();
+		std::wstring const cipherName = GetCipherName();
+		std::wstring const macName = GetMacName();
 
 		m_pOwner->LogMessage(MessageType::Debug_Info, _T("Protocol: %s, Key exchange: %s, Cipher: %s, MAC: %s"), protocol, keyExchange, cipherName, macName);
 
 		res = VerifyCertificate();
-		if (res != FZ_REPLY_OK)
+		if (res != FZ_REPLY_OK) {
 			return res;
+		}
 
 		if (m_shutdown_requested) {
 			int error = Shutdown();
@@ -648,8 +654,9 @@ int CTlsSocket::ContinueHandshake()
 
 		return FZ_REPLY_OK;
 	}
-	else if (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED)
+	else if (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED) {
 		return FZ_REPLY_WOULDBLOCK;
+	}
 
 	Failure(res, true);
 
@@ -842,7 +849,7 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 	}
 }
 
-void CTlsSocket::Failure(int code, bool send_close, const wxString& function)
+void CTlsSocket::Failure(int code, bool send_close, std::wstring const& function)
 {
 	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::Failure(%d)"), code);
 	if (code) {
@@ -1383,9 +1390,9 @@ int CTlsSocket::VerifyCertificate()
 		m_pOwner->GetCurrentServer()->GetHost(),
 		m_pOwner->GetCurrentServer()->GetPort(),
 		GetProtocolName(),
-		GetKeyExchange().ToStdWstring(),
-		GetCipherName().ToStdWstring(),
-		GetMacName().ToStdWstring(),
+		GetKeyExchange(),
+		GetCipherName(),
+		GetMacName(),
 		algorithmWarnings,
 		std::move(certificates));
 
@@ -1401,43 +1408,66 @@ void CTlsSocket::OnRateAvailable(CRateLimiter::rate_direction)
 
 std::wstring CTlsSocket::GetProtocolName()
 {
-	std::wstring protocol = _("unknown").ToStdWstring();
+	std::wstring ret;
 
 	const char* s = gnutls_protocol_get_name( gnutls_protocol_get_version( m_session ) );
 	if (s && *s) {
-		protocol = fz::to_wstring_from_utf8(s);
+		ret = fz::to_wstring_from_utf8(s);
+	}
+	
+	if (ret.empty()) {
+		ret = _("unknown").ToStdWstring();
 	}
 
-	return protocol;
+	return ret;
 }
 
-wxString CTlsSocket::GetKeyExchange()
+std::wstring CTlsSocket::GetKeyExchange()
 {
-	wxString keyExchange = _("unknown");
+	std::wstring ret;
 
 	const char* s = gnutls_kx_get_name( gnutls_kx_get( m_session ) );
-	if (s && *s)
-		keyExchange = wxString(s, wxConvUTF8);
+	if (s && *s) {
+		ret = fz::to_wstring_from_utf8(s);
+	}
 
-	return keyExchange;
+	if (ret.empty()) {
+		ret = _("unknown").ToStdWstring();
+	}
+
+	return ret;
 }
 
-wxString CTlsSocket::GetCipherName()
+std::wstring CTlsSocket::GetCipherName()
 {
+	std::wstring ret;
+
 	const char* cipher = gnutls_cipher_get_name(gnutls_cipher_get(m_session));
-	if (cipher && *cipher)
-		return wxString(cipher, wxConvUTF8);
-	else
-		return _("unknown");
+	if (cipher && *cipher) {
+		ret = fz::to_wstring_from_utf8(cipher);
+	}
+
+	if (ret.empty()) {
+		ret = _("unknown").ToStdWstring();
+	}
+
+	return ret;
 }
 
-wxString CTlsSocket::GetMacName()
+std::wstring CTlsSocket::GetMacName()
 {
+	std::wstring ret;
+
 	const char* mac = gnutls_mac_get_name(gnutls_mac_get(m_session));
-	if (mac && *mac)
-		return wxString(mac, wxConvUTF8);
-	else
-		return _("unknown");
+	if (mac && *mac) {
+		ret = fz::to_wstring_from_utf8(mac);
+	}
+	
+	if (ret.empty()) {
+		ret = _("unknown").ToStdWstring();
+	}
+
+	return ret;
 }
 
 std::string CTlsSocket::ListTlsCiphers(std::string priority)

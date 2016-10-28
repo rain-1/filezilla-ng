@@ -38,9 +38,9 @@ public:
 	TlsState GetState() const { return m_tlsState; }
 
 	std::wstring GetProtocolName();
-	wxString GetKeyExchange();
-	wxString GetCipherName();
-	wxString GetMacName();
+	std::wstring GetKeyExchange();
+	std::wstring GetCipherName();
+	std::wstring GetMacName();
 	int GetAlgorithmWarnings();
 
 	bool ResumedSession() const;
@@ -72,11 +72,11 @@ protected:
 
 	gnutls_certificate_credentials_t m_certCredentials{};
 
-	void LogError(int code, const wxString& function, MessageType logLegel = MessageType::Error);
+	void LogError(int code, std::wstring const& function, MessageType logLegel = MessageType::Error);
 	void PrintAlert(MessageType logLevel);
 
 	// Failure logs the error, uninits the session and sends a close event
-	void Failure(int code, bool send_close, const wxString& function = wxString());
+	void Failure(int code, bool send_close, std::wstring const& function = std::wstring());
 
 	static ssize_t PushFunction(gnutls_transport_ptr_t ptr, const void* data, size_t len);
 	static ssize_t PullFunction(gnutls_transport_ptr_t ptr, void* data, size_t len);
