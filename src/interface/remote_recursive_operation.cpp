@@ -16,7 +16,7 @@ recursion_root::recursion_root(CServerPath const& start_dir, bool allow_parent)
 	wxASSERT_MSG(!start_dir.empty(), _T("Empty startDir in recursion_root constructor"));
 }
 
-void recursion_root::add_dir_to_visit(CServerPath const& path, wxString const& subdir, CLocalPath const& localDir, bool is_link)
+void recursion_root::add_dir_to_visit(CServerPath const& path, std::wstring const& subdir, CLocalPath const& localDir, bool is_link)
 {
 	new_dir dirToVisit;
 
@@ -27,13 +27,13 @@ void recursion_root::add_dir_to_visit(CServerPath const& path, wxString const& s
 	m_dirsToVisit.push_back(dirToVisit);
 }
 
-void recursion_root::add_dir_to_visit_restricted(CServerPath const& path, wxString const& restrict, bool recurse)
+void recursion_root::add_dir_to_visit_restricted(CServerPath const& path, std::wstring const& restrict, bool recurse)
 {
 	new_dir dirToVisit;
 	dirToVisit.parent = path;
 	dirToVisit.recurse = recurse;
 	if (!restrict.empty()) {
-		dirToVisit.restrict = fz::sparse_optional<wxString>(restrict);
+		dirToVisit.restrict = fz::sparse_optional<std::wstring>(restrict);
 	}
 	m_dirsToVisit.push_back(dirToVisit);
 }
