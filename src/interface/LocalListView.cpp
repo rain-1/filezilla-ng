@@ -373,8 +373,8 @@ bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 		DisplayDrives();
 	}
 	else if (m_dir.GetPath().substr(0, 2) == _T("\\\\")) {
-		auto pos = m_dir.GetPath().substr(2).find('\\');
-		if (pos != std::wstring::npos && pos + 3 < m_dir.GetPath().size()) {
+		auto pos = m_dir.GetPath().find('\\', 2);
+		if (pos != std::wstring::npos && pos + 1 < m_dir.GetPath().size()) {
 			goto regular_dir;
 		}
 
