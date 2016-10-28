@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2016-10-25 16:22+0200\n"
-"PO-Revision-Date: 2016-10-16 12:11+0200\n"
+"POT-Creation-Date: 2016-10-28 14:19+0200\n"
+"PO-Revision-Date: 2016-10-25 21:31+0200\n"
 "Last-Translator: Peter Körner <18427@gmx.net>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -1302,7 +1302,7 @@ msgstr ""
 "Ein Lesezeichen mit dem angegebenen Namen existiert bereits. Bitte geben Sie "
 "einen noch nicht verwendeten Namen an."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1322
+#: ../../locales/../src/engine/tlssocket.cpp:1329
 msgid "A certificate in the chain was signed using an insecure algorithm"
 msgstr ""
 "Ein Zertifikat der Kette wurde mit einem unsicheren Algorithmus signiert"
@@ -1631,7 +1631,7 @@ msgstr ""
 "aufgetreten.\n"
 "Möglicherweise wurden einige Warteschlangeneinträge nicht gespeichert."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1325
+#: ../../locales/../src/engine/tlssocket.cpp:1332
 msgid "An issuer in the certificate chain is not a certificate authority"
 msgstr ""
 "Einer der Aussteller in der Zertifikatskette ist keine Zertifizierungsstelle"
@@ -1791,7 +1791,7 @@ msgstr "Verhalten"
 msgid "Being edited"
 msgstr "Wird bearbeitet"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1316
+#: ../../locales/../src/engine/tlssocket.cpp:1323
 msgid "Beware! Certificate has been revoked"
 msgstr "Vorsicht! Zertifikat wurde widerrufen"
 
@@ -1882,17 +1882,17 @@ msgstr "CPU-Features:"
 msgid "Calculating timezone offset of server..."
 msgstr "Berechne Zeitzonenabweichung des Servers..."
 
-#: ../../locales/../src/engine/transfersocket.cpp:683
+#: ../../locales/../src/engine/transfersocket.cpp:688
 msgid "Can't read from file"
 msgstr "Kann nicht aus Datei lesen"
 
-#: ../../locales/../src/engine/transfersocket.cpp:661
-#: ../../locales/../src/engine/transfersocket.cpp:736
+#: ../../locales/../src/engine/transfersocket.cpp:666
+#: ../../locales/../src/engine/transfersocket.cpp:741
 msgid "Can't write data to file."
 msgstr "In die Datei kann nicht geschrieben werden."
 
-#: ../../locales/../src/engine/transfersocket.cpp:664
-#: ../../locales/../src/engine/transfersocket.cpp:739
+#: ../../locales/../src/engine/transfersocket.cpp:669
+#: ../../locales/../src/engine/transfersocket.cpp:744
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "In die Datei kann nicht geschrieben werden: %s"
@@ -1993,7 +1993,7 @@ msgstr ""
 msgid "Cannot load Quickconnect bar from resource file"
 msgstr "Quickconnect-Leiste kann nicht aus Ressourcendatei geladen werden"
 
-#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:120
+#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:119
 msgid "Cannot load key file"
 msgstr "Kann Schlüsseldatei nicht laden"
 
@@ -2075,7 +2075,7 @@ msgstr "Zertifikat in Kette:"
 msgid "Certificate issuer"
 msgstr "Herausgeber des Zertifikats"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1319
+#: ../../locales/../src/engine/tlssocket.cpp:1326
 msgid "Certificate signature verification failed"
 msgstr "Zertifikat-Signaturverifikation fehlgeschlagen"
 
@@ -2562,7 +2562,7 @@ msgstr "Die URLs der ausgewählten Objekte in die Zwischenablage kopieren."
 msgid "Could not accept connection: %s"
 msgstr "Konnte Verbindung nicht akzeptieren: %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1299
+#: ../../locales/../src/engine/tlssocket.cpp:1306
 msgid "Could not add certificate to temporary trust list"
 msgstr "Konnte Zertifikat nicht zu temporärer Vertrauensliste hinzufügen"
 
@@ -2598,7 +2598,7 @@ msgstr "Konnte privaten Schlüssel nicht konvertieren"
 msgid "Could not copy URLs"
 msgstr "Konnte URLs nicht kopieren"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1281
+#: ../../locales/../src/engine/tlssocket.cpp:1288
 msgid "Could not copy certificate"
 msgstr "Konnte Zertifikat nicht kopieren"
 
@@ -2648,7 +2648,7 @@ msgstr ""
 msgid "Could not generate custom login sequence."
 msgstr "Es konnte keine benutzerdefinierte Anmeldesequenz erstellt werden."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1066
+#: ../../locales/../src/engine/tlssocket.cpp:1073
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2656,7 +2656,7 @@ msgstr ""
 "Konnte 'Distinguished Name' des Zertifikatsausstellers nicht ermitteln; "
 "gnutls_x509_get_issuer_dn fehlgeschlagen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1042
+#: ../../locales/../src/engine/tlssocket.cpp:1049
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2795,7 +2795,7 @@ msgstr "Es konnte nicht zum Dateiende gesprungen werden"
 msgid "Could not send command to fzputtygen."
 msgstr "Konnte Befehl nicht an fzputtygen senden."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1250
+#: ../../locales/../src/engine/tlssocket.cpp:1257
 msgid "Could not sort peer certificates"
 msgstr "Konnte Peer-Zertifikate nicht sortieren"
 
@@ -4004,7 +4004,7 @@ msgstr ""
 msgid "Failed to validate settings"
 msgstr "Überprüfung der Einstellungen fehlgeschlagen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1309
+#: ../../locales/../src/engine/tlssocket.cpp:1316
 msgid "Failed to verify peer certificate"
 msgstr "Verifizierung des Zertifikats der Gegenstelle fehlgeschlagen"
 
@@ -4380,17 +4380,17 @@ msgstr ""
 msgid "Global bookmarks"
 msgstr "Globale Lesezeichen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:315
+#: ../../locales/../src/engine/tlssocket.cpp:317
 #, c-format
 msgid "GnuTLS error %d"
 msgstr "GnuTLS-Fehler %d"
 
-#: ../../locales/../src/engine/tlssocket.cpp:317
+#: ../../locales/../src/engine/tlssocket.cpp:320
 #, c-format
 msgid "GnuTLS error %d in %s"
 msgstr "GnuTLS-Fehler %d in %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:311
+#: ../../locales/../src/engine/tlssocket.cpp:312
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
 msgstr "GnuTLS-Fehler %d in %s: %s"
@@ -6183,7 +6183,7 @@ msgstr "Änderungszeitpunkt der Dateien beibehalten"
 msgid "Preview:"
 msgstr "Vorschau:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1348
+#: ../../locales/../src/engine/tlssocket.cpp:1355
 msgid "Primary connection and data connection certificates don't match."
 msgstr ""
 "Das Zertifikat der Datenverbindung stimmt nicht mit dem der Hauptverbindung "
@@ -6440,7 +6440,7 @@ msgstr "Jetzt neustarten"
 msgid "Rec&urse into subdirectories"
 msgstr "&Unterverzeichnisse einbeziehen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:328
+#: ../../locales/../src/engine/tlssocket.cpp:331
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "TLS-Warnung vom Server erhalten: %s (%d)"
@@ -6454,7 +6454,7 @@ msgstr "Verzeichnisinhalt empfangen, der EBCDIC-codiert zu sein scheint."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Zeile mit einer Länge größer als 10000 Zeichen empfangen, Abbruch."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1331
+#: ../../locales/../src/engine/tlssocket.cpp:1338
 #, c-format
 msgid ""
 "Received certificate chain could not be verified. Verification status is %d."
@@ -6472,7 +6472,7 @@ msgstr "Empfangene Daten fehlerhaft"
 msgid "Received invalid character in version information"
 msgstr "Ungültiges Zeichen in Versionsinformationen empfangen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:331
+#: ../../locales/../src/engine/tlssocket.cpp:334
 #, c-format
 msgid "Received unknown TLS alert %d from the server"
 msgstr "Unbekannte TLS-Warnung %d vom Server erhalten"
@@ -6539,7 +6539,7 @@ msgstr "Passwörter speichern?"
 msgid "Remote"
 msgstr "Server"
 
-#: ../../locales/../src/engine/tlssocket.cpp:968
+#: ../../locales/../src/engine/tlssocket.cpp:975
 msgid "Remote certificate not trusted."
 msgstr "Zertifikat des Servers nicht vertrauenswürdig."
 
@@ -6983,7 +6983,7 @@ msgstr "Der gewählte Editor existiert nicht."
 msgid "Selected file already being edited"
 msgstr "Gewählte Datei wird bereits bearbeitet"
 
-#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:120
+#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:119
 msgid "Selected file is already loaded"
 msgstr "Die gewählte Datei ist bereits geladen"
 
@@ -7037,7 +7037,7 @@ msgstr "Seriennummer:"
 msgid "Server &Type:"
 msgstr "Server&typ:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:857
+#: ../../locales/../src/engine/tlssocket.cpp:864
 msgid "Server did not properly shut down TLS connection"
 msgstr "Server hat die TLS-Verbindung nicht ordnungsgemäß geschlossen"
 
@@ -7130,7 +7130,7 @@ msgstr ""
 msgid "Server sent unexpected reply."
 msgstr "Server sendete unerwartete Antwort."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1243
+#: ../../locales/../src/engine/tlssocket.cpp:1250
 msgid ""
 "Server sent unsorted certificate chain in violation of the TLS specifications"
 msgstr ""
@@ -7172,7 +7172,7 @@ msgstr "&Priorität setzen"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Berechtigungen für '%s' werden auf '%s' gesetzt"
 
-#: ../../locales/../src/engine/transfersocket.cpp:823
+#: ../../locales/../src/engine/transfersocket.cpp:828
 msgid "SetSocketBufferSize called without socket"
 msgstr "SetSocketBufferSize ohne Socket aufgerufen"
 
@@ -7320,7 +7320,7 @@ msgstr "Überspringe Download von %s"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:311
 #, c-format
 msgid "Skipping non-existing key file \"%s\""
-msgstr ""
+msgstr "Überspringe nicht existierende Schlüsseldatei \"%s\""
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1138
 #: ../../locales/../src/engine/ControlSocket.cpp:1155
@@ -7995,7 +7995,7 @@ msgstr ""
 "Der Server-Schlüssel ist unbekannt. Daher kann nicht garantiert werden, dass "
 "der Server wirklich derjenige ist, mit dem Sie sich verbinden wollen."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1328
+#: ../../locales/../src/engine/tlssocket.cpp:1335
 msgid "The server's hostname does not match the certificate's hostname"
 msgstr ""
 "Der Hostname des Servers stimmt nicht mit dem Hostnamen des Zertifikats "
@@ -8347,9 +8347,9 @@ msgstr "Unbekanntes Zertifikat"
 
 #: ../../locales/../src/engine/misc.cpp:154
 #: ../../locales/../src/engine/misc.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown error %d"
-msgstr "Unbekannter Fehler %u"
+msgstr "Unbekannter Fehler %d"
 
 #: ../../locales/../src/engine/misc.cpp:131
 #, c-format
@@ -8393,7 +8393,7 @@ msgstr ""
 "Solange dieses Problem nicht gelöst ist, funktioniert der Aktive Modus "
 "nicht. Stattdessen muss der Passive Modus verwendet werden."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1267
+#: ../../locales/../src/engine/tlssocket.cpp:1274
 msgid "Unsupported certificate type"
 msgstr "Nicht unterstützter Zertifikatstyp"
 
@@ -8567,7 +8567,7 @@ msgstr "Gültig bis:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Ausführliche wxWidgets-Logmeldungen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1360
+#: ../../locales/../src/engine/tlssocket.cpp:1367
 msgid "Verifying certificate..."
 msgstr "Überprüfe Zertifikat..."
 
@@ -8963,11 +8963,11 @@ msgstr "fzsftp gehört zu einer anderen FileZilla-Version"
 msgid "fzsftp could not be started"
 msgstr "fzsftp konnte nicht gestartet werden"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1206
+#: ../../locales/../src/engine/tlssocket.cpp:1213
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers gab keine Zertifikate zurück"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1218
+#: ../../locales/../src/engine/tlssocket.cpp:1225
 msgid "gnutls_pem_base64_encode2 failed"
 msgstr "gnutls_pem_base64_encode2 fehlgeschlagen"
 
@@ -9028,9 +9028,10 @@ msgid "owner writeable"
 msgstr "'Besitzer: beschreibbar'"
 
 #: ../../locales/../src/engine/proxy.cpp:62
-#: ../../locales/../src/engine/tlssocket.cpp:1404
-#: ../../locales/../src/engine/tlssocket.cpp:1416
-#: ../../locales/../src/engine/tlssocket.cpp:1431
+#: ../../locales/../src/engine/tlssocket.cpp:1419
+#: ../../locales/../src/engine/tlssocket.cpp:1435
+#: ../../locales/../src/engine/tlssocket.cpp:1451
+#: ../../locales/../src/engine/tlssocket.cpp:1467
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:38
 msgid "unknown"
 msgstr "unbekannt"
