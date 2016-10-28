@@ -1321,24 +1321,26 @@ std::string CSocket::AddressToString(char const* buf, int buf_len)
 	return AddressToString(&addr.sockaddr, sizeof(addr), false, true);
 }
 
-std::string CSocket::GetLocalIP(bool strip_zone_index /*=false*/) const
+std::string CSocket::GetLocalIP(bool strip_zone_index) const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
 	int res = getsockname(m_fd, (sockaddr*)&addr, &addr_len);
-	if (res)
+	if (res) {
 		return std::string();
+	}
 
 	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
 }
 
-std::string CSocket::GetPeerIP(bool strip_zone_index /*=false*/) const
+std::string CSocket::GetPeerIP(bool strip_zone_index) const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
 	int res = getpeername(m_fd, (sockaddr*)&addr, &addr_len);
-	if (res)
+	if (res) {
 		return std::string();
+	}
 
 	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
 }
@@ -1348,8 +1350,9 @@ CSocket::address_family CSocket::GetAddressFamily() const
 	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
 	int res = getsockname(m_fd, &addr.sockaddr, &addr_len);
-	if (res)
+	if (res) {
 		return unspec;
+	}
 
 	switch (addr.sockaddr.sa_family)
 	{

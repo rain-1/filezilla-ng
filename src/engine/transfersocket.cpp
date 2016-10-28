@@ -490,8 +490,10 @@ void CTransferSocket::OnClose(int error)
 	}
 }
 
-bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
+bool CTransferSocket::SetupPassiveTransfer(std::wstring const& host, int port)
 {
+	std::string ip;
+
 	ResetSocket();
 
 	m_pSocket = new CSocket(engine_.GetThreadPool(), this);
@@ -500,7 +502,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, &controlSocket_);
 
 		int res = m_pProxyBackend->Handshake(controlSocket_.m_pProxyBackend->GetProxyType(),
-											 host.ToStdWstring(), port,
+											 host, port,
 											 controlSocket_.m_pProxyBackend->GetUser(), controlSocket_.m_pProxyBackend->GetPass());
 
 		if (res != EINPROGRESS) {
@@ -508,13 +510,16 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 			return false;
 		}
 		int error;
-		host = controlSocket_.m_pSocket->GetPeerIP();
+		ip = controlSocket_.m_pSocket->GetPeerIP();
 		port = controlSocket_.m_pSocket->GetRemotePort(error);
-		if (host.empty() || port < 1) {
+		if (ip.empty() || port < 1) {
 			controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Could not get peer address of control connection."));
 			ResetSocket();
 			return false;
 		}
+	}
+	else {
+		ip = fz::to_utf8(host);
 	}
 
 	SetSocketBufferSizes(m_pSocket);
@@ -533,7 +538,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 		controlSocket_.LogMessage(MessageType::Debug_Info, _T("Binding data connection source IP to control connection source IP %s"), bindAddress);
 	}
 	else {
-		if (controlSocket_.m_pSocket->GetPeerIP(true) == host || controlSocket_.m_pSocket->GetPeerIP(false) == host) {
+		if (controlSocket_.m_pSocket->GetPeerIP(true) == ip || controlSocket_.m_pSocket->GetPeerIP(false) == ip) {
 			bindAddress = controlSocket_.m_pSocket->GetLocalIP();
 			controlSocket_.LogMessage(MessageType::Debug_Info, _T("Binding data connection source IP to control connection source IP %s"), bindAddress);
 		}
@@ -542,7 +547,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 		}
 	}
 
-	int res = m_pSocket->Connect(fz::to_native(host), port, CSocket::unspec, bindAddress);
+	int res = m_pSocket->Connect(fz::to_native(ip), port, CSocket::unspec, bindAddress);
 	if (res && res != EINPROGRESS) {
 		ResetSocket();
 		return false;
@@ -656,7 +661,7 @@ bool CTransferSocket::CheckGetNextWriteBuffer()
 			return false;
 		}
 		else if (res == IO_Error) {
-			wxString error = ioThread_->GetError();
+			std::wstring error = ioThread_->GetError();
 			if (error.empty()) {
 				controlSocket_.LogMessage(MessageType::Error, _("Can't write data to file."));
 			}

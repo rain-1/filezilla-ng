@@ -26,7 +26,7 @@ public:
 	virtual ~CTransferSocket();
 
 	std::wstring SetupActiveTransfer(std::string const& ip);
-	bool SetupPassiveTransfer(wxString host, int port);
+	bool SetupPassiveTransfer(std::wstring const& host, int port);
 
 	void SetActive();
 
