@@ -99,7 +99,6 @@ void COptionsPageConnectionSFTP::OnRemove(wxCommandEvent&)
 
 bool COptionsPageConnectionSFTP::AddKey(std::wstring keyFile, bool silent)
 {
-	keyFile += 'f';
 	wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
 	if (!pKeys) {
 		return false;
