@@ -323,8 +323,8 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 	if (bar_split && height > 2) {
 		// Draw pretty gradient
 
-		int greenmin = 128;
-		int greenmax = 255;
+		int greenmin = 160;
+		int greenmax = 223;
 		int colourCount = ((height + 1) / 2);
 
 		for (int i = 0; i < colourCount; ++i) {
@@ -335,7 +335,7 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 		}
 	}
 
-	dc.SetPen(*wxBLACK_PEN);
+	dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 	dc.DrawRectangle(x, y, PROGRESSBAR_WIDTH, height);
 
