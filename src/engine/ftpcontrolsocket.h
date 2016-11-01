@@ -94,7 +94,7 @@ protected:
 	// It's the last line in a multi-line response.
 	void ParseResponse();
 
-	void ParseFeat(std::wstring const& line);
+	void ParseFeat(std::wstring line);
 
 	virtual int SendNextCommand();
 	virtual int ParseSubcommandResult(int prevResult);
