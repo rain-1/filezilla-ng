@@ -277,9 +277,10 @@ bool HasFeature(std::wstring const& line, std::wstring const& feature)
 }
 }
 
-void CFtpControlSocket::ParseFeat(std::wstring const& line)
+void CFtpControlSocket::ParseFeat(std::wstring line)
 {
-	std::wstring up = fz::str_toupper_ascii(fz::trimmed(line));
+	fz::trim(line);
+	std::wstring up = fz::str_toupper_ascii(line);
 
 	if (HasFeature(up, _T("UTF8"))) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
