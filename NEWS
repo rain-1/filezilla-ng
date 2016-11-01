@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.22.2.2 (2016-11-01)
+
+- Fixed trimming of FEAT response lines leading to incorrectly detected server features
+
 3.22.2.1 (2016-11-01)
 
 - OS X: Rebuilt to work around a nasty bug in XCode: Even when linking with -Wl,-no-weak-imports it links against functions not available on older OS X versions
