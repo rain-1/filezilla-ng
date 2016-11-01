@@ -291,7 +291,12 @@ void CFtpControlSocket::ParseFeat(std::wstring const& line)
 		std::wstring facts;
 		// FEAT output for MLST overrides MLSD
 		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command, &facts) != yes || facts.empty()) {
-			facts = line.substr(5);
+			if (line.size() > 5) {
+				facts = line.substr(5);
+			}
+			else {
+				facts.clear();
+			}
 		}
 		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, facts);
 
@@ -299,7 +304,10 @@ void CFtpControlSocket::ParseFeat(std::wstring const& line)
 		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 	}
 	else if (HasFeature(up, _T("MLST"))) {
-		std::wstring facts = line.substr(5);
+		std::wstring facts;
+		if (line.size() > 5) {
+			facts = line.substr(5);
+		}
 		// FEAT output for MLST overrides MLSD
 		if (facts.empty()) {
 			if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command, &facts) != yes) {
