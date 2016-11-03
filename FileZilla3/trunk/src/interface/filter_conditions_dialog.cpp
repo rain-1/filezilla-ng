@@ -10,7 +10,7 @@ static wxArrayString permissionConditionTypes;
 static wxArrayString attributeSetTypes;
 static wxArrayString dateConditionTypes;
 
-static wxChoice* CreateChoice(wxWindow* parent, wxPoint pos, const wxArrayString& items, wxSize const& size = wxDefaultSize)
+static std::unique_ptr<wxChoice> CreateChoice(wxWindow* parent, const wxArrayString& items, wxSize const& size = wxDefaultSize)
 {
 #ifdef __WXGTK__
 	// Really obscure bug in wxGTK: If creating in a single step,
@@ -18,49 +18,26 @@ static wxChoice* CreateChoice(wxWindow* parent, wxPoint pos, const wxArrayString
 	// even though it can still be selected and returns to looking
 	// normal after hovering mouse over it.
 	// This works around it nicely.
-	wxChoice *ret( new wxChoice );
-	ret->Create(parent, wxID_ANY, pos, size);
+	auto ret = std::make_unique<wxChoice>();
+	ret->Create(parent, wxID_ANY, wxDefaultPosition, size);
 	ret->Append(items);
 	ret->InvalidateBestSize();
 	ret->SetInitialSize();
 	return ret;
 #else
-	return new wxChoice(parent, wxID_ANY, pos, size, items);
+	return std::make_unique<wxChoice>(parent, wxID_ANY, wxDefaultPosition, size, items);
 #endif
 }
 
 CFilterControls::CFilterControls()
 {
-	pType = 0;
-	pCondition = 0;
-	pValue = 0;
-	pSet = 0;
-	pLabel = 0;
-	pRemove = 0;
-}
-
-void CFilterControls::Reset()
-{
-	delete pType;
-	delete pCondition;
-	delete pValue;
-	delete pSet;
-	delete pLabel;
-	delete pRemove;
-
-	pType = 0;
-	pCondition = 0;
-	pValue = 0;
-	pSet = 0;
-	pLabel = 0;
-	pRemove = 0;
+	sizer = std::make_unique<wxBoxSizer>(wxHORIZONTAL);
 }
 
 BEGIN_EVENT_TABLE(CFilterConditionsDialog, wxDialogEx)
 EVT_BUTTON(wxID_ANY, CFilterConditionsDialog::OnButton)
 EVT_CHOICE(wxID_ANY, CFilterConditionsDialog::OnFilterTypeChange)
 EVT_LISTBOX(wxID_ANY, CFilterConditionsDialog::OnConditionSelectionChange)
-EVT_NAVIGATION_KEY(CFilterConditionsDialog::OnNavigationKeyEvent)
 END_EVENT_TABLE()
 
 CFilterConditionsDialog::CFilterConditionsDialog()
@@ -68,7 +45,6 @@ CFilterConditionsDialog::CFilterConditionsDialog()
 	m_choiceBoxHeight = 0;
 	m_pListCtrl = 0;
 	m_has_foreign_type = false;
-	m_pAdd = 0;
 	m_button_size = wxSize(-1, -1);
 }
 
@@ -82,8 +58,7 @@ bool CFilterConditionsDialog::CreateListControl(int conditions)
 
 	CalcMinListWidth();
 
-	if (stringConditionTypes.empty())
-	{
+	if (stringConditionTypes.empty()) {
 		stringConditionTypes.Add(_("contains"));
 		stringConditionTypes.Add(_("is equal to"));
 		stringConditionTypes.Add(_("begins with"));
@@ -122,42 +97,32 @@ bool CFilterConditionsDialog::CreateListControl(int conditions)
 		dateConditionTypes.Add(_("after"));
 	}
 
-	if (conditions & filter_name)
-	{
+	if (conditions & filter_name) {
 		filterTypes.Add(_("Filename"));
 		filter_type_map.push_back(filter_name);
 	}
-	if (conditions & filter_size)
-	{
+	if (conditions & filter_size) {
 		filterTypes.Add(_("Filesize"));
 		filter_type_map.push_back(filter_size);
 	}
-	if (conditions & filter_attributes)
-	{
+	if (conditions & filter_attributes) {
 		filterTypes.Add(_("Attribute"));
 		filter_type_map.push_back(filter_attributes);
 	}
-	if (conditions & filter_permissions)
-	{
+	if (conditions & filter_permissions) {
 		filterTypes.Add(_("Permission"));
 		filter_type_map.push_back(filter_permissions);
 	}
-	if (conditions & filter_path)
-	{
+	if (conditions & filter_path) {
 		filterTypes.Add(_("Path"));
 		filter_type_map.push_back(filter_path);
 	}
-	if (conditions & filter_date)
-	{
+	if (conditions & filter_date) {
 		filterTypes.Add(_("Date"));
 		filter_type_map.push_back(filter_date);
 	}
 
 	SetFilterCtrlState(true);
-
-	m_pListCtrl->Connect(wxEVT_SIZE, wxSizeEventHandler(CFilterConditionsDialog::OnListSize), 0, this);
-
-	m_pListCtrl->MoveAfterInTabOrder(XRCCTRL(*this, "ID_MATCHTYPE", wxChoice));
 
 	return true;
 }
@@ -196,8 +161,9 @@ void CFilterConditionsDialog::CalcMinListWidth()
 
 t_filterType CFilterConditionsDialog::GetTypeFromTypeSelection(int selection)
 {
-	if (selection < 0 || selection > (int)filter_type_map.size())
+	if (selection < 0 || selection >(int)filter_type_map.size()) {
 		selection = 0;
+	}
 
 	return filter_type_map[selection];
 }
@@ -211,347 +177,196 @@ void CFilterConditionsDialog::SetSelectionFromType(wxChoice* pChoice, t_filterTy
 		}
 	}
 
-	 pChoice->SetSelection(0);
+	pChoice->SetSelection(0);
 }
 
 void CFilterConditionsDialog::OnMore()
 {
-	wxPoint pos = m_pAdd->GetPosition();
-	pos.y += m_choiceBoxHeight + 6;
-	m_pAdd->SetPosition(pos);
-
 	CFilterCondition cond;
 	m_currentFilter.filters.push_back(cond);
 
-	MakeControls(cond);
+	size_t newRowIndex = m_filterControls.size() - 1;
 
-	CFilterControls& controls = m_filterControls.back();
-	m_pAdd->MoveAfterInTabOrder(controls.pSet ? (wxWindow*)controls.pSet : (wxWindow*)controls.pValue);
+	m_filterControls.insert(m_filterControls.begin() + newRowIndex, CFilterControls());
+	MakeControls(cond, newRowIndex);
 
-	m_pListCtrl->SetLineCount(m_filterControls.size() + 1);
-	UpdateConditionsClientSize();
-}
-
-void CFilterConditionsDialog::OnRemove(int item)
-{
-	std::set<int> selected;
-	selected.insert(item);
-	OnRemove(selected);
-	if (m_filterControls.empty())
-		OnMore();
-}
-
-void CFilterConditionsDialog::OnRemove(const std::set<int> &selected)
-{
-	int delta_y = 0;
-
-	m_pListCtrl->SetLineCount(m_filterControls.size() - selected.size() + 1);
-
-	std::vector<CFilterControls> filterControls = m_filterControls;
-	m_filterControls.clear();
-
-	std::vector<CFilterCondition> filters = m_currentFilter.filters;
-	m_currentFilter.filters.clear();
-
-	for (unsigned int i = 0; i < filterControls.size(); ++i) {
-		CFilterControls& controls = filterControls[i];
-		if (selected.find(i) == selected.end()) {
-			m_filterControls.push_back(controls);
-			m_currentFilter.filters.push_back(filters[i]);
-
-			// Reposition controls
-			wxPoint pos;
-
-			pos = controls.pType->GetPosition();
-			pos.y -= delta_y;
-			controls.pType->SetPosition(pos);
-
-			pos = controls.pCondition->GetPosition();
-			pos.y -= delta_y;
-			controls.pCondition->SetPosition(pos);
-
-			if (controls.pValue) {
-				pos = controls.pValue->GetPosition();
-				pos.y -= delta_y;
-				controls.pValue->SetPosition(pos);
-			}
-			if (controls.pSet) {
-				pos = controls.pSet->GetPosition();
-				pos.y -= delta_y;
-				controls.pSet->SetPosition(pos);
-			}
-			if (controls.pLabel) {
-				pos = controls.pLabel->GetPosition();
-				pos.y -= delta_y;
-				controls.pLabel->SetPosition(pos);
-			}
-
-			pos = controls.pRemove->GetPosition();
-			pos.y -= delta_y;
-			controls.pRemove->SetPosition(pos);
-		}
-		else {
-			controls.Reset();
-			delta_y += m_choiceBoxHeight + 6;
-		}
+	CFilterControls& controls = m_filterControls[newRowIndex];
+	if (m_filterControls.back().pRemove) {
+		m_filterControls.back().pRemove->MoveAfterInTabOrder(controls.pRemove.get());
 	}
 
-	wxPoint pos = m_pAdd->GetPosition();
-	pos.y -= delta_y;
-	m_pAdd->SetPosition(pos);
+	m_pListCtrl->InsertRow(m_filterControls[newRowIndex].sizer.get(), newRowIndex);
+}
 
-	m_pListCtrl->ClearSelection();
-	UpdateConditionsClientSize();
+void CFilterConditionsDialog::OnRemove(size_t item)
+{
+	if (item + 1 >= m_filterControls.size()) {
+		return;
+	}
 
-	SetFilterCtrlState(false);
+	m_pListCtrl->DeleteRow(item);
+	m_filterControls.erase(m_filterControls.begin() + item);
+	m_currentFilter.filters.erase(m_currentFilter.filters.begin() + item);
+
+	if (m_currentFilter.filters.empty()) {
+		OnMore();
+	}
 }
 
 void CFilterConditionsDialog::OnFilterTypeChange(wxCommandEvent& event)
 {
-	int item;
-	for (item = 0; item < (int)m_filterControls.size(); ++item) {
-		if (!m_filterControls[item].pType || m_filterControls[item].pType->GetId() != event.GetId())
-			continue;
-
-		break;
+	size_t item;
+	for (item = 0; item < m_filterControls.size(); ++item) {
+		if (m_filterControls[item].pType && m_filterControls[item].pType->GetId() == event.GetId()) {
+			break;
+		}
 	}
-	if (item == (int)m_filterControls.size())
+	if (item == m_filterControls.size()) {
 		return;
+	}
 
 	CFilterCondition& filter = m_currentFilter.filters[item];
 
 	t_filterType type = GetTypeFromTypeSelection(event.GetSelection());
-	if (type == filter.type)
+	if (type == filter.type) {
 		return;
+	}
 	filter.type = type;
 
-	if (filter.type == filter_size && filter.condition > 3)
+	if (filter.type == filter_size && filter.condition > 3) {
 		filter.condition = 0;
-	else if (filter.type == filter_date && filter.condition > 3)
+	}
+	else if (filter.type == filter_date && filter.condition > 3) {
 		filter.condition = 0;
-	delete m_filterControls[item].pCondition;
-	m_filterControls[item].pCondition = 0;
+	}
 
-	MakeControls(filter, item);
+	UpdateControls(filter, item);
 }
 
-void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, int i /*=-1*/)
+void CFilterConditionsDialog::MakeControls(CFilterCondition const& condition, size_t i)
 {
-	wxRect client_size = m_pListCtrl->GetClientSize();
-
-	if (i == -1) {
-		i = m_filterControls.size();
-		CFilterControls controls;
-		m_filterControls.push_back(controls);
-	}
 	CFilterControls& controls = m_filterControls[i];
 
-	// Get correct coordinates
-	int posy = i * (m_choiceBoxHeight + 6) + 3;
-	int posx = 0, x, y;
-	m_pListCtrl->CalcScrolledPosition(posx, posy, &x, &y);
-	posy = y;
-
-	wxPoint pos = wxPoint(5, posy);
-	if (!controls.pType)
-		controls.pType = CreateChoice(m_pListCtrl, pos, filterTypes);
-	else
-		controls.pType->SetPosition(pos);
-	SetSelectionFromType(controls.pType, condition.type);
-	wxRect typeRect = controls.pType->GetSize();
-
+	if (!controls.pType) {
+		controls.pType = CreateChoice(m_pListCtrl, filterTypes);
+		controls.sizer->Add(controls.pType.get(), 0, wxALIGN_CENTER_VERTICAL | wxFIXED_MINSIZE | wxLEFT, 5);
+	}
+	
 	if (!m_choiceBoxHeight) {
 		wxSize size = controls.pType->GetSize();
 		m_choiceBoxHeight = size.GetHeight();
 		m_pListCtrl->SetLineHeight(m_choiceBoxHeight + 6);
 	}
 
-	pos = wxPoint(10 + typeRect.GetWidth(), posy);
 	if (!controls.pCondition) {
-		switch (condition.type)
-		{
-		case filter_name:
-		case filter_path:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, stringConditionTypes);
-			break;
-		case filter_size:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, sizeConditionTypes);
-			break;
-		case filter_attributes:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, attributeConditionTypes);
-			break;
-		case filter_permissions:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, permissionConditionTypes);
-			break;
-		case filter_date:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, dateConditionTypes);
-			break;
-		default:
-			wxFAIL_MSG(_T("Unhandled condition"));
-			return;
-		}
-		if (controls.pCondition && controls.pType) {
-			controls.pCondition->MoveAfterInTabOrder(controls.pType);
-		}
+		controls.pCondition = CreateChoice(m_pListCtrl, wxArrayString());
+		controls.sizer->Add(controls.pCondition.get(), 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 	}
-	else
-		controls.pCondition->SetPosition(pos);
+	
+	if (!controls.pValue) {
+		controls.pValue = std::make_unique<wxTextCtrlEx>();
+		controls.pValue->Hide();
+		controls.pValue->Create(m_pListCtrl, wxID_ANY, _T(""));
+		controls.sizer->Add(controls.pValue.get(), 1, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+	}
 
-	controls.pCondition->Select(condition.condition);
-	wxRect conditionsRect = controls.pCondition->GetSize();
+	if (!controls.pSet) {
+		controls.pSet = CreateChoice(m_pListCtrl,  attributeSetTypes);
+		controls.pSet->Hide();
+		controls.sizer->Add(controls.pSet.get(), 1, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+	}
+
+	if (!controls.pLabel) {
+		controls.pLabel = std::make_unique<wxStaticText>();
+		controls.pLabel->Hide();
+		controls.pLabel->Create(m_pListCtrl, wxID_ANY, _("bytes"), wxDefaultPosition, m_size_label_size);
+		controls.sizer->Add(controls.pLabel.get(), 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+	}
 
 	if (!controls.pRemove) {
-		controls.pRemove = new wxButton(m_pListCtrl, wxID_ANY, _T("-"), wxPoint(client_size.GetWidth() - 5 - m_button_size.x, posy), m_button_size, wxBU_EXACTFIT);
+		controls.pRemove = std::make_unique<wxButton>(m_pListCtrl, wxID_ANY, _T("-"), wxDefaultPosition, m_button_size, wxBU_EXACTFIT);
 		if (m_button_size.x <= 0) {
 			m_button_size.x = wxMax(m_choiceBoxHeight, controls.pRemove->GetSize().x);
 			m_button_size.y = m_choiceBoxHeight;
 			controls.pRemove->SetSize(m_button_size);
-			controls.pRemove->SetPosition(wxPoint(client_size.GetWidth() - 5 - m_button_size.x, posy));
 		}
-		controls.pRemove->MoveAfterInTabOrder(controls.pCondition);
+		controls.sizer->Add(controls.pRemove.get(), 0, wxALIGN_CENTER_VERTICAL | wxFIXED_MINSIZE | wxLEFT | wxRIGHT, 5);
 	}
-	else
-		controls.pRemove->SetPosition(wxPoint(client_size.GetWidth() - 5 - m_button_size.x, posy));
 
-	posx = 15 + typeRect.GetWidth() + conditionsRect.GetWidth();
-	int maxwidth = client_size.GetWidth() - posx - 10 - m_button_size.x;
-	if (condition.type == filter_name || condition.type == filter_size || condition.type == filter_path || condition.type == filter_date) {
-		delete controls.pSet;
-		controls.pSet = 0;
+	UpdateControls(condition, i);
+}
 
-		if (condition.type == filter_size) {
-			// Label needs to be aligned
-			int size_posy = posy;
-			if (conditionsRect.GetHeight() > m_size_label_size.GetHeight())
-				size_posy += (conditionsRect.GetHeight() - m_size_label_size.GetHeight()) / 2;
-			maxwidth -= m_size_label_size.GetWidth() + 5;
-			if (!controls.pLabel)
-				controls.pLabel = new wxStaticText(m_pListCtrl, wxID_ANY, _("bytes"), wxPoint(posx + maxwidth + 5, size_posy), m_size_label_size);
-			else {
-				controls.pLabel->SetPosition(wxPoint(posx + maxwidth + 5, size_posy));
-				controls.pLabel->SetSize(m_size_label_size);
-			}
-		}
-		else {
-			delete controls.pLabel;
-			controls.pLabel = 0;
-		}
+void CFilterConditionsDialog::UpdateControls(CFilterCondition const& condition, size_t i)
+{
+	CFilterControls& controls = m_filterControls[i];
 
-		pos = wxPoint(posx, posy);
-		wxSize size(maxwidth, -1);
+	SetSelectionFromType(controls.pType.get(), condition.type);
 
-		if (!controls.pValue) {
-			controls.pValue = new wxTextCtrlEx();
-			controls.pValue->Create(m_pListCtrl, wxID_ANY, _T(""), pos, size);
-		}
-		else {
-			controls.pValue->SetPosition(pos);
-			controls.pValue->SetSize(size);
-		}
-		controls.pValue->SetValue(condition.strValue);
-
-		// Need to explicitely set min size, otherwise initial size becomes min size
-		controls.pValue->SetMinSize(wxSize(20, -1));
-		controls.pValue->MoveBeforeInTabOrder(controls.pRemove);
+	switch (condition.type)
+	{
+	case filter_name:
+	case filter_path:
+		controls.pCondition->Set(stringConditionTypes);
+		break;
+	case filter_size:
+		controls.pCondition->Set(sizeConditionTypes);
+		break;
+	case filter_attributes:
+		controls.pCondition->Set(attributeConditionTypes);
+		break;
+	case filter_permissions:
+		controls.pCondition->Set(permissionConditionTypes);
+		break;
+	case filter_date:
+		controls.pCondition->Set(dateConditionTypes);
+		break;
+	default:
+		wxFAIL_MSG(_T("Unhandled condition"));
+		return;
 	}
-	else {
-		delete controls.pValue;
-		controls.pValue = 0;
-		delete controls.pLabel;
-		controls.pLabel = 0;
+	controls.pCondition->Select(condition.condition);
 
-		pos = wxPoint(posx, posy);
-		wxSize size(maxwidth, -1);
-		if (!controls.pSet)
-			controls.pSet = CreateChoice(m_pListCtrl, pos, attributeSetTypes, size);
-		else {
-			controls.pSet->SetPosition(pos);
-			controls.pSet->SetSize(size);
-		}
-		controls.pSet->Select(condition.strValue != _T("0") ? 0 : 1);
+	controls.pValue->SetValue(condition.strValue);
+	controls.pSet->Select(condition.strValue != _T("0") ? 0 : 1);
 
-		// Need to explicitely set min size, otherwise initial size becomes min size
-		controls.pSet->SetMinSize(wxSize(20, -1));
-		controls.pSet->MoveBeforeInTabOrder(controls.pRemove);
-	}
+	controls.pValue->Show(condition.type == filter_name || condition.type == filter_size || condition.type == filter_path || condition.type == filter_date);
+	controls.pSet->Show(!controls.pValue->IsShown());
+	controls.pLabel->Show(condition.type == filter_size);
+
+	controls.sizer->Layout();
 }
 
 void CFilterConditionsDialog::DestroyControls()
 {
-	for (unsigned int i = 0; i < m_filterControls.size(); ++i) {
-		CFilterControls& controls = m_filterControls[i];
-		controls.Reset();
-	}
+	m_pListCtrl->ClearRows();
 	m_filterControls.clear();
 }
 
-void CFilterConditionsDialog::UpdateConditionsClientSize()
-{
-	wxSize newSize = m_pListCtrl->GetClientSize();
-
-	if (m_lastListSize.GetWidth() == newSize.GetWidth())
-		return;
-
-	int deltaX = newSize.GetWidth() - m_lastListSize.GetWidth();
-	m_lastListSize = newSize;
-
-	// Resize text fields
-	for (unsigned int i = 0; i < m_filterControls.size(); ++i) {
-		CFilterControls& controls = m_filterControls[i];
-		if (!controls.pValue)
-			continue;
-
-		wxSize size = controls.pValue->GetSize();
-		size.SetWidth(size.GetWidth() + deltaX);
-		controls.pValue->SetSize(size);
-
-		wxPoint pos = controls.pRemove->GetPosition();
-		pos.x += deltaX;
-		controls.pRemove->SetPosition(pos);
-
-		if (controls.pLabel) {
-			wxPoint labelPos = controls.pLabel->GetPosition();
-			labelPos.x += deltaX;
-			controls.pLabel->SetPosition(labelPos);
-		}
-	}
-
-	// Move add button
-	if (m_pAdd) {
-		wxPoint pos = m_pAdd->GetPosition();
-		pos.x += deltaX;
-		m_pAdd->SetPosition(pos);
-	}
-}
-
-void CFilterConditionsDialog::EditFilter(const CFilter& filter)
+void CFilterConditionsDialog::EditFilter(CFilter const& filter)
 {
 	DestroyControls();
 
 	// Create new controls
 	m_currentFilter = filter;
 
-	if (m_currentFilter.filters.empty())
+	if (m_currentFilter.filters.empty()) {
 		m_currentFilter.filters.push_back(CFilterCondition());
+	}
+	m_filterControls.resize(m_currentFilter.filters.size() + 1);
 
 	for (unsigned int i = 0; i < m_currentFilter.filters.size(); ++i) {
 		const CFilterCondition& cond = m_currentFilter.filters[i];
 
-		MakeControls(cond);
+		MakeControls(cond, i);
+		m_pListCtrl->InsertRow(m_filterControls[i].sizer.get(), i);
 	}
 
-	// Get correct coordinates
-	wxSize client_size = m_pListCtrl->GetClientSize();
-	wxPoint pos;
-	m_pListCtrl->CalcScrolledPosition(client_size.GetWidth() - 5 - m_button_size.x, (m_choiceBoxHeight + 6) * m_filterControls.size() + 3, &pos.x, &pos.y);
+	CFilterControls & controls = m_filterControls.back();
+	controls.pRemove = std::make_unique<wxButton>(m_pListCtrl, wxID_ANY, _T("+"), wxDefaultPosition, m_button_size);
+	controls.sizer->AddStretchSpacer();
+	controls.sizer->Add(controls.pRemove.get(), 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE|wxRIGHT, 5);
 
-	if (!m_pAdd)
-		m_pAdd = new wxButton(m_pListCtrl, wxID_ANY, _T("+"), pos, m_button_size);
-	else
-		m_pAdd->SetPosition(pos);
-
-	m_pListCtrl->SetLineCount(m_filterControls.size() + 1);
-	UpdateConditionsClientSize();
+	m_pListCtrl->InsertRow(controls.sizer.get(), m_filterControls.size() - 1);
 
 	XRCCTRL(*this, "ID_MATCHTYPE", wxChoice)->SetSelection(filter.matchType);
 
@@ -560,10 +375,10 @@ void CFilterConditionsDialog::EditFilter(const CFilter& filter)
 
 CFilter CFilterConditionsDialog::GetFilter()
 {
-	wxASSERT(m_filterControls.size() == m_currentFilter.filters.size());
+	wxASSERT(m_filterControls.size() >= m_currentFilter.filters.size());
 
 	CFilter filter;
-	for (unsigned int i = 0; i < m_currentFilter.filters.size(); ++i) {
+	for (size_t i = 0; i < m_currentFilter.filters.size(); ++i) {
 		CFilterControls const& controls = m_filterControls[i];
 		if (!controls.pType || !controls.pCondition) {
 			continue;
@@ -648,12 +463,10 @@ CFilter CFilterConditionsDialog::GetFilter()
 	return filter;
 }
 
-void CFilterConditionsDialog::ClearFilter(bool disable)
+void CFilterConditionsDialog::ClearFilter()
 {
 	DestroyControls();
-	m_pListCtrl->SetLineCount(0);
-
-	SetFilterCtrlState(disable);
+	SetFilterCtrlState(true);
 }
 
 void CFilterConditionsDialog::SetFilterCtrlState(bool disable)
@@ -663,18 +476,19 @@ void CFilterConditionsDialog::SetFilterCtrlState(bool disable)
 	XRCCTRL(*this, "ID_MATCHTYPE", wxChoice)->Enable(!disable);
 }
 
-bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /*=false*/)
+bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty)
 {
-	const unsigned int size = m_currentFilter.filters.size();
+	size_t const size = m_currentFilter.filters.size();
 	if (!size) {
-		if (allow_empty)
+		if (allow_empty) {
 			return true;
+		}
 
 		error = _("Each filter needs at least one condition.");
 		return false;
 	}
 
-	wxASSERT(m_filterControls.size() == m_currentFilter.filters.size());
+	wxASSERT(m_filterControls.size() >= m_currentFilter.filters.size());
 
 	for (unsigned int i = 0; i < size; ++i) {
 		const CFilterControls& controls = m_filterControls[i];
@@ -693,7 +507,6 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 				m_pListCtrl->SelectLine(i);
 				controls.pValue->SetFocus();
 				error = _("At least one filter condition is incomplete");
-				SetFilterCtrlState(false);
 				return false;
 			}
 
@@ -705,7 +518,6 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 					m_pListCtrl->SelectLine(i);
 					controls.pValue->SetFocus();
 					error = _("Invalid regular expression");
-					SetFilterCtrlState(false);
 					return false;
 				}
 			}
@@ -721,7 +533,6 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 				m_pListCtrl->SelectLine(i);
 				controls.pValue->SetFocus();
 				error = _("Invalid size in condition");
-				SetFilterCtrlState(false);
 				return false;
 			}
 		}
@@ -736,7 +547,6 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 				m_pListCtrl->SelectLine(i);
 				controls.pValue->SetFocus();
 				error = _("Please enter a date of the form YYYY-MM-DD such as for example 2010-07-18.");
-				SetFilterCtrlState(false);
 				return false;
 			}
 		}
@@ -747,103 +557,23 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 
 void CFilterConditionsDialog::OnConditionSelectionChange(wxCommandEvent& event)
 {
-	if (event.GetId() != m_pListCtrl->GetId())
+	if (event.GetId() != m_pListCtrl->GetId()) {
 		return;
-
-	SetFilterCtrlState(false);
+	}
 }
 
 void CFilterConditionsDialog::OnButton(wxCommandEvent& event)
 {
-	if (event.GetId() == m_pAdd->GetId()) {
-		OnMore();
-		return;
-	}
-
-	for (int i = 0; i < (int)m_filterControls.size(); ++i) {
+	for (size_t i = 0; i < m_filterControls.size(); ++i) {
 		if (m_filterControls[i].pRemove->GetId() == event.GetId()) {
-			OnRemove(i);
+			if (i + 1 == m_filterControls.size()) {
+				OnMore();
+			}
+			else {
+				OnRemove(i);
+			}
 			return;
 		}
 	}
 	event.Skip();
-}
-
-void CFilterConditionsDialog::OnListSize(wxSizeEvent& event)
-{
-	UpdateConditionsClientSize();
-	event.Skip();
-}
-
-void CFilterConditionsDialog::OnNavigationKeyEvent(wxNavigationKeyEvent& event)
-{
-	wxWindow* source = FindFocus();
-	if (!source)
-	{
-		event.Skip();
-		return;
-	}
-
-	wxWindow* target = 0;
-
-	if (event.GetDirection()) {
-		for (int i = 0; i < (int)m_filterControls.size(); ++i) {
-			if (m_filterControls[i].pType == source) {
-				target = m_filterControls[i].pCondition;
-				break;
-			}
-			if (m_filterControls[i].pCondition == source) {
-				target = m_filterControls[i].pValue;
-				if (!target)
-					target = m_filterControls[i].pSet;
-				break;
-			}
-			if (m_filterControls[i].pSet == source || m_filterControls[i].pValue == source) {
-				target = m_filterControls[i].pRemove;
-				break;
-			}
-			if (m_filterControls[i].pRemove == source) {
-				int j = i + 1;
-				if (j == (int)m_filterControls.size())
-					target = m_pAdd;
-				else
-					target = m_filterControls[j].pType;
-				break;
-			}
-		}
-	}
-	else {
-		if (source == m_pAdd) {
-			if (!m_filterControls.empty())
-				target = m_filterControls[m_filterControls.size() - 1].pRemove;
-		}
-		else {
-			for (int i = 0; i < (int)m_filterControls.size(); ++i) {
-				if (m_filterControls[i].pType == source) {
-					if (i > 0)
-						target = m_filterControls[i - 1].pRemove;
-					break;
-				}
-				if (m_filterControls[i].pCondition == source) {
-					target = m_filterControls[i].pType;
-					break;
-				}
-				if (m_filterControls[i].pSet == source || m_filterControls[i].pValue == source) {
-					target = m_filterControls[i].pCondition;
-					break;
-				}
-				if (m_filterControls[i].pRemove == source) {
-					target = m_filterControls[i].pValue;
-					if (!target)
-						target = m_filterControls[i].pSet;
-					break;
-				}
-			}
-		}
-	}
-
-	if (target)
-		target->SetFocus();
-	else
-		event.Skip();
 }
