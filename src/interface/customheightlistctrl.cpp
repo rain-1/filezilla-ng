@@ -5,6 +5,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCustomHeightListCtrl, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxCustomHeightListCtrl, wxScrolledWindow)
 EVT_MOUSE_EVENTS(wxCustomHeightListCtrl::OnMouseEvent)
+EVT_SIZE(wxCustomHeightListCtrl::OnSize)
 END_EVENT_TABLE()
 
 wxCustomHeightListCtrl::wxCustomHeightListCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
@@ -18,27 +19,13 @@ void wxCustomHeightListCtrl::SetLineHeight(int height)
 
 	int posx, posy;
 	GetViewStart(&posx, &posy);
-	SetScrollbars(0, m_lineHeight, 0, m_lineCount, 0, posy);
+	SetScrollbars(0, m_lineHeight, 0, m_rows.size(), 0, posy);
 
 	Refresh();
 }
 
-void wxCustomHeightListCtrl::SetLineCount(int count)
+void wxCustomHeightListCtrl::AdjustView()
 {
-	if (count < m_lineCount) {
-		std::set<int> selectedLines = m_selectedLines;
-		m_selectedLines.clear();
-		for (std::set<int>::const_iterator iter = selectedLines.begin(); iter != selectedLines.end(); ++iter) {
-			if (*iter < count) {
-				m_selectedLines.insert(*iter);
-			}
-		}
-	}
-	m_lineCount = count;
-	if (m_focusedLine >= count) {
-		m_focusedLine = -1;
-	}
-
 	int posx, posy;
 	GetViewStart(&posx, &posy);
 
@@ -49,7 +36,7 @@ void wxCustomHeightListCtrl::SetLineCount(int count)
 	GetViewStart(&old_view.x, &old_view.y);
 #endif
 
-	SetScrollbars(0, m_lineHeight, 0, m_lineCount, 0, posy);
+	SetScrollbars(0, m_lineHeight, 0, m_rows.size(), 0, posy);
 
 #ifdef __WXGTK__
 	wxPoint new_view;
@@ -68,8 +55,6 @@ void wxCustomHeightListCtrl::SetLineCount(int count)
 		}
 	}
 #endif
-
-	Refresh();
 }
 
 void wxCustomHeightListCtrl::SetFocus()
@@ -84,16 +69,16 @@ void wxCustomHeightListCtrl::OnDraw(wxDC& dc)
 	dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
 	dc.SetPen(*wxTRANSPARENT_PEN);
 
-	for (std::set<int>::const_iterator iter = m_selectedLines.begin(); iter != m_selectedLines.end(); ++iter) {
-		if (*iter == m_focusedLine) {
+	for (auto const& selected : m_selectedLines) {
+		if (selected == m_focusedLine) {
 			dc.SetPen(wxPen(wxColour(0, 0, 0), 1, wxDOT));
 		}
 		else {
 			dc.SetPen(*wxTRANSPARENT_PEN);
 		}
-		dc.DrawRectangle(0, m_lineHeight * *iter, size.GetWidth(), m_lineHeight);
+		dc.DrawRectangle(0, m_lineHeight * selected, size.GetWidth(), m_lineHeight);
 	}
-	if (m_focusedLine != -1 && m_selectedLines.find(m_focusedLine) == m_selectedLines.end()) {
+	if (m_focusedLine != npos && m_selectedLines.find(m_focusedLine) == m_selectedLines.end()) {
 		dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
 		dc.SetPen(wxPen(wxColour(0, 0, 0), 1, wxDOT));
 		dc.DrawRectangle(0, m_lineHeight * m_focusedLine, size.GetWidth(), m_lineHeight);
@@ -107,28 +92,26 @@ void wxCustomHeightListCtrl::OnMouseEvent(wxMouseEvent& event)
 		wxPoint pos = event.GetPosition();
 		int x, y;
 		CalcUnscrolledPosition(pos.x, pos.y, &x, &y);
-		if (y > m_lineHeight * m_lineCount) {
-			m_focusedLine = -1;
+		if (y < 0 || y > static_cast<int>(m_lineHeight * m_rows.size())) {
+			m_focusedLine = npos;
 			m_selectedLines.clear();
 			changed = true;
 		}
 		else {
-			int line = y / m_lineHeight;
+			size_t line = static_cast<size_t>(y / m_lineHeight);
+
 			if (event.ShiftDown()) {
-				if (line < m_focusedLine) {
-					for (int i = line; i <= m_focusedLine; ++i) {
-						if (m_selectedLines.find(i) == m_selectedLines.end()) {
-							changed = true;
-							m_selectedLines.insert(i);
-						}
+				if (m_focusedLine == npos) {
+					changed |= m_selectedLines.insert(line).second;
+				}
+				else if (line < m_focusedLine) {
+					for (size_t i = line; i <= m_focusedLine; ++i) {
+						changed |= m_selectedLines.insert(i).second;
 					}
 				}
 				else {
-					for (int i = line; i >= m_focusedLine; --i) {
-						if (m_selectedLines.find(i) == m_selectedLines.end()) {
-							changed = true;
-							m_selectedLines.insert(i);
-						}
+					for (size_t i = line; i >= m_focusedLine && i != npos; --i) {
+						changed |= m_selectedLines.insert(i).second;
 					}
 				}
 			}
@@ -148,7 +131,6 @@ void wxCustomHeightListCtrl::OnMouseEvent(wxMouseEvent& event)
 			}
 
 			m_focusedLine = line;
-
 		}
 		Refresh();
 	}
@@ -164,21 +146,26 @@ void wxCustomHeightListCtrl::OnMouseEvent(wxMouseEvent& event)
 void wxCustomHeightListCtrl::ClearSelection()
 {
 	m_selectedLines.clear();
-	m_focusedLine = -1;
+	m_focusedLine = npos;
 
+	AdjustView();
 	Refresh();
 }
 
-std::set<int> wxCustomHeightListCtrl::GetSelection() const
+std::set<size_t> wxCustomHeightListCtrl::GetSelection() const
 {
 	return m_selectedLines;
 }
 
-void wxCustomHeightListCtrl::SelectLine(int line)
+void wxCustomHeightListCtrl::SelectLine(size_t line)
 {
+	if (!m_allow_selection) {
+		return;
+	}
+
 	m_selectedLines.clear();
 	m_focusedLine = line;
-	if (line != -1) {
+	if (line != npos) {
 		m_selectedLines.insert(line);
 	}
 
@@ -190,5 +177,81 @@ void wxCustomHeightListCtrl::AllowSelection(bool allow_selection)
 	m_allow_selection = allow_selection;
 	if (!allow_selection) {
 		ClearSelection();
+	}
+}
+
+void wxCustomHeightListCtrl::InsertRow(wxSizer* sizer, size_t pos)
+{
+	assert(sizer);
+	assert(pos <= m_rows.size());
+	m_rows.insert(m_rows.begin() + pos, sizer);
+
+	sizer->SetContainingWindow(this);
+
+	AdjustView();
+
+	int left = 0;
+	int top = 0;
+	CalcScrolledPosition(0, 0, &left, &top);
+
+	int const width = GetClientSize().GetWidth();
+	for (size_t i = pos; i < m_rows.size(); ++i) {
+		m_rows[i]->SetDimension(left, m_lineHeight * i + top, width, m_lineHeight);
+	}
+
+	Refresh();
+}
+
+void wxCustomHeightListCtrl::DeleteRow(size_t pos)
+{
+	assert(pos < m_rows.size());
+	m_rows[pos]->SetContainingWindow(0);
+	m_rows.erase(m_rows.begin() + pos);
+
+	std::set<size_t> selectedLines;
+	m_selectedLines.swap(selectedLines);
+	for (auto const& selected : selectedLines) {
+		if (selected < m_rows.size()) {
+			m_selectedLines.insert(selected);
+		}
+	}
+
+	AdjustView();
+
+	if (m_focusedLine >= m_rows.size()) {
+		m_focusedLine = npos;
+	}
+
+	int left = 0;
+	int top = 0;
+	CalcScrolledPosition(0, 0, &left, &top);
+
+	int const width = GetClientSize().GetWidth();
+
+	// Intentionally update all: if y position changes, by the time OnSize is called in
+	// response to AdjustView, internal state isn't quite correct
+	for (size_t i = 0; i < m_rows.size(); ++i) {
+		m_rows[i]->SetDimension(left, m_lineHeight * i + top, width, m_lineHeight);
+	}
+
+	Refresh();
+}
+
+void wxCustomHeightListCtrl::ClearRows()
+{
+	m_rows.clear();
+}
+
+void wxCustomHeightListCtrl::OnSize(wxSizeEvent& event)
+{
+	event.Skip();
+
+	int const width = GetClientSize().GetWidth();
+
+	int left = 0;
+	int top = 0;
+	CalcScrolledPosition(0, 0, &left, &top);
+	for (size_t i = 0; i < m_rows.size(); ++i) {
+		m_rows[i]->SetDimension(left, m_lineHeight * i + top, width, m_lineHeight);
 	}
 }

@@ -1,23 +1,22 @@
-#ifndef __FILTER_CONDITIONS_DIALOG_H__
-#define __FILTER_CONDITIONS_DIALOG_H__
+#ifndef FILEZILLA_INTERFACE_CONDITIONS_DIALOG_HEADER
+#define FILEZILLA_INTERFACE_CONDITIONS_DIALOG_HEADER
 
 #include "dialogex.h"
 #include "filter.h"
 #include <set>
 
-class CFilterControls
+class CFilterControls final
 {
 public:
 	CFilterControls();
 
-	void Reset();
-
-	wxChoice* pType;
-	wxChoice* pCondition;
-	wxTextCtrl* pValue;
-	wxChoice* pSet;
-	wxStaticText* pLabel;
-	wxButton* pRemove;
+	std::unique_ptr<wxBoxSizer> sizer;
+	std::unique_ptr<wxChoice> pType;
+	std::unique_ptr<wxChoice> pCondition;
+	std::unique_ptr<wxTextCtrl> pValue;
+	std::unique_ptr<wxChoice> pSet;
+	std::unique_ptr<wxStaticText> pLabel;
+	std::unique_ptr<wxButton> pRemove;
 };
 
 class wxCustomHeightListCtrl;
@@ -30,9 +29,9 @@ public:
 	// has_foreign_type for attributes on *nix, permissions on MSW
 	bool CreateListControl(int conditions);
 
-	void EditFilter(const CFilter& filter);
+	void EditFilter(CFilter const& filter);
 	CFilter GetFilter();
-	void ClearFilter(bool disable);
+	void ClearFilter();
 	bool ValidateFilter(wxString& error, bool allow_empty = false);
 
 private:
@@ -41,9 +40,10 @@ private:
 	t_filterType GetTypeFromTypeSelection(int selection);
 	void SetSelectionFromType(wxChoice* pChoice, t_filterType);
 
-	void MakeControls(const CFilterCondition& condition, int i = -1);
+	void MakeControls(CFilterCondition const& condition, size_t i);
+	void UpdateControls(CFilterCondition const& condition, size_t i);
+
 	void DestroyControls();
-	void UpdateConditionsClientSize();
 
 	void SetFilterCtrlState(bool disable);
 
@@ -60,21 +60,16 @@ private:
 	wxArrayString filterTypes;
 	std::vector<t_filterType> filter_type_map;
 
-	wxButton* m_pAdd;
 	wxSize m_button_size;
 	wxSize m_size_label_size;
 
 	void OnMore();
-	void OnRemove(int item);
-	void OnRemove(const std::set<int> &selected);
-
-	void OnListSize(wxSizeEvent& event);
+	void OnRemove(size_t item);
 
 	DECLARE_EVENT_TABLE()
 	void OnButton(wxCommandEvent& event);
 	void OnFilterTypeChange(wxCommandEvent& event);
 	void OnConditionSelectionChange(wxCommandEvent& event);
-	void OnNavigationKeyEvent(wxNavigationKeyEvent& event);
 };
 
-#endif //__FILTER_CONDITIONS_DIALOG_H__
+#endif

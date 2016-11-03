@@ -1,8 +1,10 @@
-#ifndef __CUSTOMHIGHTLISTCTRL_H__
-#define __CUSTOMHIGHTLISTCTRL_H__
+#ifndef FILEZILLA_INTERFACE_CUSTOM_HEIGHT_LISTCTRL_HEADER
+#define FILEZILLA_INTERFACE_CUSTOM_HEIGHT_LISTCTRL_HEADER
+
+#include <wx/scrolwin.h>
 
 #include <set>
-#include <wx/scrolwin.h>
+#include <vector>
 
 class wxCustomHeightListCtrl : public wxScrolledWindow
 {
@@ -12,32 +14,42 @@ public:
 	wxCustomHeightListCtrl(wxWindow* parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxHSCROLL | wxVSCROLL, const wxString& name = _T("scrolledWindow"));
 
 	void SetLineHeight(int height);
-	void SetLineCount(int count);
 
 	virtual void SetFocus();
 
 	void ClearSelection();
 
-	std::set<int> GetSelection() const;
-	void SelectLine(int line);
+	std::set<size_t> GetSelection() const;
+	void SelectLine(size_t line);
 
 	void AllowSelection(bool allow_selection);
 
+	void InsertRow(wxSizer* sizer, size_t pos);
+	void DeleteRow(size_t pos);
+	void ClearRows();
+
 protected:
+	void AdjustView();
+
 	virtual void OnDraw(wxDC& dc);
 
 	DECLARE_EVENT_TABLE()
 	void OnMouseEvent(wxMouseEvent& event);
+	void OnSize(wxSizeEvent& event);
 
 	int m_lineHeight{20};
-	int m_lineCount{};
 
-	std::set<int> m_selectedLines;
-	int m_focusedLine{-1};
+	std::vector<wxSizer*> m_rows;
+
+	std::set<size_t> m_selectedLines;
+
+	static size_t const npos{static_cast<size_t>(-1)};
+
+	size_t m_focusedLine{npos};
 
 	bool m_allow_selection{true};
 
 	DECLARE_DYNAMIC_CLASS(wxCustomHeightListCtrl)
 };
 
-#endif //__CUSTOMHIGHTLISTCTRL_H__
+#endif

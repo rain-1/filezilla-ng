@@ -171,22 +171,21 @@ void CFilterEditDialog::OnNew(wxCommandEvent&)
 void CFilterEditDialog::OnDelete(wxCommandEvent&)
 {
 	int item = m_pFilterListCtrl->GetSelection();
-	if (item == -1)
+	if (item == -1) {
 		return;
+	}
 
 	m_currentSelection = -1;
 	m_pFilterListCtrl->Delete(item);
 	m_filters.erase(m_filters.begin() + item);
 
 	// Remote filter from all filter sets
-	for (auto iter = m_filterSets.begin(); iter != m_filterSets.end(); ++iter)
-	{
-		CFilterSet& set = *iter;
+	for (auto & set : m_filterSets) {
 		set.local.erase(set.local.begin() + item);
 		set.remote.erase(set.remote.begin() + item);
 	}
 
-	ClearFilter(true);
+	ClearFilter();
 	SetCtrlState(false);
 }
 
