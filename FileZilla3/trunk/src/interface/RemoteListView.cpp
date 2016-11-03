@@ -833,7 +833,9 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 				resetDropTarget = true;
 
 		if (resetDropTarget) {
-			SetItemState(m_dropTarget, 0, wxLIST_STATE_DROPHILITED);
+			if (m_dropTarget < GetItemCount()) {
+				SetItemState(m_dropTarget, 0, wxLIST_STATE_DROPHILITED);
+			}
 			m_dropTarget = -1;
 		}
 	}
