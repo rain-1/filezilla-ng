@@ -984,7 +984,7 @@ void CFilterManager::SaveFilters()
 		auto xSet = xSets.append_child("Set");
 
 		if (!set.name.empty()) {
-			AddTextElement(xSet, "Name", set.name);
+			AddTextElement(xSet, "Name", set.name.ToStdWstring());
 		}
 
 		for (unsigned int i = 0; i < set.local.size(); ++i) {
@@ -999,7 +999,7 @@ void CFilterManager::SaveFilters()
 
 void CFilterManager::SaveFilter(pugi::xml_node& element, const CFilter& filter)
 {
-	AddTextElement(element, "Name", filter.name);
+	AddTextElement(element, "Name", filter.name.ToStdWstring());
 	AddTextElement(element, "ApplyToFiles", filter.filterFiles ? _T("1") : _T("0"));
 	AddTextElement(element, "ApplyToDirs", filter.filterDirs ? _T("1") : _T("0"));
 	AddTextElement(element, "MatchType", matchTypeXmlNames[filter.matchType]);
@@ -1041,15 +1041,18 @@ void CFilterManager::SaveFilter(pugi::xml_node& element, const CFilter& filter)
 		if (condition.type == filter_size) {
 			// Backwards compatibility sucks
 			int v = condition.condition;
-			if (v == 2)
+			if (v == 2) {
 				v = 3;
-			else if (v > 2)
+			}
+			else if (v > 2) {
 				--v;
+			}
 			AddTextElement(xCondition, "Condition", v);
 		}
-		else
+		else {
 			AddTextElement(xCondition, "Condition", condition.condition);
-		AddTextElement(xCondition, "Value", condition.strValue);
+		}
+		AddTextElement(xCondition, "Value", condition.strValue.ToStdWstring());
 	}
 }
 

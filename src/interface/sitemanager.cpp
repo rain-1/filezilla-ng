@@ -654,12 +654,14 @@ pugi::xml_node CSiteManager::GetElementByPath(pugi::xml_node node, std::vector<s
 
 bool CSiteManager::AddBookmark(std::wstring sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison)
 {
-	if (local_dir.empty() && remote_dir.empty())
+	if (local_dir.empty() && remote_dir.empty()) {
 		return false;
+	}
 
-	wxChar c = sitePath.empty() ? 0 : sitePath[0];
-	if (c != '0')
+	auto const c = sitePath[0];
+	if (c != '0') {
 		return false;
+	}
 
 	sitePath = sitePath.substr(1);
 
@@ -677,8 +679,9 @@ bool CSiteManager::AddBookmark(std::wstring sitePath, const wxString& name, cons
 	}
 
 	auto element = document.child("Servers");
-	if (!element)
+	if (!element) {
 		return false;
+	}
 
 	std::vector<std::wstring> segments;
 	if (!UnescapeSitePath(sitePath, segments)) {
@@ -695,35 +698,44 @@ bool CSiteManager::AddBookmark(std::wstring sitePath, const wxString& name, cons
 	// Bookmarks
 	pugi::xml_node insertBefore, bookmark;
 	for (bookmark = child.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
-		wxString old_name = GetTextElement_Trimmed(bookmark, "Name");
-		if (old_name.empty())
+		std::wstring old_name = GetTextElement_Trimmed(bookmark, "Name");
+		if (old_name.empty()) {
 			continue;
+		}
 
 		if (name == old_name) {
 			wxMessageBoxEx(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
-		if (name < old_name && !insertBefore)
+		if (name < old_name && !insertBefore) {
 			insertBefore = bookmark;
+		}
 	}
 
-	if (insertBefore)
+	if (insertBefore) {
 		bookmark = child.insert_child_before("Bookmark", insertBefore);
-	else
+	}
+	else {
 		bookmark = child.append_child("Bookmark");
-	AddTextElement(bookmark, "Name", name);
-	if (!local_dir.empty())
-		AddTextElement(bookmark, "LocalDir", local_dir);
-	if (!remote_dir.empty())
+	}
+	AddTextElement(bookmark, "Name", name.ToStdWstring());
+	if (!local_dir.empty()) {
+		AddTextElement(bookmark, "LocalDir", local_dir.ToStdWstring());
+	}
+	if (!remote_dir.empty()) {
 		AddTextElement(bookmark, "RemoteDir", remote_dir.GetSafePath());
-	if (sync)
-		AddTextElementRaw(bookmark, "SyncBrowsing", "1");
-	if (comparison)
-		AddTextElementRaw(bookmark, "DirectoryComparison", "1");
+	}
+	if (sync) {
+		AddTextElementUtf8(bookmark, "SyncBrowsing", "1");
+	}
+	if (comparison) {
+		AddTextElementUtf8(bookmark, "DirectoryComparison", "1");
+	}
 
 	if (!file.Save(false)) {
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 			return true;
+		}
 
 		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName(), file.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
@@ -735,8 +747,9 @@ bool CSiteManager::AddBookmark(std::wstring sitePath, const wxString& name, cons
 bool CSiteManager::ClearBookmarks(std::wstring sitePath)
 {
 	wxChar const c = sitePath.empty() ? 0 : sitePath[0];
-	if (c != '0')
+	if (c != '0') {
 		return false;
+	}
 
 	sitePath = sitePath.substr(1);
 

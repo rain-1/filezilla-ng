@@ -1090,12 +1090,14 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 	}
 
 	datum_holder der;
-	if (gnutls_x509_crt_export2(cert, GNUTLS_X509_FMT_DER, &der) != GNUTLS_E_SUCCESS) {
+	if (gnutls_x509_crt_export2(cert, GNUTLS_X509_FMT_DER, &der) != GNUTLS_E_SUCCESS || !der.data || !der.size) {
 		m_pOwner->LogMessage(MessageType::Error, _T("gnutls_x509_crt_get_issuer_dn"));
 		return false;
 	}
+	std::vector<uint8_t> data(der.data, der.data + der.size);
+
 	out = CCertificate(
-		der.data, der.size,
+		std::move(data),
 		activationTime, expirationTime,
 		serial,
 		pkAlgoName, pkBits,
@@ -1104,7 +1106,7 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 		fingerprint_sha1,
 		issuer,
 		subject,
-		alt_subject_names);
+		std::move(alt_subject_names));
 
 	return true;
 }

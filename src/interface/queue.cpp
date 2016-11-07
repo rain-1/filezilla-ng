@@ -288,7 +288,7 @@ void CFileItem::SaveItem(pugi::xml_node& element) const
 	AddTextElement(file, "LocalFile", m_localPath.GetPath() + GetLocalFile());
 	AddTextElement(file, "RemoteFile", GetRemoteFile());
 	AddTextElement(file, "RemotePath", m_remotePath.GetSafePath());
-	AddTextElementRaw(file, "Download", Download() ? "1" : "0");
+	AddTextElementUtf8(file, "Download", Download() ? "1" : "0");
 	if (m_size != -1) {
 		AddTextElement(file, "Size", m_size);
 	}
@@ -298,7 +298,7 @@ void CFileItem::SaveItem(pugi::xml_node& element) const
 	if (m_priority != QueuePriority::normal) {
 		AddTextElement(file, "Priority", static_cast<int>(m_priority));
 	}
-	AddTextElementRaw(file, "DataType", Ascii() ? "0" : "1");
+	AddTextElementUtf8(file, "DataType", Ascii() ? "0" : "1");
 	if (m_defaultFileExistsAction != CFileExistsNotification::unknown) {
 		AddTextElement(file, "OverwriteAction", m_defaultFileExistsAction);
 	}
@@ -372,7 +372,7 @@ void CFolderItem::SaveItem(pugi::xml_node& element) const
 		AddTextElement(file, "RemoteFile", GetRemoteFile());
 		AddTextElement(file, "RemotePath", m_remotePath.GetSafePath());
 	}
-	AddTextElementRaw(file, "Download", Download() ? "1" : "0");
+	AddTextElementUtf8(file, "Download", Download() ? "1" : "0");
 }
 
 void CFolderItem::SetActive(const bool active)
