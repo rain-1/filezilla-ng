@@ -311,8 +311,10 @@ class CCertificate final
 {
 public:
 	CCertificate() = default;
+	CCertificate(CCertificate const& op) = default;
+
 	CCertificate(
-		unsigned char const* rawData, unsigned int len,
+		std::vector<uint8_t> const& rawData,
 		fz::datetime const& activationTime, fz::datetime const& expirationTime,
 		std::wstring const& serial,
 		std::wstring const& pkalgoname, unsigned int bits,
@@ -323,10 +325,20 @@ public:
 		std::wstring const& subject,
 		std::vector<std::wstring> const& altSubjectNames);
 
-	CCertificate(CCertificate const& op);
-	~CCertificate();
+	CCertificate(
+		std::vector<uint8_t> && rawdata,
+		fz::datetime const& activationTime, fz::datetime const& expirationTime,
+		std::wstring const& serial,
+		std::wstring const& pkalgoname, unsigned int bits,
+		std::wstring const& signalgoname,
+		std::wstring const& fingerprint_sha256,
+		std::wstring const& fingerprint_sha1,
+		std::wstring const& issuer,
+		std::wstring const& subject,
+		std::vector<std::wstring> && altSubjectNames);
 
-	const unsigned char* GetRawData(unsigned int& len) const { len = m_len; return m_rawData; }
+
+	std::vector<uint8_t> GetRawData() const { return m_rawData; }
 	fz::datetime GetActivationTime() const { return m_activationTime; }
 	fz::datetime GetExpirationTime() const { return m_expirationTime; }
 
@@ -342,16 +354,13 @@ public:
 	std::wstring const& GetSubject() const { return m_subject; }
 	std::wstring const& GetIssuer() const { return m_issuer; }
 
-	CCertificate& operator=(CCertificate const& op);
-
 	std::vector<std::wstring> const& GetAltSubjectNames() const { return m_altSubjectNames; }
 
 private:
 	fz::datetime m_activationTime;
 	fz::datetime m_expirationTime;
 
-	unsigned char* m_rawData{};
-	unsigned int m_len{};
+	std::vector<uint8_t> m_rawData{};
 
 	std::wstring m_serial;
 	std::wstring m_pkalgoname;

@@ -938,16 +938,17 @@ bool CWrapEngine::LoadCache()
 	bool cacheValid = true;
 
 	auto layoutElement = document.child("Layout");
-	if (!layoutElement)
+	if (!layoutElement) {
 		layoutElement = document.append_child("Layout");
+	}
 
-	const wxString buildDate = CBuildInfo::GetBuildDateString();
+	std::wstring const buildDate = CBuildInfo::GetBuildDateString();
 	if (GetTextAttribute(layoutElement, "Builddate") != buildDate) {
 		cacheValid = false;
 		SetTextAttribute(layoutElement, "Builddate", buildDate);
 	}
 
-	const wxString buildTime = CBuildInfo::GetBuildTimeString();
+	std::wstring const buildTime = CBuildInfo::GetBuildTimeString();
 	if (GetTextAttribute(layoutElement, "Buildtime") != buildTime) {
 		cacheValid = false;
 		SetTextAttribute(layoutElement, "Buildtime", buildTime);
@@ -957,8 +958,9 @@ bool CWrapEngine::LoadCache()
 	// -----------------------------
 
 	auto resources = layoutElement.child("Resources");
-	if (!resources)
+	if (!resources) {
 		resources = layoutElement.append_child("Resources");
+	}
 
 	CLocalPath resourceDir = wxGetApp().GetResourceDir();
 	resourceDir.AddSegment(_T("xrc"));
@@ -968,21 +970,22 @@ bool CWrapEngine::LoadCache()
 
 	wxString xrc;
 	for (bool found = dir.GetFirst(&xrc, _T("*.xrc")); found; found = dir.GetNext(&xrc)) {
-		if (!wxFileName::FileExists(resourceDir.GetPath() + xrc))
+		if (!wxFileName::FileExists(resourceDir.GetPath() + xrc)) {
 			continue;
+		}
 
 		fz::datetime const date = fz::local_filesys::get_modification_time(fz::to_native(resourceDir.GetPath() + xrc));
-		wxString const ticks = std::to_wstring(date.get_time_t());
+		std::wstring const ticks = std::to_wstring(date.get_time_t());
 
 		auto resourceElement = FindElementWithAttribute(resources, "xrc", "file", xrc.mb_str());
 		if (!resourceElement) {
 			resourceElement = resources.append_child("xrc");
-			SetTextAttribute(resourceElement, "file", xrc);
+			SetTextAttribute(resourceElement, "file", xrc.ToStdWstring());
 			SetTextAttribute(resourceElement, "date", ticks);
 			cacheValid = false;
 		}
 		else {
-			wxString xrcNodeDate = GetTextAttribute(resourceElement, "date");
+			std::wstring xrcNodeDate = GetTextAttribute(resourceElement, "date");
 			if (xrcNodeDate.empty() || xrcNodeDate != ticks) {
 				cacheValid = false;
 				SetTextAttribute(resourceElement, "date", ticks);
@@ -1000,14 +1003,15 @@ bool CWrapEngine::LoadCache()
 	}
 
 	// Get current language
-	wxString language = wxGetApp().GetCurrentLanguageCode();
-	if (language.empty())
-		language = _T("default");
+	std::wstring language = wxGetApp().GetCurrentLanguageCode().ToStdWstring();
+	if (language.empty()) {
+		language = L"default";
+	}
 
-	auto languageElement = FindElementWithAttribute(layoutElement, "Language", "id", language.mb_str());
+	auto languageElement = FindElementWithAttribute(layoutElement, "Language", "id", fz::to_utf8(language).c_str());
 	if (!languageElement) {
 		languageElement = layoutElement.append_child("Language");
-		SetTextAttribute(languageElement, "id", language.mb_str());
+		SetTextAttribute(languageElement, "id", language);
 	}
 
 	// Get static text font and measure sample text
@@ -1016,7 +1020,7 @@ bool CWrapEngine::LoadCache()
 	wxStaticText* pText = new wxStaticText(pFrame, -1, _T("foo"));
 
 	wxFont font = pText->GetFont();
-	wxString fontDesc = font.GetNativeFontInfoDesc();
+	std::wstring fontDesc = font.GetNativeFontInfoDesc().ToStdWstring();
 
 	auto fontElement = languageElement.child("Font");
 	if (!fontElement)
@@ -1046,9 +1050,9 @@ bool CWrapEngine::LoadCache()
 
 	if (!name.empty()) {
 		fz::datetime const date = fz::local_filesys::get_modification_time(fz::to_native(localesDir.GetPath() + name + _T("/filezilla.mo")));
-		wxString const ticks = std::to_wstring(date.get_time_t());
+		std::wstring const ticks = std::to_wstring(date.get_time_t());
 
-		wxString languageNodeDate = GetTextAttribute(languageElement, "date");
+		std::wstring languageNodeDate = GetTextAttribute(languageElement, "date");
 		if (languageNodeDate.empty() || languageNodeDate != ticks) {
 			SetTextAttribute(languageElement, "date", ticks);
 			cacheValid = false;

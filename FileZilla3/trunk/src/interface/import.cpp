@@ -130,25 +130,25 @@ bool CImportDialog::ImportLegacySites(pugi::xml_node sites)
 	return file.Save(true);
 }
 
-wxString CImportDialog::DecodeLegacyPassword(wxString pass)
+std::wstring CImportDialog::DecodeLegacyPassword(std::wstring const& pass)
 {
-	if( pass.size() % 3 ) {
-		return wxString();
+	if (pass.size() % 3) {
+		return std::wstring();
 	}
 
-	wxString output;
+	std::wstring output;
 	const char* key = "FILEZILLA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-	int pos = (pass.Length() / 3) % strlen(key);
-	for (unsigned int i = 0; i < pass.Length(); i += 3) {
+	int pos = (pass.size() / 3) % strlen(key);
+	for (size_t i = 0; i < pass.size(); i += 3) {
 		if (pass[i] < '0' || pass[i] > '9' ||
 			pass[i + 1] < '0' || pass[i + 1] > '9' ||
 			pass[i + 2] < '0' || pass[i + 2] > '9')
-			return wxString();
+			return std::wstring();
 		int number = (pass[i] - '0') * 100 +
 						(pass[i + 1] - '0') * 10 +
 						(pass[i + 2] - '0');
-		wxChar c = number ^ key[(i / 3 + pos) % strlen(key)];
+		wchar_t c = number ^ key[(i / 3 + pos) % strlen(key)];
 		output += c;
 	}
 
@@ -158,36 +158,41 @@ wxString CImportDialog::DecodeLegacyPassword(wxString pass)
 bool CImportDialog::ImportLegacySites(pugi::xml_node sitesToImport, pugi::xml_node existingSites)
 {
 	for (auto importFolder = sitesToImport.child("Folder"); importFolder; importFolder = importFolder.next_sibling("Folder")) {
-		wxString name = GetTextAttribute(importFolder, "Name");
-		if (name.empty())
+		std::wstring name = GetTextAttribute(importFolder, "Name");
+		if (name.empty()) {
 			continue;
+		}
 
-		wxString newName = name;
+		std::wstring newName = name;
 		int i = 2;
 		pugi::xml_node folder;
 		while (!(folder = GetFolderWithName(existingSites, newName))) {
-			newName = wxString::Format(_T("%s %d"), name, i++);
+			newName = fz::sprintf(L"%s %d", name, i++);
 		}
 
 		ImportLegacySites(importFolder, folder);
 	}
 
 	for (auto importSite = sitesToImport.child("Site"); importSite; importSite = importSite.next_sibling("Site")) {
-		wxString name = GetTextAttribute(importSite, "Name");
-		if (name.empty())
+		std::wstring name = GetTextAttribute(importSite, "Name");
+		if (name.empty()) {
 			continue;
+		}
 
-		wxString host = GetTextAttribute(importSite, "Host");
-		if (host.empty())
+		std::wstring host = GetTextAttribute(importSite, "Host");
+		if (host.empty()) {
 			continue;
+		}
 
 		int port = GetAttributeInt(importSite, "Port");
-		if (port < 1 || port > 65535)
+		if (port < 1 || port > 65535) {
 			continue;
+		}
 
 		int serverType = GetAttributeInt(importSite, "ServerType");
-		if (serverType < 0 || serverType > 4)
+		if (serverType < 0 || serverType > 4) {
 			continue;
+		}
 
 		int protocol;
 		switch (serverType)
@@ -211,24 +216,28 @@ bool CImportDialog::ImportLegacySites(pugi::xml_node sitesToImport, pugi::xml_no
 		bool dontSavePass = GetAttributeInt(importSite, "DontSavePass") == 1;
 
 		int logontype = GetAttributeInt(importSite, "Logontype");
-		if (logontype < 0 || logontype > 2)
+		if (logontype < 0 || logontype > 2) {
 			continue;
-		if (logontype == 2)
+		}
+		if (logontype == 2) {
 			logontype = 4;
-		if (logontype == 1 && dontSavePass)
+		}
+		if (logontype == 1 && dontSavePass) {
 			logontype = 2;
+		}
 
-		wxString user = GetTextAttribute(importSite, "User");
-		wxString pass = DecodeLegacyPassword(GetTextAttribute(importSite, "Pass"));
-		wxString account = GetTextAttribute(importSite, "Account");
-		if (logontype && user.empty())
+		std::wstring user = GetTextAttribute(importSite, "User");
+		std::wstring pass = DecodeLegacyPassword(GetTextAttribute(importSite, "Pass"));
+		std::wstring account = GetTextAttribute(importSite, "Account");
+		if (logontype && user.empty()) {
 			continue;
+		}
 
 		// Find free name
-		wxString newName = name;
+		std::wstring newName = name;
 		int i = 2;
 		while (HasEntryWithName(existingSites, newName)) {
-			newName = wxString::Format(_T("%s %d"), name, i++);
+			newName = fz::sprintf(L"%s %d", name, i++);
 		}
 
 		auto server = existingSites.append_child("Server");
@@ -246,46 +255,41 @@ bool CImportDialog::ImportLegacySites(pugi::xml_node sitesToImport, pugi::xml_no
 	return true;
 }
 
-bool CImportDialog::HasEntryWithName(pugi::xml_node element, const wxString& name)
+bool CImportDialog::HasEntryWithName(pugi::xml_node element, std::wstring const& name)
 {
 	pugi::xml_node child;
 	for (child = element.child("Server"); child; child = child.next_sibling("Server")) {
-		wxString childName = GetTextElement(child);
-		childName.Trim(true);
-		childName.Trim(false);
-		if (!name.CmpNoCase(childName))
+		std::wstring childName = GetTextElement_Trimmed(child);
+		if (!fz::stricmp(name, childName)) {
 			return true;
+		}
 	}
 	for (child = element.child("Folder"); child; child = child.next_sibling("Folder")) {
-		wxString childName = GetTextElement(child);
-		childName.Trim(true);
-		childName.Trim(false);
-		if (!name.CmpNoCase(childName))
+		std::wstring childName = GetTextElement_Trimmed(child);
+		if (!fz::stricmp(name, childName)) {
 			return true;
+		}
 	}
 
 	return false;
 }
 
-pugi::xml_node CImportDialog::GetFolderWithName(pugi::xml_node element, const wxString& name)
+pugi::xml_node CImportDialog::GetFolderWithName(pugi::xml_node element, std::wstring const& name)
 {
 	pugi::xml_node child;
 	for (child = element.child("Server"); child; child = child.next_sibling("Server")) {
-		wxString childName = GetTextElement(child);
-		childName.Trim(true);
-		childName.Trim(false);
-		if (!name.CmpNoCase(childName)) {
+		std::wstring childName = GetTextElement_Trimmed(child);
+		if (!fz::stricmp(name, childName)) {
 			// We do not allow servers and directories to share the same name
 			return pugi::xml_node();
 		}
 	}
 
 	for (child = element.child("Folder"); child; child = child.next_sibling("Folder")) {
-		wxString childName = GetTextElement(child);
-		childName.Trim(true);
-		childName.Trim(false);
-		if (!name.CmpNoCase(childName))
+		std::wstring childName = GetTextElement_Trimmed(child);
+		if (!fz::stricmp(name, childName)) {
 			return child;
+		}
 	}
 
 	child = element.append_child("Folder");
@@ -308,11 +312,13 @@ bool CImportDialog::ImportSites(pugi::xml_node sites)
 	}
 
 	auto currentSites = element.child("Servers");
-	if (!currentSites)
+	if (!currentSites) {
 		currentSites = element.append_child("Servers");
+	}
 
-	if (!ImportSites(sites, currentSites))
+	if (!ImportSites(sites, currentSites)) {
 		return false;
+	}
 
 	return file.Save(true);
 }
@@ -320,34 +326,38 @@ bool CImportDialog::ImportSites(pugi::xml_node sites)
 bool CImportDialog::ImportSites(pugi::xml_node sitesToImport, pugi::xml_node existingSites)
 {
 	for (auto importFolder = sitesToImport.child("Folder"); importFolder; importFolder = importFolder.next_sibling("Folder")) {
-		wxString name = GetTextElement_Trimmed(importFolder, "Name");
-		if (name.empty())
+		std::wstring name = GetTextElement_Trimmed(importFolder, "Name");
+		if (name.empty()) {
 			name = GetTextElement_Trimmed(importFolder);
-		if (name.empty())
+		}
+		if (name.empty()) {
 			continue;
+		}
 
-		wxString newName = name;
+		std::wstring newName = name;
 		int i = 2;
 		pugi::xml_node folder;
 		while (!(folder = GetFolderWithName(existingSites, newName))) {
-			newName = wxString::Format(_T("%s %d"), name, i++);
+			newName = fz::sprintf(L"%s %d", name, i++);
 		}
 
 		ImportSites(importFolder, folder);
 	}
 
 	for (auto importSite = sitesToImport.child("Server"); importSite; importSite = importSite.next_sibling("Server")) {
-		wxString name = GetTextElement_Trimmed(importSite, "Name");
-		if (name.empty())
+		std::wstring name = GetTextElement_Trimmed(importSite, "Name");
+		if (name.empty()) {
 			name = GetTextElement_Trimmed(importSite);
-		if (name.empty())
+		}
+		if (name.empty()) {
 			continue;
+		}
 
 		// Find free name
-		wxString newName = name;
+		std::wstring newName = name;
 		int i = 2;
 		while (HasEntryWithName(existingSites, newName)) {
-			newName = wxString::Format(_T("%s %d"), name, i++);
+			newName = fz::sprintf(L"%s %d", name, i++);
 		}
 
 		auto server = existingSites.append_copy(importSite);

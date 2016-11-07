@@ -116,15 +116,15 @@ void CXmlFile::UpdateMetadata()
 
 	SetTextAttribute(m_element, "version", CBuildInfo::GetVersion());
 
-	wxString const platform =
-#ifdef __WXMSW__
-		_T("windows");
-#elif defined(__WXMAX__)
-		_T("mac");
+	std::string const platform =
+#ifdef FZ_WINDOWS
+		"windows";
+#elif defined(FZ_MAC)
+		"mac";
 #else
-		_T("*nix");
+		"*nix";
 #endif
-	SetTextAttribute(m_element, "platform", platform);
+	SetTextAttributeUtf8(m_element, "platform", platform);
 }
 
 bool CXmlFile::Save(bool printError)
@@ -160,14 +160,14 @@ pugi::xml_node CXmlFile::CreateEmpty()
 	return m_element;
 }
 
-wxString ConvLocal(const char *value)
+pugi::xml_node AddTextElement(pugi::xml_node node, const char* name, std::string const& value, bool overwrite)
 {
-	return wxString(wxConvUTF8.cMB2WC(value), *wxConvCurrent);
+	return AddTextElementUtf8(node, name, fz::to_utf8(value), overwrite);
 }
 
-pugi::xml_node AddTextElement(pugi::xml_node node, const char* name, const wxString& value, bool overwrite)
+pugi::xml_node AddTextElement(pugi::xml_node node, const char* name, std::wstring const& value, bool overwrite)
 {
-	return AddTextElementRaw(node, name, fz::to_utf8(value).c_str(), overwrite);
+	return AddTextElementUtf8(node, name, fz::to_utf8(value), overwrite);
 }
 
 void AddTextElement(pugi::xml_node node, const char* name, int64_t value, bool overwrite)
@@ -179,50 +179,42 @@ void AddTextElement(pugi::xml_node node, const char* name, int64_t value, bool o
 	child.text().set(static_cast<long long>(value));
 }
 
-pugi::xml_node AddTextElementRaw(pugi::xml_node node, const char* name, const char* value, bool overwrite)
+pugi::xml_node AddTextElementUtf8(pugi::xml_node node, const char* name, std::string const& value, bool overwrite)
 {
-	wxASSERT(node);
-	wxASSERT(value);
+	assert(node);
 
 	if (overwrite) {
 		node.remove_child(name);
 	}
 
 	auto element = node.append_child(name);
-	if (*value)
-		element.text().set(value);
+	if (!value.empty()) {
+		element.text().set(value.c_str());
+	}
 
 	return element;
 }
 
-void AddTextElement(pugi::xml_node node, const wxString& value)
+void AddTextElement(pugi::xml_node node, std::string const& value)
 {
-	wxASSERT(node);
-	wxASSERT(value);
+	AddTextElementUtf8(node, fz::to_utf8(value));
+}
 
-	wxScopedCharBuffer utf8 = value.utf8_str();
-	if (!utf8)
-		return;
-
-	AddTextElementRaw(node, utf8);
+void AddTextElement(pugi::xml_node node, std::wstring const& value)
+{
+	AddTextElementUtf8(node, fz::to_utf8(value));
 }
 
 void AddTextElement(pugi::xml_node node, int64_t value)
 {
-	wxASSERT(node);
+	assert(node);
 	node.text().set(static_cast<long long>(value));
 }
 
-void AddTextElementRaw(pugi::xml_node node, const char* value)
+void AddTextElementUtf8(pugi::xml_node node, std::string const& value)
 {
-	wxASSERT(node);
-	wxASSERT(value);
-
-	if (*value)
-		node.text().set(value);
-	else {
-		node.text().set("");
-	}
+	assert(node);
+	node.text().set(value.c_str());
 }
 
 std::wstring GetTextElement_Trimmed(pugi::xml_node node, const char* name)
@@ -527,7 +519,7 @@ void SetServer(pugi::xml_node node, const CServer& server)
 			else {
 				std::string pass = fz::to_utf8(server.GetPass());
 				
-				pugi::xml_node passElement = AddTextElementRaw(node, "Pass", fz::base64_encode(pass).c_str());
+				pugi::xml_node passElement = AddTextElementUtf8(node, "Pass", fz::base64_encode(pass));
 				if (passElement) {
 					SetTextAttribute(passElement, "encoding", _T("base64"));
 				}
@@ -547,13 +539,13 @@ void SetServer(pugi::xml_node node, const CServer& server)
 	switch (server.GetPasvMode())
 	{
 	case MODE_PASSIVE:
-		AddTextElementRaw(node, "PasvMode", "MODE_PASSIVE");
+		AddTextElementUtf8(node, "PasvMode", "MODE_PASSIVE");
 		break;
 	case MODE_ACTIVE:
-		AddTextElementRaw(node, "PasvMode", "MODE_ACTIVE");
+		AddTextElementUtf8(node, "PasvMode", "MODE_ACTIVE");
 		break;
 	default:
-		AddTextElementRaw(node, "PasvMode", "MODE_DEFAULT");
+		AddTextElementUtf8(node, "PasvMode", "MODE_DEFAULT");
 		break;
 	}
 	AddTextElement(node, "MaximumMultipleConnections", server.MaximumMultipleConnections());
@@ -561,13 +553,13 @@ void SetServer(pugi::xml_node node, const CServer& server)
 	switch (server.GetEncodingType())
 	{
 	case ENCODING_AUTO:
-		AddTextElementRaw(node, "EncodingType", "Auto");
+		AddTextElementUtf8(node, "EncodingType", "Auto");
 		break;
 	case ENCODING_UTF8:
-		AddTextElementRaw(node, "EncodingType", "UTF-8");
+		AddTextElementUtf8(node, "EncodingType", "UTF-8");
 		break;
 	case ENCODING_CUSTOM:
-		AddTextElementRaw(node, "EncodingType", "Custom");
+		AddTextElementUtf8(node, "EncodingType", "Custom");
 		AddTextElement(node, "CustomEncoding", server.GetCustomEncoding());
 		break;
 	}
@@ -582,31 +574,36 @@ void SetServer(pugi::xml_node node, const CServer& server)
 		}
 	}
 
-	AddTextElementRaw(node, "BypassProxy", server.GetBypassProxy() ? "1" : "0");
+	AddTextElementUtf8(node, "BypassProxy", server.GetBypassProxy() ? "1" : "0");
 	std::wstring const& name = server.GetName();
 	if (!name.empty()) {
 		AddTextElement(node, "Name", name);
 	}
 }
 
-void SetTextAttribute(pugi::xml_node node, const char* name, const wxString& value)
+void SetTextAttribute(pugi::xml_node node, char const* name, std::string const& value)
 {
-	wxASSERT(node);
+	SetTextAttributeUtf8(node, name, fz::to_utf8(value));
+}
 
-	wxScopedCharBuffer utf8 = value.utf8_str();
-	if (!utf8)
-		return;
+void SetTextAttribute(pugi::xml_node node, char const* name, std::wstring const& value)
+{
+	SetTextAttributeUtf8(node, name, fz::to_utf8(value));
+}
 
+void SetTextAttributeUtf8(pugi::xml_node node, char const* name, std::string const& utf8)
+{
+	assert(node);
 	auto attribute = node.attribute(name);
 	if (!attribute) {
 		attribute = node.append_attribute(name);
 	}
-	attribute.set_value(utf8);
+	attribute.set_value(utf8.c_str());
 }
 
-std::wstring GetTextAttribute(pugi::xml_node node, const char* name)
+std::wstring GetTextAttribute(pugi::xml_node node, char const* name)
 {
-	wxASSERT(node);
+	assert(node);
 
 	const char* value = node.attribute(name).value();
 	return fz::to_wstring_from_utf8(value);
@@ -617,8 +614,9 @@ pugi::xml_node FindElementWithAttribute(pugi::xml_node node, const char* element
 	pugi::xml_node child = element ? node.child(element) : node.first_child();
 	while (child) {
 		const char* nodeVal = child.attribute(attribute).value();
-		if (nodeVal && !strcmp(value, nodeVal))
+		if (nodeVal && !strcmp(value, nodeVal)) {
 			return child;
+		}
 
 		child = element ? child.next_sibling(element) : child.next_sibling();
 	}
@@ -696,6 +694,6 @@ bool CXmlFile::IsFromFutureVersion() const
 	if (!m_element) {
 		return false;
 	}
-	wxString const version = GetTextAttribute(m_element, "version");
+	std::wstring const version = GetTextAttribute(m_element, "version");
 	return CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion().c_str()) < CBuildInfo::ConvertToVersionNumber(version.c_str());
 }

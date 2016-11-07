@@ -145,7 +145,7 @@ public:
 	{
 	}
 
-	wxString m_local_dir;
+	std::wstring m_local_dir;
 	CServerPath m_remote_dir;
 	bool m_sync{};
 	bool m_comparison{};
@@ -305,15 +305,17 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 		wxASSERT(data);
 
 		auto bookmark = element.append_child("Bookmark");
-		AddTextElement(bookmark, "Name", m_pTree->GetItemText(child));
+		AddTextElement(bookmark, "Name", m_pTree->GetItemText(child).ToStdWstring());
 		if (!data->m_local_dir.empty())
 			AddTextElement(bookmark, "LocalDir", data->m_local_dir);
 		if (!data->m_remote_dir.empty())
 			AddTextElement(bookmark, "RemoteDir", data->m_remote_dir.GetSafePath());
-		if (data->m_sync)
-			AddTextElementRaw(bookmark, "SyncBrowsing", "1");
-		if (data->m_comparison)
-			AddTextElementRaw(bookmark, "DirectoryComparison", "1");
+		if (data->m_sync) {
+			AddTextElementUtf8(bookmark, "SyncBrowsing", "1");
+		}
+		if (data->m_comparison) {
+			AddTextElementUtf8(bookmark, "DirectoryComparison", "1");
+		}
 	}
 
 	if (!file.Save(false)) {
@@ -781,10 +783,12 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 
 bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison)
 {
-	if (local_dir.empty() && remote_dir.empty())
+	if (local_dir.empty() && remote_dir.empty()) {
 		return false;
-	if ((local_dir.empty() || remote_dir.empty()) && sync)
+	}
+	if ((local_dir.empty() || remote_dir.empty()) && sync) {
 		return false;
+	}
 
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
@@ -807,23 +811,30 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 			wxMessageBoxEx(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
-		if (name < old_name && !insertBefore)
+		if (name < old_name && !insertBefore) {
 			insertBefore = bookmark;
+		}
 	}
 
-	if (insertBefore)
+	if (insertBefore) {
 		bookmark = element.insert_child_before("Bookmark", insertBefore);
-	else
+	}
+	else {
 		bookmark = element.append_child("Bookmark");
-	AddTextElement(bookmark, "Name", name);
-	if (!local_dir.empty())
-		AddTextElement(bookmark, "LocalDir", local_dir);
-	if (!remote_dir.empty())
+	}
+	AddTextElement(bookmark, "Name", name.ToStdWstring());
+	if (!local_dir.empty()) {
+		AddTextElement(bookmark, "LocalDir", local_dir.ToStdWstring());
+	}
+	if (!remote_dir.empty()) {
 		AddTextElement(bookmark, "RemoteDir", remote_dir.GetSafePath());
-	if (sync)
-		AddTextElementRaw(bookmark, "SyncBrowsing", "1");
-	if (comparison)
-		AddTextElementRaw(bookmark, "DirectoryComparison", "1");
+	}
+	if (sync) {
+		AddTextElementUtf8(bookmark, "SyncBrowsing", "1");
+	}
+	if (comparison) {
+		AddTextElementUtf8(bookmark, "DirectoryComparison", "1");
+	}
 
 	if (!file.Save(false)) {
 		wxString msg = wxString::Format(_("Could not write \"%s\", the bookmark could not be added: %s"), file.GetFileName(), file.GetError());

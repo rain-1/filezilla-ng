@@ -847,7 +847,7 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 		return false;
 	}
 
-	wxString const name = pTree->GetItemText(child);
+	std::wstring const name = pTree->GetItemText(child).ToStdWstring();
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(child));
 	if (!data) {
@@ -862,19 +862,19 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 		SetServer(node, data->m_site->m_server);
 
 		// Save comments
-		AddTextElement(node, "Comments", data->m_site->m_comments);
+		AddTextElement(node, "Comments", data->m_site->m_comments.ToStdWstring());
 
 		// Save colour
 		AddTextElement(node, "Colour", CSiteManager::GetColourIndex(data->m_site->m_colour));
 
 		// Save local dir
-		AddTextElement(node, "LocalDir", data->m_site->m_default_bookmark.m_localDir);
+		AddTextElement(node, "LocalDir", data->m_site->m_default_bookmark.m_localDir.ToStdWstring());
 
 		// Save remote dir
 		AddTextElement(node, "RemoteDir", data->m_site->m_default_bookmark.m_remoteDir.GetSafePath());
 
-		AddTextElementRaw(node, "SyncBrowsing", data->m_site->m_default_bookmark.m_sync ? "1" : "0");
-		AddTextElementRaw(node, "DirectoryComparison", data->m_site->m_default_bookmark.m_comparison ? "1" : "0");
+		AddTextElementUtf8(node, "SyncBrowsing", data->m_site->m_default_bookmark.m_sync ? "1" : "0");
+		AddTextElementUtf8(node, "DirectoryComparison", data->m_site->m_default_bookmark.m_comparison ? "1" : "0");
 		AddTextElement(node, name);
 
 		data->m_site->m_bookmarks.clear();
@@ -900,13 +900,13 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 		AddTextElement(node, "Name", name);
 
 		// Save local dir
-		AddTextElement(node, "LocalDir", data->m_bookmark->m_localDir);
+		AddTextElement(node, "LocalDir", data->m_bookmark->m_localDir.ToStdWstring());
 
 		// Save remote dir
 		AddTextElement(node, "RemoteDir", data->m_bookmark->m_remoteDir.GetSafePath());
 
-		AddTextElementRaw(node, "SyncBrowsing", data->m_bookmark->m_sync ? "1" : "0");
-		AddTextElementRaw(node, "DirectoryComparison", data->m_bookmark->m_comparison ? "1" : "0");
+		AddTextElementUtf8(node, "SyncBrowsing", data->m_bookmark->m_sync ? "1" : "0");
+		AddTextElementUtf8(node, "DirectoryComparison", data->m_bookmark->m_comparison ? "1" : "0");
 	}
 
 	return true;
@@ -915,12 +915,14 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 void CSiteManagerDialog::OnNewFolder(wxCommandEvent&)
 {
 	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return;
+	}
 
 	while (pTree->GetItemData(item))
 		item = pTree->GetItemParent(item);

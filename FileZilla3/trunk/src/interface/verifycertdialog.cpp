@@ -16,14 +16,6 @@ CVerifyCertDialog::CVerifyCertDialog()
 {
 }
 
-CVerifyCertDialog::~CVerifyCertDialog()
-{
-	for (auto iter = m_trustedCerts.begin(); iter != m_trustedCerts.end(); ++iter)
-		delete [] iter->data;
-	for (auto iter = m_sessionTrustedCerts.begin(); iter != m_sessionTrustedCerts.end(); ++iter)
-		delete [] iter->data;
-}
-
 bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 {
 	bool warning = false;
@@ -33,8 +25,9 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 			xrc_call(*pDlg, "ID_ACTIVATION_TIME", &wxWindow::SetForegroundColour, wxColour(255, 0, 0));
 			warning = true;
 		}
-		else
+		else {
 			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), CTimeFormat::Format(cert.GetActivationTime()));
+		}
 	}
 	else {
 		warning = true;
@@ -47,18 +40,21 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 			xrc_call(*pDlg, "ID_EXPIRATION_TIME", &wxWindow::SetForegroundColour, wxColour(255, 0, 0));
 			warning = true;
 		}
-		else
+		else {
 			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), CTimeFormat::Format(cert.GetExpirationTime()));
+		}
 	}
 	else {
 		warning = true;
 		pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), _("Invalid date"));
 	}
 
-	if (!cert.GetSerial().empty())
+	if (!cert.GetSerial().empty()) {
 		pDlg->SetChildLabel(XRCID("ID_SERIAL"), cert.GetSerial());
-	else
+	}
+	else {
 		pDlg->SetChildLabel(XRCID("ID_SERIAL"), _("None"));
+	}
 
 	pDlg->SetChildLabel(XRCID("ID_PKALGO"), wxString::Format(_("%s with %d bits"), cert.GetPkAlgoName(), cert.GetPkAlgoBits()));
 	pDlg->SetChildLabel(XRCID("ID_SIGNALGO"), cert.GetSignatureAlgorithm());
@@ -143,8 +139,9 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 	else {
 		m_pDlg->WrapText(m_pDlg, XRCID("ID_DESC"), 400);
 
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 			XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->Hide();
+		}
 	}
 
 	m_certificates = notification.GetCertificates();
@@ -209,21 +206,21 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 			notification.m_trusted = true;
 
 			if (!notification.GetAlgorithmWarnings()) {
-				if (!warning && XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->GetValue())
+				if (!warning && XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->GetValue()) {
 					SetPermanentlyTrusted(notification);
+				}
 				else {
 					t_certData cert;
 					cert.host = notification.GetHost();
 					cert.port = notification.GetPort();
-					const unsigned char* data = m_certificates[0].GetRawData(cert.len);
-					cert.data = new unsigned char[cert.len];
-					memcpy(cert.data, data, cert.len);
-					m_sessionTrustedCerts.push_back(cert);
+					cert.data = m_certificates[0].GetRawData();
+					m_sessionTrustedCerts.emplace_back(std::move(cert));
 				}
 			}
 		}
-		else
+		else {
 			notification.m_trusted = false;
+		}
 	}
 
 	delete m_pDlg;
@@ -237,8 +234,9 @@ void CVerifyCertDialog::ParseDN(wxWindow* parent, const wxString& dn, wxSizer* p
 	wxStringTokenizer tokens(dn, _T(","));
 
 	std::list<wxString> tokenlist;
-	while (tokens.HasMoreTokens())
+	while (tokens.HasMoreTokens()) {
 		tokenlist.push_back(tokens.GetNextToken());
+	}
 
 	ParseDN_by_prefix(parent, tokenlist, _T("CN"), _("Common name:"), pSizer);
 	ParseDN_by_prefix(parent, tokenlist, _T("O"), _("Organization:"), pSizer);
@@ -257,11 +255,11 @@ void CVerifyCertDialog::ParseDN(wxWindow* parent, const wxString& dn, wxSizer* p
 	ParseDN_by_prefix(parent, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.2"), _("Jurisdiction state or province:"), pSizer, true);
 	ParseDN_by_prefix(parent, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.1"), _("Jurisdiction locality:"), pSizer, true);
 
-	if (!tokenlist.empty())
-	{
+	if (!tokenlist.empty()) {
 		wxString value = tokenlist.front();
-		for (std::list<wxString>::const_iterator iter = ++tokenlist.begin(); iter != tokenlist.end(); ++iter)
+		for (auto iter = ++tokenlist.cbegin(); iter != tokenlist.cend(); ++iter) {
 			value += _T(",") + *iter;
+		}
 
 		pSizer->Add(new wxStaticText(parent, wxID_ANY, _("Other:")));
 		pSizer->Add(new wxStaticText(parent, wxID_ANY, value));
@@ -278,29 +276,25 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxWindow* parent, std::list<wxString>&
 	bool append = false;
 
 	auto iter = tokens.begin();
-	while (iter != tokens.end())
-	{
-		if (!append)
-		{
-			if (iter->Left(len) != prefix)
-			{
+	while (iter != tokens.end()) {
+		if (!append) {
+			if (iter->Left(len) != prefix) {
 				++iter;
 				continue;
 			}
 
-			if (!value.empty())
+			if (!value.empty()) {
 				value += _T("\n");
+			}
 		}
-		else
-		{
+		else {
 			append = false;
 			value += _T(",");
 		}
 
 		value += iter->Mid(len);
 
-		if (iter->Last() == '\\')
-		{
+		if (iter->Last() == '\\') {
 			value.RemoveLast();
 			append = true;
 			len = 0;
@@ -310,11 +304,11 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxWindow* parent, std::list<wxString>&
 		tokens.erase(remove);
 	}
 
-	if (decode)
+	if (decode) {
 		value = DecodeValue(value);
+	}
 
-	if (!value.empty())
-	{
+	if (!value.empty()) {
 		pSizer->Add(new wxStaticText(parent, wxID_ANY, name));
 		pSizer->Add(new wxStaticText(parent, wxID_ANY, value));
 	}
@@ -329,109 +323,42 @@ bool CVerifyCertDialog::IsTrusted(CCertificateNotification const& notification)
 
 	LoadTrustedCerts();
 
-	unsigned int len;
-	CCertificate cert =  notification.GetCertificates()[0];
-	const unsigned char* data = cert.GetRawData(len);
+	CCertificate cert = notification.GetCertificates()[0];
 
-	return IsTrusted(notification.GetHost(), notification.GetPort(), data, len, false);
+	return IsTrusted(notification.GetHost(), notification.GetPort(), cert.GetRawData(), false);
 }
 
-bool CVerifyCertDialog::DoIsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, std::list<CVerifyCertDialog::t_certData> const& trustedCerts)
+bool CVerifyCertDialog::DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<CVerifyCertDialog::t_certData> const& trustedCerts)
 {
-	if( !data || !len ) {
+	if (!data.size()) {
 		return false;
 	}
 
-	for ( auto const& cert : trustedCerts ) {
-		if (host != cert.host)
+	for (auto const& cert : trustedCerts) {
+		if (host != cert.host) {
 			continue;
+		}
 
-		if (port != cert.port)
+		if (port != cert.port) {
 			continue;
+		}
 
-		if (cert.len != len)
-			continue;
-
-		if (!memcmp(cert.data, data, len))
+		if (cert.data == data) {
 			return true;
+		}
 	}
 
 	return false;
 }
 
-bool CVerifyCertDialog::IsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, bool permanentOnly)
+bool CVerifyCertDialog::IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly)
 {
-	bool trusted = DoIsTrusted(host, port, data, len, m_trustedCerts);
-	if( !trusted && !permanentOnly ) {
-		trusted = DoIsTrusted(host, port, data, len, m_sessionTrustedCerts);
+	bool trusted = DoIsTrusted(host, port, data, m_trustedCerts);
+	if (!trusted && !permanentOnly) {
+		trusted = DoIsTrusted(host, port, data, m_sessionTrustedCerts);
 	}
 
 	return trusted;
-}
-
-wxString CVerifyCertDialog::ConvertHexToString(const unsigned char* data, unsigned int len)
-{
-	wxString str;
-	for (unsigned int i = 0; i < len; i++)
-	{
-		const unsigned char& c = data[i];
-
-		const unsigned char low = c & 0x0F;
-		const unsigned char high = (c & 0xF0) >> 4;
-
-		if (high < 10)
-			str += '0' + high;
-		else
-			str += 'A' + high - 10;
-
-		if (low < 10)
-			str += '0' + low;
-		else
-			str += 'A' + low - 10;
-	}
-
-	return str;
-}
-
-unsigned char* CVerifyCertDialog::ConvertStringToHex(const wxString& str, unsigned int &len)
-{
-	if (str.size() % 2) {
-		return 0;
-	}
-
-	len = str.size() / 2;
-	unsigned char* data = new unsigned char[len];
-
-	unsigned int j = 0;
-	for (unsigned int i = 0; i < str.size(); ++i, ++j)
-	{
-		wxChar high = str[i++];
-		wxChar low = str[i];
-
-		if (high >= '0' && high <= '9')
-			high -= '0';
-		else if (high >= 'A' && high <= 'F')
-			high -= 'A' - 10;
-		else
-		{
-			delete [] data;
-			return 0;
-		}
-
-		if (low >= '0' && low <= '9')
-			low -= '0';
-		else if (low >= 'A' && low <= 'F')
-			low -= 'A' - 10;
-		else
-		{
-			delete [] data;
-			return 0;
-		}
-
-		data[j] = ((unsigned char)high << 4) + (unsigned char)low;
-	}
-
-	return data;
 }
 
 void CVerifyCertDialog::LoadTrustedCerts()
@@ -448,42 +375,49 @@ void CVerifyCertDialog::LoadTrustedCerts()
 
 	m_trustedCerts.clear();
 
-	if (!(element = element.child("TrustedCerts")))
+	if (!(element = element.child("TrustedCerts"))) {
 		return;
+	}
 
 	bool modified = false;
 
 	auto cert = element.child("Certificate");
 	while (cert) {
-		wxString value = GetTextElement(cert, "Data");
+		std::wstring value = GetTextElement(cert, "Data");
 
 		pugi::xml_node remove;
 
 		t_certData data;
-		if (value.empty() || !(data.data = ConvertStringToHex(value, data.len)))
+		data.data = fz::hex_decode(value);
+		if (data.data.empty()) {
 			remove = cert;
+		}
 
 		data.host = GetTextElement(cert, "Host");
 		data.port = GetTextElementInt(cert, "Port");
-		if (data.host.empty() || data.port < 1 || data.port > 65535)
+		if (data.host.empty() || data.port < 1 || data.port > 65535) {
 			remove = cert;
+		}
 
 		fz::datetime const now = fz::datetime::now();
 		int64_t activationTime = GetTextElementInt(cert, "ActivationTime", 0);
-		if (activationTime == 0 || activationTime > now.get_time_t())
+		if (activationTime == 0 || activationTime > now.get_time_t()) {
 			remove = cert;
+		}
 
 		int64_t expirationTime = GetTextElementInt(cert, "ExpirationTime", 0);
-		if (expirationTime == 0 || expirationTime < now.get_time_t())
+		if (expirationTime == 0 || expirationTime < now.get_time_t()) {
 			remove = cert;
+		}
 
-		if (IsTrusted(data.host, data.port, data.data, data.len, true)) // Weed out duplicates
+		// Weed out duplicates
+		if (IsTrusted(data.host, data.port, data.data, true)) {
 			remove = cert;
+		}
 
-		if (!remove)
-			m_trustedCerts.push_back(data);
-		else
-			delete [] data.data;
+		if (!remove) {
+			m_trustedCerts.emplace_back(std::move(data));
+		}
 
 		cert = cert.next_sibling("Certificate");
 
@@ -493,52 +427,46 @@ void CVerifyCertDialog::LoadTrustedCerts()
 		}
 	}
 
-	if (modified)
+	if (modified) {
 		m_xmlFile.Save(false);
+	}
 }
 
 void CVerifyCertDialog::SetPermanentlyTrusted(CCertificateNotification const& notification)
 {
 	const CCertificate certificate = notification.GetCertificates()[0];
-	unsigned int len;
-	const unsigned char* const data = certificate.GetRawData(len);
-
-	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
-	LoadTrustedCerts();
-
-	if (IsTrusted(notification.GetHost(), notification.GetPort(), data, len, true))	{
-		return;
-	}
 
 	t_certData cert;
 	cert.host = notification.GetHost();
 	cert.port = notification.GetPort();
-	cert.len = len;
-	cert.data = new unsigned char[len];
-	memcpy(cert.data, data, len);
-	m_trustedCerts.push_back(cert);
+	cert.data = certificate.GetRawData();
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
+	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
+	LoadTrustedCerts();
+
+	if (IsTrusted(cert.host, cert.port, cert.data, true))	{
 		return;
 	}
 
-	auto element = m_xmlFile.GetElement();
-	if (!element) {
-		return;
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 2) {
+		auto element = m_xmlFile.GetElement();
+		if (element) {
+			auto certs = element.child("TrustedCerts");
+			if (!certs) {
+				certs = element.append_child("TrustedCerts");
+			}
+
+			auto xCert = certs.append_child("Certificate");
+			AddTextElementUtf8(xCert, "Data", fz::hex_encode<std::string>(cert.data));
+			AddTextElement(xCert, "ActivationTime", static_cast<int64_t>(certificate.GetActivationTime().get_time_t()));
+			AddTextElement(xCert, "ExpirationTime", static_cast<int64_t>(certificate.GetExpirationTime().get_time_t()));
+			AddTextElement(xCert, "Host", cert.host);
+			AddTextElement(xCert, "Port", cert.port);
+
+			m_xmlFile.Save(true);
+		}
 	}
-
-	auto certs = element.child("TrustedCerts");
-	if (!certs)
-		certs = element.append_child("TrustedCerts");
-
-	auto xCert = certs.append_child("Certificate");
-	AddTextElement(xCert, "Data", ConvertHexToString(data, len));
-	AddTextElement(xCert, "ActivationTime", static_cast<int64_t>(certificate.GetActivationTime().get_time_t()));
-	AddTextElement(xCert, "ExpirationTime", static_cast<int64_t>(certificate.GetExpirationTime().get_time_t()));
-	AddTextElement(xCert, "Host", notification.GetHost());
-	AddTextElement(xCert, "Port", notification.GetPort());
-
-	m_xmlFile.Save(true);
+	m_trustedCerts.emplace_back(std::move(cert));
 }
 
 wxString CVerifyCertDialog::DecodeValue(const wxString& value)
@@ -547,39 +475,46 @@ wxString CVerifyCertDialog::DecodeValue(const wxString& value)
 	// #xxxx466F6F626172 -> Foobar
 	// First two encoded bytes are ignored, some weird type information I don't care about
 	// Only accepts ASCII for now.
-	if (value.empty() || value[0] != '#')
+	if (value.empty() || value[0] != '#') {
 		return value;
+	}
 
 	unsigned int len = value.Len();
 
 	wxString out;
 
-	for (unsigned int i = 5; i + 1 < len; i += 2)
-	{
+	for (unsigned int i = 5; i + 1 < len; i += 2) {
 		wxChar c = value[i];
 		wxChar d = value[i + 1];
-		if (c >= '0' && c <= '9')
+		if (c >= '0' && c <= '9') {
 			c -= '0';
-		else if (c >= 'a' && c <= 'z')
+		}
+		else if (c >= 'a' && c <= 'z') {
 			c -= 'a' - 10;
-		else if (c >= 'A' && c <= 'Z')
+		}
+		else if (c >= 'A' && c <= 'Z') {
 			c -= 'A' - 10;
-		else
+		}
+		else {
 			continue;
-			//return value;
-		if (d >= '0' && d <= '9')
+		}
+		if (d >= '0' && d <= '9') {
 			d -= '0';
-		else if (d >= 'a' && d <= 'z')
+		}
+		else if (d >= 'a' && d <= 'z') {
 			d -= 'a' - 10;
-		else if (d >= 'A' && d <= 'Z')
+		}
+		else if (d >= 'A' && d <= 'Z') {
 			d -= 'A' - 10;
-		else
+		}
+		else {
 			continue;
-			//return value;
+		}
 
 		c = c * 16 + d;
-		if (c > 127 || c < 32)
+		if (c > 127 || c < 32) {
 			continue;
+		}
 		out += c;
 	}
 
@@ -589,8 +524,9 @@ wxString CVerifyCertDialog::DecodeValue(const wxString& value)
 void CVerifyCertDialog::OnCertificateChoice(wxCommandEvent& event)
 {
 	int sel = event.GetSelection();
-	if (sel < 0 || sel > (int)m_certificates.size())
+	if (sel < 0 || static_cast<unsigned int>(sel) > m_certificates.size()) {
 		return;
+	}
 	DisplayCert(m_pDlg, m_certificates[sel]);
 
 	m_pDlg->Layout();

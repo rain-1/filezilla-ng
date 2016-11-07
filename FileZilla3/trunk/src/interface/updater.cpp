@@ -348,14 +348,12 @@ void CUpdater::ProcessNotification(std::unique_ptr<CNotification> && notificatio
 				auto & certNotification = static_cast<CCertificateNotification &>(*pData.get());
 				if (m_use_internal_rootcert) {
 					auto certs = certNotification.GetCertificates();
-					if( certs.size() > 1 ) {
-						auto ca = certs.back();
-
-						unsigned int ca_data_length{};
-						unsigned char const* ca_data = ca.GetRawData(ca_data_length);
+					if (certs.size() > 1) {
+						auto const& ca = certs.back();
+						std::vector<uint8_t> ca_data = ca.GetRawData();
 
 						std::string updater_root = fz::base64_decode(s_update_cert);
-						if (ca_data_length == updater_root.size() && !memcmp(ca_data, updater_root.c_str(), ca_data_length) ) {
+						if (ca_data.size() == updater_root.size() && !memcmp(&ca_data[0], updater_root.c_str(), ca_data.size()) ) {
 							certNotification.m_trusted = true;
 						}
 					}

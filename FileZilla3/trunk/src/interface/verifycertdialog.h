@@ -8,21 +8,19 @@ class CVerifyCertDialog final : protected wxEvtHandler
 {
 public:
 	CVerifyCertDialog();
-	virtual ~CVerifyCertDialog();
 
 	bool IsTrusted(CCertificateNotification const& notification);
 	void ShowVerificationDialog(CCertificateNotification& notification, bool displayOnly = false);
 
 private:
 	struct t_certData {
-		wxString host;
-		int port{};
-		unsigned char* data{};
-		unsigned int len{};
+		std::wstring host;
+		unsigned int port{};
+		std::vector<uint8_t> data;
 	};
 
-	bool IsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, bool permanentOnly);
-	bool DoIsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, std::list<t_certData> const& trustedCerts);
+	bool IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly);
+	bool DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<t_certData> const& trustedCerts);
 
 	bool DisplayAlgorithm(int controlId, wxString name, bool insecure);
 
@@ -32,9 +30,6 @@ private:
 	void ParseDN_by_prefix(wxWindow* parent, std::list<wxString>& tokens, wxString prefix, const wxString& name, wxSizer* pSizer, bool decode = false);
 
 	wxString DecodeValue(const wxString& value);
-
-	wxString ConvertHexToString(const unsigned char* data, unsigned int len);
-	unsigned char* ConvertStringToHex(const wxString& str, unsigned int &len);
 
 	void SetPermanentlyTrusted(CCertificateNotification const& notification);
 

@@ -72,26 +72,27 @@ protected:
 	wxString m_rootName{_T("FileZilla3")};
 };
 
-// Convert the given utf-8 string into wxString
-wxString ConvLocal(const char *value);
+void SetTextAttribute(pugi::xml_node node, char const* name, std::string const& value);
+void SetTextAttribute(pugi::xml_node node, char const* name, std::wstring const& value);
+void SetTextAttributeUtf8(pugi::xml_node node, char const* name, std::string const& utf8);
+std::wstring GetTextAttribute(pugi::xml_node node, char const* name);
 
-void SetTextAttribute(pugi::xml_node node, const char* name, const wxString& value);
-std::wstring GetTextAttribute(pugi::xml_node node, const char* name);
+int GetAttributeInt(pugi::xml_node node, char const* name);
+void SetAttributeInt(pugi::xml_node node, char const* name, int value);
 
-int GetAttributeInt(pugi::xml_node node, const char* name);
-void SetAttributeInt(pugi::xml_node node, const char* name, int value);
-
-pugi::xml_node FindElementWithAttribute(pugi::xml_node node, const char* element, const char* attribute, const char* value);
+pugi::xml_node FindElementWithAttribute(pugi::xml_node node, char const* element, char const* attribute, char const* value);
 
 // Add a new child element with the specified name and value to the xml document
-pugi::xml_node AddTextElement(pugi::xml_node node, const char* name, wxString const& value, bool overwrite = false);
-void AddTextElement(pugi::xml_node node, const char* name, int64_t value, bool overwrite = false);
-pugi::xml_node AddTextElementRaw(pugi::xml_node node, const char* name, const char* value, bool overwrite = false);
+pugi::xml_node AddTextElement(pugi::xml_node node, char const* name, std::string const& value, bool overwrite = false);
+pugi::xml_node AddTextElement(pugi::xml_node node, char const* name, std::wstring const& value, bool overwrite = false);
+void AddTextElement(pugi::xml_node node, char const* name, int64_t value, bool overwrite = false);
+pugi::xml_node AddTextElementUtf8(pugi::xml_node node, char const* name, std::string const& value, bool overwrite = false);
 
 // Set the current element's text value
-void AddTextElement(pugi::xml_node node, const wxString& value);
+void AddTextElement(pugi::xml_node node, std::string const& value);
+void AddTextElement(pugi::xml_node node, std::wstring const& value);
 void AddTextElement(pugi::xml_node node, int64_t value);
-void AddTextElementRaw(pugi::xml_node node, const char* value);
+void AddTextElementUtf8(pugi::xml_node node, std::string const& value);
 
 // Get string from named child element
 std::wstring GetTextElement(pugi::xml_node node, const char* name);

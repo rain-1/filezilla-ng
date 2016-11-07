@@ -81,7 +81,7 @@ char* CDataNotification::Detach(int& len)
 }
 
 CCertificate::CCertificate(
-		unsigned char const* rawData, unsigned int len,
+		std::vector<uint8_t> const& rawData,
 		fz::datetime const& activationTime, fz::datetime const& expirationTime,
 		std::wstring const& serial,
 		std::wstring const& pkalgoname, unsigned int bits,
@@ -93,7 +93,7 @@ CCertificate::CCertificate(
 		std::vector<std::wstring> const& altSubjectNames)
 	: m_activationTime(activationTime)
 	, m_expirationTime(expirationTime)
-	, m_len(len)
+	, m_rawData(rawData)
 	, m_serial(serial)
 	, m_pkalgoname(pkalgoname)
 	, m_pkalgobits(bits)
@@ -104,88 +104,32 @@ CCertificate::CCertificate(
 	, m_subject(subject)
 	, m_altSubjectNames(altSubjectNames)
 {
-	wxASSERT(len);
-	if (len) {
-		m_rawData = new unsigned char[len];
-		memcpy(m_rawData, rawData, len);
-	}
 }
 
-CCertificate::CCertificate(const CCertificate &op)
+CCertificate::CCertificate(
+	std::vector<uint8_t> && rawData,
+	fz::datetime const& activationTime, fz::datetime const& expirationTime,
+	std::wstring const& serial,
+	std::wstring const& pkalgoname, unsigned int bits,
+	std::wstring const& signalgoname,
+	std::wstring const& fingerprint_sha256,
+	std::wstring const& fingerprint_sha1,
+	std::wstring const& issuer,
+	std::wstring const& subject,
+	std::vector<std::wstring> && altSubjectNames)
+	: m_activationTime(activationTime)
+	, m_expirationTime(expirationTime)
+	, m_rawData(rawData)
+	, m_serial(serial)
+	, m_pkalgoname(pkalgoname)
+	, m_pkalgobits(bits)
+	, m_signalgoname(signalgoname)
+	, m_fingerprint_sha256(fingerprint_sha256)
+	, m_fingerprint_sha1(fingerprint_sha1)
+	, m_issuer(issuer)
+	, m_subject(subject)
+	, m_altSubjectNames(altSubjectNames)
 {
-	if (op.m_rawData) {
-		wxASSERT(op.m_len);
-		if (op.m_len) {
-			m_rawData = new unsigned char[op.m_len];
-			memcpy(m_rawData, op.m_rawData, op.m_len);
-		}
-		else {
-			m_rawData = 0;
-		}
-	}
-	else {
-		m_rawData = 0;
-	}
-	m_len = op.m_len;
-
-	m_activationTime = op.m_activationTime;
-	m_expirationTime = op.m_expirationTime;
-
-	m_serial = op.m_serial;
-	m_pkalgoname = op.m_pkalgoname;
-	m_pkalgobits = op.m_pkalgobits;
-
-	m_signalgoname = op.m_signalgoname;
-
-	m_fingerprint_sha256 = op.m_fingerprint_sha256;
-	m_fingerprint_sha1 = op.m_fingerprint_sha1;
-
-	m_issuer = op.m_issuer;
-	m_subject = op.m_subject;
-	m_altSubjectNames = op.m_altSubjectNames;
-}
-
-CCertificate::~CCertificate()
-{
-	delete [] m_rawData;
-}
-
-CCertificate& CCertificate::operator=(const CCertificate &op)
-{
-	if (&op == this)
-		return *this;
-
-	delete [] m_rawData;
-	if (op.m_rawData) {
-		wxASSERT(op.m_len);
-		if (op.m_len) {
-			m_rawData = new unsigned char[op.m_len];
-			memcpy(m_rawData, op.m_rawData, op.m_len);
-		}
-		else
-			m_rawData = 0;
-	}
-	else
-		m_rawData = 0;
-	m_len = op.m_len;
-
-	m_activationTime = op.m_activationTime;
-	m_expirationTime = op.m_expirationTime;
-
-	m_serial = op.m_serial;
-	m_pkalgoname = op.m_pkalgoname;
-	m_pkalgobits = op.m_pkalgobits;
-
-	m_signalgoname = op.m_signalgoname;
-
-	m_fingerprint_sha256 = op.m_fingerprint_sha256;
-	m_fingerprint_sha1 = op.m_fingerprint_sha1;
-
-	m_issuer = op.m_issuer;
-	m_subject = op.m_subject;
-	m_altSubjectNames = op.m_altSubjectNames;
-
-	return *this;
 }
 
 CCertificateNotification::CCertificateNotification(std::wstring const& host, unsigned int port,
