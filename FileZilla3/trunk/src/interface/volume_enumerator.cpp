@@ -25,6 +25,10 @@ CVolumeDescriptionEnumeratorThread::~CVolumeDescriptionEnumeratorThread()
 
 void CVolumeDescriptionEnumeratorThread::entry()
 {
+	if (!m_pEvtHandler) {
+		return;
+	}
+
 	if (!GetDriveLabels()) {
 		m_failure = true;
 	}
@@ -61,7 +65,7 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(std::wstring const& drive
 	}
 
 	// Check if it is a network share
-	wxChar share_name[512];
+	wchar_t share_name[512];
 	DWORD dwSize = 511;
 	if (!WNetGetConnection(volume.c_str(), share_name, &dwSize) && share_name[0]) {
 		t_VolumeInfo volumeInfo;
@@ -73,7 +77,7 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(std::wstring const& drive
 	}
 
 	// Get the label of the drive
-	wxChar volume_name[501];
+	wchar_t volume_name[501];
 	int oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 	BOOL res = GetVolumeInformation(drive.c_str(), volume_name, 500, 0, 0, 0, 0, 0);
 	SetErrorMode(oldErrorMode);
@@ -164,17 +168,18 @@ long CVolumeDescriptionEnumeratorThread::GetDrivesToHide()
 	wxRegKey key(_T("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"));
 	if (key.Exists()) {
 		wxLogNull null; // QueryValue can fail if item has wrong type
-		if (!key.HasValue(_T("NoDrives")) || !key.QueryValue(_T("NoDrives"), &drivesToHide))
+		if (!key.HasValue(_T("NoDrives")) || !key.QueryValue(_T("NoDrives"), &drivesToHide)) {
 			drivesToHide = 0;
+		}
 	}
 	return drivesToHide;
 }
 
-bool CVolumeDescriptionEnumeratorThread::IsHidden(wxChar const* drive, long noDrives)
+bool CVolumeDescriptionEnumeratorThread::IsHidden(wchar_t const* drive, long noDrives)
 {
 	int bit = 0;
 	if (drive && drive[0] != 0 && drive[1] == ':') {
-		wxChar letter = drive[0];
+		wchar_t letter = drive[0];
 		if (letter >= 'A' && letter <= 'Z')
 			bit = 1 << (letter - 'A');
 		else if (letter >= 'a' && letter <= 'z')
@@ -191,7 +196,7 @@ std::list<std::wstring> CVolumeDescriptionEnumeratorThread::GetDrives()
 	long drivesToHide = GetDrivesToHide();
 
 	DWORD bufferLen{};
-	wxChar* drives{};
+	wchar_t* drives{};
 
 	DWORD neededLen = 1000;
 
@@ -199,13 +204,13 @@ std::list<std::wstring> CVolumeDescriptionEnumeratorThread::GetDrives()
 		delete[] drives;
 
 		bufferLen = neededLen * 2;
-		drives = new wxChar[bufferLen + 1];
+		drives = new wchar_t[bufferLen + 1];
 		neededLen = GetLogicalDriveStrings(bufferLen, drives);
 	} while (neededLen >= bufferLen);
 	drives[neededLen] = 0;
 
 
-	const wxChar* pDrive = drives;
+	wchar_t const* pDrive = drives;
 	while (*pDrive) {
 		const int drivelen = fz::strlen(pDrive);
 
