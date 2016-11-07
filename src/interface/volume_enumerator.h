@@ -45,7 +45,7 @@ public:
 	static std::list<std::wstring> GetDrives();
 
 	static long GetDrivesToHide();
-	static bool IsHidden(wxChar const* drive, long noDrives);
+	static bool IsHidden(wchar_t const* drive, long noDrives);
 
 protected:
 	bool GetDriveLabels();
