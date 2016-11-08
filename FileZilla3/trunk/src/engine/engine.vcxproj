@@ -91,7 +91,6 @@
     <ClCompile Include="local_path.cpp" />
     <ClCompile Include="logging.cpp" />
     <ClCompile Include="misc.cpp" />
-    <ClCompile Include="msgbox.cpp" />
     <ClCompile Include="notification.cpp" />
     <ClCompile Include="option_change_event_handler.cpp" />
     <ClCompile Include="pathcache.cpp" />

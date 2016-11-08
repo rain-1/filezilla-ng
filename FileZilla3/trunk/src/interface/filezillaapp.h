@@ -21,7 +21,7 @@ public:
 	CLocalPath GetDefaultsDir() const { return m_defaultsDir; }
 	CLocalPath GetLocalesDir() const { return m_localesDir; }
 
-	wxString GetSettingsFile(wxString const& name) const;
+	std::wstring GetSettingsFile(std::wstring const& name) const;
 
 	void CheckExistsFzsftp();
 

@@ -1431,7 +1431,7 @@ void CQueueViewBase::OnExport(wxCommandEvent&)
 	if (dlg.ShowModal() != wxID_OK)
 		return;
 
-	CXmlFile xml(dlg.GetPath());
+	CXmlFile xml(dlg.GetPath().ToStdWstring());
 
 	auto exportRoot = xml.CreateEmpty();
 

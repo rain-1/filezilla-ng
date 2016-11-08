@@ -81,7 +81,7 @@
       <ProgramDatabaseFile>.\Debug/FileZilla_dbg.pdb</ProgramDatabaseFile>
       <OutputFile>..\bin\FileZilla_dbg.exe</OutputFile>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
@@ -180,6 +180,7 @@
     <ClCompile Include="Mainfrm.cpp" />
     <ClCompile Include="manual_transfer.cpp" />
     <ClCompile Include="menu_bar.cpp" />
+    <ClCompile Include="msgbox.cpp" />
     <ClCompile Include="netconfwizard.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="recursive_operation.cpp" />
@@ -297,6 +298,7 @@
     <ClInclude Include="Mainfrm.h" />
     <ClInclude Include="manual_transfer.h" />
     <ClInclude Include="menu_bar.h" />
+    <ClInclude Include="msgbox.h" />
     <ClInclude Include="netconfwizard.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="recursive_operation.h" />

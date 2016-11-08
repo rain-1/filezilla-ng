@@ -753,22 +753,26 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 
 			CHostKeyNotification *pHostKeyNotification = static_cast<CHostKeyNotification *>(pNotification);
 			std::wstring show;
-			if (requestId == reqId_hostkey)
-				show = _("Trust new Hostkey:").ToStdWstring();
-			else
-				show = _("Trust changed Hostkey:").ToStdWstring();
+			if (requestId == reqId_hostkey) {
+				show = _("Trust new Hostkey:");
+			}
+			else {
+				show = _("Trust changed Hostkey:");
+			}
 			show += ' ';
 			if (!pHostKeyNotification->m_trust) {
-				SendCommand(std::wstring(), show + _("No").ToStdWstring());
+				SendCommand(std::wstring(), show + _("No"));
 				if (m_pCurOpData && m_pCurOpData->opId == Command::connect) {
 					CSftpConnectOpData *pData = static_cast<CSftpConnectOpData *>(m_pCurOpData);
 					pData->criticalFailure = true;
 				}
 			}
-			else if (pHostKeyNotification->m_alwaysTrust)
-				SendCommand(L"y", show + _("Yes").ToStdWstring());
-			else
-				SendCommand(L"n", show + _("Once").ToStdWstring());
+			else if (pHostKeyNotification->m_alwaysTrust) {
+				SendCommand(L"y", show + _("Yes"));
+			}
+			else {
+				SendCommand(L"n", show + _("Once"));
+			}
 		}
 		break;
 	case reqId_interactiveLogin:

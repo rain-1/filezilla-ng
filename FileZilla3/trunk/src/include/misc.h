@@ -31,10 +31,6 @@ unique_static_cast(std::unique_ptr<Base>&& p)
 	return std::unique_ptr<Derived>(d);
 }
 
-// wxGetTranslation does not support 64bit ints on 32bit systems.
-#define wxPLURAL_LL(sing, plur, n) \
-	wxGetTranslation((sing), (plur), (sizeof(unsigned int) < 8 && (n) > 1000000000) ? (1000000000 + (n) % 1000000000) : (n))
-
 std::wstring url_encode(std::wstring const& s, bool keep_slashes = false);
 
 #if FZ_WINDOWS
@@ -44,5 +40,21 @@ fz::native_string GetSystemErrorDescription(DWORD err);
 int GetSystemErrorCode();
 fz::native_string GetSystemErrorDescription(int err);
 #endif
+
+namespace fz {
+
+void set_translators(
+	std::wstring(*s)(char const* const t),
+	std::wstring(*pf)(char const* const singular, char const* const plural, int64_t n)
+);
+
+std::wstring translate(char const* const source);
+std::wstring translate(char const * const singular, char const * const plural, int64_t n);
+
+}
+
+// Sadly xgettext cannot be used with namespaces
+#define fztranslate fz::translate
+#define fztranslate_mark
 
 #endif

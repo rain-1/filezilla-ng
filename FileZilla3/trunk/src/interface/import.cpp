@@ -30,7 +30,7 @@ void CImportDialog::Run()
 		return;
 	}
 
-	CXmlFile fz3(dlg.GetPath());
+	CXmlFile fz3(dlg.GetPath().ToStdWstring());
 	auto fz3Root = fz3.Load();
 	if (fz3Root) {
 		bool settings = fz3Root.child("Settings") != 0;
@@ -90,7 +90,7 @@ void CImportDialog::Run()
 		}
 	}
 
-	CXmlFile fz2(dlg.GetPath(), _T("FileZilla"));
+	CXmlFile fz2(dlg.GetPath().ToStdWstring(), "FileZilla");
 	auto fz2Root = fz2.Load();
 	if (fz2Root) {
 		auto sites_fz2 = fz2Root.child("Sites");

@@ -1418,7 +1418,7 @@ std::wstring CTlsSocket::GetProtocolName()
 	}
 	
 	if (ret.empty()) {
-		ret = _("unknown").ToStdWstring();
+		ret = _("unknown");
 	}
 
 	return ret;
@@ -1434,7 +1434,7 @@ std::wstring CTlsSocket::GetKeyExchange()
 	}
 
 	if (ret.empty()) {
-		ret = _("unknown").ToStdWstring();
+		ret = _("unknown");
 	}
 
 	return ret;
@@ -1450,7 +1450,7 @@ std::wstring CTlsSocket::GetCipherName()
 	}
 
 	if (ret.empty()) {
-		ret = _("unknown").ToStdWstring();
+		ret = _("unknown");
 	}
 
 	return ret;
@@ -1466,7 +1466,7 @@ std::wstring CTlsSocket::GetMacName()
 	}
 	
 	if (ret.empty()) {
-		ret = _("unknown").ToStdWstring();
+		ret = _("unknown");
 	}
 
 	return ret;

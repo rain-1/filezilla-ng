@@ -56,7 +56,7 @@ void CExportDialog::Run()
 		return;
 	}
 
-	CXmlFile xml(dlg.GetPath());
+	CXmlFile xml(dlg.GetPath().ToStdWstring());
 
 	auto exportRoot = xml.CreateEmpty();
 

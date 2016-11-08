@@ -16,24 +16,22 @@ class CXmlFile final
 {
 public:
 	CXmlFile() = default;
-	explicit CXmlFile(const wxString& fileName, wxString const& root = wxString());
-
-	~CXmlFile();
+	explicit CXmlFile(std::wstring const& fileName, std::string const& root = std::string());
 
 	CXmlFile(CXmlFile const&) = delete;
 	CXmlFile& operator=(CXmlFile const&) = delete;
 
 	pugi::xml_node CreateEmpty();
 
-	wxString GetFileName() const { return m_fileName; }
-	void SetFileName(const wxString& name);
+	std::wstring GetFileName() const { return m_fileName; }
+	void SetFileName(std::wstring const& name);
 
 	bool HasFileName() const { return !m_fileName.empty(); }
 
 	// Sets error description on failure
 	pugi::xml_node Load();
 
-	wxString GetError() const { return m_error; }
+	std::wstring GetError() const { return m_error; }
 	size_t GetRawDataLength();
 	void GetRawDataHere(char* p, size_t size); // p has to big enough to hold at least GetRawDataLength() bytes
 
@@ -50,11 +48,11 @@ public:
 
 	bool IsFromFutureVersion() const;
 protected:
-	wxString GetRedirectedName() const;
+	std::wstring GetRedirectedName() const;
 
 	// Opens the specified XML file if it exists or creates a new one otherwise.
 	// Returns 0 on error.
-	bool GetXmlFile(wxString const& file);
+	bool GetXmlFile(std::wstring const& file);
 
 	// Sets version and platform in root element
 	void UpdateMetadata();
@@ -63,13 +61,13 @@ protected:
 	bool SaveXmlFile();
 
 	fz::datetime m_modificationTime;
-	wxString m_fileName;
+	std::wstring m_fileName;
 	pugi::xml_document m_document;
 	pugi::xml_node m_element;
 
-	wxString m_error;
+	std::wstring m_error;
 
-	wxString m_rootName{_T("FileZilla3")};
+	std::string m_rootName{"FileZilla3"};
 };
 
 void SetTextAttribute(pugi::xml_node node, char const* name, std::string const& value);
