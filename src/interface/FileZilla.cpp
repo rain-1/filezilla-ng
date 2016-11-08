@@ -9,7 +9,7 @@
 #include "buildinfo.h"
 #include "cmdline.h"
 #include "welcome_dialog.h"
-#include <msgbox.h>
+#include "msgbox.h"
 
 #include <libfilezilla/local_filesys.hpp>
 
@@ -154,11 +154,27 @@ void CFileZillaApp::InitLocale()
 	}
 }
 
+namespace {
+std::wstring translator(char const* const t)
+{
+	return wxGetTranslation(t).ToStdWstring();
+}
+
+std::wstring translator_pf(char const* const singular, char const* const plural, int64_t n)
+{
+	// wxGetTranslation does not support 64bit ints on 32bit systems.
+	if (n < 0) {
+		n = -n;
+	}
+	return wxGetTranslation(singular, plural, (sizeof(unsigned int) < 8 && n > 1000000000) ? (1000000000 + n % 1000000000) : n).ToStdWstring();
+}
+}
+
 bool CFileZillaApp::OnInit()
 {
 	AddStartupProfileRecord(_T("CFileZillaApp::OnInit()"));
 
-	srand( (unsigned)time( NULL ) );
+	fz::set_translators(translator, translator_pf);
 
 #ifdef __WXMSW__
 	if (!InitWinsock()) {
@@ -746,7 +762,7 @@ void CFileZillaApp::ShowStartupProfile()
 	m_startupProfile.clear();
 }
 
-wxString CFileZillaApp::GetSettingsFile(wxString const& name) const
+std::wstring CFileZillaApp::GetSettingsFile(std::wstring const& name) const
 {
 	return COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR) + name + _T(".xml");
 }

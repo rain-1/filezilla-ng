@@ -2,7 +2,7 @@
 #define __FILEZILLA_H__
 
 #include <libfilezilla_engine.h>
-#include <msgbox.h>
+#include "msgbox.h"
 
 #ifndef PACKAGE_NAME
 #define PACKAGE_NAME "FileZilla"

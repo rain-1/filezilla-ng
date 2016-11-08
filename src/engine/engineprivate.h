@@ -1,5 +1,5 @@
-#ifndef __FILEZILLAENGINEPRIVATE_H__
-#define __FILEZILLAENGINEPRIVATE_H__
+#ifndef FILEZILLA_ENGINEPRIVATE_HEADER
+#define FILEZILLA_ENGINEPRIVATE_HEADER
 
 #include <libfilezilla/event.hpp>
 #include <libfilezilla/event_handler.hpp>
@@ -213,4 +213,4 @@ typedef fz::simple_event<command_event_type> CCommandEvent;
 struct async_request_reply_event_type{};
 typedef fz::simple_event<async_request_reply_event_type, std::unique_ptr<CAsyncRequestNotification>> CAsyncRequestReplyEvent;
 
-#endif //__FILEZILLAENGINEPRIVATE_H__
+#endif

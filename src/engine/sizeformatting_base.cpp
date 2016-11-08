@@ -65,7 +65,7 @@ std::wstring CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool 
 			return result;
 		}
 		else {
-			return fz::sprintf(wxPLURAL_LL("%s byte", "%s bytes", size), result);
+			return fz::sprintf(fztranslate("%s byte", "%s bytes", size), result);
 		}
 	}
 
@@ -159,7 +159,7 @@ std::wstring CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool 
 
 	static wchar_t byte_unit = 0;
 	if (!byte_unit) {
-		std::wstring t = _("B <Unit symbol for bytes. Only translate first letter>").ToStdWstring(); // @translator: Only translate first letter.
+		std::wstring t = _("B <Unit symbol for bytes. Only translate first letter>"); // @translator: Only translate first letter.
 		byte_unit = t[0];
 	}
 
@@ -226,7 +226,7 @@ std::wstring CSizeFormatBase::GetUnit(COptionsBase* pOptions, _unit unit, CSizeF
 
 	static wchar_t byte_unit = 0;
 	if (!byte_unit) {
-		std::wstring t = _("B <Unit symbol for bytes. Only translate first letter>").ToStdWstring(); // @translator: Only translate first letter.
+		std::wstring t = _("B <Unit symbol for bytes. Only translate first letter>"); // @translator: Only translate first letter.
 		byte_unit = t[0];
 	}
 

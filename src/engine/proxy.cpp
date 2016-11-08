@@ -59,7 +59,7 @@ std::wstring CProxySocket::Name(ProxyType t)
 	case SOCKS5:
 		return L"SOCKS5";
 	default:
-		return _("unknown").ToStdWstring();
+		return _("unknown");
 	}
 }
 
@@ -358,7 +358,7 @@ void CProxySocket::OnReceive()
 			m_recvBufferPos = 0;
 
 			if (m_pRecvBuffer[1] != 0x5A) {
-				wxString error;
+				std::wstring error;
 				switch (m_pRecvBuffer[1]) {
 					case 0x5B:
 						error = _("Request rejected or failed");
@@ -370,7 +370,7 @@ void CProxySocket::OnReceive()
 						error = _("Request failed - client's identd could not confirm the user ID string");
 						break;
 					default:
-						error.Printf(_("Unassigned error code %d"), (int)(unsigned char) m_pRecvBuffer[1]);
+						error = fz::sprintf(_("Unassigned error code %d"), (int)(unsigned char)m_pRecvBuffer[1]);
 						break;
 				}
 				m_pOwner->LogMessage(MessageType::Error, _("Proxy request failed: %s"), error);
@@ -468,7 +468,7 @@ void CProxySocket::OnReceive()
 				break;
 			case socks5_request:
 				if (m_pRecvBuffer[1]) {
-					wxString errorMsg;
+					std::wstring errorMsg;
 					switch (m_pRecvBuffer[1])
 					{
 					case 1:
@@ -496,7 +496,7 @@ void CProxySocket::OnReceive()
 						errorMsg = _("Address type not supported");
 						break;
 					default:
-						errorMsg.Printf(_("Unassigned error code %d"), (int)(unsigned char)m_pRecvBuffer[1]);
+						errorMsg = fz::sprintf(_("Unassigned error code %d"), (int)(unsigned char)m_pRecvBuffer[1]);
 						break;
 					}
 

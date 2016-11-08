@@ -166,27 +166,33 @@ std::vector<std::unique_ptr<wxBitmap>> CThemeProvider::GetAllImages(const wxStri
 		path += strSize;
 	}
 	else {
-		if (size.GetWidth() > 32)
+		if (size.GetWidth() > 32) {
 			path += _T("48x48/");
-		else if (size.GetWidth() > 16)
+		}
+		else if (size.GetWidth() > 16) {
 			path += _T("32x32/");
-		else
+		}
+		else {
 			path += _T("16x16/");
+		}
 	}
 
 	std::vector<std::unique_ptr<wxBitmap>> bitmaps;
 
-	if (!wxDir::Exists(path))
+	if (!wxDir::Exists(path)) {
 		return bitmaps;
+	}
 
 	wxDir dir(path);
-	if (!dir.IsOpened())
+	if (!dir.IsOpened()) {
 		return bitmaps;
+	}
 
 	wxString file;
 	for (bool found = dir.GetFirst(&file, _T("*.png")); found; found = dir.GetNext(&file)) {
-		if (file.Right(13) == _T("_disabled.png"))
+		if (file.Right(13) == _T("_disabled.png")) {
 			continue;
+		}
 
 		wxFileName fn(path, file);
 		std::unique_ptr<wxBitmap> bmp(new wxBitmap);
@@ -199,11 +205,12 @@ std::vector<std::unique_ptr<wxBitmap>> CThemeProvider::GetAllImages(const wxStri
 
 bool CThemeProvider::GetThemeData(const wxString& themePath, wxString& name, wxString& author, wxString& email)
 {
-	wxString const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
+	std::wstring const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
 	CXmlFile xml(file);
 	auto theme = xml.Load().child("Theme");
-	if (!theme)
+	if (!theme) {
 		return false;
+	}
 
 	name = GetTextElement(theme, "Name");
 	author = GetTextElement(theme, "Author");
@@ -215,7 +222,7 @@ std::vector<wxString> CThemeProvider::GetThemeSizes(const wxString& themePath)
 {
 	std::vector<wxString> sizes;
 
-	wxString const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
+	std::wstring const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
 	CXmlFile xml(file);
 	auto theme = xml.Load().child("Theme");
 	if (!theme)
@@ -223,8 +230,9 @@ std::vector<wxString> CThemeProvider::GetThemeSizes(const wxString& themePath)
 
 	for (auto xSize = theme.child("size"); xSize; xSize = xSize.next_sibling("size")) {
 		wxString size = GetTextElement(xSize);
-		if (size.empty())
+		if (size.empty()) {
 			continue;
+		}
 		sizes.push_back(size);
 	}
 
@@ -235,8 +243,9 @@ wxIconBundle CThemeProvider::GetIconBundle(const wxArtID& id, const wxArtClient&
 {
 	wxIconBundle iconBundle;
 
-	if (id.Left(4) != _T("ART_"))
+	if (id.Left(4) != _T("ART_")) {
 		return iconBundle;
+	}
 
 	wxString name = fz::str_tolower_ascii(id.Mid(4));
 
@@ -246,8 +255,9 @@ wxIconBundle CThemeProvider::GetIconBundle(const wxArtID& id, const wxArtClient&
 
 	for (auto const& dir : dirs ) {
 		wxString file = resourcePath.GetPath() + dir + name + _T(".png");
-		if (!wxFileName::FileExists(file))
+		if (!wxFileName::FileExists(file)) {
 			continue;
+		}
 
 		iconBundle.AddIcon(wxIcon(file, wxBITMAP_TYPE_PNG));
 	}
@@ -257,7 +267,7 @@ wxIconBundle CThemeProvider::GetIconBundle(const wxArtID& id, const wxArtClient&
 
 bool CThemeProvider::ThemeHasSize(const wxString& themePath, const wxString& size)
 {
-	wxString const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
+	std::wstring const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
 	CXmlFile xml(file);
 	auto theme = xml.Load().child("Theme");
 	if (!theme) {

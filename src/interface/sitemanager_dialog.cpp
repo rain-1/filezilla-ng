@@ -2257,8 +2257,9 @@ void CSiteManagerDialog::RememberLastSelected()
 void CSiteManagerDialog::OnContextMenu(wxTreeEvent& event)
 {
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_SITEMANAGER"));
-	if (!pMenu)
+	if (!pMenu) {
 		return;
+	}
 
 	m_contextMenuItem = event.GetItem();
 
@@ -2277,10 +2278,11 @@ void CSiteManagerDialog::OnExportSelected(wxCommandEvent&)
 					_T("sites.xml"), _T("XML files (*.xml)|*.xml"),
 					wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
-	if (dlg.ShowModal() != wxID_OK)
+	if (dlg.ShowModal() != wxID_OK) {
 		return;
+	}
 
-	CXmlFile xml(dlg.GetPath());
+	CXmlFile xml(dlg.GetPath().ToStdWstring());
 
 	auto exportRoot = xml.CreateEmpty();
 

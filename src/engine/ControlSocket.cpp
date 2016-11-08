@@ -79,42 +79,49 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 	CTransferStatus const status = engine_.transfer_status_.Get(tmp);
 	if (!status.empty() && (nErrorCode == FZ_REPLY_OK || status.madeProgress)) {
 		int elapsed = static_cast<int>((fz::datetime::now() - status.started).get_seconds());
-		if (elapsed <= 0)
+		if (elapsed <= 0) {
 			elapsed = 1;
-		wxString time = wxString::Format(
-			wxPLURAL("%d second", "%d seconds", elapsed),
-			elapsed);
+		}
+		std::wstring time = fz::sprintf(fztranslate("%d second", "%d seconds", elapsed), elapsed);
 
 		int64_t transferred = status.currentOffset - status.startOffset;
 		std::wstring size = CSizeFormatBase::Format(&engine_.GetOptions(), transferred, true);
 
 		MessageType msgType = MessageType::Error;
-		wxString msg;
+		std::wstring msg;
 		if (nErrorCode == FZ_REPLY_OK) {
 			msgType = MessageType::Status;
 			msg = _("File transfer successful, transferred %s in %s");
 		}
-		else if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
+		else if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 			msg = _("File transfer aborted by user after transferring %s in %s");
-		else if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR)
+		}
+		else if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR) {
 			msg = _("Critical file transfer error after transferring %s in %s");
-		else
+		}
+		else {
 			msg = _("File transfer failed after transferring %s in %s");
+		}
 		LogMessage(msgType, msg, size, time);
 	}
 	else {
-		if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
+		if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 			LogMessage(MessageType::Error, _("File transfer aborted by user"));
-		else if (nErrorCode == FZ_REPLY_OK) {
-			if (pData->transferInitiated)
-				LogMessage(MessageType::Status, _("File transfer successful"));
-			else
-				LogMessage(MessageType::Status, _("File transfer skipped"));
 		}
-		else if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR)
+		else if (nErrorCode == FZ_REPLY_OK) {
+			if (pData->transferInitiated) {
+				LogMessage(MessageType::Status, _("File transfer successful"));
+			}
+			else {
+				LogMessage(MessageType::Status, _("File transfer skipped"));
+			}
+		}
+		else if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR) {
 			LogMessage(MessageType::Error, _("Critical file transfer error"));
-		else
+		}
+		else {
 			LogMessage(MessageType::Error, _("File transfer failed"));
+		}
 	}
 }
 
@@ -126,8 +133,9 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		LogMessage(MessageType::Debug_Warning, _T("ResetOperation with FZ_REPLY_WOULDBLOCK in nErrorCode (%d)"), nErrorCode);
 	}
 
-	if (m_pCurOpData && m_pCurOpData->holdsLock)
+	if (m_pCurOpData && m_pCurOpData->holdsLock) {
 		UnlockCache();
+	}
 
 	if (m_pCurOpData && m_pCurOpData->pNextOpData) {
 		COpData *pNext = m_pCurOpData->pNextOpData;
@@ -140,15 +148,16 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		{
 			return ParseSubcommandResult(nErrorCode);
 		}
-		else
+		else {
 			return ResetOperation(nErrorCode);
+		}
 	}
 
 	std::wstring prefix;
 	if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR &&
 		(!m_pCurOpData || m_pCurOpData->opId != Command::transfer))
 	{
-		prefix = _("Critical error:").ToStdWstring() + _T(" ");
+		prefix = _("Critical error:") + _T(" ");
 	}
 
 	if (m_pCurOpData) {
@@ -161,16 +170,20 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			}
 			break;
 		case Command::connect:
-			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
+			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 				LogMessage(MessageType::Error, prefix + _("Connection attempt interrupted by user"));
-			else if (nErrorCode != FZ_REPLY_OK)
+			}
+			else if (nErrorCode != FZ_REPLY_OK) {
 				LogMessage(MessageType::Error, prefix + _("Could not connect to server"));
+			}
 			break;
 		case Command::list:
-			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
+			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 				LogMessage(MessageType::Error, prefix + _("Directory listing aborted by user"));
-			else if (nErrorCode != FZ_REPLY_OK)
+			}
+			else if (nErrorCode != FZ_REPLY_OK) {
 				LogMessage(MessageType::Error, prefix + _("Failed to retrieve directory listing"));
+			}
 			else {
 				if (m_CurrentPath.empty()) {
 					LogMessage(MessageType::Status, _("Directory listing successful"));
@@ -184,20 +197,23 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			{
 				CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
 				if (!pData->download && pData->transferInitiated) {
-					if (!m_pCurrentServer)
+					if (!m_pCurrentServer) {
 						LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurrentServer is 0"));
+					}
 					else {
 						bool updated = engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->remotePath, pData->remoteFile, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? pData->localFileSize : -1);
-						if (updated)
+						if (updated) {
 							engine_.SendDirectoryListingNotification(pData->remotePath, false, true, false);
+						}
 					}
 				}
 				LogTransferResultMessage(nErrorCode, pData);
 			}
 			break;
 		default:
-			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
+			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 				LogMessage(MessageType::Error, prefix + _("Interrupted by user"));
+			}
 			break;
 		}
 
@@ -539,7 +555,7 @@ void CControlSocket::OnTimer(fz::timer_id)
 
 		if ((!m_pCurOpData || !m_pCurOpData->waitForAsyncRequest) && !IsWaitingForLock()) {
 			if (elapsed > fz::duration::from_seconds(timeout)) {
-				LogMessage(MessageType::Error, wxPLURAL("Connection timed out after %d second of inactivity", "Connection timed out after %d seconds of inactivity", timeout), timeout);
+				LogMessage(MessageType::Error, fztranslate("Connection timed out after %d second of inactivity", "Connection timed out after %d seconds of inactivity", timeout), timeout);
 				DoClose(FZ_REPLY_TIMEOUT);
 				return;
 			}

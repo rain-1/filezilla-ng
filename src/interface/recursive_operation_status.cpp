@@ -115,8 +115,8 @@ void CRecursiveOperationStatus::UpdateText()
 
 		unsigned long long const countFiles = static_cast<unsigned long long>(operation->GetProcessedFiles());
 		unsigned long long const countDirs = static_cast<unsigned long long>(operation->GetProcessedDirectories());
-		const wxString files = wxString::Format(wxPLURAL_LL("%llu file", "%llu files", countFiles), countFiles);
-		const wxString dirs = wxString::Format(wxPLURAL_LL("%llu directory", "%llu directories", countDirs), countDirs);
+		std::wstring const files = fz::sprintf(fztranslate("%llu file", "%llu files", countFiles), countFiles);
+		std::wstring const dirs = fz::sprintf(fztranslate("%llu directory", "%llu directories", countDirs), countDirs);
 		// @translator: Example: Processed 5 files in 1 directory
 		m_pTextCtrl[1]->SetLabel(wxString::Format(_("Processed %s in %s."), files, dirs));
 	}

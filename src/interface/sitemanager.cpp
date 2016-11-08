@@ -9,18 +9,18 @@
 namespace {
 struct background_color {
 	wxColour const color;
-	wchar_t const*const name;
+	char const*const name;
 };
 
 background_color const background_colors[] = {
-	{ wxColour(), TRANSLATE_T("None") },
-	{ wxColour(255, 0, 0, 32), TRANSLATE_T("Red") },
-	{ wxColour(0, 255, 0, 32), TRANSLATE_T("Green") },
-	{ wxColour(0, 0, 255, 32), TRANSLATE_T("Blue") },
-	{ wxColour(255, 255, 0, 32), TRANSLATE_T("Yellow") },
-	{ wxColour(0, 255, 255, 32), TRANSLATE_T("Cyan") },
-	{ wxColour(255, 0, 255, 32), TRANSLATE_T("Magenta") },
-	{ wxColour(255, 128, 0, 32), TRANSLATE_T("Orange") },
+	{ wxColour(), fztranslate_mark("None") },
+	{ wxColour(255, 0, 0, 32), fztranslate_mark("Red") },
+	{ wxColour(0, 255, 0, 32), fztranslate_mark("Green") },
+	{ wxColour(0, 0, 255, 32), fztranslate_mark("Blue") },
+	{ wxColour(255, 255, 0, 32), fztranslate_mark("Yellow") },
+	{ wxColour(0, 255, 255, 32), fztranslate_mark("Cyan") },
+	{ wxColour(255, 0, 255, 32), fztranslate_mark("Magenta") },
+	{ wxColour(255, 128, 0, 32), fztranslate_mark("Orange") },
 	{ wxColour(), 0 }
 };
 }
@@ -330,8 +330,9 @@ std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu()
 	}
 
 	if (pMenu) {
-		if (!predefinedSites)
+		if (!predefinedSites) {
 			return pMenu;
+		}
 
 		auto pRootMenu = std::make_unique<wxMenu>();
 		pRootMenu->AppendSubMenu(predefinedSites.release(), _("Predefined Sites"));
@@ -340,8 +341,9 @@ std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu()
 		return pRootMenu;
 	}
 
-	if (predefinedSites)
+	if (predefinedSites) {
 		return predefinedSites;
+	}
 
 	pMenu = std::make_unique<wxMenu>();
 	wxMenuItem* pItem = pMenu->Append(wxID_ANY, _("No sites available"));
@@ -357,19 +359,22 @@ void CSiteManager::ClearIdMap()
 bool CSiteManager::LoadPredefined(CSiteManagerXmlHandler& handler)
 {
 	CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
-	if (defaultsDir.empty())
+	if (defaultsDir.empty()) {
 		return false;
+	}
 
-	wxString const name(defaultsDir.GetPath() + _T("fzdefaults.xml"));
+	std::wstring const name(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	CXmlFile file(name);
 
 	auto document = file.Load();
-	if (!document)
+	if (!document) {
 		return false;
+	}
 
 	auto element = document.child("Servers");
-	if (!element)
+	if (!element) {
 		return false;
+	}
 
 	if (!Load(element, handler)) {
 		return false;

@@ -1,6 +1,6 @@
 #include <filezilla.h>
 #include "dialogex.h"
-#include <msgbox.h>
+#include "msgbox.h"
 
 BEGIN_EVENT_TABLE(wxDialogEx, wxDialog)
 EVT_CHAR_HOOK(wxDialogEx::OnChar)

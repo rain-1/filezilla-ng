@@ -55,6 +55,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		Mainfrm.cpp \
 		manual_transfer.cpp \
 		menu_bar.cpp \
+		msgbox.cpp \
 		netconfwizard.cpp \
 		Options.cpp \
 		power_management.cpp \
@@ -177,6 +178,7 @@ noinst_HEADERS = aboutdialog.h \
 		 Mainfrm.h \
 		 manual_transfer.h \
 		 menu_bar.h \
+		 msgbox.h \
 		 netconfwizard.h \
 		 Options.h \
 		 power_management.h \

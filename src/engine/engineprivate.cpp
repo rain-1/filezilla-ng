@@ -530,7 +530,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	const CServer& server = pConnectCommand->GetServer();
 	unsigned int delay = GetRemainingReconnectDelay(server);
 	if (delay) {
-		m_pLogging->LogMessage(MessageType::Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
+		m_pLogging->LogMessage(MessageType::Status, fztranslate("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
 		stop_timer(m_retryTimer);
 		m_retryTimer = add_timer(fz::duration::from_milliseconds(delay), true);
 		return FZ_REPLY_WOULDBLOCK;

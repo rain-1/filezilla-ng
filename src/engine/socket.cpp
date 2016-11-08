@@ -167,29 +167,6 @@ int GetLastSocketError()
 #else
 inline int GetLastSocketError() { return errno; }
 #endif
-
-#ifdef ERRORCODETEST
-class CErrorCodeTest
-{
-public:
-	CErrorCodeTest()
-	{
-		int errors[] = {
-			0
-		};
-		for (int i = 0; errors[i]; ++i) {
-#ifdef FZ_WINDOWS
-			int code = ConvertMSWErrorCode(errors[i]);
-#else
-			int code = errors[i];
-#endif
-			if (CSocket::GetErrorDescription(code).Len() < 15)
-				wxMessageBoxEx(CSocket::GetErrorDescription(code));
-		}
-
-	}
-};
-#endif
 }
 
 class CSocketThread final
@@ -859,9 +836,6 @@ CSocket::CSocket(fz::thread_pool & pool, fz::event_handler* pEvtHandler)
 	, m_pEvtHandler(pEvtHandler)
 	, m_keepalive_interval(fz::duration::from_hours(2))
 {
-#ifdef ERRORCODETEST
-	CErrorCodeTest test;
-#endif
 	m_family = AF_UNSPEC;
 
 	m_buffer_sizes[0] = -1;
@@ -1018,80 +992,80 @@ void CSocket::SetEventHandler(fz::event_handler* pEvtHandler)
 struct Error_table
 {
 	int code;
-	const char* const name;
-	const wchar_t* const description;
+	char const* const name;
+	char const* const description;
 };
 
 static Error_table const error_table[] =
 {
-	ERRORDECL(EACCES, TRANSLATE_T("Permission denied"))
-	ERRORDECL(EADDRINUSE, TRANSLATE_T("Local address in use"))
-	ERRORDECL(EAFNOSUPPORT, TRANSLATE_T("The specified address family is not supported"))
-	ERRORDECL(EINPROGRESS, TRANSLATE_T("Operation in progress"))
-	ERRORDECL(EINVAL, TRANSLATE_T("Invalid argument passed"))
-	ERRORDECL(EMFILE, TRANSLATE_T("Process file table overflow"))
-	ERRORDECL(ENFILE, TRANSLATE_T("System limit of open files exceeded"))
-	ERRORDECL(ENOBUFS, TRANSLATE_T("Out of memory"))
-	ERRORDECL(ENOMEM, TRANSLATE_T("Out of memory"))
-	ERRORDECL(EPERM, TRANSLATE_T("Permission denied"))
-	ERRORDECL(EPROTONOSUPPORT, TRANSLATE_T("Protocol not supported"))
-	ERRORDECL(EAGAIN, TRANSLATE_T("Resource temporarily unavailable"))
-	ERRORDECL(EALREADY, TRANSLATE_T("Operation already in progress"))
-	ERRORDECL(EBADF, TRANSLATE_T("Bad file descriptor"))
-	ERRORDECL(ECONNREFUSED, TRANSLATE_T("Connection refused by server"))
-	ERRORDECL(EFAULT, TRANSLATE_T("Socket address outside address space"))
-	ERRORDECL(EINTR, TRANSLATE_T("Interrupted by signal"))
-	ERRORDECL(EISCONN, TRANSLATE_T("Socket already connected"))
-	ERRORDECL(ENETUNREACH, TRANSLATE_T("Network unreachable"))
-	ERRORDECL(ENOTSOCK, TRANSLATE_T("File descriptor not a socket"))
-	ERRORDECL(ETIMEDOUT, TRANSLATE_T("Connection attempt timed out"))
-	ERRORDECL(EHOSTUNREACH, TRANSLATE_T("No route to host"))
-	ERRORDECL(ENOTCONN, TRANSLATE_T("Socket not connected"))
-	ERRORDECL(ENETRESET, TRANSLATE_T("Connection reset by network"))
-	ERRORDECL(EOPNOTSUPP, TRANSLATE_T("Operation not supported"))
-	ERRORDECL(ESHUTDOWN, TRANSLATE_T("Socket has been shut down"))
-	ERRORDECL(EMSGSIZE, TRANSLATE_T("Message too large"))
-	ERRORDECL(ECONNABORTED, TRANSLATE_T("Connection aborted"))
-	ERRORDECL(ECONNRESET, TRANSLATE_T("Connection reset by peer"))
-	ERRORDECL(EPIPE, TRANSLATE_T("Local endpoint has been closed"))
-	ERRORDECL(EHOSTDOWN, TRANSLATE_T("Host is down"))
+	ERRORDECL(EACCES, fztranslate_mark("Permission denied"))
+	ERRORDECL(EADDRINUSE, fztranslate_mark("Local address in use"))
+	ERRORDECL(EAFNOSUPPORT, fztranslate_mark("The specified address family is not supported"))
+	ERRORDECL(EINPROGRESS, fztranslate_mark("Operation in progress"))
+	ERRORDECL(EINVAL, fztranslate_mark("Invalid argument passed"))
+	ERRORDECL(EMFILE, fztranslate_mark("Process file table overflow"))
+	ERRORDECL(ENFILE, fztranslate_mark("System limit of open files exceeded"))
+	ERRORDECL(ENOBUFS, fztranslate_mark("Out of memory"))
+	ERRORDECL(ENOMEM, fztranslate_mark("Out of memory"))
+	ERRORDECL(EPERM, fztranslate_mark("Permission denied"))
+	ERRORDECL(EPROTONOSUPPORT, fztranslate_mark("Protocol not supported"))
+	ERRORDECL(EAGAIN, fztranslate_mark("Resource temporarily unavailable"))
+	ERRORDECL(EALREADY, fztranslate_mark("Operation already in progress"))
+	ERRORDECL(EBADF, fztranslate_mark("Bad file descriptor"))
+	ERRORDECL(ECONNREFUSED, fztranslate_mark("Connection refused by server"))
+	ERRORDECL(EFAULT, fztranslate_mark("Socket address outside address space"))
+	ERRORDECL(EINTR, fztranslate_mark("Interrupted by signal"))
+	ERRORDECL(EISCONN, fztranslate_mark("Socket already connected"))
+	ERRORDECL(ENETUNREACH, fztranslate_mark("Network unreachable"))
+	ERRORDECL(ENOTSOCK, fztranslate_mark("File descriptor not a socket"))
+	ERRORDECL(ETIMEDOUT, fztranslate_mark("Connection attempt timed out"))
+	ERRORDECL(EHOSTUNREACH, fztranslate_mark("No route to host"))
+	ERRORDECL(ENOTCONN, fztranslate_mark("Socket not connected"))
+	ERRORDECL(ENETRESET, fztranslate_mark("Connection reset by network"))
+	ERRORDECL(EOPNOTSUPP, fztranslate_mark("Operation not supported"))
+	ERRORDECL(ESHUTDOWN, fztranslate_mark("Socket has been shut down"))
+	ERRORDECL(EMSGSIZE, fztranslate_mark("Message too large"))
+	ERRORDECL(ECONNABORTED, fztranslate_mark("Connection aborted"))
+	ERRORDECL(ECONNRESET, fztranslate_mark("Connection reset by peer"))
+	ERRORDECL(EPIPE, fztranslate_mark("Local endpoint has been closed"))
+	ERRORDECL(EHOSTDOWN, fztranslate_mark("Host is down"))
 
 	// Getaddrinfo related
 #ifdef EAI_ADDRFAMILY
-	ERRORDECL(EAI_ADDRFAMILY, TRANSLATE_T("Network host does not have any network addresses in the requested address family"))
+	ERRORDECL(EAI_ADDRFAMILY, fztranslate_mark("Network host does not have any network addresses in the requested address family"))
 #endif
-	ERRORDECL(EAI_AGAIN, TRANSLATE_T("Temporary failure in name resolution"))
-	ERRORDECL(EAI_BADFLAGS, TRANSLATE_T("Invalid value for ai_flags"))
+	ERRORDECL(EAI_AGAIN, fztranslate_mark("Temporary failure in name resolution"))
+	ERRORDECL(EAI_BADFLAGS, fztranslate_mark("Invalid value for ai_flags"))
 #ifdef EAI_BADHINTS
-	ERRORDECL(EAI_BADHINTS, TRANSLATE_T("Invalid value for hints"))
+	ERRORDECL(EAI_BADHINTS, fztranslate_mark("Invalid value for hints"))
 #endif
-	ERRORDECL(EAI_FAIL, TRANSLATE_T("Nonrecoverable failure in name resolution"))
-	ERRORDECL(EAI_FAMILY, TRANSLATE_T("The ai_family member is not supported"))
-	ERRORDECL(EAI_MEMORY, TRANSLATE_T("Memory allocation failure"))
+	ERRORDECL(EAI_FAIL, fztranslate_mark("Nonrecoverable failure in name resolution"))
+	ERRORDECL(EAI_FAMILY, fztranslate_mark("The ai_family member is not supported"))
+	ERRORDECL(EAI_MEMORY, fztranslate_mark("Memory allocation failure"))
 #ifdef EAI_NODATA
-	ERRORDECL(EAI_NODATA, TRANSLATE_T("No address associated with nodename"))
+	ERRORDECL(EAI_NODATA, fztranslate_mark("No address associated with nodename"))
 #endif
-	ERRORDECL(EAI_NONAME, TRANSLATE_T("Neither nodename nor servname provided, or not known"))
+	ERRORDECL(EAI_NONAME, fztranslate_mark("Neither nodename nor servname provided, or not known"))
 #ifdef EAI_OVERFLOW
-	ERRORDECL(EAI_OVERFLOW, TRANSLATE_T("Argument buffer overflow"))
+	ERRORDECL(EAI_OVERFLOW, fztranslate_mark("Argument buffer overflow"))
 #endif
 #ifdef EAI_PROTOCOL
-	ERRORDECL(EAI_PROTOCOL, TRANSLATE_T("Resolved protocol is unknown"))
+	ERRORDECL(EAI_PROTOCOL, fztranslate_mark("Resolved protocol is unknown"))
 #endif
-	ERRORDECL(EAI_SERVICE, TRANSLATE_T("The servname parameter is not supported for ai_socktype"))
-	ERRORDECL(EAI_SOCKTYPE, TRANSLATE_T("The ai_socktype member is not supported"))
+	ERRORDECL(EAI_SERVICE, fztranslate_mark("The servname parameter is not supported for ai_socktype"))
+	ERRORDECL(EAI_SOCKTYPE, fztranslate_mark("The ai_socktype member is not supported"))
 #ifdef EAI_SYSTEM
-	ERRORDECL(EAI_SYSTEM, TRANSLATE_T("Other system error"))
+	ERRORDECL(EAI_SYSTEM, fztranslate_mark("Other system error"))
 #endif
 
 	// Codes that have no POSIX equivalence
 #ifdef FZ_WINDOWS
-	ERRORDECL(WSANOTINITIALISED, TRANSLATE_T("Not initialized, need to call WSAStartup"))
-	ERRORDECL(WSAENETDOWN, TRANSLATE_T("System's network subsystem has failed"))
-	ERRORDECL(WSAEPROTOTYPE, TRANSLATE_T("Protocol not supported on given socket type"))
-	ERRORDECL(WSAESOCKTNOSUPPORT, TRANSLATE_T("Socket type not supported for address family"))
-	ERRORDECL(WSAEADDRNOTAVAIL, TRANSLATE_T("Cannot assign requested address"))
-	ERRORDECL(ERROR_NETNAME_DELETED, TRANSLATE_T("The specified network name is no longer available"))
+	ERRORDECL(WSANOTINITIALISED, fztranslate_mark("Not initialized, need to call WSAStartup"))
+	ERRORDECL(WSAENETDOWN, fztranslate_mark("System's network subsystem has failed"))
+	ERRORDECL(WSAEPROTOTYPE, fztranslate_mark("Protocol not supported on given socket type"))
+	ERRORDECL(WSAESOCKTNOSUPPORT, fztranslate_mark("Socket type not supported for address family"))
+	ERRORDECL(WSAEADDRNOTAVAIL, fztranslate_mark("Cannot assign requested address"))
+	ERRORDECL(ERROR_NETNAME_DELETED, fztranslate_mark("The specified network name is no longer available"))
 #endif
 	{ 0, 0, 0 }
 };
@@ -1116,7 +1090,7 @@ fz::native_string CSocket::GetErrorDescription(int error)
 			continue;
 		}
 
-		return fz::to_native(fz::to_native(std::string(error_table[i].name)) + fzT(" - ") + fz::to_native(wxGetTranslation(error_table[i].description)));
+		return fz::to_native(fz::to_native(std::string(error_table[i].name)) + fzT(" - ") + fz::to_native(fz::translate(error_table[i].description)));
 	}
 
 	return fz::sprintf(fzT("%d"), error);

@@ -852,7 +852,7 @@ void CFilterManager::LoadFilters()
 
 	CReentrantInterProcessMutexLocker mutex(MUTEX_FILTERS);
 
-	wxString file(wxGetApp().GetSettingsFile(_T("filters")));
+	std::wstring file(wxGetApp().GetSettingsFile(_T("filters")));
 	if (fz::local_filesys::get_size(fz::to_native(file)) < 1) {
 		file = wxGetApp().GetResourceDir().GetPath() + _T("defaultfilters.xml");
 	}

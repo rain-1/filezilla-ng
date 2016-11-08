@@ -24,8 +24,8 @@ END_EVENT_TABLE()
 
 // Mark some strings used by wx as translatable
 #if 0
-TRANSLATE_T("&Next >");
-TRANSLATE_T("< &Back");
+fztranslate_mark("&Next >");
+fztranslate_mark("< &Back");
 #endif
 
 CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaEngineContext & engine_context)

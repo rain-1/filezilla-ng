@@ -6,6 +6,8 @@
 
 #include <deque>
 
+#include <wx/wxcrt.h>
+
 #ifdef FZ_WINDOWS
 wchar_t const CLocalPath::path_separator = '\\';
 #else
@@ -447,7 +449,7 @@ bool CLocalPath::Exists(std::wstring *error) const
 			return false;
 		}
 
-		*error = fz::sprintf(_("'%s' does not exist or cannot be accessed.").ToStdWstring(), path);
+		*error = fz::sprintf(_("'%s' does not exist or cannot be accessed."), path);
 
 		if ((*m_path)[0] == '\\') {
 			return false;
@@ -459,13 +461,13 @@ bool CLocalPath::Exists(std::wstring *error) const
 		}
 		int type = GetDriveType(m_path->substr(0, 3).c_str());
 		if (type == DRIVE_REMOVABLE || type == DRIVE_CDROM) {
-			*error = fz::sprintf(_("Cannot access '%s', no media inserted or drive not ready.").ToStdWstring(), path);
+			*error = fz::sprintf(_("Cannot access '%s', no media inserted or drive not ready."), path);
 		}
 		return false;
 	}
 	else if (!(ret & FILE_ATTRIBUTE_DIRECTORY)) {
 		if (error) {
-			*error = fz::sprintf(_("'%s' is not a directory.").ToStdWstring(), path);
+			*error = fz::sprintf(_("'%s' is not a directory."), path);
 		}
 		return false;
 	}

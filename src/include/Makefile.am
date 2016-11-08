@@ -10,7 +10,6 @@ noinst_HEADERS = \
 	local_path.h \
 	logging.h \
 	misc.h \
-	msgbox.h \
 	notification.h \
 	optionsbase.h \
 	option_change_event_handler.h \

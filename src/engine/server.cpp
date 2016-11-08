@@ -2,38 +2,38 @@
 
 struct t_protocolInfo
 {
-	const ServerProtocol protocol;
+	ServerProtocol const protocol;
 	std::wstring const prefix;
 	bool alwaysShowPrefix;
 	unsigned int defaultPort;
-	const bool translateable;
-	const wchar_t* const name;
+	bool const translateable;
+	char const* const name;
 	bool supportsPostlogin;
 };
 
 static const t_protocolInfo protocolInfos[] = {
-	{ FTP,          _T("ftp"),    false, 21,  true,  TRANSLATE_T("FTP - File Transfer Protocol with optional encryption"), true  },
-	{ SFTP,         _T("sftp"),   true,  22,  false, _T("SFTP - SSH File Transfer Protocol"),                              false },
-	{ HTTP,         _T("http"),   true,  80,  false, _T("HTTP - Hypertext Transfer Protocol"),                             false },
-	{ HTTPS,        _T("https"),  true, 443,  true,  TRANSLATE_T("HTTPS - HTTP over TLS"),                                 false },
-	{ FTPS,         _T("ftps"),   true, 990,  true,  TRANSLATE_T("FTPS - FTP over implicit TLS"),                          true  },
-	{ FTPES,        _T("ftpes"),  true,  21,  true,  TRANSLATE_T("FTPES - FTP over explicit TLS"),                         true  },
-	{ INSECURE_FTP, _T("ftp"),    false, 21,  true,  TRANSLATE_T("FTP - Insecure File Transfer Protocol"),                 true  },
-	{ UNKNOWN,      _T(""),       false, 21,  false, _T(""), false }
+	{ FTP,          _T("ftp"),    false, 21,  true,  fztranslate_mark("FTP - File Transfer Protocol with optional encryption"), true  },
+	{ SFTP,         _T("sftp"),   true,  22,  false, "SFTP - SSH File Transfer Protocol",                                       false },
+	{ HTTP,         _T("http"),   true,  80,  false, "HTTP - Hypertext Transfer Protocol",                                      false },
+	{ HTTPS,        _T("https"),  true, 443,  true,  fztranslate_mark("HTTPS - HTTP over TLS"),                                 false },
+	{ FTPS,         _T("ftps"),   true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true  },
+	{ FTPES,        _T("ftpes"),  true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true  },
+	{ INSECURE_FTP, _T("ftp"),    false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true  },
+	{ UNKNOWN,      _T(""),       false, 21,  false, "", false }
 };
 
-static const std::wstring typeNames[SERVERTYPE_MAX] = {
-	TRANSLATE_T("Default (Autodetect)"),
-	_T("Unix"),
-	_T("VMS"),
-	_T("DOS with backslash separators"),
-	_T("MVS, OS/390, z/OS"),
-	_T("VxWorks"),
-	_T("z/VM"),
-	_T("HP NonStop"),
-	TRANSLATE_T("DOS-like with virtual paths"),
-	_T("Cygwin"),
-	_T("DOS with forward-slash separators"),
+static char const* const typeNames[SERVERTYPE_MAX] = {
+	fztranslate_mark("Default (Autodetect)"),
+	"Unix",
+	"VMS",
+	"DOS with backslash separators",
+	"MVS, OS/390, z/OS",
+	"VxWorks",
+	"z/VM",
+	"HP NonStop",
+	fztranslate_mark("DOS-like with virtual paths"),
+	"Cygwin",
+	"DOS with forward-slash separators",
 };
 
 static const t_protocolInfo& GetProtocolInfo(ServerProtocol protocol)
@@ -58,9 +58,9 @@ bool CServer::ParseUrl(std::wstring const& host, std::wstring const& port, std::
 	if (!port.empty()) {
 		nPort = fz::to_integral<unsigned int>(fz::trimmed(port));
 		if (port.size() > 5 || !nPort || nPort > 65535) {
-			error = _("Invalid port given. The port has to be a value from 1 to 65535.").ToStdWstring();
+			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
 			error += L"\n";
-			error += _("You can leave the port field empty to use the default port.").ToStdWstring();
+			error += _("You can leave the port field empty to use the default port.");
 			return false;
 		}
 	}
@@ -72,7 +72,7 @@ bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, 
 	m_type = DEFAULT;
 
 	if (host.empty()) {
-		error = _("No host given, please enter a host.").ToStdWstring();
+		error = _("No host given, please enter a host.");
 		return false;
 	}
 
@@ -85,7 +85,7 @@ bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, 
 		}
 		m_protocol = GetProtocolFromPrefix(protocol);
 		if (m_protocol == UNKNOWN) {
-			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).").ToStdWstring();
+			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
 			return false;
 		}
 	}
@@ -123,7 +123,7 @@ bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, 
 		fz::trim(user);
 
 		if (user.empty()) {
-			error = _("Invalid username given.").ToStdWstring();
+			error = _("Invalid username given.");
 			return false;
 		}
 	}
@@ -147,12 +147,12 @@ bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, 
 		// Probably IPv6 address
 		pos = host.find(']');
 		if (pos == std::wstring::npos) {
-			error = _("Host starts with '[' but no closing bracket found.").ToStdWstring();
+			error = _("Host starts with '[' but no closing bracket found.");
 			return false;
 		}
 		if (pos < host.size() - 1 ) {
 			if (host[pos + 1] != ':') {
-				error = _("Invalid host, after closing bracket only colon and port may follow.").ToStdWstring();
+				error = _("Invalid host, after closing bracket only colon and port may follow.");
 				return false;
 			}
 			++pos;
@@ -165,7 +165,7 @@ bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, 
 	}
 	if (pos != std::wstring::npos) {
 		if (!pos) {
-			error = _("No host given, please enter a host.").ToStdWstring();
+			error = _("No host given, please enter a host.");
 			return false;
 		}
 
@@ -179,14 +179,14 @@ bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, 
 	}
 
 	if (port < 1 || port > 65535) {
-		error = _("Invalid port given. The port has to be a value from 1 to 65535.").ToStdWstring();
+		error = _("Invalid port given. The port has to be a value from 1 to 65535.");
 		return false;
 	}
 	
 	fz::trim(host);
 
 	if (host.empty()) {
-		error = _("No host given, please enter a host.").ToStdWstring();
+		error = _("No host given, please enter a host.");
 		return false;
 	}
 
@@ -765,16 +765,17 @@ unsigned int CServer::GetDefaultPort(ServerProtocol protocol)
 	return info.defaultPort;
 }
 
-ServerProtocol CServer::GetProtocolFromPort(unsigned int port, bool defaultOnly /*=false*/)
+ServerProtocol CServer::GetProtocolFromPort(unsigned int port, bool defaultOnly)
 {
-	for (unsigned int i = 0; protocolInfos[i].protocol != UNKNOWN; ++i)
-	{
-		if (protocolInfos[i].defaultPort == port)
+	for (unsigned int i = 0; protocolInfos[i].protocol != UNKNOWN; ++i) {
+		if (protocolInfos[i].defaultPort == port) {
 			return protocolInfos[i].protocol;
+		}
 	}
 
-	if (defaultOnly)
+	if (defaultOnly) {
 		return UNKNOWN;
+	}
 
 	// Else default to FTP
 	return FTP;
@@ -790,10 +791,10 @@ std::wstring CServer::GetProtocolName(ServerProtocol protocol)
 		}
 
 		if (protocolInfo->translateable) {
-			return wxGetTranslation(protocolInfo->name).ToStdWstring();
+			return fz::translate(protocolInfo->name);
 		}
 		else {
-			return protocolInfo->name;
+			return fz::to_wstring(protocolInfo->name);
 		}
 	}
 
@@ -805,7 +806,7 @@ ServerProtocol CServer::GetProtocolFromName(std::wstring const& name)
 	const t_protocolInfo *protocolInfo = protocolInfos;
 	while (protocolInfo->protocol != UNKNOWN) {
 		if (protocolInfo->translateable) {
-			if (wxGetTranslation(protocolInfo->name) == name) {
+			if (fz::translate(protocolInfo->name) == name) {
 				return protocolInfo->protocol;
 			}
 		}
@@ -877,7 +878,7 @@ bool CServer::ProtocolHasDataTypeConcept(const ServerProtocol protocol)
 std::wstring CServer::GetNameFromServerType(ServerType type)
 {
 	assert(type != SERVERTYPE_MAX);
-	return wxGetTranslation(typeNames[type]).ToStdWstring();
+	return fz::translate(typeNames[type]);
 }
 
 ServerType CServer::GetServerTypeFromName(std::wstring const& name)
@@ -915,16 +916,16 @@ std::wstring CServer::GetNameFromLogonType(LogonType type)
 	switch (type)
 	{
 	case NORMAL:
-		return _("Normal").ToStdWstring();
+		return _("Normal");
 	case ASK:
-		return _("Ask for password").ToStdWstring();
+		return _("Ask for password");
 	case KEY:
-		return _("Key file").ToStdWstring();
+		return _("Key file");
 	case INTERACTIVE:
-		return _("Interactive").ToStdWstring();
+		return _("Interactive");
 	case ACCOUNT:
-		return _("Account").ToStdWstring();
+		return _("Account");
 	default:
-		return _("Anonymous").ToStdWstring();
+		return _("Anonymous");
 	}
 }
