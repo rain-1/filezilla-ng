@@ -2,10 +2,6 @@
 
 #include "logging_private.h"
 
-#ifdef FZ_WINDOWS
-#include <wx/filename.h>
-#endif
-
 #include <errno.h>
 
 bool CLogging::m_logfile_initialized = false;
@@ -200,9 +196,20 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 				// a handle. Move it far away first.
 				// Todo: Handle the case in which logdir and tmpdir are on different volumes.
 				// (Why is everthing so needlessly complex on MSW?)
-				std::wstring tmp = wxFileName::CreateTempFileName(_T("fz3")).ToStdWstring();
-				MoveFileEx((m_file + _T(".1")).c_str(), tmp.c_str(), MOVEFILE_REPLACE_EXISTING);
-				DeleteFile(tmp.c_str());
+
+				wchar_t tempDir[MAX_PATH + 1];
+				DWORD res = GetTempPath(MAX_PATH, tempDir);
+				if (res && res <= MAX_PATH) {
+					tempDir[MAX_PATH] = 0;
+
+					wchar_t tempFile[MAX_PATH + 1];
+					res = GetTempFileName(tempDir, L"fz3", 0, tempFile);
+					if (res) {
+						tempFile[MAX_PATH] = 0;
+						MoveFileEx((m_file + _T(".1")).c_str(), tempFile, MOVEFILE_REPLACE_EXISTING);
+						DeleteFile(tempFile);
+					}
+				}
 				MoveFileEx(m_file.c_str(), (m_file + _T(".1")).c_str(), MOVEFILE_REPLACE_EXISTING);
 				m_log_fd = CreateFile(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 				if (m_log_fd == INVALID_HANDLE_VALUE) {
