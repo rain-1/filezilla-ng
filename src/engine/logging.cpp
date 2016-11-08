@@ -4,6 +4,12 @@
 
 #include <errno.h>
 
+#ifndef FZ_WINDOWS
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#endif
+
 bool CLogging::m_logfile_initialized = false;
 #ifdef FZ_WINDOWS
 HANDLE CLogging::m_log_fd = INVALID_HANDLE_VALUE;

@@ -2,6 +2,7 @@
 #include "local_path.h"
 #ifndef FZ_WINDOWS
 #include <errno.h>
+#include <sys/stat.h>
 #endif
 
 #include <deque>
@@ -488,20 +489,20 @@ bool CLocalPath::Exists(std::wstring *error) const
 		}
 
 		if (error) {
-			*error = fz::sprintf(_("'%s' is not a directory.").ToStdWstring(), *m_path);
+			*error = fz::sprintf(_("'%s' is not a directory."), *m_path);
 		}
 
 		return false;
 	}
 	else if (result == ENOTDIR) {
 		if (error) {
-			*error = fz::sprintf(_("'%s' is not a directory.").ToStdWstring(), *m_path);
+			*error = fz::sprintf(_("'%s' is not a directory."), *m_path);
 		}
 		return false;
 	}
 	else {
 		if (error) {
-			*error = fz::sprintf(_("'%s' does not exist or cannot be accessed.").ToStdWstring(), *m_path);
+			*error = fz::sprintf(_("'%s' does not exist or cannot be accessed."), *m_path);
 		}
 		return false;
 	}
