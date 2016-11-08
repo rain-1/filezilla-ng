@@ -1796,7 +1796,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 				// nothing has been written to it. Remove it again, so we don't
 				// leave a bunch of empty files all over the place.
 				LogMessage(MessageType::Debug_Verbose, _T("Deleting empty file"));
-				wxRemoveFile(pData->localFile);
+				fz::remove_file(fz::to_native(pData->localFile));
 			}
 		}
 	}
@@ -2595,7 +2595,7 @@ int CFtpControlSocket::FileTransferSend()
 
 					startOffset = pFile->seek(0, fz::file::end);
 
-					if (startOffset == wxInvalidOffset) {
+					if (startOffset == -1) {
 						LogMessage(MessageType::Error, _("Could not seek to the end of the file"));
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
@@ -2685,7 +2685,7 @@ int CFtpControlSocket::FileTransferSend()
 						}
 
 						// Assume native 64 bit type exists
-						if (pFile->seek(startOffset, fz::file::begin) == wxInvalidOffset) {
+						if (pFile->seek(startOffset, fz::file::begin) == -1) {
 							std::wstring const s = std::to_wstring(startOffset);
 							LogMessage(MessageType::Error, _("Could not seek to offset %s within file"), s);
 							ResetOperation(FZ_REPLY_ERROR);

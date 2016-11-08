@@ -24,7 +24,6 @@
 #include <windows.h>
 #endif
 
-#include <wx/file.h>
 #include <wx/string.h>
 #include <wx/translation.h>
 
