@@ -40,7 +40,7 @@ MSGMERGE=@msgmerge@
 XGETTEXT=@xgettext@
 
 # common xgettext args: C++ syntax, use the specified macro names as markers
-XGETTEXT_ARGS=-C -k_ -kfztranslate:1t -kfztranslate:1,2,3t -kwxPLURAL:1,2 -s -j -c@translator --msgid-bugs-address='https://trac.filezilla-project.org/'
+XGETTEXT_ARGS=-C -k_ -kfztranslate:1,1t -kfztranslate:1,2,3t -kfztranslate_mark:1,1t -kfztranslate_mark:1,2,3t -kwxPLURAL:1,2 -s -j -c@translator --msgid-bugs-address='https://trac.filezilla-project.org/'
 
 # implicit rules
 %.mo: %.po.new
