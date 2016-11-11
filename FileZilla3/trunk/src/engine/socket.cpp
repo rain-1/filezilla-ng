@@ -1,4 +1,3 @@
-#include <wx/defs.h>
 #include <libfilezilla/libfilezilla.hpp>
 #ifdef FZ_WINDOWS
   #include <libfilezilla/private/windows.hpp>

@@ -1,4 +1,3 @@
-#include <wx/defs.h>
 #include <libfilezilla/libfilezilla.hpp>
 #ifdef FZ_WINDOWS
   #include <libfilezilla/private/windows.hpp>
@@ -539,7 +538,7 @@ void CProxySocket::OnReceive()
 					return;
 				}
 			default:
-				wxFAIL;
+				assert(false);
 				break;
 			}
 
@@ -614,7 +613,7 @@ void CProxySocket::OnReceive()
 				// Nothing to send, we simply need to wait for more data
 				break;
 			default:
-				wxFAIL;
+				assert(false);
 				break;
 			}
 			if (m_pSendBuffer && m_can_write)

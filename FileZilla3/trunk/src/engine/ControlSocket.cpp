@@ -239,7 +239,7 @@ int CControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 {
 	LogMessage(MessageType::Debug_Debug, _T("CControlSocket::DoClose(%d)"), nErrorCode);
 	if (m_closed) {
-		wxASSERT(!m_pCurOpData);
+		assert(!m_pCurOpData);
 		return nErrorCode;
 	}
 
@@ -476,7 +476,7 @@ std::wstring CControlSocket::ConvToLocal(const char* buffer, size_t len)
 
 wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, wxMBConv& conv, size_t len, size_t& outlen)
 {
-	wxASSERT(buffer && len > 0 && !buffer[len - 1]);
+	assert(buffer && len > 0 && !buffer[len - 1]);
 	outlen = conv.ToWChar(0, 0, buffer, len);
 	if (!outlen || outlen == wxCONV_FAILED)
 		return 0;
@@ -489,7 +489,7 @@ wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, wxMBConv& conv, s
 wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_t& outlen)
 {
 	if (m_useUTF8) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		// wxConvUTF8 is generic and slow.
 		// Use the highly optimized MultiByteToWideChar on Windows
 		// This helps when processing large directory listings.
@@ -619,8 +619,8 @@ const std::list<CControlSocket::t_lockInfo>::iterator CControlSocket::GetLockSta
 
 bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& directory)
 {
-	wxASSERT(m_pCurrentServer);
-	wxASSERT(m_pCurOpData);
+	assert(m_pCurrentServer);
+	assert(m_pCurOpData);
 
 	std::list<t_lockInfo>::iterator own = GetLockStatus();
 	if (own == m_lockInfoList.end())
@@ -645,8 +645,8 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 			}
 			return true;
 		}
-		wxASSERT(own->waiting);
-		wxASSERT(own->reason == reason);
+		assert(own->waiting);
+		assert(own->reason == reason);
 	}
 
 	// Needs to be set in any case so that ResetOperation
@@ -674,7 +674,7 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 
 bool CControlSocket::IsLocked(locking_reason reason, const CServerPath& directory)
 {
-	wxASSERT(m_pCurrentServer);
+	assert(m_pCurrentServer);
 
 	std::list<t_lockInfo>::iterator own = GetLockStatus();
 	if (own != m_lockInfoList.end())
@@ -707,11 +707,11 @@ void CControlSocket::UnlockCache()
 	if (iter == m_lockInfoList.end())
 		return;
 
-	wxASSERT(!iter->waiting || iter->lockcount == 0);
+	assert(!iter->waiting || iter->lockcount == 0);
 	if (!iter->waiting)
 	{
 		iter->lockcount--;
-		wxASSERT(iter->lockcount >= 0);
+		assert(iter->lockcount >= 0);
 		if (iter->lockcount)
 			return;
 	}
@@ -801,7 +801,7 @@ bool CControlSocket::IsWaitingForLock()
 
 void CControlSocket::InvalidateCurrentWorkingDir(const CServerPath& path)
 {
-	wxASSERT(!path.empty());
+	assert(!path.empty());
 	if (m_CurrentPath.empty())
 		return;
 
@@ -828,7 +828,7 @@ fz::duration CControlSocket::GetTimezoneOffset() const
 
 void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 {
-	wxASSERT(pNotification);
+	assert(pNotification);
 
 	pNotification->requestNumber = engine_.GetNextAsyncRequestNumber();
 
@@ -1123,7 +1123,7 @@ void CRealControlSocket::ResetSocket()
 
 bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNotification)
 {
-	wxASSERT(pFileExistsNotification);
+	assert(pFileExistsNotification);
 
 	if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pFileExistsNotification->GetRequestID());

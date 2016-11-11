@@ -49,7 +49,7 @@ const CDirentry& CDirectoryListing::operator[](unsigned int index) const
 CDirentry& CDirectoryListing::operator[](unsigned int index)
 {
 	// Commented out, too heavy speed penalty
-	// wxASSERT(index < m_entryCount);
+	// assert(index < m_entryCount);
 	return m_entries.get()[index].get();
 }
 

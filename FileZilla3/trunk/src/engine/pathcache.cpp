@@ -13,7 +13,7 @@ void CPathCache::Store(CServer const& server, CServerPath const& target, CServer
 {
 	fz::scoped_lock lock(mutex_);
 
-	wxASSERT(!target.empty() && !source.empty());
+	assert(!target.empty() && !source.empty());
 
 	tCacheIterator iter = m_cache.find(server);
 	if (iter == m_cache.cend()) {

@@ -1074,7 +1074,7 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 		pData->path = m_CurrentPath;
 
 	if (!pData->refresh) {
-		wxASSERT(!pData->pNextOpData);
+		assert(!pData->pNextOpData);
 
 		// Do a cache lookup now that we know the correct directory
 
@@ -1129,7 +1129,7 @@ int CSftpControlSocket::ListSend()
 		// Check if we can use already existing listing
 		CDirectoryListing listing;
 		bool is_outdated = false;
-		wxASSERT(pData->subDir.empty()); // Did do ChangeDir before trying to lock
+		assert(pData->subDir.empty()); // Did do ChangeDir before trying to lock
 		bool found = engine_.GetDirectoryCache().Lookup(listing, *m_pCurrentServer, pData->path, true, is_outdated);
 		if (found && !is_outdated && !listing.get_unsure_flags() &&
 			listing.m_firstListTime >= pData->m_time_before_locking)
@@ -1244,7 +1244,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool li
 		!static_cast<CSftpFileTransferOpData *>(pData->pNextOpData)->download)
 	{
 		pData->tryMkdOnFail = true;
-		wxASSERT(subDir.empty());
+		assert(subDir.empty());
 	}
 
 	m_pCurOpData = pData;
@@ -2072,14 +2072,14 @@ std::wstring CSftpControlSocket::QuoteFilename(std::wstring const& filename)
 int CSftpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::Delete"));
-	wxASSERT(!m_pCurOpData);
+	assert(!m_pCurOpData);
 	CSftpDeleteOpData *pData = new CSftpDeleteOpData();
 	m_pCurOpData = pData;
 	pData->path = path;
 	pData->files = files;
 
 	// CFileZillaEnginePrivate should have checked this already
-	wxASSERT(!files.empty());
+	assert(!files.empty());
 
 	return SendNextCommand();
 }
@@ -2180,7 +2180,7 @@ int CSftpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& s
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::RemoveDir"));
 
-	wxASSERT(!m_pCurOpData);
+	assert(!m_pCurOpData);
 	CSftpRemoveDirOpData *pData = new CSftpRemoveDirOpData();
 	m_pCurOpData = pData;
 	pData->path = path;
@@ -2585,7 +2585,7 @@ int CSftpControlSocket::ParseSubcommandResult(int prevResult)
 
 int CSftpControlSocket::ListCheckTimezoneDetection()
 {
-	wxASSERT(m_pCurOpData);
+	assert(m_pCurOpData);
 
 	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
 

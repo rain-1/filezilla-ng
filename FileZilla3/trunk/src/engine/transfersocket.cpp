@@ -633,7 +633,7 @@ CSocket* CTransferSocket::CreateSocketServer()
 
 	if (start < low || start > high) {
 		start = fz::random_number(low, high);
-		wxASSERT(start >= low && start <= high);
+		assert(start >= low && start <= high);
 	}
 
 	CSocket* pServer = 0;
@@ -752,7 +752,7 @@ bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 	// Disable Nagle algorithm during TlS handshake
 	m_pSocket->SetFlags(m_pSocket->GetFlags() | CSocket::flag_nodelay);
 
-	wxASSERT(!m_pBackend);
+	assert(!m_pBackend);
 	m_pTlsSocket = new CTlsSocket(this, *m_pSocket, &controlSocket_);
 
 	if (!m_pTlsSocket->Init()) {
@@ -777,7 +777,7 @@ bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 
 void CTransferSocket::TriggerPostponedEvents()
 {
-	wxASSERT(m_bActive);
+	assert(m_bActive);
 
 	if (m_postponedReceive) {
 		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Executing postponed receive"));

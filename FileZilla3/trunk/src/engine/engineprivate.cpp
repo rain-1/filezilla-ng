@@ -510,7 +510,7 @@ void CFileZillaEnginePrivate::OnTimer(int)
 		wxFAIL_MSG(_T("CFileZillaEnginePrivate::OnTimer called without pending Command::connect"));
 		return;
 	}
-	wxASSERT(!IsConnected());
+	assert(!IsConnected());
 
 	m_pControlSocket.reset();
 
@@ -567,9 +567,9 @@ void CFileZillaEnginePrivate::InvalidateCurrentWorkingDirs(const CServerPath& pa
 {
 	fz::scoped_lock lock(mutex_);
 
-	wxASSERT(m_pControlSocket);
+	assert(m_pControlSocket);
 	const CServer* const pOwnServer = m_pControlSocket->GetCurrentServer();
-	wxASSERT(pOwnServer);
+	assert(pOwnServer);
 
 	for (auto & engine : m_engineList) {
 		if (!engine || engine == this)
@@ -680,7 +680,7 @@ void CFileZillaEnginePrivate::DoCancel()
 		return;
 
 	if (m_retryTimer) {
-		wxASSERT(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
+		assert(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
 
 		m_pControlSocket.reset();
 
@@ -818,7 +818,7 @@ int CFileZillaEnginePrivate::CacheLookup(const CServerPath& path, CDirectoryList
 	if (!IsConnected())
 		return FZ_REPLY_ERROR;
 
-	wxASSERT(m_pControlSocket->GetCurrentServer());
+	assert(m_pControlSocket->GetCurrentServer());
 
 	bool is_outdated = false;
 	if (!directory_cache_.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated))

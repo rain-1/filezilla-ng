@@ -9,7 +9,7 @@ CDirectoryCache::~CDirectoryCache()
 {
 	for( auto & serverEntry : m_serverList ) {
 		for (auto & cacheEntry : serverEntry.cacheList ) {
-#ifdef __WXDEBUG__
+#ifndef NDEBUG
 			m_totalFileCount -= cacheEntry.listing.GetCount();
 #endif
 			tLruList::iterator* lruIt = (tLruList::iterator*)cacheEntry.lruIt;
@@ -19,8 +19,8 @@ CDirectoryCache::~CDirectoryCache()
 			}
 		}
 	}
-#ifdef __WXDEBUG__
-	wxASSERT(m_totalFileCount == 0);
+#ifndef NDEBUG
+	assert(m_totalFileCount == 0);
 #endif
 }
 
@@ -29,7 +29,7 @@ void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &ser
 	fz::scoped_lock lock(mutex_);
 
 	tServerIter sit = CreateServerEntry(server);
-	wxASSERT(sit != m_serverList.end());
+	assert(sit != m_serverList.end());
 
 	m_totalFileCount += listing.GetCount();
 
@@ -269,18 +269,21 @@ bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path,
 
 		if (matchCase) {
 			unsigned int i;
-			for (i = 0; i < entry.listing.GetCount(); i++)
-				if (entry.listing[i].name == filename)
+			for (i = 0; i < entry.listing.GetCount(); ++i) {
+				if (entry.listing[i].name == filename) {
 					break;
-			wxASSERT(i != entry.listing.GetCount());
+				}
+			}
+			assert(i != entry.listing.GetCount());
 
 			entry.listing.RemoveEntry(i); // This does set m_hasUnsureEntries
 			--m_totalFileCount;
 		}
 		else {
 			for (unsigned int i = 0; i < entry.listing.GetCount(); ++i) {
-				if (!filename.CmpNoCase(entry.listing[i].name))
+				if (!filename.CmpNoCase(entry.listing[i].name)) {
 					entry.listing[i].flags |= CDirentry::flag_unsure;
+				}
 			}
 			entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
 		}
