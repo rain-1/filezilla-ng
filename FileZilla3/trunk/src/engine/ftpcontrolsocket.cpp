@@ -426,8 +426,9 @@ void CFtpControlSocket::OnConnect()
 			}
 
 			int res = m_pTlsSocket->Handshake();
-			if (res == FZ_REPLY_ERROR)
+			if (res == FZ_REPLY_ERROR) {
 				DoClose();
+			}
 
 			return;
 		}
@@ -1267,6 +1268,7 @@ bool CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool
 	std::string buffer = ConvToServer(str);
 	if (buffer.empty()) {
 		LogMessage(MessageType::Error, _("Failed to convert command to 8 bit charset"));
+		ResetOperation(FZ_REPLY_OK);
 		return false;
 	}
 	buffer += "\r\n";
@@ -3932,16 +3934,17 @@ int CFtpControlSocket::TransferParseResponse()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::TransferParseResponse()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
-	if (pData->opState == rawtransfer_init)
+	if (pData->opState == rawtransfer_init) {
+		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
+	}
 
 	int code = GetReplyCode();
 
@@ -3952,63 +3955,74 @@ int CFtpControlSocket::TransferParseResponse()
 	switch (pData->opState)
 	{
 	case rawtransfer_type:
-		if (code != 2 && code != 3)
+		if (code != 2 && code != 3) {
 			error = true;
-		else
-		{
+		}
+		else {
 			pData->opState = rawtransfer_port_pasv;
 			m_lastTypeBinary = pData->pOldData->binary ? 1 : 0;
 		}
 		break;
 	case rawtransfer_port_pasv:
-		if (code != 2 && code != 3)
-		{
-			if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK))
-			{
+		if (code != 2 && code != 3) {
+			if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
 				error = true;
 				break;
 			}
 
-			if (pData->bTriedPasv)
-				if (pData->bTriedActive)
+			if (pData->bTriedPasv) {
+				if (pData->bTriedActive) {
 					error = true;
-				else
+				}
+				else {
 					pData->bPasv = false;
-			else
+				}
+			}
+			else {
 				pData->bPasv = true;
+			}
 			break;
 		}
 		if (pData->bPasv) {
 			bool parsed;
-			if (GetPassiveCommand(*pData) == _T("EPSV"))
+			if (GetPassiveCommand(*pData) == _T("EPSV")) {
 				parsed = ParseEpsvResponse(pData);
-			else
+			}
+			else {
 				parsed = ParsePasvResponse(pData);
+			}
 			if (!parsed) {
 				if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
 					error = true;
 					break;
 				}
 
-				if (!pData->bTriedActive)
+				if (!pData->bTriedActive) {
 					pData->bPasv = false;
-				else
+				}
+				else {
 					error = true;
+				}
 				break;
 			}
 		}
-		if (pData->pOldData->resumeOffset > 0 || m_sentRestartOffset)
+		if (pData->pOldData->resumeOffset > 0 || m_sentRestartOffset) {
 			pData->opState = rawtransfer_rest;
-		else
+		}
+		else {
 			pData->opState = rawtransfer_transfer;
+		}
 		break;
 	case rawtransfer_rest:
-		if (pData->pOldData->resumeOffset <= 0)
+		if (pData->pOldData->resumeOffset <= 0) {
 			m_sentRestartOffset = false;
-		if (pData->pOldData->resumeOffset > 0 && code != 2 && code != 3)
+		}
+		if (pData->pOldData->resumeOffset > 0 && code != 2 && code != 3) {
 			error = true;
-		else
+		}
+		else {
 			pData->opState = rawtransfer_transfer;
+		}
 		break;
 	case rawtransfer_transfer:
 		if (code == 1) {
@@ -4019,8 +4033,9 @@ int CFtpControlSocket::TransferParseResponse()
 			pData->opState = rawtransfer_waitsocket;
 		}
 		else {
-			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
+			if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
 				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure_immediate;
+			}
 			error = true;
 		}
 		break;
@@ -4039,24 +4054,28 @@ int CFtpControlSocket::TransferParseResponse()
 			return FZ_REPLY_OK;
 		}
 		else {
-			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
+			if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
 				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure_immediate;
+			}
 			error = true;
 		}
 		break;
 	case rawtransfer_waitfinish:
 		if (code != 2 && code != 3) {
-			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
+			if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
 				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure;
+			}
 			error = true;
 		}
-		else
+		else {
 			pData->opState = rawtransfer_waitsocket;
+		}
 		break;
 	case rawtransfer_waittransfer:
 		if (code != 2 && code != 3) {
-			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
+			if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
 				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure;
+			}
 			error = true;
 		}
 		else {
@@ -4077,8 +4096,7 @@ int CFtpControlSocket::TransferParseResponse()
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown op state"));
 		error = true;
 	}
-	if (error)
-	{
+	if (error) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
