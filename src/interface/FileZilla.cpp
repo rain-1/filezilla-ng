@@ -39,6 +39,10 @@ IMPLEMENT_APP(CFileZillaApp)
 IMPLEMENT_APP_NO_MAIN(CFileZillaApp)
 #endif //__WXGTK__
 
+#if !wxUSE_PRINTF_POS_PARAMS
+  #error Please build wxWidgets with support for positional arguments.
+#endif
+
 CFileZillaApp::CFileZillaApp()
 {
 	m_profile_start = fz::monotonic_clock::now();

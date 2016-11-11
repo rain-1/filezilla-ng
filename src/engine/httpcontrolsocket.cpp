@@ -243,7 +243,7 @@ int CHttpControlSocket::DoReceive()
 		{
 			if (!read)
 			{
-				wxASSERT(!m_recvBufferPos);
+				assert(!m_recvBufferPos);
 				ProcessData(0, 0);
 				return 0;
 			}
@@ -262,7 +262,7 @@ int CHttpControlSocket::DoReceive()
 
 void CHttpControlSocket::OnConnect()
 {
-	wxASSERT(GetCurrentCommandId() == Command::connect);
+	assert(GetCurrentCommandId() == Command::connect);
 
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
 
@@ -501,7 +501,7 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 		engine_.AddNotification(new CDataNotification(q, len));
 	}
 	else {
-		wxASSERT(pData->file.opened());
+		assert(pData->file.opened());
 
 		auto write = static_cast<int64_t>(len);
 		if (pData->file.write(p, write) != write) {
@@ -919,7 +919,7 @@ void CHttpControlSocket::ResetSocket()
 
 void CHttpControlSocket::ResetHttpData(CHttpOpData* pData)
 {
-	wxASSERT(pData);
+	assert(pData);
 
 	pData->m_gotHeader = false;
 	pData->m_responseCode = -1;
@@ -949,7 +949,7 @@ int CHttpControlSocket::ProcessData(char* p, int len)
 		break;
 	}
 
-	wxASSERT(p || !m_pCurOpData);
+	assert(p || !m_pCurOpData);
 
 	return res;
 }

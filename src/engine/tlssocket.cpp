@@ -616,8 +616,8 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 int CTlsSocket::ContinueHandshake()
 {
 	m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::ContinueHandshake()"));
-	wxASSERT(m_session);
-	wxASSERT(m_tlsState == TlsState::handshake);
+	assert(m_session);
+	assert(m_tlsState == TlsState::handshake);
 
 	int res = gnutls_handshake(m_session);
 	while (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED) {
@@ -821,7 +821,7 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 		m_canTriggerWrite = true;
 	}
 	if (m_lastReadFailed) {
-		wxASSERT(!m_peekData);
+		assert(!m_peekData);
 
 		m_peekDataLen = 65536;
 		m_peekData = new char[m_peekDataLen];

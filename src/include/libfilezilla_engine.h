@@ -9,12 +9,13 @@
 #define PACKAGE_STRING "FileZilla 3"
 #endif
 
+#include <libfilezilla/libfilezilla.hpp>
+
 #include <wx/defs.h>
 
-// Include after defs.h so that __WXFOO__ is properly defined
 #include "setup.h"
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -29,8 +30,6 @@
 #include <list>
 #include <vector>
 #include <map>
-
-#include <libfilezilla/libfilezilla.hpp>
 
 #include <libfilezilla/glue/wx.hpp>
 

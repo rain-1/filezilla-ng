@@ -133,7 +133,7 @@ void CRateLimiter::OnTimer(fz::timer_id)
 
 		for (auto iter = m_objectList.begin(); iter != m_objectList.end(); ++iter) {
 			if ((*iter)->m_bytesAvailable[i] == -1) {
-				wxASSERT(!(*iter)->m_waiting[i]);
+				assert(!(*iter)->m_waiting[i]);
 				(*iter)->m_bytesAvailable[i] = tokensPerObject;
 				unsaturatedObjects.push_back(*iter);
 			}
@@ -194,7 +194,7 @@ void CRateLimiter::WakeupWaitingObjects(fz::scoped_lock & l)
 			if (!pObject->m_waiting[i])
 				continue;
 
-			wxASSERT(pObject->m_bytesAvailable[i] != 0);
+			assert(pObject->m_bytesAvailable[i] != 0);
 			pObject->m_waiting[i] = false;
 
 			l.unlock(); // Do not hold while executing callback
@@ -255,7 +255,7 @@ CRateLimiterObject::CRateLimiterObject()
 
 void CRateLimiterObject::UpdateUsage(CRateLimiter::rate_direction direction, int usedBytes)
 {
-	wxASSERT(usedBytes <= m_bytesAvailable[direction]);
+	assert(usedBytes <= m_bytesAvailable[direction]);
 	if (usedBytes > m_bytesAvailable[direction])
 		m_bytesAvailable[direction] = 0;
 	else
@@ -264,7 +264,7 @@ void CRateLimiterObject::UpdateUsage(CRateLimiter::rate_direction direction, int
 
 void CRateLimiterObject::Wait(CRateLimiter::rate_direction direction)
 {
-	wxASSERT(m_bytesAvailable[direction] == 0);
+	assert(m_bytesAvailable[direction] == 0);
 	m_waiting[direction] = true;
 }
 

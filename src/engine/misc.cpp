@@ -50,7 +50,7 @@ std::string ListTlsCiphers(std::string const& priority)
 	return CTlsSocket::ListTlsCiphers(priority);
 }
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 bool IsAtLeast(int major, int minor = 0)
 {
 	OSVERSIONINFOEX vi = { 0 };
@@ -69,7 +69,7 @@ bool IsAtLeast(int major, int minor = 0)
 
 bool GetRealOsVersion(int& major, int& minor)
 {
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 	return wxGetOsVersion(&major, &minor) != wxOS_UNKNOWN;
 #else
 	major = 4;

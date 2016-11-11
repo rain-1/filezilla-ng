@@ -354,7 +354,7 @@ void CFtpControlSocket::ParseLine(std::wstring line)
 		if (pData->waitChallenge) {
 			std::wstring& challenge = pData->challenge;
 			if (!challenge.empty())
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 				challenge += _T("\r\n");
 #else
 				challenge += _T("\n");
@@ -788,7 +788,7 @@ int CFtpControlSocket::LogonParseResponse()
 
 			LogMessage(MessageType::Status, _("Initializing TLS..."));
 
-			wxASSERT(!m_pTlsSocket);
+			assert(!m_pTlsSocket);
 			delete m_pBackend;
 
 			m_pTlsSocket = new CTlsSocket(this, *m_pSocket, this);
@@ -1181,7 +1181,7 @@ int CFtpControlSocket::LogonSend()
 				}
 				break;
 			case loginCommandType::other:
-				wxASSERT(!cmd.command.empty());
+				assert(!cmd.command.empty());
 				res = SendCommand(cmd.command, cmd.hide_arguments);
 				break;
 			default:
@@ -1405,12 +1405,12 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		}
 		if (pData->path.empty()) {
 			pData->path = m_CurrentPath;
-			wxASSERT(pData->subDir.empty());
-			wxASSERT(!pData->path.empty());
+			assert(pData->subDir.empty());
+			assert(!pData->path.empty());
 		}
 
 		if (!pData->refresh) {
-			wxASSERT(!pData->pNextOpData);
+			assert(!pData->pNextOpData);
 
 			// Do a cache lookup now that we know the correct directory
 			int hasUnsureEntries;
@@ -1636,7 +1636,7 @@ int CFtpControlSocket::ListSend()
 		// Check if we can use already existing listing
 		CDirectoryListing listing;
 		bool is_outdated = false;
-		wxASSERT(pData->subDir.empty()); // Did do ChangeDir before trying to lock
+		assert(pData->subDir.empty()); // Did do ChangeDir before trying to lock
 		bool found = engine_.GetDirectoryCache().Lookup(listing, *m_pCurrentServer, pData->path, true, is_outdated);
 		if (found && !is_outdated && !listing.get_unsure_flags() &&
 			listing.m_firstListTime >= pData->m_time_before_locking)
@@ -1692,7 +1692,7 @@ int CFtpControlSocket::ListParseResponse()
 	{
 		fz::datetime date(m_Response.substr(4), fz::datetime::utc);
 		if (!date.empty()) {
-			wxASSERT(pData->directoryListing[pData->mdtm_index].has_date());
+			assert(pData->directoryListing[pData->mdtm_index].has_date());
 			fz::datetime listTime = pData->directoryListing[pData->mdtm_index].time;
 			listTime -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 
@@ -1737,7 +1737,7 @@ int CFtpControlSocket::ListParseResponse()
 
 int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
 {
-	wxASSERT(m_pCurOpData);
+	assert(m_pCurOpData);
 
 	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
 
@@ -2968,7 +2968,7 @@ int CFtpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&
 	}
 
 	// CFileZillaEnginePrivate should have checked this already
-	wxASSERT(!files.empty());
+	assert(!files.empty());
 
 	return SendNextCommand();
 }
