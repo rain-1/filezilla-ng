@@ -40,7 +40,7 @@ public:
 
 	bool m_gotHeader{};
 	int m_responseCode{-1};
-	wxString m_responseString;
+	std::wstring m_responseString;
 	wxURI m_newLocation;
 	int m_redirectionCount{};
 
@@ -429,7 +429,7 @@ int CHttpControlSocket::FileTransferSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool tls)
+int CHttpControlSocket::InternalConnect(std::wstring host, unsigned short port, bool tls)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::InternalConnect()"));
 
@@ -439,7 +439,7 @@ int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool
 	pData->port = port;
 	pData->tls = tls;
 
-	if (fz::get_address_type(host.ToStdWstring()) == fz::address_type::unknown) {
+	if (fz::get_address_type(host) == fz::address_type::unknown) {
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 	}
 
@@ -638,7 +638,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					m_current_uri = pData->m_newLocation;
 
 					// International domain names
-					wxString host = ConvertDomainName(m_current_uri.GetServer().ToStdWstring());
+					std::wstring host = ConvertDomainName(m_current_uri.GetServer().ToStdWstring());
 
 					int res = InternalConnect(host, static_cast<unsigned short>(port), protocol == HTTPS);
 					if (res == FZ_REPLY_WOULDBLOCK) {

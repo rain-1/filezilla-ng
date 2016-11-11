@@ -1473,15 +1473,14 @@ void CDirectoryListingParserTest::testIndividual()
 
 	CDirectoryListing listing = parser.Parse(CServerPath());
 
-	wxString msg = wxString::Format(_T("Data: %s, count: %d"), wxString(entry.data.c_str(), wxConvUTF8).c_str(), listing.GetCount());
-	msg.Replace(_T("\r"), _T(""));
-	msg.Replace(_T("\n"), _T(""));
-	wxWX2MBbuf mb_buf = msg.mb_str(wxConvUTF8);
-	CPPUNIT_ASSERT_MESSAGE((const char*)mb_buf, listing.GetCount() == 1);
+	std::string msg = fz::sprintf("Data: %s, count: %d", entry.data, listing.GetCount());
+	fz::replace_substrings(msg, "\r", std::string());
+	fz::replace_substrings(msg, "\n", std::string());
 
-	msg = wxString::Format(_T("Data: %s  Expected:\n%s\n  Got:\n%s"), wxString(entry.data.c_str(), wxConvUTF8).c_str(), entry.reference.dump().c_str(), listing[0].dump().c_str());
-	mb_buf = msg.mb_str(wxConvUTF8);
-	CPPUNIT_ASSERT_MESSAGE((const char*)mb_buf, listing[0] == entry.reference);
+	CPPUNIT_ASSERT_MESSAGE(msg, listing.GetCount() == 1);
+
+	msg = fz::sprintf("Data: %s  Expected:\n%s\n  Got:\n%s", entry.data, entry.reference.dump(), listing[0].dump());
+	CPPUNIT_ASSERT_MESSAGE(msg, listing[0] == entry.reference);
 }
 
 void CDirectoryListingParserTest::testAll()
@@ -1501,11 +1500,10 @@ void CDirectoryListingParserTest::testAll()
 	CPPUNIT_ASSERT(listing.GetCount() == m_entries.size());
 
 	unsigned int i = 0;
-	for (std::vector<t_entry>::const_iterator iter = m_entries.begin(); iter != m_entries.end(); iter++, i++)
-	{
-		wxString msg = wxString::Format(_T("Data: %s  Expected:\n%s\n  Got:\n%s"), wxString(iter->data.c_str(), wxConvUTF8).c_str(), iter->reference.dump().c_str(), listing[i].dump().c_str());
+	for (auto iter = m_entries.begin(); iter != m_entries.end(); iter++, i++) {
+		std::string msg = fz::sprintf("Data: %s  Expected:\n%s\n  Got:\n%s", iter->data, iter->reference.dump(), listing[i].dump());
 
-		CPPUNIT_ASSERT_MESSAGE((const char*)msg.mb_str(wxConvUTF8), listing[i] == iter->reference);
+		CPPUNIT_ASSERT_MESSAGE(msg, listing[i] == iter->reference);
 	}
 }
 

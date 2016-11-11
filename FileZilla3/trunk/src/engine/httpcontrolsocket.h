@@ -27,7 +27,7 @@ protected:
 	virtual int FileTransferParseResponse(char* p, unsigned int len);
 	virtual int FileTransferSubcommandResult(int prevResult);
 
-	int InternalConnect(wxString host, unsigned short port, bool tls);
+	int InternalConnect(std::wstring host, unsigned short port, bool tls);
 	int DoInternalConnect();
 
 	virtual void OnConnect();
