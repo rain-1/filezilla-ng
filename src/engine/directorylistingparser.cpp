@@ -1058,8 +1058,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 
 	if (day < 1) {
 		// Get day field
-		if (!line.GetToken(++index, token))
+		if (!line.GetToken(++index, token)) {
 			return false;
+		}
 
 		int dateDay;
 
@@ -1083,8 +1084,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 				bHasYearAndTime = true;
 		}
 
-		if (dateDay < 1 || dateDay > 31)
+		if (dateDay < 1 || dateDay > 31) {
 			return false;
+		}
 		day = dateDay;
 	}
 
@@ -1114,14 +1116,13 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	pos = token.Find(_T(":.-"));
 	if (pos != -1 && mayHaveTime) {
 		// token is a time
-		if (!pos || static_cast<size_t>(pos) == (token.GetLength() - 1))
+		if (!pos || static_cast<size_t>(pos) == (token.GetLength() - 1)) {
 			return false;
+		}
 
-		wxString str = token.GetString();
-		if (!str.Left(pos).ToLong(&hour))
-			return false;
-		if (!str.Mid(pos + 1).ToLong(&minute))
-			return false;
+		std::wstring str = token.GetString();
+		hour = fz::to_integral<int>(str.substr(0, pos), -1);
+		minute = fz::to_integral<int>(str.substr(pos + 1), -1);
 
 		if (hour < 0 || hour > 23) {
 			// Allow alternate midnight representation
@@ -1129,8 +1130,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 				return false;
 			}
 		}
-		else if (minute < 0 || minute > 59)
+		else if (minute < 0 || minute > 59) {
 			return false;
+		}
 
 		// Some servers use times only for files newer than 6 months
 		if (year <= 0) {
@@ -1146,38 +1148,42 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			// Problem: Servers which do send the time but not the year even
 			// one day away from getting 1 year old. This is far more uncommon
 			// however.
-			if ((currentDayOfYear + 1) < fileDayOfYear)
+			if ((currentDayOfYear + 1) < fileDayOfYear) {
 				year -= 1;
+			}
 		}
 	}
 	else if (year <= 0) {
 		// token is a year
-		if (!token.IsNumeric() && !token.IsLeftNumeric())
+		if (!token.IsNumeric() && !token.IsLeftNumeric()) {
 			return false;
+		}
 
 		year = token.GetNumber();
 
-		if (year > 3000)
+		if (year > 3000) {
 			return false;
-		if (year < 1000)
+		}
+		if (year < 1000) {
 			year += 1900;
+		}
 
 		if (bHasYearAndTime) {
-			if (!line.GetToken(++index, token))
+			if (!line.GetToken(++index, token)) {
 				return false;
+			}
 
 			if (token.Find(':') == 2 && token.GetLength() == 5 && token.IsLeftNumeric() && token.IsRightNumeric()) {
 				pos = token.Find(':');
 				// token is a time
-				if (!pos || static_cast<size_t>(pos) == (token.GetLength() - 1))
+				if (!pos || static_cast<size_t>(pos) == (token.GetLength() - 1)) {
 					return false;
+				}
 
-				wxString str = token.GetString();
+				std::wstring str = token.GetString();
 
-				if (!str.Left(pos).ToLong(&hour))
-					return false;
-				if (!str.Mid(pos + 1).ToLong(&minute))
-					return false;
+				hour = fz::to_integral<int>(str.substr(0, pos), -1);
+				minute = fz::to_integral<int>(str.substr(pos + 1), -1);
 
 				if (hour < 0 || hour > 23) {
 					// Allow alternate midnight representation
@@ -1185,11 +1191,13 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 						return false;
 					}
 				}
-				else if (minute < 0 || minute > 59)
+				else if (minute < 0 || minute > 59) {
 					return false;
+				}
 			}
-			else
+			else {
 				--index;
+			}
 		}
 	}
 	else

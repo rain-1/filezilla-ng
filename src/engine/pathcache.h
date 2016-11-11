@@ -13,15 +13,15 @@ public:
 	CPathCache& operator=(CPathCache const&) = delete;
 
 	// The source argument should be a canonicalized path already if subdir is non-empty
-	void Store(CServer const& server, CServerPath const& target, CServerPath const& source, wxString const& subdir = wxString());
+	void Store(CServer const& server, CServerPath const& target, CServerPath const& source, std::wstring const& subdir = std::wstring());
 
 	// The source argument should be a canonicalized path already if subdir is non-empty happen
-	CServerPath Lookup(CServer const& server, CServerPath const& source, wxString const& subdir = wxString());
+	CServerPath Lookup(CServer const& server, CServerPath const& source, std::wstring const& subdir = std::wstring());
 
 	void InvalidateServer(CServer const& server);
 
 	// Invalidate path
-	void InvalidatePath(CServer const& server, CServerPath const& path, wxString const& subdir = wxString());
+	void InvalidatePath(CServer const& server, CServerPath const& path, std::wstring const& subdir = std::wstring());
 
 	void Clear();
 
@@ -30,7 +30,7 @@ protected:
 	{
 	public:
 		CServerPath source;
-		wxString subdir;
+		std::wstring subdir;
 
 		bool operator<(CSourcePath const& op) const
 		{
@@ -48,8 +48,8 @@ protected:
 	typedef tCache::iterator tCacheIterator;
 	typedef tCache::const_iterator tCacheConstIterator;
 
-	CServerPath Lookup(tServerCache const& serverCache, CServerPath const& source, wxString const& subdir);
-	void InvalidatePath(tServerCache & serverCache, CServerPath const& path, wxString const& subdir = wxString());
+	CServerPath Lookup(tServerCache const& serverCache, CServerPath const& source, std::wstring const& subdir);
+	void InvalidatePath(tServerCache & serverCache, CServerPath const& path, std::wstring const& subdir = std::wstring());
 
 	int m_hits{};
 	int m_misses{};

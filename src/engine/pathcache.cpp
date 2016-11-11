@@ -9,15 +9,16 @@ CPathCache::~CPathCache()
 {
 }
 
-void CPathCache::Store(CServer const& server, CServerPath const& target, CServerPath const& source, wxString const& subdir)
+void CPathCache::Store(CServer const& server, CServerPath const& target, CServerPath const& source, std::wstring const& subdir)
 {
 	fz::scoped_lock lock(mutex_);
 
 	wxASSERT(!target.empty() && !source.empty());
 
 	tCacheIterator iter = m_cache.find(server);
-	if (iter == m_cache.cend())
+	if (iter == m_cache.cend()) {
 		iter = m_cache.emplace(std::make_pair(server, tServerCache())).first;
+	}
 	tServerCache &serverCache = iter->second;
 
 	CSourcePath sourcePath;
@@ -28,25 +29,28 @@ void CPathCache::Store(CServer const& server, CServerPath const& target, CServer
 	serverCache[sourcePath] = target;
 }
 
-CServerPath CPathCache::Lookup(CServer const& server, CServerPath const& source, wxString const& subdir)
+CServerPath CPathCache::Lookup(CServer const& server, CServerPath const& source, std::wstring const& subdir)
 {
 	fz::scoped_lock lock(mutex_);
 
 	const tCacheConstIterator iter = m_cache.find(server);
-	if (iter == m_cache.end())
+	if (iter == m_cache.end()) {
 		return CServerPath();
+	}
 
 	CServerPath result = Lookup(iter->second, source, subdir);
 
-	if (result.empty())
+	if (result.empty()) {
 		m_misses++;
-	else
+	}
+	else {
 		m_hits++;
+	}
 
 	return result;
 }
 
-CServerPath CPathCache::Lookup(tServerCache const& serverCache, CServerPath const& source, wxString const& subdir)
+CServerPath CPathCache::Lookup(tServerCache const& serverCache, CServerPath const& source, std::wstring const& subdir)
 {
 	CSourcePath sourcePath;
 	sourcePath.source = source;
@@ -70,7 +74,7 @@ void CPathCache::InvalidateServer(CServer const& server)
 	m_cache.erase(iter);
 }
 
-void CPathCache::InvalidatePath(CServer const& server, CServerPath const& path, wxString const& subdir)
+void CPathCache::InvalidatePath(CServer const& server, CServerPath const& path, std::wstring const& subdir)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -80,7 +84,7 @@ void CPathCache::InvalidatePath(CServer const& server, CServerPath const& path, 
 	}
 }
 
-void CPathCache::InvalidatePath(tServerCache & serverCache, CServerPath const& path, wxString const& subdir)
+void CPathCache::InvalidatePath(tServerCache & serverCache, CServerPath const& path, std::wstring const& subdir)
 {
 	CSourcePath sourcePath;
 
@@ -96,7 +100,7 @@ void CPathCache::InvalidatePath(tServerCache & serverCache, CServerPath const& p
 
 	if (target.empty() && !subdir.empty()) {
 		target = path;
-		if (!target.AddSegment(subdir.ToStdWstring())) {
+		if (!target.AddSegment(subdir)) {
 			return;
 		}
 	}
