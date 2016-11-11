@@ -711,12 +711,14 @@ bool CSftpControlSocket::SendCommand(std::wstring const& cmd, std::wstring const
 bool CSftpControlSocket::AddToStream(std::wstring const& cmd, bool force_utf8)
 {
 	if (!m_pProcess) {
+		ResetOperation(FZ_REPLY_INTENRALERROR);
 		return false;
 	}
 
 	std::string const str = ConvToServer(cmd, force_utf8);
 	if (str.empty()) {
 		LogMessage(MessageType::Error, _("Could not convert command to server encoding"));
+		ResetOperation(FZ_REPLY_OK);
 		return false;
 	}
 
@@ -1145,8 +1147,9 @@ int CSftpControlSocket::ListSend()
 	else if (pData->opState == list_list) {
 		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer, listingEncoding::unknown);
 		pData->pParser->SetTimezoneOffset(GetTimezoneOffset());
-		if (!SendCommand(_T("ls")))
+		if (!SendCommand(_T("ls"))) {
 			return FZ_REPLY_ERROR;
+		}
 		return FZ_REPLY_WOULDBLOCK;
 	}
 	else if (pData->opState == list_mtime) {
@@ -1155,7 +1158,9 @@ int CSftpControlSocket::ListSend()
 		std::wstring quotedFilename = QuoteFilename(pData->directoryListing.path.FormatFilename(name, true));
 		if (!SendCommand(L"mtime " + WildcardEscape(quotedFilename),
 			L"mtime " + quotedFilename))
+		{
 			return FZ_REPLY_ERROR;
+		}
 		return FZ_REPLY_WOULDBLOCK;
 	}
 
@@ -1506,10 +1511,12 @@ int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::FileTransfer(...)"));
 
 	if (localFile.empty()) {
-		if (!download)
+		if (!download) {
 			ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
-		else
+		}
+		else {
 			ResetOperation(FZ_REPLY_SYNTAXERROR);
+		}
 		return FZ_REPLY_ERROR;
 	}
 
@@ -2148,7 +2155,9 @@ int CSftpControlSocket::DeleteSend()
 
 	if (!SendCommand(L"rm " + WildcardEscape(QuoteFilename(filename)),
 			  L"rm " + QuoteFilename(filename)))
+	{
 		return FZ_REPLY_ERROR;
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
