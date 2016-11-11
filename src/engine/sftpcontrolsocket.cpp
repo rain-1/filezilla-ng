@@ -711,7 +711,7 @@ bool CSftpControlSocket::SendCommand(std::wstring const& cmd, std::wstring const
 bool CSftpControlSocket::AddToStream(std::wstring const& cmd, bool force_utf8)
 {
 	if (!m_pProcess) {
-		ResetOperation(FZ_REPLY_INTENRALERROR);
+		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return false;
 	}
 
