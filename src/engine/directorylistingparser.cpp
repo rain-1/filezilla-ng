@@ -627,8 +627,7 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 	}
 
 #ifdef LISTDEBUG
-	for (unsigned int i = 0; data[i][0]; ++i)
-	{
+	for (unsigned int i = 0; data[i][0]; ++i) {
 		unsigned int len = (unsigned int)strlen(data[i]);
 		char *pData = new char[len + 3];
 		strcpy(pData, data[i]);
@@ -640,8 +639,9 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 
 CDirectoryListingParser::~CDirectoryListingParser()
 {
-	for (auto iter = m_DataList.begin(); iter != m_DataList.end(); ++iter)
+	for (auto iter = m_DataList.begin(); iter != m_DataList.end(); ++iter) {
 		delete [] iter->p;
+	}
 
 	delete m_prevLine;
 }
@@ -665,8 +665,9 @@ bool CDirectoryListingParser::ParseData(bool partial)
 					delete pLine;
 					m_prevLine = 0;
 				}
-				else
+				else {
 					m_prevLine = pLine;
+				}
 			}
 			else {
 				m_prevLine = pLine;
@@ -1912,13 +1913,14 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 
 bool CDirectoryListingParser::AddData(char *pData, int len)
 {
-	ConvertEncoding( pData, len );
+	ConvertEncoding(pData, len);
 
 	m_DataList.emplace_back(pData, len);
 	m_totalData += len;
 
-	if (m_totalData < 512)
+	if (m_totalData < 512) {
 		return true;
+	}
 
 	return ParseData(true);
 }
@@ -1944,7 +1946,11 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 		// Trim empty lines and spaces
 		auto iter = m_DataList.begin();
 		int len = iter->len;
-		while (iter->p[m_currentOffset] == '\r' || iter->p[m_currentOffset] == '\n' || iter->p[m_currentOffset] == ' ' || iter->p[m_currentOffset] == '\t' || !iter->p[m_currentOffset]) {
+		while (iter->p[m_currentOffset] == '\r' || iter->p[m_currentOffset] == '\n'
+			|| iter->p[m_currentOffset] == ' ' || iter->p[m_currentOffset] == '\t'
+			|| !iter->p[m_currentOffset]
+			|| iter->p[m_currentOffset] == 0xfeff) // BOM
+		{
 			++m_currentOffset;
 			if (m_currentOffset >= len) {
 				delete [] iter->p;
@@ -2874,8 +2880,9 @@ char ebcdic_table[256] = {
 
 void CDirectoryListingParser::ConvertEncoding(char *pData, int len)
 {
-	if (m_listingEncoding != listingEncoding::ebcdic)
+	if (m_listingEncoding != listingEncoding::ebcdic) {
 		return;
+	}
 
 	for (int i = 0; i < len; ++i) {
 		pData[i] = ebcdic_table[static_cast<unsigned char>(pData[i])];
@@ -2884,16 +2891,18 @@ void CDirectoryListingParser::ConvertEncoding(char *pData, int len)
 
 void CDirectoryListingParser::DeduceEncoding()
 {
-	if (m_listingEncoding != listingEncoding::unknown)
+	if (m_listingEncoding != listingEncoding::unknown) {
 		return;
+	}
 
 	int count[256];
 
 	memset(&count, 0, sizeof(int)*256);
 
 	for (auto const& data : m_DataList) {
-		for (int i = 0; i < data.len; ++i)
+		for (int i = 0; i < data.len; ++i) {
 			++count[static_cast<unsigned char>(data.p[i])];
+		}
 	}
 
 	int count_normal = 0;
@@ -2936,9 +2945,11 @@ void CDirectoryListingParser::DeduceEncoding()
 			m_pControlSocket->LogMessage(MessageType::Status, _("Received a directory listing which appears to be encoded in EBCDIC."));
 		}
 		m_listingEncoding = listingEncoding::ebcdic;
-		for (auto it = m_DataList.begin(); it != m_DataList.end(); ++it)
-			ConvertEncoding(it->p, it->len);
+		for (auto & data : m_DataList) {
+			ConvertEncoding(data.p, data.len);
+		}
 	}
-	else
+	else {
 		m_listingEncoding = listingEncoding::normal;
+	}
 }
