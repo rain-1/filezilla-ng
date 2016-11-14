@@ -108,6 +108,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Size thousands separator", number, _T("1"), normal },
 	{ "Size decimal places", number, _T("1"), normal },
 	{ "TCP Keepalive Interval", number, _T("15"), normal },
+	{ "Cache TTL", number, _T("600"), normal },
 
 	// Interface settings
 	{ "Number of Transfers", number, _T("2"), normal },
@@ -245,8 +246,9 @@ COptions::COptions()
 		delete m_pXmlFile;
 		m_pXmlFile = 0;
 	}
-	else
+	else {
 		CreateSettingsXmlElement();
+	}
 
 	LoadOptions(nameOptionMap);
 }
@@ -255,8 +257,9 @@ std::map<std::string, unsigned int> COptions::GetNameOptionMap() const
 {
 	std::map<std::string, unsigned int> ret;
 	for (unsigned int i = 0; i < OPTIONS_NUM; ++i) {
-		if (options[i].flags != internal)
+		if (options[i].flags != internal) {
 			ret.insert(std::make_pair(std::string(options[i].name), i));
+		}
 	}
 	return ret;
 }
@@ -339,8 +342,9 @@ void COptions::ContinueSetOption(unsigned int nID, T const& value)
 	if (options[nID].flags == normal || options[nID].flags == default_priority) {
 		SetXmlValue(nID, validated);
 
-		if (!m_save_timer.IsRunning())
+		if (!m_save_timer.IsRunning()) {
 			m_save_timer.Start(15000, true);
+		}
 	}
 
 	if (changedOptions_.none()) {
@@ -359,8 +363,9 @@ void COptions::NotifyChangedOptions()
 
 bool COptions::OptionFromFzDefaultsXml(unsigned int nID)
 {
-	if (nID >= OPTIONS_NUM)
+	if (nID >= OPTIONS_NUM) {
 		return false;
+	}
 
 	fz::scoped_lock l(m_sync_);
 	return m_optionsCache[nID].from_default;
@@ -368,8 +373,9 @@ bool COptions::OptionFromFzDefaultsXml(unsigned int nID)
 
 pugi::xml_node COptions::CreateSettingsXmlElement()
 {
-	if (!m_pXmlFile)
+	if (!m_pXmlFile) {
 		return pugi::xml_node();
+	}
 
 	auto element = m_pXmlFile->GetElement();
 	if (!element) {
@@ -413,10 +419,12 @@ void COptions::SetXmlValue(unsigned int nID, std::wstring const& value)
 		pugi::xml_node setting;
 		for (setting = settings.child("Setting"); setting; setting = setting.next_sibling("Setting")) {
 			const char *attribute = setting.attribute("name").value();
-			if (!attribute)
+			if (!attribute) {
 				continue;
-			if (!strcmp(attribute, options[nID].name))
+			}
+			if (!strcmp(attribute, options[nID].name)) {
 				break;
+			}
 		}
 		if (!setting) {
 			setting = settings.append_child("Setting");
@@ -522,6 +530,14 @@ int COptions::Validate(unsigned int nID, int value)
 		}
 		else if (value > 9999) {
 			value = 9999;
+		}
+		break;
+	case OPTION_CACHE_TTL:
+		if (value < 30) {
+			value = 30;
+		}
+		else if (value > 60*60*24) {
+			value = 60 * 60 * 24;
 		}
 		break;
 	}
@@ -693,13 +709,15 @@ void COptions::LoadOptions(std::map<std::string, unsigned int> const& nameOption
 void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string, unsigned int> const& nameOptionMap, bool allowDefault)
 {
 	const char* name = option.attribute("name").value();
-	if (!name)
+	if (!name) {
 		return;
+	}
 
 	auto const iter = nameOptionMap.find(name);
 	if (iter != nameOptionMap.end()) {
-		if (!allowDefault && options[iter->second].flags == default_only)
+		if (!allowDefault && options[iter->second].flags == default_only) {
 			return;
+		}
 		std::wstring value = GetTextElement(option);
 		if (options[iter->second].flags == default_priority) {
 			if (allowDefault) {
@@ -708,8 +726,9 @@ void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string
 			}
 			else {
 				fz::scoped_lock l(m_sync_);
-				if (m_optionsCache[iter->second].from_default)
+				if (m_optionsCache[iter->second].from_default) {
 					return;
+				}
 			}
 		}
 
@@ -730,20 +749,23 @@ void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string
 void COptions::LoadGlobalDefaultOptions(std::map<std::string, unsigned int> const& nameOptionMap)
 {
 	CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
-	if (defaultsDir.empty())
+	if (defaultsDir.empty()) {
 		return;
-
+	}
 	CXmlFile file(defaultsDir.GetPath() + _T("fzdefaults.xml"));
-	if (!file.Load())
+	if (!file.Load()) {
 		return;
+	}
 
 	auto element = file.GetElement();
-	if (!element)
+	if (!element) {
 		return;
+	}
 
 	element = element.child("Settings");
-	if (!element)
+	if (!element) {
 		return;
+	}
 
 	for (auto setting = element.child("Setting"); setting; setting = setting.next_sibling("Setting")) {
 		LoadOptionFromElement(setting, nameOptionMap, true);
@@ -757,11 +779,13 @@ void COptions::OnTimer(wxTimerEvent&)
 
 void COptions::Save()
 {
-	if (GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		return;
+	}
 
-	if (!m_pXmlFile)
+	if (!m_pXmlFile) {
 		return;
+	}
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
 	m_pXmlFile->Save(true);
@@ -769,8 +793,9 @@ void COptions::Save()
 
 void COptions::SaveIfNeeded()
 {
-	if (!m_save_timer.IsRunning())
+	if (!m_save_timer.IsRunning()) {
 		return;
+	}
 
 	m_save_timer.Stop();
 	Save();

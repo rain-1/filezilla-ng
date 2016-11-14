@@ -7,8 +7,8 @@ CDirectoryCache::CDirectoryCache()
 
 CDirectoryCache::~CDirectoryCache()
 {
-	for( auto & serverEntry : m_serverList ) {
-		for (auto & cacheEntry : serverEntry.cacheList ) {
+	for (auto & serverEntry : m_serverList) {
+		for (auto & cacheEntry : serverEntry.cacheList) {
 #ifndef NDEBUG
 			m_totalFileCount -= cacheEntry.listing.GetCount();
 #endif
@@ -24,7 +24,7 @@ CDirectoryCache::~CDirectoryCache()
 #endif
 }
 
-void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &server)
+void CDirectoryCache::Store(CDirectoryListing const& listing, CServer const& server)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -52,13 +52,14 @@ void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &ser
 	Prune();
 }
 
-bool CDirectoryCache::Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated)
+bool CDirectoryCache::Lookup(CDirectoryListing &listing, CServer const& server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated)
 {
 	fz::scoped_lock lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
-	if (sit == m_serverList.end())
+	if (sit == m_serverList.end()) {
 		return false;
+	}
 
 	tCacheIter iter;
 	if (Lookup(iter, sit, path, allowUnsureEntries, is_outdated)) {
@@ -69,7 +70,7 @@ bool CDirectoryCache::Lookup(CDirectoryListing &listing, const CServer &server, 
 	return false;
 }
 
-bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated)
+bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, CServerPath const& path, bool allowUnsureEntries, bool& is_outdated)
 {
 	static CCacheEntry dummy;
 	dummy.listing.path = path;
@@ -81,10 +82,11 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CSer
 		if (entry.listing.path == path) {
 			UpdateLru(sit, cacheIter);
 
-			if (!allowUnsureEntries && entry.listing.get_unsure_flags())
+			if (!allowUnsureEntries && entry.listing.get_unsure_flags()) {
 				return false;
+			}
 
-			is_outdated = (fz::monotonic_clock::now() - entry.listing.m_firstListTime).get_seconds() > CACHE_TIMEOUT;
+			is_outdated = (fz::monotonic_clock::now() - entry.listing.m_firstListTime) > ttl_;
 			return true;
 		}
 	}
@@ -92,13 +94,14 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CSer
 	return false;
 }
 
-bool CDirectoryCache::DoesExist(const CServer &server, const CServerPath &path, int &hasUnsureEntries, bool &is_outdated)
+bool CDirectoryCache::DoesExist(CServer const& server, CServerPath const& path, int &hasUnsureEntries, bool &is_outdated)
 {
 	fz::scoped_lock lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
-	if (sit == m_serverList.end())
+	if (sit == m_serverList.end()) {
 		return false;
+	}
 
 	tCacheIter iter;
 	if (Lookup(iter, sit, path, true, is_outdated)) {
@@ -146,25 +149,28 @@ bool CDirectoryCache::LookupFile(CDirentry &entry, CServer const& server, CServe
 	return false;
 }
 
-bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool *wasDir /*=false*/)
+bool CDirectoryCache::InvalidateFile(CServer const& server, CServerPath const& path, wxString const& filename, bool *wasDir)
 {
 	fz::scoped_lock lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
-	if (sit == m_serverList.end())
+	if (sit == m_serverList.end()) {
 		return false;
+	}
 
 	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter) {
 		auto & entry = const_cast<CCacheEntry&>(*iter);
-		if (path.CmpNoCase(entry.listing.path))
+		if (path.CmpNoCase(entry.listing.path)) {
 			continue;
+		}
 
 		UpdateLru(sit, iter);
 
 		for (unsigned int i = 0; i < entry.listing.GetCount(); i++) {
 			if (!filename.CmpNoCase(((const CCacheEntry&)entry).listing[i].name)) {
-				if (wasDir)
+				if (wasDir) {
 					*wasDir = entry.listing[i].is_dir();
+				}
 				entry.listing[i].flags |= CDirentry::flag_unsure;
 			}
 		}
@@ -175,20 +181,22 @@ bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &p
 	return true;
 }
 
-bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, Filetype type, int64_t size)
+bool CDirectoryCache::UpdateFile(CServer const& server, CServerPath const& path, wxString const& filename, bool mayCreate, Filetype type, int64_t size)
 {
 	fz::scoped_lock lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
-	if (sit == m_serverList.end())
+	if (sit == m_serverList.end()) {
 		return false;
+	}
 
 	bool updated = false;
 
 	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter) {
 		auto & entry = const_cast<CCacheEntry&>(*iter);
-		if (path.CmpNoCase(entry.listing.path))
+		if (path.CmpNoCase(entry.listing.path)) {
 			continue;
+		}
 
 		UpdateLru(sit, iter);
 
@@ -206,20 +214,25 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 
 		if (matchCase) {
 			Filetype old_type = entry.listing[i].is_dir() ? dir : file;
-			if (type != old_type)
+			if (type != old_type) {
 				entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
-			else if (type == dir)
+			}
+			else if (type == dir) {
 				entry.listing.m_flags |= CDirectoryListing::unsure_dir_changed;
-			else
+			}
+			else {
 				entry.listing.m_flags |= CDirectoryListing::unsure_file_changed;
+			}
 		}
 		else if (type != unknown && mayCreate) {
 			CDirentry direntry;
 			direntry.name = filename;
-			if (type == dir)
+			if (type == dir) {
 				direntry.flags = CDirentry::flag_dir | CDirentry::flag_unsure;
-			else
+			}
+			else {
 				direntry.flags = CDirentry::flag_unsure;
+			}
 			direntry.size = size;
 			switch (type) {
 			case dir:
@@ -236,8 +249,9 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 
 			++m_totalFileCount;
 		}
-		else
+		else {
 			entry.listing.m_flags |= CDirectoryListing::unsure_unknown;
+		}
 		entry.modificationTime = fz::monotonic_clock::now();
 
 		updated = true;
@@ -246,25 +260,28 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 	return updated;
 }
 
-bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path, const wxString& filename)
+bool CDirectoryCache::RemoveFile(CServer const& server, CServerPath const& path, wxString const& filename)
 {
 	fz::scoped_lock lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
-	if (sit == m_serverList.end())
+	if (sit == m_serverList.end()) {
 		return false;
+	}
 
 	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter) {
 		auto & entry = const_cast<CCacheEntry&>(*iter);
-		if (path.CmpNoCase(entry.listing.path))
+		if (path.CmpNoCase(entry.listing.path)) {
 			continue;
+		}
 
 		UpdateLru(sit, iter);
 
 		bool matchCase = false;
 		for (unsigned int i = 0; i < entry.listing.GetCount(); ++i) {
-			if (entry.listing[i].name == filename)
+			if (entry.listing[i].name == filename) {
 				matchCase = true;
+			}
 		}
 
 		if (matchCase) {
@@ -293,20 +310,18 @@ bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path,
 	return true;
 }
 
-void CDirectoryCache::InvalidateServer(const CServer& server)
+void CDirectoryCache::InvalidateServer(CServer const& server)
 {
 	fz::scoped_lock lock(mutex_);
 
-	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-	{
-		if (iter->server != server)
+	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
+		if (iter->server != server) {
 			continue;
+		}
 
-		for (tCacheIter cit = iter->cacheList.begin(); cit != iter->cacheList.end(); ++cit)
-		{
+		for (tCacheIter cit = iter->cacheList.begin(); cit != iter->cacheList.end(); ++cit) {
 			tLruList::iterator* lruIt = (tLruList::iterator*)cit->lruIt;
-			if (lruIt)
-			{
+			if (lruIt) {
 				m_leastRecentlyUsedList.erase(*lruIt);
 				delete lruIt;
 			}
@@ -319,13 +334,14 @@ void CDirectoryCache::InvalidateServer(const CServer& server)
 	}
 }
 
-bool CDirectoryCache::GetChangeTime(fz::monotonic_clock& time, const CServer &server, const CServerPath &path)
+bool CDirectoryCache::GetChangeTime(fz::monotonic_clock& time, CServer const& server, CServerPath const& path)
 {
 	fz::scoped_lock lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
-	if (sit == m_serverList.end())
+	if (sit == m_serverList.end()) {
 		return false;
+	}
 
 	tCacheIter iter;
 	bool unused;
@@ -374,7 +390,7 @@ void CDirectoryCache::RemoveDir(CServer const& server, CServerPath const& path, 
 	RemoveFile(server, path, filename);
 }
 
-void CDirectoryCache::Rename(CServer const& server, CServerPath const& pathFrom, std::wstring const& fileFrom, const CServerPath& pathTo, std::wstring const& fileTo)
+void CDirectoryCache::Rename(CServer const& server, CServerPath const& pathFrom, std::wstring const& fileFrom, CServerPath const& pathTo, std::wstring const& fileTo)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -436,23 +452,25 @@ void CDirectoryCache::Rename(CServer const& server, CServerPath const& pathFrom,
 	InvalidateServer(server);
 }
 
-CDirectoryCache::tServerIter CDirectoryCache::CreateServerEntry(const CServer& server)
+CDirectoryCache::tServerIter CDirectoryCache::CreateServerEntry(CServer const& server)
 {
 	for (tServerIter iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
-		if (iter->server == server)
+		if (iter->server == server) {
 			return iter;
+		}
 	}
 	m_serverList.emplace_back(server);
 
 	return --m_serverList.end();
 }
 
-CDirectoryCache::tServerIter CDirectoryCache::GetServerEntry(const CServer& server)
+CDirectoryCache::tServerIter CDirectoryCache::GetServerEntry(CServer const& server)
 {
 	tServerIter iter;
 	for (iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
-		if (iter->server == server)
+		if (iter->server == server) {
 			break;
+		}
 	}
 
 	return iter;
@@ -484,9 +502,23 @@ void CDirectoryCache::Prune()
 		m_totalFileCount -= pos.second->listing.GetCount();
 
 		pos.first->cacheList.erase(pos.second);
-		if (pos.first->cacheList.empty())
+		if (pos.first->cacheList.empty()) {
 			m_serverList.erase(pos.first);
+		}
 
 		m_leastRecentlyUsedList.pop_front();
+	}
+}
+
+void CDirectoryCache::SetTtl(fz::duration const& ttl)
+{
+	if (ttl < fz::duration::from_seconds(30)) {
+		ttl_ = fz::duration::from_seconds(30);
+	}
+	else if (ttl > fz::duration::from_days(1)) {
+		ttl_ = fz::duration::from_days(1);
+	}
+	else {
+		ttl_ = ttl;
 	}
 }

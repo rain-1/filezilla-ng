@@ -1,5 +1,5 @@
-#ifndef __DIRECTORYCACHE_H__
-#define __DIRECTORYCACHE_H__
+#ifndef FILEZILLA_ENGINE_DIRECTORYCACHE_HEADER
+#define FILEZILLA_ENGINE_DIRECTORYCACHE_HEADER
 
 /*
 This class is the directory cache used to store retrieved directory listings
@@ -18,8 +18,6 @@ version.
 
 #include <set>
 
-const int CACHE_TIMEOUT = 900; // In seconds
-
 class CDirectoryCache final
 {
 public:
@@ -36,17 +34,19 @@ public:
 	CDirectoryCache(CDirectoryCache const&) = delete;
 	CDirectoryCache& operator=(CDirectoryCache const&) = delete;
 
-	void Store(const CDirectoryListing &listing, const CServer &server);
-	bool GetChangeTime(fz::monotonic_clock& time, const CServer &server, const CServerPath &path);
-	bool Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
-	bool DoesExist(const CServer &server, const CServerPath &path, int &hasUnsureEntries, bool &is_outdated);
+	void Store(CDirectoryListing const& listing, CServer const& server);
+	bool GetChangeTime(fz::monotonic_clock& time, CServer const& server, CServerPath const& path);
+	bool Lookup(CDirectoryListing &listing, CServer const&server, CServerPath const& path, bool allowUnsureEntries, bool& is_outdated);
+	bool DoesExist(CServer const& server, CServerPath const& path, int &hasUnsureEntries, bool &is_outdated);
 	bool LookupFile(CDirentry &entry, CServer const& server, CServerPath const& path, std::wstring const& file, bool &dirDidExist, bool &matchedCase);
-	bool InvalidateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool *wasDir = 0);
-	bool UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, Filetype type = file, int64_t size = -1);
-	bool RemoveFile(const CServer &server, const CServerPath &path, const wxString& filename);
-	void InvalidateServer(const CServer& server);
-	void RemoveDir(const CServer& server, const CServerPath& path, std::wstring const& filename, CServerPath const& target);
-	void Rename(CServer const& server, CServerPath const& pathFrom, std::wstring const& fileFrom, const CServerPath& pathTo, std::wstring const& fileTo);
+	bool InvalidateFile(CServer const& server, CServerPath const& path, wxString const& filename, bool *wasDir = 0);
+	bool UpdateFile(CServer const& server, CServerPath const& path, wxString const& filename, bool mayCreate, Filetype type = file, int64_t size = -1);
+	bool RemoveFile(CServer const& server, CServerPath const& path, wxString const& filename);
+	void InvalidateServer(CServer const& server);
+	void RemoveDir(CServer const& server, CServerPath const& path, std::wstring const& filename, CServerPath const& target);
+	void Rename(CServer const& server, CServerPath const& pathFrom, std::wstring const& fileFrom, CServerPath const& pathTo, std::wstring const& fileTo);
+
+	void SetTtl(fz::duration const& ttl);
 
 protected:
 
@@ -95,7 +95,7 @@ protected:
 	typedef std::set<CCacheEntry>::iterator tCacheIter;
 	typedef std::set<CCacheEntry>::const_iterator tCacheConstIter;
 
-	bool Lookup(tCacheIter &cacheIter, tServerIter &sit, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
+	bool Lookup(tCacheIter &cacheIter, tServerIter &sit, CServerPath const& path, bool allowUnsureEntries, bool& is_outdated);
 
 	fz::mutex mutex_;
 
@@ -110,6 +110,8 @@ protected:
 	tLruList m_leastRecentlyUsedList;
 
 	int64_t m_totalFileCount{};
+
+	fz::duration ttl_{fz::duration::from_seconds(600)};
 };
 
 #endif
