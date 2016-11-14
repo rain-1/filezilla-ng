@@ -51,6 +51,8 @@ public:
 		, optionChangeHandler_(options, loop_)
 	{
 		CLogging::UpdateLogLevel(options);
+
+		directory_cache_.SetTtl(fz::duration::from_seconds(options.GetOptionVal(OPTION_CACHE_TTL)));
 	}
 
 	~Impl()
