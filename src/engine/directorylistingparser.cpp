@@ -2503,17 +2503,21 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 
 	CToken token;
 
-	if (!line.GetToken(0, token))
+	if (!line.GetToken(0, token)) {
 		return 0;
+	}
 
 	std::wstring const facts = token.GetString();
-	if (facts.empty())
+	if (facts.empty()) {
 		return 0;
+	}
 
 	entry.flags = 0;
 	entry.size = -1;
+	entry.time.clear();
+	entry.target.clear();
 
-	std::wstring owner, group, uid, gid;
+	std::wstring owner, ownername, group, groupname, user, uid, gid;
 	std::wstring ownerGroup;
 	std::wstring permissions;
 
@@ -2528,25 +2532,30 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 		}
 
 		auto const pos = facts.find('=', start);
-		if (pos == std::wstring::npos || pos < start + 1 || pos > delim)
+		if (pos == std::wstring::npos || pos < start + 1 || pos > delim) {
 			return 0;
+		}
 
 		std::wstring factname = fz::str_tolower_ascii(facts.substr(start, pos - start));
 		std::wstring value = facts.substr(pos + 1, delim - pos - 1);
 		if (factname == _T("type")) {
 			auto colonPos = value.find(':');
 			std::wstring valuePrefix;
-			if (colonPos == std::wstring::npos)
+			if (colonPos == std::wstring::npos) {
 				valuePrefix = fz::str_tolower_ascii(value);
-			else
+			}
+			else {
 				valuePrefix = fz::str_tolower_ascii(value.substr(0, colonPos));
+			}
 
-			if (valuePrefix == _T("dir") && colonPos == std::wstring::npos)
+			if (valuePrefix == _T("dir") && colonPos == std::wstring::npos) {
 				entry.flags |= CDirentry::flag_dir;
+			}
 			else if (valuePrefix == _T("os.unix=slink") || valuePrefix == _T("os.unix=symlink")) {
 				entry.flags |= CDirentry::flag_dir | CDirentry::flag_link;
-				if (colonPos != std::wstring::npos)
+				if (colonPos != std::wstring::npos) {
 					entry.target = fz::sparse_optional<std::wstring>(value.substr(colonPos));
+				}
 			}
 			else if ((valuePrefix == _T("cdir") || valuePrefix == _T("pdir")) && colonPos == std::wstring::npos) {
 				// Current and parent directory, don't parse it
@@ -2557,8 +2566,9 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 			entry.size = 0;
 
 			for (unsigned int i = 0; i < value.size(); ++i) {
-				if (value[i] < '0' || value[i] > '9')
+				if (value[i] < '0' || value[i] > '9') {
 					return 0;
+				}
 				entry.size *= 10;
 				entry.size += value[i] - '0';
 			}
@@ -2573,43 +2583,75 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 		}
 		else if (factname == _T("perm")) {
 			if (!value.empty()) {
-				if (!permissions.empty())
+				if (!permissions.empty()) {
 					permissions = value + _T(" (") + permissions + _T(")");
-				else
+				}
+				else {
 					permissions = value;
+				}
 			}
 		}
 		else if (factname == _T("unix.mode")) {
-			if (!permissions.empty())
+			if (!permissions.empty()) {
 				permissions = permissions + _T(" (") + value + _T(")");
-			else
+			}
+			else {
 				permissions = value;
+			}
 		}
-		else if (factname == _T("unix.owner") || factname == _T("unix.user"))
+		else if (factname == _T("unix.owner")) {
 			owner = value;
-		else if (factname == _T("unix.group"))
+		}
+		else if (factname == _T("unix.ownername")) {
+			ownername = value;
+		}
+		else if (factname == _T("unix.group")) {
 			group = value;
-		else if (factname == _T("unix.uid"))
+		}
+		else if (factname == _T("unix.groupname")) {
+			groupname = value;
+		}
+		else if (factname == _T("unix.user")) {
+			user = value;
+		}
+		else if (factname == _T("unix.uid")) {
 			uid = value;
-		else if (factname == _T("unix.gid"))
+		}
+		else if (factname == _T("unix.gid")) {
 			gid = value;
+		}
 
 		start = delim + 1;
 	}
 
 	// The order of the facts is undefined, so assemble ownerGroup in correct
 	// order
-	if (!owner.empty())
-		ownerGroup += owner;
-	else if (!uid.empty())
-		ownerGroup += uid;
-	if (!group.empty())
-		ownerGroup += _T(" ") + group;
-	else if (!gid.empty())
-		ownerGroup += _T(" ") + gid;
+	if (!ownername.empty()) {
+		ownerGroup = ownername;
+	}
+	else if (!owner.empty()) {
+		ownerGroup = owner;
+	}
+	else if (!user.empty()) {
+		ownerGroup = user;
+	}
+	else if (!uid.empty()) {
+		ownerGroup = uid;
+	}
 
-	if (!line.GetToken(1, token, true, true))
+	if (!groupname.empty()) {
+		ownerGroup += _T(" ") + groupname;
+	}
+	else if (!group.empty()) {
+		ownerGroup += _T(" ") + group;
+	}
+	else if (!gid.empty()) {
+		ownerGroup += _T(" ") + gid;
+	}
+
+	if (!line.GetToken(1, token, true, true)) {
 		return 0;
+	}
 
 	entry.name = token.GetString();
 	entry.ownerGroup = objcache.get(ownerGroup);
