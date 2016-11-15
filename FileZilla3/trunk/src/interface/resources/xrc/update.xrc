@@ -123,10 +123,33 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxHyperlinkCtrl" name="ID_DOWNLOAD_RETRY">
-              <label>Try again</label>
+            <show>0</show>
+            <object class="wxTextCtrl" name="ID_DETAILS_DL">
+              <style>wxTE_AUTO_SCROLL|wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL|wxTE_DONTWRAP</style>
             </object>
-            <flag>wxBOTTOM</flag>
+            <option>1</option>
+            <flag>wxGROW</flag>
+            <minsize>-1,0</minsize>
+          </object>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <object class="wxHyperlinkCtrl" name="ID_DOWNLOAD_RETRY">
+                  <label>Try again</label>
+                </object>
+              </object>
+              <object class="spacer">
+                <option>1</option>
+              </object>
+                <object class="sizeritem">
+                <object class="wxHyperlinkCtrl" name="ID_SHOW_DETAILS_DL">
+                  <label>Show details</label>
+                </object>
+                <flag>wxALIGN_RIGHT</flag>
+              </object>
+            </object>
+            <flag>wxBOTTOM|wxGROW</flag>
             <border>10</border>
           </object>
           <object class="sizeritem">
