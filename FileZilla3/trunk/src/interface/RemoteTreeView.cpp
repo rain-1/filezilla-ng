@@ -14,9 +14,12 @@
 #include "remote_recursive_operation.h"
 #include "themeprovider.h"
 
+#include "uri.h"
+
 #include <wx/clipbrd.h>
 
 #include <algorithm>
+
 
 class CItemData : public wxTreeItemData
 {
@@ -1388,8 +1391,9 @@ void CRemoteTreeView::ApplyFilters(bool resort)
 
 void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
 {
-	if (!m_contextMenuItem)
+	if (!m_contextMenuItem) {
 		return;
+	}
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
 	if (path.empty()) {
@@ -1410,7 +1414,7 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
 
 	wxString url = pServer->Format((event.GetId() == XRCID("ID_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
 
-	std::wstring const pathPart = url_encode(path.GetPath(), true);
+	std::wstring const pathPart = fz::percent_encode_w(path.GetPath(), true);
 	if (!pathPart.empty() && pathPart[0] != '/') {
 		url += '/';
 	}

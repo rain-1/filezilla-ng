@@ -1,7 +1,7 @@
-#ifndef __HTTPCONTROLSOCKET_H__
-#define __HTTPCONTROLSOCKET_H__
+#ifndef FILEZILLA_ENGINE_HTTPCONTROLSOCKET_HEADER
+#define FILEZILLA_ENGINE_HTTPCONTROLSOCKET_HEADER
 
-#include <wx/uri.h>
+#include "uri.h"
 
 class CHttpOpData;
 class CTlsSocket;
@@ -57,7 +57,7 @@ protected:
 
 	CTlsSocket* m_pTlsSocket{};
 
-	wxURI m_current_uri;
+	fz::uri m_current_uri;
 };
 
-#endif //__HTTPCONTROLSOCKET_H__
+#endif
