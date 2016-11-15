@@ -39,6 +39,7 @@ protected:
 	void OnInstall(wxCommandEvent& ev);
 	void OnTimer(wxTimerEvent& ev);
 	void ShowDetails(wxHyperlinkEvent& ev);
+	void ShowDetailsDl(wxHyperlinkEvent& ev);
 	void Retry(wxHyperlinkEvent& ev);
 	void OnDebugLog(wxCommandEvent&);
 };

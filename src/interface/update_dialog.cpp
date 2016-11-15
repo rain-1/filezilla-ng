@@ -17,6 +17,7 @@ BEGIN_EVENT_TABLE(CUpdateDialog, wxDialogEx)
 EVT_BUTTON(XRCID("ID_INSTALL"), CUpdateDialog::OnInstall)
 EVT_TIMER(wxID_ANY, CUpdateDialog::OnTimer)
 EVT_HYPERLINK(XRCID("ID_SHOW_DETAILS"), CUpdateDialog::ShowDetails)
+EVT_HYPERLINK(XRCID("ID_SHOW_DETAILS_DL"), CUpdateDialog::ShowDetailsDl)
 EVT_HYPERLINK(XRCID("ID_RETRY"), CUpdateDialog::Retry)
 EVT_HYPERLINK(XRCID("ID_DOWNLOAD_RETRY"), CUpdateDialog::Retry)
 EVT_BUTTON(XRCID("ID_DEBUGLOG"), CUpdateDialog::OnDebugLog)
@@ -84,6 +85,7 @@ int CUpdateDialog::ShowModal()
 	Wrap();
 
 	xrc_call(*this, "ID_DETAILS", &wxTextCtrl::Hide);
+	xrc_call(*this, "ID_DETAILS_DL", &wxTextCtrl::Hide);
 
 	UpdaterState s = updater_.GetState();
 	UpdaterStateChanged( s, updater_.AvailableBuild() );
@@ -258,6 +260,9 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 		bool dlfail = s == UpdaterState::newversion && !v.url_.empty();
 		XRCCTRL(*this, "ID_DOWNLOAD_FAIL", wxStaticText)->Show(dlfail);
 		XRCCTRL(*this, "ID_DOWNLOAD_RETRY", wxHyperlinkCtrl)->Show(dlfail);
+		XRCCTRL(*this, "ID_SHOW_DETAILS_DL", wxHyperlinkCtrl)->Show(dlfail);
+
+		XRCCTRL(*this, "ID_DETAILS_DL", wxTextCtrl)->ChangeValue(updater_.GetLog());
 
 		XRCCTRL(*this, "ID_NEWVERSION_WEBSITE_TEXT", wxStaticText)->Show(manual && !dlfail);
 		XRCCTRL(*this, "ID_NEWVERSION_WEBSITE_TEXT_DLFAIL", wxStaticText)->Show(manual && dlfail);
@@ -314,6 +319,15 @@ void CUpdateDialog::ShowDetails(wxHyperlinkEvent&)
 	XRCCTRL(*this, "ID_DETAILS", wxTextCtrl)->Show();
 
 	panels_[pagenames::failed]->Layout();
+}
+
+void CUpdateDialog::ShowDetailsDl(wxHyperlinkEvent&)
+{
+	XRCCTRL(*this, "ID_SHOW_DETAILS_DL", wxHyperlinkCtrl)->Hide();
+	XRCCTRL(*this, "ID_DETAILS_DL", wxTextCtrl)->Show();
+	XRCCTRL(*this, "ID_DETAILS_DL", wxTextCtrl)->SetMinSize(wxSize(-1, 200));
+
+	panels_[pagenames::newversion]->Layout();
 }
 
 void CUpdateDialog::Retry(wxHyperlinkEvent&)
