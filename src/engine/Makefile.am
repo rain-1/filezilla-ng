@@ -35,7 +35,8 @@ libengine_a_SOURCES = \
 		sizeformatting_base.cpp \
 		socket.cpp \
 		tlssocket.cpp \
-		transfersocket.cpp
+		transfersocket.cpp \
+		uri.cpp
 
 noinst_HEADERS = backend.h \
 		ControlSocket.h \

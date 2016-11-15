@@ -31,8 +31,6 @@ unique_static_cast(std::unique_ptr<Base>&& p)
 	return std::unique_ptr<Derived>(d);
 }
 
-std::wstring url_encode(std::wstring const& s, bool keep_slashes = false);
-
 #if FZ_WINDOWS
 DWORD GetSystemErrorCode();
 fz::native_string GetSystemErrorDescription(DWORD err);

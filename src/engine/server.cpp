@@ -1,5 +1,7 @@
 #include <filezilla.h>
 
+#include "uri.h"
+
 struct t_protocolInfo
 {
 	ServerProtocol const protocol;
@@ -675,20 +677,20 @@ std::wstring CServer::Format(ServerFormat formatType) const
 		// Open question: Do we need some form of escapement for presentation within the GUI,
 		// that deals e.g. with whitespace but does not touch Unicode characters?
 		if (formatType == ServerFormat::url || formatType == ServerFormat::url_with_password) {
-			user = url_encode(user);
+			user = fz::percent_encode_w(user);
 		}
 		if (!user.empty()) {
 			if (formatType == ServerFormat::url_with_password) {
 				auto pass = GetPass();
 				if (!pass.empty()) {
 					if (formatType == ServerFormat::url || formatType == ServerFormat::url_with_password) {
-						pass = url_encode(pass);
+						pass = fz::percent_encode_w(pass);
 					}
 					server = user + _T(":") + pass + _T("@") + server;
 				}
 			}
 			else {
-				server = url_encode(user) + _T("@") + server;
+				server = fz::percent_encode(user) + _T("@") + server;
 			}
 		}
 	}

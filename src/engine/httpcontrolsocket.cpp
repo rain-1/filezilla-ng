@@ -4,6 +4,7 @@
 #include "engineprivate.h"
 #include "httpcontrolsocket.h"
 #include "tlssocket.h"
+#include "uri.h"
 
 #include <libfilezilla/file.hpp>
 #include <libfilezilla/iputils.hpp>
@@ -41,7 +42,7 @@ public:
 	bool m_gotHeader{};
 	int m_responseCode{-1};
 	std::wstring m_responseString;
-	wxURI m_newLocation;
+	fz::uri m_newLocation;
 	int m_redirectionCount{};
 
 	int64_t m_totalSize{-1};
@@ -91,15 +92,13 @@ CHttpControlSocket::~CHttpControlSocket()
 int CHttpControlSocket::SendNextCommand()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::SendNextCommand()"));
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("SendNextCommand called without active operation"));
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (m_pCurOpData->waitForAsyncRequest)
-	{
+	if (m_pCurOpData->waitForAsyncRequest) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Waiting for async request, ignoring SendNextCommand"));
 		return FZ_REPLY_WOULDBLOCK;
 	}
@@ -327,28 +326,37 @@ int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	m_pCurOpData = pData;
 	m_pHttpOpData = pData;
 
-	m_current_uri = wxURI(m_pCurrentServer->Format(ServerFormat::with_user_and_optional_port) + pData->remotePath.FormatFilename(pData->remoteFile));
+	// TODO: Ordinarily we need to percent-encode the filename. With the current API we then however would not be able to pass the query part of the URL
+	m_current_uri = fz::uri(fz::to_utf8(m_pCurrentServer->Format(ServerFormat::url)) + fz::to_utf8(pData->remotePath.FormatFilename(pData->remoteFile)));
+	if (m_current_uri.empty()) {
+		FZ_REPLY_INTERNALERROR;
+		return FZ_REPLY_ERROR;
+	}
 
 	if (!localFile.empty()) {
 		pData->localFileSize = fz::local_filesys::get_size(fz::to_native(pData->localFile));
 
 		pData->opState = filetransfer_waitfileexists;
 		int res = CheckOverwriteFile();
-		if (res != FZ_REPLY_OK)
+		if (res != FZ_REPLY_OK) {
 			return res;
+		}
 
 		pData->opState = filetransfer_transfer;
 
 		res = OpenFile(pData);
-		if( res != FZ_REPLY_OK )
+		if (res != FZ_REPLY_OK) {
 			return res;
+		}
 	}
-	else
+	else {
 		pData->opState = filetransfer_transfer;
+	}
 
 	int res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(), m_pCurrentServer->GetProtocol() == HTTPS);
-	if (res != FZ_REPLY_OK)
+	if (res != FZ_REPLY_OK) {
 		return res;
+	}
 
 	return FileTransferSend();
 }
@@ -357,15 +365,13 @@ int CHttpControlSocket::FileTransferSubcommandResult(int prevResult)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferSubcommandResult(%d)"), prevResult);
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (prevResult != FZ_REPLY_OK)
-	{
+	if (prevResult != FZ_REPLY_OK) {
 		ResetOperation(prevResult);
 		return FZ_REPLY_ERROR;
 	}
@@ -383,8 +389,8 @@ int CHttpControlSocket::FileTransferSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!m_current_uri.HasScheme() || !m_current_uri.HasServer() || !m_current_uri.HasPath()) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Invalid URI: %s"), m_current_uri.BuildURI());
+	if (m_current_uri.scheme_.empty() || m_current_uri.host_.empty() || !m_current_uri.is_absolute()) {
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, "Invalid URI: %s", m_current_uri.to_string());
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -405,18 +411,11 @@ int CHttpControlSocket::FileTransferSend()
 		}
 	}
 
-	std::wstring location = m_current_uri.GetPath().ToStdWstring();
-	if (m_current_uri.HasQuery()) {
-		location += L"?" + m_current_uri.GetQuery().ToStdWstring();
-	}
-	std::wstring action = fz::sprintf(L"GET %s HTTP/1.1", location);
+	std::string action = fz::sprintf("GET %s HTTP/1.1", m_current_uri.get_request());
 	LogMessageRaw(MessageType::Command, action);
 
-	std::string hostWithPort = fz::to_utf8(m_current_uri.GetServer());
-	if (m_current_uri.HasPort()) {
-		hostWithPort += ":" + fz::to_utf8(m_current_uri.GetPort());
-	}
-	std::string command = fz::sprintf("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n", fz::to_utf8(action), hostWithPort, PACKAGE_STRING);
+	std::string host = m_current_uri.get_authority(false);
+	std::string command = fz::sprintf("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n", action, host, PACKAGE_STRING);
 	if (pData->resume) {
 		command += fz::sprintf("Range: bytes=%d-\r\n", pData->localFileSize);
 	}
@@ -546,7 +545,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 		}
 
 		m_pRecvBuffer[i] = 0;
-		wxString const line = wxString(m_pRecvBuffer, wxConvLocal);
+		std::wstring const line = wxString(m_pRecvBuffer, wxConvLocal).ToStdWstring();
 		if (!line.empty()) {
 			LogMessageRaw(MessageType::Response, line);
 		}
@@ -615,32 +614,35 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					ResetSocket();
 					ResetHttpData(pData);
 
-					if (!pData->m_newLocation.HasScheme() || !pData->m_newLocation.HasServer() || !pData->m_newLocation.HasPath()) {
-						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported URI: %s"), m_current_uri.BuildURI());
+					if (pData->m_newLocation.scheme_.empty() || pData->m_newLocation.host_.empty() || !pData->m_newLocation.is_absolute()) {
+						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported URI: %s"), m_current_uri.to_string());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
 
-					ServerProtocol protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.GetScheme().ToStdWstring());
+					ServerProtocol protocol = CServer::GetProtocolFromPrefix(fz::to_wstring_from_utf8(pData->m_newLocation.scheme_));
 					if (protocol != HTTP && protocol != HTTPS) {
-						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI());
+						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.to_string());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
 
-					long port = CServer::GetDefaultPort(protocol);
-					if (pData->m_newLocation.HasPort() && (!pData->m_newLocation.GetPort().ToLong(&port) || port < 1 || port > 65535)) {
-						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI());
-						ResetOperation(FZ_REPLY_ERROR);
-						return FZ_REPLY_ERROR;
+					unsigned short port = CServer::GetDefaultPort(protocol);
+					if (pData->m_newLocation.port_ != 0) {
+						port = pData->m_newLocation.port_;
 					}
 
 					m_current_uri = pData->m_newLocation;
 
 					// International domain names
-					std::wstring host = ConvertDomainName(m_current_uri.GetServer().ToStdWstring());
+					std::wstring host = ConvertDomainName(fz::to_wstring_from_utf8(m_current_uri.host_));
+					if (host.empty()) {
+						LogMessage(MessageType::Error, _("Invalid hostname: %s"), pData->m_newLocation.to_string());
+						ResetOperation(FZ_REPLY_ERROR);
+						return FZ_REPLY_ERROR;
+					}
 
-					int res = InternalConnect(host, static_cast<unsigned short>(port), protocol == HTTPS);
+					int res = InternalConnect(host, port, protocol == HTTPS);
 					if (res == FZ_REPLY_WOULDBLOCK) {
 						res |= FZ_REPLY_REDIRECTED;
 					}
@@ -679,8 +681,10 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				return FZ_REPLY_WOULDBLOCK;
 			}
 			if (m_recvBufferPos > 12 && !memcmp(m_pRecvBuffer, "Location: ", 10)) {
-				pData->m_newLocation = wxURI(wxString(m_pRecvBuffer + 10, wxConvLocal));
-				pData->m_newLocation.Resolve(m_current_uri);
+				pData->m_newLocation = fz::uri(m_pRecvBuffer + 10);
+				if (!pData->m_newLocation.empty()) {
+					pData->m_newLocation.resolve(m_current_uri);
+				}
 			}
 			else if (m_recvBufferPos > 21 && !memcmp(m_pRecvBuffer, "Transfer-Encoding: ", 19)) {
 				if (!strcmp(m_pRecvBuffer + 19, "chunked")) {

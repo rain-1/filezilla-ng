@@ -19,6 +19,8 @@
 #include "sizeformatting.h"
 #include "timeformatting.h"
 
+#include "uri.h"
+
 #include <wx/clipbrd.h>
 #include <wx/dcclient.h>
 
@@ -2541,7 +2543,7 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent& event)
 	auto getUrl = [](wxString const& serverPart, CServerPath const& path, std::wstring const& name) {
 		wxString url = serverPart;
 
-		auto const pathPart = url_encode(path.FormatFilename(name, false), true);
+		auto const pathPart = fz::percent_encode_w(path.FormatFilename(name, false), true);
 		if (!pathPart.empty() && pathPart[0] != '/') {
 			url += '/';
 		}

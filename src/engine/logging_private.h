@@ -36,7 +36,7 @@ public:
 			return;
 		}
 
-		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType, std::forward<String>(msg));
+		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType, fz::to_wstring(std::forward<String>(msg)));
 
 		LogToFile(nMessageType, notification->msg);
 		engine_.AddLogNotification(notification);

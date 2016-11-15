@@ -109,9 +109,11 @@
     </ClCompile>
     <ClCompile Include="tlssocket.cpp" />
     <ClCompile Include="transfersocket.cpp" />
+    <ClCompile Include="uri.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\engine_context.h" />
+    <ClInclude Include="..\include\uri.h" />
     <ClInclude Include="backend.h" />
     <ClInclude Include="..\include\commands.h" />
     <ClInclude Include="ControlSocket.h" />
