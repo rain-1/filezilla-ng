@@ -1074,8 +1074,10 @@ int CFtpControlSocket::LogonParseResponse()
 						fact == _T("perm") ||
 						fact == _T("unix.mode") ||
 						fact == _T("unix.owner") ||
-						fact == _T("unix.user") ||
+						fact == _T("unix.ownername") ||
 						fact == _T("unix.group") ||
+						fact == _T("unix.groupname") ||
+						fact == _T("unix.user") ||
 						fact == _T("unix.uid") ||
 						fact == _T("unix.gid") ||
 						fact == _T("x.hidden"))
