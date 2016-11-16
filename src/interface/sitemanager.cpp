@@ -777,8 +777,9 @@ bool CSiteManager::ClearBookmarks(std::wstring sitePath)
 	}
 
 	auto element = document.child("Servers");
-	if (!element)
+	if (!element) {
 		return false;
+	}
 
 	std::vector<std::wstring> segments;
 	if (!UnescapeSitePath(sitePath, segments)) {
@@ -799,8 +800,9 @@ bool CSiteManager::ClearBookmarks(std::wstring sitePath)
 	}
 
 	if (!file.Save(false)) {
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 			return true;
+		}
 
 		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName(), file.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);

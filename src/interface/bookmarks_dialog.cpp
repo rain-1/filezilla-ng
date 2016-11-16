@@ -3,6 +3,7 @@
 #include "filezillaapp.h"
 #include "sitemanager.h"
 #include "ipcmutex.h"
+#include "state.h"
 #include "themeprovider.h"
 #include "xmlfunctions.h"
 #include "xrc_helper.h"
@@ -34,15 +35,18 @@ CNewBookmarkDialog::CNewBookmarkDialog(wxWindow* parent, std::wstring& site_path
 
 int CNewBookmarkDialog::Run(const wxString &local_path, const CServerPath &remote_path)
 {
-	if (!Load(m_parent, _T("ID_NEWBOOKMARK")))
+	if (!Load(m_parent, _T("ID_NEWBOOKMARK"))) {
 		return wxID_CANCEL;
+	}
 
 	xrc_call(*this, "ID_LOCALPATH", &wxTextCtrl::ChangeValue, local_path);
-	if (!remote_path.empty())
+	if (!remote_path.empty()) {
 		xrc_call(*this, "ID_REMOTEPATH", &wxTextCtrl::ChangeValue, remote_path.GetPath());
+	}
 
-	if (!m_server)
+	if (!m_server) {
 		xrc_call(*this, "ID_TYPE_SITE", &wxRadioButton::Enable, false);
+	}
 
 	return ShowModal();
 }
@@ -115,8 +119,9 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 		EndModal(wxID_OK);
 	}
 	else {
-		if (!CBookmarksDialog::AddBookmark(name, local_path, remote_path, sync, comparison))
+		if (!CBookmarksDialog::AddBookmark(name, local_path, remote_path, sync, comparison)) {
 			return;
+		}
 
 		EndModal(wxID_OK);
 	}
@@ -231,13 +236,15 @@ void CBookmarksDialog::LoadSiteSpecificBookmarks()
 
 int CBookmarksDialog::Run()
 {
-	if (!Load(m_parent, _T("ID_BOOKMARKS")))
+	if (!Load(m_parent, _T("ID_BOOKMARKS"))) {
 		return wxID_CANCEL;
+	}
 
 	// Now create the imagelist for the site tree
 	m_pTree = XRCCTRL(*this, "ID_TREE", wxTreeCtrl);
-	if (!m_pTree)
+	if (!m_pTree) {
 		return false;
+	}
 
 	wxSize s = CThemeProvider::GetIconSize(iconSizeSmall);
 	wxImageList* pImageList = new wxImageList(s.x, s.y);
@@ -306,10 +313,12 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 
 		auto bookmark = element.append_child("Bookmark");
 		AddTextElement(bookmark, "Name", m_pTree->GetItemText(child).ToStdWstring());
-		if (!data->m_local_dir.empty())
+		if (!data->m_local_dir.empty()) {
 			AddTextElement(bookmark, "LocalDir", data->m_local_dir);
-		if (!data->m_remote_dir.empty())
+		}
+		if (!data->m_remote_dir.empty()) {
 			AddTextElement(bookmark, "RemoteDir", data->m_remote_dir.GetSafePath());
+		}
 		if (data->m_sync) {
 			AddTextElementUtf8(bookmark, "SyncBrowsing", "1");
 		}
@@ -322,12 +331,15 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 		wxString msg = wxString::Format(_("Could not write \"%s\", the global bookmarks could no be saved: %s"), file.GetFileName(), file.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
+
+	CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_GLOBALBOOKMARKS);
 }
 
 void CBookmarksDialog::SaveSiteSpecificBookmarks()
 {
-	if (m_site_path.empty())
+	if (m_site_path.empty()) {
 		return;
+	}
 
 	if (!CSiteManager::ClearBookmarks(m_site_path)) {
 		return;
@@ -346,8 +358,9 @@ void CBookmarksDialog::SaveSiteSpecificBookmarks()
 
 void CBookmarksDialog::OnOK(wxCommandEvent&)
 {
-	if (!Verify())
+	if (!Verify()) {
 		return;
+	}
 	UpdateBookmark();
 
 	SaveGlobalBookmarks();
@@ -359,12 +372,14 @@ void CBookmarksDialog::OnOK(wxCommandEvent&)
 void CBookmarksDialog::OnBrowse(wxCommandEvent&)
 {
 	wxTreeItemId item = m_pTree->GetSelection();
-	if (!item)
+	if (!item) {
 		return;
+	}
 
 	CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(item);
-	if (!data)
+	if (!data) {
 		return;
+	}
 
 	wxTextCtrl *pText = XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl);
 
@@ -376,8 +391,9 @@ void CBookmarksDialog::OnBrowse(wxCommandEvent&)
 
 void CBookmarksDialog::OnSelChanging(wxTreeEvent& event)
 {
-	if (m_is_deleting)
+	if (m_is_deleting) {
 		return;
+	}
 
 	if (!Verify()) {
 		event.Veto();
@@ -395,18 +411,22 @@ void CBookmarksDialog::OnSelChanged(wxTreeEvent&)
 bool CBookmarksDialog::Verify()
 {
 	wxTreeItemId item = m_pTree->GetSelection();
-	if (!item)
+	if (!item) {
 		return true;
+	}
 
 	CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(item);
-	if (!data)
+	if (!data) {
 		return true;
+	}
 
 	const CServer *server;
-	if (m_pTree->GetItemParent(item) == m_bookmarks_site)
+	if (m_pTree->GetItemParent(item) == m_bookmarks_site) {
 		server = m_server;
-	else
+	}
+	else {
 		server = 0;
+	}
 
 	wxString const remotePathRaw = xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::GetValue);
 	if (!remotePathRaw.empty()) {
@@ -418,14 +438,17 @@ bool CBookmarksDialog::Verify()
 			xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::SetFocus);
 			if (server) {
 				wxString msg;
-				if (server->GetType() != DEFAULT)
+				if (server->GetType() != DEFAULT) {
 					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the current site's servertype (%s)."), server->GetNameFromServerType(server->GetType()));
-				else
+				}
+				else {
 					msg = _("Remote path cannot be parsed. Make sure it is a valid absolute path.");
+				}
 				wxMessageBoxEx(msg);
 			}
-			else
+			else {
 				wxMessageBoxEx(_("Remote path cannot be parsed. Make sure it is a valid absolute path."));
+			}
 			return false;
 		}
 	}
@@ -450,23 +473,28 @@ bool CBookmarksDialog::Verify()
 void CBookmarksDialog::UpdateBookmark()
 {
 	wxTreeItemId item = m_pTree->GetSelection();
-	if (!item)
+	if (!item) {
 		return;
+	}
 
 	CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(item);
-	if (!data)
+	if (!data) {
 		return;
+	}
 
 	const CServer *server;
-	if (m_pTree->GetItemParent(item) == m_bookmarks_site)
+	if (m_pTree->GetItemParent(item) == m_bookmarks_site) {
 		server = m_server;
-	else
+	}
+	else {
 		server = 0;
+	}
 
 	wxString const remotePathRaw = xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::GetValue);
 	if (!remotePathRaw.empty()) {
-		if (server)
+		if (server) {
 			data->m_remote_dir.SetType(server->GetType());
+		}
 		data->m_remote_dir.SetPath(remotePathRaw.ToStdWstring());
 	}
 
@@ -514,16 +542,19 @@ void CBookmarksDialog::DisplayBookmark()
 
 void CBookmarksDialog::OnNewBookmark(wxCommandEvent&)
 {
-	if (!Verify())
+	if (!Verify()) {
 		return;
+	}
 	UpdateBookmark();
 
 	wxTreeItemId item = m_pTree->GetSelection();
-	if (!item)
+	if (!item) {
 		item = m_bookmarks_global;
+	}
 
-	if (m_pTree->GetItemData(item))
+	if (m_pTree->GetItemData(item)) {
 		item = m_pTree->GetItemParent(item);
+	}
 
 	if (item == m_bookmarks_site) {
 
@@ -533,8 +564,9 @@ void CBookmarksDialog::OnNewBookmark(wxCommandEvent&)
 		}
 		
 		if (!site) {
-			if (wxMessageBoxEx(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES)
+			if (wxMessageBoxEx(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES) {
 				return;
+			}
 
 			m_site_path = CSiteManager::AddServer(*m_server);
 			if (m_site_path.empty()) {
@@ -561,8 +593,9 @@ void CBookmarksDialog::OnNewBookmark(wxCommandEvent&)
 
 			child = m_pTree->GetNextChild(item, cookie);
 		}
-		if (!found)
+		if (!found) {
 			break;
+		}
 
 		newName = _("New bookmark") + wxString::Format(_T(" %d"), index++);
 	}
@@ -576,8 +609,9 @@ void CBookmarksDialog::OnNewBookmark(wxCommandEvent&)
 void CBookmarksDialog::OnRename(wxCommandEvent&)
 {
 	wxTreeItemId item = m_pTree->GetSelection();
-	if (!item || item == m_bookmarks_global || item == m_bookmarks_site)
+	if (!item || item == m_bookmarks_global || item == m_bookmarks_site) {
 		return;
+	}
 
 	m_pTree->EditLabel(item);
 }
@@ -585,8 +619,9 @@ void CBookmarksDialog::OnRename(wxCommandEvent&)
 void CBookmarksDialog::OnDelete(wxCommandEvent&)
 {
 	wxTreeItemId item = m_pTree->GetSelection();
-	if (!item || item == m_bookmarks_global || item == m_bookmarks_site)
+	if (!item || item == m_bookmarks_global || item == m_bookmarks_site) {
 		return;
+	}
 
 	wxTreeItemId parent = m_pTree->GetItemParent(item);
 
@@ -599,15 +634,18 @@ void CBookmarksDialog::OnDelete(wxCommandEvent&)
 void CBookmarksDialog::OnCopy(wxCommandEvent&)
 {
 	wxTreeItemId item = m_pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return;
+	}
 
-	if (!Verify())
+	if (!Verify()) {
 		return;
+	}
 
 	CBookmarkItemData* data = static_cast<CBookmarkItemData *>(m_pTree->GetItemData(item));
-	if (!data)
+	if (!data) {
 		return;
+	}
 
 	UpdateBookmark();
 
@@ -631,8 +669,9 @@ void CBookmarksDialog::OnCopy(wxCommandEvent&)
 
 			child = m_pTree->GetNextChild(parent, cookie);
 		}
-		if (!found)
+		if (!found) {
 			break;
+		}
 
 		newName = wxString::Format(_("Copy (%d) of %s"), index++, oldName);
 	}
@@ -663,8 +702,9 @@ void CBookmarksDialog::OnBeginLabelEdit(wxTreeEvent& event)
 
 void CBookmarksDialog::OnEndLabelEdit(wxTreeEvent& event)
 {
-	if (event.IsEditCancelled())
+	if (event.IsEditCancelled()) {
 		return;
+	}
 
 	wxTreeItemId item = event.GetItem();
 	if (item != m_pTree->GetSelection()) {
@@ -685,8 +725,9 @@ void CBookmarksDialog::OnEndLabelEdit(wxTreeEvent& event)
 
 	wxTreeItemIdValue cookie;
 	for (wxTreeItemId child = m_pTree->GetFirstChild(parent, cookie); child.IsOk(); child = m_pTree->GetNextChild(parent, cookie)) {
-		if (child == item)
+		if (child == item) {
 			continue;
+		}
 		if (!name.CmpNoCase(m_pTree->GetItemText(child))) {
 			wxMessageBoxEx(_("Name already exists"), _("Cannot rename entry"), wxICON_EXCLAMATION, this);
 			event.Veto();
@@ -716,8 +757,9 @@ bool CBookmarksDialog::GetGlobalBookmarks(std::list<wxString> &bookmarks)
 		CServerPath remote_dir;
 
 		name = GetTextElement(bookmark, "Name");
-		if (name.empty())
+		if (name.empty()) {
 			continue;
+		}
 
 		local_dir = GetTextElement(bookmark, "LocalDir");
 		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
@@ -841,6 +883,8 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 		return false;
 	}
+
+	CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_GLOBALBOOKMARKS);
 
 	return true;
 }
