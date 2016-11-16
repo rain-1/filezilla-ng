@@ -9,6 +9,7 @@
 #include <sqlite3.h>
 #include <random>
 #include <cstdint>
+#include <cwctype>
 
 std::wstring GetDependencyVersion(lib_dependency d)
 {
@@ -181,6 +182,15 @@ std::wstring translate(char const * const t)
 std::wstring translate(char const * const singular, char const * const plural, int64_t n)
 {
 	return translator_pf(singular, plural, n);
+}
+
+std::wstring str_tolower(std::wstring const& source)
+{
+	std::wstring ret;
+	for (auto const& c : source) {
+		ret.push_back(std::towlower(c));
+	}
+	return ret;
 }
 
 }

@@ -49,6 +49,8 @@ void set_translators(
 std::wstring translate(char const* const source);
 std::wstring translate(char const * const singular, char const * const plural, int64_t n);
 
+// Poor-man's tolower. Consider to eventually use libicu or similar
+std::wstring str_tolower(std::wstring const& source);
 }
 
 // Sadly xgettext cannot be used with namespaces

@@ -149,7 +149,7 @@ bool CDirectoryCache::LookupFile(CDirentry &entry, CServer const& server, CServe
 	return false;
 }
 
-bool CDirectoryCache::InvalidateFile(CServer const& server, CServerPath const& path, wxString const& filename, bool *wasDir)
+bool CDirectoryCache::InvalidateFile(CServer const& server, CServerPath const& path, std::wstring const& filename, bool *wasDir)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -167,11 +167,11 @@ bool CDirectoryCache::InvalidateFile(CServer const& server, CServerPath const& p
 		UpdateLru(sit, iter);
 
 		for (unsigned int i = 0; i < entry.listing.GetCount(); i++) {
-			if (!filename.CmpNoCase(((const CCacheEntry&)entry).listing[i].name)) {
+			if (!fz::stricmp(filename, entry.listing[i].name)) {
 				if (wasDir) {
 					*wasDir = entry.listing[i].is_dir();
 				}
-				entry.listing[i].flags |= CDirentry::flag_unsure;
+				entry.listing.get(i).flags |= CDirentry::flag_unsure;
 			}
 		}
 		entry.listing.m_flags |= CDirectoryListing::unsure_unknown;
@@ -181,7 +181,7 @@ bool CDirectoryCache::InvalidateFile(CServer const& server, CServerPath const& p
 	return true;
 }
 
-bool CDirectoryCache::UpdateFile(CServer const& server, CServerPath const& path, wxString const& filename, bool mayCreate, Filetype type, int64_t size)
+bool CDirectoryCache::UpdateFile(CServer const& server, CServerPath const& path, std::wstring const& filename, bool mayCreate, Filetype type, int64_t size)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -203,8 +203,8 @@ bool CDirectoryCache::UpdateFile(CServer const& server, CServerPath const& path,
 		bool matchCase = false;
 		unsigned int i;
 		for (i = 0; i < entry.listing.GetCount(); ++i) {
-			if (!filename.CmpNoCase(entry.listing[i].name)) {
-				entry.listing[i].flags |= CDirentry::flag_unsure;
+			if (!fz::stricmp(filename, entry.listing[i].name)) {
+				entry.listing.get(i).flags |= CDirentry::flag_unsure;
 				if (entry.listing[i].name == filename) {
 					matchCase = true;
 					break;
@@ -260,7 +260,7 @@ bool CDirectoryCache::UpdateFile(CServer const& server, CServerPath const& path,
 	return updated;
 }
 
-bool CDirectoryCache::RemoveFile(CServer const& server, CServerPath const& path, wxString const& filename)
+bool CDirectoryCache::RemoveFile(CServer const& server, CServerPath const& path, std::wstring const& filename)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -298,8 +298,8 @@ bool CDirectoryCache::RemoveFile(CServer const& server, CServerPath const& path,
 		}
 		else {
 			for (unsigned int i = 0; i < entry.listing.GetCount(); ++i) {
-				if (!filename.CmpNoCase(entry.listing[i].name)) {
-					entry.listing[i].flags |= CDirentry::flag_unsure;
+				if (!fz::stricmp(filename, entry.listing[i].name)) {
+					entry.listing.get(i).flags |= CDirentry::flag_unsure;
 				}
 			}
 			entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
@@ -419,8 +419,8 @@ void CDirectoryCache::Rename(CServer const& server, CServerPath const& pathFrom,
 					UpdateFile(server, pathFrom, fileTo, true, dir);
 				}
 				else {
-					listing[i].name = fileTo;
-					listing[i].flags |= CDirentry::flag_unsure;
+					listing.get(i).name = fileTo;
+					listing.get(i).flags |= CDirentry::flag_unsure;
 					listing.m_flags |= CDirectoryListing::unsure_unknown;
 					listing.ClearFindMap();
 				}

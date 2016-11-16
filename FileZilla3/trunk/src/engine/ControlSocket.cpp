@@ -363,8 +363,7 @@ bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPat
 
 int CControlSocket::CheckOverwriteFile()
 {
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -382,10 +381,12 @@ int CControlSocket::CheckOverwriteFile()
 	bool dirDidExist;
 	bool matchedCase;
 	CServerPath remotePath;
-	if (pData->tryAbsolutePath || m_CurrentPath.empty())
+	if (pData->tryAbsolutePath || m_CurrentPath.empty()) {
 		remotePath = pData->remotePath;
-	else
+	}
+	else {
 		remotePath = m_CurrentPath;
+	}
 	bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, remotePath, pData->remoteFile, dirDidExist, matchedCase);
 
 	// Ignore entries with wrong case
@@ -393,8 +394,9 @@ int CControlSocket::CheckOverwriteFile()
 		found = false;
 
 	if (!pData->download) {
-		if (!found && pData->remoteFileSize < 0 && pData->fileTime.empty())
+		if (!found && pData->remoteFileSize < 0 && pData->fileTime.empty()) {
 			return FZ_REPLY_OK;
+		}
 	}
 
 	CFileExistsNotification *pNotification = new CFileExistsNotification;
@@ -408,12 +410,15 @@ int CControlSocket::CheckOverwriteFile()
 	pNotification->remoteTime = pData->fileTime;
 	pNotification->ascii = !pData->transferSettings.binary;
 
-	if (pData->download && pNotification->localSize >= 0)
+	if (pData->download && pNotification->localSize >= 0) {
 		pNotification->canResume = true;
-	else if (!pData->download && pNotification->remoteSize >= 0)
+	}
+	else if (!pData->download && pNotification->remoteSize >= 0) {
 		pNotification->canResume = true;
-	else
+	}
+	else {
 		pNotification->canResume = false;
+	}
 
 	pNotification->localTime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile));
 
