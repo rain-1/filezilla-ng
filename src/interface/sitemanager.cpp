@@ -585,14 +585,16 @@ wxString CSiteManager::AddServer(CServer server)
 	}
 
 	auto element = document.child("Servers");
-	if (!element)
-		return wxString();
+	if (!element) {
+		element = document.append_child("Servers");
+	}
 
 	std::list<wxString> names;
 	for (auto child = element.child("Server"); child; child = child.next_sibling("Server")) {
 		wxString name = GetTextElement(child, "Name");
-		if (name.empty())
+		if (name.empty()) {
 			continue;
+		}
 
 		names.push_back(name);
 	}
@@ -603,11 +605,13 @@ wxString CSiteManager::AddServer(CServer server)
 	for (;;) {
 		std::list<wxString>::const_iterator iter;
 		for (iter = names.begin(); iter != names.end(); ++iter) {
-			if (*iter == name)
+			if (*iter == name) {
 				break;
+			}
 		}
-		if (iter == names.end())
+		if (iter == names.end()) {
 			break;
+		}
 
 		name = _("New site") + wxString::Format(_T(" %d"), ++i);
 	}
@@ -619,8 +623,9 @@ wxString CSiteManager::AddServer(CServer server)
 	AddTextElement(xServer, name);
 
 	if (!file.Save(false)) {
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 			return wxString();
+		}
 
 		wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFileName(), file.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
