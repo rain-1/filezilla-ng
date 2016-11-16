@@ -1712,7 +1712,7 @@ int CFtpControlSocket::ListParseResponse()
 			fz::duration span = fz::duration::from_seconds(serveroffset);
 			const int count = pData->directoryListing.GetCount();
 			for (int i = 0; i < count; ++i) {
-				CDirentry& entry = pData->directoryListing[i];
+				CDirentry& entry = pData->directoryListing.get(i);
 				entry.time += span;
 			}
 

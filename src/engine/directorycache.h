@@ -39,9 +39,9 @@ public:
 	bool Lookup(CDirectoryListing &listing, CServer const&server, CServerPath const& path, bool allowUnsureEntries, bool& is_outdated);
 	bool DoesExist(CServer const& server, CServerPath const& path, int &hasUnsureEntries, bool &is_outdated);
 	bool LookupFile(CDirentry &entry, CServer const& server, CServerPath const& path, std::wstring const& file, bool &dirDidExist, bool &matchedCase);
-	bool InvalidateFile(CServer const& server, CServerPath const& path, wxString const& filename, bool *wasDir = 0);
-	bool UpdateFile(CServer const& server, CServerPath const& path, wxString const& filename, bool mayCreate, Filetype type = file, int64_t size = -1);
-	bool RemoveFile(CServer const& server, CServerPath const& path, wxString const& filename);
+	bool InvalidateFile(CServer const& server, CServerPath const& path, std::wstring const& filename, bool *wasDir = 0);
+	bool UpdateFile(CServer const& server, CServerPath const& path, std::wstring const& filename, bool mayCreate, Filetype type = file, int64_t size = -1);
+	bool RemoveFile(CServer const& server, CServerPath const& path, std::wstring const& filename);
 	void InvalidateServer(CServer const& server);
 	void RemoveDir(CServer const& server, CServerPath const& path, std::wstring const& filename, CServerPath const& target);
 	void Rename(CServer const& server, CServerPath const& pathFrom, std::wstring const& fileFrom, CServerPath const& pathTo, std::wstring const& fileTo);

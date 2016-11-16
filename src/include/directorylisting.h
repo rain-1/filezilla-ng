@@ -5,7 +5,7 @@
 #include <libfilezilla/shared.hpp>
 #include <libfilezilla/time.hpp>
 
-#include <map>
+#include <unordered_map>
 
 class CDirentry
 {
@@ -73,18 +73,18 @@ public:
 	CDirectoryListing& operator=(CDirectoryListing const&) = default;
 	CDirectoryListing& operator=(CDirectoryListing &&) noexcept = default;
 
-	const CDirentry& operator[](unsigned int index) const;
+	CDirentry const& operator[](unsigned int index) const;
 
 	// Word of caution: You MUST NOT change the name of the returned
 	// entry if you do not call ClearFindMap afterwards
-	CDirentry& operator[](unsigned int index);
+	CDirentry& get(unsigned int index);
 
 	unsigned int GetCount() const { return m_entries ? m_entries->size() : 0; }
 
 	void Append(CDirentry&& entry);
 
 	int FindFile_CmpCase(std::wstring const& name) const;
-	int FindFile_CmpNoCase(wxString name) const;
+	int FindFile_CmpNoCase(std::wstring const& name) const;
 
 	void ClearFindMap();
 
@@ -136,8 +136,8 @@ protected:
 
 	fz::shared_optional<std::vector<fz::shared_value<CDirentry> > > m_entries;
 
-	mutable fz::shared_optional<std::multimap<std::wstring, unsigned int> > m_searchmap_case;
-	mutable fz::shared_optional<std::multimap<std::wstring, unsigned int> > m_searchmap_nocase;
+	mutable fz::shared_optional<std::unordered_multimap<std::wstring, unsigned int> > m_searchmap_case;
+	mutable fz::shared_optional<std::unordered_multimap<std::wstring, unsigned int> > m_searchmap_nocase;
 };
 
 #endif
