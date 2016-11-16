@@ -143,8 +143,9 @@ void CContextManager::NotifyHandlers(CState* pState, t_statechange_notifications
 
 	auto const& handlers = m_handlers[notification];
 	for (auto const& handler : handlers) {
-		if (handler.current_only && pState != GetCurrentContext())
+		if (handler.current_only && pState != GetCurrentContext()) {
 			continue;
+		}
 
 		handler.pHandler->OnStateChange(pState, notification, data, data2);
 	}
@@ -152,16 +153,18 @@ void CContextManager::NotifyHandlers(CState* pState, t_statechange_notifications
 
 CState* CContextManager::GetCurrentContext()
 {
-	if (m_current_context == -1)
+	if (m_current_context == -1) {
 		return 0;
+	}
 
 	return m_contexts[m_current_context];
 }
 
 void CContextManager::NotifyAllHandlers(t_statechange_notifications notification, wxString const& data, void const* data2)
 {
-	for (unsigned int i = 0; i < m_contexts.size(); i++)
-		m_contexts[i]->NotifyHandlers(notification, data, data2);
+	for (auto const& context : m_contexts) {
+		context->NotifyHandlers(notification, data, data2);
+	}
 }
 
 void CContextManager::NotifyGlobalHandlers(t_statechange_notifications notification, wxString const& data, void const* data2)

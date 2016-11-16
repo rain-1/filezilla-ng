@@ -117,6 +117,8 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_QUEUEPROCESSING, false);
 	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_CHANGEDCONTEXT, false);
 
+	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_GLOBALBOOKMARKS, false);
+
 	menubar->RegisterOption(OPTION_ASCIIBINARY);
 	menubar->RegisterOption(OPTION_PRESERVE_TIMESTAMPS);
 
@@ -156,8 +158,9 @@ void CMenuBar::UpdateBookmarkMenu()
 	// Delete the separators
 	while (pMenu->GetMenuItemCount() > 2) {
 		wxMenuItem* pSeparator = pMenu->FindItemByPosition(2);
-		if (pSeparator)
+		if (pSeparator) {
 			pMenu->Delete(pSeparator);
+		}
 	}
 
 	auto ids = m_bookmark_menu_ids.begin();
@@ -324,6 +327,9 @@ void CMenuBar::OnStateChange(CState* pState, t_statechange_notifications notific
 	{
 	case STATECHANGE_CHANGEDCONTEXT:
 		UpdateMenubarState();
+		UpdateBookmarkMenu();
+		break;
+	case STATECHANGE_GLOBALBOOKMARKS:
 		UpdateBookmarkMenu();
 		break;
 	case STATECHANGE_SERVER:
