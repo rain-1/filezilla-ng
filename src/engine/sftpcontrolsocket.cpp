@@ -288,10 +288,6 @@ int CSftpControlSocket::Connect(const CServer &server)
 	delete m_pCurrentServer;
 	m_pCurrentServer = new CServer(server);
 
-	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, yes, 0);
-	}
-
 	CSftpConnectOpData* pData = new CSftpConnectOpData;
 	m_pCurOpData = pData;
 
@@ -834,8 +830,7 @@ enum listStates
 	list_init = 0,
 	list_waitcwd,
 	list_waitlock,
-	list_list,
-	list_mtime
+	list_list
 };
 
 int CSftpControlSocket::List(CServerPath path, std::wstring const& subDir, int flags)
@@ -915,65 +910,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, std::wstring const& r
 		}
 
 		pData->directoryListing = pData->pParser->Parse(m_CurrentPath);
-
-		int res = ListCheckTimezoneDetection();
-		if (res != FZ_REPLY_OK) {
-			return res;
-		}
-
 		engine_.GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
-
-		engine_.SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
-
-		ResetOperation(FZ_REPLY_OK);
-		return FZ_REPLY_OK;
-	}
-	else if (pData->opState == list_mtime) {
-		if (successful && !reply.empty()) {
-			time_t seconds = 0;
-			bool parsed = true;
-			for (auto c : reply) {
-				if (c < '0' || c > '9') {
-					parsed = false;
-					break;
-				}
-				seconds *= 10;
-				seconds += c - '0';
-			}
-			if (parsed) {
-				fz::datetime date(seconds, fz::datetime::seconds);
-				if (!date.empty()) {
-					assert(pData->directoryListing[pData->mtime_index].has_date());
-					fz::datetime listTime = pData->directoryListing[pData->mtime_index].time;
-					listTime -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
-
-					int serveroffset = static_cast<int>((date - listTime).get_seconds());
-					if (!pData->directoryListing[pData->mtime_index].has_seconds()) {
-						// Round offset to full minutes
-						if (serveroffset < 0) {
-							serveroffset -= 59;
-						}
-						serveroffset -= serveroffset % 60;
-					}
-
-					LogMessage(MessageType::Status, _("Timezone offset of server is %d seconds."), -serveroffset);
-
-					fz::duration span = fz::duration::from_seconds(serveroffset);
-					const int count = pData->directoryListing.GetCount();
-					for (int i = 0; i < count; ++i) {
-						CDirentry& entry = pData->directoryListing.get(i);
-						entry.time += span;
-					}
-
-					// TODO: Correct cached listings
-
-					CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, yes, serveroffset);
-				}
-			}
-		}
-
-		engine_.GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
-
 		engine_.SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
 
 		ResetOperation(FZ_REPLY_OK);
@@ -1146,19 +1083,7 @@ int CSftpControlSocket::ListSend()
 	}
 	else if (pData->opState == list_list) {
 		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer, listingEncoding::unknown);
-		pData->pParser->SetTimezoneOffset(GetTimezoneOffset());
 		if (!SendCommand(_T("ls"))) {
-			return FZ_REPLY_ERROR;
-		}
-		return FZ_REPLY_WOULDBLOCK;
-	}
-	else if (pData->opState == list_mtime) {
-		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
-		std::wstring const& name = pData->directoryListing[pData->mtime_index].name;
-		std::wstring quotedFilename = QuoteFilename(pData->directoryListing.path.FormatFilename(name, true));
-		if (!SendCommand(L"mtime " + WildcardEscape(quotedFilename),
-			L"mtime " + quotedFilename))
-		{
 			return FZ_REPLY_ERROR;
 		}
 		return FZ_REPLY_WOULDBLOCK;
@@ -2581,30 +2506,6 @@ int CSftpControlSocket::ParseSubcommandResult(int prevResult)
 	}
 
 	return FZ_REPLY_ERROR;
-}
-
-int CSftpControlSocket::ListCheckTimezoneDetection()
-{
-	assert(m_pCurOpData);
-
-	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
-
-	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown) {
-		const int count = pData->directoryListing.GetCount();
-		for (int i = 0; i < count; ++i) {
-			if (!pData->directoryListing[i].has_time())
-				continue;
-
-			if (pData->directoryListing[i].is_link())
-				continue;
-
-			pData->opState = list_mtime;
-			pData->mtime_index = i;
-			return SendNextCommand();
-		}
-	}
-
-	return FZ_REPLY_OK;
 }
 
 void CSftpControlSocket::operator()(fz::event_base const& ev)
