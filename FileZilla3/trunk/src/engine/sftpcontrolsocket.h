@@ -89,7 +89,6 @@ protected:
 	int ListSend();
 	int ListParseResponse(bool successful, std::wstring const& reply);
 	int ListParseEntry(std::wstring && entry, std::wstring const& stime, std::wstring && name);
-	int ListCheckTimezoneDetection();
 
 	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
 	int ChangeDirParseResponse(bool successful, std::wstring const& reply);
