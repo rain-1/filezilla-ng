@@ -9,6 +9,8 @@
 
 #include <algorithm>
 
+#include <string.h>
+
 #if FZ_USE_GNUTLS_SYSTEM_CIPHERS
 char const ciphers[] = "@SYSTEM";
 #else
@@ -26,7 +28,7 @@ void log_func(int level, const char* msg)
 	}
 	std::wstring s = fz::to_wstring(msg);
 	fz::trim(s);
-	pLoggingControlSocket->LogMessage(MessageType::Debug_Debug, _T("tls: %d %s"), level, s);
+	pLoggingControlSocket->LogMessage(MessageType::Debug_Debug, L"tls: %d %s", level, s);
 }
 #endif
 

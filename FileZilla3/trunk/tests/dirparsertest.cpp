@@ -6,6 +6,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <list>
 
+#include <string.h>
 /*
  * This testsuite asserts the correctness of the directory listing parser.
  * It's main purpose is to ensure that all known formats are recognized and
