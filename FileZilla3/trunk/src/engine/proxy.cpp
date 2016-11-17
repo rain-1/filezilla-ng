@@ -16,6 +16,8 @@
 
 #include <algorithm>
 
+#include <string.h>
+
 enum handshake_state
 {
 	http_wait,
