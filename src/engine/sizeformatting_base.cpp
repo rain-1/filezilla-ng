@@ -277,7 +277,7 @@ std::wstring DoGetRadixSeparator()
 #else
 	char* chr = nl_langinfo(RADIXCHAR);
 	if (!chr || !*chr) {
-		sep = _T(".");
+		sep = L".";
 	}
 	else {
 		sep = fz::to_wstring(chr);

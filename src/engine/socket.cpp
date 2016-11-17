@@ -26,6 +26,8 @@
   #undef mutex
 #endif
 
+#include <string.h>
+
 // Fixups needed on FreeBSD
 #if !defined(EAI_ADDRFAMILY) && defined(EAI_FAMILY)
   #define EAI_ADDRFAMILY EAI_FAMILY
