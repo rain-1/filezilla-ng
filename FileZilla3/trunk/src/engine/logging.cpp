@@ -291,7 +291,7 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 			// The file is indeed the log file and we are holding a lock on it.
 
 			// Rename it
-			rc = rename(m_file.c_str(), (m_file + _T(".1")).c_str());
+			rc = rename(m_file.c_str(), (m_file + ".1").c_str());
 			close(m_log_fd);
 			close(fd);
 
