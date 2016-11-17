@@ -315,7 +315,6 @@ int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	LogMessage(MessageType::Status, _("Downloading %s"), remotePath.FormatFilename(remoteFile));
 
 	if (!download) {
-		ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
 		return FZ_REPLY_ERROR;
 	}
 
@@ -331,7 +330,7 @@ int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	// TODO: Ordinarily we need to percent-encode the filename. With the current API we then however would not be able to pass the query part of the URL
 	m_current_uri = fz::uri(fz::to_utf8(m_pCurrentServer->Format(ServerFormat::url)) + fz::to_utf8(pData->remotePath.FormatFilename(pData->remoteFile)));
 	if (m_current_uri.empty()) {
-		FZ_REPLY_INTERNALERROR;
+		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
