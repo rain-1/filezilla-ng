@@ -1,6 +1,8 @@
 #include <filezilla.h>
 #include "servercapabilities.h"
 
+#include <assert.h>
+
 std::map<CServer, CCapabilities> CServerCapabilities::m_serverMap;
 
 capabilities CCapabilities::GetCapability(capabilityNames name, std::wstring* pOption) const

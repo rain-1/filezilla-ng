@@ -13,6 +13,8 @@
 #include <libfilezilla/process.hpp>
 #include <libfilezilla/thread_pool.hpp>
 
+#include <wx/string.h>
+
 #include <algorithm>
 #include <cwchar>
 

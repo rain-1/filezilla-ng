@@ -279,7 +279,7 @@ void CProxySocket::OnReceive()
 				}
 				if (m_pSendBuffer) {
 					m_proxyState = noconn;
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Incoming data before request fully sent"));
+					m_pOwner->LogMessage(MessageType::Debug_Warning, L"Incoming data before request fully sent");
 					m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 					return;
 				}
@@ -291,7 +291,7 @@ void CProxySocket::OnReceive()
 					if (!end) {
 						if (m_recvBufferPos + read + 1 == m_recvBufferLen) {
 							m_proxyState = noconn;
-							m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Incoming header too large"));
+							m_pOwner->LogMessage(MessageType::Debug_Warning, L"Incoming header too large");
 							m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ENOMEM);
 							return;
 						}
@@ -303,7 +303,7 @@ void CProxySocket::OnReceive()
 				else {
 					if (read != do_read) {
 						m_proxyState = noconn;
-						m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Could not read what got peeked"));
+						m_pOwner->LogMessage(MessageType::Debug_Warning, "Could not read what got peeked");
 						m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 						return;
 					}
@@ -622,7 +622,7 @@ void CProxySocket::OnReceive()
 		break;
 	default:
 		m_proxyState = noconn;
-		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unhandled handshake state %d"), m_handshakeState);
+		m_pOwner->LogMessage(MessageType::Debug_Warning, L"Unhandled handshake state %d", m_handshakeState);
 		m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 		return;
 	}

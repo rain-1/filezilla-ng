@@ -1,6 +1,8 @@
 #include <filezilla.h>
 #include "pathcache.h"
 
+#include <assert.h>
+
 CPathCache::CPathCache()
 {
 }

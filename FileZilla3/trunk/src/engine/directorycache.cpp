@@ -1,6 +1,8 @@
 #include <filezilla.h>
 #include "directorycache.h"
 
+#include <assert.h>
+
 CDirectoryCache::CDirectoryCache()
 {
 }

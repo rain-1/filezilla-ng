@@ -172,7 +172,7 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 
 			// m_log_fd might no longer be the original file.
 			// Recheck on a new handle. Proteced with a mutex against other processes
-			HANDLE hMutex = ::CreateMutex(0, true, _T("FileZilla 3 Logrotate Mutex"));
+			HANDLE hMutex = ::CreateMutexW(0, true, L"FileZilla 3 Logrotate Mutex");
 			if (!hMutex) {
 				DWORD err = GetLastError();
 				l.unlock();
@@ -180,7 +180,7 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 				return;
 			}
 
-			HANDLE hFile = CreateFile(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+			HANDLE hFile = CreateFileW(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 			if (hFile == INVALID_HANDLE_VALUE) {
 				DWORD err = GetLastError();
 
@@ -209,15 +209,15 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 					tempDir[MAX_PATH] = 0;
 
 					wchar_t tempFile[MAX_PATH + 1];
-					res = GetTempFileName(tempDir, L"fz3", 0, tempFile);
+					res = GetTempFileNameW(tempDir, L"fz3", 0, tempFile);
 					if (res) {
 						tempFile[MAX_PATH] = 0;
-						MoveFileEx((m_file + _T(".1")).c_str(), tempFile, MOVEFILE_REPLACE_EXISTING);
-						DeleteFile(tempFile);
+						MoveFileExW((m_file + L".1").c_str(), tempFile, MOVEFILE_REPLACE_EXISTING);
+						DeleteFileW(tempFile);
 					}
 				}
-				MoveFileEx(m_file.c_str(), (m_file + _T(".1")).c_str(), MOVEFILE_REPLACE_EXISTING);
-				m_log_fd = CreateFile(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+				MoveFileExW(m_file.c_str(), (m_file + L".1").c_str(), MOVEFILE_REPLACE_EXISTING);
+				m_log_fd = CreateFileW(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 				if (m_log_fd == INVALID_HANDLE_VALUE) {
 					// If this function would return bool, I'd return FILE_NOT_FOUND here.
 					err = GetLastError();

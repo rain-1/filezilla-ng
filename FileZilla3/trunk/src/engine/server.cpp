@@ -2,6 +2,10 @@
 
 #include "uri.h"
 
+#include <libfilezilla/format.hpp>
+
+#include <assert.h>
+
 struct t_protocolInfo
 {
 	ServerProtocol const protocol;
@@ -14,14 +18,14 @@ struct t_protocolInfo
 };
 
 static const t_protocolInfo protocolInfos[] = {
-	{ FTP,          _T("ftp"),    false, 21,  true,  fztranslate_mark("FTP - File Transfer Protocol with optional encryption"), true  },
-	{ SFTP,         _T("sftp"),   true,  22,  false, "SFTP - SSH File Transfer Protocol",                                       false },
-	{ HTTP,         _T("http"),   true,  80,  false, "HTTP - Hypertext Transfer Protocol",                                      false },
-	{ HTTPS,        _T("https"),  true, 443,  true,  fztranslate_mark("HTTPS - HTTP over TLS"),                                 false },
-	{ FTPS,         _T("ftps"),   true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true  },
-	{ FTPES,        _T("ftpes"),  true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true  },
-	{ INSECURE_FTP, _T("ftp"),    false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true  },
-	{ UNKNOWN,      _T(""),       false, 21,  false, "", false }
+	{ FTP,          L"ftp",   false, 21,  true,  fztranslate_mark("FTP - File Transfer Protocol with optional encryption"), true  },
+	{ SFTP,         L"sftp",  true,  22,  false, "SFTP - SSH File Transfer Protocol",                                       false },
+	{ HTTP,         L"http",  true,  80,  false, "HTTP - Hypertext Transfer Protocol",                                      false },
+	{ HTTPS,        L"https", true, 443,  true,  fztranslate_mark("HTTPS - HTTP over TLS"),                                 false },
+	{ FTPS,         L"ftps",  true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true  },
+	{ FTPES,        L"ftpes", true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true  },
+	{ INSECURE_FTP, L"ftp",   false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true  },
+	{ UNKNOWN,      L"",      false, 21,  false, "", false }
 };
 
 static char const* const typeNames[SERVERTYPE_MAX] = {
@@ -206,7 +210,7 @@ bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, 
 		if (m_user.empty()) {
 			m_logonType = ANONYMOUS;
 		}
-		else if (m_user == "anonymous") {
+		else if (m_user == L"anonymous") {
 			if (m_pass.empty() || m_pass == L"anonymous@example.com") {
 				m_logonType = ANONYMOUS;
 			}
@@ -656,7 +660,7 @@ std::wstring CServer::Format(ServerFormat formatType) const
 	t_protocolInfo const& info = GetProtocolInfo(m_protocol);
 
 	if (server.find(':') != std::wstring::npos) {
-		server = _T("[") + server + _T("]");
+		server = L"[" + server + L"]";
 	}
 
 	if (formatType == ServerFormat::host_only) {
@@ -686,11 +690,11 @@ std::wstring CServer::Format(ServerFormat formatType) const
 					if (formatType == ServerFormat::url || formatType == ServerFormat::url_with_password) {
 						pass = fz::percent_encode_w(pass);
 					}
-					server = user + _T(":") + pass + _T("@") + server;
+					server = user + L":" + pass + L"@" + server;
 				}
 			}
 			else {
-				server = fz::percent_encode(user) + _T("@") + server;
+				server = fz::percent_encode_w(user) + L"@" + server;
 			}
 		}
 	}
@@ -702,7 +706,7 @@ std::wstring CServer::Format(ServerFormat formatType) const
 	}
 		
 	if (!info.prefix.empty()) {
-		server = info.prefix + _T("://") + server;
+		server = info.prefix + L"://" + server;
 	}
 
 	return server;
@@ -813,7 +817,7 @@ ServerProtocol CServer::GetProtocolFromName(std::wstring const& name)
 			}
 		}
 		else {
-			if (protocolInfo->name == name) {
+			if (fz::to_wstring(protocolInfo->name) == name) {
 				return protocolInfo->protocol;
 			}
 		}

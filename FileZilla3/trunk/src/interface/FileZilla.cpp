@@ -448,7 +448,7 @@ bool CFileZillaApp::LoadResourceFiles()
 	}
 	else {
 		fz::local_filesys fs;
-		wxString dir = m_resourceDir.GetPath() + _T("xrc/");
+		std::wstring dir = m_resourceDir.GetPath() + L"xrc/";
 		bool found = fs.begin_find_files(fz::to_native(dir), false);
 		while (found) {
 			fz::native_string name;
@@ -456,7 +456,7 @@ bool CFileZillaApp::LoadResourceFiles()
 			if (name.size() <= 4 || name.substr(name.size() - 4) != fzT(".xrc")) {
 				continue;
 			}
-			pResource->LoadFile(dir + name);
+			pResource->LoadFile(wxString(dir + fz::to_wstring(name)));
 		}
 	}
 

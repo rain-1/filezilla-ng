@@ -138,7 +138,7 @@ protected:
 
 	void operator()(fz::event_base const& ev);
 	void OnEngineEvent(EngineNotificationType type);
-	void OnTimer(int timer_id);
+	void OnTimer(fz::timer_id);
 	void OnCommandEvent();
 
 	// General mutex for operations on the engine

@@ -4,7 +4,11 @@
 #ifndef FZ_WINDOWS
 #include <langinfo.h>
 #endif
+
+#include <libfilezilla/format.hpp>
+
 #include <math.h>
+#include <assert.h>
 
 namespace {
 wchar_t const prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
@@ -13,7 +17,7 @@ std::wstring ToString(int64_t n, wchar_t const* const sepBegin = 0, wchar_t cons
 {
 	std::wstring ret;
 	if (!n) {
-		ret = _T("0");
+		ret = L"0";
 	}
 	else {
 		bool neg = false;
@@ -264,7 +268,7 @@ std::wstring DoGetRadixSeparator()
 	wchar_t tmp[5];
 	int count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, tmp, 5);
 	if (!count) {
-		sep = _T(".");
+		sep = L".";
 	}
 	else {
 		tmp[4] = 0;

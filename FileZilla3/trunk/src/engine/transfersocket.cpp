@@ -825,7 +825,10 @@ bool CTransferSocket::InitBackend()
 
 void CTransferSocket::SetSocketBufferSizes(CSocket* pSocket)
 {
-	wxCHECK_RET(pSocket, _("SetSocketBufferSize called without socket"));
+	if (!pSocket) {
+		controlSocket_.LogMessage(MessageType::Debug_Warning, L"SetSocketBufferSize called without socket");
+		return;
+	}
 
 	const int size_read = engine_.GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_RECV);
 #if FZ_WINDOWS

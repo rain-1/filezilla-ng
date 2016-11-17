@@ -213,7 +213,7 @@ void CFileZillaEnginePrivate::ClearQueuedLogs(bool reset_flag)
 int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 {
 	fz::scoped_lock lock(mutex_);
-	m_pLogging->LogMessage(MessageType::Debug_Debug, _T("CFileZillaEnginePrivate::ResetOperation(%d)"), nErrorCode);
+	m_pLogging->LogMessage(MessageType::Debug_Debug, L"CFileZillaEnginePrivate::ResetOperation(%d)", nErrorCode);
 
 	if (nErrorCode & FZ_REPLY_DISCONNECTED)
 		m_lastListDir.clear();
@@ -488,18 +488,21 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 			++iter;
 			m_failedLogins.erase(prev);
 		}
-		else if (!iter->critical && iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort())
+		else if (!iter->critical && iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort()) {
 			return delay * 1000 - span.get_milliseconds();
-		else if (iter->server == server)
+		}
+		else if (iter->server == server) {
 			return delay * 1000 - span.get_milliseconds();
-		else
+		}
+		else {
 			++iter;
+		}
 	}
 
 	return 0;
 }
 
-void CFileZillaEnginePrivate::OnTimer(int)
+void CFileZillaEnginePrivate::OnTimer(fz::timer_id)
 {
 	if (!m_retryTimer) {
 		return;
@@ -507,9 +510,10 @@ void CFileZillaEnginePrivate::OnTimer(int)
 	m_retryTimer = 0;
 
 	if (!m_pCurrentCommand || m_pCurrentCommand->GetId() != Command::connect) {
-		wxFAIL_MSG(_T("CFileZillaEnginePrivate::OnTimer called without pending Command::connect"));
+		m_pLogging->LogMessage(MessageType::Debug_Warning, L"CFileZillaEnginePrivate::OnTimer called without pending Command::connect");
 		return;
 	}
+
 	assert(!IsConnected());
 
 	m_pControlSocket.reset();
@@ -522,7 +526,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	fz::scoped_lock lock(mutex_);
 
 	if (!m_pCurrentCommand || m_pCurrentCommand->GetId() != Command::connect) {
-		m_pLogging->LogMessage(MessageType::Debug_Warning, _T("CFileZillaEnginePrivate::ContinueConnect called without pending Command::connect"));
+		m_pLogging->LogMessage(MessageType::Debug_Warning, L"CFileZillaEnginePrivate::ContinueConnect called without pending Command::connect");
 		return ResetOperation(FZ_REPLY_INTERNALERROR);
 	}
 
@@ -552,7 +556,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 		m_pControlSocket = std::make_unique<CHttpControlSocket>(*this);
 		break;
 	default:
-		m_pLogging->LogMessage(MessageType::Debug_Warning, _T("Not a valid protocol: %d"), server.GetProtocol());
+		m_pLogging->LogMessage(MessageType::Debug_Warning, L"Not a valid protocol: %d", server.GetProtocol());
 		return FZ_REPLY_SYNTAXERROR|FZ_REPLY_DISCONNECTED;
 	}
 

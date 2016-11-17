@@ -12,6 +12,8 @@
 #include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
+#include <wx/string.h>
+
 #ifndef FZ_WINDOWS
 	#include <sys/stat.h>
 

@@ -4,6 +4,8 @@
 
 #include <libfilezilla/file.hpp>
 
+#include <assert.h>
+
 CIOThread::CIOThread()
 {
 	m_buffers[0] = new char[BUFFERSIZE*BUFFERCOUNT];
@@ -85,13 +87,13 @@ void CIOThread::entry()
 				m_evtHandler->send_event<CIOThreadEvent>();
 			}
 
-			if (len == -1) {
+			if (len <= -1) {
 				m_error = true;
 				m_running = false;
 				break;
 			}
 
-			m_bufferLens[m_curThreadBuf] = len;
+			m_bufferLens[m_curThreadBuf] = static_cast<unsigned int>(len);
 
 			if (!len) {
 				m_running = false;
