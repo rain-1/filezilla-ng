@@ -10,6 +10,8 @@
 #include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
+#include <wx/string.h>
+
 #define FZ_REPLY_REDIRECTED FZ_REPLY_ALREADYCONNECTED
 
 // Connect is special for HTTP: It is done on a per-command basis, so we need

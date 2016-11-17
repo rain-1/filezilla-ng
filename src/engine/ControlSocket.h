@@ -35,6 +35,9 @@ public:
 	unsigned int port{};
 };
 
+class wxMBConv;
+class wxCSConv;
+
 class CFileTransferOpData : public COpData
 {
 public:

@@ -1,5 +1,7 @@
 #include <filezilla.h>
 
+#include <libfilezilla/format.hpp>
+
 std::wstring CDirentry::dump() const
 {
 	std::wstring str = fz::sprintf(L"name=%s\nsize=%d\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nunsure=%d\n",

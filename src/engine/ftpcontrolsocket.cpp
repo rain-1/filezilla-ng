@@ -3824,7 +3824,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 			if (!m_pIPResolver) {
 				std::string localAddress = m_pSocket->GetLocalIP(true);
 
-				if (!localAddress.empty() && localAddress == engine_.GetOptions().GetOption(OPTION_LASTRESOLVEDIP)) {
+				if (!localAddress.empty() && localAddress == fz::to_string(engine_.GetOptions().GetOption(OPTION_LASTRESOLVEDIP))) {
 					LogMessage(MessageType::Debug_Verbose, _T("Using cached external IP address"));
 
 					address = localAddress;

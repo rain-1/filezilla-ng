@@ -1,6 +1,9 @@
 #ifndef __TLSSOCKET_H__
 #define __TLSSOCKET_H__
 
+// TODO: Figure our ssize_t mess
+#include <wx/defs.h>
+
 #include <gnutls/gnutls.h>
 #include "backend.h"
 #include "socket.h"

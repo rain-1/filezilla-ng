@@ -11,8 +11,6 @@
 
 #include <libfilezilla/libfilezilla.hpp>
 
-#include <wx/defs.h>
-
 #include "setup.h"
 
 #ifdef FZ_WINDOWS
@@ -25,13 +23,9 @@
 #include <windows.h>
 #endif
 
-#include <wx/string.h>
-
 #include <list>
 #include <vector>
 #include <map>
-
-#include <libfilezilla/glue/wx.hpp>
 
 #include "optionsbase.h"
 #include "logging.h"

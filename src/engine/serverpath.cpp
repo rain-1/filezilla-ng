@@ -17,17 +17,17 @@ struct CServerTypeTraits
 };
 
 static const CServerTypeTraits traits[SERVERTYPE_MAX] = {
-	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false }, // Failsafe
-	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false },
-	{ _T("."),   false,  '[',  ']',    false, 0, '^', false, false },
-	{ _T("\\/"), false,    0,    0,    false, 0, 0,   true,  false }, // DOS with backslashes
-	{ _T("."),   false, '\'', '\'',     true, 1, 0,   false, false },
-	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false },
-	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false }, // Same as Unix
-	{ _T("."),   false,    0,    0,    false, 0, 0,   false, false },
-	{ _T("\\"),  true,     0,    0,    false, 0, 0,   true,  false },
-	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  true  },  // Cygwin is like Unix but has optional prefix of form "//server"
-	{ _T("/\\"), false,    0,    0,    false, 0, 0,   true,  false } // DOS with forwardslashes
+	{ L"/",   true,     0,    0,    false, 0, 0,   true,  false }, // Failsafe
+	{ L"/",   true,     0,    0,    false, 0, 0,   true,  false },
+	{ L".",   false,  '[',  ']',    false, 0, '^', false, false },
+	{ L"\\/", false,    0,    0,    false, 0, 0,   true,  false }, // DOS with backslashes
+	{ L".",   false, '\'', '\'',     true, 1, 0,   false, false },
+	{ L"/",   true,     0,    0,    false, 0, 0,   true,  false },
+	{ L"/",   true,     0,    0,    false, 0, 0,   true,  false }, // Same as Unix
+	{ L".",   false,    0,    0,    false, 0, 0,   false, false },
+	{ L"\\",  true,     0,    0,    false, 0, 0,   true,  false },
+	{ L"/",   true,     0,    0,    false, 0, 0,   true,  true  },  // Cygwin is like Unix but has optional prefix of form "//server"
+	{ L"/\\", false,    0,    0,    false, 0, 0,   true,  false } // DOS with forwardslashes
 };
 
 bool CServerPathData::operator==(CServerPathData const& cmp) const
@@ -192,19 +192,22 @@ std::wstring CServerPath::GetPath() const
 
 bool CServerPath::HasParent() const
 {
-	if (empty())
+	if (empty()) {
 		return false;
+	}
 
-	if (!traits[m_type].has_root)
+	if (!traits[m_type].has_root) {
 		return m_data->m_segments.size() > 1;
+	}
 
 	return !m_data->m_segments.empty();
 }
 
 CServerPath CServerPath::GetParent() const
 {
-	if (empty() || !HasParent())
+	if (empty() || !HasParent()) {
 		return CServerPath();
+	}
 
 	CServerPath parent(*this);
 	CServerPathData& parent_data = parent.m_data.get();
@@ -212,7 +215,7 @@ CServerPath CServerPath::GetParent() const
 	parent_data.m_segments.pop_back();
 
 	if (m_type == MVS) {
-		parent_data.m_prefix = fz::sparse_optional<std::wstring>(_T("."));
+		parent_data.m_prefix = fz::sparse_optional<std::wstring>(L".");
 	}
 
 	return parent;
@@ -422,14 +425,17 @@ ServerType CServerPath::GetType() const
 
 bool CServerPath::IsSubdirOf(const CServerPath &path, bool cmpNoCase) const
 {
-	if (empty() || path.empty())
+	if (empty() || path.empty()) {
 		return false;
+	}
 
-	if (m_type != path.m_type)
+	if (m_type != path.m_type) {
 		return false;
+	}
 
-	if (!HasParent())
+	if (!HasParent()) {
 		return false;
+	}
 
 	if (traits[m_type].prefixmode != 1) {
 		if (cmpNoCase ) {
@@ -794,12 +800,15 @@ bool CServerPath::DoChangePath(std::wstring &subdir, bool isFile)
 
 bool CServerPath::operator==(const CServerPath &op) const
 {
-	if (empty() != op.empty())
+	if (empty() != op.empty()) {
 		return false;
-	else if (m_type != op.m_type)
+	}
+	else if (m_type != op.m_type) {
 		return false;
-	else if (m_data != op.m_data)
+	}
+	else if (m_data != op.m_data) {
 		return false;
+	}
 
 	return true;
 }
@@ -812,25 +821,29 @@ bool CServerPath::operator!=(const CServerPath &op) const
 bool CServerPath::operator<(const CServerPath &op) const
 {
 	if (empty()) {
-		if (!op.empty())
+		if (!op.empty()) {
 			return false;
+		}
 	}
-	else if (op.empty())
+	else if (op.empty()) {
 		return true;
+	}
 
-	if( m_data->m_prefix || op.m_data->m_prefix ) {
-		if( m_data->m_prefix < op.m_data->m_prefix ) {
+	if (m_data->m_prefix || op.m_data->m_prefix) {
+		if (m_data->m_prefix < op.m_data->m_prefix) {
 			return true;
 		}
-		else if( op.m_data->m_prefix < m_data->m_prefix ) {
+		else if (op.m_data->m_prefix < m_data->m_prefix) {
 			return false;
 		}
 	}
 
-	if (m_type > op.m_type)
+	if (m_type > op.m_type) {
 		return false;
-	else if (m_type < op.m_type)
+	}
+	else if (m_type < op.m_type) {
 		return true;
+	}
 
 	tConstSegmentIter iter1, iter2;
 	for (iter1 = m_data->m_segments.begin(), iter2 = op.m_data->m_segments.begin(); iter1 != m_data->m_segments.end(); ++iter1, ++iter2) {
@@ -935,11 +948,13 @@ bool CServerPath::AddSegment(std::wstring const& segment)
 
 CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 {
-	if (*this == path)
+	if (*this == path) {
 		return *this;
+	}
 
-	if (empty() || path.empty())
+	if (empty() || path.empty()) {
 		return CServerPath();
+	}
 
 	if (m_type != path.m_type ||
 		(!traits[m_type].prefixmode && m_data->m_prefix != path.m_data->m_prefix))
@@ -947,19 +962,21 @@ CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 		return CServerPath();
 	}
 
-	if (!HasParent())
-	{
-		if (path.IsSubdirOf(*this, false))
+	if (!HasParent()) {
+		if (path.IsSubdirOf(*this, false)) {
 			return *this;
-		else
+		}
+		else {
 			return CServerPath();
+		}
 	}
-	else if (!path.HasParent())
-	{
-		if (IsSubdirOf(path, false))
+	else if (!path.HasParent()) {
+		if (IsSubdirOf(path, false)) {
 			return path;
-		else
+		}
+		else {
 			return CServerPath();
+		}
 	}
 
 	CServerPath parent;
@@ -970,10 +987,12 @@ CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 	tConstSegmentIter last = m_data->m_segments.end();
 	tConstSegmentIter last2 = path.m_data->m_segments.end();
 	if (traits[m_type].prefixmode == 1) {
-		if (!m_data->m_prefix)
+		if (!m_data->m_prefix) {
 			--last;
-		if (!path.m_data->m_prefix)
+		}
+		if (!path.m_data->m_prefix) {
 			--last2;
+		}
 		parentData.m_prefix = GetParent().m_data->m_prefix;
 	}
 	else
@@ -983,10 +1002,12 @@ CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 	tConstSegmentIter iter2 = path.m_data->m_segments.begin();
 	while (iter != last && iter2 != last2) {
 		if (*iter != *iter2) {
-			if (!traits[m_type].has_root && parentData.m_segments.empty())
+			if (!traits[m_type].has_root && parentData.m_segments.empty()) {
 				return CServerPath();
-			else
+			}
+			else {
 				return parent;
+			}
 		}
 
 		parentData.m_segments.push_back(*iter);
@@ -1013,11 +1034,13 @@ std::wstring CServerPath::FormatSubdir(std::wstring const& subdir) const
 bool CServerPath::SegmentizeAddSegment(std::wstring & segment, tSegmentList& segments, bool& append)
 {
 	if (traits[m_type].has_dots) {
-		if (segment == _T("."))
+		if (segment == L".") {
 			return true;
-		else if (segment == _T("..")) {
-			if (segments.empty())
+		}
+		else if (segment == L"..") {
+			if (segments.empty()) {
 				return false;
+			}
 			else {
 				segments.pop_back();
 				return true;
@@ -1031,10 +1054,12 @@ bool CServerPath::SegmentizeAddSegment(std::wstring & segment, tSegmentList& seg
 		segment[segment.size() - 1] = traits[m_type].separators[0];
 	}
 
-	if (append)
+	if (append) {
 		segments.back() += segment;
-	else
+	}
+	else {
 		segments.push_back(std::move(segment));
+	}
 
 	append = append_next;
 

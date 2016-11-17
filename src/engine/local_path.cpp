@@ -1,5 +1,8 @@
 #include <filezilla.h>
 #include "local_path.h"
+
+#include <libfilezilla/format.hpp>
+
 #ifndef FZ_WINDOWS
 #include <errno.h>
 #include <sys/stat.h>
@@ -7,7 +10,7 @@
 
 #include <deque>
 
-#include <wx/wxcrt.h>
+#include <assert.h>
 
 #ifdef FZ_WINDOWS
 wchar_t const CLocalPath::path_separator = '\\';
@@ -72,7 +75,7 @@ bool CLocalPath::SetPath(std::wstring const& path, std::wstring* file)
 					goto parse_regular;
 				}
 				wchar_t const* in_end = in + path.size();
-				if (in_end - in < 5 || wxStrnicmp(in, _T("UNC\\"), 4)) {
+				if (in_end - in < 5 || fz::stricmp(std::wstring(in, in_end), L"UNC\\")) {
 					path_out.clear();
 					return false;
 				}
@@ -231,19 +234,22 @@ void CLocalPath::clear()
 
 bool CLocalPath::IsWriteable() const
 {
-	if (m_path->empty())
+	if (m_path->empty()) {
 		return false;
+	}
 
 #ifdef FZ_WINDOWS
-	if (m_path == _T("\\"))
+	if (m_path == L"\\") {
 		// List of drives not writeable
 		return false;
+	}
 
-	if (m_path->substr(0, 2) == _T("\\\\")) {
+	if (m_path->substr(0, 2) == L"\\\\") {
 		auto pos = m_path->find('\\', 2);
-		if (pos == std::wstring::npos || pos + 3 >= m_path->size())
+		if (pos == std::wstring::npos || pos + 3 >= m_path->size()) {
 			// List of shares on a computer not writeable
 			return false;
+		}
 	}
 #endif
 
@@ -272,8 +278,10 @@ bool CLocalPath::HasParent() const
 bool CLocalPath::HasLogicalParent() const
 {
 #ifdef FZ_WINDOWS
-	if (m_path->size() == 3 && (*m_path)[0] != '\\') // Drive root
+	if (m_path->size() == 3 && (*m_path)[0] != '\\') {
+		// Drive root
 		return true;
+	}
 #endif
 	return HasParent();
 }
@@ -288,7 +296,7 @@ CLocalPath CLocalPath::GetParent(std::wstring* last_segment) const
 		if (last_segment) {
 			last_segment->clear();
 		}
-		return CLocalPath(_T("\\"));
+		return CLocalPath(L"\\");
 	}
 
 	// C:\f\ has parent
@@ -318,7 +326,7 @@ bool CLocalPath::MakeParent(std::wstring* last_segment)
 #ifdef FZ_WINDOWS
 	if (path.size() == 3 && path[0] != '\\') {
 		// Drive root
-		path = _T("\\");
+		path = L"\\";
 		return true;
 	}
 
@@ -348,9 +356,9 @@ void CLocalPath::AddSegment(std::wstring const& segment)
 	std::wstring& path = m_path.get();
 
 	assert(!path.empty());
-	assert(segment.find(_T("/")) == std::wstring::npos);
+	assert(segment.find(L"/") == std::wstring::npos);
 #ifdef FZ_WINDOWS
-	assert(segment.find(_T("\\")) == std::wstring::npos);
+	assert(segment.find(L"\\") == std::wstring::npos);
 #endif
 
 	if (!segment.empty()) {
@@ -366,8 +374,8 @@ bool CLocalPath::ChangePath(std::wstring const& new_path)
 	}
 
 #ifdef FZ_WINDOWS
-	if (new_path == _T("\\") || new_path == _T("/")) {
-		m_path.get() = _T("\\");
+	if (new_path == L"\\" || new_path == L"/") {
+		m_path.get() = L"\\";
 		return true;
 	}
 
@@ -417,7 +425,7 @@ bool CLocalPath::Exists(std::wstring *error) const
 	}
 
 #ifdef FZ_WINDOWS
-	if (m_path == _T("\\")) {
+	if (m_path == L"\\") {
 		// List of drives always exists
 		return true;
 	}

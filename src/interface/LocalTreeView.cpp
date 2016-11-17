@@ -1403,8 +1403,9 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 #endif
 
 	if (child) {
-		if (!GetItemText(child).empty())
+		if (!GetItemText(child).empty()) {
 			return false;
+		}
 
 		CTreeItemData* pData = (CTreeItemData*)GetItemData(child);
 		if (pData) {
@@ -1412,10 +1413,12 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 			int attributes;
 			fz::local_filesys::type type;
 			fz::datetime date;
-			if (!path.empty() && path.Last() == fz::local_filesys::path_separator)
+			if (!path.empty() && path.Last() == fz::local_filesys::path_separator) {
 				type = fz::local_filesys::get_file_info(fz::to_native(path + pData->m_known_subdir), wasLink, 0, &date, &attributes);
-			else
+			}
+			else {
 				type = fz::local_filesys::get_file_info(fz::to_native(path + fz::local_filesys::path_separator + pData->m_known_subdir), wasLink, 0, &date, &attributes);
+			}
 			if (type == fz::local_filesys::dir) {
 				CFilterManager filter;
 				if (!filter.FilenameFiltered(pData->m_known_subdir, path, true, size, true, attributes, date))

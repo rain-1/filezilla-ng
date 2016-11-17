@@ -4,6 +4,8 @@
 
 #include <libfilezilla/format.hpp>
 
+#include <wx/string.h>
+
 #include <algorithm>
 #include <vector>
 

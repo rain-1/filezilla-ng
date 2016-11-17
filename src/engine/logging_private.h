@@ -23,7 +23,7 @@ public:
 		}
 
 		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType);
-		notification->msg = to_wstring(fz::sprintf(std::forward<String>(msgFormat), std::forward<Args>(args)...));
+		notification->msg = fz::to_wstring(fz::sprintf(std::forward<String>(msgFormat), std::forward<Args>(args)...));
 
 		LogToFile(nMessageType, notification->msg);
 		engine_.AddLogNotification(notification);

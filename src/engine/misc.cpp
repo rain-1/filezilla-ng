@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "tlssocket.h"
 
+#include <libfilezilla/format.hpp>
 #include <libfilezilla/time.hpp>
 
 #include <wx/utils.h>

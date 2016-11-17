@@ -2,6 +2,7 @@
 #define __FILEZILLA_H__
 
 #include <libfilezilla_engine.h>
+
 #include "msgbox.h"
 
 #ifndef PACKAGE_NAME
@@ -73,5 +74,7 @@
 #include <wx/treectrl.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/xml/xml.h>
+
+#include <libfilezilla/glue/wx.hpp>
 
 #endif

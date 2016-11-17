@@ -3,6 +3,8 @@
 
 #include <libfilezilla/event_handler.hpp>
 
+#include <assert.h>
+
 static int const tickDelay = 250;
 
 CRateLimiter::CRateLimiter(fz::event_loop& loop, COptionsBase& options)
