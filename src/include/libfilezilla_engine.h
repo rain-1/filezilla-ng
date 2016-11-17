@@ -14,6 +14,9 @@
 #include "setup.h"
 
 #ifdef FZ_WINDOWS
+#ifndef UNICODE
+#define UNICODE
+#endif
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
