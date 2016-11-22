@@ -738,7 +738,7 @@ AM_CONDITIONAL(HAVE_DBUS, [test "x$with_dbus" = "xyes"])
 AC_CONFIG_FILES(Makefile src/Makefile src/engine/Makefile src/pugixml/Makefile
 src/dbus/Makefile
 src/interface/Makefile src/interface/resources/Makefile src/include/Makefile
-locales/Makefile src/interface/resources/16x16/Makefile
+locales/Makefile
 src/interface/resources/32x32/Makefile data/Makefile
 src/interface/resources/classic/Makefile
 src/interface/resources/cyril/Makefile
