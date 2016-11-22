@@ -422,7 +422,7 @@ CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
 bool CFileZillaApp::LoadResourceFiles()
 {
 	AddStartupProfileRecord(_T("CFileZillaApp::LoadResourceFiles"));
-	m_resourceDir = GetDataDir(_T("resources/theme.xml"));
+	m_resourceDir = GetDataDir(_T("resources/defaultfilters.xml"));
 
 	wxImage::AddHandler(new wxPNGHandler());
 
