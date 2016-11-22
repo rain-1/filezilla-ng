@@ -43,7 +43,7 @@ dist_resources480_DATA = \
 if MACAPPBUNDLE
 mac-copy-resources: $(dist_resources_DATA)
 	mkdir -p "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/default/480x480";
-	for i in $(dist_resources16_DATA); do \
+	for i in $(dist_resources480_DATA); do \
 	  cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/default/480x480"; \
 	done
 	for i in $(dist_resources_DATA); do \
