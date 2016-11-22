@@ -134,15 +134,15 @@ wxBitmap const& CTheme::LoadBitmapWithSpecificSizeAndScale(std::wstring const& n
 		return bmp;
 	}
 
-	if (bmp.GetSize() != scale) {
-		// need to scale
-		wxImage img = bmp.ConvertToImage();
-		img.Rescale(scale.x, scale.y, wxIMAGE_QUALITY_HIGH);
-		auto inserted = cache.insert(std::make_pair(scale, wxBitmap(img)));
-		wxBitmap & bmp = inserted.first->second;
-		return inserted.first->second;
+	if (bmp.GetSize() == scale) {
+		return bmp;
 	}
-	return bmp;
+
+	// need to scale
+	wxImage img = bmp.ConvertToImage();
+	img.Rescale(scale.x, scale.y, wxIMAGE_QUALITY_HIGH);
+	auto inserted = cache.insert(std::make_pair(scale, wxBitmap(img)));
+	return inserted.first->second;
 }
 
 wxBitmap const& CTheme::LoadBitmapWithSpecificSize(std::wstring const& name, wxSize const& size, std::map<wxSize, wxBitmap, size_cmp> & cache)
@@ -200,7 +200,7 @@ std::vector<wxBitmap> CTheme::GetAllImages(wxSize const& size)
 
 wxAnimation CTheme::LoadAnimation(std::wstring const& name, wxSize const& size)
 {
-	std::wstring path = path_ + fz::sprintf(fzT("%dx%d/%s.gif"), size.x, size.y, name);
+	std::wstring path = path_ + fz::sprintf(L"%dx%d/%s.gif", size.x, size.y, name);
 
 	return wxAnimation(path);
 }
@@ -304,7 +304,7 @@ wxAnimation CThemeProvider::CreateAnimation(wxArtID const& id, wxSize const& siz
 	// all filenames used by FileZilla for the resources
 	// are lowercase ASCII. Locale-independent transformation
 	// needed e.g. if using Turkish locale.
-	std::wstring name = fz::str_tolower_ascii(id.Mid(4));
+	std::wstring name = fz::str_tolower_ascii(id.Mid(4).ToStdWstring());
 
 	wxAnimation anim;
 	auto tryTheme = [&](std::wstring const& theme) {
