@@ -1,16 +1,13 @@
-SUBDIRS = 16x16 32x32 cyril blukis default flatzilla lone minimal opencrystal sun tango
+SUBDIRS = 32x32 cyril blukis default flatzilla lone minimal opencrystal sun tango
 
 CLEANFILES = filezilla.o
 
 resourcesdir = $(pkgdatadir)/resources
 dist_resources_DATA = \
 	defaultfilters.xml \
-	down.png \
 	dropdown.png \
 	finished.wav \
-	leds.png \
-	theme.xml \
-	up.png
+	leds.png
 
 xrcdir = $(pkgdatadir)/resources/xrc
 dist_xrc_DATA = \
@@ -24,6 +21,16 @@ dist_xrc_DATA = \
 	xrc/sitemanager.xrc \
 	xrc/toolbar.xrc \
 	xrc/update.xrc
+
+resources16dir = $(pkgdatadir)/resources/16x16
+dist_resources16_DATA = \
+	filezilla.png \
+	sort_down_dark.png \
+	sort_down_light.png \
+	sort_up_dark.png \
+	sort_up_light.png \
+	throbber.gif \
+	unknown.png
 
 resources20dir = $(pkgdatadir)/resources/20x20
 dist_resources20_DATA = 20x20/unknown.png
@@ -61,6 +68,10 @@ mac-copy-resources: $(dist_resources_DATA)
 	for i in $(dist_xrc_DATA); \
 		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/xrc"; \
 	done
+	mkdir -p "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/16x16"
+	for i in $(dist_resources16_DATA); \
+		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/16x16"; \
+	done
 	mkdir -p "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/20x20"
 	for i in $(dist_resources20_DATA); \
 		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/20x20"; \
@@ -74,8 +85,8 @@ mac-copy-resources: $(dist_resources_DATA)
 		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/48x48"; \
 	done
 
-	$(MAKE) -C 16x16 mac-copy-resources
 	$(MAKE) -C 32x32 mac-copy-resources
+	$(MAKE) -C classic mac-copy-resources
 	$(MAKE) -C cyril mac-copy-resources
 	$(MAKE) -C blukis mac-copy-resources
 	$(MAKE) -C default mac-copy-resources
