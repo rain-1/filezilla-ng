@@ -9,7 +9,6 @@
 #include <libfilezilla/format.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
-#include <iterator>
 #include <utility>
 
 static CThemeProvider* instance = 0;
@@ -116,7 +115,7 @@ wxBitmap const& CTheme::DoLoadBitmap(std::wstring const& name, wxSize const& siz
 	}
 
 	// Now look smaller icons
-	for (auto pit = std::make_reverse_iterator(pivot); pit != sizes_.rend(); ++pit) {
+	for (auto pit = decltype(sizes_)::reverse_iterator(pivot); pit != sizes_.rend(); ++pit) {
 		wxBitmap const& bmp = LoadBitmapWithSpecificSizeAndScale(name, pit->first, size, cache);
 		if (bmp.IsOk()) {
 			return bmp;
