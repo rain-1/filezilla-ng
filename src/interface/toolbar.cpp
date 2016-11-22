@@ -46,14 +46,6 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 	toolbar->RegisterOption(OPTION_SHOW_TREE_REMOTE);
 	toolbar->RegisterOption(OPTION_MESSAGELOG_POSITION);
 
-#ifdef __WXMSW__
-	int majorVersion, minorVersion;
-	wxGetOsVersion(& majorVersion, & minorVersion);
-	if (majorVersion < 6) {
-		toolbar->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-	}
-#endif
-
 	toolbar->ToggleTool(XRCID("ID_TOOLBAR_FILTER"), CFilterManager::HasActiveFilters());
 	toolbar->ToggleTool(XRCID("ID_TOOLBAR_LOGVIEW"), COptions::Get()->GetOptionVal(OPTION_SHOW_MESSAGELOG) != 0);
 	toolbar->ToggleTool(XRCID("ID_TOOLBAR_QUEUEVIEW"), COptions::Get()->GetOptionVal(OPTION_SHOW_QUEUE) != 0);
