@@ -1009,7 +1009,6 @@ Section "FileZilla Client" SecMain
   File "${top_srcdir}/src\interface\resources\*.png"
   File "${top_srcdir}/src\interface\resources\defaultfilters.xml"
   File "${top_srcdir}/src\interface\resources\finished.wav"
-  File "${top_srcdir}/src\interface\resources\theme.xml"
 
   SetOutPath "$INSTDIR\resources\xrc"
   File "${top_srcdir}/src\interface\resources\xrc\*.xrc"
@@ -1119,7 +1118,9 @@ SectionEnd
 ${MementoSection} "Icon sets" SecIconSets
 
   !insertmacro INSTALLICONSET blukis
+  !insertmacro INSTALLICONSET classic
   !insertmacro INSTALLICONSET cyril
+  !insertmacro INSTALLICONSET default
   !insertmacro INSTALLICONSET flatzilla
   !insertmacro INSTALLICONSET lone
   !insertmacro INSTALLICONSET minimal
@@ -1420,6 +1421,7 @@ FunctionEnd
   Delete "$INSTDIR\resources\${SET}\24x24\*.png"
   Delete "$INSTDIR\resources\${SET}\32x32\*.png"
   Delete "$INSTDIR\resources\${SET}\48x48\*.png"
+  Delete "$INSTDIR\resources\${SET}\480x480\*.png"
   Delete "$INSTDIR\resources\${SET}\16x16\*.gif"
   Delete "$INSTDIR\resources\${SET}\20x20\*.gif"
   Delete "$INSTDIR\resources\${SET}\24x24\*.gif"
@@ -1430,6 +1432,7 @@ FunctionEnd
   RMDir "$INSTDIR\resources\${SET}\24x24"
   RMDir "$INSTDIR\resources\${SET}\32x32"
   RMDir "$INSTDIR\resources\${SET}\48x48"
+  RMDir "$INSTDIR\resources\${SET}\480x480"
   RMDir "$INSTDIR\resources\${SET}"
 
   SetDetailsPrint lastused
@@ -1469,7 +1472,6 @@ Section "Uninstall"
   Delete "$INSTDIR\resources\*.png"
   Delete "$INSTDIR\resources\defaultfilters.xml"
   Delete "$INSTDIR\resources\finished.wav"
-  Delete "$INSTDIR\resources\theme.xml"
   Delete "$INSTDIR\resources\16x16\*.png"
   Delete "$INSTDIR\resources\32x32\*.png"
   Delete "$INSTDIR\resources\48x48\*.png"
@@ -1479,8 +1481,10 @@ Section "Uninstall"
 
   SetDetailsPrint lastused
 
-  !insertmacro UNINSTALLICONSET cyril
   !insertmacro UNINSTALLICONSET blukis
+  !insertmacro UNINSTALLICONSET classic
+  !insertmacro UNINSTALLICONSET cyril
+  !insertmacro UNINSTALLICONSET default
   !insertmacro UNINSTALLICONSET flatzilla
   !insertmacro UNINSTALLICONSET lone
   !insertmacro UNINSTALLICONSET minimal
