@@ -9,6 +9,7 @@
 #include <libfilezilla/format.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
+#include <iterator>
 #include <utility>
 
 static CThemeProvider* instance = 0;
