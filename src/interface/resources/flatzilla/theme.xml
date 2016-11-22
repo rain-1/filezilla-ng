@@ -4,9 +4,9 @@
     <Name>FlatZilla</Name>
     <Author>Boaz Lederer</Author>
     <Mail>aniboaz@gmail.com</Mail>
-    <size>16x16</size>
-    <size>24x24</size>
-    <size>32x32</size>
-    <size>48x48</size>
+    <size primary="1">16x16</size>
+    <size primary="1">24x24</size>
+    <size primary="1">32x32</size>
+    <size primary="1">48x48</size>
   </Theme>
 </FileZilla3>

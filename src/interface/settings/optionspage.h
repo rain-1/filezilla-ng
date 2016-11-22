@@ -11,7 +11,7 @@ class CSettingsDialog;
 class COptionsPage : public wxPanel
 {
 public:
-	bool CreatePage(COptions* pOptions, CSettingsDialog* pOwner, wxWindow* parent, wxSize& maxSize);
+	virtual bool CreatePage(COptions* pOptions, CSettingsDialog* pOwner, wxWindow* parent, wxSize& maxSize);
 
 	virtual wxString GetResourceName() = 0;
 	virtual bool LoadPage() = 0;

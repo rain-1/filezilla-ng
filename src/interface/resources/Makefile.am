@@ -1,4 +1,4 @@
-SUBDIRS = 16x16 32x32 cyril blukis flatzilla lone minimal opencrystal sun tango
+SUBDIRS = 16x16 32x32 cyril blukis default flatzilla lone minimal opencrystal sun tango
 
 CLEANFILES = filezilla.o
 
@@ -78,6 +78,7 @@ mac-copy-resources: $(dist_resources_DATA)
 	$(MAKE) -C 32x32 mac-copy-resources
 	$(MAKE) -C cyril mac-copy-resources
 	$(MAKE) -C blukis mac-copy-resources
+	$(MAKE) -C default mac-copy-resources
 	$(MAKE) -C lone mac-copy-resources
 	$(MAKE) -C opencrystal mac-copy-resources
 	$(MAKE) -C tango mac-copy-resources

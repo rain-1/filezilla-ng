@@ -12,21 +12,22 @@ IMPLEMENT_DYNAMIC_CLASS(CToolBar, wxToolBar)
 
 CToolBar::~CToolBar()
 {
-	for (auto iter = m_hidden_tools.begin(); iter != m_hidden_tools.end(); ++iter)
+	for (auto iter = m_hidden_tools.begin(); iter != m_hidden_tools.end(); ++iter) {
 		delete iter->second;
+	}
 }
 
 CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 {
 	{
-		wxString str = COptions::Get()->GetOption(OPTION_THEME_ICONSIZE);
-		wxSize iconSize = CThemeProvider::GetIconSize(str);
+		wxSize iconSize = CThemeProvider::GetIconSize(iconSizeSmall, true);
 		wxToolBarXmlHandlerEx::SetIconSize(iconSize);
 	}
 
 	CToolBar* toolbar = dynamic_cast<CToolBar*>(wxXmlResource::Get()->LoadToolBar(pMainFrame, _T("ID_TOOLBAR")));
-	if (!toolbar)
+	if (!toolbar) {
 		return 0;
+	}
 
 	toolbar->m_pMainFrame = pMainFrame;
 
@@ -48,8 +49,9 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 #ifdef __WXMSW__
 	int majorVersion, minorVersion;
 	wxGetOsVersion(& majorVersion, & minorVersion);
-	if (majorVersion < 6)
+	if (majorVersion < 6) {
 		toolbar->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+	}
 #endif
 
 	toolbar->ToggleTool(XRCID("ID_TOOLBAR_FILTER"), CFilterManager::HasActiveFilters());
@@ -58,8 +60,9 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 	toolbar->ToggleTool(XRCID("ID_TOOLBAR_LOCALTREEVIEW"), COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_LOCAL) != 0);
 	toolbar->ToggleTool(XRCID("ID_TOOLBAR_REMOTETREEVIEW"), COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_REMOTE) != 0);
 
-	if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2)
+	if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2) {
 		toolbar->HideTool(XRCID("ID_TOOLBAR_LOGVIEW"));
+	}
 
 #ifdef __WXMAC__
 	// Hide then re-show fixes some odd sizing
