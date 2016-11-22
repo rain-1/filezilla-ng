@@ -427,8 +427,8 @@ CMainFrame::CMainFrame()
 
 	FixTabOrder();
 
-	RegisterOption(OPTION_THEME);
-	RegisterOption(OPTION_THEME_ICONSIZE);
+	RegisterOption(OPTION_ICONS_THEME);
+	RegisterOption(OPTION_ICONS_SCALE);
 	RegisterOption(OPTION_MESSAGELOG_POSITION);
 	RegisterOption(OPTION_FILEPANE_LAYOUT);
 	RegisterOption(OPTION_FILEPANE_SWAP);
@@ -2663,7 +2663,7 @@ void CMainFrame::OnOptionsChanged(changed_options_t const& options)
 		UpdateLayout();
 	}
 
-	if (options.test(OPTION_THEME) || options.test(OPTION_THEME_ICONSIZE)) {
+	if (options.test(OPTION_ICONS_THEME) || options.test(OPTION_ICONS_SCALE)) {
 		CreateMainToolBar();
 		if (m_pToolBar) {
 			m_pToolBar->UpdateToolbarState();

@@ -740,9 +740,11 @@ src/dbus/Makefile
 src/interface/Makefile src/interface/resources/Makefile src/include/Makefile
 locales/Makefile src/interface/resources/16x16/Makefile
 src/interface/resources/32x32/Makefile data/Makefile
+src/interface/resources/classic/Makefile
 src/interface/resources/cyril/Makefile
 src/interface/resources/cyril/16x16/Makefile
 src/interface/resources/blukis/Makefile
+src/interface/resources/default/Makefile
 src/interface/resources/flatzilla/Makefile
 src/interface/resources/lone/Makefile
 src/interface/resources/minimal/Makefile

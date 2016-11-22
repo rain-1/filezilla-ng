@@ -312,7 +312,7 @@ CStatusBar::CStatusBar(wxTopLevelWindow* pParent)
 	RegisterOption(OPTION_ASCIIBINARY);
 
 	// Reload icons
-	RegisterOption(OPTION_THEME);
+	RegisterOption(OPTION_ICONS_THEME);
 
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, true);
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false);
@@ -373,8 +373,9 @@ void CStatusBar::DisplayDataType()
 {
 	const CServer* pServer = 0;
 	const CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (pState)
+	if (pState) {
 		pServer = pState->GetServer();
+	}
 
 	if (!pServer || !CServer::ProtocolHasDataTypeConcept(pServer->GetProtocol())) {
 		if (m_pDataTypeIndicator) {
@@ -608,7 +609,7 @@ void CStatusBar::OnOptionsChanged(changed_options_t const& options)
 	if (options.test(OPTION_ASCIIBINARY)) {
 		DisplayDataType();
 	}
-	if (options.test(OPTION_THEME)) {
+	if (options.test(OPTION_ICONS_THEME)) {
 		DisplayDataType();
 		UpdateSpeedLimitsIcon();
 		DisplayEncrypted();

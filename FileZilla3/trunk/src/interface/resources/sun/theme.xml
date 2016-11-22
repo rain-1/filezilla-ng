@@ -4,6 +4,6 @@
     <Name>SuN</Name>
     <Author>Mr.Silencer</Author>
     <Mail>silencer.guard@yahoo.com</Mail>
-    <size>48x48</size>
+    <size primary="1">48x48</size>
   </Theme>
 </FileZilla3>

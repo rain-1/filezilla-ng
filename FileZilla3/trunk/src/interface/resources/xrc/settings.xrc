@@ -241,7 +241,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <object class="wxStaticText" name="">
+                <object class="wxStaticText">
                   <label>A proper server does not require this. Contact the server administrator if you need this.</label>
                 </object>
                 <flag>wxALIGN_TOP</flag>
@@ -619,13 +619,13 @@
             <object class="wxFlexGridSizer">
               <cols>1</cols>
               <object class="sizeritem">
-                <object class="wxStaticText" name="">
+                <object class="wxStaticText">
                   <label>To support public key authentication, FileZilla needs to know the private keys to use.</label>
                 </object>
               </object>
               <object class="spacer"/>
               <object class="sizeritem">
-                <object class="wxStaticText" name="">
+                <object class="wxStaticText">
                   <label>Private &amp;keys:</label>
                 </object>
               </object>
@@ -1447,7 +1447,7 @@
                 <flag>wxGROW</flag>
               </object>
               <object class="sizeritem">
-                <object class="wxStaticText" name="">
+                <object class="wxStaticText">
                   <label>Email:</label>
                 </object>
               </object>
@@ -1456,6 +1456,17 @@
                   <label>&lt;Email&gt;</label>
                 </object>
                 <flag>wxGROW</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ID_SCALE_LABEL">
+                  <label>Scale factor:</label>
+                </object>
+                <flag>wxALIGN_CENTRE_VERTICAL</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ID_SCALE">
+                  <label>&lt;Scale&gt;</label>
+                </object>
               </object>
               <vgap>5</vgap>
               <hgap>5</hgap>

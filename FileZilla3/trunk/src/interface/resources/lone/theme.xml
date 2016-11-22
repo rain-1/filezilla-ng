@@ -4,8 +4,8 @@
     <Name>LonE</Name>
     <Author>Ricardo Cabral</Author>
     <Mail>ricardolcabral@gmail.com</Mail>
-    <size>16x16</size>
-    <size>32x32</size>
-    <size>48x48</size>
+    <size primary="1">16x16</size>
+    <size primary="1">32x32</size>
+    <size primary="1">48x48</size>
   </Theme>
 </FileZilla3>
