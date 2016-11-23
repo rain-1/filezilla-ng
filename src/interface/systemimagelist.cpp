@@ -134,8 +134,9 @@ CSystemImageList::~CSystemImageList()
 // This function converts to the right size with the given background colour
 wxBitmap PrepareIcon(wxIcon icon, wxSize size)
 {
-	if (icon.GetWidth() == size.GetWidth() && icon.GetHeight() == size.GetHeight())
+	if (icon.GetWidth() == size.GetWidth() && icon.GetHeight() == size.GetHeight()) {
 		return icon;
+	}
 	wxBitmap bmp;
 	bmp.CopyFromIcon(icon);
 	return bmp.ConvertToImage().Rescale(size.GetWidth(), size.GetHeight());

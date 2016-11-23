@@ -11,6 +11,7 @@
 #include "LocalTreeView.h"
 #include "Options.h"
 #include "queue.h"
+#include "themeprovider.h"
 
 #include <libfilezilla/local_filesys.hpp>
 
@@ -243,7 +244,7 @@ END_EVENT_TABLE()
 
 CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState& state, CQueueView *pQueueView)
 	: wxTreeCtrlEx(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxTR_EDIT_LABELS | wxTR_LINES_AT_ROOT | wxTR_HAS_BUTTONS | wxNO_BORDER),
-	CSystemImageList(16),
+	CSystemImageList(CThemeProvider::GetIconSize(iconSizeSmall).x),
 	CStateEventHandler(state),
 	m_pQueueView(pQueueView)
 {
