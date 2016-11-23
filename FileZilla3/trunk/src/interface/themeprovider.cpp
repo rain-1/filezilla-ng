@@ -11,6 +11,10 @@
 
 #include <utility>
 
+#ifdef __WXGTK__
+#include <gtk/gtk.h>
+#endif
+
 static CThemeProvider* instance = 0;
 
 wxSize CTheme::StringToSize(std::wstring const& str)
@@ -494,6 +498,18 @@ wxSize CThemeProvider::GetIconSize(iconSize size, bool userScaled)
 	}
 
 	wxSize ret(s, s);
+
+#ifdef __WXGTK__
+	GdkScreen * screen = gdk_screen_get_default();
+	if (screen) {
+		gdouble scale = gdk_screen_get_resolution(screen);
+		if (scale >= 48) {
+			scale /= 96.f;
+			ret = ret.Scale(scale, scale);
+		}
+	}
+#endif
+
 	if (userScaled) {
 		float scale = static_cast<float>(COptions::Get()->GetOptionVal(OPTION_ICONS_SCALE));
 		ret = ret.Scale(scale / 100.f, scale / 100.f);
