@@ -502,10 +502,9 @@ wxSize CThemeProvider::GetIconSize(iconSize size, bool userScaled)
 #ifdef __WXGTK__
 	GdkScreen * screen = gdk_screen_get_default();
 	if (screen) {
-		gdouble scale = gdk_screen_get_resolution(screen);
+		static gdouble const scale = gdk_screen_get_resolution(screen);
 		if (scale >= 48) {
-			scale /= 96.f;
-			ret = ret.Scale(scale, scale);
+			ret = ret.Scale(scale / 96.f, scale / 96.f);
 		}
 	}
 #endif
