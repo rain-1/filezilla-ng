@@ -19,16 +19,14 @@ CToolBar::~CToolBar()
 
 CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 {
-	{
-		wxSize iconSize = CThemeProvider::GetIconSize(iconSizeSmall, true);
-		wxToolBarXmlHandlerEx::SetIconSize(iconSize);
-	}
+	wxSize iconSize = CThemeProvider::GetIconSize(iconSizeSmall, true);
+	wxToolBarXmlHandlerEx::SetIconSize(iconSize);
 
 	CToolBar* toolbar = dynamic_cast<CToolBar*>(wxXmlResource::Get()->LoadToolBar(pMainFrame, _T("ID_TOOLBAR")));
 	if (!toolbar) {
 		return 0;
 	}
-
+	
 	toolbar->m_pMainFrame = pMainFrame;
 
 	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_REMOTE_IDLE, true);
@@ -64,6 +62,70 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 #endif
 	return toolbar;
 }
+
+#ifdef __WXMSW__
+bool CToolBar::Realize()
+{
+	wxASSERT(HasFlag(wxTB_NOICONS));
+
+	bool ret = wxToolBar::Realize();
+	if (!ret) {
+		return false;
+	}
+
+	wxSize const size = GetToolBitmapSize();
+	wxASSERT(size.x > 0 && size.y > 0);
+	auto toolImages = std::make_unique<wxImageList>(size.x, size.y, false, 0);
+	auto disabledToolImages = std::make_unique<wxImageList>(size.x, size.y, false, 0);
+
+	HWND hwnd = GetHandle();
+
+	auto hImgList = reinterpret_cast<HIMAGELIST>(toolImages->GetHIMAGELIST());
+	auto hDisabledImgList = reinterpret_cast<HIMAGELIST>(disabledToolImages->GetHIMAGELIST());
+	::SendMessage(hwnd, TB_SETIMAGELIST, 0, reinterpret_cast<LPARAM>(hImgList));
+	::SendMessage(hwnd, TB_SETDISABLEDIMAGELIST, 0, reinterpret_cast<LPARAM>(hDisabledImgList));
+
+	toolImages_ = std::move(toolImages);
+	disabledToolImages_ = std::move(disabledToolImages);
+
+	int images{};
+	for (size_t i = 0; i < GetToolsCount(); ++i) {
+		auto tool = GetToolByPos(static_cast<int>(i));
+		if (!tool || tool->GetStyle() != wxTOOL_STYLE_BUTTON) {
+			continue;
+		}
+
+		auto bmp = tool->GetBitmap();
+		if (!bmp.IsOk()) {
+			continue;
+		}
+			
+		int image = toolImages_->Add(bmp);
+		auto disabled = tool->GetDisabledBitmap();
+		if (!disabled.IsOk()) {
+			disabled = wxBitmap(bmp.ConvertToImage().ConvertToGreyscale());
+		}
+		disabledToolImages_->Add(disabled);
+
+		TBBUTTONINFO btn{};
+		btn.cbSize = sizeof(TBBUTTONINFO);
+		btn.dwMask = TBIF_BYINDEX;
+		int index = ::SendMessage(hwnd, TB_GETBUTTONINFO, i, reinterpret_cast<LPARAM>(&btn));
+		if (index != i) {
+			return false;
+		}
+
+		btn.dwMask = TBIF_BYINDEX | TBIF_IMAGE;
+		btn.iImage = image;
+		if (::SendMessage(hwnd, TB_SETBUTTONINFO, i, reinterpret_cast<LPARAM>(&btn)) == 0) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+#endif
 
 void CToolBar::OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void*)
 {

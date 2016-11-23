@@ -19,6 +19,10 @@ public:
 	bool ShowTool(int id);
 	bool HideTool(int id);
 
+#ifdef __WXMSW__
+	virtual bool Realize();
+#endif
+
 protected:
 	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2);
 	virtual void OnOptionsChanged(changed_options_t const& options);
@@ -26,6 +30,11 @@ protected:
 	CMainFrame* m_pMainFrame{};
 
 	std::map<int, wxToolBarToolBase*> m_hidden_tools;
+
+#ifdef __WXMSW__
+	std::unique_ptr<wxImageList> toolImages_;
+	std::unique_ptr<wxImageList> disabledToolImages_;
+#endif
 
 	DECLARE_DYNAMIC_CLASS(CToolBar)
 };
