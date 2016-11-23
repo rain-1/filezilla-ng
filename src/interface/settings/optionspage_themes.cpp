@@ -98,9 +98,6 @@ protected:
 		int x = BORDER;
 		int y = BORDER;
 
-		dc.SetBrush(wxColor(240, 240, 240));
-		dc.DrawRectangle(0, 0, size.x, size.y * 10);
-
 		for (auto const& bmp : m_icons) {
 			dc.DrawBitmap(bmp, x, y, true);
 			x += m_iconSize.GetWidth() + BORDER + m_extra_padding;
@@ -311,6 +308,8 @@ bool COptionsPageThemes::OnDisplayedFirstTime()
 	if (themes.empty()) {
 		return false;
 	}
+
+	xrc_call<wxSpinCtrlDouble, double>(*this, "ID_SCALE", &wxSpinCtrlDouble::SetValue, static_cast<double>(m_pOptions->GetOptionVal(OPTION_ICONS_SCALE)) / 100.f);
 
 	wxString activeTheme = m_pOptions->GetOption(OPTION_ICONS_THEME);
 	wxString firstName;
