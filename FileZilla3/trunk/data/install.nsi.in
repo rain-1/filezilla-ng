@@ -988,6 +988,16 @@ FunctionEnd
 ; Installer Sections
 ;--------------------------------
 
+!macro INSTALLICONSET SET
+  DetailPrint "Installing ${SET} icon set"
+  SetDetailsPrint none
+  SetOutPath "$INSTDIR\resources\${SET}"
+  File "${top_srcdir}/src\interface\resources\${SET}\theme.xml"
+  File /r "${top_srcdir}/src\interface\resources\${SET}\*.png"
+  File /nonfatal /r "${top_srcdir}/src\interface\resources\${SET}\*.gif"
+  SetDetailsPrint lastused
+!macroend
+
 Section "FileZilla Client" SecMain
 
   SectionIn 1 RO
@@ -1106,16 +1116,6 @@ Section "FileZilla Client" SecMain
   WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\App Paths\filezilla.exe" "Path" "$INSTDIR"
 
 SectionEnd
-
-!macro INSTALLICONSET SET
-  DetailPrint "Installing ${SET} icon set"
-  SetDetailsPrint none
-  SetOutPath "$INSTDIR\resources\${SET}"
-  File "${top_srcdir}/src\interface\resources\${SET}\theme.xml"
-  File /r "${top_srcdir}/src\interface\resources\${SET}\*.png"
-  File /nonfatal /r "${top_srcdir}/src\interface\resources\${SET}\*.gif"
-  SetDetailsPrint lastused
-!macroend
 
 ${MementoSection} "Icon sets" SecIconSets
 
