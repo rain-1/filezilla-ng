@@ -29,8 +29,9 @@ wxStatusBarEx::wxStatusBarEx(wxTopLevelWindow* pParent)
 #ifdef __WXMSW__
 	m_parentWasMaximized = false;
 
-	if (GetLayoutDirection() != wxLayout_RightToLeft)
+	if (GetLayoutDirection() != wxLayout_RightToLeft) {
 		SetDoubleBuffered(true);
+	}
 #endif
 }
 
@@ -39,7 +40,7 @@ wxStatusBarEx::~wxStatusBarEx()
 	delete [] m_columnWidths;
 }
 
-void wxStatusBarEx::SetFieldsCount(int number /*=1*/, const int* widths /*=NULL*/)
+void wxStatusBarEx::SetFieldsCount(int number, const int* widths)
 {
 	wxASSERT(number > 0);
 
@@ -47,28 +48,28 @@ void wxStatusBarEx::SetFieldsCount(int number /*=1*/, const int* widths /*=NULL*
 	int* oldWidths = m_columnWidths;
 
 	m_columnWidths = new int[number];
-	if (!widths)
-	{
-		if (oldWidths)
-		{
+	if (!widths) {
+		if (oldWidths) {
 			const int min = wxMin(oldCount, number);
-			for (int i = 0; i < min; i++)
+			for (int i = 0; i < min; ++i) {
 				m_columnWidths[i] = oldWidths[i];
-			for (int i = min; i < number; i++)
+			}
+			for (int i = min; i < number; ++i) {
 				m_columnWidths[i] = -1;
+			}
 			delete [] oldWidths;
 		}
-		else
-		{
-			for (int i = 0; i < number; i++)
+		else {
+			for (int i = 0; i < number; ++i) {
 				m_columnWidths[i] = -1;
+			}
 		}
 	}
-	else
-	{
+	else {
 		delete [] oldWidths;
-		for (int i = 0; i < number; i++)
+		for (int i = 0; i < number; ++i) {
 			m_columnWidths[i] = widths[i];
+		}
 
 		FixupFieldWidth(number - 1);
 	}
@@ -80,8 +81,9 @@ void wxStatusBarEx::SetStatusWidths(int n, const int *widths)
 {
 	wxASSERT(n == GetFieldsCount());
 	wxASSERT(widths);
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < n; ++i) {
 		m_columnWidths[i] = widths[i];
+	}
 
 	FixupFieldWidth(n - 1);
 
@@ -90,20 +92,22 @@ void wxStatusBarEx::SetStatusWidths(int n, const int *widths)
 
 void wxStatusBarEx::FixupFieldWidth(int field)
 {
-	if (field != GetFieldsCount() - 1)
+	if (field != GetFieldsCount() - 1) {
 		return;
+	}
 
 #if __WXGTK20__
 	// Gripper overlaps last all the time
-	if (m_columnWidths[field] > 0)
+	if (m_columnWidths[field] > 0) {
 		m_columnWidths[field] += 15;
+	}
 #endif
 }
 
 void wxStatusBarEx::SetFieldWidth(int field, int width)
 {
 	field = GetFieldIndex(field);
-	if( field < 0 ) {
+	if (field < 0) {
 		return;
 	}
 
@@ -129,18 +133,18 @@ void wxStatusBarEx::OnSize(wxSizeEvent&)
 {
 #ifdef __WXMSW__
 	const int count = GetFieldsCount();
-	if (count && m_columnWidths && m_columnWidths[count - 1] > 0)
-	{
+	if (count && m_columnWidths && m_columnWidths[count - 1] > 0) {
 		// No sizegrip on maximized windows
 		bool isMaximized = m_pParent->IsMaximized();
-		if (isMaximized != m_parentWasMaximized)
-		{
+		if (isMaximized != m_parentWasMaximized) {
 			m_parentWasMaximized = isMaximized;
 
-			if (isMaximized)
+			if (isMaximized) {
 				m_columnWidths[count - 1] -= 16;
-			else
+			}
+			else {
 				m_columnWidths[count - 1] += 16;
+			}
 
 			wxStatusBar::SetStatusWidths(count, m_columnWidths);
 			Refresh();
@@ -189,19 +193,21 @@ void CWidgetsStatusBar::OnSize(wxSizeEvent& event)
 {
 	wxStatusBarEx::OnSize(event);
 
-	for (int i = 0; i < GetFieldsCount(); i++)
+	for (int i = 0; i < GetFieldsCount(); ++i) {
 		PositionChildren(i);
+	}
 
 #ifdef __WXMSW__
-	if (GetLayoutDirection() != wxLayout_RightToLeft)
+	if (GetLayoutDirection() != wxLayout_RightToLeft) {
 		Update();
+	}
 #endif
 }
 
 bool CWidgetsStatusBar::AddField(int field, int idx, wxWindow* pChild)
 {
 	field = GetFieldIndex(field);
-	if( field < 0 ) {
+	if (field < 0) {
 		return false;
 	}
 
@@ -234,17 +240,16 @@ void CWidgetsStatusBar::PositionChildren(int field)
 	int offset = 2;
 
 #ifndef __WXMSW__
-	if (field + 1 == GetFieldsCount())
-	{
+	if (field + 1 == GetFieldsCount()) {
 		rect.SetWidth(m_columnWidths[field]);
 		offset += 5 + GetGripperWidth();
 	}
 #endif
 
-	for (auto iter = m_children.begin(); iter != m_children.end(); ++iter)
-	{
-		if (iter->second.field != field)
+	for (auto iter = m_children.begin(); iter != m_children.end(); ++iter) {
+		if (iter->second.field != field) {
 			continue;
+		}
 
 		const wxSize size = iter->second.pChild->GetSize();
 		int position = rect.GetRight() - size.x - offset;
@@ -258,8 +263,9 @@ void CWidgetsStatusBar::PositionChildren(int field)
 void CWidgetsStatusBar::SetFieldWidth(int field, int width)
 {
 	wxStatusBarEx::SetFieldWidth(field, width);
-	for (int i = 0; i < GetFieldsCount(); i++)
+	for (int i = 0; i < GetFieldsCount(); ++i) {
 		PositionChildren(i);
+	}
 }
 
 class CIndicator : public wxStaticBitmap
@@ -578,23 +584,28 @@ void CStatusBar::UpdateSpeedLimitsIcon()
 	else {
 		tooltip = _("Speed limits are enabled, click to change.");
 		tooltip += _T("\n");
-		if (downloadLimit)
+		if (downloadLimit) {
 			tooltip += wxString::Format(_("Download limit: %s/s"), CSizeFormat::FormatUnit(downloadLimit, CSizeFormat::kilo));
-		else
+		}
+		else {
 			tooltip += _("Download limit: none");
+		}
 		tooltip += _T("\n");
-		if (uploadLimit)
+		if (uploadLimit) {
 			tooltip += wxString::Format(_("Upload limit: %s/s"), CSizeFormat::FormatUnit(uploadLimit, CSizeFormat::kilo));
-		else
+		}
+		else {
 			tooltip += _("Upload limit: none");
+		}
 	}
 
 	if (!m_pSpeedLimitsIndicator) {
 		m_pSpeedLimitsIndicator = new CIndicator(this, bmp);
 		AddField(0, widget_speedlimit, m_pSpeedLimitsIndicator);
 	}
-	else
+	else {
 		m_pSpeedLimitsIndicator->SetBitmap(bmp);
+	}
 	m_pSpeedLimitsIndicator->SetToolTip(tooltip);
 }
 
@@ -632,18 +643,18 @@ void CStatusBar::OnSpeedLimitsEnable(wxCommandEvent&)
 	int downloadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
 	int uploadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);
 	bool enable = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) == 0;
-	if (enable)
-	{
-		if (!downloadlimit && !uploadlimit)
-		{
+	if (enable) {
+		if (!downloadlimit && !uploadlimit) {
 			CSpeedLimitsDialog dlg;
 			dlg.Run(m_pParent);
 		}
-		else
+		else {
 			COptions::Get()->SetOption(OPTION_SPEEDLIMIT_ENABLE, 1);
+		}
 	}
-	else
+	else {
 		COptions::Get()->SetOption(OPTION_SPEEDLIMIT_ENABLE, 0);
+	}
 }
 
 void CStatusBar::OnSpeedLimitsConfigure(wxCommandEvent&)
