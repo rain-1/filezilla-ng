@@ -13,9 +13,9 @@
 		#define SHGetIconOverlayIndex SHGetIconOverlayIndexW
 	#endif
 #endif
+#include "themeprovider.h"
 #ifndef __WXMSW__
 #include "graphics.h"
-#include "themeprovider.h"
 #include <wx/rawbmp.h>
 #endif
 
@@ -24,7 +24,7 @@ wxImageListEx::wxImageListEx()
 {
 }
 
-wxImageListEx::wxImageListEx(int width, int height, const bool mask /*=true*/, int initialCount /*=1*/)
+wxImageListEx::wxImageListEx(int width, int height, const bool mask, int initialCount)
 	: wxImageList(width, height, mask, initialCount)
 {
 }
@@ -68,11 +68,12 @@ static void OverlaySymlink(wxBitmap& bmp)
 }
 #endif
 
-CSystemImageList::CSystemImageList(int size /*=-1*/)
+CSystemImageList::CSystemImageList(int size)
 	: m_pImageList()
 {
-	if (size != -1)
+	if (size != -1) {
 		CreateSystemImageList(size);
+	}
 }
 
 bool CSystemImageList::CreateSystemImageList(int size)
@@ -95,7 +96,7 @@ bool CSystemImageList::CreateSystemImageList(int size)
 							  &shFinfo,
 							  sizeof( shFinfo ),
 							  SHGFI_SYSICONINDEX |
-							  ((size != 16) ? SHGFI_ICON : SHGFI_SMALLICON) ));
+							  ((size != CThemeProvider::GetIconSize(iconSizeSmall).x) ? SHGFI_ICON : SHGFI_SMALLICON) ));
 #else
 	m_pImageList = new wxImageListEx(size, size);
 
