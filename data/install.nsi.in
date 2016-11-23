@@ -1023,6 +1023,8 @@ Section "FileZilla Client" SecMain
   SetOutPath "$INSTDIR\resources\48x48"
   File "${top_srcdir}/src\interface\resources\48x48\*.png"
 
+  !insertmacro INSTALLICONSET default
+
   SetDetailsPrint lastused
 
   ; Create uninstaller
@@ -1120,7 +1122,6 @@ ${MementoSection} "Icon sets" SecIconSets
   !insertmacro INSTALLICONSET blukis
   !insertmacro INSTALLICONSET classic
   !insertmacro INSTALLICONSET cyril
-  !insertmacro INSTALLICONSET default
   !insertmacro INSTALLICONSET flatzilla
   !insertmacro INSTALLICONSET lone
   !insertmacro INSTALLICONSET minimal
