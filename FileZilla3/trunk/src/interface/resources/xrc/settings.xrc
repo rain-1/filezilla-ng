@@ -1479,10 +1479,10 @@
       </object>
       <object class="sizeritem">
         <object class="wxStaticBoxSizer">
-          <label>Available sizes</label>
+          <label>Preview</label>
           <orient>wxVERTICAL</orient>
           <object class="sizeritem">
-            <object class="wxNotebook" name="ID_PREVIEW"/>
+            <object class="wxScrolledWindow" subclass="CIconPreview" name="ID_PREVIEW" />
             <option>1</option>
             <flag>wxALL|wxGROW</flag>
             <border>5</border>

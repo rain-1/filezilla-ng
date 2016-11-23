@@ -61,10 +61,9 @@ public:
 	CThemeProvider();
 	virtual ~CThemeProvider();
 
-	static std::vector<wxString> GetThemes();
+	static std::vector<std::wstring> GetThemes();
 	std::vector<wxBitmap> GetAllImages(std::wstring const& theme, wxSize const& size);
-	static bool GetThemeData(const wxString& themePath, wxString& name, wxString& author, wxString& email);
-	static std::vector<std::wstring> GetThemeSizes(const wxString& themePath, bool & scalable);
+	static bool GetThemeData(std::wstring const& themePath, std::wstring& name, std::wstring& author, std::wstring& email);
 	static wxIconBundle GetIconBundle(const wxArtID& id, const wxArtClient& client = wxART_OTHER);
 	static bool ThemeHasSize(const wxString& themePath, const wxString& size);
 
