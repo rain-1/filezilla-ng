@@ -63,9 +63,8 @@ public:
 
 	static std::vector<std::wstring> GetThemes();
 	std::vector<wxBitmap> GetAllImages(std::wstring const& theme, wxSize const& size);
-	static bool GetThemeData(std::wstring const& themePath, std::wstring& name, std::wstring& author, std::wstring& email);
+	bool GetThemeData(std::wstring const& theme, std::wstring& name, std::wstring& author, std::wstring& email);
 	static wxIconBundle GetIconBundle(const wxArtID& id, const wxArtClient& client = wxART_OTHER);
-	static bool ThemeHasSize(const wxString& themePath, const wxString& size);
 
 	static wxSize GetIconSize(iconSize size, bool userScaled = false);
 
