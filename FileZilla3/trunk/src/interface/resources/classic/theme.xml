@@ -4,6 +4,6 @@
     <Name>Classic</Name>
     <Author>Tim Kosse</Author>
     <Mail>tim.kosse@filezilla-project.org</Mail>
-    <size>16x16</size>
+    <size primary="1">16x16</size>
   </Theme>
 </FileZilla3>
