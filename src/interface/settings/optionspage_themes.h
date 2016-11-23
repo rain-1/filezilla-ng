@@ -13,7 +13,7 @@ public:
 	virtual bool CreatePage(COptions* pOptions, CSettingsDialog* pOwner, wxWindow* parent, wxSize& maxSize);
 
 protected:
-	bool DisplayTheme(const wxString& theme);
+	bool DisplayTheme(std::wstring const& theme);
 
 	virtual bool OnDisplayedFirstTime();
 

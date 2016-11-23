@@ -20,6 +20,8 @@ const int BORDER = 5;
 class CIconPreview : public wxScrolledWindow
 {
 public:
+	CIconPreview() = default;
+
 	CIconPreview(wxWindow* pParent)
 		: wxScrolledWindow(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSTATIC_BORDER | wxVSCROLL)
 	{
@@ -32,6 +34,9 @@ public:
 		m_iconSize = size;
 
 		m_icons = CThemeProvider::Get()->GetAllImages(theme, size);
+
+		m_sizeInitialized = false;
+		Refresh();
 	}
 
 	void CalcSize()
@@ -112,7 +117,11 @@ protected:
 	wxSize m_iconSize;
 	bool m_sizeInitialized;
 	int m_extra_padding;
+
+	DECLARE_DYNAMIC_CLASS(CIconPreview)
 };
+
+IMPLEMENT_DYNAMIC_CLASS(CIconPreview, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(CIconPreview, wxScrolledWindow)
 EVT_PAINT(CIconPreview::OnPaint)
@@ -166,8 +175,6 @@ bool COptionsPageThemes::SavePage()
 
 	m_pOptions->SetOption(OPTION_ICONS_THEME, theme.ToStdWstring());
 
-	wxNotebook *pPreview = XRCCTRL(*this, "ID_PREVIEW", wxNotebook);
-	wxString size = pPreview->GetPageText(pPreview->GetSelection());
 	m_pOptions->SetOption(OPTION_ICONS_SCALE, static_cast<int>(100 * xrc_call(*this, "ID_SCALE", &wxSpinCtrlDouble::GetValue)));
 
 	return true;
@@ -178,9 +185,9 @@ bool COptionsPageThemes::Validate()
 	return true;
 }
 
-bool COptionsPageThemes::DisplayTheme(const wxString& theme)
+bool COptionsPageThemes::DisplayTheme(std::wstring const& theme)
 {
-	wxString name, author, mail;
+	std::wstring name, author, mail;
 	if (!CThemeProvider::GetThemeData(theme, name, author, mail)) {
 		return false;
 	}
@@ -189,91 +196,21 @@ bool COptionsPageThemes::DisplayTheme(const wxString& theme)
 	}
 
 	if (author.empty()) {
-		author = _("N/a");
+		author = _("N/a").ToStdWstring();
 	}
 	if (mail.empty()) {
-		mail = _("N/a");
+		mail = _("N/a").ToStdWstring();
 	}
 
 	bool failure = false;
 	SetStaticText(XRCID("ID_AUTHOR"), author, failure);
 	SetStaticText(XRCID("ID_EMAIL"), mail, failure);
 
-	wxNotebook *pPreview = XRCCTRL(*this, "ID_PREVIEW", wxNotebook);
-
-	wxString selected_size;
-	int selected_page = pPreview->GetSelection();
-	if (selected_page != -1) {
-		selected_size = pPreview->GetPageText(selected_page);
-	}
-	else {
-		selected_size = COptions::Get()->GetOption(OPTION_ICONS_THEME);
-	}
-
-	pPreview->DeleteAllPages();
-
-	bool scalable{};
-	auto sizes = CThemeProvider::GetThemeSizes(theme, scalable);
-	if (sizes.empty()) {
-		return false;
-	}
-
 	auto scale_factor = xrc_call(*this, "ID_SCALE", &wxSpinCtrlDouble::GetValue);
 	wxSize size = CThemeProvider::Get()->GetIconSize(iconSizeSmall);
 	size.Scale(scale_factor, scale_factor);
 
-/*	else {
-		for (auto const& size : sizes) {
-			int pos = size.Find('x');
-			if (pos <= 0 || pos >= (int)size.Len() - 1) {
-				continue;
-			}
-
-			long width = 0;
-			long height = 0;
-			if (!size.Left(pos).ToLong(&width) ||
-				!size.Mid(pos + 1).ToLong(&height) ||
-				width <= 0 || height <= 0)
-			{
-				continue;
-			}
-
-			wxSize iconSize(width, height);
-			
-			wxPanel* pPanel = new wxPanel();
-#ifdef __WXMSW__
-			// Drawing glitch on MSW
-			pPanel->Hide();
-#endif
-			pPanel->Create(pPreview);
-			wxSizer* pSizer = new wxBoxSizer(wxVERTICAL);
-			pPanel->SetSizer(pSizer);
-			pSizer->Add(new wxStaticText(pPanel, wxID_ANY, _("Preview:")), 0, wxLEFT | wxRIGHT | wxTOP, 5);
-
-			CIconPreview *pIconPreview = new CIconPreview(pPanel);
-			pIconPreview->LoadIcons(theme, iconSize);
-
-			pSizer->Add(pIconPreview, 1, wxGROW | wxALL, 5);
-
-			pPreview->AddPage(pPanel, size, selected_size == size);
-		}
-	}*/
-
-	wxPanel* pPanel = new wxPanel();
-#ifdef __WXMSW__
-	// Drawing glitch on MSW
-	pPanel->Hide();
-#endif
-	pPanel->Create(pPreview);
-	wxSizer* pSizer = new wxBoxSizer(wxVERTICAL);
-	pPanel->SetSizer(pSizer);
-
-	CIconPreview *pIconPreview = new CIconPreview(pPanel);
-	pIconPreview->LoadIcons(theme.ToStdWstring(), size);
-
-	pSizer->Add(pIconPreview, 1, wxGROW | wxALL, 5);
-
-	pPreview->AddPage(pPanel, _("Preview"), true);
+	xrc_call(*this, "ID_PREVIEW", &CIconPreview::LoadIcons, theme, size);
 
 	return !failure;
 }
@@ -283,8 +220,7 @@ void COptionsPageThemes::OnThemeChange(wxCommandEvent&)
 	wxChoice* pTheme = XRCCTRL(*this, "ID_THEME", wxChoice);
 
 	const int sel = pTheme->GetSelection();
-	const wxString theme = ((wxStringClientData*)pTheme->GetClientObject(sel))->GetData();
-
+	std::wstring const theme = ((wxStringClientData*)pTheme->GetClientObject(sel))->GetData().ToStdWstring();
 	DisplayTheme(theme);
 }
 
@@ -297,7 +233,7 @@ bool COptionsPageThemes::OnDisplayedFirstTime()
 		return false;
 	}
 
-	if (!pTheme || !XRCCTRL(*this, "ID_PREVIEW", wxNotebook) ||
+	if (!pTheme || !XRCCTRL(*this, "ID_PREVIEW", CIconPreview) ||
 		!XRCCTRL(*this, "ID_AUTHOR", wxStaticText) ||
 		!XRCCTRL(*this, "ID_EMAIL", wxStaticText))
 	{
@@ -311,10 +247,10 @@ bool COptionsPageThemes::OnDisplayedFirstTime()
 
 	xrc_call<wxSpinCtrlDouble, double>(*this, "ID_SCALE", &wxSpinCtrlDouble::SetValue, static_cast<double>(m_pOptions->GetOptionVal(OPTION_ICONS_SCALE)) / 100.f);
 
-	wxString activeTheme = m_pOptions->GetOption(OPTION_ICONS_THEME);
-	wxString firstName;
+	std::wstring activeTheme = m_pOptions->GetOption(OPTION_ICONS_THEME);
+	std::wstring firstName;
 	for (auto const& theme : themes) {
-		wxString name, author, mail;
+		std::wstring name, author, mail;
 		if (!CThemeProvider::GetThemeData(theme, name, author, mail)) {
 			continue;
 		}

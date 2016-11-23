@@ -332,18 +332,21 @@ wxAnimation CThemeProvider::CreateAnimation(wxArtID const& id, wxSize const& siz
 	return anim;
 }
 
-std::vector<wxString> CThemeProvider::GetThemes()
+std::vector<std::wstring> CThemeProvider::GetThemes()
 {
-	std::vector<wxString> themes;
+	std::vector<std::wstring> themes;
 
 	CLocalPath const resourceDir = wxGetApp().GetResourceDir();
 
-	wxDir dir(resourceDir.GetPath());
-	bool found;
-	wxString subdir;
-	for (found = dir.GetFirst(&subdir, _T("*"), wxDIR_DIRS); found; found = dir.GetNext(&subdir)) {
-		if (wxFileName::FileExists(resourceDir.GetPath() + subdir + _T("/") + _T("theme.xml"))) {
-			themes.push_back(subdir);
+	fz::local_filesys fs;
+
+	fz::native_string path = fz::to_native(resourceDir.GetPath());
+	if (fs.begin_find_files(path, true)) {
+		fz::native_string name;
+		while (fs.get_next_file(name)) {
+			if (fz::local_filesys::get_file_type(path + name + fzT("/theme.xml")) == fz::local_filesys::file) {
+				themes.push_back(fz::to_wstring(name));
+			}
 		}
 	}
 
@@ -365,7 +368,7 @@ std::vector<wxBitmap> CThemeProvider::GetAllImages(std::wstring const& theme, wx
 	return it->second.GetAllImages(size);
 }
 
-bool CThemeProvider::GetThemeData(const wxString& themePath, wxString& name, wxString& author, wxString& email)
+bool CThemeProvider::GetThemeData(std::wstring const& themePath, std::wstring & name, std::wstring & author, std::wstring & email)
 {
 	std::wstring const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("/theme.xml"));
 	CXmlFile xml(file);
@@ -378,30 +381,6 @@ bool CThemeProvider::GetThemeData(const wxString& themePath, wxString& name, wxS
 	author = GetTextElement(theme, "Author");
 	email = GetTextElement(theme, "Mail");
 	return true;
-}
-
-std::vector<std::wstring> CThemeProvider::GetThemeSizes(const wxString& themePath, bool & scalable)
-{
-	std::vector<std::wstring> sizes;
-
-	std::wstring const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("/theme.xml"));
-	CXmlFile xml(file);
-	auto theme = xml.Load().child("Theme");
-	if (!theme) {
-		return sizes;
-	}
-
-	scalable = std::string(theme.child_value("scalable")) == "1";
-
-	for (auto xSize = theme.child("size"); xSize; xSize = xSize.next_sibling("size")) {
-		std::wstring size = GetTextElement(xSize);
-		if (size.empty()) {
-			continue;
-		}
-		sizes.push_back(size);
-	}
-
-	return sizes;
 }
 
 wxIconBundle CThemeProvider::GetIconBundle(const wxArtID& id, const wxArtClient&)
