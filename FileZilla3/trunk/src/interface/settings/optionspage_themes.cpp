@@ -188,7 +188,7 @@ bool COptionsPageThemes::Validate()
 bool COptionsPageThemes::DisplayTheme(std::wstring const& theme)
 {
 	std::wstring name, author, mail;
-	if (!CThemeProvider::GetThemeData(theme, name, author, mail)) {
+	if (!CThemeProvider::Get()->GetThemeData(theme, name, author, mail)) {
 		return false;
 	}
 	if (name.empty()) {
@@ -251,7 +251,7 @@ bool COptionsPageThemes::OnDisplayedFirstTime()
 	std::wstring firstName;
 	for (auto const& theme : themes) {
 		std::wstring name, author, mail;
-		if (!CThemeProvider::GetThemeData(theme, name, author, mail)) {
+		if (!CThemeProvider::Get()->GetThemeData(theme, name, author, mail)) {
 			continue;
 		}
 		if (firstName.empty()) {
