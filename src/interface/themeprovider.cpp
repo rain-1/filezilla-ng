@@ -464,8 +464,9 @@ wxSize CThemeProvider::GetIconSize(iconSize size, bool userScaled)
 	int s;
 	if (size == iconSizeSmall) {
 		s = wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
-		if (s <= 0)
+		if (s <= 0) {
 			s = 16;
+		}
 	}
 	else if (size == iconSize24) {
 		s = wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);

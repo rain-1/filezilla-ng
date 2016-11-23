@@ -8,6 +8,7 @@
 #include "conditionaldialog.h"
 #include <algorithm>
 #include "filelist_statusbar.h"
+#include "themeprovider.h"
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
 #include <gtk/gtk.h>
 #endif
@@ -234,7 +235,7 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 : wxListCtrlEx(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxLC_VIRTUAL | wxLC_REPORT | wxLC_EDIT_LABELS | (border ? wxBORDER_SUNKEN : wxNO_BORDER)),
 	CComparableListing(this)
 {
-	CreateSystemImageList(16);
+	CreateSystemImageList(CThemeProvider::GetIconSize(iconSizeSmall).x);
 	m_pQueue = pQueue;
 
 	m_hasParent = true;
