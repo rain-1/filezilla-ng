@@ -138,14 +138,19 @@ wxBitmap const& CTheme::LoadBitmapWithSpecificSizeAndScale(std::wstring const& n
 		return bmp;
 	}
 
-	if (bmp.GetSize() == scale) {
+	if (bmp.GetScaledSize() == scale) {
 		return bmp;
 	}
 
 	// need to scale
 	wxImage img = bmp.ConvertToImage();
+#ifdef __WXMAC__
+	double factor = static_cast<double>(size.x) / scale.x;
+	auto inserted = cache.insert(std::make_pair(scale, wxBitmap(img, -1, factor)));
+#else
 	img.Rescale(scale.x, scale.y, wxIMAGE_QUALITY_HIGH);
 	auto inserted = cache.insert(std::make_pair(scale, wxBitmap(img)));
+#endif
 	return inserted.first->second;
 }
 
@@ -462,16 +467,6 @@ wxSize CThemeProvider::GetIconSize(iconSize size, bool userScaled)
 	}
 
 	wxSize ret(s, s);
-
-#ifdef __WXMAC__
-	wxTopLevelWindow* pTopWindow = (wxTopLevelWindow*)wxTheApp->GetTopWindow();
-	if (pTopWindow) {
-		static double scale = pTopWindow->GetContentScaleFactor();
-		if (scale >= 0.5 && scale <= 8.0) {
-			ret = ret.Scale(scale, scale);
-		}
-	}
-#endif
 
 #ifdef __WXGTK__
 	GdkScreen * screen = gdk_screen_get_default();

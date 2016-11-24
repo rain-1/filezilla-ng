@@ -72,8 +72,9 @@ public:
 
 	wxAnimation CreateAnimation(wxArtID const& id, wxSize const& size);
 
-protected:
 	virtual wxBitmap CreateBitmap(wxArtID const& id, wxArtClient const& client, wxSize const& size);
+
+protected:
 
 	virtual void OnOptionsChanged(changed_options_t const& options);
 
