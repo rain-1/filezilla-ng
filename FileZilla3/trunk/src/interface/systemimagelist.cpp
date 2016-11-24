@@ -42,7 +42,7 @@ HIMAGELIST wxImageListEx::Detach()
 static void OverlaySymlink(wxBitmap& bmp)
 {
 	// This is ugly, but apparently needed so that the data is _really_ in the right internal format
-	bmp = bmp.ConvertToImage();
+	bmp = wxBitmap(bmp.ConvertToImage(), -1, bmp.GetScaleFactor());
 	wxBitmap symlink = wxArtProvider::GetBitmap(_T("ART_SYMLINK"),  wxART_OTHER, wxSize(bmp.GetWidth(), bmp.GetHeight())).ConvertToImage();
 
 	wxAlphaPixelData target(bmp);
@@ -100,9 +100,9 @@ bool CSystemImageList::CreateSystemImageList(int size)
 #else
 	m_pImageList = new wxImageListEx(size, size);
 
-	wxBitmap file = wxArtProvider::GetBitmap(_T("ART_FILE"),  wxART_OTHER, wxSize(size, size));
-	wxBitmap folderclosed = wxArtProvider::GetBitmap(_T("ART_FOLDERCLOSED"),  wxART_OTHER, wxSize(size, size));
-	wxBitmap folder = wxArtProvider::GetBitmap(_T("ART_FOLDER"),  wxART_OTHER, wxSize(size, size));
+	wxBitmap file = CThemeProvider::Get()->CreateBitmap(_T("ART_FILE"),  wxART_OTHER, wxSize(size, size));
+	wxBitmap folderclosed = CThemeProvider::Get()->CreateBitmap(_T("ART_FOLDERCLOSED"),  wxART_OTHER, wxSize(size, size));
+	wxBitmap folder = CThemeProvider::Get()->CreateBitmap(_T("ART_FOLDER"),  wxART_OTHER, wxSize(size, size));
 	m_pImageList->Add(file);
 	m_pImageList->Add(folderclosed);
 	m_pImageList->Add(folder);
