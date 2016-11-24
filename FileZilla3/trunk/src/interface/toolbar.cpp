@@ -20,13 +20,22 @@ CToolBar::~CToolBar()
 CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 {
 	wxSize iconSize = CThemeProvider::GetIconSize(iconSizeSmall, true);
+#ifdef __WXMAC__
+	// OS X only knows two hardcoded toolbar sizes.
+	if (iconSize.x >= 32) {
+		iconSize = wxSize(32, 32);
+	}
+	else {
+		iconSize = wxSize(24, 24);
+	}
+#endif
 	wxToolBarXmlHandlerEx::SetIconSize(iconSize);
 
 	CToolBar* toolbar = dynamic_cast<CToolBar*>(wxXmlResource::Get()->LoadToolBar(pMainFrame, _T("ID_TOOLBAR")));
 	if (!toolbar) {
 		return 0;
 	}
-	
+
 	toolbar->m_pMainFrame = pMainFrame;
 
 	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_REMOTE_IDLE, true);
