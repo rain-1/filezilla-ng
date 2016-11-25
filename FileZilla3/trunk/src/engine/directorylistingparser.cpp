@@ -1950,8 +1950,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 		int len = iter->len;
 		while (iter->p[m_currentOffset] == '\r' || iter->p[m_currentOffset] == '\n'
 			|| iter->p[m_currentOffset] == ' ' || iter->p[m_currentOffset] == '\t'
-			|| !iter->p[m_currentOffset]
-			|| iter->p[m_currentOffset] == 0xfeff) // BOM
+			|| !iter->p[m_currentOffset])
 		{
 			++m_currentOffset;
 			if (m_currentOffset >= len) {
@@ -2037,11 +2036,13 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 				delete [] iter->p;
 				m_DataList.erase(m_DataList.begin(), ++iter);
 			}
-			else
+			else {
 				m_DataList.erase(m_DataList.begin(), iter);
+			}
 		}
-		else
+		else {
 			m_DataList.erase(m_DataList.begin(), iter);
+		}
 
 		std::wstring buffer;
 		if (m_pControlSocket) {
@@ -2058,6 +2059,11 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 			}
 		}
 		delete [] res;
+
+		// Strip BOM
+		if (buffer[0] == 0xfeff) {
+			buffer = buffer.substr(1);
+		}
 
 		if (!buffer.empty()) {
 			return new CLine(std::move(buffer));
