@@ -408,7 +408,7 @@ void CStatusBar::DisplayDataType()
 			desc = _("Current transfer type is set to automatic detection.");
 		}
 
-		wxBitmap bmp = wxArtProvider::GetBitmap(name, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
+		wxBitmap bmp = CThemeProvider::Get()->CreateBitmap(name, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
 		if (!m_pDataTypeIndicator) {
 			m_pDataTypeIndicator = new CIndicator(this, bmp);
 			AddField(0, widget_datatype, m_pDataTypeIndicator);
@@ -464,7 +464,7 @@ void CStatusBar::DisplayEncrypted()
 		}
 	}
 	else {
-		wxBitmap bmp = wxArtProvider::GetBitmap(_T("ART_LOCK"), wxART_OTHER,  CThemeProvider::GetIconSize(iconSizeSmall));
+		wxBitmap bmp = CThemeProvider::Get()->CreateBitmap(_T("ART_LOCK"), wxART_OTHER,  CThemeProvider::GetIconSize(iconSizeSmall));
 		if (!m_pEncryptionIndicator) {
 			m_pEncryptionIndicator = new CIndicator(this, bmp);
 			AddField(0, widget_encryption, m_pEncryptionIndicator);
@@ -567,7 +567,7 @@ void CStatusBar::UpdateSpeedLimitsIcon()
 {
 	bool enable = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) != 0;
 
-	wxBitmap bmp = wxArtProvider::GetBitmap(_T("ART_SPEEDLIMITS"), wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
+	wxBitmap bmp = CThemeProvider::Get()->CreateBitmap(_T("ART_SPEEDLIMITS"), wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
 	if (!bmp.Ok()) {
 		return;
 	}

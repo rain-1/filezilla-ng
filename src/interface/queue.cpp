@@ -765,9 +765,9 @@ CQueueViewBase::CQueueViewBase(CQueue* parent, int index, const wxString& title)
 	wxSize s = CThemeProvider::GetIconSize(iconSizeSmall);
 	wxImageList* pImageList = new wxImageList(s.x, s.y);
 
-	pImageList->Add(wxArtProvider::GetBitmap(_T("ART_SERVER"), wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)));
-	pImageList->Add(wxArtProvider::GetBitmap(_T("ART_FILE"), wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)));
-	pImageList->Add(wxArtProvider::GetBitmap(_T("ART_FOLDER"), wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)));
+	pImageList->Add(CThemeProvider::Get()->CreateBitmap(_T("ART_SERVER"), wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)));
+	pImageList->Add(CThemeProvider::Get()->CreateBitmap(_T("ART_FILE"), wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)));
+	pImageList->Add(CThemeProvider::Get()->CreateBitmap(_T("ART_FOLDER"), wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)));
 
 	AssignImageList(pImageList, wxIMAGE_LIST_SMALL);
 
