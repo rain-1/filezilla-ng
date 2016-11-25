@@ -42,7 +42,11 @@ HIMAGELIST wxImageListEx::Detach()
 static void OverlaySymlink(wxBitmap& bmp)
 {
 	// This is ugly, but apparently needed so that the data is _really_ in the right internal format
+#ifdef __WXMAC__
 	bmp = wxBitmap(bmp.ConvertToImage(), -1, bmp.GetScaleFactor());
+#else
+	bmp = wxBitmap(bmp.ConvertToImage(), -1);
+#endif
 	wxBitmap symlink = wxArtProvider::GetBitmap(_T("ART_SYMLINK"),  wxART_OTHER, wxSize(bmp.GetWidth(), bmp.GetHeight())).ConvertToImage();
 
 	wxAlphaPixelData target(bmp);
