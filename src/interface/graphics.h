@@ -20,18 +20,25 @@ static inline unsigned char AlphaComposite_Over(unsigned char bg, unsigned char 
 // All RGB and A values have range from 0 to 255, RGB values aren't
 // premultiplied by A.
 // Safe for multiple compositions.
-static inline void AlphaComposite_Over_Inplace(wxAlphaPixelData::Iterator &bg, wxAlphaPixelData::Iterator &fg)
+static inline void AlphaComposite_Over_Inplace(
+	unsigned char & bg_red, unsigned char & bg_green, unsigned char & bg_blue, unsigned char & bg_alpha,
+	unsigned char & fg_red, unsigned char & fg_green, unsigned char & fg_blue, unsigned char & fg_alpha)
 {
-	if (!fg.Alpha()) {
+	if (!fg_alpha) {
 		// Nothing to do. Also prevents zero new_alpha
 		return;
 	}
 
-	unsigned char const new_alpha = AlphaComposite_Over_GetAlpha(bg.Alpha(), fg.Alpha());
-	bg.Red()   = AlphaComposite_Over(bg.Red(),   bg.Alpha(), fg.Red(),   fg.Alpha(), new_alpha);
-	bg.Green() = AlphaComposite_Over(bg.Green(), bg.Alpha(), fg.Green(), fg.Alpha(), new_alpha);
-	bg.Blue()  = AlphaComposite_Over(bg.Blue(),  bg.Alpha(), fg.Blue(),  fg.Alpha(), new_alpha);
-	bg.Alpha() = new_alpha;
+	unsigned char const new_alpha = AlphaComposite_Over_GetAlpha(bg_alpha, fg_alpha);
+	bg_red   = AlphaComposite_Over(bg_red,   bg_alpha, fg_red,   fg_alpha, new_alpha);
+	bg_green = AlphaComposite_Over(bg_green, bg_alpha, fg_green, fg_alpha, new_alpha);
+	bg_blue  = AlphaComposite_Over(bg_blue,  bg_alpha, fg_blue,  fg_alpha, new_alpha);
+	bg_alpha = new_alpha;
+}
+
+static inline void AlphaComposite_Over_Inplace(wxAlphaPixelData::Iterator &bg, wxAlphaPixelData::Iterator &fg)
+{
+	AlphaComposite_Over_Inplace(bg.Red(), bg.Green(), bg.Blue(), bg.Alpha(), fg.Red(), fg.Green(), fg.Blue(), fg.Alpha());
 }
 
 static inline wxColour AlphaComposite_Over(wxColour const& bg, wxColour const& fg) {
@@ -48,6 +55,8 @@ static inline wxColour AlphaComposite_Over(wxColour const& bg, wxColour const& f
 		new_alpha
 	);
 }
+
+void Overlay(wxBitmap& bg, wxBitmap const& fg);
 
 class CWindowTinter final
 {

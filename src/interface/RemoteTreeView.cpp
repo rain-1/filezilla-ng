@@ -442,41 +442,14 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 	return parent;
 }
 
-wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay /*=_T("")*/)
+wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay)
 {
-	// Create memory DC
-	wxSize s = CThemeProvider::GetIconSize(iconSizeSmall);
-#ifdef __WXMSW__
-	wxBitmap bmp(s.x, s.y, 32);
-#else
-	wxBitmap bmp(s.x, s.y, 24);
-#endif
-	wxMemoryDC dc;
-	dc.SelectObject(bmp);
-
-	// Make sure the background is set correctly
-	dc.SetBrush(wxBrush(GetBackgroundColour()));
-	dc.SetPen(wxPen(GetBackgroundColour()));
-	dc.DrawRectangle(0, 0, s.x, s.y);
-
-	// Draw item from system image list
-	GetSystemImageList()->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_TRANSPARENT);
-
-	// Load overlay
+	wxBitmap bmp = GetSystemImageList()->GetBitmap(index);
 	if (!overlay.empty()) {
-		wxImage unknownIcon = CThemeProvider::Get()->CreateBitmap(overlay, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)).ConvertToImage();
-
-		// Convert mask into alpha channel
-		if (unknownIcon.IsOk() && !unknownIcon.HasAlpha()) {
-			wxASSERT(unknownIcon.HasMask());
-			unknownIcon.InitAlpha();
-		}
-
-		// Draw overlay
-		dc.DrawBitmap(unknownIcon, 0, 0, true);
+		wxBitmap unknown = CThemeProvider::Get()->CreateBitmap(overlay, wxART_OTHER, bmp.GetScaledSize());
+		Overlay(bmp, unknown);
 	}
 
-	dc.SelectObject(wxNullBitmap);
 	return bmp;
 }
 

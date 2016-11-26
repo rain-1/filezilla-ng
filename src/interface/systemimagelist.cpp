@@ -16,7 +16,6 @@
 #include "themeprovider.h"
 #ifndef __WXMSW__
 #include "graphics.h"
-#include <wx/rawbmp.h>
 #endif
 
 wxImageListEx::wxImageListEx()
@@ -41,34 +40,8 @@ HIMAGELIST wxImageListEx::Detach()
 #ifndef __WXMSW__
 static void OverlaySymlink(wxBitmap& bmp)
 {
-	// This is ugly, but apparently needed so that the data is _really_ in the right internal format
-#ifdef __WXMAC__
-	bmp = wxBitmap(bmp.ConvertToImage(), -1, bmp.GetScaleFactor());
-#else
-	bmp = wxBitmap(bmp.ConvertToImage(), -1);
-#endif
-	wxBitmap symlink = wxArtProvider::GetBitmap(_T("ART_SYMLINK"),  wxART_OTHER, wxSize(bmp.GetWidth(), bmp.GetHeight())).ConvertToImage();
-
-	wxAlphaPixelData target(bmp);
-	wxAlphaPixelData source(symlink);
-
-	int sx = bmp.GetWidth();
-	if (symlink.GetWidth() < sx)
-		sx = symlink.GetWidth();
-	int sy = bmp.GetHeight();
-	if (symlink.GetHeight() < sy)
-		sy = symlink.GetHeight();
-
-	// Do some rudimentary alpha copying
-	wxAlphaPixelData::Iterator t(target);
-	wxAlphaPixelData::Iterator s(source);
-	for (int y = 0; y < sy; y++)
-	{
-		s.MoveTo(source, 0, y);
-		t.MoveTo(target, 0, y);
-		for (int x = 0; x < sx; x++, s++, t++)
-			AlphaComposite_Over_Inplace(t, s);
-	}
+	wxBitmap overlay = CThemeProvider::Get()->CreateBitmap(_T("ART_SYMLINK"),  wxART_OTHER, wxSize(bmp.GetScaledWidth(), bmp.GetScaledHeight()));
+	Overlay(bmp, overlay);
 }
 #endif
 
