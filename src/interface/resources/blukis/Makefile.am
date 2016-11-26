@@ -61,6 +61,7 @@ dist_resources32_DATA = 32x32/ascii.png \
 		32x32/reconnect.png \
 		32x32/refresh.png \
 		32x32/remotetreeview.png \
+		32x32/server.png \
 		32x32/showhidden.png \
 		32x32/sitemanager.png \
 		32x32/speedlimits.png \
@@ -92,6 +93,7 @@ dist_resources48_DATA = 48x48/ascii.png \
 		48x48/reconnect.png \
 		48x48/refresh.png \
 		48x48/remotetreeview.png \
+		48x48/server.png \
 		48x48/showhidden.png \
 		48x48/sitemanager.png \
 		48x48/speedlimits.png \
