@@ -13,6 +13,8 @@ class COptionsPage : public wxPanel
 public:
 	virtual bool CreatePage(COptions* pOptions, CSettingsDialog* pOwner, wxWindow* parent, wxSize& maxSize);
 
+	void UpdateMaxPageSize(wxSize& maxSize);
+
 	virtual wxString GetResourceName() = 0;
 	virtual bool LoadPage() = 0;
 	virtual bool SavePage() = 0;

@@ -8,9 +8,19 @@ bool COptionsPage::CreatePage(COptions* pOptions, CSettingsDialog* pOwner, wxWin
 	m_pOwner = pOwner;
 	m_pOptions = pOptions;
 
-	if (!wxXmlResource::Get()->LoadPanel(this, parent, GetResourceName()))
+	if (!wxXmlResource::Get()->LoadPanel(this, parent, GetResourceName())) {
 		return false;
+	}
 
+	m_was_selected = false;
+
+	UpdateMaxPageSize(maxSize);
+
+	return true;
+}
+
+void COptionsPage::UpdateMaxPageSize(wxSize& maxSize)
+{
 	wxSize size = GetSize();
 
 #ifdef __WXGTK__
@@ -20,14 +30,12 @@ bool COptionsPage::CreatePage(COptions* pOptions, CSettingsDialog* pOwner, wxWin
 	size.x += 1;
 #endif
 
-	if (size.GetWidth() > maxSize.GetWidth())
+	if (size.GetWidth() > maxSize.GetWidth()) {
 		maxSize.SetWidth(size.GetWidth());
-	if (size.GetHeight() > maxSize.GetHeight())
+	}
+	if (size.GetHeight() > maxSize.GetHeight()) {
 		maxSize.SetHeight(size.GetHeight());
-
-	m_was_selected = false;
-
-	return true;
+	}
 }
 
 void COptionsPage::SetCheck(int id, bool checked, bool& failure)
