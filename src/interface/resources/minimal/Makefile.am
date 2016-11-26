@@ -7,6 +7,7 @@ dist_resources_DATA = theme.xml
 dist_resources16_DATA = 16x16/ascii.png \
 		16x16/auto.png \
 		16x16/binary.png \
+		16x16/bookmark.png \
 		16x16/bookmarks.png \
 		16x16/cancel.png \
 		16x16/compare.png \
