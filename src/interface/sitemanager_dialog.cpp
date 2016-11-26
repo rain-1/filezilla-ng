@@ -290,8 +290,9 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	if (m_pSiteManagerMutex->TryLock() == 0) {
 		int answer = wxMessageBoxEx(_("The Site Manager is opened in another instance of FileZilla 3.\nDo you want to continue? Any changes made in the Site Manager won't be saved then."),
 								  _("Site Manager already open"), wxYES_NO | wxICON_QUESTION);
-		if (answer != wxYES)
+		if (answer != wxYES) {
 			return false;
+		}
 
 		delete m_pSiteManagerMutex;
 		m_pSiteManagerMutex = 0;
@@ -300,16 +301,17 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 
 	// Now create the imagelist for the site tree
 	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
-	if (!pTree)
+	if (!pTree) {
 		return false;
+	}
 
 	wxSize s = CThemeProvider::GetIconSize(iconSizeSmall);
 	wxImageList* pImageList = new wxImageList(s.x, s.y);
 
-	pImageList->Add(wxArtProvider::GetBitmap(_T("ART_FOLDERCLOSED"), wxART_OTHER, s));
-	pImageList->Add(wxArtProvider::GetBitmap(_T("ART_FOLDER"), wxART_OTHER, s));
-	pImageList->Add(wxArtProvider::GetBitmap(_T("ART_SERVER"), wxART_OTHER, s));
-	pImageList->Add(wxArtProvider::GetBitmap(_T("ART_BOOKMARK"), wxART_OTHER, s));
+	pImageList->Add(CThemeProvider::Get()->CreateBitmap(_T("ART_FOLDERCLOSED"), wxART_OTHER, s));
+	pImageList->Add(CThemeProvider::Get()->CreateBitmap(_T("ART_FOLDER"), wxART_OTHER, s));
+	pImageList->Add(CThemeProvider::Get()->CreateBitmap(_T("ART_SERVER"), wxART_OTHER, s));
+	pImageList->Add(CThemeProvider::Get()->CreateBitmap(_T("ART_BOOKMARK"), wxART_OTHER, s));
 
 	pTree->AssignImageList(pImageList);
 
