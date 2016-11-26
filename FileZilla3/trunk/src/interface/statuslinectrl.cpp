@@ -82,11 +82,15 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 	int refresh = 0;
 	if (!m_data.IsOk() || rect.GetWidth() != m_data.GetWidth() || rect.GetHeight() != m_data.GetHeight()) {
 		m_mdc.reset();
-		m_data = wxBitmap(rect.GetWidth(), rect.GetHeight());
+
+		double sf = dc.GetContentScaleFactor();
+		m_data.CreateScaled(rect.width, rect.height, -1, sf);
+
 		m_mdc = std::make_unique<wxMemoryDC>(m_data);
 		// Use same layout direction as the DC which bitmap is drawn on.
 		// This avoids problem with mirrored characters on RTL locales.
 		m_mdc->SetLayoutDirection(dc.GetLayoutDirection());
+
 		refresh = 31;
 	}
 
@@ -195,11 +199,11 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 		wxCoord h = (rect.GetHeight() - m_textHeight) / 2;
 
 		if (refresh & 1) {
-			m_mdc->DrawRectangle(0, 0, m_fieldOffsets[0], rect.GetHeight());
+			m_mdc->DrawRectangle(0, 0, m_fieldOffsets[0], rect.GetHeight() + 1);
 			DrawRightAlignedText(*m_mdc, wxTimeSpan::Milliseconds(elapsed.get_milliseconds()).Format(_("%H:%M:%S elapsed")), m_fieldOffsets[0], h);
 		}
 		if (refresh & 2) {
-			m_mdc->DrawRectangle(m_fieldOffsets[0], 0, m_fieldOffsets[1] - m_fieldOffsets[0], rect.GetHeight());
+			m_mdc->DrawRectangle(m_fieldOffsets[0], 0, m_fieldOffsets[1] - m_fieldOffsets[0], rect.GetHeight() + 1);
 			if (left != -1) {
 				wxTimeSpan timeLeft(0, 0, left);
 				DrawRightAlignedText(*m_mdc, timeLeft.Format(_("%H:%M:%S left")), m_fieldOffsets[1], h);
@@ -208,14 +212,14 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 				DrawRightAlignedText(*m_mdc, _("--:--:-- left"), m_fieldOffsets[1], h);
 		}
 		if (refresh & 8) {
-			m_mdc->DrawRectangle(m_fieldOffsets[3], 0, rect.GetWidth() - m_fieldOffsets[3], rect.GetHeight());
+			m_mdc->DrawRectangle(m_fieldOffsets[3], 0, rect.GetWidth() - m_fieldOffsets[3], rect.GetHeight() + 1);
 			m_mdc->DrawText(bytes_and_rate, m_fieldOffsets[3], h);
 		}
 		if (refresh & 16) {
-			m_mdc->DrawRectangle(m_fieldOffsets[1], 0, m_fieldOffsets[2] - m_fieldOffsets[1], rect.GetHeight());
+			m_mdc->DrawRectangle(m_fieldOffsets[1], 0, m_fieldOffsets[2] - m_fieldOffsets[1], rect.GetHeight() + 1);
 		}
 		if (refresh & 4) {
-			m_mdc->DrawRectangle(m_fieldOffsets[2], 0, m_fieldOffsets[3] - m_fieldOffsets[2], rect.GetHeight());
+			m_mdc->DrawRectangle(m_fieldOffsets[2], 0, m_fieldOffsets[3] - m_fieldOffsets[2], rect.GetHeight() + 1);
 			if (bar_split != -1)
 				DrawProgressBar(*m_mdc, m_fieldOffsets[2], 1, rect.GetHeight() - 2, bar_split, permill);
 		}
