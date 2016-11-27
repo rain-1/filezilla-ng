@@ -130,6 +130,8 @@ bool CToolBar::Realize()
 		}
 	}
 
+	::SendMessage(hwnd, TB_SETINDENT, ConvertDialogToPixels(wxPoint(1, 0)).x, 0);
+
 	return true;
 }
 
