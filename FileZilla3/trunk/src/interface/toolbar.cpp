@@ -97,7 +97,6 @@ bool CToolBar::Realize()
 	toolImages_ = std::move(toolImages);
 	disabledToolImages_ = std::move(disabledToolImages);
 
-	int images{};
 	for (size_t i = 0; i < GetToolsCount(); ++i) {
 		auto tool = GetToolByPos(static_cast<int>(i));
 		if (!tool || tool->GetStyle() != wxTOOL_STYLE_BUTTON) {
@@ -120,7 +119,7 @@ bool CToolBar::Realize()
 		btn.cbSize = sizeof(TBBUTTONINFO);
 		btn.dwMask = TBIF_BYINDEX;
 		int index = ::SendMessage(hwnd, TB_GETBUTTONINFO, i, reinterpret_cast<LPARAM>(&btn));
-		if (index != i) {
+		if (index != static_cast<int>(i)) {
 			return false;
 		}
 
