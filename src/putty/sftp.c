@@ -360,6 +360,7 @@ void sftp_register(struct sftp_request *req)
 struct sftp_request *sftp_find_request(struct sftp_packet *pktin)
 {
     unsigned long id;
+    unsigned fid;
     struct sftp_request *req;
 
     if (!pktin) {
@@ -371,7 +372,8 @@ struct sftp_request *sftp_find_request(struct sftp_packet *pktin)
 	fxp_internal_error("did not receive a valid SFTP packet");
 	return NULL;
     }
-    req = find234(sftp_requests, &id, sftp_reqfind);
+    fid = (unsigned)id;
+    req = find234(sftp_requests, &fid, sftp_reqfind);
 
     if (!req || !req->registered) {
 	fxp_internal_error("request ID mismatch");
