@@ -578,7 +578,11 @@ void CStatusBar::UpdateSpeedLimitsIcon()
 	if (!enable || (!downloadLimit && !uploadLimit)) {
 		wxImage img = bmp.ConvertToImage();
 		img = img.ConvertToGreyscale();
+#ifdef __WXMAC__
+		bmp = wxBitmap(img, -1, bmp.GetScaleFactor());
+#else
 		bmp = wxBitmap(img);
+#endif
 		tooltip = _("Speed limits are disabled, click to change.");
 	}
 	else {
