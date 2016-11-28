@@ -25,8 +25,6 @@ public:
 	CIconPreview(wxWindow* pParent)
 		: wxScrolledWindow(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSTATIC_BORDER | wxVSCROLL)
 	{
-		m_sizeInitialized = false;
-		m_extra_padding = 0;
 	}
 
 	void LoadIcons(std::wstring const& theme, wxSize const& size)
@@ -115,8 +113,8 @@ protected:
 
 	std::vector<wxBitmap> m_icons;
 	wxSize m_iconSize;
-	bool m_sizeInitialized;
-	int m_extra_padding;
+	bool m_sizeInitialized{};
+	int m_extra_padding{};
 
 	DECLARE_DYNAMIC_CLASS(CIconPreview)
 };
