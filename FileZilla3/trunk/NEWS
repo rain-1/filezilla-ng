@@ -10,6 +10,16 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.23.0-rc1 (2016-11-28)
+
++ New high-resolution icons
++ Improvements to the sizing of icons and other user interface elements on high-DPI displays. For technical reasons, existing theme settings have been reverted to their default values. They can be changed again in the settings dialog.
++ Make use of the Unix.ownername and Unix.groupname facts for MLSD if available
+- The bookmarks menu updates again after changing global bookmarks
+- Adding a site to the Site Manager as part of adding a site-specific bookmark no longer fails if sitemanager.xml does not yet exist
+- Strip byte order marks at the beginning of directory listings
+- Add an option to filezilla.xml to control cache ttl
+
 3.22.2.2 (2016-11-01)
 
 - Fixed trimming of FEAT response lines leading to incorrectly detected server features
