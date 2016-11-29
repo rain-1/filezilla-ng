@@ -71,7 +71,7 @@ void wxCustomHeightListCtrl::OnDraw(wxDC& dc)
 
 	for (auto const& selected : m_selectedLines) {
 		if (selected == m_focusedLine) {
-			dc.SetPen(wxPen(wxColour(0, 0, 0), 1, wxDOT));
+			dc.SetPen(wxPen(wxColour(0, 0, 0), 1, wxPENSTYLE_DOT));
 		}
 		else {
 			dc.SetPen(*wxTRANSPARENT_PEN);
@@ -80,7 +80,7 @@ void wxCustomHeightListCtrl::OnDraw(wxDC& dc)
 	}
 	if (m_focusedLine != npos && m_selectedLines.find(m_focusedLine) == m_selectedLines.end()) {
 		dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
-		dc.SetPen(wxPen(wxColour(0, 0, 0), 1, wxDOT));
+		dc.SetPen(wxPen(wxColour(0, 0, 0), 1, wxPENSTYLE_DOT));
 		dc.DrawRectangle(0, m_lineHeight * m_focusedLine, size.GetWidth(), m_lineHeight);
 	}
 }
