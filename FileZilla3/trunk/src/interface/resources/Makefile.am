@@ -1,4 +1,4 @@
-SUBDIRS = 32x32 cyril blukis default flatzilla lone minimal opencrystal sun tango
+SUBDIRS = 32x32 blukis classic cyril default flatzilla lone minimal opencrystal sun tango
 
 CLEANFILES = filezilla.o
 
