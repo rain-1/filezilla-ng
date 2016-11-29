@@ -70,7 +70,11 @@ String ExpandPath(String dir)
 			result += token;
 		}
 
+#ifdef FZ_WINDOWS
+		result += '\\';
+#else
 		result += '/';
+#endif
 	}
 
 	return result;
