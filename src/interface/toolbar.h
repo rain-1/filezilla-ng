@@ -24,6 +24,9 @@ public:
 #endif
 
 protected:
+	void AddTool(char const* id, std::wstring const& art, wxString const& tooltip, wxString const& help = wxString(), wxItemKind type = wxITEM_NORMAL);
+	void AddTools();
+
 	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2);
 	virtual void OnOptionsChanged(changed_options_t const& options);
 
@@ -35,8 +38,6 @@ protected:
 	std::unique_ptr<wxImageList> toolImages_;
 	std::unique_ptr<wxImageList> disabledToolImages_;
 #endif
-
-	DECLARE_DYNAMIC_CLASS(CToolBar)
 };
 
 #endif //__TOOLBAR_H__
