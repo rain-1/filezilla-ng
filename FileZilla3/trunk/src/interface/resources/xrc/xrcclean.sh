@@ -31,7 +31,7 @@ do_clean() {
     cp "$infile" "$outfile"
   fi
 
-  if[ "$embed" = "1" ]; then
+  if [ "$embed" = "1" ]; then
     cat "$outfile" | sed -e 's/\(<?[^>]*>\)\?<resource[^>]*>//g' | sed -e 's/<\/resource>//g' > "$tmpfile"
     mv "$tmpfile" "$outfile"
   fi
