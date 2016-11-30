@@ -77,13 +77,14 @@ bool CFileExistsDlg::CreateControls()
 void CFileExistsDlg::LoadIcon(int id, const wxString &file)
 {
 	wxStaticBitmap *pStatBmp = static_cast<wxStaticBitmap *>(FindWindow(id));
-	if (!pStatBmp)
+	if (!pStatBmp) {
 		return;
+	}
 
 	wxSize size = CThemeProvider::GetIconSize(iconSizeNormal);
 	pStatBmp->SetInitialSize(size);
 	pStatBmp->InvalidateBestSize();
-	pStatBmp->SetBitmap(CThemeProvider::GetBitmap(_T("ART_FILE"), wxART_OTHER, size));
+	pStatBmp->SetBitmap(CThemeProvider::Get()->CreateBitmap(_T("ART_FILE"), wxART_OTHER, size));
 
 #ifdef __WXMSW__
 	SHFILEINFO fileinfo;

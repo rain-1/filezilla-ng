@@ -37,11 +37,18 @@ private:
 		}
 	};
 
-	wxBitmap const& DoLoadBitmap(std::wstring const& name, wxSize const& size, std::map<wxSize, wxBitmap, size_cmp> & cache);
+	struct cacheEntry
+	{
+		// Converting from wxImage to wxBitmap to wxImage is quite slow, so cache the images as well.
+		std::map<wxSize, wxBitmap, size_cmp> bitmaps_;
+		std::map<wxSize, wxImage, size_cmp> images_;
+	};
 
-	wxBitmap const& LoadBitmapWithSpecificSizeAndScale(std::wstring const& name, wxSize const& size, wxSize const& scale, std::map<wxSize, wxBitmap, size_cmp> & cache);
+	wxBitmap const& DoLoadBitmap(std::wstring const& name, wxSize const& size, cacheEntry & cache);
 
-	wxBitmap const& LoadBitmapWithSpecificSize(std::wstring const& name, wxSize const& size, std::map<wxSize, wxBitmap, size_cmp> & cache);
+	wxBitmap const& LoadBitmapWithSpecificSizeAndScale(std::wstring const& name, wxSize const& size, wxSize const& scale, cacheEntry & cache);
+
+	wxImage const& LoadImageWithSpecificSize(std::wstring const& name, wxSize const& size, cacheEntry & cache);
 
 	std::wstring theme_;
 	std::wstring path_;
@@ -52,7 +59,7 @@ private:
 
 	std::map<wxSize, bool, size_cmp> sizes_;
 
-	std::map<std::wstring, std::map<wxSize, wxBitmap, size_cmp>> cache_;
+	std::map<std::wstring, cacheEntry> cache_;
 };
 
 class CThemeProvider : public wxArtProvider, protected COptionChangeEventHandler

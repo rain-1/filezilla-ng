@@ -85,10 +85,10 @@ wxBitmap const& CTheme::LoadBitmap(std::wstring const& name, wxSize const& size)
 	// First, check for name in cache
 	auto it = cache_.find(name);
 	if (it == cache_.end()) {
-		it = cache_.insert(std::make_pair(name, std::map<wxSize, wxBitmap, size_cmp>())).first;
+		it = cache_.insert(std::make_pair(name, cacheEntry())).first;
 	}
 	else {
-		if (it->second.empty()) {
+		if (it->second.bitmaps_.empty()) {
 			// The name is known but the icon does not exist
 			static wxBitmap empty;
 			return empty;
@@ -96,16 +96,16 @@ wxBitmap const& CTheme::LoadBitmap(std::wstring const& name, wxSize const& size)
 	}
 
 	// Look for correct size
-	auto & sizeCache = it->second;
+	auto & sizeCache = it->second.bitmaps_;
 	auto sit = sizeCache.find(size);
 	if (sit != sizeCache.end()) {
 		return sit->second;
 	}
 
-	return DoLoadBitmap(name, size, sizeCache);
+	return DoLoadBitmap(name, size, it->second);
 }
 
-wxBitmap const& CTheme::DoLoadBitmap(std::wstring const& name, wxSize const& size, std::map<wxSize, wxBitmap, size_cmp> & cache)
+wxBitmap const& CTheme::DoLoadBitmap(std::wstring const& name, wxSize const& size, cacheEntry & cache)
 {
 	// Go through all the theme sizes and look for the file we need
 
@@ -131,49 +131,45 @@ wxBitmap const& CTheme::DoLoadBitmap(std::wstring const& name, wxSize const& siz
 	return empty;
 }
 
-wxBitmap const& CTheme::LoadBitmapWithSpecificSizeAndScale(std::wstring const& name, wxSize const& size, wxSize const& scale, std::map<wxSize, wxBitmap, size_cmp> & cache)
+wxBitmap const& CTheme::LoadBitmapWithSpecificSizeAndScale(std::wstring const& name, wxSize const& size, wxSize const& scale, cacheEntry & cache)
 {
-	wxBitmap const& bmp = LoadBitmapWithSpecificSize(name, size, cache);
-	if (!bmp.IsOk()) {
-		return bmp;
-	}
-
-	if (bmp.GetScaledSize() == scale) {
-		return bmp;
-	}
-
-	// need to scale
-	wxImage img = bmp.ConvertToImage();
-#ifdef __WXMAC__
-	double factor = static_cast<double>(bmp.GetSize().x) / scale.x;
-	auto inserted = cache.insert(std::make_pair(scale, wxBitmap(img, -1, factor)));
-#else
-	img.Rescale(scale.x, scale.y, wxIMAGE_QUALITY_HIGH);
-	auto inserted = cache.insert(std::make_pair(scale, wxBitmap(img)));
-#endif
-	return inserted.first->second;
-}
-
-wxBitmap const& CTheme::LoadBitmapWithSpecificSize(std::wstring const& name, wxSize const& size, std::map<wxSize, wxBitmap, size_cmp> & cache)
-{
-	auto it = cache.find(size);
-	if (it != cache.end()) {
-		return it->second;
-	}
-
-	wxImage img(path_ + fz::sprintf(L"%dx%d/%s.png", size.x, size.y, name), wxBITMAP_TYPE_PNG);
-	if (!img.Ok()) {
+	wxImage image = LoadImageWithSpecificSize(name, size, cache);
+	if (!image.IsOk()) {
 		static wxBitmap empty;
 		return empty;
 	}
 
-	if (img.HasMask() && !img.HasAlpha()) {
-		img.InitAlpha();
+	// need to scale
+#ifdef __WXMAC__
+	double factor = static_cast<double>(img.GetSize().x) / scale.x;
+	auto inserted = cache.insert(std::make_pair(scale, wxBitmap(img, -1, factor)));
+#else
+	if (image.GetSize() != scale) {
+		image.Rescale(scale.x, scale.y, wxIMAGE_QUALITY_HIGH);
 	}
-	if (img.GetSize() != size) {
-		img.Rescale(size.x, size.y, wxIMAGE_QUALITY_HIGH);
+	auto inserted = cache.bitmaps_.insert(std::make_pair(scale, wxBitmap(image)));
+#endif
+	return inserted.first->second;
+}
+
+wxImage const& CTheme::LoadImageWithSpecificSize(std::wstring const& name, wxSize const& size, cacheEntry & cache)
+{
+	auto it = cache.images_.find(size);
+	if (it != cache.images_.end()) {
+		return it->second;
 	}
-	auto inserted = cache.insert(std::make_pair(size, wxBitmap(img)));
+
+	wxImage img(path_ + fz::sprintf(L"%dx%d/%s.png", size.x, size.y, name), wxBITMAP_TYPE_PNG);
+
+	if (img.Ok()) {
+		if (img.HasMask() && !img.HasAlpha()) {
+			img.InitAlpha();
+		}
+		if (img.GetSize() != size) {
+			img.Rescale(size.x, size.y, wxIMAGE_QUALITY_HIGH);
+		}
+	}
+	auto inserted = cache.images_.insert(std::make_pair(size, img));
 	return inserted.first->second;
 }
 
