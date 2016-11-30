@@ -630,6 +630,7 @@ Function CleanLeftovers
   Delete "$INSTDIR\resources\update.xrc"
   Delete "$INSTDIR\resources\xxquickconnectbar.xrc"
   Delete "$INSTDIR\resources\xxtoolbar.xrc"
+  Delete "$INSTDIR\resources\xrc\toolbar.xrc"
   Delete "$INSTDIR\resources\20x20\unknown.png"
   Delete "$INSTDIR\resources\24x24\unknown.png"
   RMDir "$INSTDIR\resources\20x20"
