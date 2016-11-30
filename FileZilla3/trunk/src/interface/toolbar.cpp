@@ -74,7 +74,7 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 #endif
 	if (!toolbar->Create(pMainFrame, XRCID("ID_TOOLBAR"), wxDefaultPosition, wxDefaultSize, style)) {
 		delete toolbar;
-		return false;
+		return 0;
 	}
 	toolbar->SetToolBitmapSize(iconSize);
 	toolbar->AddTools();
