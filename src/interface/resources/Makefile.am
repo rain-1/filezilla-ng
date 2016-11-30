@@ -1,4 +1,4 @@
-SUBDIRS = 32x32 blukis classic cyril default flatzilla lone minimal opencrystal sun tango
+SUBDIRS = blukis classic cyril default flatzilla lone minimal opencrystal sun tango
 
 CLEANFILES = filezilla.o
 
@@ -36,6 +36,9 @@ dist_resources20_DATA = 20x20/unknown.png
 
 resources24dir = $(pkgdatadir)/resources/24x24
 dist_resources24_DATA = 24x24/unknown.png
+
+resources32dir = $(pkgdatadir)/resources/48x48
+dist_resources32_DATA = 32x32/filezilla.png
 
 resources48dir = $(pkgdatadir)/resources/48x48
 dist_resources48_DATA = 48x48/filezilla.png
@@ -77,6 +80,10 @@ mac-copy-resources: $(dist_resources_DATA)
 	mkdir -p "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/24x24"
 	for i in $(dist_resources24_DATA); \
 		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/24x24"; \
+	done
+	mkdir -p "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/32x32"
+	for i in $(dist_resources32_DATA); \
+		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/32x32"; \
 	done
 	mkdir -p "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/48x48"
 	for i in $(dist_resources48_DATA); \
