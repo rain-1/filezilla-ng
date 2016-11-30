@@ -141,8 +141,8 @@ wxBitmap const& CTheme::LoadBitmapWithSpecificSizeAndScale(std::wstring const& n
 
 	// need to scale
 #ifdef __WXMAC__
-	double factor = static_cast<double>(img.GetSize().x) / scale.x;
-	auto inserted = cache.insert(std::make_pair(scale, wxBitmap(img, -1, factor)));
+	double factor = static_cast<double>(image.GetSize().x) / scale.x;
+	auto inserted = cache.bitmaps_.insert(std::make_pair(scale, wxBitmap(image, -1, factor)));
 #else
 	if (image.GetSize() != scale) {
 		image.Rescale(scale.x, scale.y, wxIMAGE_QUALITY_HIGH);
