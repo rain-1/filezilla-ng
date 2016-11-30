@@ -13,7 +13,7 @@ while echo "$1" | grep '^-'; do
     embed=1
   fi
   shift
-fi
+done
 
 do_clean() {
   infile="$1"
