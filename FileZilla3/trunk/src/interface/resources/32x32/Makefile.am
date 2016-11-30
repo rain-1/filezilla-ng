@@ -1,7 +1,6 @@
 resourcesdir = $(pkgdatadir)/resources/32x32
 
-dist_resources_DATA = file.png \
-			filezilla.png
+dist_resources_DATA = filezilla.png
 
 if MACAPPBUNDLE
 mac-copy-resources: $(dist_resources_DATA)

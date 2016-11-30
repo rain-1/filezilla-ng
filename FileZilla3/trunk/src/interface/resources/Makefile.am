@@ -38,8 +38,7 @@ resources24dir = $(pkgdatadir)/resources/24x24
 dist_resources24_DATA = 24x24/unknown.png
 
 resources48dir = $(pkgdatadir)/resources/48x48
-dist_resources48_DATA = 48x48/filezilla.png \
-			48x48/speedlimits.png
+dist_resources48_DATA = 48x48/filezilla.png
 
 if USE_RESOURCEFILE
 nodist_noinst_DATA = filezilla.o
