@@ -26,7 +26,6 @@
 #include "xh_text_ex.h"
 #include <wx/xrc/xh_tree.h>
 #include <wx/xrc/xh_hyperlink.h>
-#include "xh_toolb_ex.h"
 
 void InitHandlers(wxXmlResource& res)
 {
@@ -51,7 +50,6 @@ void InitHandlers(wxXmlResource& res)
 	res.AddHandler(new wxNotebookXmlHandler);
 	res.AddHandler(new wxTextCtrlXmlHandlerEx);
 	res.AddHandler(new wxListBoxXmlHandler);
-	res.AddHandler(new wxToolBarXmlHandlerEx);
 	res.AddHandler(new wxStaticLineXmlHandler);
 	res.AddHandler(new wxScrolledWindowXmlHandler);
 	res.AddHandler(new wxHyperlinkCtrlXmlHandler);

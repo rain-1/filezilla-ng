@@ -19,7 +19,6 @@ dist_xrc_DATA = \
 	xrc/quickconnectbar.xrc \
 	xrc/settings.xrc \
 	xrc/sitemanager.xrc \
-	xrc/toolbar.xrc \
 	xrc/update.xrc
 
 resources16dir = $(pkgdatadir)/resources/16x16

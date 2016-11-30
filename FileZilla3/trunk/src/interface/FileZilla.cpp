@@ -442,22 +442,16 @@ bool CFileZillaApp::LoadResourceFiles()
 
 	InitHandlers(*pResource);
 
-	if (fz::local_filesys::get_file_type(fz::to_native(m_resourceDir.GetPath() + _T("xrc/resources.xrc"))) == fz::local_filesys::file) {
-		wxFileName fn(m_resourceDir.GetPath() + _T("xrc/resources.xrc"));
-		pResource->LoadFile(fn);
-	}
-	else {
-		fz::local_filesys fs;
-		std::wstring dir = m_resourceDir.GetPath() + L"xrc/";
-		bool found = fs.begin_find_files(fz::to_native(dir), false);
-		while (found) {
-			fz::native_string name;
-			found = fs.get_next_file(name);
-			if (name.size() <= 4 || name.substr(name.size() - 4) != fzT(".xrc")) {
-				continue;
-			}
-			pResource->LoadFile(wxString(dir + fz::to_wstring(name)));
+	fz::local_filesys fs;
+	std::wstring dir = m_resourceDir.GetPath() + L"xrc/";
+	bool found = fs.begin_find_files(fz::to_native(dir), false);
+	while (found) {
+		fz::native_string name;
+		found = fs.get_next_file(name);
+		if (name.size() <= 4 || name.substr(name.size() - 4) != fzT(".xrc")) {
+			continue;
 		}
+		pResource->LoadFile(wxString(dir + fz::to_wstring(name)));
 	}
 
 	// Useful for XRC files with embedded image data.

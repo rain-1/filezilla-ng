@@ -123,7 +123,6 @@ filezilla_SOURCES = aboutdialog.cpp \
 		wrapengine.cpp \
 		wxfilesystem_blob_handler.cpp \
 		xh_text_ex.cpp \
-		xh_toolb_ex.cpp \
 		xmlfunctions.cpp \
 		xrc_helper.cpp
 
@@ -247,7 +246,6 @@ noinst_HEADERS = aboutdialog.h \
 		 wrapengine.h \
 		 wxfilesystem_blob_handler.h \
 		 xh_text_ex.h \
-		 xh_toolb_ex.h \
 		 xmlfunctions.h \
 		 xrc_helper.h
 
