@@ -78,7 +78,7 @@ bool CQuickconnectBar::Create(CMainFrame* pParent)
 #if defined(__WXMSW__)
 	wxSize dropdownSize = ConvertDialogToPixels(wxSize(12, -1));
 #elif defined(__WXMAC__)
-	wSize dropdownSize(20, -1);
+	wxSize dropdownSize(20, -1);
 	flags.Border(wxLEFT, 6);
 #else
 	wxSize dropdownSize(-1, -1);
