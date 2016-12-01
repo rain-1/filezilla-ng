@@ -14,10 +14,10 @@ CToolBar::~CToolBar()
 	}
 }
 
-void CToolBar::AddTool(char const* id, std::wstring const& art, wxString const& tooltip, wxString const& help, wxItemKind type)
+void CToolBar::MakeTool(char const* id, std::wstring const& art, wxString const& tooltip, wxString const& help, wxItemKind type)
 {
 	if (help.empty() && !tooltip.empty()) {
-		AddTool(id, art, tooltip, tooltip, type);
+		MakeTool(id, art, tooltip, tooltip, type);
 		return;
 	}
 
@@ -25,32 +25,32 @@ void CToolBar::AddTool(char const* id, std::wstring const& art, wxString const& 
 	wxToolBar::AddTool(XRCID(id), wxString(), bmp, wxBitmap(), type, tooltip, help);
 }
 
-void CToolBar::AddTools()
+void CToolBar::MakeTools()
 {
 #ifdef __WXMSW__
-	AddTool("ID_TOOLBAR_SITEMANAGER", L"ART_SITEMANAGER", _("Open the Site Manager."), _("Open the Site Manager"), wxITEM_DROPDOWN);
+	MakeTool("ID_TOOLBAR_SITEMANAGER", L"ART_SITEMANAGER", _("Open the Site Manager."), _("Open the Site Manager"), wxITEM_DROPDOWN);
 #else
-	AddTool("ID_TOOLBAR_SITEMANAGER", L"ART_SITEMANAGER", _("Open the Site Manager. Right-click for a list of sites."), _("Open the Site Manager"), wxITEM_DROPDOWN);
+	MakeTool("ID_TOOLBAR_SITEMANAGER", L"ART_SITEMANAGER", _("Open the Site Manager. Right-click for a list of sites."), _("Open the Site Manager"), wxITEM_DROPDOWN);
 #endif
 	AddSeparator();
 
-	AddTool("ID_TOOLBAR_LOGVIEW", L"ART_LOGVIEW", _("Toggles the display of the message log"), wxString(), wxITEM_CHECK);
-	AddTool("ID_TOOLBAR_LOCALTREEVIEW", L"ART_LOCALTREEVIEW", _("Toggles the display of the local directory tree"), wxString(), wxITEM_CHECK);
-	AddTool("ID_TOOLBAR_REMOTETREEVIEW", L"ART_REMOTETREEVIEW", _("Toggles the display of the remote directory tree"), wxString(), wxITEM_CHECK);
-	AddTool("ID_TOOLBAR_QUEUEVIEW", L"ART_QUEUEVIEW", _("Toggles the display of the transfer queue"), wxString(), wxITEM_CHECK);
+	MakeTool("ID_TOOLBAR_LOGVIEW", L"ART_LOGVIEW", _("Toggles the display of the message log"), wxString(), wxITEM_CHECK);
+	MakeTool("ID_TOOLBAR_LOCALTREEVIEW", L"ART_LOCALTREEVIEW", _("Toggles the display of the local directory tree"), wxString(), wxITEM_CHECK);
+	MakeTool("ID_TOOLBAR_REMOTETREEVIEW", L"ART_REMOTETREEVIEW", _("Toggles the display of the remote directory tree"), wxString(), wxITEM_CHECK);
+	MakeTool("ID_TOOLBAR_QUEUEVIEW", L"ART_QUEUEVIEW", _("Toggles the display of the transfer queue"), wxString(), wxITEM_CHECK);
 	AddSeparator();
 
-	AddTool("ID_TOOLBAR_REFRESH", L"ART_REFRESH", _("Refresh the file and folder lists"));
-	AddTool("ID_TOOLBAR_PROCESSQUEUE", L"ART_PROCESSQUEUE", _("Toggles processing of the transfer queue"), wxString(), wxITEM_CHECK);
-	AddTool("ID_TOOLBAR_CANCEL", L"ART_CANCEL", _("Cancels the current operation"), _("Cancel current operation"));
-	AddTool("ID_TOOLBAR_DISCONNECT", L"ART_DISCONNECT", _("Disconnects from the currently visible server"), _("Disconnect from server"));
-	AddTool("ID_TOOLBAR_RECONNECT", L"ART_RECONNECT", _("Reconnects to the last used server"));
+	MakeTool("ID_TOOLBAR_REFRESH", L"ART_REFRESH", _("Refresh the file and folder lists"));
+	MakeTool("ID_TOOLBAR_PROCESSQUEUE", L"ART_PROCESSQUEUE", _("Toggles processing of the transfer queue"), wxString(), wxITEM_CHECK);
+	MakeTool("ID_TOOLBAR_CANCEL", L"ART_CANCEL", _("Cancels the current operation"), _("Cancel current operation"));
+	MakeTool("ID_TOOLBAR_DISCONNECT", L"ART_DISCONNECT", _("Disconnects from the currently visible server"), _("Disconnect from server"));
+	MakeTool("ID_TOOLBAR_RECONNECT", L"ART_RECONNECT", _("Reconnects to the last used server"));
 	AddSeparator();
 
-	AddTool("ID_TOOLBAR_FILTER", L"ART_FILTER", _("Opens the directory listing filter dialog. Right-click to toggle filters."), _("Filter the directory listings"), wxITEM_CHECK);
-	AddTool("ID_TOOLBAR_COMPARISON", L"ART_COMPARE", _("Toggle directory comparison. Right-click to change comparison mode.\n\nColors:\nYellow: File only exists on one side\nGreen: File is newer than the unmarked file on other side\nRed: File sizes different"), _("Directory comparison"), wxITEM_CHECK);
-	AddTool("ID_TOOLBAR_SYNCHRONIZED_BROWSING", L"ART_SYNCHRONIZE", _("Toggle synchronized browsing.\nIf enabled, navigating the local directory hierarchy will also change the directory on the server accordingly and vice versa."), _("Synchronized browsing"), wxITEM_CHECK);
-	AddTool("ID_TOOLBAR_FIND", L"ART_FIND", _("Search for files recursively."), _("File search"));
+	MakeTool("ID_TOOLBAR_FILTER", L"ART_FILTER", _("Opens the directory listing filter dialog. Right-click to toggle filters."), _("Filter the directory listings"), wxITEM_CHECK);
+	MakeTool("ID_TOOLBAR_COMPARISON", L"ART_COMPARE", _("Toggle directory comparison. Right-click to change comparison mode.\n\nColors:\nYellow: File only exists on one side\nGreen: File is newer than the unmarked file on other side\nRed: File sizes different"), _("Directory comparison"), wxITEM_CHECK);
+	MakeTool("ID_TOOLBAR_SYNCHRONIZED_BROWSING", L"ART_SYNCHRONIZE", _("Toggle synchronized browsing.\nIf enabled, navigating the local directory hierarchy will also change the directory on the server accordingly and vice versa."), _("Synchronized browsing"), wxITEM_CHECK);
+	MakeTool("ID_TOOLBAR_FIND", L"ART_FIND", _("Search for files recursively."), _("File search"));
 }
 
 CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
@@ -77,7 +77,7 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 		return 0;
 	}
 	toolbar->SetToolBitmapSize(iconSize);
-	toolbar->AddTools();
+	toolbar->MakeTools();
 	
 	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_REMOTE_IDLE, true);
 	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_SERVER, true);
@@ -104,13 +104,7 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 		toolbar->HideTool(XRCID("ID_TOOLBAR_LOGVIEW"));
 	}
 
-#ifdef __WXMAC__
-	// Hide then re-show fixes some odd sizing
-	toolbar->Hide();
-	if (COptions::Get()->GetOptionVal(OPTION_TOOLBAR_HIDDEN) == 0)
-		toolbar->Show();
-#endif
-
+	pMainFrame->SetToolBar(toolbar);
 	toolbar->Realize();
 
 	return toolbar;
