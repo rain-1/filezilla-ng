@@ -90,7 +90,6 @@ mac-copy-resources: $(dist_resources_DATA)
 		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/48x48"; \
 	done
 
-	$(MAKE) -C 32x32 mac-copy-resources
 	$(MAKE) -C classic mac-copy-resources
 	$(MAKE) -C cyril mac-copy-resources
 	$(MAKE) -C blukis mac-copy-resources
