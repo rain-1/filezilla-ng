@@ -254,7 +254,7 @@ CMainFrame::CMainFrame()
 {
 	m_pActivityLed[0] = m_pActivityLed[1] = 0;
 
-	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CMainFrame"));
+	wxGetApp().AddStartupProfileRecord("CMainFrame::CMainFrame");
 	wxRect screen_size = CWindowStateManager::GetScreenDimensions();
 
 	wxSize initial_size;
@@ -504,7 +504,7 @@ void CMainFrame::OnSize(wxSizeEvent &event)
 
 bool CMainFrame::CreateMenus()
 {
-	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CreateMenus"));
+	wxGetApp().AddStartupProfileRecord("CMainFrame::CreateMenus");
 	CMenuBar* old = m_pMenuBar;
 
 	m_pMenuBar = CMenuBar::Load(this);
@@ -522,7 +522,7 @@ bool CMainFrame::CreateMenus()
 
 bool CMainFrame::CreateQuickconnectBar()
 {
-	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CreateQuickconnectBar"));
+	wxGetApp().AddStartupProfileRecord("CMainFrame::CreateQuickconnectBar");
 	delete m_pQuickconnectBar;
 
 	m_pQuickconnectBar = new CQuickconnectBar();
@@ -985,7 +985,7 @@ void CMainFrame::OnUpdateLedTooltip(wxCommandEvent&)
 
 bool CMainFrame::CreateMainToolBar()
 {
-	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CreateMainToolBar"));
+	wxGetApp().AddStartupProfileRecord("CMainFrame::CreateMainToolBar");
 	if (m_pToolBar)
 	{
 #ifdef __WXMAC__

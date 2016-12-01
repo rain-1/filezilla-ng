@@ -248,7 +248,7 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState& state, C
 	CStateEventHandler(state),
 	m_pQueueView(pQueueView)
 {
-	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::CLocalTreeView"));
+	wxGetApp().AddStartupProfileRecord("CLocalTreeView::CLocalTreeView");
 #ifdef __WXMAC__
 	SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 #endif
@@ -407,7 +407,7 @@ wxTreeItemId CLocalTreeView::GetSubdir(wxTreeItemId parent, const wxString& subD
 
 bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 {
-	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::DisplayDrives"));
+	wxGetApp().AddStartupProfileRecord("CLocalTreeView::DisplayDrives");
 
 	std::list<std::wstring> drives = CVolumeDescriptionEnumeratorThread::GetDrives();
 
@@ -427,7 +427,7 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 	}
 	SortChildren(parent);
 
-	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::DisplayDrives adding drives done"));
+	wxGetApp().AddStartupProfileRecord("CLocalTreeView::DisplayDrives adding drives done");
 
 	return true;
 }
