@@ -16,7 +16,6 @@ dist_xrc_DATA = \
 	xrc/inputdialog.xrc \
 	xrc/menus.xrc \
 	xrc/netconfwizard.xrc \
-	xrc/quickconnectbar.xrc \
 	xrc/settings.xrc \
 	xrc/sitemanager.xrc \
 	xrc/update.xrc
