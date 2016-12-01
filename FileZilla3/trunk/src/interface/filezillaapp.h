@@ -37,7 +37,7 @@ public:
 	const CCommandLine* GetCommandLine() const { return m_pCommandLine.get(); }
 
 	void ShowStartupProfile();
-	void AddStartupProfileRecord(const wxString& msg);
+	void AddStartupProfileRecord(std::string const& msg);
 
 protected:
 	bool InitDefaultsDir();
@@ -68,7 +68,7 @@ protected:
 	std::unique_ptr<CCommandLine> m_pCommandLine;
 
 	fz::monotonic_clock m_profile_start;
-	std::vector<std::pair<fz::monotonic_clock, wxString> > m_startupProfile;
+	std::vector<std::pair<fz::monotonic_clock, std::string>> m_startupProfile;
 };
 
 DECLARE_APP(CFileZillaApp)

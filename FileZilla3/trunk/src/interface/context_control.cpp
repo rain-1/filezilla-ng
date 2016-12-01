@@ -50,7 +50,7 @@ void CContextControl::Create(wxWindow *parent)
 
 void CContextControl::CreateTab()
 {
-	wxGetApp().AddStartupProfileRecord(_T("CContextControl::CreateTab"));
+	wxGetApp().AddStartupProfileRecord("CContextControl::CreateTab");
 
 	{
 	#ifdef __WXMSW__
@@ -135,7 +135,7 @@ void CContextControl::CreateTab()
 
 void CContextControl::CreateContextControls(CState& state)
 {
-	wxGetApp().AddStartupProfileRecord(_T("CContextControl::CreateContextControls"));
+	wxGetApp().AddStartupProfileRecord("CContextControl::CreateContextControls");
 	wxWindow* parent = this;
 
 #ifdef __WXGTK__

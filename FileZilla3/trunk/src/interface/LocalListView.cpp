@@ -273,7 +273,7 @@ CLocalListView::CLocalListView(wxWindow* pParent, CState& state, CQueueView *pQu
 	: CFileListCtrl<CLocalFileData>(pParent, pQueue),
 	CStateEventHandler(state)
 {
-	wxGetApp().AddStartupProfileRecord(_T("CLocalListView::CLocalListView"));
+	wxGetApp().AddStartupProfileRecord("CLocalListView::CLocalListView");
 	m_state.RegisterHandler(this, STATECHANGE_LOCAL_DIR);
 	m_state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
 	m_state.RegisterHandler(this, STATECHANGE_LOCAL_REFRESH_FILE);

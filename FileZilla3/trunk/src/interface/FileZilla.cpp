@@ -46,7 +46,7 @@ IMPLEMENT_APP_NO_MAIN(CFileZillaApp)
 CFileZillaApp::CFileZillaApp()
 {
 	m_profile_start = fz::monotonic_clock::now();
-	AddStartupProfileRecord(_T("CFileZillaApp::CFileZillaApp()"));
+	AddStartupProfileRecord("CFileZillaApp::CFileZillaApp()");
 }
 
 CFileZillaApp::~CFileZillaApp()
@@ -176,7 +176,7 @@ std::wstring translator_pf(char const* const singular, char const* const plural,
 
 bool CFileZillaApp::OnInit()
 {
-	AddStartupProfileRecord(_T("CFileZillaApp::OnInit()"));
+	AddStartupProfileRecord("CFileZillaApp::OnInit()");
 
 	fz::set_translators(translator, translator_pf);
 
@@ -421,7 +421,7 @@ CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
 
 bool CFileZillaApp::LoadResourceFiles()
 {
-	AddStartupProfileRecord(_T("CFileZillaApp::LoadResourceFiles"));
+	AddStartupProfileRecord("CFileZillaApp::LoadResourceFiles");
 	m_resourceDir = GetDataDir(_T("resources/defaultfilters.xml"));
 
 	wxImage::AddHandler(new wxPNGHandler());
@@ -462,7 +462,7 @@ bool CFileZillaApp::LoadResourceFiles()
 
 bool CFileZillaApp::InitDefaultsDir()
 {
-	AddStartupProfileRecord(_T("InitDefaultsDir"));
+	AddStartupProfileRecord("InitDefaultsDir");
 #ifdef __WXGTK__
 	m_defaultsDir = COptions::GetUnadjustedSettingsDir();
 	if( m_defaultsDir.empty() || !wxFileName::FileExists(m_defaultsDir.GetPath() + _T("fzdefaults.xml"))) {
@@ -484,7 +484,7 @@ bool CFileZillaApp::InitDefaultsDir()
 
 bool CFileZillaApp::LoadLocales()
 {
-	AddStartupProfileRecord(_T("CFileZillaApp::LoadLocales"));
+	AddStartupProfileRecord("CFileZillaApp::LoadLocales");
 #ifndef __WXMAC__
 	m_localesDir = GetDataDir(_T("../locale/*/filezilla.mo"));
 	if (m_localesDir.empty())
@@ -587,7 +587,7 @@ CWrapEngine* CFileZillaApp::GetWrapEngine()
 
 void CFileZillaApp::CheckExistsFzsftp()
 {
-	AddStartupProfileRecord(_T("CFileZillaApp::CheckExistsFzstp"));
+	AddStartupProfileRecord("FileZillaApp::CheckExistsFzstp");
 	// Get the correct path to the fzsftp executable
 
 #ifdef __WXMAC__
@@ -706,7 +706,7 @@ extern "C" BOOL CALLBACK EnumWindowCallback(HWND hwnd, LPARAM)
 
 int CFileZillaApp::ProcessCommandLine()
 {
-	AddStartupProfileRecord(_T("CFileZillaApp::ProcessCommandLine"));
+	AddStartupProfileRecord("CFileZillaApp::ProcessCommandLine");
 	m_pCommandLine = std::make_unique<CCommandLine>(argc, argv);
 	int res = m_pCommandLine->Parse() ? 1 : -1;
 
@@ -732,7 +732,7 @@ int CFileZillaApp::ProcessCommandLine()
 	return res;
 }
 
-void CFileZillaApp::AddStartupProfileRecord(const wxString& msg)
+void CFileZillaApp::AddStartupProfileRecord(std::string const& msg)
 {
 	if (!m_profile_start) {
 		return;
@@ -750,7 +750,7 @@ void CFileZillaApp::ShowStartupProfile()
 
 			msg += std::to_wstring(diff.get_milliseconds());
 			msg += _T(" ");
-			msg += p.second;
+			msg += fz::to_wstring(p.second);
 			msg += _T("\n");
 		}
 		wxMessageBoxEx(msg);
