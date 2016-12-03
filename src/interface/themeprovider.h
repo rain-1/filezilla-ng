@@ -4,6 +4,8 @@
 #include <option_change_event_handler.h>
 #include <memory>
 
+#include <libfilezilla/time.hpp>
+
 enum iconSize
 {
 	iconSizeSmall,
@@ -48,7 +50,7 @@ private:
 
 	wxBitmap const& LoadBitmapWithSpecificSizeAndScale(std::wstring const& name, wxSize const& size, wxSize const& scale, cacheEntry & cache);
 
-	wxImage const& LoadImageWithSpecificSize(std::wstring const& name, wxSize const& size, cacheEntry & cache);
+	wxImage const& LoadImageWithSpecificSize(std::wstring const& file, wxSize const& size, cacheEntry & cache);
 
 	std::wstring theme_;
 	std::wstring path_;
@@ -56,6 +58,8 @@ private:
 	std::wstring name_;
 	std::wstring author_;
 	std::wstring mail_;
+
+	fz::datetime timestamp_;
 
 	std::map<wxSize, bool, size_cmp> sizes_;
 
