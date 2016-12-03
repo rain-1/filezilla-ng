@@ -55,13 +55,9 @@ protected:
 	virtual void OnFatalException();
 #endif
 
-	CLocalPath GetDataDir(wxString fileToFind) const;
+	CLocalPath GetDataDir(std::wstring fileToFind) const;
 
-	// FileExists accepts full paths as parameter,
-	// with the addition that path segments may be obmitted
-	// with a wildcard (*). A matching directory will then be searched.
-	// Example: FileExists(_T("/home/*/.filezilla/filezilla.xml"));
-	bool FileExists(const wxString& file) const;
+	bool FileExists(std::wstring const& file) const;
 
 	std::unique_ptr<CWrapEngine> m_pWrapEngine;
 

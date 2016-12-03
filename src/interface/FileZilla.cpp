@@ -291,34 +291,12 @@ int CFileZillaApp::OnExit()
 	return wxApp::OnExit();
 }
 
-bool CFileZillaApp::FileExists(const wxString& file) const
+bool CFileZillaApp::FileExists(std::wstring const& file) const
 {
-	int pos = file.Find('*');
-	if (pos < 0)
-		return wxFileExists(file);
-
-	wxASSERT(pos > 0);
-	wxASSERT(file[pos - 1] == '/');
-	wxASSERT(file.size() > static_cast<size_t>(pos + 1) && file[pos + 1] == '/');
-
-	wxLogNull nullLog;
-	wxDir dir(file.Left(pos));
-	if (!dir.IsOpened())
-		return false;
-
-	wxString subDir;
-	bool found = dir.GetFirst(&subDir, _T(""), wxDIR_DIRS);
-	while (found) {
-		if (FileExists(file.Left(pos) + subDir + file.Mid(pos + 1)))
-			return true;
-
-		found = dir.GetNext(&subDir);
-	}
-
-	return false;
+	return fz::local_filesys::get_file_type(fz::to_native(file), true) == fz::local_filesys::file;
 }
 
-CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
+CLocalPath CFileZillaApp::GetDataDir(std::wstring fileToFind) const
 {
 	/*
 	 * Finding the resources in all cases is a difficult task,
@@ -333,8 +311,9 @@ CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
 
 #ifdef __WXMAC__
 	CLocalPath path(wxStandardPaths::Get().GetDataDir().ToStdWstring());
-	if (FileExists(path.GetPath() + fileToFind))
+	if (FileExists(path.GetPath() + fileToFind)) {
 		return path;
+	}
 
 	return CLocalPath();
 #else
@@ -486,14 +465,14 @@ bool CFileZillaApp::LoadLocales()
 {
 	AddStartupProfileRecord("CFileZillaApp::LoadLocales");
 #ifndef __WXMAC__
-	m_localesDir = GetDataDir(_T("../locale/*/filezilla.mo"));
+	m_localesDir = GetDataDir(_T("../locale/de/filezilla.mo"));
 	if (m_localesDir.empty())
-		m_localesDir = GetDataDir(_T("../locale/*/LC_MESSAGES/filezilla.mo"));
+		m_localesDir = GetDataDir(_T("../locale/de/LC_MESSAGES/filezilla.mo"));
 	if (!m_localesDir.empty()) {
 		m_localesDir.ChangePath( _T("../locale") );
 	}
 	else {
-		m_localesDir = GetDataDir(_T("locales/*/filezilla.mo"));
+		m_localesDir = GetDataDir(_T("locales/de/filezilla.mo"));
 		if (!m_localesDir.empty()) {
 			m_localesDir.AddSegment(_T("locales"));
 		}
@@ -596,7 +575,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 	if (pos != -1)
 		executable = executable.Left(pos);
 	executable += _T("/fzsftp");
-	if (!wxFileName::FileExists(executable))
+	if (!wxFileName::FileExists(executable.ToStdWstring()))
 	{
 		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPlease download FileZilla again. If this problem persists, please submit a bug report."), executable),
 			_("File not found"), wxICON_ERROR);
@@ -615,7 +594,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 	// First check the FZ_FZSFTP environment variable
 	wxString executable;
 	if (wxGetEnv(_T("FZ_FZSFTP"), &executable)) {
-		if (wxFileName::FileExists(executable))
+		if (wxFileName::FileExists(executable.ToStdWstring()))
 			found = true;
 	}
 
