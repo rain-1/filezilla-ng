@@ -145,7 +145,7 @@ wxBitmap const& CTheme::LoadBitmapWithSpecificSizeAndScale(std::wstring const& n
 		if (!cacheDir.empty()) {
 			cacheFile = cacheDir.GetPath() + fz::sprintf(L"%s_%s%dx%d.png", theme_, name, scale.x, scale.y);
 			auto cacheTime = fz::local_filesys::get_modification_time(fz::to_native(cacheFile));
-			if (!cacheTime.empty() && fileTime <= cacheTime) {
+			if (!cacheTime.empty() && timestamp_ <= cacheTime) {
 				wxBitmap bmp(cacheFile, wxBITMAP_TYPE_PNG);
 				if (bmp.IsOk() && bmp.GetScaledSize() == scale) {
 					auto inserted = cache.bitmaps_.insert(std::make_pair(scale, bmp));
