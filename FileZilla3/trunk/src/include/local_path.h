@@ -63,6 +63,9 @@ public:
 	// Checks if the directory exists.
 	bool Exists(std::wstring *error = 0) const;
 
+	// Craetes direcory if it doesn't yet exist
+	bool Create(CLocalPath *last_successful = 0);
+
 	static wchar_t const path_separator;
 
 	bool operator==(CLocalPath const& op) const;

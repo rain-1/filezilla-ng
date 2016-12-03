@@ -105,6 +105,7 @@ enum interfaceOptions
 	OPTION_DEFAULT_SETTINGSDIR, // guaranteed to be (back)slash-terminated
 	OPTION_DEFAULT_KIOSKMODE,
 	OPTION_DEFAULT_DISABLEUPDATECHECK,
+	OPTION_DEFAULT_CACHE_DIR,
 
 	// Has to be last element
 	OPTIONS_NUM
@@ -146,6 +147,7 @@ public:
 	void SaveIfNeeded();
 
 	static CLocalPath GetUnadjustedSettingsDir();
+	CLocalPath GetCacheDirectory();
 
 protected:
 	COptions();

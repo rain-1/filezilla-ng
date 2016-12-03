@@ -64,6 +64,8 @@ bool CTheme::Load(std::wstring const& theme)
 		}
 	}
 
+	timestamp_ = fz::local_filesys::get_modification_time(fz::to_native(path_) + fzT("theme.xml"));
+
 	return !sizes_.empty();
 }
 
@@ -133,7 +135,27 @@ wxBitmap const& CTheme::DoLoadBitmap(std::wstring const& name, wxSize const& siz
 
 wxBitmap const& CTheme::LoadBitmapWithSpecificSizeAndScale(std::wstring const& name, wxSize const& size, wxSize const& scale, cacheEntry & cache)
 {
-	wxImage image = LoadImageWithSpecificSize(name, size, cache);
+	std::wstring const file = path_ + fz::sprintf(L"%dx%d/%s.png", size.x, size.y, name);
+	std::wstring cacheFile;
+	CLocalPath cacheDir;
+#ifndef __WXMAC__
+	if (size != scale && !timestamp_.empty()) {
+		// Scaling is expensive. Look into resource cache.
+		cacheDir = COptions::Get()->GetCacheDirectory();
+		if (!cacheDir.empty()) {
+			cacheFile = cacheDir.GetPath() + fz::sprintf(L"%s_%s%dx%d.png", theme_, name, scale.x, scale.y);
+			auto cacheTime = fz::local_filesys::get_modification_time(fz::to_native(cacheFile));
+			if (!cacheTime.empty() && fileTime <= cacheTime) {
+				wxBitmap bmp(cacheFile, wxBITMAP_TYPE_PNG);
+				if (bmp.IsOk() && bmp.GetScaledSize() == scale) {
+					auto inserted = cache.bitmaps_.insert(std::make_pair(scale, bmp));
+					return inserted.first->second;
+				}
+			}
+		}
+	}
+#endif
+	wxImage image = LoadImageWithSpecificSize(file, size, cache);
 	if (!image.IsOk()) {
 		static wxBitmap empty;
 		return empty;
@@ -146,20 +168,28 @@ wxBitmap const& CTheme::LoadBitmapWithSpecificSizeAndScale(std::wstring const& n
 #else
 	if (image.GetSize() != scale) {
 		image.Rescale(scale.x, scale.y, wxIMAGE_QUALITY_HIGH);
+
+		// Save in cache
+		if (!cacheFile.empty()) {
+			if (cacheDir.Create()) {
+				image.SaveFile(cacheFile, wxBITMAP_TYPE_PNG);
+			}
+		}
 	}
+
 	auto inserted = cache.bitmaps_.insert(std::make_pair(scale, wxBitmap(image)));
 #endif
 	return inserted.first->second;
 }
 
-wxImage const& CTheme::LoadImageWithSpecificSize(std::wstring const& name, wxSize const& size, cacheEntry & cache)
+wxImage const& CTheme::LoadImageWithSpecificSize(std::wstring const& file, wxSize const& size, cacheEntry & cache)
 {
 	auto it = cache.images_.find(size);
 	if (it != cache.images_.end()) {
 		return it->second;
 	}
 
-	wxImage img(path_ + fz::sprintf(L"%dx%d/%s.png", size.x, size.y, name), wxBITMAP_TYPE_PNG);
+	wxImage img(file, wxBITMAP_TYPE_PNG);
 
 	if (img.Ok()) {
 		if (img.HasMask() && !img.HasAlpha()) {

@@ -1298,47 +1298,19 @@ void CControlSocket::CreateLocalDir(std::wstring const & local_file)
 {
 	std::wstring file;
 	CLocalPath local_path(local_file, &file);
-	if (local_path.empty() || !local_path.HasParent())
+	if (local_path.empty() || !local_path.HasParent()) {
 		return;
-
-	// Only go back as far as needed.
-	std::vector<std::wstring> segments;
-	while (!local_path.Exists() && local_path.HasParent()) {
-		std::wstring segment;
-		local_path.MakeParent(&segment);
-		segments.emplace_back(std::move(segment));
 	}
 
 	CLocalPath last_successful;
-	for (auto iter = segments.rbegin(); iter != segments.rend(); ++iter) {
-		local_path.AddSegment(*iter);
+	local_path.Create(&last_successful);
 
-#ifdef FZ_WINDOWS
-		BOOL res = CreateDirectory(local_path.GetPath().c_str(), 0);
-		if (!res && GetLastError() != ERROR_ALREADY_EXISTS) {
-			break;
-		}
-#else
-		fz::native_string s = fz::to_native(local_path.GetPath());
-		if (s.empty()) {
-			break;
-		}
-
-		int res = mkdir(s.c_str(), 0777);
-		if (res && errno != EEXIST) {
-			break;
-		}
-#endif
-		last_successful = local_path;
+	if (!last_successful.empty()) {
+		// Send out notification
+		CLocalDirCreatedNotification *n = new CLocalDirCreatedNotification;
+		n->dir = last_successful;
+		engine_.AddNotification(n);
 	}
-
-	if (last_successful.empty())
-		return;
-
-	// Send out notification
-	CLocalDirCreatedNotification *n = new CLocalDirCreatedNotification;
-	n->dir = last_successful;
-	engine_.AddNotification(n);
 }
 
 int CControlSocket::List(CServerPath, std::wstring const&, int)

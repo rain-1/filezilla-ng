@@ -202,7 +202,8 @@ static const t_Option options[OPTIONS_NUM] =
 	// Default/internal options
 	{ "Config Location", string, _T(""), default_only },
 	{ "Kiosk mode", number, _T("0"), default_priority },
-	{ "Disable update check", number, _T("0"), default_only }
+	{ "Disable update check", number, _T("0"), default_only },
+	{ "Cache directory", string, _T(""), default_priority },
 };
 
 BEGIN_EVENT_TABLE(COptions, wxEvtHandler)
@@ -806,14 +807,14 @@ namespace {
 std::wstring TryDirectory(wxString path, wxString const& suffix, bool check_exists)
 {
 	if (!path.empty() && path[0] == '/') {
-		if( path[path.size() - 1] != '/' ) {
+		if (path[path.size() - 1] != '/') {
 			path += '/';
 		}
 
 		path += suffix;
 
-		if( check_exists ) {
-			if( !wxFileName::DirExists(path) ) {
+		if (check_exists) {
+			if (!wxFileName::DirExists(path)) {
 				path.clear();
 			}
 		}
@@ -827,7 +828,7 @@ std::wstring TryDirectory(wxString path, wxString const& suffix, bool check_exis
 wxString GetEnv(wxString const& env)
 {
 	wxString ret;
-	if( !wxGetEnv(env, &ret) ) {
+	if (!wxGetEnv(env, &ret)) {
 		ret.clear();
 	}
 	return ret;
@@ -849,7 +850,8 @@ CLocalPath COptions::GetUnadjustedSettingsDir()
 		}
 		ret = tmp;
 	}
-	else {
+
+	if (ret.empty()) {
 		// Fall back to directory where the executable is
 		DWORD c = GetModuleFileName(0, buffer, MAX_PATH * 2);
 		if (c && c < MAX_PATH * 2) {
@@ -877,6 +879,33 @@ CLocalPath COptions::GetUnadjustedSettingsDir()
 	ret.SetPath(cfg);
 #endif
 	return ret;
+}
+
+CLocalPath COptions::GetCacheDirectory()
+{
+	CLocalPath dir(GetOption(OPTION_DEFAULT_CACHE_DIR));
+	if (!dir.empty()) {
+		return dir;
+	}
+
+#ifdef FZ_WINDOWS
+	wchar_t buffer[MAX_PATH * 2 + 1];
+
+	if (SUCCEEDED(SHGetFolderPath(0, CSIDL_LOCALAPPDATA, 0, SHGFP_TYPE_CURRENT, buffer))) {
+		dir.SetPath(buffer);
+		if (!dir.empty()) {
+			dir.AddSegment(L"FileZilla");
+		}
+	}
+#else
+	std::wstring cfg = TryDirectory(GetEnv(_T("XDG_CACHE_HOME")), _T("filezilla/"), false);
+	if (cfg.empty()) {
+		cfg = TryDirectory(wxGetHomeDir(), _T(".cache/filezilla/"), false);
+	}
+	dir.SetPath(cfg);
+#endif
+
+	return dir;
 }
 
 CLocalPath COptions::InitSettingsDir()

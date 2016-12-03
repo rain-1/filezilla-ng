@@ -605,3 +605,46 @@ std::wstring CLocalPath::GetLastSegment() const
 
 	return std::wstring();
 }
+
+bool CLocalPath::Create(CLocalPath *last_successful)
+{
+	CLocalPath local_path(*this);
+
+	// Only go back as far as needed.
+	std::vector<std::wstring> segments;
+	while (!local_path.Exists() && local_path.HasParent()) {
+		std::wstring segment;
+		local_path.MakeParent(&segment);
+		segments.emplace_back(std::move(segment));
+	}
+
+	bool ret = true;
+	for (auto iter = segments.rbegin(); iter != segments.rend(); ++iter) {
+		local_path.AddSegment(*iter);
+
+	#ifdef FZ_WINDOWS
+		BOOL res = CreateDirectory(local_path.GetPath().c_str(), 0);
+		if (!res && GetLastError() != ERROR_ALREADY_EXISTS) {
+			ret = false;
+			break;
+		}
+	#else
+		fz::native_string s = fz::to_native(local_path.GetPath());
+		if (s.empty()) {
+			ret = false;
+			break;
+		}
+
+		int res = mkdir(s.c_str(), 0777);
+		if (res && errno != EEXIST) {
+			ret = false;
+			break;
+		}
+	#endif
+		if (last_successful) {
+			*last_successful = local_path;
+		}
+	}
+
+	return ret;
+}
