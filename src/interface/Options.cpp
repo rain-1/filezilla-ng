@@ -843,7 +843,7 @@ CLocalPath COptions::GetUnadjustedSettingsDir()
 #ifdef FZ_WINDOWS
 	wchar_t buffer[MAX_PATH * 2 + 1];
 
-	if (SUCCEEDED(SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer))) {
+	if (SUCCEEDED(SHGetFolderPath(0, CSIDL_LOCAL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer))) {
 		CLocalPath tmp(buffer);
 		if (!tmp.empty()) {
 			tmp.AddSegment(L"FileZilla");
