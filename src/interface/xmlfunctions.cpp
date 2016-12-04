@@ -22,7 +22,7 @@ void CXmlFile::SetFileName(std::wstring const& name)
 	m_modificationTime = fz::datetime();
 }
 
-pugi::xml_node CXmlFile::Load()
+pugi::xml_node CXmlFile::Load(bool overwriteInvalid)
 {
 	Close();
 	m_error.clear();
@@ -44,8 +44,17 @@ pugi::xml_node CXmlFile::Load()
 		// Try the backup file
 		GetXmlFile(redirectedName + _T("~"));
 		if (!m_element) {
-			// Loading backup failed. If both original and backup file are empty, create new file.
+			// Loading backup failed.
+
+			// Create new one if we are allowed to create empty file
+			bool createEmpty = overwriteInvalid;
+
+			// Also, if both original and backup file are empty, create new file.
 			if (fz::local_filesys::get_size(fz::to_native(redirectedName)) <= 0 && fz::local_filesys::get_size(fz::to_native(redirectedName + _T("~"))) <= 0) {
+				createEmpty = true;
+			}
+
+			if (createEmpty) {
 				m_error.clear();
 				CreateEmpty();
 				m_modificationTime = fz::local_filesys::get_modification_time(fz::to_native(redirectedName));
@@ -249,7 +258,7 @@ bool GetTextElementBool(pugi::xml_node node, const char* name, bool defValue /*=
 }
 
 // Opens the specified XML file if it exists or creates a new one otherwise.
-// Returns 0 on error.
+// Returns false on error.
 bool CXmlFile::GetXmlFile(std::wstring const& file)
 {
 	Close();

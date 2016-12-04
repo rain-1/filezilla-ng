@@ -29,7 +29,7 @@ public:
 	bool HasFileName() const { return !m_fileName.empty(); }
 
 	// Sets error description on failure
-	pugi::xml_node Load();
+	pugi::xml_node Load(bool overwriteInvalid = false);
 
 	std::wstring GetError() const { return m_error; }
 	size_t GetRawDataLength();
