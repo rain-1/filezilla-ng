@@ -1247,7 +1247,7 @@ void CSearchDialog::LoadConditions()
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("search")));
-	auto document = file.Load();
+	auto document = file.Load(true);
 	if (!document) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return;
@@ -1266,7 +1266,7 @@ void CSearchDialog::SaveConditions()
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("search")));
-	auto document = file.Load();
+	auto document = file.Load(true);
 	if (!document) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return;
