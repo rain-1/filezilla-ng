@@ -74,7 +74,7 @@ bool CQuickconnectBar::Create(CMainFrame* pParent)
 	connectSizer->Add(connect, wxSizerFlags().Align(wxALIGN_CENTER_VERTICAL));
 
 	wxBitmap bmp(wxGetApp().GetResourceDir().GetPath() + _T("dropdown.png"), wxBITMAP_TYPE_PNG);
-	auto flags = wxSizerFlags().Expand().Align(wxALIGN_CENTER_VERTICAL);
+	auto flags = wxSizerFlags().Expand();
 #if defined(__WXMSW__)
 	wxSize dropdownSize = ConvertDialogToPixels(wxSize(12, -1));
 #elif defined(__WXMAC__)
