@@ -423,15 +423,14 @@ bool CFileZillaApp::LoadResourceFiles()
 
 	fz::local_filesys fs;
 	std::wstring dir = m_resourceDir.GetPath() + L"xrc/";
-	bool found = fs.begin_find_files(fz::to_native(dir), false);
-	while (found) {
-		fz::native_string name;
-		found = fs.get_next_file(name);
-		if (name.size() <= 4 || name.substr(name.size() - 4) != fzT(".xrc")) {
-			continue;
-		}
-		pResource->LoadFile(wxString(dir + fz::to_wstring(name)));
-	}
+	pResource->LoadFile(wxString(dir + L"certificate.xrc"));
+	pResource->LoadFile(wxString(dir + L"dialogs.xrc"));
+	pResource->LoadFile(wxString(dir + L"inputdialog.xrc"));
+	pResource->LoadFile(wxString(dir + L"menus.xrc"));
+	pResource->LoadFile(wxString(dir + L"netconfwizard.xrc"));
+	pResource->LoadFile(wxString(dir + L"settings.xrc"));
+	pResource->LoadFile(wxString(dir + L"sitemanager.xrc"));
+	pResource->LoadFile(wxString(dir + L"update.xrc"));
 
 	// Useful for XRC files with embedded image data.
 	wxFileSystem::AddHandler(new wxFileSystemBlobHandler);
