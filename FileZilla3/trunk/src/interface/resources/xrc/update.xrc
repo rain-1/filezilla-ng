@@ -146,7 +146,6 @@
                 <object class="wxHyperlinkCtrl" name="ID_SHOW_DETAILS_DL">
                   <label>Show details</label>
                 </object>
-                <flag>wxALIGN_RIGHT</flag>
               </object>
             </object>
             <flag>wxBOTTOM|wxGROW</flag>
