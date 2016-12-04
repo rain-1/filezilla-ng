@@ -821,7 +821,7 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
 	CXmlFile xml(wxGetApp().GetSettingsFile(_T("layout")));
-	auto root = xml.Load();
+	auto root = xml.Load(true);
 	auto  element = root.child("Layout");
 	if (!element) {
 		return 0;
@@ -859,7 +859,7 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
 	CXmlFile xml(wxGetApp().GetSettingsFile(_T("layout")));
-	auto root = xml.Load();
+	auto root = xml.Load(true);
 	auto element = root.child("Layout");
 	if (!element) {
 		return;
@@ -926,7 +926,7 @@ bool CWrapEngine::LoadCache()
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
 	CXmlFile xml(wxGetApp().GetSettingsFile(_T("layout")));
-	auto document = xml.Load();
+	auto document = xml.Load(true);
 
 	if (!document) {
 		m_use_cache = false;
