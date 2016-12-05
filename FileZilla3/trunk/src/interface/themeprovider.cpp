@@ -111,8 +111,15 @@ wxBitmap const& CTheme::DoLoadBitmap(std::wstring const& name, wxSize const& siz
 {
 	// Go through all the theme sizes and look for the file we need
 
+	wxSize pivotSize = size;
+#ifdef __WXMAC__
+	if (wxGetApp().GetTopWindow()) {
+		double scale = wxGetApp().GetTopWindow()->GetContentScaleFactor();
+		pivotSize.Scale(scale, scale);
+	}
+#endif
 	// First look equal or larger icon
-	auto const pivot = sizes_.lower_bound(size);
+	auto const pivot = sizes_.lower_bound(pivotSize);
 	for (auto pit = pivot; pit != sizes_.end(); ++pit) {
 		wxBitmap const& bmp = LoadBitmapWithSpecificSizeAndScale(name, pit->first, size, cache);
 		if (bmp.IsOk()) {
