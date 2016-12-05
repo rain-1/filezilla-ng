@@ -36,11 +36,14 @@ dist_resources20_DATA = 20x20/unknown.png
 resources24dir = $(pkgdatadir)/resources/24x24
 dist_resources24_DATA = 24x24/unknown.png
 
-resources32dir = $(pkgdatadir)/resources/48x48
+resources32dir = $(pkgdatadir)/resources/32x32
 dist_resources32_DATA = 32x32/filezilla.png
 
 resources48dir = $(pkgdatadir)/resources/48x48
 dist_resources48_DATA = 48x48/filezilla.png
+
+resources480dir = $(pkgdatadir)/resources/480x480
+dist_resources480_DATA = 480x480/filezilla.png
 
 if USE_RESOURCEFILE
 nodist_noinst_DATA = filezilla.o
@@ -107,6 +110,8 @@ hicolorapps32dir = $(datadir)/icons/hicolor/32x32/apps
 hicolorapps32_DATA = 32x32/filezilla.png
 hicolorapps48dir = $(datadir)/icons/hicolor/48x48/apps
 hicolorapps48_DATA = 48x48/filezilla.png
+hicolorapps480dir = $(datadir)/icons/hicolor/480x480/apps
+hicolorapps480_DATA = 480x480/filezilla.png
 
 scalabledir = $(datadir)/icons/hicolor/scalable/apps
 dist_scalable_DATA = filezilla.svg

@@ -245,7 +245,7 @@ CThemeProvider::CThemeProvider()
 	wxArtProvider::Push(this);
 
 	CTheme unthemed;
-	if (unthemed.Load(std::wstring(), { wxSize(16,16), wxSize(20,20), wxSize(22,22), wxSize(24,24), wxSize(32,32), wxSize(48,48) })) {
+	if (unthemed.Load(std::wstring(), { wxSize(16,16), wxSize(20,20), wxSize(22,22), wxSize(24,24), wxSize(32,32), wxSize(48,48), wxSize(480,480) })) {
 		themes_[L""] = unthemed;
 	}
 
