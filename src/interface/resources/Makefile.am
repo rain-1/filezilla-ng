@@ -91,6 +91,10 @@ mac-copy-resources: $(dist_resources_DATA)
 	for i in $(dist_resources48_DATA); \
 		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/48x48"; \
 	done
+	mkdir -p "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/480x480"
+	for i in $(dist_resources480_DATA); \
+		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/480x480"; \
+	done
 
 	$(MAKE) -C classic mac-copy-resources
 	$(MAKE) -C cyril mac-copy-resources
