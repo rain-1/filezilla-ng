@@ -100,12 +100,12 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 	toolbar->ToggleTool(XRCID("ID_TOOLBAR_LOCALTREEVIEW"), COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_LOCAL) != 0);
 	toolbar->ToggleTool(XRCID("ID_TOOLBAR_REMOTETREEVIEW"), COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_REMOTE) != 0);
 
+	pMainFrame->SetToolBar(toolbar);
+	toolbar->Realize();
+
 	if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2) {
 		toolbar->HideTool(XRCID("ID_TOOLBAR_LOGVIEW"));
 	}
-
-	pMainFrame->SetToolBar(toolbar);
-	toolbar->Realize();
 
 	return toolbar;
 }
