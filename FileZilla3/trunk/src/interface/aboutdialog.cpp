@@ -4,6 +4,7 @@
 #include "buildinfo.h"
 #include "xrc_helper.h"
 #include "Options.h"
+#include "themeprovider.h"
 
 #include <misc.h>
 
@@ -17,8 +18,12 @@ END_EVENT_TABLE()
 
 bool CAboutDialog::Create(wxWindow* parent)
 {
-	if (!Load(parent, _T("ID_ABOUT")))
+	if (!Load(parent, _T("ID_ABOUT"))) {
 		return false;
+	}
+
+        wxBitmap bmp = CThemeProvider::Get()->CreateBitmap("ART_FILEZILLA", wxString(), CThemeProvider::GetIconSize(iconSizeLarge));
+        xrc_call(*this, "ID_FILEZILLA_LOGO", &wxStaticBitmap::SetBitmap, bmp);
 
 	xrc_call(*this, "ID_URL", &wxHyperlinkCtrl::SetLabel, _T("https://filezilla-project.org/"));
 	xrc_call(*this, "ID_COPYRIGHT", &wxStaticText::SetLabel, _T("Copyright (C) 2004-2016  Tim Kosse"));

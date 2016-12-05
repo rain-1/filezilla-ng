@@ -589,10 +589,7 @@
             <object class="wxBoxSizer">
               <orient>wxVERTICAL</orient>
               <object class="sizeritem">
-                <object class="wxStaticBitmap">
-                  <bitmap stock_id="ART_FILEZILLA"/>
-                  <size>48,48</size>
-                </object>
+                <object class="wxStaticBitmap" name="ID_FILEZILLA_LOGO" />
                 <flag>wxALL</flag>
                 <border>10</border>
               </object>
@@ -3446,10 +3443,7 @@
                 <option>1</option>
               </object>
               <object class="sizeritem">
-                <object class="wxStaticBitmap">
-                  <size>48,48</size>
-                  <bitmap stock_id="ART_FILEZILLA"/>
-                </object>
+                <object class="wxStaticBitmap" name="ID_FILEZILLA_LOGO" />
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
               <orient>wxHORIZONTAL</orient>

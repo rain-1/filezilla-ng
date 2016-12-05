@@ -1,9 +1,11 @@
 #include <filezilla.h>
 #include "welcome_dialog.h"
 #include "buildinfo.h"
-#include <wx/hyperlink.h>
 #include "Options.h"
+#include "themeprovider.h"
 #include "xrc_helper.h"
+
+#include <wx/hyperlink.h>
 
 BEGIN_EVENT_TABLE(CWelcomeDialog, wxDialogEx)
 EVT_TIMER(wxID_ANY, CWelcomeDialog::OnTimer)
@@ -44,6 +46,9 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 		}
 		return false;
 	}
+
+	wxBitmap bmp = CThemeProvider::Get()->CreateBitmap("ART_FILEZILLA", wxString(), CThemeProvider::GetIconSize(iconSizeLarge));
+	xrc_call(*this, "ID_FILEZILLA_LOGO", &wxStaticBitmap::SetBitmap, bmp);
 
 	InitFooter(force ? wxString() : resources);
 
