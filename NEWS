@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.23.0 (2016-12-05)
+
+- Speed up icon scaling and cache scaled icons for faster subsequent loading. The cache directory can be changed through fzdefaults.xml using the "Cache directory" setting
+- OS X: Fixed icon display on high-DPI displays in a few more dialogs
+- Loading a corrupted layout.xml or search.xml no longer shows an error message, these files are now silently overwritten
+- MSW: Fixed a regression where UNC paths where not handled correctly as config location in fzdefaults.xml
+
 3.23.0-rc1 (2016-11-28)
 
 + New high-resolution icons
