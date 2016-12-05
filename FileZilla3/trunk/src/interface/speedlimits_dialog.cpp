@@ -2,6 +2,8 @@
 #include "sizeformatting.h"
 #include "speedlimits_dialog.h"
 #include "Options.h"
+#include "themeprovider.h"
+#include "xrc_helper.h"
 
 BEGIN_EVENT_TABLE(CSpeedLimitsDialog, wxDialogEx)
 EVT_BUTTON(wxID_OK, CSpeedLimitsDialog::OnOK)
@@ -10,8 +12,12 @@ END_EVENT_TABLE()
 
 void CSpeedLimitsDialog::Run(wxWindow* parent)
 {
-	if (!Load(parent, _T("ID_SPEEDLIMITS")))
+	if (!Load(parent, _T("ID_SPEEDLIMITS"))) {
 		return;
+	}
+
+        wxBitmap bmp = CThemeProvider::Get()->CreateBitmap("ART_SPEEDLIMITS", wxString(), CThemeProvider::GetIconSize(iconSizeLarge));
+        xrc_call(*this, "ID_SPEEDLIMITS_ICON", &wxStaticBitmap::SetBitmap, bmp);
 
 	int downloadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
 	int uploadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);
@@ -34,12 +40,16 @@ void CSpeedLimitsDialog::Run(wxWindow* parent)
 	const wxString unit = CSizeFormat::GetUnitWithBase(CSizeFormat::kilo, 1024);
 
 	wxStaticText* pUnit = XRCCTRL(*this, "ID_DOWNLOADLIMIT_UNIT", wxStaticText);
-	if (pUnit)
+	if (pUnit) {
 		pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), unit));
+	}
 
 	pUnit = XRCCTRL(*this, "ID_UPLOADLIMIT_UNIT", wxStaticText);
-	if (pUnit)
+	if (pUnit) {
 		pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), unit));
+	}
+
+	GetSizer()->Fit(this);
 
 	ShowModal();
 }
