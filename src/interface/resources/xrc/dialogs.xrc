@@ -35,10 +35,7 @@
                   <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                     <border>10</border>
-                    <object class="wxStaticBitmap" name="ID_FILE2_ICON">
-                      <bitmap stock_id="ART_FILE"/>
-                      <size>32,32</size>
-                    </object>
+                    <object class="wxStaticBitmap" name="ID_FILE2_ICON" />
                   </object>
                   <object class="sizeritem">
                     <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTRE_VERTICAL</flag>
@@ -79,10 +76,7 @@
                   <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                     <border>10</border>
-                    <object class="wxStaticBitmap" name="ID_FILE1_ICON">
-                      <bitmap stock_id="ART_FILE"/>
-                      <size>32,32</size>
-                    </object>
+                    <object class="wxStaticBitmap" name="ID_FILE1_ICON" />
                   </object>
                   <object class="sizeritem">
                     <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTRE_VERTICAL</flag>
