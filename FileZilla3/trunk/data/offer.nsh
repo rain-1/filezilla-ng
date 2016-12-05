@@ -150,6 +150,9 @@ Function OfferPage
     Abort
   ${EndIf}
 
+  ; Disable next button while fetching data
+  EnableWindow $mui.Button.Next 0
+
   ; Next, get the offer data
   GetTempFileName $OfferFile
   inetc::get /SILENT ${OfferDataUrl} $OfferFile
