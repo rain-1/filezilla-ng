@@ -883,29 +883,36 @@ CLocalPath COptions::GetUnadjustedSettingsDir()
 
 CLocalPath COptions::GetCacheDirectory()
 {
-	CLocalPath dir(GetOption(OPTION_DEFAULT_CACHE_DIR));
+	CLocalPath ret;
+
+	std::wstring dir(GetOption(OPTION_DEFAULT_CACHE_DIR));
 	if (!dir.empty()) {
-		return dir;
-	}
-
-#ifdef FZ_WINDOWS
-	wchar_t buffer[MAX_PATH * 2 + 1];
-
-	if (SUCCEEDED(SHGetFolderPath(0, CSIDL_LOCAL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer))) {
-		dir.SetPath(buffer);
-		if (!dir.empty()) {
-			dir.AddSegment(L"FileZilla");
+		dir = ExpandPath(dir);
+		ret.SetPath(wxGetApp().GetDefaultsDir().GetPath());
+		if (!ret.ChangePath(dir)) {
+			ret.clear();
 		}
 	}
-#else
-	std::wstring cfg = TryDirectory(GetEnv(_T("XDG_CACHE_HOME")), _T("filezilla/"), false);
-	if (cfg.empty()) {
-		cfg = TryDirectory(wxGetHomeDir(), _T(".cache/filezilla/"), false);
-	}
-	dir.SetPath(cfg);
-#endif
+	else {
+#ifdef FZ_WINDOWS
+		wchar_t buffer[MAX_PATH * 2 + 1];
 
-	return dir;
+		if (SUCCEEDED(SHGetFolderPath(0, CSIDL_LOCAL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer))) {
+			ret.SetPath(buffer);
+			if (!ret.empty()) {
+				ret.AddSegment(L"FileZilla");
+			}
+		}
+#else
+		std::wstring cfg = TryDirectory(GetEnv(_T("XDG_CACHE_HOME")), _T("filezilla/"), false);
+		if (cfg.empty()) {
+			cfg = TryDirectory(wxGetHomeDir(), _T(".cache/filezilla/"), false);
+		}
+		ret.SetPath(cfg);
+#endif
+	}
+
+	return ret;
 }
 
 CLocalPath COptions::InitSettingsDir()
