@@ -58,6 +58,12 @@
       If the "Disable update check" setting is set to 1, the capability to
       check for new FileZilla versions will be completely disabled.
 
+    Cache directory
+
+      Use the "Cache directory" setting to override where FileZilla places
+      its resource cache. Same rules for environment variables and relative
+      paths as for the "Config Location" setting apply.
+        
 -->
 
 <FileZilla3>
@@ -65,6 +71,7 @@
     <Setting name="Config Location">$SOMEDIR/filezilla/</Setting>
     <Setting name="Kiosk mode">0</Setting>
     <Setting name="Disable update check">0</Setting>
+    <Setting name="Cache directory">$USERPROFILE/Documents</Setting>
   </Settings>
   <Servers>
     <Server>
