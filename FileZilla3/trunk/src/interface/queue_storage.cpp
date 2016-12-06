@@ -38,6 +38,7 @@ namespace server_table_column_names
 		user,
 		password,
 		account,
+		keyfile,
 		protocol,
 		type,
 		logontype,
@@ -58,6 +59,7 @@ _column server_table_columns[] = {
 	{ "user", Column_type::text, 0 },
 	{ "password", Column_type::text, 0 },
 	{ "account", Column_type::text, 0 },
+	{ "keyfile", Column_type::text, 0 },
 	{ "protocol", Column_type::integer, 0 },
 	{ "type", Column_type::integer, 0 },
 	{ "logontype", Column_type::integer, 0 },
@@ -156,6 +158,11 @@ public:
 	int64_t ParseFileFromRow(CFileItem** pItem);
 
 	bool MigrateSchema();
+
+	bool BeginTransaction();
+	bool EndTransaction(bool roolback);
+
+	void Close();
 
 	sqlite3* db_{};
 
@@ -266,17 +273,39 @@ static int int_callback(void* p, int n, char** v, char**)
 
 bool CQueueStorage::Impl::MigrateSchema()
 {
-	int version = 0;
-
-	if (sqlite3_exec(db_, "PRAGMA user_version", int_callback, &version, 0) != SQLITE_OK) {
+	if (!db_) {
 		return false;
 	}
 
-	if (version < 1) {
-		return sqlite3_exec(db_, "PRAGMA user_version = 1", 0, 0, 0) == SQLITE_OK;
+	if (!BeginTransaction()) {
+		Close();
+		return false;
 	}
 
-	return true;
+	int version = 0;
+	bool ret = sqlite3_exec(db_, "PRAGMA user_version", int_callback, &version, 0) == SQLITE_OK;
+
+	if (ret) {
+		if (version > 2) {
+			ret = false;
+		}
+		else if (version > 0) {
+			// Do the schema changes
+			if (ret && version < 2) {
+				ret = sqlite3_exec(db_, "ALTER TABLE servers ADD COLUMN keyfile TEXT", int_callback, &version, 0) == SQLITE_OK;
+			}
+		}
+		if (ret && version != 2) {
+			ret = sqlite3_exec(db_, "PRAGMA user_version = 2", 0, 0, 0) == SQLITE_OK;
+		}
+	}
+
+	EndTransaction(!ret);
+	if (!ret) {
+		Close();
+	}
+
+	return ret;
 }
 
 
@@ -596,11 +625,18 @@ bool CQueueStorage::Impl::SaveServer(CServerItem const& item)
 			BindNull(insertServerQuery_, server_table_column_names::password);
 			BindNull(insertServerQuery_, server_table_column_names::account);
 		}
+		if (server.GetLogonType() == KEY) {
+			Bind(insertServerQuery_, server_table_column_names::keyfile, server.GetKeyFile());
+		}
+		else {
+			BindNull(insertServerQuery_, server_table_column_names::keyfile);
+		}
 	}
 	else {
 		BindNull(insertServerQuery_, server_table_column_names::user);
 		BindNull(insertServerQuery_, server_table_column_names::password);
 		BindNull(insertServerQuery_, server_table_column_names::account);
+		BindNull(insertServerQuery_, server_table_column_names::keyfile);
 	}
 	Bind(insertServerQuery_, server_table_column_names::logontype, static_cast<int>(logonType));
 
@@ -891,6 +927,16 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 				return INVALID_DATA;
 			}
 		}
+
+		if ((long)KEY == logonType) {
+			std::wstring key = GetColumnText(selectServersQuery_, server_table_column_names::keyfile);
+			if (key.empty()) {
+				return INVALID_DATA;
+			}
+			if (!server.SetKeyFile(key)) {
+				return INVALID_DATA;
+			}
+		}
 	}
 
 	int timezoneOffset = GetColumnInt(selectServersQuery_, server_table_column_names::timezone_offset);
@@ -1002,6 +1048,44 @@ int64_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 	return GetColumnInt64(selectFilesQuery_, file_table_column_names::id);
 }
 
+bool CQueueStorage::Impl::BeginTransaction()
+{
+	return sqlite3_exec(db_, "BEGIN TRANSACTION", 0, 0, 0) == SQLITE_OK;
+}
+
+bool CQueueStorage::Impl::EndTransaction(bool rollback)
+{
+	if (rollback) {
+		return sqlite3_exec(db_, "ROLLBACK", 0, 0, 0) == SQLITE_OK;
+	}
+	else {
+		return sqlite3_exec(db_, "END TRANSACTION", 0, 0, 0) == SQLITE_OK;
+	}
+}
+
+
+void CQueueStorage::Impl::Close()
+{
+	sqlite3_finalize(insertServerQuery_);
+	sqlite3_finalize(insertFileQuery_);
+	sqlite3_finalize(insertLocalPathQuery_);
+	sqlite3_finalize(insertRemotePathQuery_);
+	sqlite3_finalize(selectServersQuery_);
+	sqlite3_finalize(selectFilesQuery_);
+	sqlite3_finalize(selectLocalPathQuery_);
+	sqlite3_finalize(selectRemotePathQuery_);
+	insertServerQuery_ = 0;
+	insertFileQuery_ = 0;
+	insertLocalPathQuery_ = 0;
+	insertRemotePathQuery_ = 0;
+	selectServersQuery_ = 0;
+	selectFilesQuery_ = 0;
+	selectLocalPathQuery_ = 0;
+	selectRemotePathQuery_ = 0;
+	sqlite3_close(db_);
+	db_ = 0;	
+}
+
 CQueueStorage::CQueueStorage()
 : d_(new Impl)
 {
@@ -1019,15 +1103,7 @@ CQueueStorage::CQueueStorage()
 
 CQueueStorage::~CQueueStorage()
 {
-	sqlite3_finalize(d_->insertServerQuery_);
-	sqlite3_finalize(d_->insertFileQuery_);
-	sqlite3_finalize(d_->insertLocalPathQuery_);
-	sqlite3_finalize(d_->insertRemotePathQuery_);
-	sqlite3_finalize(d_->selectServersQuery_);
-	sqlite3_finalize(d_->selectFilesQuery_);
-	sqlite3_finalize(d_->selectLocalPathQuery_);
-	sqlite3_finalize(d_->selectRemotePathQuery_);
-	sqlite3_close(d_->db_);
+	d_->Close();
 	delete d_;
 }
 
@@ -1174,17 +1250,12 @@ std::wstring CQueueStorage::GetDatabaseFilename()
 
 bool CQueueStorage::BeginTransaction()
 {
-	return sqlite3_exec(d_->db_, "BEGIN TRANSACTION", 0, 0, 0) == SQLITE_OK;
+	return d_->BeginTransaction();
 }
 
 bool CQueueStorage::EndTransaction(bool rollback)
 {
-	if (rollback) {
-		return sqlite3_exec(d_->db_, "ROLLBACK", 0, 0, 0) == SQLITE_OK;
-	}
-	else {
-		return sqlite3_exec(d_->db_, "END TRANSACTION", 0, 0, 0) == SQLITE_OK;
-	}
+	return d_->EndTransaction(rollback);
 }
 
 bool CQueueStorage::Vacuum()
