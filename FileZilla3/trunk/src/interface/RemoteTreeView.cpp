@@ -444,7 +444,12 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 
 wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay)
 {
+#ifdef __WXMSW__
+	// Need to use wxImageList::GetIcon, wxImageList::GetBitmap kills the alpha channel on MSW...
+	wxBitmap bmp = GetSystemImageList()->GetIcon(index);
+#else
 	wxBitmap bmp = GetSystemImageList()->GetBitmap(index);
+#endif
 	if (!overlay.empty()) {
 		wxBitmap unknown = CThemeProvider::Get()->CreateBitmap(overlay, wxART_OTHER, bmp.GetScaledSize());
 		Overlay(bmp, unknown);
