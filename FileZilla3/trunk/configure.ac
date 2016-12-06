@@ -145,11 +145,11 @@ if test "$buildmain" = "yes"; then
   if test -z "$PKG_CONFIG"; then
     AC_MSG_ERROR([pkg-config not found. pkg-config is required to check for some dependencies.])
   fi
-  
+
   # Find libfilezilla
   # -----------------
   PKG_CHECK_MODULES(LIBFILEZILLA, [libfilezilla >= 0.9.0],, [
-	AC_MSG_ERROR([libfilezilla not found. You can download it from https://lib.filezilla-project.org/])
+	AC_MSG_ERROR([libfilezilla not found: $LIBFILEZILLA_PKG_ERRORS. You can download it from https://lib.filezilla-project.org/])
   ])
   AC_SUBST(LIBFILEZILLA_CFLAGS)
   AC_SUBST(LIBFILEZILLA_LIBS)
