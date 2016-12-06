@@ -455,6 +455,10 @@ wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay)
 		Overlay(bmp, unknown);
 	}
 
+	if (!bmp.IsOk()) {
+		bmp.Create(CThemeProvider::GetIconSize(iconSizeSmall));
+	}
+
 	return bmp;
 }
 
