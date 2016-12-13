@@ -62,6 +62,10 @@
 #include <wx/combobox.h>
 #endif
 
+#if USE_MAC_SANDBOX
+#include "osx_sandbox_userdirs.h"
+#endif
+
 #include <functional>
 #include <map>
 
@@ -1595,6 +1599,9 @@ void CMainFrame::OnToggleQueueView(wxCommandEvent&)
 
 void CMainFrame::OnMenuHelpAbout(wxCommandEvent&)
 {
+#if USE_MAC_SANDBOX
+	OSXSandboxUserdirs::Get().Add();
+#endif
 	CAboutDialog dlg;
 	if (!dlg.Create(this))
 		return;
