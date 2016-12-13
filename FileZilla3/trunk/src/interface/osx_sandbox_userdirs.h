@@ -24,7 +24,7 @@ private:
 
 	bool Save();
 
-	std::map<std::wstring, wxCFDataRef> userdirs_;
+	std::map<std::wstring, std::pair<wxCFDataRef, wxCFRef<CFURLRef>>> userdirs_;
 };
 
 #endif

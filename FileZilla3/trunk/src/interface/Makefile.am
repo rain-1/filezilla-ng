@@ -300,6 +300,12 @@ dist_noinst_DATA = interface.vcxproj
 
 if MACAPPBUNDLE
 noinst_DATA = $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla$(EXEEXT)
+
+if USE_MAC_SANDBOX
+filezilla_SOURCES += osx_sandbox_userdirs.cpp
+noinst_HEADERS += osx_sandbox_userdirs.h
+endif
+
 endif
 
 $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla$(EXEEXT): filezilla
