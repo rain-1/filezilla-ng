@@ -720,12 +720,12 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
 	ret = fxp_fstat_recv(pktin, req, &attrs);
 
 	if (!ret) {
-	    err = 1
+	    err = 1;
 	    fzprintf(sftpError, "read size of %s: %s", outfname, fxp_error());
 	    goto cleanup;
 	}
 	if (!(attrs.flags & SSH_FILEXFER_ATTR_SIZE)) {
-	    err = 1
+	    err = 1;
 	    fzprintf(sftpError, "read size of %s: size was not given", outfname);
 	    ret = 0;
 	    goto cleanup;
