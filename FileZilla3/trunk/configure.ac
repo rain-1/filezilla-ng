@@ -178,7 +178,7 @@ if test "$buildmain" = "yes"; then
     ])
   fi
   if test "${WX_VERSION_MAJOR}.${WX_VERSION_MINOR}" = "3.1"; then
-    AC_MSG_ERROR([You must use wxWidgets 3.0.x, development versios of wxWidgets are not supported.])
+    AC_MSG_ERROR([You must use wxWidgets 3.0.x, development versions of wxWidgets are not supported.])
   elif test "${WX_VERSION_MAJOR}.${WX_VERSION_MINOR}" != "3.0"; then
     AC_MSG_ERROR([You must use wxWidgets 3.0.x, wxWidgets 3.2 or higher is not yet supported.])
   fi
