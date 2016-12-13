@@ -389,6 +389,14 @@ if test "$buildmain" = "yes"; then
     macappbundle="no"
   fi
 
+  AC_ARG_ENABLE(mac-sandbox, AS_HELP_STRING([--enable-mac-sandbox],[Enables use of OS X's App Sandbox.]),
+    [use_mac_sandbox="$enableval"], [use_mac_sandbox="no"])
+  if test "$use_mac_sandbox" == "yes"; then
+    AC_DEFINE([USE_MAC_SANDBOX], [1],
+       [Define to 1 if the App Sandbox on OS X should be used.])]
+  fi
+
+
   # Installer creation under Windows
   # --------------------------------
 
@@ -733,6 +741,7 @@ AM_CONDITIONAL(SFTP_MINGW, [test "$sftpbuild" = "mingw"])
 AM_CONDITIONAL(SFTP_UNIX, [test "$sftpbuild" = "unix"])
 AM_CONDITIONAL(USE_RESOURCEFILE, test "$use_resourcefile" = "true")
 AM_CONDITIONAL(MACAPPBUNDLE, [test "$macappbundle" = "yes"])
+AM_CONDITIONAL(USE_MAC_SANDBOX, [test "$use_mac_sandbox" = "yes"])
 AM_CONDITIONAL(MAKENSISSCRIPT, [test "$makensisscript" = "yes"])
 AM_CONDITIONAL(USE_BINRELOC, test "$use_binreloc" = "yes")
 AM_CONDITIONAL(ENABLE_PRECOMP, test "x$use_precomp" = "xyes")

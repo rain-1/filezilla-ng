@@ -27,8 +27,9 @@ enum t_ipcMutexType
 	MUTEX_TRUSTEDCERTS = 8,
 	MUTEX_GLOBALBOOKMARKS = 9,
 	MUTEX_SEARCHCONDITIONS = 10,
+	MUTEX_MAC_SANDBOX_USERDIRS = 11, // Only used if configured with --enable-mac-sandbox
 
-	MUTEX_LASTFREE = 11
+	MUTEX_LASTFREE = 12
 };
 
 class CInterProcessMutex
