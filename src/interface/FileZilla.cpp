@@ -28,6 +28,10 @@
 
 #include "locale_initializer.h"
 
+#ifdef USE_MAC_SANDBOX
+#include "osx_sandbox_userdirs.h"
+#endif
+
 #ifdef ENABLE_BINRELOC
 	#define BR_PTHREADS 0
 	#include "prefix.h"
@@ -205,8 +209,9 @@ bool CFileZillaApp::OnInit()
 #endif
 
 	int cmdline_result = ProcessCommandLine();
-	if (!cmdline_result)
+	if (!cmdline_result) {
 		return false;
+	}
 
 	LoadLocales();
 
@@ -220,6 +225,10 @@ bool CFileZillaApp::OnInit()
 	InitDefaultsDir();
 
 	COptions::Init();
+
+#ifdef USE_MAC_SANDBOX
+	OSXSandboxUserdirs::Get().Load();
+#endif
 
 	InitLocale();
 
