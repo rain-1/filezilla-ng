@@ -55,9 +55,14 @@ filezilla.o: $(srcdir)/filezilla.rc $(srcdir)/windows_manifest.xml version.rc
 	mv $@~ $@
 endif
 
-dist_noinst_DATA = filezilla.rc FileZilla.ico \
-		FileZilla.icns MacInfo.plist.in \
-		version.rc.in windows_manifest.xml
+dist_noinst_DATA = \
+	filezilla.rc \
+	FileZilla.ico \
+	FileZilla.icns \
+	filezilla.entitlements \
+	MacInfo.plist.in \
+	version.rc.in \
+	windows_manifest.xml
 
 if MACAPPBUNDLE
 mac-copy-resources: $(dist_resources_DATA)
