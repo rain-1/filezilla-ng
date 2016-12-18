@@ -352,7 +352,7 @@ bool CQueueView::QueueFiles(const bool queueOnly, CServer const& server, CLocalR
 
 		// We do not look at dirs here, recursion takes care of it.
 	}
-	
+
 	return true;
 }
 
@@ -580,7 +580,7 @@ bool CQueueView::TryStartNextTransfer()
 	// the file with the highest priority
 	for (auto const& currentServerItem : m_serverList) {
 		t_EngineData* pEngineData = 0;
-		
+
 		if (!CanStartTransfer(*currentServerItem, pEngineData)) {
 			continue;
 		}
@@ -1467,7 +1467,7 @@ void CQueueView::UpdateStatusLinePositions()
 
 		wxRect rect = lineRect;
 		rect.y += GetLineHeight() * (index - m_lastTopItem);
-		
+
 		m_allowBackgroundErase = bottomItem + 1 >= m_itemCount;
 		pCtrl->SetSize(rect);
 		m_allowBackgroundErase = false;

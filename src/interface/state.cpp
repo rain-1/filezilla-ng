@@ -481,7 +481,7 @@ void CState::SetSite(Site const& site, CServerPath const& path)
 		}
 		m_last_site = site;
 	}
-	
+
 	m_site = site;
 
 	UpdateTitle();
@@ -580,7 +580,7 @@ void CState::RegisterHandler(CStateEventHandler* pHandler, t_statechange_notific
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
 	wxASSERT(pHandler != insertBefore);
 
-	
+
 	auto &handlers = m_handlers[notification];
 	auto insertionPoint = handlers.end();
 

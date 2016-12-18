@@ -47,7 +47,7 @@ bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, Act
 	if (!m_pQueue) {
 		return false;
 	}
-	
+
 	auto const server = m_state.GetServer();
 	if (server) {
 		server_ = *server;
@@ -290,7 +290,7 @@ void CLocalRecursiveOperation::OnListedDirectory()
 	if (queue) {
 		m_pQueue->QueueFile_Finish(m_immediate);
 	}
-	
+
 	m_processedFiles += processed;
 	if (stop) {
 		StopRecursiveOperation();

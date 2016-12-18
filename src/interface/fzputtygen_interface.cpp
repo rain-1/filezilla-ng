@@ -139,7 +139,7 @@ bool CFZPuttyGenInterface::LoadKeyFile(std::wstring& keyFile, bool silent, std::
 		}
 		keyFile = newName;
 	}
-	
+
 	if (!Send(L"fingerprint")) {
 		comment = _("Could not load key file");
 		return false;

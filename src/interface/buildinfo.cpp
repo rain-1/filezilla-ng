@@ -48,7 +48,7 @@ std::wstring CBuildInfo::GetBuildDateString()
 	if (!day) {
 		return date;
 	}
-	
+
 	auto year = fz::to_integral<unsigned int>(tmp.substr(pos + 1));
 	if (!year) {
 		return date;

@@ -16,8 +16,8 @@ void CSpeedLimitsDialog::Run(wxWindow* parent)
 		return;
 	}
 
-        wxBitmap bmp = CThemeProvider::Get()->CreateBitmap("ART_SPEEDLIMITS", wxString(), CThemeProvider::GetIconSize(iconSizeLarge));
-        xrc_call(*this, "ID_SPEEDLIMITS_ICON", &wxStaticBitmap::SetBitmap, bmp);
+	wxBitmap bmp = CThemeProvider::Get()->CreateBitmap("ART_SPEEDLIMITS", wxString(), CThemeProvider::GetIconSize(iconSizeLarge));
+	xrc_call(*this, "ID_SPEEDLIMITS_ICON", &wxStaticBitmap::SetBitmap, bmp);
 
 	int downloadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
 	int uploadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);

@@ -188,7 +188,7 @@ bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, 
 		error = _("Invalid port given. The port has to be a value from 1 to 65535.");
 		return false;
 	}
-	
+
 	fz::trim(host);
 
 	if (host.empty()) {
@@ -666,7 +666,7 @@ std::wstring CServer::Format(ServerFormat formatType) const
 	if (formatType == ServerFormat::host_only) {
 		return server;
 	}
-	
+
 	if (m_port != GetDefaultPort(m_protocol)) {
 		server += fz::sprintf(L":%d", m_port);
 	}
@@ -674,7 +674,7 @@ std::wstring CServer::Format(ServerFormat formatType) const
 	if (formatType == ServerFormat::with_optional_port) {
 		return server;
 	}
-		
+
 	if (m_logonType != ANONYMOUS) {
 		auto user = GetUser();
 		// For now, only escape if formatting for URL.
@@ -698,13 +698,13 @@ std::wstring CServer::Format(ServerFormat formatType) const
 			}
 		}
 	}
-	
+
 	if (formatType == ServerFormat::with_user_and_optional_port) {
 		if (!info.alwaysShowPrefix && m_port == info.defaultPort) {
 			return server;
 		}
 	}
-		
+
 	if (!info.prefix.empty()) {
 		server = info.prefix + L"://" + server;
 	}

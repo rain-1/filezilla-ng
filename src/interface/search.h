@@ -49,7 +49,7 @@ protected:
 	search_mode m_searching{};
 
 	CServerPath m_original_dir;
-	
+
 	DECLARE_EVENT_TABLE()
 	void OnSearch(wxCommandEvent& event);
 	void OnStop(wxCommandEvent& event);

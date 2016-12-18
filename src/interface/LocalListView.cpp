@@ -318,7 +318,7 @@ CLocalListView::~CLocalListView()
 
 bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 {
-	
+
 	CancelLabelEdit();
 
 	wxString focused;

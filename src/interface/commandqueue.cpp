@@ -36,7 +36,7 @@ bool CCommandQueue::Idle(command_origin origin) const
 	if (origin == any) {
 		return m_CommandList.empty();
 	}
-	
+
 	return std::find_if(m_CommandList.begin(), m_CommandList.end(), [origin](CommandInfo const& c) { return c.origin == origin; }) == m_CommandList.end();
 }
 

@@ -1418,7 +1418,7 @@ std::wstring CTlsSocket::GetProtocolName()
 	if (s && *s) {
 		ret = fz::to_wstring_from_utf8(s);
 	}
-	
+
 	if (ret.empty()) {
 		ret = _("unknown");
 	}
@@ -1466,7 +1466,7 @@ std::wstring CTlsSocket::GetMacName()
 	if (mac && *mac) {
 		ret = fz::to_wstring_from_utf8(mac);
 	}
-	
+
 	if (ret.empty()) {
 		ret = _("unknown");
 	}

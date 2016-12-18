@@ -1234,7 +1234,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 					ResetOperation(FZ_REPLY_INTERNALERROR);
 					return false;
 				}
-				
+
 				pData->localFile = l.GetPath() + tmp;
 			}
 

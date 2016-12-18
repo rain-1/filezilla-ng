@@ -194,7 +194,7 @@ CFileListCtrl<CGenericFileData>::CSortComparisonObject CSearchDialogFileList::Ge
 				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortType<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
 			else if (m_sortColumn == 4)
 				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortTime<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-		
+
 			else
 				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortNamePath<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
 		}
@@ -207,7 +207,7 @@ CFileListCtrl<CGenericFileData>::CSortComparisonObject CSearchDialogFileList::Ge
 				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortType<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
 			else if (m_sortColumn == 4)
 				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortTime<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			
+
 			else
 				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortNamePath<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
 		}
@@ -698,7 +698,7 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 	m_visited.clear();
 
 	// Start
-	
+
 	if (localSearch) {
 		local_recursion_root root;
 		root.add_dir_to_visit(m_local_search_root);
@@ -1087,7 +1087,7 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 	m_pQueue->QueueFile_Finish(start);
 
 	auto const mode = flatten ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_transfer;
-	
+
 	for (auto const& dir : selected_dirs) {
 		CServerPath target_path = path;
 		if (!flatten && dir.HasParent()) {

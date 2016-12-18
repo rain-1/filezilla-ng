@@ -525,7 +525,7 @@ bool CTransferSocket::SetupPassiveTransfer(std::wstring const& host, int port)
 	SetSocketBufferSizes(m_pSocket);
 
 	// Try to bind the source IP of the data connection to the same IP as the control connection.
-	// We can do so either if 
+	// We can do so either if
 	// 1) the destination IP of the data connection matches peer IP of the control connection or
 	// 2) we are using a proxy.
 	//

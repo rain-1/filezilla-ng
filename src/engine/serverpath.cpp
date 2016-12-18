@@ -321,7 +321,7 @@ bool CServerPath::DoSetSafePath(std::wstring const& path)
 	// from file
 	wchar_t const* const begin = path.c_str();
 	wchar_t const* const end = begin + path.size();
-	
+
 	wchar_t const* p = begin;
 
 	int type = 0;

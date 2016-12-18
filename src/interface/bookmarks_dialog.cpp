@@ -562,7 +562,7 @@ void CBookmarksDialog::OnNewBookmark(wxCommandEvent&)
 		if (!m_site_path.empty()) {
 			site = CSiteManager::GetSiteByPath(m_site_path).first;
 		}
-		
+
 		if (!site) {
 			if (wxMessageBoxEx(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES) {
 				return;

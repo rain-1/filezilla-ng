@@ -58,7 +58,7 @@ protected:
 
 	bool m_failure{};
 	bool m_stop{};
-	
+
 	std::list<t_VolumeInfo> m_volumeInfo;
 
 	fz::mutex sync_{false};

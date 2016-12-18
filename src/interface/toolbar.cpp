@@ -78,7 +78,7 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 	}
 	toolbar->SetToolBitmapSize(iconSize);
 	toolbar->MakeTools();
-	
+
 	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_REMOTE_IDLE, true);
 	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_SERVER, true);
 	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_SYNC_BROWSE, true);
@@ -145,7 +145,7 @@ bool CToolBar::Realize()
 		if (!bmp.IsOk()) {
 			continue;
 		}
-			
+
 		int image = toolImages_->Add(bmp);
 		auto disabled = tool->GetDisabledBitmap();
 		if (!disabled.IsOk()) {

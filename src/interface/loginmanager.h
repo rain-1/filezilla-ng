@@ -31,9 +31,9 @@ protected:
 		std::wstring password;
 		std::wstring challenge;
 	};
-	
+
 	std::list<t_passwordcache>::iterator FindItem(CServer const& server, std::wstring const& challenge);
-	
+
 	std::list<t_passwordcache> m_passwordCache;
 };
 

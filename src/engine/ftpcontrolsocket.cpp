@@ -2042,7 +2042,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 		}
 		break;
 	case cwd_pwd_cwd:
-		if (code != 2 && code != 3) 	{
+		if (code != 2 && code != 3) {
 			LogMessage(MessageType::Debug_Warning, _T("PWD failed, assuming path is '%s'."), pData->path.GetPath());
 			m_CurrentPath = pData->path;
 
@@ -3714,7 +3714,7 @@ bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 
 	std::wstring number = m_Response.substr(pos + 4, pos2 - pos - 4);
 	auto port = fz::to_integral<unsigned int>(number);
-	
+
 	if (port == 0 || port > 65535) {
 		return false;
 	}

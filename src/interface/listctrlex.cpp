@@ -130,7 +130,7 @@ void wxListCtrlEx::ScrollTopItem(int item)
 	else if (item >= GetItemCount()) {
 		item = GetItemCount() - 1;
 	}
-	
+
 	const int current = GetTopItem();
 
 	int delta = item - current;
