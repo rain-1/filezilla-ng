@@ -712,7 +712,7 @@ bool CFilterManager::FilenameFilteredByFilter(CFilter const& filter, std::wstrin
 			}
 		}
 	}
-	
+
 	if (filter.matchType == CFilter::not_all) {
 		return false;
 	}

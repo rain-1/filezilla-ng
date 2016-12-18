@@ -23,7 +23,7 @@ public:
 	// Does not encode query and fragment.
 	std::string to_string() const;
 
-	// Returns path and query 
+	// Returns path and query
 	std::string get_request() const;
 
 	std::string get_authority(bool with_userinfo) const;

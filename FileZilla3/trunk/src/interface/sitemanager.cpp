@@ -30,7 +30,7 @@ bool Bookmark::operator==(Bookmark const& b) const
 	if (m_localDir != b.m_localDir) {
 		return false;
 	}
-	
+
 	if (m_remoteDir != b.m_remoteDir) {
 		return false;
 	}
@@ -162,7 +162,7 @@ std::unique_ptr<Site> CSiteManager::ReadServerElement(pugi::xml_node element)
 
 	data->m_comments = GetTextElement(element, "Comments");
 	data->m_colour = GetColourFromIndex(GetTextElementInt(element, "Colour"));
-	
+
 	ReadBookmarkElement(data->m_default_bookmark, element);
 
 	// Bookmarks

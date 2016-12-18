@@ -56,15 +56,15 @@ bool CIOThread::Create(fz::thread_pool& pool, std::unique_ptr<fz::file> && pFile
 #ifdef SIMULATE_IO
 	size_ = m_pFile->size();
 #endif
-	
+
 	m_running = true;
-	
+
 	thread_ = pool.spawn([this]() { entry(); });
 	if (!thread_) {
 		m_running = false;
 		return false;
 	}
-	
+
 	return true;
 }
 

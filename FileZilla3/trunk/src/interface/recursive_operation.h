@@ -49,7 +49,7 @@ protected:
 	CQueueView* m_pQueue{};
 
 	ActiveFilters m_filters;
-	
+
 	std::shared_ptr<CActionAfterBlocker> m_actionAfterBlocker;
 };
 

@@ -660,7 +660,7 @@ public:
 
 		m_pTree->SortChildren(newItem);
 		m_pTree->Expand(newItem);
-		
+
 		return true;
 	}
 
@@ -2071,7 +2071,7 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 
 	wxString sourceName = pTree->GetItemText(source);
 
-	
+
 	wxTreeItemIdValue cookie;
 	for (auto child = pTree->GetFirstChild(target, cookie); child.IsOk(); child = pTree->GetNextChild(target, cookie)) {
 		wxString const childName = pTree->GetItemText(child);

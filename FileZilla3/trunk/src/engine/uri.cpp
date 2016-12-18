@@ -42,7 +42,7 @@ bool uri::parse(std::string in)
 	}
 
 	// Do we have a scheme?
-        if (uri_chars::alpha.find(in[0]) != std::string::npos) {
+	if (uri_chars::alpha.find(in[0]) != std::string::npos) {
 		size_t pos = in.find_first_not_of(uri_chars::scheme, 1);
 		if (pos != std::string::npos && in[pos] == ':') {
 			scheme_ = in.substr(0, pos);
@@ -177,7 +177,7 @@ std::string uri::get_authority(bool with_userinfo) const
 			ret += fz::to_string(port_);
 		}
 	}
-	
+
 	return ret;
 }
 

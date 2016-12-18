@@ -522,7 +522,7 @@ void SetServer(pugi::xml_node node, const CServer& server)
 			}
 			else {
 				std::string pass = fz::to_utf8(server.GetPass());
-				
+
 				pugi::xml_node passElement = AddTextElementUtf8(node, "Pass", fz::base64_encode(pass));
 				if (passElement) {
 					SetTextAttribute(passElement, "encoding", _T("base64"));
@@ -574,7 +574,7 @@ void SetServer(pugi::xml_node node, const CServer& server)
 			auto element = node.append_child("PostLoginCommands");
 			for (auto const& command : postLoginCommands) {
 				AddTextElement(element, "Command", command);
-			}				
+			}
 		}
 	}
 

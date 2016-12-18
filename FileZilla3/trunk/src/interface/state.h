@@ -194,7 +194,7 @@ protected:
 	std::shared_ptr<CDirectoryListing> m_pDirectoryListing;
 
 	Site m_site;
-	
+
 	wxString m_title;
 	bool m_successful_connect{};
 

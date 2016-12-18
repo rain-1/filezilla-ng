@@ -507,7 +507,7 @@ bool CFileZillaApp::SetLocale(int language)
 	if (!pLocale->IsOk()) {
 		return false;
 	}
-	
+
 	// Load catalog. Only fail if a non-default language has been selected
 	if (!pLocale->AddCatalog(_T("filezilla")) && language != wxLANGUAGE_DEFAULT) {
 		return false;

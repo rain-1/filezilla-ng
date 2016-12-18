@@ -107,7 +107,7 @@ void CContextControl::CreateTab()
 					site->m_server = last_server;
 				}
 				pState->SetLastSite(*site, last_path);
-			}				
+			}
 		}
 
 		CreateContextControls(*pState);

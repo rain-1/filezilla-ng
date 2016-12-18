@@ -1679,7 +1679,7 @@ int CSftpControlSocket::FileTransferSend()
 
 		fz::datetime t = pData->fileTime;
 		t -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
-		
+
 		// Y2K38
 		time_t ticks = t.get_time_t();
 		std::wstring seconds = fz::sprintf(L"%d", ticks);

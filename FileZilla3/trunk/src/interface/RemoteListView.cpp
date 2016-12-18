@@ -1471,7 +1471,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 
 	if (!root.empty()) {
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
-		
+
 		CFilterManager filter;
 		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete,
 													 filter.GetActiveFilters(), m_pDirectoryListing->path);

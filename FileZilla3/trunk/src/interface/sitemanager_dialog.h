@@ -29,7 +29,7 @@ public:
 	bool Create(wxWindow* parent, std::vector<_connected_site> *connected_sites, const CServer* pServer = 0);
 
 	bool GetServer(Site& data, Bookmark& bookmark);
-	
+
 protected:
 	// Creates the controls and sizers
 	void CreateControls(wxWindow* parent);

@@ -111,7 +111,7 @@ public:
 	static std::string GetErrorString(int error);
 	static fz::native_string GetErrorDescription(int error);
 
-	// Due to asynchronicity it is possible that the old handler receives one last 
+	// Due to asynchronicity it is possible that the old handler receives one last
 	// socket event when changing handlers.
 	void SetEventHandler(fz::event_handler* pEvtHandler);
 

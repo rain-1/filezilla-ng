@@ -579,7 +579,7 @@ bool CServerItem::RemoveChild(CQueueItem* pItem, bool destroy, bool forward)
 	if (removed) {
 		m_maxCachedIndex = -1;
 	}
-	
+
 	wxASSERT(m_visibleOffspring >= static_cast<int>(m_children.size()) - m_removed_at_front);
 	wxASSERT(((m_children.size() - m_removed_at_front) != 0) == (m_visibleOffspring != 0));
 

@@ -780,7 +780,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		if (!pState) {
 			return;
 		}
-		
+
 		Site const old_site = pState->GetSite();
 		std::wstring sitePath = old_site.m_path;
 

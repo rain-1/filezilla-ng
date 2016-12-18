@@ -14,7 +14,7 @@ OSXSandboxUserdirs::OSXSandboxUserdirs()
 OSXSandboxUserdirs::~OSXSandboxUserdirs()
 {
 	for (auto const& dir : userdirs_) {
-		CFURLStopAccessingSecurityScopedResource(dir.second.second.get());		
+		CFURLStopAccessingSecurityScopedResource(dir.second.second.get());
 	}
 }
 

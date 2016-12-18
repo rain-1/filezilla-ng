@@ -1614,7 +1614,7 @@ int CSocket::GetIdealSendBufferSize()
 		// enabled unless an application sets the SO_SNDBUF socket option on
 		// the stream socket"
 		//
-		// Guess what: It doesn't do it by itself. Programs need to 
+		// Guess what: It doesn't do it by itself. Programs need to
 		// periodically and manually update SO_SNDBUF based on what
 		// SIO_IDEAL_SEND_BACKLOG_QUERY returns.
 #ifndef SIO_IDEAL_SEND_BACKLOG_QUERY

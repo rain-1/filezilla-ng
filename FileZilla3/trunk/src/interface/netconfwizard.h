@@ -44,7 +44,7 @@ protected:
 	virtual void operator()(fz::event_base const& ev);
 	void OnExternalIPAddress();
 	void OnSocketEvent(CSocketEventSource*, SocketEventType t, int error);
-	
+
 	void DoOnSocketEvent(CSocketEventSource*, SocketEventType t, int error);
 
 	void OnReceive();

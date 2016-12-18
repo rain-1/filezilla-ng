@@ -45,7 +45,7 @@ bool CTheme::Load(std::wstring const& theme)
 	if (!theme.empty()) {
 		path_ += L"/";
 	}
-	
+
 	CXmlFile xml(path_ + L"theme.xml");
 	auto xtheme = xml.Load().child("Theme");
 	if (!xtheme) {
@@ -215,7 +215,7 @@ std::vector<wxBitmap> CTheme::GetAllImages(wxSize const& size)
 	wxLogNull null;
 
 	std::vector<wxBitmap> ret;
-	
+
 	for (auto const& psize : sizes_) {
 		if (psize.second) {
 			fz::local_filesys fs;
@@ -402,7 +402,7 @@ std::vector<wxBitmap> CThemeProvider::GetAllImages(std::wstring const& theme, wx
 
 		it = themes_.insert(std::make_pair(theme, t)).first;
 	}
-	
+
 	return it->second.GetAllImages(size);
 }
 

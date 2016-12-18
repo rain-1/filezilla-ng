@@ -11,7 +11,7 @@ class local_recursion_root final
 {
 public:
 	local_recursion_root() = default;
-	
+
 	void add_dir_to_visit(CLocalPath const& localPath, CServerPath const& remotePath = CServerPath());
 
 	bool empty() const { return m_dirsToVisit.empty(); }

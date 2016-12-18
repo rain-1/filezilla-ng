@@ -14,7 +14,7 @@ public:
 	enum command_origin
 	{
 		any = -1,
-		normal, // Most user actions 
+		normal, // Most user actions
 		recursiveOperation
 	};
 

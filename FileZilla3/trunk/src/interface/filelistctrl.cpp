@@ -326,7 +326,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 			if (item != -1) {
 				selected = new bool[m_fileData.size()];
 				memset(selected, 0, sizeof(bool) * m_fileData.size());
-			
+
 				do {
 					selected[m_indexMapping[item]] = 1;
 					item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
@@ -394,7 +394,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList_UpdateSelectio
 			}
 		}
 	}
-	
+
 	if (selections) {
 		for (unsigned int i = m_hasParent ? 1 : 0; i < m_indexMapping.size(); ++i) {
 			const int state = GetItemState(i, wxLIST_STATE_SELECTED);

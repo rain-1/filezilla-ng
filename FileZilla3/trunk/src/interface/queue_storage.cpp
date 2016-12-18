@@ -1083,7 +1083,7 @@ void CQueueStorage::Impl::Close()
 	selectLocalPathQuery_ = 0;
 	selectRemotePathQuery_ = 0;
 	sqlite3_close(db_);
-	db_ = 0;	
+	db_ = 0;
 }
 
 CQueueStorage::CQueueStorage()

@@ -220,7 +220,7 @@ std::list<std::wstring> CVolumeDescriptionEnumeratorThread::GetDrives()
 
 		pDrive += drivelen + 1;
 	}
-	
+
 	delete [] drives;
 
 	return ret;

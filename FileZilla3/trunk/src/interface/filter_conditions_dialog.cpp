@@ -251,7 +251,7 @@ void CFilterConditionsDialog::MakeControls(CFilterCondition const& condition, si
 		controls.pType = CreateChoice(m_pListCtrl, filterTypes);
 		controls.sizer->Add(controls.pType.get(), 0, wxALIGN_CENTER_VERTICAL | wxFIXED_MINSIZE | wxLEFT, 5);
 	}
-	
+
 	if (!m_choiceBoxHeight) {
 		wxSize size = controls.pType->GetSize();
 		m_choiceBoxHeight = size.GetHeight();
@@ -262,7 +262,7 @@ void CFilterConditionsDialog::MakeControls(CFilterCondition const& condition, si
 		controls.pCondition = CreateChoice(m_pListCtrl, wxArrayString());
 		controls.sizer->Add(controls.pCondition.get(), 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 	}
-	
+
 	if (!controls.pValue) {
 		controls.pValue = std::make_unique<wxTextCtrlEx>();
 		controls.pValue->Hide();
