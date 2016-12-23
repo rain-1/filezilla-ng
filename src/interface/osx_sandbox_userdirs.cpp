@@ -117,7 +117,7 @@ void OSXSandboxUserdirs::Load()
 	}
 
 	Save();
-};
+}
 
 
 bool OSXSandboxUserdirs::Save()
