@@ -1457,7 +1457,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 		if (entry.is_dir() && (follow_symlink || !entry.is_link())) {
 			CServerPath remotePath = m_pDirectoryListing->path;
 			if (remotePath.AddSegment(name)) {
-				root.add_dir_to_visit(m_pDirectoryListing->path, name, CLocalPath(), true);;
+				root.add_dir_to_visit(m_pDirectoryListing->path, name, CLocalPath(), true);
 			}
 		}
 		else {
