@@ -80,7 +80,6 @@ bool CServerPath::SetPath(std::wstring newPath)
 bool CServerPath::SetPath(std::wstring &newPath, bool isFile)
 {
 	std::wstring path = newPath;
-	std::wstring file;
 
 	if (path.empty()) {
 		return false;

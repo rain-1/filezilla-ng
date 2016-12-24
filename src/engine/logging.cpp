@@ -194,7 +194,6 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 			}
 
 			DWORD err{};
-			std::wstring error;
 			if (GetFileSizeEx(hFile, &size) && size.QuadPart > m_max_size) {
 				CloseHandle(hFile);
 
