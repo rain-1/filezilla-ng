@@ -3,7 +3,7 @@
 
 #include "../sizeformatting.h"
 
-class COptionsPageSizeFormatting : public COptionsPage
+class COptionsPageSizeFormatting final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_SIZEFORMATTING"); }

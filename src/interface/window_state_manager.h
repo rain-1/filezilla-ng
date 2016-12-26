@@ -4,7 +4,7 @@
 // This class get used to remember toplevel window size and position across
 // sessions.
 
-class CWindowStateManager : public wxEvtHandler
+class CWindowStateManager final : public wxEvtHandler
 {
 public:
 	CWindowStateManager(wxTopLevelWindow* pWindow);

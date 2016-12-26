@@ -66,7 +66,7 @@ private:
 	std::map<std::wstring, cacheEntry> cache_;
 };
 
-class CThemeProvider : public wxArtProvider, protected COptionChangeEventHandler
+class CThemeProvider final : public wxArtProvider, protected COptionChangeEventHandler
 {
 public:
 	CThemeProvider();

@@ -17,16 +17,16 @@ public:
 	void SetExArtProvider();
 
 	// Basically identical to the AUI one, but not calling Update
-	bool SetPageText(size_t page_idx, const wxString& text);
+	virtual bool SetPageText(size_t page_idx, const wxString& text) final;
 
 	void Highlight(size_t page, bool highlight = true);
 	bool Highlighted(size_t page) const;
 
 	void AdvanceTab(bool forward);
 
-	bool AddPage(wxWindow *page, const wxString &text, bool select = false, int imageId = -1);
+	virtual bool AddPage(wxWindow *page, const wxString &text, bool select = false, int imageId = -1) final;
 
-	bool RemovePage(size_t page);
+	virtual bool RemovePage(size_t page) final;
 
 	void SetTabColour(size_t page, wxColour const& c);
 	wxColour GetTabColour(wxWindow* page);

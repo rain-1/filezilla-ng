@@ -123,7 +123,7 @@ protected:
 };
 
 class CMainFrame;
-class CFilterDialog : public wxDialogEx, public CFilterManager
+class CFilterDialog final : public wxDialogEx, public CFilterManager
 {
 public:
 	CFilterDialog();

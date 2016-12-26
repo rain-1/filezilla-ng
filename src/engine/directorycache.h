@@ -38,7 +38,7 @@ public:
 	bool GetChangeTime(fz::monotonic_clock& time, CServer const& server, CServerPath const& path);
 	bool Lookup(CDirectoryListing &listing, CServer const&server, CServerPath const& path, bool allowUnsureEntries, bool& is_outdated);
 	bool DoesExist(CServer const& server, CServerPath const& path, int &hasUnsureEntries, bool &is_outdated);
-	bool LookupFile(CDirentry &entry, CServer const& server, CServerPath const& path, std::wstring const& file, bool &dirDidExist, bool &matchedCase);
+	bool LookupFile(CDirentry &entry, CServer const& server, CServerPath const& path, std::wstring const& filename, bool &dirDidExist, bool &matchedCase);
 	bool InvalidateFile(CServer const& server, CServerPath const& path, std::wstring const& filename, bool *wasDir = 0);
 	bool UpdateFile(CServer const& server, CServerPath const& path, std::wstring const& filename, bool mayCreate, Filetype type = file, int64_t size = -1);
 	bool RemoveFile(CServer const& server, CServerPath const& path, std::wstring const& filename);

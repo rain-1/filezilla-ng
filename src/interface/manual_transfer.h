@@ -5,7 +5,7 @@
 
 class CQueueView;
 class CState;
-class CManualTransfer : public wxDialogEx
+class CManualTransfer final : public wxDialogEx
 {
 public:
 	CManualTransfer(CQueueView* pQueueView);

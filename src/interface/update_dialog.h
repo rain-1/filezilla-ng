@@ -10,7 +10,7 @@ class wxWindow;
 
 class wxHyperlinkEvent;
 
-class CUpdateDialog : public wxDialogEx, protected CUpdateHandler
+class CUpdateDialog final : public wxDialogEx, protected CUpdateHandler
 {
 public:
 	CUpdateDialog(wxWindow* parent, CUpdater& updater);

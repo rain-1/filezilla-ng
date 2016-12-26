@@ -28,7 +28,7 @@
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/recursive_remove.hpp>
 
-class CLocalListViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
+class CLocalListViewDropTarget final : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:
 	CLocalListViewDropTarget(CLocalListView* pLocalListView)

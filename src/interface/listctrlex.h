@@ -90,7 +90,7 @@ public:
 
 protected:
 	virtual void OnPostScroll();
-	virtual void OnPreEmitPostScrollEvent();
+	virtual void OnPreEmitPostScrollEvent() final;
 	void EmitPostScrollEvent();
 
 	virtual wxString GetItemText(int, unsigned int) { return _T(""); }

@@ -425,7 +425,7 @@ private:
 	std::vector<CCertificate> m_certificates;
 };
 
-class CSftpEncryptionNotification : public CNotificationHelper<nId_sftp_encryption>
+class CSftpEncryptionNotification final : public CNotificationHelper<nId_sftp_encryption>
 {
 public:
 	std::wstring hostKey;
@@ -438,7 +438,7 @@ public:
 	std::wstring macServerToClient;
 };
 
-class CLocalDirCreatedNotification : public CNotificationHelper<nId_local_dir_created>
+class CLocalDirCreatedNotification final : public CNotificationHelper<nId_local_dir_created>
 {
 public:
 	CLocalPath dir;

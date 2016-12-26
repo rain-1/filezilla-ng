@@ -11,7 +11,7 @@ std::string const alpha{ "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" 
 std::string const digit{ "01234567890" };
 std::string const hexdigit{ digit + "abcdefABCDEF" };
 std::string const scheme{ alpha + digit + "+-." };
-};
+}
 
 uri::uri(std::string const& in)
 {
@@ -23,7 +23,7 @@ uri::uri(std::string const& in)
 void uri::clear()
 {
 	*this = uri();
-};
+}
 
 bool uri::parse(std::string in)
 {
@@ -43,20 +43,20 @@ bool uri::parse(std::string in)
 
 	// Do we have a scheme?
 	if (uri_chars::alpha.find(in[0]) != std::string::npos) {
-		size_t pos = in.find_first_not_of(uri_chars::scheme, 1);
-		if (pos != std::string::npos && in[pos] == ':') {
-			scheme_ = in.substr(0, pos);
-			in = in.substr(pos + 1);
+		size_t scheme_delim = in.find_first_not_of(uri_chars::scheme, 1);
+		if (scheme_delim != std::string::npos && in[scheme_delim] == ':') {
+			scheme_ = in.substr(0, scheme_delim);
+			in = in.substr(scheme_delim + 1);
 		}
 	}
 
 	// Do we have authority?
 	if (in[0] == '/' && in[1] == '/') {
-		size_t pos = in.find('/', 2);
+		size_t auth_delim = in.find('/', 2);
 		std::string authority;
-		if (pos != std::string::npos) {
-			authority = in.substr(2, pos - 2);
-			in = in.substr(pos);
+		if (auth_delim != std::string::npos) {
+			authority = in.substr(2, auth_delim - 2);
+			in = in.substr(auth_delim);
 		}
 		else {
 			authority = in;

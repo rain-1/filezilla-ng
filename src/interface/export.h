@@ -4,7 +4,7 @@
 #include "dialogex.h"
 
 class CQueueView;
-class CExportDialog : protected wxDialogEx
+class CExportDialog final : protected wxDialogEx
 {
 public:
 	CExportDialog(wxWindow* parent, CQueueView* pQueueView);

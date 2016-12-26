@@ -33,7 +33,7 @@
 #include "commctrl.h"
 #endif
 
-class CRemoteListViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
+class CRemoteListViewDropTarget final : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:
 	CRemoteListViewDropTarget(CRemoteListView* pRemoteListView)
@@ -296,7 +296,7 @@ protected:
 	wxDataObjectComposite* m_pDataObject;
 };
 
-class CInfoText : public wxWindow
+class CInfoText final : public wxWindow
 {
 public:
 	CInfoText(wxWindow* parent)

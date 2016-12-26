@@ -7,7 +7,7 @@ class CMainFrame;
 class CQueueView;
 class CVerifyCertDialog;
 
-class CAsyncRequestQueue : public wxEvtHandler
+class CAsyncRequestQueue final : public wxEvtHandler
 {
 public:
 	CAsyncRequestQueue(CMainFrame *pMainFrame);

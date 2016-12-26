@@ -3,7 +3,7 @@
 
 #include "dialogex.h"
 
-class CSpeedLimitsDialog : public wxDialogEx
+class CSpeedLimitsDialog final : public wxDialogEx
 {
 public:
 	CSpeedLimitsDialog() {}

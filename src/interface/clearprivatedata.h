@@ -6,7 +6,7 @@
 #include <wx/timer.h>
 
 class CMainFrame;
-class CClearPrivateDataDialog : public wxDialogEx
+class CClearPrivateDataDialog final : public wxDialogEx
 {
 public:
 

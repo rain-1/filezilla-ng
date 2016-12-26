@@ -93,7 +93,7 @@ public:
 	virtual bool SetData(size_t, const void *) { return true; }
 };
 
-class CSiteManagerDropTarget : public CScrollableDropTarget<wxTreeCtrlEx>
+class CSiteManagerDropTarget final : public CScrollableDropTarget<wxTreeCtrlEx>
 {
 public:
 	CSiteManagerDropTarget(CSiteManagerDialog* pSiteManager)
@@ -334,8 +334,7 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	// Make pages at least wide enough to fit all tabs
 	int width = 10; // Guessed
 	wxClientDC dc(m_pNotebook_Site);
-	for (unsigned int i = 0; i < m_pNotebook_Site->GetPageCount(); ++i)
-	{
+	for (unsigned int i = 0; i < m_pNotebook_Site->GetPageCount(); ++i) {
 		wxCoord w, h;
 		dc.GetTextExtent(m_pNotebook_Site->GetPageText(i), &w, &h);
 
@@ -348,8 +347,7 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	}
 
 	wxSize page_min_size = m_pNotebook_Site->GetPage(0)->GetSizer()->GetMinSize();
-	if (page_min_size.x < width)
-	{
+	if (page_min_size.x < width) {
 		page_min_size.x = width;
 		m_pNotebook_Site->GetPage(0)->GetSizer()->SetMinSize(page_min_size);
 	}
@@ -402,8 +400,9 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	XRCCTRL(*this, "ID_TRANSFERMODE_PASSIVE", wxRadioButton)->Update();
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		pTree->SafeSelectItem(m_ownSites);
+	}
 	SetCtrlState();
 
 	m_pWindowStateManager = new CWindowStateManager(this);
@@ -414,19 +413,22 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 #ifdef __WXGTK__
 	{
 		CSiteManagerItemData* data = 0;
-		wxTreeItemId item = pTree->GetSelection();
-		if (item.IsOk())
-			data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-		if (!data)
+		wxTreeItemId selected = pTree->GetSelection();
+		if (selected.IsOk()) {
+			data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(selected));
+		}
+		if (!data) {
 			XRCCTRL(*this, "wxID_OK", wxButton)->SetFocus();
+		}
 	}
 #endif
 
 	m_connected_sites = connected_sites;
 	MarkConnectedSites();
 
-	if (pServer)
+	if (pServer) {
 		CopyAddServer(*pServer);
+	}
 
 	return true;
 }

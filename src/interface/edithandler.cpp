@@ -263,15 +263,17 @@ int CEditHandler::GetFileCount(CEditHandler::fileType type, CEditHandler::fileSt
 	}
 	else {
 		auto f = [state, pServer](decltype(m_fileDataList[0]) & items) {
-			int count = 0;
+			int cnt = 0;
 			for (auto const& data : items) {
-				if (data.state != state)
+				if (data.state != state) {
 					continue;
+				}
 
-				if (!pServer || data.server == *pServer)
-					++count;
+				if (!pServer || data.server == *pServer) {
+					++cnt;
+				}
 			}
-			return count;
+			return cnt;
 		};
 		if (type != remote) {
 			count += f(m_fileDataList[local]);

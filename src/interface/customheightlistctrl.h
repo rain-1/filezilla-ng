@@ -6,7 +6,7 @@
 #include <set>
 #include <vector>
 
-class wxCustomHeightListCtrl : public wxScrolledWindow
+class wxCustomHeightListCtrl final : public wxScrolledWindow
 {
 public:
 	wxCustomHeightListCtrl() = default;

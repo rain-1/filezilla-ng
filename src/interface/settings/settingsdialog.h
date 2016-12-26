@@ -6,7 +6,7 @@
 class COptions;
 class COptionsPage;
 class CMainFrame;
-class CSettingsDialog : public wxDialogEx
+class CSettingsDialog final : public wxDialogEx
 {
 public:
 	CSettingsDialog(CFileZillaEngineContext & engine_context);

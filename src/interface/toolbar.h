@@ -6,7 +6,7 @@
 
 class CMainFrame;
 
-class CToolBar : public wxToolBar, public CGlobalStateEventHandler, public COptionChangeEventHandler
+class CToolBar final : public wxToolBar, public CGlobalStateEventHandler, public COptionChangeEventHandler
 {
 public:
 	CToolBar() = default;

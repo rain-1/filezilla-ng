@@ -8,7 +8,7 @@
 
 // As such, keep track on the objects.
 
-class CDragDropManager
+class CDragDropManager final
 {
 public:
 	static CDragDropManager* Get() { return m_pDragDropManager; }

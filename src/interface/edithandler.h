@@ -16,7 +16,7 @@ enum type
 }
 
 class CQueueView;
-class CEditHandler : protected wxEvtHandler
+class CEditHandler final : protected wxEvtHandler
 {
 public:
 	enum fileState
@@ -167,7 +167,7 @@ protected:
 };
 
 class CWindowStateManager;
-class CEditHandlerStatusDialog : protected wxDialogEx
+class CEditHandlerStatusDialog final : protected wxDialogEx
 {
 public:
 	CEditHandlerStatusDialog(wxWindow* parent);
@@ -191,7 +191,7 @@ protected:
 	void OnEdit(wxCommandEvent& event);
 };
 
-class CNewAssociationDialog : protected wxDialogEx
+class CNewAssociationDialog final : protected wxDialogEx
 {
 public:
 	CNewAssociationDialog(wxWindow* parent);
