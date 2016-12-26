@@ -6,7 +6,7 @@
 #include "xmlfunctions.h"
 
 class CQueueView;
-class CImportDialog : public wxDialogEx
+class CImportDialog final : public wxDialogEx
 {
 public:
 	CImportDialog(wxWindow* parent, CQueueView* pQueueView);

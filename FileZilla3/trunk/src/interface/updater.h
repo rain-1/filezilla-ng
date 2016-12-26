@@ -51,7 +51,7 @@ public:
 };
 
 class CFileZillaEngineContext;
-class CUpdater : public wxEvtHandler, private EngineNotificationHandler
+class CUpdater final : public wxEvtHandler, private EngineNotificationHandler
 {
 public:
 	CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context);

@@ -25,7 +25,7 @@ public:
 	bool is_dir() const { return dir; }
 };
 
-class CLocalListView : public CFileListCtrl<CLocalFileData>, CStateEventHandler
+class CLocalListView final : public CFileListCtrl<CLocalFileData>, CStateEventHandler
 {
 	friend class CLocalListViewDropTarget;
 	friend class CLocalListViewSortType;

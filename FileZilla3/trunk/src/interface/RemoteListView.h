@@ -11,7 +11,7 @@ class CQueueView;
 class CRemoteListViewDropTarget;
 class CWindowTinter;
 
-class CRemoteListView : public CFileListCtrl<CGenericFileData>, CStateEventHandler
+class CRemoteListView final : public CFileListCtrl<CGenericFileData>, CStateEventHandler
 {
 	friend class CRemoteListViewDropTarget;
 public:

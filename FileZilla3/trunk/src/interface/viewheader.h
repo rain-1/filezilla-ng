@@ -47,7 +47,7 @@ protected:
 	std::unique_ptr<CWindowTinter> m_windowTinter;
 };
 
-class CLocalViewHeader : public CViewHeader, CStateEventHandler
+class CLocalViewHeader final : public CViewHeader, CStateEventHandler
 {
 public:
 	CLocalViewHeader(wxWindow* pParent, CState& state);
@@ -68,7 +68,7 @@ protected:
 #endif
 };
 
-class CRemoteViewHeader : public CViewHeader, CStateEventHandler
+class CRemoteViewHeader final : public CViewHeader, CStateEventHandler
 {
 public:
 	CRemoteViewHeader(wxWindow* pParent, CState& state);

@@ -3,7 +3,7 @@
 
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 
-class COptionsPageUpdateCheck : public COptionsPage
+class COptionsPageUpdateCheck final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_UPDATECHECK"); }

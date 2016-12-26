@@ -533,16 +533,21 @@ protected:
 		for (;;) {
 #ifdef FZ_WINDOWS
 			int wait_events = FD_CLOSE;
-			if (m_waiting & WAIT_CONNECT)
+			if (m_waiting & WAIT_CONNECT) {
 				wait_events |= FD_CONNECT;
-			if (m_waiting & WAIT_READ)
+			}
+			if (m_waiting & WAIT_READ) {
 				wait_events |= FD_READ;
-			if (m_waiting & WAIT_WRITE)
+			}
+			if (m_waiting & WAIT_WRITE) {
 				wait_events |= FD_WRITE;
-			if (m_waiting & WAIT_ACCEPT)
+			}
+			if (m_waiting & WAIT_ACCEPT) {
 				wait_events |= FD_ACCEPT;
-			if (m_waiting & WAIT_CLOSE)
+			}
+			if (m_waiting & WAIT_CLOSE) {
 				wait_events |= FD_CLOSE;
+			}
 			WSAEventSelect(m_pSocket->m_fd, m_sync_event, wait_events);
 			l.unlock();
 			WSAWaitForMultipleEvents(1, &m_sync_event, false, WSA_INFINITE, false);
@@ -604,11 +609,13 @@ protected:
 			FD_ZERO(&writefds);
 
 			FD_SET(m_pipe[0], &readfds);
-			if (!(m_waiting & WAIT_CONNECT))
+			if (!(m_waiting & WAIT_CONNECT)) {
 				FD_SET(m_pSocket->m_fd, &readfds);
+			}
 
-			if (m_waiting & (WAIT_WRITE | WAIT_CONNECT))
+			if (m_waiting & (WAIT_WRITE | WAIT_CONNECT)) {
 				FD_SET(m_pSocket->m_fd, &writefds);
+			}
 
 			int maxfd = std::max(m_pipe[0], m_pSocket->m_fd) + 1;
 
@@ -628,13 +635,15 @@ protected:
 				return false;
 			}
 
-			if (!res)
+			if (!res) {
 				continue;
+			}
 			if (res == -1) {
 				res = errno;
 
-				if (res == EINTR)
+				if (res == EINTR) {
 					continue;
+				}
 
 				return false;
 			}
@@ -643,9 +652,10 @@ protected:
 				if (FD_ISSET(m_pSocket->m_fd, &writefds)) {
 					int error;
 					socklen_t len = sizeof(error);
-					int res = getsockopt(m_pSocket->m_fd, SOL_SOCKET, SO_ERROR, &error, &len);
-					if (res)
+					int getsockopt_res = getsockopt(m_pSocket->m_fd, SOL_SOCKET, SO_ERROR, &error, &len);
+					if (getsockopt_res) {
 						error = errno;
+					}
 					m_triggered |= WAIT_CONNECT;
 					m_triggered_errors[0] = error;
 					m_waiting &= ~WAIT_CONNECT;
@@ -670,8 +680,9 @@ protected:
 				}
 			}
 
-			if (m_triggered || !m_waiting)
+			if (m_triggered || !m_waiting) {
 				return true;
+			}
 #endif
 		}
 	}

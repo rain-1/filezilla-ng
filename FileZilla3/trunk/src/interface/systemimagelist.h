@@ -14,12 +14,11 @@ enum class iconType
 };
 
 // Required wxImageList extension
-class wxImageListEx : public wxImageList
+class wxImageListEx final : public wxImageList
 {
 public:
 	wxImageListEx();
 	wxImageListEx(int width, int height, const bool mask = true, int initialCount = 1);
-	virtual ~wxImageListEx() {}
 
 #ifdef __WXMSW__
 	wxImageListEx(WXHIMAGELIST hList) { m_hImageList = hList; }

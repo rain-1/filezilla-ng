@@ -13,7 +13,7 @@ class CWindowTinter;
 class CVolumeDescriptionEnumeratorThread;
 #endif
 
-class CLocalTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler, COptionChangeEventHandler
+class CLocalTreeView final : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler, COptionChangeEventHandler
 {
 	DECLARE_CLASS(CLocalTreeView)
 

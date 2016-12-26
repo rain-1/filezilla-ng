@@ -10,7 +10,7 @@ class CWindowStateManager;
 class CSearchDialogFileList;
 class CQueueView;
 class CFilelistStatusBar;
-class CSearchDialog : protected CFilterConditionsDialog, public CStateEventHandler
+class CSearchDialog final : protected CFilterConditionsDialog, public CStateEventHandler
 {
 	friend class CSearchDialogFileList;
 public:

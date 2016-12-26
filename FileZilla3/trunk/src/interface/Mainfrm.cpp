@@ -183,7 +183,7 @@ BEGIN_EVENT_TABLE(CMainFrame, wxNavigationEnabled<wxFrame>)
 	EVT_MENU(XRCID("ID_MENU_FILE_CLOSETAB"), CMainFrame::OnMenuCloseTab)
 END_EVENT_TABLE()
 
-class CMainFrameStateEventHandler : public CGlobalStateEventHandler
+class CMainFrameStateEventHandler final : public CGlobalStateEventHandler
 {
 public:
 	CMainFrameStateEventHandler(CMainFrame* pMainFrame)
@@ -755,8 +755,9 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		}
 	}
 	else if (event.GetId() == XRCID("ID_VIEW_QUICKCONNECT")) {
-		if (!m_pQuickconnectBar)
+		if (!m_pQuickconnectBar) {
 			CreateQuickconnectBar();
+		}
 		else {
 			m_pQuickconnectBar->Destroy();
 			m_pQuickconnectBar = 0;
@@ -804,11 +805,10 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 				std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(sitePath, false).first;
 				if (site) {
 					for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
-						CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
-						if (!controls) {
-							continue;
+						CContextControl::_context_controls *tab_controls = m_pContextControl->GetControlsFromTabIndex(i);
+						if (tab_controls) {
+							tab_controls->pState->UpdateSite(old_site.m_path, *site);
 						}
-						controls->pState->UpdateSite(old_site.m_path, *site);
 					}
 				}
 			}

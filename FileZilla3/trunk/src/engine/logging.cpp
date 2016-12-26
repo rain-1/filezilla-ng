@@ -259,8 +259,6 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 			lock.l_start = 0;
 			lock.l_len = 1;
 
-			int rc;
-
 			// Retry through signals
 			while ((rc = fcntl(m_log_fd, F_SETLKW, &lock)) == -1 && errno == EINTR);
 

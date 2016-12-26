@@ -3,7 +3,7 @@
 
 #include "dialogex.h"
 
-class CFileExistsDlg: public wxDialogEx
+class CFileExistsDlg final : public wxDialogEx
 {
 	DECLARE_EVENT_TABLE()
 

@@ -87,7 +87,7 @@ protected:
 	void OnSize(wxSizeEvent& event);
 };
 
-class CStatusBar : public CWidgetsStatusBar, protected COptionChangeEventHandler, protected CGlobalStateEventHandler
+class CStatusBar final : public CWidgetsStatusBar, protected COptionChangeEventHandler, protected CGlobalStateEventHandler
 {
 public:
 	CStatusBar(wxTopLevelWindow* parent);

@@ -3,7 +3,7 @@
 
 #include "dialogex.h"
 
-class CAboutDialog : public wxDialogEx
+class CAboutDialog final : public wxDialogEx
 {
 public:
 	CAboutDialog() {}

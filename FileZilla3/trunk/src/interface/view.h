@@ -2,7 +2,7 @@
 #define __VIEW_H__
 
 class CViewHeader;
-class CView : public wxNavigationEnabled<wxWindow>
+class CView final : public wxNavigationEnabled<wxWindow>
 {
 public:
 	CView(wxWindow* pParent);

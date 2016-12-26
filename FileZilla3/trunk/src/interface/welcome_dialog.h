@@ -5,7 +5,7 @@
 
 #include <wx/timer.h>
 
-class CWelcomeDialog : public wxDialogEx
+class CWelcomeDialog final : public wxDialogEx
 {
 public:
 	CWelcomeDialog() {}

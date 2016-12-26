@@ -227,8 +227,9 @@ void CMenuBar::UpdateBookmarkMenu()
 void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState)
+	if (!pState) {
 		return;
+	}
 
 	std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_site.find(event.GetId());
 	if (iter != m_bookmark_menu_id_map_site.end()) {

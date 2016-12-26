@@ -3,7 +3,7 @@
 
 #include "dialogex.h"
 
-class CDefaultFileExistsDlg : protected wxDialogEx
+class CDefaultFileExistsDlg final : protected wxDialogEx
 {
 public:
 	CDefaultFileExistsDlg();

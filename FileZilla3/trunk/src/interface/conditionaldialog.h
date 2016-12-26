@@ -1,7 +1,7 @@
 #ifndef __CONDITIONALDIALOG_H__
 #define __CONDITIONALDIALOG_H__
 
-class CConditionalDialog : public wxDialog
+class CConditionalDialog final : public wxDialog
 {
 public:
 	enum Modes

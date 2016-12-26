@@ -9,7 +9,7 @@
 
 class CQueueView;
 class CWindowTinter;
-class CRemoteTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler, COptionChangeEventHandler
+class CRemoteTreeView final : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler, COptionChangeEventHandler
 {
 	DECLARE_CLASS(CRemoteTreeView)
 

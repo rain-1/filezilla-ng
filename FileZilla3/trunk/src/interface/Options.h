@@ -124,7 +124,7 @@ struct t_OptionsCache
 };
 
 class CXmlFile;
-class COptions : public wxEvtHandler, public COptionsBase
+class COptions final : public wxEvtHandler, public COptionsBase
 {
 public:
 	virtual int GetOptionVal(unsigned int nID);

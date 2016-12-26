@@ -31,7 +31,7 @@ public:
 	std::wstring m_known_subdir;
 };
 
-class CLocalTreeViewDropTarget : public CScrollableDropTarget<wxTreeCtrlEx>
+class CLocalTreeViewDropTarget final : public CScrollableDropTarget<wxTreeCtrlEx>
 {
 public:
 	CLocalTreeViewDropTarget(CLocalTreeView* pLocalTreeView)
@@ -710,10 +710,10 @@ void CLocalTreeView::RefreshListing()
 		}
 	}
 #else
-	t_dir dir;
-	dir.dir = separator;
-	dir.item = GetRootItem();
-	dirsToCheck.push_back(dir);
+	t_dir root_dir;
+	root_dir.dir = separator;
+	root_dir.item = GetRootItem();
+	dirsToCheck.push_back(root_dir);
 #endif
 
 	CFilterManager filter;

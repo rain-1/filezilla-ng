@@ -1,7 +1,7 @@
 #ifndef __OPTIONSPAGE_CONNECTION_ACTIVE_H__
 #define __OPTIONSPAGE_CONNECTION_ACTIVE_H__
 
-class COptionsPageConnectionActive : public COptionsPage
+class COptionsPageConnectionActive final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_CONNECTION_ACTIVE"); }

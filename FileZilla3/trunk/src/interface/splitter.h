@@ -1,7 +1,7 @@
 #ifndef __SPLITTER_H__
 #define __SPLITTER_H__
 
-class CSplitterWindowEx : public wxSplitterWindow
+class CSplitterWindowEx final : public wxSplitterWindow
 {
 public:
 	CSplitterWindowEx();

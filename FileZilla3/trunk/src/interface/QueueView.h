@@ -105,7 +105,7 @@ private:
 	bool trigger_{};
 };
 
-class CQueueView : public CQueueViewBase, public COptionChangeEventHandler, private EngineNotificationHandler
+class CQueueView final : public CQueueViewBase, public COptionChangeEventHandler, private EngineNotificationHandler
 {
 	friend class CQueueViewDropTarget;
 	friend class CQueueViewFailed;

@@ -36,7 +36,7 @@
 #include <powrprof.h>
 #endif
 
-class CQueueViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
+class CQueueViewDropTarget final : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:
 	CQueueViewDropTarget(CQueueView* pQueueView)

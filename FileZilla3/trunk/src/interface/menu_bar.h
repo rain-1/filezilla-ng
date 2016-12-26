@@ -5,7 +5,7 @@
 #include "state.h"
 
 class CMainFrame;
-class CMenuBar : public wxMenuBar, public CGlobalStateEventHandler, public COptionChangeEventHandler
+class CMenuBar final : public wxMenuBar, public CGlobalStateEventHandler, public COptionChangeEventHandler
 {
 public:
 	CMenuBar();

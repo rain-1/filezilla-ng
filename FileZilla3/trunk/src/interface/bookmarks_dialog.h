@@ -3,7 +3,7 @@
 
 #include "dialogex.h"
 
-class CNewBookmarkDialog : public wxDialogEx
+class CNewBookmarkDialog final : public wxDialogEx
 {
 public:
 	CNewBookmarkDialog(wxWindow* parent, std::wstring& site_path, const CServer* server);

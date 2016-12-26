@@ -78,7 +78,7 @@ private:
 };
 
 class CFileItem;
-class CServerItem : public CQueueItem
+class CServerItem final : public CQueueItem
 {
 public:
 	CServerItem(const CServer& server);
@@ -267,7 +267,7 @@ protected:
 	int64_t m_size{};
 };
 
-class CFolderItem : public CFileItem
+class CFolderItem final : public CFileItem
 {
 public:
 	CFolderItem(CServerItem* parent, bool queued, CLocalPath const& localPath);
@@ -282,7 +282,7 @@ public:
 	virtual bool TryRemoveAll() { return true; }
 };
 
-class CStatusItem : public CQueueItem
+class CStatusItem final : public CQueueItem
 {
 public:
 	CStatusItem() {}
@@ -394,7 +394,7 @@ class CQueueViewSuccessful;
 
 class CMainFrame;
 class CAsyncRequestQueue;
-class CQueue : public wxAuiNotebookEx
+class CQueue final : public wxAuiNotebookEx
 {
 public:
 	CQueue(wxWindow* parent, CMainFrame* pMainFrame, CAsyncRequestQueue* pAsyncRequestQueue);

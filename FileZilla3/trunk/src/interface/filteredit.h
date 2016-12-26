@@ -6,7 +6,7 @@
 
 class wxCustomHeightListCtrl;
 class CWindowStateManager;
-class CFilterEditDialog : public CFilterConditionsDialog
+class CFilterEditDialog final : public CFilterConditionsDialog
 {
 public:
 	CFilterEditDialog();

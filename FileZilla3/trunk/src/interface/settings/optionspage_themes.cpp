@@ -17,7 +17,7 @@ END_EVENT_TABLE()
 
 const int BORDER = 5;
 
-class CIconPreview : public wxScrolledWindow
+class CIconPreview final : public wxScrolledWindow
 {
 public:
 	CIconPreview() = default;

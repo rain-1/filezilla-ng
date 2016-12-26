@@ -32,9 +32,9 @@ CConditionalDialog::CConditionalDialog(wxWindow* parent, DialogType type, Modes 
 	if (mode == ok) {
 		pMainSizer->Prepend(new wxStaticBitmap(this, wxID_ANY, wxArtProvider::GetBitmap(wxART_INFORMATION)), 0, wxLEFT | wxBOTTOM | wxTOP, 10);
 
-		wxButton* ok = new wxButton(this, wxID_OK);
-		ok->SetDefault();
-		buttons->AddButton(ok);
+		wxButton* ok_btn = new wxButton(this, wxID_OK);
+		ok_btn->SetDefault();
+		buttons->AddButton(ok_btn);
 		SetEscapeId(wxID_OK);
 	}
 	else {

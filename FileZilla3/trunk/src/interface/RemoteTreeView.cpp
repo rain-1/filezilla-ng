@@ -28,7 +28,7 @@ public:
 	CServerPath m_path;
 };
 
-class CRemoteTreeViewDropTarget : public CScrollableDropTarget<wxTreeCtrlEx>
+class CRemoteTreeViewDropTarget final : public CScrollableDropTarget<wxTreeCtrlEx>
 {
 public:
 	CRemoteTreeViewDropTarget(CRemoteTreeView* pRemoteTreeView)

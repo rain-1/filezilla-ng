@@ -114,7 +114,7 @@ bool CDirectoryCache::DoesExist(CServer const& server, CServerPath const& path, 
 	return false;
 }
 
-bool CDirectoryCache::LookupFile(CDirentry &entry, CServer const& server, CServerPath const& path, std::wstring const& file, bool &dirDidExist, bool &matchedCase)
+bool CDirectoryCache::LookupFile(CDirentry &entry, CServer const& server, CServerPath const& path, std::wstring const& filename, bool &dirDidExist, bool &matchedCase)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -135,13 +135,13 @@ bool CDirectoryCache::LookupFile(CDirentry &entry, CServer const& server, CServe
 	const CCacheEntry &cacheEntry = *iter;
 	const CDirectoryListing &listing = cacheEntry.listing;
 
-	int i = listing.FindFile_CmpCase(file);
+	int i = listing.FindFile_CmpCase(filename);
 	if (i >= 0) {
 		entry = listing[i];
 		matchedCase = true;
 		return true;
 	}
-	i = listing.FindFile_CmpNoCase(file);
+	i = listing.FindFile_CmpNoCase(filename);
 	if (i >= 0) {
 		entry = listing[i];
 		matchedCase = false;

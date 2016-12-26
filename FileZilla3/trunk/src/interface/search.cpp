@@ -84,7 +84,7 @@ inline int DoCmpName(CLocalSearchFileData const& data1, CLocalSearchFileData con
 	return res;
 }
 
-class CSearchDialogFileList : public CFileListCtrl<CGenericFileData>
+class CSearchDialogFileList final : public CFileListCtrl<CGenericFileData>
 {
 	friend class CSearchDialog;
 	friend class CSearchSortType;
@@ -789,7 +789,7 @@ void CSearchDialog::OnContextMenu(wxContextMenuEvent& event)
 
 
 
-class CSearchTransferDialog : public wxDialogEx
+class CSearchTransferDialog final : public wxDialogEx
 {
 public:
 	bool Run(wxWindow* parent, bool download, const wxString& path, int count_files, int count_dirs)
