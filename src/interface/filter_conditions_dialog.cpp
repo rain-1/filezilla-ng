@@ -248,8 +248,9 @@ void CFilterConditionsDialog::MakeControls(CFilterCondition const& condition, si
 	CFilterControls& controls = m_filterControls[i];
 
 	if (!controls.pType) {
-		controls.pType = CreateChoice(m_pListCtrl, filterTypes);
-		controls.sizer->Add(controls.pType.get(), 0, wxALIGN_CENTER_VERTICAL | wxFIXED_MINSIZE | wxLEFT, 5);
+		controls.pType = CreateChoice(m_pListCtrl, wxArrayString());
+		controls.pType->Set(filterTypes);
+		controls.sizer->Add(controls.pType.get(), 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 	}
 
 	if (!m_choiceBoxHeight) {
