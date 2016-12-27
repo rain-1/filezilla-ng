@@ -1073,8 +1073,9 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 	}
 
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_REMOTEFILELIST"));
-	if (!pMenu)
+	if (!pMenu) {
 		return;
+	}
 
 	bool const idle = m_state.IsRemoteIdle();
 	bool const userIdle = m_state.IsRemoteIdle(true);
@@ -1106,6 +1107,7 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Enable(XRCID("ID_CHMOD"), false);
 		pMenu->Enable(XRCID("ID_EDIT"), false);
 		pMenu->Enable(XRCID("ID_GETURL"), false);
+		pMenu->Enable(XRCID("ID_GETURL_PASSWORD"), false);
 		pMenu->Enable(XRCID("ID_CONTEXT_REFRESH"), false);
 		pMenu->Enable(XRCID("ID_NEW_FILE"), false);
 	}
@@ -1118,6 +1120,7 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Enable(XRCID("ID_CHMOD"), false);
 		pMenu->Enable(XRCID("ID_EDIT"), false);
 		pMenu->Enable(XRCID("ID_GETURL"), false);
+		pMenu->Enable(XRCID("ID_GETURL_PASSWORD"), false);
 	}
 	else {
 		if ((GetItemCount() && GetItemState(0, wxLIST_STATE_SELECTED))) {
@@ -1125,6 +1128,7 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 			pMenu->Enable(XRCID("ID_CHMOD"), false);
 			pMenu->Enable(XRCID("ID_EDIT"), false);
 			pMenu->Enable(XRCID("ID_GETURL"), false);
+			pMenu->Enable(XRCID("ID_GETURL_PASSWORD"), false);
 		}
 
 		int count = 0;
@@ -1139,15 +1143,17 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 			}
 
 			int index = GetItemIndex(item);
-			if (index == -1)
-				continue;
-			count++;
-			if (m_fileData[index].comparison_flags == fill) {
-				fillCount++;
+			if (index == -1) {
 				continue;
 			}
-			if ((*m_pDirectoryListing)[index].is_dir())
+			++count;
+			if (m_fileData[index].comparison_flags == fill) {
+				++fillCount;
+				continue;
+			}
+			if ((*m_pDirectoryListing)[index].is_dir()) {
 				selectedDir = true;
+			}
 		}
 		if (!count || fillCount == count) {
 			pMenu->Delete(XRCID("ID_ENTER"));
@@ -1158,15 +1164,19 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 			pMenu->Enable(XRCID("ID_CHMOD"), false);
 			pMenu->Enable(XRCID("ID_EDIT"), false);
 			pMenu->Enable(XRCID("ID_GETURL"), false);
+			pMenu->Enable(XRCID("ID_GETURL_PASSWORD"), false);
 		}
 		else {
-			if (selectedDir)
+			if (selectedDir) {
 				pMenu->Enable(XRCID("ID_EDIT"), false);
-			else
+			}
+			else {
 				pMenu->Delete(XRCID("ID_ENTER"));
+			}
 			if (count > 1) {
-				if (selectedDir)
+				if (selectedDir) {
 					pMenu->Delete(XRCID("ID_ENTER"));
+				}
 				pMenu->Enable(XRCID("ID_RENAME"), false);
 			}
 
