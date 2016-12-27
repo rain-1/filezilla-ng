@@ -14,6 +14,10 @@
 #include "window_state_manager.h"
 #include "xrc_helper.h"
 
+#include "uri.h"
+
+#include <wx/clipbrd.h>
+
 class CRemoteSearchFileData final : public CDirentry
 {
 public:
@@ -361,6 +365,8 @@ EVT_MENU(XRCID("ID_MENU_SEARCH_DOWNLOAD"), CSearchDialog::OnDownload)
 EVT_MENU(XRCID("ID_MENU_SEARCH_UPLOAD"), CSearchDialog::OnUpload)
 EVT_MENU(XRCID("ID_MENU_SEARCH_EDIT"), CSearchDialog::OnEdit)
 EVT_MENU(XRCID("ID_MENU_SEARCH_DELETE"), CSearchDialog::OnDelete)
+EVT_MENU(XRCID("ID_MENU_SEARCH_GETURL"), CSearchDialog::OnGetUrl)
+EVT_MENU(XRCID("ID_MENU_SEARCH_GETURL_PASSWORD"), CSearchDialog::OnGetUrl)
 EVT_CHAR_HOOK(CSearchDialog::OnCharHook)
 EVT_RADIOBUTTON(XRCID("ID_LOCAL_SEARCH"), CSearchDialog::OnChangeSearchMode)
 EVT_RADIOBUTTON(XRCID("ID_REMOTE_SEARCH"), CSearchDialog::OnChangeSearchMode)
@@ -778,9 +784,12 @@ void CSearchDialog::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Delete(XRCID("ID_MENU_SEARCH_DOWNLOAD"));
 		pMenu->Delete(XRCID("ID_MENU_SEARCH_DELETE"));
 		pMenu->Delete(XRCID("ID_MENU_SEARCH_EDIT"));
+		pMenu->Delete(XRCID("ID_MENU_SEARCH_GETURL"));
+		pMenu->Delete(XRCID("ID_MENU_SEARCH_GETURL_PASSWORD"));
 	}
 	else {
 		pMenu->Delete(XRCID("ID_MENU_SEARCH_UPLOAD"));
+		pMenu->Delete(XRCID(wxGetKeyState(WXK_SHIFT) ? "ID_MENU_SEARCH_GETURL" : "ID_MENU_SEARCH_GETURL_PASSWORD"));
 	}
 
 	PopupMenu(pMenu);
@@ -895,8 +904,9 @@ void ProcessSelection(std::list<int> &selected_files, std::deque<Path> &selected
 
 	int sel = -1;
 	while ((sel = results->GetNextItem(sel, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
-		if (sel > (int)results->indexMapping().size())
+		if (static_cast<size_t>(sel) >= results->indexMapping().size()) {
 			continue;
+		}
 		int index = results->indexMapping()[sel];
 
 		if (fileData[index].is_dir()) {
@@ -1301,4 +1311,59 @@ void CSearchDialog::OnChangeSearchMode(wxCommandEvent&)
 		}
 	}
 
+}
+
+void CSearchDialog::OnGetUrl(wxCommandEvent& event)
+{
+	if (m_results->mode_ != search_mode::remote) {
+		return;
+	}
+
+	CServer const* pServer = m_state.GetServer();
+	if (!pServer) {
+		wxBell();
+		return;
+	}
+
+	if (!wxTheClipboard->Open()) {
+		wxMessageBoxEx(_("Could not open clipboard"), _("Could not copy URLs"), wxICON_EXCLAMATION);
+		return;
+	}
+
+	wxString const server = pServer->Format((event.GetId() == XRCID("ID_MENU_SEARCH_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
+
+	auto getUrl = [](wxString const& serverPart, CServerPath const& path, std::wstring const& name) {
+		wxString url = serverPart;
+
+		auto const pathPart = fz::percent_encode_w(path.FormatFilename(name, false), true);
+		if (!pathPart.empty() && pathPart[0] != '/') {
+			url += '/';
+		}
+		url += pathPart;
+
+		return url;
+	};
+
+	wxString urls;
+
+	int sel = -1;
+	while ((sel = m_results->GetNextItem(sel, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) >= 0) {
+		if (static_cast<size_t>(sel) >= m_results->m_indexMapping.size()) {
+			continue;
+		}
+		int index = m_results->m_indexMapping[sel];
+
+		auto const& entry = m_results->remoteFileData_[index];
+		urls += getUrl(server, entry.path, entry.name);
+#ifdef __WXMSW__
+		urls += _T("\r\n");
+#else
+		urls += _T("\n");
+#endif
+	}
+
+	wxTheClipboard->SetData(new wxURLDataObject(urls));
+
+	wxTheClipboard->Flush();
+	wxTheClipboard->Close();
 }

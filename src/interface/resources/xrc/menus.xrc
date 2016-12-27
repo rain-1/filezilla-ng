@@ -618,6 +618,12 @@
     <object class="wxMenuItem" name="ID_MENU_SEARCH_DELETE">
       <label>D&amp;elete</label>
     </object>
+    <object class="wxMenuItem" name="ID_MENU_SEARCH_GETURL">
+      <label>C&amp;opy URL(s) to clipboard</label>
+    </object>
+    <object class="wxMenuItem" name="ID_MENU_SEARCH_GETURL_PASSWORD">
+      <label>C&amp;opy URL(s) with password to clipboard</label>
+    </object>
   </object>
   <object class="wxMenu" name="ID_MENU_TABCONTEXT">
     <object class="wxMenuItem" name="ID_TABCONTEXT_NEW">
