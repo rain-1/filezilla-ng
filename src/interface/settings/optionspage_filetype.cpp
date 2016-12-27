@@ -126,9 +126,9 @@ void COptionsPageFiletype::OnRemove(wxCommandEvent&)
 
 	int item = -1;
 	item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-	while (item != -1)
-	{
+	while (item != -1) {
 		pListCtrl->DeleteItem(item);
+		--item;
 		item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	}
 	SetCtrlState();
