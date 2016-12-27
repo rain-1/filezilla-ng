@@ -2630,6 +2630,7 @@ void CMainFrame::SetupKeyboardAccelerators()
 	for (int i = 0; i < 10; i++) {
 		tab_hotkey_ids[i] = wxNewId();
 		entries.emplace_back(wxACCEL_CMD, (int)'0' + i, tab_hotkey_ids[i]);
+		entries.emplace_back(wxACCEL_ALT, (int)'0' + i, tab_hotkey_ids[i]);
 	}
 	entries.emplace_back(wxACCEL_CMD | wxACCEL_SHIFT, 'O', m_comparisonToggleAcceleratorId);
 	entries.emplace_back(wxACCEL_CMD | wxACCEL_SHIFT, 'I', XRCID("ID_MENU_VIEW_FILTERS"));
