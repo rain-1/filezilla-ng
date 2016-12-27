@@ -245,14 +245,16 @@ bool CState::SetLocalDir(CLocalPath const& dir, std::wstring *error, bool rememb
 			wxString msg = wxString::Format(_("The local directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the local directory?"),
 					dir.GetPath(),
 					m_sync_browse.local_root.GetPath());
-			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES) {
 				return false;
+			}
 			SetSyncBrowse(false);
 		}
 		else if (!IsRemoteIdle(true)) {
 			wxString msg(_("A remote operation is in progress and synchronized browsing is enabled.\nDisable synchronized browsing and continue changing the local directory?"));
-			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES) {
 				return false;
+			}
 			SetSyncBrowse(false);
 		}
 		else {
@@ -285,8 +287,9 @@ bool CState::SetLocalDir(CLocalPath const& dir, std::wstring *error, bool rememb
 #endif
 			m_previouslyVisitedLocalSubdir = m_localDir.GetLastSegment();
 	}
-	else
+	else {
 		m_previouslyVisitedLocalSubdir = _T("");
+	}
 
 
 	m_localDir = dir;
@@ -972,6 +975,9 @@ void CState::ListingFailed(int)
 				SetSyncBrowse(false);
 				SetLocalDir(local);
 			}
+		}
+		else {
+			m_changeDirFlags.syncbrowse = false;
 		}
 	}
 }
