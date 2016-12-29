@@ -7,7 +7,7 @@
  * This testsuite asserts the correctness of the CServerPath class.
  */
 
-class CServerPathTest : public CppUnit::TestFixture
+class CServerPathTest final : public CppUnit::TestFixture
 {
 	CPPUNIT_TEST_SUITE(CServerPathTest);
 	CPPUNIT_TEST(testGetPath);

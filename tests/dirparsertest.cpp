@@ -21,7 +21,7 @@ struct t_entry
 	ServerType serverType;
 };
 
-class CDirectoryListingParserTest : public CppUnit::TestFixture
+class CDirectoryListingParserTest final : public CppUnit::TestFixture
 {
 	CPPUNIT_TEST_SUITE(CDirectoryListingParserTest);
 	InitEntries();

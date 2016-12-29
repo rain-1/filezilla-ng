@@ -6,7 +6,7 @@
  * This testsuite asserts the correctness of the CLocalPathTest class.
  */
 
-class CLocalPathTest : public CppUnit::TestFixture
+class CLocalPathTest final : public CppUnit::TestFixture
 {
 	CPPUNIT_TEST_SUITE(CLocalPathTest);
 	CPPUNIT_TEST(testSetPath);
