@@ -12,7 +12,7 @@
  * functions handling natural sort
  */
 
-class CNaturalSortTest : public CppUnit::TestFixture
+class CNaturalSortTest final : public CppUnit::TestFixture
 {
 	CPPUNIT_TEST_SUITE(CNaturalSortTest);
 	CPPUNIT_TEST(testEmpty);
