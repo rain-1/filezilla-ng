@@ -561,7 +561,7 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
     struct sftp_request *req;
     uint64 offset;
     RFile *file;
-    int ret, err = 0, eof, closeret;
+    int err = 0, eof;
     struct fxp_attrs attrs;
     long permissions;
 
@@ -714,21 +714,21 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
     if (restart) {
 	char decbuf[30];
 	struct fxp_attrs attrs;
+        int ret;
 
 	req = fxp_fstat_send(fh);
         pktin = sftp_wait_for_reply(req);
 	ret = fxp_fstat_recv(pktin, req, &attrs);
 
 	if (!ret) {
-	    err = 1;
 	    fzprintf(sftpError, "read size of %s: %s", outfname, fxp_error());
-	    goto cleanup;
+	    err = 1;
+            goto cleanup;
 	}
 	if (!(attrs.flags & SSH_FILEXFER_ATTR_SIZE)) {
-	    err = 1;
 	    fzprintf(sftpError, "read size of %s: size was not given", outfname);
-	    ret = 0;
-	    goto cleanup;
+	    err = 1;
+            goto cleanup;
 	}
 	offset = attrs.size;
 	uint64_decimal(offset, decbuf);
@@ -745,12 +745,11 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
      * FIXME: we can use FXP_FSTAT here to get the file size, and
      * thus put up a progress bar.
      */
-    ret = 1;
     xfer = xfer_upload_init(fh, offset);
     eof = 0;
     while ((!err && !eof) || !xfer_done(xfer)) {
-        char buffer[4096*4];
-	int len;
+	char buffer[4096*4];
+	int len, ret;
 
 	while (xfer_upload_ready(xfer) && !err && !eof) {
 	    len = read_from_file(file, buffer, sizeof(buffer));
@@ -773,31 +772,28 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
                 if (ret == INT_MIN)        /* pktin not even freed */
                     sfree(pktin);
                 if (!err) {
-		    fzprintf(sftpError, "error while writing: %s", fxp_error());
-		    err = 1;
-		}
-		ret = 0;
+                    fzprintf(sftpError, "error while writing: %s", fxp_error());
+                    err = 1;
+                }
 	    }
 	}
     }
 
     xfer_cleanup(xfer);
 
-cleanup:
+  cleanup:
     req = fxp_close_send(fh);
     pktin = sftp_wait_for_reply(req);
-    closeret = fxp_close_recv(pktin, req);
-    if (closeret <= 0) {
+    if (!fxp_close_recv(pktin, req)) {
 	if (!err) {
 	    fzprintf(sftpError, "error while writing: %s", fxp_error());
 	    err = 1;
 	}
-	ret = 0;
     }
 
     close_rfile(file);
 
-    return ret;
+    return (err == 0) ? 1 : 0;
 }
 
 /* ----------------------------------------------------------------------
