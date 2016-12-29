@@ -15,7 +15,7 @@
 void SHATransform(word32 * digest, word32 * block)
 {
     // This has different endianess than the PuTTY code, but this is fine for use in the RNG
-    _nettle_sha1_compress(digest, (uint8_t)block);
+    _nettle_sha1_compress(digest, (uint8_t *)block);
 }
 
 
