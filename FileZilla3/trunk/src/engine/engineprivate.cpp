@@ -18,10 +18,20 @@ std::vector<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
 std::atomic_int CFileZillaEnginePrivate::m_activeStatus[2] = {{0}, {0}};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
+namespace {
+unsigned int get_next_engine_id(fz::mutex& mutex)
+{
+	fz::scoped_lock lock(mutex);
+	static unsigned int id = 0;
+	return ++id;
+}
+}
+
 CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& context, CFileZillaEngine& parent, EngineNotificationHandler& notificationHandler)
 	: event_handler(context.GetEventLoop())
 	, transfer_status_(*this)
 	, notification_handler_(notificationHandler)
+	, m_engine_id(get_next_engine_id(mutex_))
 	, m_options(context.GetOptions())
 	, m_rateLimiter(context.GetRateLimiter())
 	, directory_cache_(context.GetDirectoryCache())
@@ -30,12 +40,6 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	, thread_pool_(context.GetThreadPool())
 {
 	m_engineList.push_back(this);
-
-	{
-		fz::scoped_lock lock(mutex_);
-		static int id = 0;
-		m_engine_id = ++id;
-	}
 
 	m_pLogging = new CLogging(*this);
 

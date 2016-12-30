@@ -103,7 +103,7 @@ public:
 	// directory.
 	void InvalidateCurrentWorkingDirs(const CServerPath& path);
 
-	int GetEngineId() const {return m_engine_id; }
+	unsigned int GetEngineId() const {return m_engine_id; }
 
 	CTransferStatusManager transfer_status_;
 protected:
@@ -150,7 +150,7 @@ protected:
 
 	EngineNotificationHandler& notification_handler_;
 
-	int m_engine_id;
+	unsigned int const m_engine_id;
 
 	static std::vector<CFileZillaEnginePrivate*> m_engineList;
 

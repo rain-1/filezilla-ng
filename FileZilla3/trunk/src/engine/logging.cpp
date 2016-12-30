@@ -155,7 +155,7 @@ void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) cons
 #endif
 
 	fz::datetime now = fz::datetime::now();
-	std::string const out = fz::sprintf("%s %u %d %s %s"
+	std::string const out = fz::sprintf("%s %u %u %s %s"
 #ifdef FZ_WINDOWS
 		"\r\n",
 #else
