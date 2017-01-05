@@ -2,6 +2,10 @@
 #include "dialogex.h"
 #include "msgbox.h"
 
+#ifdef __WXMAC__
+#include "filezillaapp.h"
+#endif
+
 BEGIN_EVENT_TABLE(wxDialogEx, wxDialog)
 EVT_CHAR_HOOK(wxDialogEx::OnChar)
 END_EVENT_TABLE()
@@ -143,6 +147,13 @@ bool wxDialogEx::CanShowPopupDialog()
 #ifdef __WXMSW__
 	// During a drag & drop we cannot show a dialog. Doing so can render the program unresponsive
 	if (GetCapture()) {
+		return false;
+	}
+#endif
+
+#ifdef __WXMAC__
+	if (wxGetApp().MacGetCurrentEvent()) {
+		// We're inside an event handler for a native mac event, such as a popup menu
 		return false;
 	}
 #endif
