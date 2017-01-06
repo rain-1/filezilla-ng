@@ -21,7 +21,7 @@ void CToolBar::MakeTool(char const* id, std::wstring const& art, wxString const&
 		return;
 	}
 
-	wxBitmap bmp = CThemeProvider::Get()->CreateBitmap(art, wxART_TOOLBAR, GetToolBitmapSize());
+	wxBitmap bmp = CThemeProvider::Get()->CreateBitmap(art, wxART_TOOLBAR, iconSize_);
 	wxToolBar::AddTool(XRCID(id), wxString(), bmp, wxBitmap(), type, tooltip, help);
 }
 
@@ -55,19 +55,20 @@ void CToolBar::MakeTools()
 
 CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 {
-	wxSize iconSize = CThemeProvider::GetIconSize(iconSizeSmall, true);
+	CToolBar* toolbar = new CToolBar();
+	toolbar->m_pMainFrame = pMainFrame;
+
+	toolbar->iconSize_ = CThemeProvider::GetIconSize(iconSizeSmall, true);
 #ifdef __WXMAC__
 	// OS X only knows two hardcoded toolbar sizes.
-	if (iconSize.x >= 32) {
-		iconSize = wxSize(32, 32);
+	if (toolbar->iconSize_.x >= 32) {
+		toolbar->iconSize_ = wxSize(32, 32);
 	}
 	else {
-		iconSize = wxSize(24, 24);
+		toolbar->iconSize_ = wxSize(24, 24);
 	}
 #endif
 
-	CToolBar* toolbar = new CToolBar();
-	toolbar->m_pMainFrame = pMainFrame;
 	int style = wxTB_FLAT | wxTB_HORIZONTAL | wxTB_NODIVIDER;
 #ifdef __WXMSW__
 	style |= wxTB_NOICONS;
@@ -76,7 +77,7 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 		delete toolbar;
 		return 0;
 	}
-	toolbar->SetToolBitmapSize(iconSize);
+	toolbar->SetToolBitmapSize(toolbar->iconSize_);
 	toolbar->MakeTools();
 
 	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_REMOTE_IDLE, true);
@@ -120,10 +121,9 @@ bool CToolBar::Realize()
 		return false;
 	}
 
-	wxSize const size = GetToolBitmapSize();
-	wxASSERT(size.x > 0 && size.y > 0);
-	auto toolImages = std::make_unique<wxImageList>(size.x, size.y, false, 0);
-	auto disabledToolImages = std::make_unique<wxImageList>(size.x, size.y, false, 0);
+	wxASSERT(iconSize_.x > 0 && iconSize_.y > 0);
+	auto toolImages = std::make_unique<wxImageList>(iconSize_.x, iconSize_.y, false, 0);
+	auto disabledToolImages = std::make_unique<wxImageList>(iconSize_.x, iconSize_.y, false, 0);
 
 	HWND hwnd = GetHandle();
 

@@ -38,6 +38,8 @@ protected:
 	std::unique_ptr<wxImageList> toolImages_;
 	std::unique_ptr<wxImageList> disabledToolImages_;
 #endif
+
+	wxSize iconSize_;
 };
 
 #endif //__TOOLBAR_H__
