@@ -698,7 +698,7 @@ bool CSftpControlSocket::SendCommand(std::wstring const& cmd, std::wstring const
 	if (cmd.find('\n') != std::wstring::npos ||
 		cmd.find('\r') != std::wstring::npos)
 	{
-		LogMessage(MessageType::Debug_Warning, _T("Command containing newline characters, aborting"));
+		LogMessage(MessageType::Debug_Warning, _T("Command containing newline characters, aborting."));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return false;
 	}
