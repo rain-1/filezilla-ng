@@ -881,7 +881,7 @@ int CFtpControlSocket::LogonParseResponse()
 			}
 		}
 		else if (code == 3 && pData->loginSequence.empty()) {
-			LogMessage(MessageType::Error, _("Login sequence fully executed yet not logged in. Aborting."));
+			LogMessage(MessageType::Error, _("Login sequence fully executed yet not logged in, aborting."));
 			if (cmd.type == loginCommandType::pass && m_pCurrentServer->GetAccount().empty()) {
 				LogMessage(MessageType::Error, _("Server might require an account. Try specifying an account using the Site Manager"));
 			}

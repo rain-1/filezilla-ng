@@ -709,7 +709,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 	if (!mode) {
 		ret = m_socket->GetLocalIP();
 		if (ret.empty()) {
-			PrintMessage(_("Failed to retrieve local ip address. Aborting"), 1);
+			PrintMessage(_("Failed to retrieve local ip address, aborting."), 1);
 			CloseSocket();
 		}
 	}
@@ -734,7 +734,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 			ret = m_pIPResolver->GetIP();
 		}
 		else {
-			PrintMessage(_("Failed to retrieve external ip address, aborting"), 1);
+			PrintMessage(_("Failed to retrieve external ip address, aborting."), 1);
 
 			m_testResult = externalfailed;
 			CloseSocket();
@@ -805,7 +805,7 @@ void CNetConfWizard::SendNextCommand()
 			int port = CreateListenSocket();
 			if (!port)
 			{
-				PrintMessage(_("Failed to create listen socket, aborting"), 1);
+				PrintMessage(_("Failed to create listen socket, aborting."), 1);
 				CloseSocket();
 				return;
 			}
