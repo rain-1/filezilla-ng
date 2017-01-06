@@ -267,17 +267,34 @@ protected:
 	CTransferStatus const status_;
 };
 
-// Notification about new or changed hostkeys, only used by SSH/SFTP transfers.
-// GetRequestID() returns either reqId_hostkey or reqId_hostkeyChanged
-class CHostKeyNotification final : public CAsyncRequestNotification
+class CSftpEncryptionDetails
 {
 public:
-	CHostKeyNotification(std::wstring const& host, int port, std::wstring const& fingerprint, bool changed = false);
+	virtual ~CSftpEncryptionDetails() = default;
+
+	std::wstring hostKeyAlgorithm;
+	std::wstring hostKeyFingerprintMD5;
+	std::wstring hostKeyFingerprintSHA256;
+	std::wstring kexAlgorithm;
+	std::wstring kexHash;
+	std::wstring kexCurve;
+	std::wstring cipherClientToServer;
+	std::wstring cipherServerToClient;
+	std::wstring macClientToServer;
+	std::wstring macServerToClient;
+};
+
+// Notification about new or changed hostkeys, only used by SSH/SFTP transfers.
+// GetRequestID() returns either reqId_hostkey or reqId_hostkeyChanged
+class CHostKeyNotification final : public CAsyncRequestNotification, public CSftpEncryptionDetails
+{
+public:
+	CHostKeyNotification(std::wstring const& host, int port, CSftpEncryptionDetails const& details, bool changed = false);
+
 	virtual RequestId GetRequestID() const;
 
 	std::wstring GetHost() const;
 	int GetPort() const;
-	std::wstring GetFingerprint() const;
 
 	// Set to true if you trust the server
 	bool m_trust{};
@@ -290,7 +307,6 @@ protected:
 
 	const std::wstring m_host;
 	const int m_port;
-	const std::wstring m_fingerprint;
 	const bool m_changed;
 };
 
@@ -425,17 +441,8 @@ private:
 	std::vector<CCertificate> m_certificates;
 };
 
-class CSftpEncryptionNotification final : public CNotificationHelper<nId_sftp_encryption>
+class CSftpEncryptionNotification final : public CNotificationHelper<nId_sftp_encryption>, public CSftpEncryptionDetails
 {
-public:
-	std::wstring hostKey;
-	std::wstring kexAlgorithm;
-	std::wstring kexHash;
-	std::wstring kexCurve;
-	std::wstring cipherClientToServer;
-	std::wstring cipherServerToClient;
-	std::wstring macClientToServer;
-	std::wstring macServerToClient;
 };
 
 class CLocalDirCreatedNotification final : public CNotificationHelper<nId_local_dir_created>

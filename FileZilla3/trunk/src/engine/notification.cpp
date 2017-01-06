@@ -37,8 +37,11 @@ CTransferStatus const& CTransferStatusNotification::GetStatus() const
 	return status_;
 }
 
-CHostKeyNotification::CHostKeyNotification(std::wstring const& host, int port, std::wstring const& fingerprint, bool changed)
-	: m_host(host), m_port(port), m_fingerprint(fingerprint), m_changed(changed)
+CHostKeyNotification::CHostKeyNotification(std::wstring const& host, int port, CSftpEncryptionDetails const& details, bool changed)
+	: CSftpEncryptionDetails(details)
+	, m_host(host)
+	, m_port(port)
+	, m_changed(changed)
 {
 }
 
@@ -55,11 +58,6 @@ std::wstring CHostKeyNotification::GetHost() const
 int CHostKeyNotification::GetPort() const
 {
 	return m_port;
-}
-
-std::wstring CHostKeyNotification::GetFingerprint() const
-{
-	return m_fingerprint;
 }
 
 CDataNotification::CDataNotification(char* pData, int len)

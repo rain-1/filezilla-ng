@@ -20,7 +20,12 @@ void CSftpEncryptioInfoDialog::ShowDialog(CSftpEncryptionNotification* pNotifica
 		xrc_call(dlg, "ID_KEXCURVE_LABEL", &wxWindow::Show, false);
 		xrc_call(dlg, "ID_KEXCURVE", &wxWindow::Show, false);
 	}
-	SetLabel(dlg, XRCID("ID_FINGERPRINT"), pNotification->hostKey);
+
+	if (!pNotification->hostKeyAlgorithm.empty()) {
+		SetLabel(dlg, XRCID("ID_HOSTKEYALGO"), pNotification->hostKeyAlgorithm);
+	}
+	std::wstring fingerprints = fz::sprintf(L"SHA256: %s\nMD5: %s", pNotification->hostKeyFingerprintSHA256, pNotification->hostKeyFingerprintMD5);
+	SetLabel(dlg, XRCID("ID_FINGERPRINT"), fingerprints);
 	SetLabel(dlg, XRCID("ID_C2S_CIPHER"), pNotification->cipherClientToServer);
 	SetLabel(dlg, XRCID("ID_C2S_MAC"), pNotification->macClientToServer);
 	SetLabel(dlg, XRCID("ID_S2C_CIPHER"), pNotification->cipherServerToClient);

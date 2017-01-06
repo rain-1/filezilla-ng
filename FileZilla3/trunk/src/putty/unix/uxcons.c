@@ -175,7 +175,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
 	return 1;
 
 //FZ premsg(&cf);
-    fzprintf_raw((ret == 1) ? sftpAskHostkey : sftpAskHostkeyChanged, "%s\n%d\n%s\n", host, port, fingerprint);
+    fzprintf_raw((ret == 1) ? sftpAskHostkey : sftpAskHostkeyChanged, "%s\n%d\n", host, port);
 
     {
 	struct termios oldmode, newmode;
