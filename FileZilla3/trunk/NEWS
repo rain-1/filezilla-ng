@@ -10,6 +10,17 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.24.0-rc1 (2017-01-06)
+
++ The context menu for remote file search results now has a "Copy URL(s) to clipboard" item
++ Alt+number can now be used to switch between tabs in addition to Ctrl+number
++ SFTP hostkey fingerprints are now also shown as base64 encoded SHA256 hashes to match the new format displayed by OpenSSH
+- Errors at the end of SFTP transfers now correctly result in transfer failures instead
+- Cancelling synchronized browsing questions no longer prevents further directory changes
+- Fix display issues for the filter conditions dialog
+- Fix deleting multiple extensions on the filetype page in the settings
+- OS X: Do not open dialogs while already processing an event, e.g. while a context menu is open
+
 3.23.0.2 (2016-12-06)
 
 - Key file paths entered in the Site Manager are now saved to corresponding server entries in the transfer queue
