@@ -417,179 +417,179 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 		//Fill the month names map
 
 		//English month names
-		m_MonthNamesMap[_T("jan")] = 1;
-		m_MonthNamesMap[_T("feb")] = 2;
-		m_MonthNamesMap[_T("mar")] = 3;
-		m_MonthNamesMap[_T("apr")] = 4;
-		m_MonthNamesMap[_T("may")] = 5;
-		m_MonthNamesMap[_T("jun")] = 6;
-		m_MonthNamesMap[_T("june")] = 6;
-		m_MonthNamesMap[_T("jul")] = 7;
-		m_MonthNamesMap[_T("july")] = 7;
-		m_MonthNamesMap[_T("aug")] = 8;
-		m_MonthNamesMap[_T("sep")] = 9;
-		m_MonthNamesMap[_T("sept")] = 9;
-		m_MonthNamesMap[_T("oct")] = 10;
-		m_MonthNamesMap[_T("nov")] = 11;
-		m_MonthNamesMap[_T("dec")] = 12;
+		m_MonthNamesMap[L"jan"] = 1;
+		m_MonthNamesMap[L"feb"] = 2;
+		m_MonthNamesMap[L"mar"] = 3;
+		m_MonthNamesMap[L"apr"] = 4;
+		m_MonthNamesMap[L"may"] = 5;
+		m_MonthNamesMap[L"jun"] = 6;
+		m_MonthNamesMap[L"june"] = 6;
+		m_MonthNamesMap[L"jul"] = 7;
+		m_MonthNamesMap[L"july"] = 7;
+		m_MonthNamesMap[L"aug"] = 8;
+		m_MonthNamesMap[L"sep"] = 9;
+		m_MonthNamesMap[L"sept"] = 9;
+		m_MonthNamesMap[L"oct"] = 10;
+		m_MonthNamesMap[L"nov"] = 11;
+		m_MonthNamesMap[L"dec"] = 12;
 
 		//Numerical values for the month
-		m_MonthNamesMap[_T("1")] = 1;
-		m_MonthNamesMap[_T("01")] = 1;
-		m_MonthNamesMap[_T("2")] = 2;
-		m_MonthNamesMap[_T("02")] = 2;
-		m_MonthNamesMap[_T("3")] = 3;
-		m_MonthNamesMap[_T("03")] = 3;
-		m_MonthNamesMap[_T("4")] = 4;
-		m_MonthNamesMap[_T("04")] = 4;
-		m_MonthNamesMap[_T("5")] = 5;
-		m_MonthNamesMap[_T("05")] = 5;
-		m_MonthNamesMap[_T("6")] = 6;
-		m_MonthNamesMap[_T("06")] = 6;
-		m_MonthNamesMap[_T("7")] = 7;
-		m_MonthNamesMap[_T("07")] = 7;
-		m_MonthNamesMap[_T("8")] = 8;
-		m_MonthNamesMap[_T("08")] = 8;
-		m_MonthNamesMap[_T("9")] = 9;
-		m_MonthNamesMap[_T("09")] = 9;
-		m_MonthNamesMap[_T("10")] = 10;
-		m_MonthNamesMap[_T("11")] = 11;
-		m_MonthNamesMap[_T("12")] = 12;
+		m_MonthNamesMap[L"1"] = 1;
+		m_MonthNamesMap[L"01"] = 1;
+		m_MonthNamesMap[L"2"] = 2;
+		m_MonthNamesMap[L"02"] = 2;
+		m_MonthNamesMap[L"3"] = 3;
+		m_MonthNamesMap[L"03"] = 3;
+		m_MonthNamesMap[L"4"] = 4;
+		m_MonthNamesMap[L"04"] = 4;
+		m_MonthNamesMap[L"5"] = 5;
+		m_MonthNamesMap[L"05"] = 5;
+		m_MonthNamesMap[L"6"] = 6;
+		m_MonthNamesMap[L"06"] = 6;
+		m_MonthNamesMap[L"7"] = 7;
+		m_MonthNamesMap[L"07"] = 7;
+		m_MonthNamesMap[L"8"] = 8;
+		m_MonthNamesMap[L"08"] = 8;
+		m_MonthNamesMap[L"9"] = 9;
+		m_MonthNamesMap[L"09"] = 9;
+		m_MonthNamesMap[L"10"] = 10;
+		m_MonthNamesMap[L"11"] = 11;
+		m_MonthNamesMap[L"12"] = 12;
 
 		//German month names
-		m_MonthNamesMap[_T("mrz")] = 3;
-		m_MonthNamesMap[_T("m\xe4r")] = 3;
-		m_MonthNamesMap[_T("m\xe4rz")] = 3;
-		m_MonthNamesMap[_T("mai")] = 5;
-		m_MonthNamesMap[_T("juni")] = 6;
-		m_MonthNamesMap[_T("juli")] = 7;
-		m_MonthNamesMap[_T("okt")] = 10;
-		m_MonthNamesMap[_T("dez")] = 12;
+		m_MonthNamesMap[L"mrz"] = 3;
+		m_MonthNamesMap[L"m\xe4r"] = 3;
+		m_MonthNamesMap[L"m\xe4rz"] = 3;
+		m_MonthNamesMap[L"mai"] = 5;
+		m_MonthNamesMap[L"juni"] = 6;
+		m_MonthNamesMap[L"juli"] = 7;
+		m_MonthNamesMap[L"okt"] = 10;
+		m_MonthNamesMap[L"dez"] = 12;
 
 		//Austrian month names
-		m_MonthNamesMap[_T("j\xe4n")] = 1;
+		m_MonthNamesMap[L"j\xe4n"] = 1;
 
 		//French month names
-		m_MonthNamesMap[_T("janv")] = 1;
-		m_MonthNamesMap[_T("f\xe9") _T("b")] = 1;
-		m_MonthNamesMap[_T("f\xe9v")] = 2;
-		m_MonthNamesMap[_T("fev")] = 2;
-		m_MonthNamesMap[_T("f\xe9vr")] = 2;
-		m_MonthNamesMap[_T("fevr")] = 2;
-		m_MonthNamesMap[_T("mars")] = 3;
-		m_MonthNamesMap[_T("mrs")] = 3;
-		m_MonthNamesMap[_T("avr")] = 4;
-		m_MonthNamesMap[_T("avril")] = 4;
-		m_MonthNamesMap[_T("juin")] = 6;
-		m_MonthNamesMap[_T("juil")] = 7;
-		m_MonthNamesMap[_T("jui")] = 7;
-		m_MonthNamesMap[_T("ao\xfb")] = 8;
-		m_MonthNamesMap[_T("ao\xfbt")] = 8;
-		m_MonthNamesMap[_T("aout")] = 8;
-		m_MonthNamesMap[_T("d\xe9") _T("c")] = 12;
-		m_MonthNamesMap[_T("dec")] = 12;
+		m_MonthNamesMap[L"janv"] = 1;
+		m_MonthNamesMap[L"f\xe9" L"b"] = 1;
+		m_MonthNamesMap[L"f\xe9v"] = 2;
+		m_MonthNamesMap[L"fev"] = 2;
+		m_MonthNamesMap[L"f\xe9vr"] = 2;
+		m_MonthNamesMap[L"fevr"] = 2;
+		m_MonthNamesMap[L"mars"] = 3;
+		m_MonthNamesMap[L"mrs"] = 3;
+		m_MonthNamesMap[L"avr"] = 4;
+		m_MonthNamesMap[L"avril"] = 4;
+		m_MonthNamesMap[L"juin"] = 6;
+		m_MonthNamesMap[L"juil"] = 7;
+		m_MonthNamesMap[L"jui"] = 7;
+		m_MonthNamesMap[L"ao\xfb"] = 8;
+		m_MonthNamesMap[L"ao\xfbt"] = 8;
+		m_MonthNamesMap[L"aout"] = 8;
+		m_MonthNamesMap[L"d\xe9" L"c"] = 12;
+		m_MonthNamesMap[L"dec"] = 12;
 
 		//Italian month names
-		m_MonthNamesMap[_T("gen")] = 1;
-		m_MonthNamesMap[_T("mag")] = 5;
-		m_MonthNamesMap[_T("giu")] = 6;
-		m_MonthNamesMap[_T("lug")] = 7;
-		m_MonthNamesMap[_T("ago")] = 8;
-		m_MonthNamesMap[_T("set")] = 9;
-		m_MonthNamesMap[_T("ott")] = 10;
-		m_MonthNamesMap[_T("dic")] = 12;
+		m_MonthNamesMap[L"gen"] = 1;
+		m_MonthNamesMap[L"mag"] = 5;
+		m_MonthNamesMap[L"giu"] = 6;
+		m_MonthNamesMap[L"lug"] = 7;
+		m_MonthNamesMap[L"ago"] = 8;
+		m_MonthNamesMap[L"set"] = 9;
+		m_MonthNamesMap[L"ott"] = 10;
+		m_MonthNamesMap[L"dic"] = 12;
 
 		//Spanish month names
-		m_MonthNamesMap[_T("ene")] = 1;
-		m_MonthNamesMap[_T("fbro")] = 2;
-		m_MonthNamesMap[_T("mzo")] = 3;
-		m_MonthNamesMap[_T("ab")] = 4;
-		m_MonthNamesMap[_T("abr")] = 4;
-		m_MonthNamesMap[_T("agto")] = 8;
-		m_MonthNamesMap[_T("sbre")] = 9;
-		m_MonthNamesMap[_T("obre")] = 9;
-		m_MonthNamesMap[_T("nbre")] = 9;
-		m_MonthNamesMap[_T("dbre")] = 9;
+		m_MonthNamesMap[L"ene"] = 1;
+		m_MonthNamesMap[L"fbro"] = 2;
+		m_MonthNamesMap[L"mzo"] = 3;
+		m_MonthNamesMap[L"ab"] = 4;
+		m_MonthNamesMap[L"abr"] = 4;
+		m_MonthNamesMap[L"agto"] = 8;
+		m_MonthNamesMap[L"sbre"] = 9;
+		m_MonthNamesMap[L"obre"] = 9;
+		m_MonthNamesMap[L"nbre"] = 9;
+		m_MonthNamesMap[L"dbre"] = 9;
 
 		//Polish month names
-		m_MonthNamesMap[_T("sty")] = 1;
-		m_MonthNamesMap[_T("lut")] = 2;
-		m_MonthNamesMap[_T("kwi")] = 4;
-		m_MonthNamesMap[_T("maj")] = 5;
-		m_MonthNamesMap[_T("cze")] = 6;
-		m_MonthNamesMap[_T("lip")] = 7;
-		m_MonthNamesMap[_T("sie")] = 8;
-		m_MonthNamesMap[_T("wrz")] = 9;
-		m_MonthNamesMap[_T("pa\x9f")] = 10;
-		m_MonthNamesMap[_T("pa\xbc")] = 10; // ISO-8859-2
-		m_MonthNamesMap[_T("paz")] = 10; // ASCII
-		m_MonthNamesMap[_T("pa\xc5\xba")] = 10; // UTF-8
-		m_MonthNamesMap[_T("pa\x017a")] = 10; // some servers send this
-		m_MonthNamesMap[_T("lis")] = 11;
-		m_MonthNamesMap[_T("gru")] = 12;
+		m_MonthNamesMap[L"sty"] = 1;
+		m_MonthNamesMap[L"lut"] = 2;
+		m_MonthNamesMap[L"kwi"] = 4;
+		m_MonthNamesMap[L"maj"] = 5;
+		m_MonthNamesMap[L"cze"] = 6;
+		m_MonthNamesMap[L"lip"] = 7;
+		m_MonthNamesMap[L"sie"] = 8;
+		m_MonthNamesMap[L"wrz"] = 9;
+		m_MonthNamesMap[L"pa\x9f"] = 10;
+		m_MonthNamesMap[L"pa\xbc"] = 10; // ISO-8859-2
+		m_MonthNamesMap[L"paz"] = 10; // ASCII
+		m_MonthNamesMap[L"pa\xc5\xba"] = 10; // UTF-8
+		m_MonthNamesMap[L"pa\x017a"] = 10; // some servers send this
+		m_MonthNamesMap[L"lis"] = 11;
+		m_MonthNamesMap[L"gru"] = 12;
 
 		//Russian month names
-		m_MonthNamesMap[_T("\xff\xed\xe2")] = 1;
-		m_MonthNamesMap[_T("\xf4\xe5\xe2")] = 2;
-		m_MonthNamesMap[_T("\xec\xe0\xf0")] = 3;
-		m_MonthNamesMap[_T("\xe0\xef\xf0")] = 4;
-		m_MonthNamesMap[_T("\xec\xe0\xe9")] = 5;
-		m_MonthNamesMap[_T("\xe8\xfe\xed")] = 6;
-		m_MonthNamesMap[_T("\xe8\xfe\xeb")] = 7;
-		m_MonthNamesMap[_T("\xe0\xe2\xe3")] = 8;
-		m_MonthNamesMap[_T("\xf1\xe5\xed")] = 9;
-		m_MonthNamesMap[_T("\xee\xea\xf2")] = 10;
-		m_MonthNamesMap[_T("\xed\xee\xff")] = 11;
-		m_MonthNamesMap[_T("\xe4\xe5\xea")] = 12;
+		m_MonthNamesMap[L"\xff\xed\xe2"] = 1;
+		m_MonthNamesMap[L"\xf4\xe5\xe2"] = 2;
+		m_MonthNamesMap[L"\xec\xe0\xf0"] = 3;
+		m_MonthNamesMap[L"\xe0\xef\xf0"] = 4;
+		m_MonthNamesMap[L"\xec\xe0\xe9"] = 5;
+		m_MonthNamesMap[L"\xe8\xfe\xed"] = 6;
+		m_MonthNamesMap[L"\xe8\xfe\xeb"] = 7;
+		m_MonthNamesMap[L"\xe0\xe2\xe3"] = 8;
+		m_MonthNamesMap[L"\xf1\xe5\xed"] = 9;
+		m_MonthNamesMap[L"\xee\xea\xf2"] = 10;
+		m_MonthNamesMap[L"\xed\xee\xff"] = 11;
+		m_MonthNamesMap[L"\xe4\xe5\xea"] = 12;
 
 		//Dutch month names
-		m_MonthNamesMap[_T("mrt")] = 3;
-		m_MonthNamesMap[_T("mei")] = 5;
+		m_MonthNamesMap[L"mrt"] = 3;
+		m_MonthNamesMap[L"mei"] = 5;
 
 		//Portuguese month names
-		m_MonthNamesMap[_T("out")] = 10;
+		m_MonthNamesMap[L"out"] = 10;
 
 		//Finnish month names
-		m_MonthNamesMap[_T("tammi")] = 1;
-		m_MonthNamesMap[_T("helmi")] = 2;
-		m_MonthNamesMap[_T("maalis")] = 3;
-		m_MonthNamesMap[_T("huhti")] = 4;
-		m_MonthNamesMap[_T("touko")] = 5;
-		m_MonthNamesMap[_T("kes\xe4")] = 6;
-		m_MonthNamesMap[_T("hein\xe4")] = 7;
-		m_MonthNamesMap[_T("elo")] = 8;
-		m_MonthNamesMap[_T("syys")] = 9;
-		m_MonthNamesMap[_T("loka")] = 10;
-		m_MonthNamesMap[_T("marras")] = 11;
-		m_MonthNamesMap[_T("joulu")] = 12;
+		m_MonthNamesMap[L"tammi"] = 1;
+		m_MonthNamesMap[L"helmi"] = 2;
+		m_MonthNamesMap[L"maalis"] = 3;
+		m_MonthNamesMap[L"huhti"] = 4;
+		m_MonthNamesMap[L"touko"] = 5;
+		m_MonthNamesMap[L"kes\xe4"] = 6;
+		m_MonthNamesMap[L"hein\xe4"] = 7;
+		m_MonthNamesMap[L"elo"] = 8;
+		m_MonthNamesMap[L"syys"] = 9;
+		m_MonthNamesMap[L"loka"] = 10;
+		m_MonthNamesMap[L"marras"] = 11;
+		m_MonthNamesMap[L"joulu"] = 12;
 
 		//Slovenian month names
-		m_MonthNamesMap[_T("avg")] = 8;
+		m_MonthNamesMap[L"avg"] = 8;
 
 		//Icelandic
-		m_MonthNamesMap[_T("ma\x00ed")] = 5;
-		m_MonthNamesMap[_T("j\x00fan")] = 6;
-		m_MonthNamesMap[_T("j\x00fal")] = 7;
-		m_MonthNamesMap[_T("\x00e1g")] = 8;
-		m_MonthNamesMap[_T("n\x00f3v")] = 11;
-		m_MonthNamesMap[_T("des")] = 12;
+		m_MonthNamesMap[L"ma\x00ed"] = 5;
+		m_MonthNamesMap[L"j\x00fan"] = 6;
+		m_MonthNamesMap[L"j\x00fal"] = 7;
+		m_MonthNamesMap[L"\x00e1g"] = 8;
+		m_MonthNamesMap[L"n\x00f3v"] = 11;
+		m_MonthNamesMap[L"des"] = 12;
 
 		//Lithuanian
-		m_MonthNamesMap[_T("sau")] = 1;
-		m_MonthNamesMap[_T("vas")] = 2;
-		m_MonthNamesMap[_T("kov")] = 3;
-		m_MonthNamesMap[_T("bal")] = 4;
-		m_MonthNamesMap[_T("geg")] = 5;
-		m_MonthNamesMap[_T("bir")] = 6;
-		m_MonthNamesMap[_T("lie")] = 7;
-		m_MonthNamesMap[_T("rgp")] = 8;
-		m_MonthNamesMap[_T("rgs")] = 9;
-		m_MonthNamesMap[_T("spa")] = 10;
-		m_MonthNamesMap[_T("lap")] = 11;
-		m_MonthNamesMap[_T("grd")] = 12;
+		m_MonthNamesMap[L"sau"] = 1;
+		m_MonthNamesMap[L"vas"] = 2;
+		m_MonthNamesMap[L"kov"] = 3;
+		m_MonthNamesMap[L"bal"] = 4;
+		m_MonthNamesMap[L"geg"] = 5;
+		m_MonthNamesMap[L"bir"] = 6;
+		m_MonthNamesMap[L"lie"] = 7;
+		m_MonthNamesMap[L"rgp"] = 8;
+		m_MonthNamesMap[L"rgs"] = 9;
+		m_MonthNamesMap[L"spa"] = 10;
+		m_MonthNamesMap[L"lap"] = 11;
+		m_MonthNamesMap[L"grd"] = 12;
 
 		// Hungarian
-		m_MonthNamesMap[_T("szept")] = 9;
+		m_MonthNamesMap[L"szept"] = 9;
 
 		//There are more languages and thus month
 		//names, but as long as nobody reports a
@@ -614,18 +614,18 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 		}
 		m_MonthNamesMap.insert(combo.begin(), combo.end());
 
-		m_MonthNamesMap[_T("1")] = 1;
-		m_MonthNamesMap[_T("2")] = 2;
-		m_MonthNamesMap[_T("3")] = 3;
-		m_MonthNamesMap[_T("4")] = 4;
-		m_MonthNamesMap[_T("5")] = 5;
-		m_MonthNamesMap[_T("6")] = 6;
-		m_MonthNamesMap[_T("7")] = 7;
-		m_MonthNamesMap[_T("8")] = 8;
-		m_MonthNamesMap[_T("9")] = 9;
-		m_MonthNamesMap[_T("10")] = 10;
-		m_MonthNamesMap[_T("11")] = 11;
-		m_MonthNamesMap[_T("12")] = 12;
+		m_MonthNamesMap[L"1"] = 1;
+		m_MonthNamesMap[L"2"] = 2;
+		m_MonthNamesMap[L"3"] = 3;
+		m_MonthNamesMap[L"4"] = 4;
+		m_MonthNamesMap[L"5"] = 5;
+		m_MonthNamesMap[L"6"] = 6;
+		m_MonthNamesMap[L"7"] = 7;
+		m_MonthNamesMap[L"8"] = 8;
+		m_MonthNamesMap[L"9"] = 9;
+		m_MonthNamesMap[L"10"] = 10;
+		m_MonthNamesMap[L"11"] = 11;
+		m_MonthNamesMap[L"12"] = 12;
 	}
 
 #ifdef LISTDEBUG
@@ -828,7 +828,7 @@ done:
 	m_fileListOnly = false;
 
 	// Don't add . or ..
-	if (entry.name == _T(".") || entry.name == _T(".."))
+	if (entry.name == L"." || entry.name == L"..")
 		return true;
 
 	if (serverType == VMS && entry.is_dir()) {
@@ -887,7 +887,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 	if (token.GetLength() == 1) {
 		if (!line.GetToken(++index, token))
 			return false;
-		permissions += _T(" ") + token.GetString();
+		permissions += L" " + token.GetString();
 		netware = true;
 	}
 
@@ -912,7 +912,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 			if (!line.GetToken(++index, token))
 				return false;
 			if (i)
-				ownerGroup += _T(" ");
+				ownerGroup += L" ";
 			ownerGroup += token.GetString();
 		}
 
@@ -929,7 +929,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 		// Append missing group to ownerGroup
 		if (!token.IsNumeric() && token.IsRightNumeric()) {
 			if (!ownerGroup.empty())
-				ownerGroup += _T(" ");
+				ownerGroup += L" ";
 
 			std::wstring const group = token.GetString();
 			int i;
@@ -961,7 +961,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 
 		if (entry.is_link()) {
 			size_t pos;
-			if ((pos = entry.name.find(_T(" -> "))) != std::wstring::npos) {
+			if ((pos = entry.name.find(L" -> ")) != std::wstring::npos) {
 				entry.target = fz::sparse_optional<std::wstring>(entry.name.substr(pos + 4));
 				entry.name = entry.name.substr(0, pos);
 			}
@@ -999,9 +999,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	// Some servers use the following date formats:
 	// 26-05 2002, 2002-10-14, 01-jun-99 or 2004.07.15
 	// slashes instead of dashes are also possible
-	int pos = token.Find(_T("-/."));
+	int pos = token.Find(L"-/.");
 	if (pos != -1) {
-		int pos2 = token.Find(_T("-/."), pos + 1);
+		int pos2 = token.Find(L"-/.", pos + 1);
 		if (pos2 == -1) {
 			if (token[pos] != '.') {
 				// something like 26-05 2002
@@ -1116,7 +1116,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	if (!line.GetToken(++index, token))
 		return false;
 
-	pos = token.Find(_T(":.-"));
+	pos = token.Find(L":.-");
 	if (pos != -1 && mayHaveTime) {
 		// token is a time
 		if (!pos || static_cast<size_t>(pos) == (token.GetLength() - 1)) {
@@ -1227,7 +1227,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	int month = 0;
 	int day = 0;
 
-	int pos = token.Find(_T("-./"));
+	int pos = token.Find(L"-./");
 	if (pos < 1)
 		return false;
 
@@ -1288,7 +1288,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	else
 		return false;
 
-	int pos2 = token.Find(_T("-./"), pos + 1);
+	int pos2 = token.Find(L"-./", pos + 1);
 	if (pos2 == -1 || (pos2 - pos) == 1)
 		return false;
 	if (static_cast<size_t>(pos2) == (token.GetLength() - 1))
@@ -1383,7 +1383,7 @@ bool CDirectoryListingParser::ParseAsDos(CLine &line, CDirentry &entry)
 	if (!line.GetToken(++index, token))
 		return false;
 
-	if (token.GetString() == _T("<DIR>")) {
+	if (token.GetString() == L"<DIR>") {
 		entry.flags |= CDirentry::flag_dir;
 		entry.size = -1;
 	}
@@ -1560,9 +1560,9 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 
 	entry.flags = 0;
 
-	if (pos > 4 && token.GetString().substr(pos - 4, 4) == _T(".DIR")) {
+	if (pos > 4 && token.GetString().substr(pos - 4, 4) == L".DIR") {
 		entry.flags |= CDirentry::flag_dir;
-		if (token.GetString().substr(pos) == _T(";1"))
+		if (token.GetString().substr(pos) == L";1")
 			entry.name = token.GetString().substr(0, pos - 4);
 		else
 			entry.name = token.GetString().substr(0, pos - 4) + token.GetString().substr(pos);
@@ -1671,17 +1671,17 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 		const int len = token.GetLength();
 		if (len > 2 && token[0] == '(' && token[len - 1] == ')') {
 			if (!permissions.empty())
-				permissions += _T(" ");
+				permissions += L" ";
 			permissions += token.GetString().substr(1, len - 2);
 		}
 		else if (len > 2 && token[0] == '[' && token[len - 1] == ']') {
 			if (!ownerGroup.empty())
-				ownerGroup += _T(" ");
+				ownerGroup += L" ";
 			ownerGroup += token.GetString().substr(1, len - 2);
 		}
 		else {
 			if (!ownerGroup.empty())
-				ownerGroup += _T(" ");
+				ownerGroup += L" ";
 			ownerGroup += token.GetString();
 		}
 	}
@@ -1776,7 +1776,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 		if (!line.GetToken(++index, token))
 			return false;
 
-		ownerGroup += _T(" ") + token.GetString();
+		ownerGroup += L" " + token.GetString();
 
 		// Get size
 		if (!line.GetToken(++index, token))
@@ -1821,9 +1821,9 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			// OS/2 or nortel.VxWorks
 			int skippedCount = 0;
 			do {
-				if (token.GetString() == _T("DIR"))
+				if (token.GetString() == L"DIR")
 					entry.flags |= CDirentry::flag_dir;
-				else if (token.Find(_T("-/.")) != -1)
+				else if (token.Find(L"-/.") != -1)
 					break;
 
 				++skippedCount;
@@ -1849,7 +1849,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			entry.name = token.GetString();
 			if (entry.name.size() >= 5) {
 				std::wstring type = fz::str_tolower_ascii(entry.name.substr(entry.name.size() - 5));
-				if (!skippedCount && type == _T("<dir>")) {
+				if (!skippedCount && type == L"<dir>") {
 					entry.flags |= CDirentry::flag_dir;
 					entry.name = entry.name.substr(0, entry.name.size() - 5);
 					while (!entry.name.empty() && entry.name.back() == ' ')
@@ -1986,8 +1986,9 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 						error = true;
 						return 0;
 					}
-					if (breakAtEnd)
+					if (breakAtEnd) {
 						return 0;
+					}
 					break;
 				}
 				len = iter->len;
@@ -2015,8 +2016,9 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 		auto i = m_DataList.begin();
 		while (i != iter && reslen) {
 			int copylen = i->len - startpos;
-			if (copylen > reslen)
+			if (copylen > reslen) {
 				copylen = reslen;
+			}
 			memcpy(&res[respos], &i->p[startpos], copylen);
 			reslen -= copylen;
 			respos += i->len - startpos;
@@ -2029,8 +2031,9 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 		// Copy last chunk
 		if (iter != m_DataList.end() && reslen) {
 			int copylen = m_currentOffset-startpos;
-			if (copylen > reslen)
+			if (copylen > reslen) {
 				copylen = reslen;
+			}
 			memcpy(&res[respos], &iter->p[startpos], copylen);
 			if (reslen >= iter->len) {
 				delete [] iter->p;
@@ -2141,10 +2144,10 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 		return false;
 
 	entry.flags = 0;
-	if (token.GetString() != _T("**NONE**") && !ParseShortDate(token, entry)) {
+	if (token.GetString() != L"**NONE**" && !ParseShortDate(token, entry)) {
 		// Perhaps of the following type:
 		// TSO004 3390 VSAM FOO.BAR
-		if (token.GetString() != _T("VSAM"))
+		if (token.GetString() != L"VSAM")
 			return false;
 
 		if (!line.GetToken(index++, token))
@@ -2172,7 +2175,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 	// used
 	if (!line.GetToken(index++, token))
 		return false;
-	if (token.IsNumeric() || token.GetString() == _T("????") || token.GetString() == _T("++++") ) {
+	if (token.IsNumeric() || token.GetString() == L"????" || token.GetString() == L"++++" ) {
 		// recfm
 		if (!line.GetToken(index++, token))
 			return false;
@@ -2200,7 +2203,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 	if (!line.GetToken(index++, token))
 		return false;
 
-	if (token.GetString() == _T("PO") || token.GetString() == _T("PO-E"))
+	if (token.GetString() == L"PO" || token.GetString() == L"PO-E")
 	{
 		entry.flags |= CDirentry::flag_dir;
 		entry.size = -1;
@@ -2295,7 +2298,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Migrated(CLine &line, CDirentry &en
 		return false;
 
 	std::wstring s = fz::str_tolower_ascii(token.GetString());
-	if (s != _T("migrated"))
+	if (s != L"migrated")
 		return false;
 
 	if (!line.GetToken(++index, token))
@@ -2358,13 +2361,13 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS2(CLine &line, CDirentry &entry)
 	if (!line.GetToken(index, token)) {
 		return false;
 	}
-	if (!token.IsNumeric() && (token.GetString() != _T("ANY")))
+	if (!token.IsNumeric() && (token.GetString() != L"ANY"))
 		return false;
 
 	if (!line.GetToken(index - 1, token)) {
 		return false;
 	}
-	if (!token.IsNumeric() && (token.GetString() != _T("ANY")))
+	if (!token.IsNumeric() && (token.GetString() != L"ANY"))
 		return false;
 
 	for (int i = start; i < index - 1; ++i) {
@@ -2394,7 +2397,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Tape(CLine &line, CDirentry &entry)
 		return false;
 
 	std::wstring s = fz::str_tolower_ascii(token.GetString());
-	if (s != _T("tape"))
+	if (s != L"tape")
 		return false;
 
 	// dsname
@@ -2546,7 +2549,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 
 		std::wstring factname = fz::str_tolower_ascii(facts.substr(start, pos - start));
 		std::wstring value = facts.substr(pos + 1, delim - pos - 1);
-		if (factname == _T("type")) {
+		if (factname == L"type") {
 			auto colonPos = value.find(':');
 			std::wstring valuePrefix;
 			if (colonPos == std::wstring::npos) {
@@ -2556,21 +2559,21 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 				valuePrefix = fz::str_tolower_ascii(value.substr(0, colonPos));
 			}
 
-			if (valuePrefix == _T("dir") && colonPos == std::wstring::npos) {
+			if (valuePrefix == L"dir" && colonPos == std::wstring::npos) {
 				entry.flags |= CDirentry::flag_dir;
 			}
-			else if (valuePrefix == _T("os.unix=slink") || valuePrefix == _T("os.unix=symlink")) {
+			else if (valuePrefix == L"os.unix=slink" || valuePrefix == L"os.unix=symlink") {
 				entry.flags |= CDirentry::flag_dir | CDirentry::flag_link;
 				if (colonPos != std::wstring::npos) {
 					entry.target = fz::sparse_optional<std::wstring>(value.substr(colonPos));
 				}
 			}
-			else if ((valuePrefix == _T("cdir") || valuePrefix == _T("pdir")) && colonPos == std::wstring::npos) {
+			else if ((valuePrefix == L"cdir" || valuePrefix == L"pdir") && colonPos == std::wstring::npos) {
 				// Current and parent directory, don't parse it
 				return 2;
 			}
 		}
-		else if (factname == _T("size")) {
+		else if (factname == L"size") {
 			entry.size = 0;
 
 			for (unsigned int i = 0; i < value.size(); ++i) {
@@ -2581,51 +2584,51 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 				entry.size += value[i] - '0';
 			}
 		}
-		else if (factname == _T("modify") ||
-			(!entry.has_date() && factname == _T("create")))
+		else if (factname == L"modify" ||
+			(!entry.has_date() && factname == L"create"))
 		{
 			entry.time = fz::datetime(value, fz::datetime::utc);
 			if (entry.time.empty()) {
 				return 0;
 			}
 		}
-		else if (factname == _T("perm")) {
+		else if (factname == L"perm") {
 			if (!value.empty()) {
 				if (!permissions.empty()) {
-					permissions = value + _T(" (") + permissions + _T(")");
+					permissions = value + L" (" + permissions + L")";
 				}
 				else {
 					permissions = value;
 				}
 			}
 		}
-		else if (factname == _T("unix.mode")) {
+		else if (factname == L"unix.mode") {
 			if (!permissions.empty()) {
-				permissions = permissions + _T(" (") + value + _T(")");
+				permissions = permissions + L" (" + value + L")";
 			}
 			else {
 				permissions = value;
 			}
 		}
-		else if (factname == _T("unix.owner")) {
+		else if (factname == L"unix.owner") {
 			owner = value;
 		}
-		else if (factname == _T("unix.ownername")) {
+		else if (factname == L"unix.ownername") {
 			ownername = value;
 		}
-		else if (factname == _T("unix.group")) {
+		else if (factname == L"unix.group") {
 			group = value;
 		}
-		else if (factname == _T("unix.groupname")) {
+		else if (factname == L"unix.groupname") {
 			groupname = value;
 		}
-		else if (factname == _T("unix.user")) {
+		else if (factname == L"unix.user") {
 			user = value;
 		}
-		else if (factname == _T("unix.uid")) {
+		else if (factname == L"unix.uid") {
 			uid = value;
 		}
-		else if (factname == _T("unix.gid")) {
+		else if (factname == L"unix.gid") {
 			gid = value;
 		}
 
@@ -2648,13 +2651,13 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 	}
 
 	if (!groupname.empty()) {
-		ownerGroup += _T(" ") + groupname;
+		ownerGroup += L" " + groupname;
 	}
 	else if (!group.empty()) {
-		ownerGroup += _T(" ") + group;
+		ownerGroup += L" " + group;
 	}
 	else if (!gid.empty()) {
-		ownerGroup += _T(" ") + gid;
+		ownerGroup += L" " + gid;
 	}
 
 	if (!line.GetToken(1, token, true, true)) {
@@ -2764,13 +2767,13 @@ bool CDirectoryListingParser::ParseAsZVM(CLine &line, CDirentry &entry)
 	// Get filename extension
 	if (!line.GetToken(++index, token))
 		return false;
-	entry.name += _T(".") + token.GetString();
+	entry.name += L"." + token.GetString();
 
 	// File format. Unused
 	if (!line.GetToken(++index, token))
 		return false;
 	std::wstring format = token.GetString();
-	if (format != _T("V") && format != _T("F"))
+	if (format != L"V" && format != L"F")
 		return false;
 
 	// Record length
@@ -2879,7 +2882,7 @@ bool CDirectoryListingParser::ParseAsHPNonstop(CLine &line, CDirentry &entry)
 		// Owner, part 2
 		if (!line.GetToken(++index, token))
 			return false;
-		ownerGroup += _T(" ") + token.GetString();
+		ownerGroup += L" " + token.GetString();
 	}
 
 	// Permissions
