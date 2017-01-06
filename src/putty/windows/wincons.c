@@ -113,7 +113,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
     if (ret == 0)		       /* success - key matched OK */
 	return 1;
 
-    fzprintf_raw((ret == 1) ? sftpAskHostkey : sftpAskHostkeyChanged, "%s\n%d\n%s\n", host, port, fingerprint);
+    fzprintf_raw((ret == 1) ? sftpAskHostkey : sftpAskHostkeyChanged, "%s\n%d\n", host, port);
 
     hin = GetStdHandle(STD_INPUT_HANDLE);
     GetConsoleMode(hin, &savemode);

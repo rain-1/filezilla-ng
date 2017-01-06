@@ -856,12 +856,22 @@
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
-                          <label>Fingerprint:</label>
+                          <label>Hostkey algorithm:</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText" name="ID_HOSTKEYALGO">
+                          <label>Unknown</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText">
+                          <label>Fingerprints:</label>
                         </object>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_FINGERPRINT">
-                          <label>&lt;fingerprint&gt;</label>
+                          <label>Unknown</label>
                         </object>
                       </object>
                       <vgap>2</vgap>
@@ -967,12 +977,22 @@
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
-                          <label>Fingerprint:</label>
+                          <label>Hostkey algorithm:</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText" name="ID_HOSTKEYALGO">
+                          <label>Unknown</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText">
+                          <label>Fingerprints:</label>
                         </object>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_FINGERPRINT">
-                          <label>&lt;fingerprint&gt;</label>
+                          <label>Unknown</label>
                         </object>
                       </object>
                       <vgap>2</vgap>
@@ -2026,14 +2046,40 @@
                       <label>&lt;kexmac&gt;</label>
                     </object>
                   </object>
+                  <vgap>3</vgap>
+                  <hgap>3</hgap>
+                </object>
+                <flag>wxALL</flag>
+                <border>4</border>
+              </object>
+            </object>
+            <flag>wxGROW</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticBoxSizer">
+              <label>Server host key</label>
+              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <object class="wxFlexGridSizer">
+                  <cols>2</cols>
                   <object class="sizeritem">
                     <object class="wxStaticText">
-                      <label>Host key fingerprint:</label>
+                      <label>Algorithm:</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxStaticText" name="ID_HOSTKEYALGO">
+                      <label>Unknown</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxStaticText">
+                      <label>Fingerprints:</label>
                     </object>
                   </object>
                   <object class="sizeritem">
                     <object class="wxStaticText" name="ID_FINGERPRINT">
-                      <label>&lt;fingerprint&gt;</label>
+                      <label>Unknown</label>
                     </object>
                   </object>
                   <vgap>3</vgap>

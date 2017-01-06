@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <cwchar>
 
-#define FZSFTP_PROTOCOL_VERSION 7
+#define FZSFTP_PROTOCOL_VERSION 8
 
 struct sftp_message
 {
@@ -171,12 +171,12 @@ protected:
 			case sftpEvent::Hostkey:
 				lines = 1;
 				break;
+			case sftpEvent::AskHostkey:
+			case sftpEvent::AskHostkeyChanged:
 			case sftpEvent::AskHostkeyBetteralg:
 				lines = 2;
 				break;
 			case sftpEvent::Listentry:
-			case sftpEvent::AskHostkey:
-			case sftpEvent::AskHostkeyChanged:
 				lines = 3;
 				break;
 			};
@@ -572,7 +572,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 				DoClose(FZ_REPLY_INTERNALERROR);
 				break;
 			}
-			SendAsyncRequest(new CHostKeyNotification(message.text[0], port, message.text[2], message.type == sftpEvent::AskHostkeyChanged));
+			SendAsyncRequest(new CHostKeyNotification(message.text[0], port, m_sftpEncryptionDetails, message.type == sftpEvent::AskHostkeyChanged));
 		}
 		break;
 	case sftpEvent::AskHostkeyBetteralg:
@@ -666,7 +666,23 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 		m_sftpEncryptionDetails.macServerToClient = message.text[0];
 		break;
 	case sftpEvent::Hostkey:
-		m_sftpEncryptionDetails.hostKey = message.text[0];
+		{
+			auto tokens = fz::strtok(message.text[0], ' ');
+			if (!tokens.empty()) {
+				m_sftpEncryptionDetails.hostKeyFingerprintSHA256 = tokens.back();
+				tokens.pop_back();
+			}
+			if (!tokens.empty()) {
+				m_sftpEncryptionDetails.hostKeyFingerprintMD5 = tokens.back();
+				tokens.pop_back();
+			}
+			for (auto const& token : tokens) {
+				if (!m_sftpEncryptionDetails.hostKeyAlgorithm.empty()) {
+					m_sftpEncryptionDetails.hostKeyAlgorithm += ' ';
+				}
+				m_sftpEncryptionDetails.hostKeyAlgorithm += token;
+			}
+		}
 		break;
 	default:
 		wxFAIL_MSG(_T("given notification codes not handled"));
