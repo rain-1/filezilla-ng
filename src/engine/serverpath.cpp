@@ -820,12 +820,10 @@ bool CServerPath::operator!=(const CServerPath &op) const
 bool CServerPath::operator<(const CServerPath &op) const
 {
 	if (empty()) {
-		if (!op.empty()) {
-			return false;
-		}
+		return !op.empty();
 	}
 	else if (op.empty()) {
-		return true;
+		return false;
 	}
 
 	if (m_data->m_prefix || op.m_data->m_prefix) {
