@@ -1270,7 +1270,7 @@ bool CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool
 	std::string buffer = ConvToServer(str);
 	if (buffer.empty()) {
 		LogMessage(MessageType::Error, _("Failed to convert command to 8 bit charset"));
-		ResetOperation(FZ_REPLY_OK);
+		ResetOperation(FZ_REPLY_ERROR);
 		return false;
 	}
 	buffer += "\r\n";
