@@ -430,6 +430,10 @@ install64on32:
 
   StrCpy $ALL_USERS_DEFAULT $ALL_USERS
 
+!ifdef ENABLE_OFFERS
+  Call OfferInit
+!endif
+
 FunctionEnd
 
 Function FZVersionCompare
