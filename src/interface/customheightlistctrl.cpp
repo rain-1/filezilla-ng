@@ -200,6 +200,14 @@ void wxCustomHeightListCtrl::InsertRow(wxSizer* sizer, size_t pos)
 	}
 
 	Refresh();
+
+#ifdef __WXGTK__
+	// Needed for Ubuntu's shitty overlay scrollbar, it changes the layout asynchronously...
+	CallAfter([this](){
+		wxSizeEvent ev;
+		OnSize(ev);
+	});
+#endif
 }
 
 void wxCustomHeightListCtrl::DeleteRow(size_t pos)
