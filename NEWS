@@ -12,7 +12,7 @@ Legend:
 
 3.24.0 (2017-01-13)
 
-- Fixed a possible crash is sending FTP commands fails during a directory listing operation
+- Fixed a possible crash if sending FTP commands fails during a directory listing operation
 - *nix: Fixed a scrolling issue in the message log if wxWidgets is built against GTK3
 
 3.24.0-rc1 (2017-01-06)
