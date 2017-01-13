@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-01-06 16:14+0100\n"
-"PO-Revision-Date: 2016-12-25 13:03+0100\n"
+"POT-Creation-Date: 2017-01-13 16:04+0100\n"
+"PO-Revision-Date: 2017-01-11 19:44+0100\n"
 "Last-Translator: György Bata <batagy.ford.(remo_ve_this#part)@indamail.hu>\n"
 "Language-Team: György Bata\n"
 "Language: hu_HU\n"
@@ -2247,8 +2247,8 @@ msgid "Command not supported by this protocol"
 msgstr "Ezt a parancsot ez a protokoll nem támogatja."
 
 #: ../../locales/../src/engine/logging.cpp:114
-#: ../../locales/../src/interface/StatusView.cpp:282
-#: ../../locales/../src/interface/StatusView.cpp:346
+#: ../../locales/../src/interface/StatusView.cpp:286
+#: ../../locales/../src/interface/StatusView.cpp:350
 msgid "Command:"
 msgstr "Parancs:"
 
@@ -3709,8 +3709,8 @@ msgid "Error writing xml file"
 msgstr "Hiba az xml fájl írásakor"
 
 #: ../../locales/../src/engine/logging.cpp:113
-#: ../../locales/../src/interface/StatusView.cpp:280
-#: ../../locales/../src/interface/StatusView.cpp:342
+#: ../../locales/../src/interface/StatusView.cpp:284
+#: ../../locales/../src/interface/StatusView.cpp:346
 msgid "Error:"
 msgstr "Hiba:"
 
@@ -3834,9 +3834,8 @@ msgid "Failed to create backup copy of xml file"
 msgstr "Az xml fájl biztonsági másolata nem hozható létre."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:808
-#, fuzzy
 msgid "Failed to create listen socket, aborting."
-msgstr "A figyelő szoftvercsatorna létrehozása nem sikerült, megszakítás"
+msgstr "A figyelő szoftvercsatorna létrehozása nem sikerült, megszakítás."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4167
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4171
@@ -3916,7 +3915,6 @@ msgid "Failed to retrieve directory listing"
 msgstr "A könyvtár lista lekérdezése nem sikerült"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:737
-#, fuzzy
 msgid "Failed to retrieve external ip address, aborting."
 msgstr "A külső IP cím lekérdezése nem sikerült, megszakítás."
 
@@ -3925,7 +3923,6 @@ msgid "Failed to retrieve external ip address, using local address"
 msgstr "A külső IP cím lekérdezése nem sikerült, a helyi IP cím használata"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:712
-#, fuzzy
 msgid "Failed to retrieve local ip address, aborting."
 msgstr "A helyi IP cím lekérdezése nem sikerült, megszakítás."
 
@@ -4272,9 +4269,8 @@ msgstr "Ujjlenyomat (SHA-256):"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:869
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:990
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2077
-#, fuzzy
 msgid "Fingerprints:"
-msgstr "Ujjlenyomat:"
+msgstr "Ujjlenyomatok:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:54
 msgid "Firewall and router configuration wizard"
@@ -4471,9 +4467,8 @@ msgstr "Cím:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:859
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:980
-#, fuzzy
 msgid "Hostkey algorithm:"
-msgstr "Nyilvános kulcsú algoritmus:"
+msgstr "Címkulcs algoritmus:"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:424
 msgid "Hours,"
@@ -5004,8 +4999,8 @@ msgid "Listen socket closed"
 msgstr "A figyelő szoftvercsatorna bezáródott"
 
 #: ../../locales/../src/engine/logging.cpp:120
-#: ../../locales/../src/interface/StatusView.cpp:291
-#: ../../locales/../src/interface/StatusView.cpp:370
+#: ../../locales/../src/interface/StatusView.cpp:295
+#: ../../locales/../src/interface/StatusView.cpp:374
 msgid "Listing:"
 msgstr "Listázás:"
 
@@ -5102,11 +5097,10 @@ msgstr ""
 "használata."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:884
-#, fuzzy
 msgid "Login sequence fully executed yet not logged in, aborting."
 msgstr ""
-"A bejelentkezési parancssorozat lefuttatódott, de a bejelentkezés nem "
-"sikerült. Megszakítás."
+"A bejelentkező parancsok befejeződtek, miközben belépés nem sikerült, "
+"megszakítás."
 
 #: ../../locales/../src/interface/cmdline.cpp:103
 msgid "Logontype has to be either 'ask' or 'interactive' (without the quotes)."
@@ -6221,7 +6215,7 @@ msgstr "Túlcsordulás a fájlleíró táblázatnál"
 #: ../../locales/../src/interface/recursive_operation_status.cpp:122
 #, c-format
 msgid "Processed %s in %s."
-msgstr "%s fájl feldolgozva %s mappában."
+msgstr "%s feldolgozva itt: %s."
 
 #: ../../locales/../src/engine/socket.cpp:1024
 msgid "Protocol not supported"
@@ -6662,8 +6656,8 @@ msgstr "Erőforrás ideiglenesen nem elérhető"
 
 #: ../../locales/../src/engine/logging.cpp:115
 #: ../../locales/../src/interface/netconfwizard.cpp:421
-#: ../../locales/../src/interface/StatusView.cpp:285
-#: ../../locales/../src/interface/StatusView.cpp:353
+#: ../../locales/../src/interface/StatusView.cpp:289
+#: ../../locales/../src/interface/StatusView.cpp:357
 msgid "Response:"
 msgstr "Válasz:"
 
@@ -6779,7 +6773,7 @@ msgstr "Keresés ebben a mappában:"
 
 #: ../../locales/../src/interface/toolbar.cpp:53
 msgid "Search for files recursively."
-msgstr "Távoli fájlok rekurzív keresése a kiszolgálón"
+msgstr "Fájl keresés"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:191
 msgid "Search server for files"
@@ -7049,7 +7043,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2060
 msgid "Server host key"
-msgstr ""
+msgstr "Kiszolgáló címkulcs"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4253
 #, c-format
@@ -7441,8 +7435,8 @@ msgid "Status"
 msgstr "Állapot"
 
 #: ../../locales/../src/engine/logging.cpp:112
-#: ../../locales/../src/interface/StatusView.cpp:294
-#: ../../locales/../src/interface/StatusView.cpp:377
+#: ../../locales/../src/interface/StatusView.cpp:298
+#: ../../locales/../src/interface/StatusView.cpp:381
 msgid "Status:"
 msgstr "Állapot:"
 
@@ -8139,8 +8133,8 @@ msgid "Too many redirects"
 msgstr "Túl sok átirányítás"
 
 #: ../../locales/../src/engine/logging.cpp:116
-#: ../../locales/../src/interface/StatusView.cpp:288
-#: ../../locales/../src/interface/StatusView.cpp:363
+#: ../../locales/../src/interface/StatusView.cpp:292
+#: ../../locales/../src/interface/StatusView.cpp:367
 msgid "Trace:"
 msgstr "Részlet:"
 
@@ -8993,8 +8987,25 @@ msgstr "mindenki által írható"
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
 
+#~ msgid "Failed to create listen socket, aborting"
+#~ msgstr "A figyelő szoftvercsatorna létrehozása nem sikerült, megszakítás"
+
+#~ msgid "Failed to retrieve external ip address, aborting"
+#~ msgstr "A külső IP cím lekérdezése nem sikerült, megszakítás."
+
+#~ msgid "Failed to retrieve local ip address. Aborting"
+#~ msgstr "A helyi IP cím lekérdezése nem sikerült, megszakítás."
+
+#~ msgid "Fingerprint:"
+#~ msgstr "Ujjlenyomat:"
+
 #~ msgid "Host key fingerprint:"
 #~ msgstr "Címkulcs ujjlenyomata:"
+
+#~ msgid "Login sequence fully executed yet not logged in. Aborting."
+#~ msgstr ""
+#~ "A bejelentkezési parancssorozat lefuttatódott, de a bejelentkezés nem "
+#~ "sikerült. Megszakítás."
 
 #~ msgid "%d files added to queue"
 #~ msgstr "%d fájl hozzáadva a várólistához"
