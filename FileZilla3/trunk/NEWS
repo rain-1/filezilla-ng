@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.24.0 (2017-01-13)
+
+- Fixed a possible crash is sending FTP commands fails during a directory listing operation
+- *nix: Fixed a scrolling issue in the message log if wxWidgets is built against GTK3
+
 3.24.0-rc1 (2017-01-06)
 
 + The context menu for remote file search results now has a "Copy URL(s) to clipboard" item
