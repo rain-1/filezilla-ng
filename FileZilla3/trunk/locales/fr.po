@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-01-06 16:14+0100\n"
+"POT-Creation-Date: 2017-01-13 16:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pgase <pgase.filezilla@free.fr>\n"
 "Language-Team: Pgase, William GATHOYE <pgase.filezilla@free.fr, "
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:114
 msgid ""
@@ -2281,8 +2281,8 @@ msgid "Command not supported by this protocol"
 msgstr "Commande non supportée par ce protocole"
 
 #: ../../locales/../src/engine/logging.cpp:114
-#: ../../locales/../src/interface/StatusView.cpp:282
-#: ../../locales/../src/interface/StatusView.cpp:346
+#: ../../locales/../src/interface/StatusView.cpp:286
+#: ../../locales/../src/interface/StatusView.cpp:350
 msgid "Command:"
 msgstr "Commande :"
 
@@ -3756,8 +3756,8 @@ msgid "Error writing xml file"
 msgstr "Erreur lors de l'écriture du fichier xml"
 
 #: ../../locales/../src/engine/logging.cpp:113
-#: ../../locales/../src/interface/StatusView.cpp:280
-#: ../../locales/../src/interface/StatusView.cpp:342
+#: ../../locales/../src/interface/StatusView.cpp:284
+#: ../../locales/../src/interface/StatusView.cpp:346
 msgid "Error:"
 msgstr "Erreur :"
 
@@ -3881,9 +3881,8 @@ msgid "Failed to create backup copy of xml file"
 msgstr "Impossible de créer la copie de sauvegarde du fichier xml"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:808
-#, fuzzy
 msgid "Failed to create listen socket, aborting."
-msgstr "Impossible de créer le socket d'écoute, abandon"
+msgstr "Impossible de créer le socket d'écoute, abandon."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4167
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4171
@@ -3964,9 +3963,8 @@ msgid "Failed to retrieve directory listing"
 msgstr "Impossible de récupérer le contenu du dossier"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:737
-#, fuzzy
 msgid "Failed to retrieve external ip address, aborting."
-msgstr "Impossible de récupérer l'adresse IP externe, abandon"
+msgstr "Impossible de récupérer l'adresse IP externe, abandon."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3849
 msgid "Failed to retrieve external ip address, using local address"
@@ -3974,9 +3972,8 @@ msgstr ""
 "Impossible de récupérer l'adresse IP externe. Utilisation de l'adresse locale"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:712
-#, fuzzy
 msgid "Failed to retrieve local ip address, aborting."
-msgstr "Impossible de récupérer l'adresse IP locale. Abandon"
+msgstr "Impossible de récupérer l'adresse IP locale, abandon."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3868
 msgid "Failed to retrieve local ip address."
@@ -4328,9 +4325,8 @@ msgstr "Empreinte (SHA-256) :"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:869
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:990
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2077
-#, fuzzy
 msgid "Fingerprints:"
-msgstr "Empreinte :"
+msgstr "Empreintes :"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:54
 msgid "Firewall and router configuration wizard"
@@ -4524,9 +4520,8 @@ msgstr "Hôte :"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:859
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:980
-#, fuzzy
 msgid "Hostkey algorithm:"
-msgstr "Algorithme de la clé publique :"
+msgstr "Algorithme de la clé de l'hôte :"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:424
 msgid "Hours,"
@@ -5054,8 +5049,8 @@ msgid "Listen socket closed"
 msgstr "Socket d'écoute fermé"
 
 #: ../../locales/../src/engine/logging.cpp:120
-#: ../../locales/../src/interface/StatusView.cpp:291
-#: ../../locales/../src/interface/StatusView.cpp:370
+#: ../../locales/../src/interface/StatusView.cpp:295
+#: ../../locales/../src/interface/StatusView.cpp:374
 msgid "Listing:"
 msgstr "Contenu :"
 
@@ -5151,11 +5146,10 @@ msgstr ""
 "local."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:884
-#, fuzzy
 msgid "Login sequence fully executed yet not logged in, aborting."
 msgstr ""
 "La séquence d'identification a entièrement été exécutée et vous n'êtes "
-"pourtant pas encore identifié. Abandon."
+"pourtant pas encore identifié, abandon."
 
 #: ../../locales/../src/interface/cmdline.cpp:103
 msgid "Logontype has to be either 'ask' or 'interactive' (without the quotes)."
@@ -6737,8 +6731,8 @@ msgstr "Ressources temporairement indisponibles"
 
 #: ../../locales/../src/engine/logging.cpp:115
 #: ../../locales/../src/interface/netconfwizard.cpp:421
-#: ../../locales/../src/interface/StatusView.cpp:285
-#: ../../locales/../src/interface/StatusView.cpp:353
+#: ../../locales/../src/interface/StatusView.cpp:289
+#: ../../locales/../src/interface/StatusView.cpp:357
 msgid "Response:"
 msgstr "Réponse :"
 
@@ -7122,7 +7116,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2060
 msgid "Server host key"
-msgstr ""
+msgstr "Clé d'hôte du serveur"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4253
 #, c-format
@@ -7520,8 +7514,8 @@ msgid "Status"
 msgstr "Statut"
 
 #: ../../locales/../src/engine/logging.cpp:112
-#: ../../locales/../src/interface/StatusView.cpp:294
-#: ../../locales/../src/interface/StatusView.cpp:377
+#: ../../locales/../src/interface/StatusView.cpp:298
+#: ../../locales/../src/interface/StatusView.cpp:381
 msgid "Status:"
 msgstr "Statut :"
 
@@ -8227,8 +8221,8 @@ msgid "Too many redirects"
 msgstr "Trop de redirections"
 
 #: ../../locales/../src/engine/logging.cpp:116
-#: ../../locales/../src/interface/StatusView.cpp:288
-#: ../../locales/../src/interface/StatusView.cpp:363
+#: ../../locales/../src/interface/StatusView.cpp:292
+#: ../../locales/../src/interface/StatusView.cpp:367
 msgid "Trace:"
 msgstr "Suivi :"
 

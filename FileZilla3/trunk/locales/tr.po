@@ -1,17 +1,17 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Roman Neumüller <email@katpatuka.org>, 2007
-# Kaya Zeren <kayazeren@gmail.com>, 2014-2016
+# Kaya Zeren <kayazeren@gmail.com>, 2014-2017
 # Volkan Gezer <volkangezer@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-01-06 16:14+0100\n"
-"PO-Revision-Date: 2016-12-15 04:27+0000\n"
+"POT-Creation-Date: 2017-01-13 16:04+0100\n"
+"PO-Revision-Date: 2017-01-12 05:41+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/zeron/filezilla/"
 "language/tr_TR/)\n"
@@ -202,7 +202,7 @@ msgstr "%w - Vekil sunucu parolası"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3678
 msgid "&Abort previous connection and connect in current tab"
-msgstr "Ö&nceki bağlantıyı iptal edip geçerli sekmede bağlan"
+msgstr "Ö&nceki bağlantıdan vazgeçip geçerli sekmede bağlan"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:233
 msgid "&About..."
@@ -2229,8 +2229,8 @@ msgid "Command not supported by this protocol"
 msgstr "Bu iletişim kuralı bu komutu desteklemiyor"
 
 #: ../../locales/../src/engine/logging.cpp:114
-#: ../../locales/../src/interface/StatusView.cpp:282
-#: ../../locales/../src/interface/StatusView.cpp:346
+#: ../../locales/../src/interface/StatusView.cpp:286
+#: ../../locales/../src/interface/StatusView.cpp:350
 msgid "Command:"
 msgstr "Komut:"
 
@@ -3193,7 +3193,7 @@ msgstr "Klasör listeleme &süzgeçleri..."
 
 #: ../../locales/../src/engine/ControlSocket.cpp:186
 msgid "Directory listing aborted by user"
-msgstr "Kullanıcı klasör listelemeyi durdurdu"
+msgstr "Kullanıcı klasör listesini almaktan vazgeçti"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2047
 msgid "Directory listing failed"
@@ -3670,8 +3670,8 @@ msgid "Error writing xml file"
 msgstr "XML dosyası yazılırken hata oluştu"
 
 #: ../../locales/../src/engine/logging.cpp:113
-#: ../../locales/../src/interface/StatusView.cpp:280
-#: ../../locales/../src/interface/StatusView.cpp:342
+#: ../../locales/../src/interface/StatusView.cpp:284
+#: ../../locales/../src/interface/StatusView.cpp:346
 msgid "Error:"
 msgstr "Hata:"
 
@@ -3795,9 +3795,8 @@ msgid "Failed to create backup copy of xml file"
 msgstr "Xml dosyasının yedeği alınamadı"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:808
-#, fuzzy
 msgid "Failed to create listen socket, aborting."
-msgstr "Dinleme soketi oluşturulamadı, iptal ediliyor"
+msgstr "Dinleme soketi oluşturulamadı. Vazgeçiliyor."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4167
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4171
@@ -3872,18 +3871,16 @@ msgid "Failed to retrieve directory listing"
 msgstr "Klasör listesi alınamadı"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:737
-#, fuzzy
 msgid "Failed to retrieve external ip address, aborting."
-msgstr "Dış IP adresi alınamadı, iptal ediliyor"
+msgstr "Dış IP adresi okunamadı. Vazgeçiliyor."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3849
 msgid "Failed to retrieve external ip address, using local address"
 msgstr "Dış IP adresi okunamadı, yerel IP deneniyor"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:712
-#, fuzzy
 msgid "Failed to retrieve local ip address, aborting."
-msgstr "Yerel IP adresi okunamadı. Vazgeçiliyor"
+msgstr "Yerel IP adresi okunamadı. Vazgeçiliyor."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3868
 msgid "Failed to retrieve local ip address."
@@ -4018,12 +4015,12 @@ msgstr "Dosya arama"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:113
 msgid "File transfer aborted by user"
-msgstr "Kullanıcı dosya aktarımını durdurdu"
+msgstr "Kullanıcı dosyayı aktarmaktan vazgeçti"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:101
 #, c-format
 msgid "File transfer aborted by user after transferring %s in %s"
-msgstr "Dosyanın %s/%s bölümü aktarılmışken kullanıcı işlemi durdurdu"
+msgstr "%s/%s aktarılmışken kullanıcı dosyayı aktarmaktan vazgeçti"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:127
 msgid "File transfer failed"
@@ -4217,9 +4214,8 @@ msgstr "Parmakizi (SHA-256):"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:869
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:990
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2077
-#, fuzzy
 msgid "Fingerprints:"
-msgstr "Parmak İzi:"
+msgstr "Parmak İzleri:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:54
 msgid "Firewall and router configuration wizard"
@@ -4411,9 +4407,8 @@ msgstr "Sunucu:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:859
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:980
-#, fuzzy
 msgid "Hostkey algorithm:"
-msgstr "Genel Anahtar Algoritması:"
+msgstr "Sunucu Anahtarı Algoritması:"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:424
 msgid "Hours,"
@@ -4933,8 +4928,8 @@ msgid "Listen socket closed"
 msgstr "Dinleme soketi kapandı"
 
 #: ../../locales/../src/engine/logging.cpp:120
-#: ../../locales/../src/interface/StatusView.cpp:291
-#: ../../locales/../src/interface/StatusView.cpp:370
+#: ../../locales/../src/interface/StatusView.cpp:295
+#: ../../locales/../src/interface/StatusView.cpp:374
 msgid "Listing:"
 msgstr "Sıralama:"
 
@@ -5029,11 +5024,10 @@ msgstr ""
 "olabilir. Yerel karakter kümesi deneniyor."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:884
-#, fuzzy
 msgid "Login sequence fully executed yet not logged in, aborting."
 msgstr ""
-"Oturum açma işlemleri eksiksiz yapıldı ama hala oturum açılamadı. "
-"Vazgeçiliyor."
+"Oturum açma işlemleri eksiksiz yapıldı ama hala oturum açılamadı, "
+"vazgeçiliyor."
 
 #: ../../locales/../src/interface/cmdline.cpp:103
 msgid "Logontype has to be either 'ask' or 'interactive' (without the quotes)."
@@ -5311,7 +5305,7 @@ msgstr "Verilecek bir kategori seçilmemiş"
 
 #: ../../locales/../src/interface/QueueView.cpp:1831
 msgid "No command given, aborting."
-msgstr "Komut verilmedi, vazgeçiliyor."
+msgstr "Herhangi bir komut verilmedi, vazgeçiliyor."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3821
 msgid "No external IP address set, trying default."
@@ -6338,7 +6332,7 @@ msgstr "Alınan klasör listesi EBCDIC olarak kodlanmış görünüyor."
 #: ../../locales/../src/engine/directorylistingparser.cpp:1984
 #: ../../locales/../src/engine/directorylistingparser.cpp:2001
 msgid "Received a line exceeding 10000 characters, aborting."
-msgstr "10.000 karakterden uzun bir satır alındı, iptal ediliyor."
+msgstr "10.000 karakterden uzun bir satır alındı, vazgeçiliyor."
 
 #: ../../locales/../src/engine/tlssocket.cpp:1342
 #, c-format
@@ -6564,8 +6558,8 @@ msgstr "Kaynak geçici olarak kullanım dışında"
 
 #: ../../locales/../src/engine/logging.cpp:115
 #: ../../locales/../src/interface/netconfwizard.cpp:421
-#: ../../locales/../src/interface/StatusView.cpp:285
-#: ../../locales/../src/interface/StatusView.cpp:353
+#: ../../locales/../src/interface/StatusView.cpp:289
+#: ../../locales/../src/interface/StatusView.cpp:357
 msgid "Response:"
 msgstr "Yanıt:"
 
@@ -6937,7 +6931,7 @@ msgstr "Sunucu 4GB boyutundan büyük dosyaları sürdüremiyor."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2060
 msgid "Server host key"
-msgstr ""
+msgstr "Sunucu Anahtarı"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4253
 #, c-format
@@ -7325,8 +7319,8 @@ msgid "Status"
 msgstr "Durum"
 
 #: ../../locales/../src/engine/logging.cpp:112
-#: ../../locales/../src/interface/StatusView.cpp:294
-#: ../../locales/../src/interface/StatusView.cpp:377
+#: ../../locales/../src/interface/StatusView.cpp:298
+#: ../../locales/../src/interface/StatusView.cpp:381
 msgid "Status:"
 msgstr "Durum:"
 
@@ -8015,8 +8009,8 @@ msgid "Too many redirects"
 msgstr "Çok fazla yönlendirme"
 
 #: ../../locales/../src/engine/logging.cpp:116
-#: ../../locales/../src/interface/StatusView.cpp:288
-#: ../../locales/../src/interface/StatusView.cpp:363
+#: ../../locales/../src/interface/StatusView.cpp:292
+#: ../../locales/../src/interface/StatusView.cpp:367
 msgid "Trace:"
 msgstr "Yol İzlensin:"
 
@@ -8862,6 +8856,3 @@ msgstr "Herkes yazabilir"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:699
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
-
-#~ msgid "Host key fingerprint:"
-#~ msgstr "Sunucu anahtarı parmak izi:"

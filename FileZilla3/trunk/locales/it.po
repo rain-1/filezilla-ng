@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Filezilla italian translation rev. 21.12.2016\n"
+"Project-Id-Version: Filezilla italian translation rev. 07.01.2017\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-01-06 16:14+0100\n"
-"PO-Revision-Date: 2016-12-21 15:48+0100\n"
-"Last-Translator: bovirus <@bovirus@gmail.com>\n"
+"POT-Creation-Date: 2017-01-13 16:04+0100\n"
+"PO-Revision-Date: 2017-01-07 08:39+0100\n"
+"Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: bovirus - Andrea Sanavia - Vincenzo Reale - Riccardo Vianello "
 "<bovirus@gmail.com>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0beta1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:114
@@ -1433,7 +1433,7 @@ msgstr "Sopra la lista file"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:113
 msgid "Access to some local directories could not be restored:"
-msgstr "L'accesso ad alcune cartelle locali non può essere ripristinato."
+msgstr "L'accesso ad alcune cartelle locali non può essere ripristinato:"
 
 #: ../../locales/../src/engine/server.cpp:912
 #: ../../locales/../src/engine/server.cpp:933
@@ -2264,8 +2264,8 @@ msgid "Command not supported by this protocol"
 msgstr "Comando non supportato da questo protocollo"
 
 #: ../../locales/../src/engine/logging.cpp:114
-#: ../../locales/../src/interface/StatusView.cpp:282
-#: ../../locales/../src/interface/StatusView.cpp:346
+#: ../../locales/../src/interface/StatusView.cpp:286
+#: ../../locales/../src/interface/StatusView.cpp:350
 msgid "Command:"
 msgstr "Comando:"
 
@@ -2617,7 +2617,7 @@ msgstr "Impossibile creare il file accesso mutex %s"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:167
 msgid "Could not create security-scoped bookmark from URL:"
-msgstr "Impossibile creare segnalibro scopo-sicurezza dall'URL:"
+msgstr "Impossibile creare segnalibro scopo sicurezza da URL:"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2211
 #: ../../locales/../src/interface/RemoteTreeView.cpp:848
@@ -2678,7 +2678,7 @@ msgstr "Impossibile ottenere percorso nativo da CFURL"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:173
 msgid "Could not get path from URL"
-msgstr "Impossibile ottenere il percorso dall'URL"
+msgstr "Impossibile ottenere percorso dall'URL"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:232
 msgid "Could not get reply from fzputtygen."
@@ -2796,7 +2796,7 @@ msgstr "Impossibile ricevere dati dal server."
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:116
 msgid "Could not restore directory access"
-msgstr "Impossibile ripristinare accesso cartella"
+msgstr "Impossibile ripristinare accesso alla cartella"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2694
 #, c-format
@@ -3731,8 +3731,8 @@ msgid "Error writing xml file"
 msgstr "Errore di scrittura file xml"
 
 #: ../../locales/../src/engine/logging.cpp:113
-#: ../../locales/../src/interface/StatusView.cpp:280
-#: ../../locales/../src/interface/StatusView.cpp:342
+#: ../../locales/../src/interface/StatusView.cpp:284
+#: ../../locales/../src/interface/StatusView.cpp:346
 msgid "Error:"
 msgstr "Errore:"
 
@@ -3856,10 +3856,8 @@ msgid "Failed to create backup copy of xml file"
 msgstr "Non è stato possibile creare una copia di backup del file xml"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:808
-#, fuzzy
 msgid "Failed to create listen socket, aborting."
-msgstr ""
-"Non è stato possibile creare il socket di ascolto, connessione terminata"
+msgstr "Impossibile creare ascolto socket, annullamento."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4167
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4171
@@ -3940,11 +3938,8 @@ msgid "Failed to retrieve directory listing"
 msgstr "Non è stato possibile leggere il contenuto della cartella"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:737
-#, fuzzy
 msgid "Failed to retrieve external ip address, aborting."
-msgstr ""
-"Non è stato possibile recuperare l'indirizzo IP esterno, connessione "
-"terminata"
+msgstr "Impossibile ottenere indirizzo IP esterno, annullamento."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3849
 msgid "Failed to retrieve external ip address, using local address"
@@ -3953,10 +3948,8 @@ msgstr ""
 "l'indirizzo locale"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:712
-#, fuzzy
 msgid "Failed to retrieve local ip address, aborting."
-msgstr ""
-"Non è stato possibile leggere l'indirizzo IP locale. Connessione terminata"
+msgstr "Impossibile ottenere indirizzo IP locale, annullamento."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3868
 msgid "Failed to retrieve local ip address."
@@ -4300,9 +4293,8 @@ msgstr "Fingerprint (SHA-256):"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:869
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:990
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2077
-#, fuzzy
 msgid "Fingerprints:"
-msgstr "Impronta:"
+msgstr "Impronta digitale"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:54
 msgid "Firewall and router configuration wizard"
@@ -4360,7 +4352,7 @@ msgstr "Trovato nuovo %s %s\n"
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:49
 #, c-format
 msgid "Function %s failed"
-msgstr "Funzione %s fallita"
+msgstr "Funzione %s non riuscita."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3598
 msgid "Further documentation"
@@ -4497,9 +4489,8 @@ msgstr "Host:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:859
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:980
-#, fuzzy
 msgid "Hostkey algorithm:"
-msgstr "Algoritmo chiave pubblica:"
+msgstr "Algoritmo chiave host:"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:424
 msgid "Hours,"
@@ -5022,8 +5013,8 @@ msgid "Listen socket closed"
 msgstr "Socket di ascolto chiuso"
 
 #: ../../locales/../src/engine/logging.cpp:120
-#: ../../locales/../src/interface/StatusView.cpp:291
-#: ../../locales/../src/interface/StatusView.cpp:370
+#: ../../locales/../src/interface/StatusView.cpp:295
+#: ../../locales/../src/interface/StatusView.cpp:374
 msgid "Listing:"
 msgstr "Elenco:"
 
@@ -5118,11 +5109,8 @@ msgstr ""
 "essere compatibile UTF-8. Tentativo con set di caratteri locale."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:884
-#, fuzzy
 msgid "Login sequence fully executed yet not logged in, aborting."
-msgstr ""
-"Sequenza di login eseguita completamente ma impossibile connetersi. "
-"Interruzione."
+msgstr "Sequenza accesso non ancora completamente eseguita, annullamneto."
 
 #: ../../locales/../src/interface/cmdline.cpp:103
 msgid "Logontype has to be either 'ask' or 'interactive' (without the quotes)."
@@ -6084,7 +6072,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:115
 msgid "Please re-add local data directories in the settings dialog."
-msgstr "Ri-aggiungi cartelle dati locali nella finestra impostazioni."
+msgstr "Ri-aggiungi le cartelle dati locali nella finestra Impostazioni."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:592
 msgid ""
@@ -6673,8 +6661,8 @@ msgstr "Risorsa temporaneamente non disponibile"
 
 #: ../../locales/../src/engine/logging.cpp:115
 #: ../../locales/../src/interface/netconfwizard.cpp:421
-#: ../../locales/../src/interface/StatusView.cpp:285
-#: ../../locales/../src/interface/StatusView.cpp:353
+#: ../../locales/../src/interface/StatusView.cpp:289
+#: ../../locales/../src/interface/StatusView.cpp:357
 msgid "Response:"
 msgstr "Risposta:"
 
@@ -7050,7 +7038,7 @@ msgstr "Il server non supporta il ripristino di file > 4GB."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2060
 msgid "Server host key"
-msgstr ""
+msgstr "Chiave server host"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4253
 #, c-format
@@ -7443,8 +7431,8 @@ msgid "Status"
 msgstr "Stato"
 
 #: ../../locales/../src/engine/logging.cpp:112
-#: ../../locales/../src/interface/StatusView.cpp:294
-#: ../../locales/../src/interface/StatusView.cpp:377
+#: ../../locales/../src/interface/StatusView.cpp:298
+#: ../../locales/../src/interface/StatusView.cpp:381
 msgid "Status:"
 msgstr "Stato:"
 
@@ -8144,8 +8132,8 @@ msgid "Too many redirects"
 msgstr "Troppi re-indirizzamenti"
 
 #: ../../locales/../src/engine/logging.cpp:116
-#: ../../locales/../src/interface/StatusView.cpp:288
-#: ../../locales/../src/interface/StatusView.cpp:363
+#: ../../locales/../src/interface/StatusView.cpp:292
+#: ../../locales/../src/interface/StatusView.cpp:367
 msgid "Trace:"
 msgstr "Trace:"
 
@@ -8997,8 +8985,29 @@ msgstr "scrivibile per gli altri"
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
 
+#~ msgid "Failed to create listen socket, aborting"
+#~ msgstr ""
+#~ "Non è stato possibile creare il socket di ascolto, connessione terminata"
+
+#~ msgid "Failed to retrieve external ip address, aborting"
+#~ msgstr ""
+#~ "Non è stato possibile recuperare l'indirizzo IP esterno, connessione "
+#~ "terminata"
+
+#~ msgid "Failed to retrieve local ip address. Aborting"
+#~ msgstr ""
+#~ "Non è stato possibile leggere l'indirizzo IP locale. Connessione terminata"
+
+#~ msgid "Fingerprint:"
+#~ msgstr "Impronta:"
+
 #~ msgid "Host key fingerprint:"
 #~ msgstr "Chiave impronta:"
+
+#~ msgid "Login sequence fully executed yet not logged in. Aborting."
+#~ msgstr ""
+#~ "Sequenza di login eseguita completamente ma impossibile connetersi. "
+#~ "Interruzione."
 
 #~ msgid ""
 #~ "Enter the address of the server. To specify the server protocol, prepend "
@@ -9187,9 +9196,6 @@ msgstr "wxWidgets:"
 
 #~ msgid " could not be started"
 #~ msgstr "non può essere avviato"
-
-#~ msgid "Could not get reply from "
-#~ msgstr "Impossibile ottenere risposta da "
 
 #~ msgid "Could not send command to "
 #~ msgstr "Impossibile inviare comando a "

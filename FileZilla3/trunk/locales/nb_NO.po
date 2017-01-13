@@ -1,14 +1,14 @@
 # Norwegian bokmål translation of FileZilla
-# Copyright (C) 2016 Tim Kosse
+# Copyright (C) 2017 Tim Kosse
 # This file is distributed under the same license as the filezilla package.
-# Åka Sikrom <a4 æt hush dåt com>, 2015-2016.
-# 
+# Åka Sikrom <a4 æt hush dåt com>, 2015-2017.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-01-06 16:14+0100\n"
-"PO-Revision-Date: 2016-12-28 10:52+0100\n"
+"POT-Creation-Date: 2017-01-13 16:04+0100\n"
+"PO-Revision-Date: 2017-01-09 14:19+0100\n"
 "Last-Translator: Åka Sikrom <a4 æt hush dåt com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb_NO\n"
@@ -23,8 +23,6 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"\n"
-"\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:55
@@ -1422,8 +1420,9 @@ msgid "Above the file lists"
 msgstr "Over fillister"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:113
+#, fuzzy
 msgid "Access to some local directories could not be restored:"
-msgstr "Klarte ikke å gjenopprette tilgang til lokale mapper:"
+msgstr "Klarte ikke å opprette lokal mappe «%s»."
 
 #: ../../locales/../src/engine/server.cpp:912
 #: ../../locales/../src/engine/server.cpp:933
@@ -2239,8 +2238,8 @@ msgid "Command not supported by this protocol"
 msgstr "Kommandoen støttes ikke av denne protokollen"
 
 #: ../../locales/../src/engine/logging.cpp:114
-#: ../../locales/../src/interface/StatusView.cpp:282
-#: ../../locales/../src/interface/StatusView.cpp:346
+#: ../../locales/../src/interface/StatusView.cpp:286
+#: ../../locales/../src/interface/StatusView.cpp:350
 msgid "Command:"
 msgstr "Kommando:"
 
@@ -2524,9 +2523,9 @@ msgid "Could not accept connection: %s"
 msgstr "Klarte ikke å akseptere tilkobling: %s"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:101
-#, c-format
+#, fuzzy, c-format
 msgid "Could not access path %s"
-msgstr "Fikk ikke tilgang til sti %s"
+msgstr "Klarte ikke å akseptere tilkobling: %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:1310
 msgid "Could not add certificate to temporary trust list"
@@ -2574,9 +2573,9 @@ msgid "Could not copy data"
 msgstr "Klarte ikke å kopiere data"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:158
-#, c-format
+#, fuzzy, c-format
 msgid "Could not create CFURL from path %s"
-msgstr "Klarte ikke å lage CFURL av sti %s"
+msgstr "Klarte ikke å lese fra sokkel: %s"
 
 #: ../../locales/../src/interface/updater.cpp:489
 #, c-format
@@ -2590,7 +2589,7 @@ msgstr "Klarte ikke å lage loggføringsmutex %s"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:167
 msgid "Could not create security-scoped bookmark from URL:"
-msgstr "Klarte ikke å lage sikkert bokmerke av nettadresse:"
+msgstr ""
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2211
 #: ../../locales/../src/interface/RemoteTreeView.cpp:848
@@ -2643,12 +2642,14 @@ msgid "Could not get full remote path."
 msgstr "Klarte ikke å hente fullstendig ekstern filsti"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:95
+#, fuzzy
 msgid "Could not get native path from CFURL"
-msgstr "Klarte ikke å hente fullstendig filsti fra CFURL"
+msgstr "Klarte ikke å motta data fra tjeneren."
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:173
+#, fuzzy
 msgid "Could not get path from URL"
-msgstr "Klarte ikke å hente filsti fra nettadresse"
+msgstr "Fikk ikke svar fra fzputtygen."
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:232
 msgid "Could not get reply from fzputtygen."
@@ -2763,8 +2764,9 @@ msgid "Could not receive data from server."
 msgstr "Klarte ikke å motta data fra tjeneren."
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:116
+#, fuzzy
 msgid "Could not restore directory access"
-msgstr "Klarte ikke å gjenopprette mappetilgang"
+msgstr "Ugyldig tolkning av tjeneradresse:"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2694
 #, c-format
@@ -3593,10 +3595,10 @@ msgid ""
 "- ftpes:// for FTP over TLS (explicit)"
 msgstr ""
 "Skriv inn adresse til tjenermaskin.\n"
-"Skriv inn protokollnavn før vertsnavn hvis aktuelt. Hvis du ikke velger "
+"Valg av protokoll må komme før tjeneradressen. Hvis du ikke velger "
 "protokoll, brukes standardprotokollen «ftp://».\n"
-"Du kan også bruke fullstendige nettadresser i form av protokoll://brukernavn:"
-"passord@tjeneradresse:port . Verdier i andre felt blir i så fall overstyrt.\n"
+"Du kan også bruke fullstendige nettadresser i form av protokoll://bruker:"
+"passord@tjener:port . Verdier i andre felt blir i så fall overstyrt.\n"
 "\n"
 "Følgende protokoller støttes:\n"
 "- ftp:// for vanlig FTP med valgfri kryptering\n"
@@ -3618,8 +3620,8 @@ msgid ""
 "Enter the port on which the server listens. The default for FTP is 21, the "
 "default for SFTP is 22."
 msgstr ""
-"Skriv inn porten som denne tjeneren bruker. Standardport er 21 for FTP, og "
-"22 for SFTP."
+"Skriv inn porten som denne tjeneren bruker. Standardport er 21 for FTP og 22 "
+"for SFTP."
 
 #: ../../locales/../src/interface/loginmanager.cpp:73
 msgid "Enter username"
@@ -3690,8 +3692,8 @@ msgid "Error writing xml file"
 msgstr "Feil ved skriving til xml-fil"
 
 #: ../../locales/../src/engine/logging.cpp:113
-#: ../../locales/../src/interface/StatusView.cpp:280
-#: ../../locales/../src/interface/StatusView.cpp:342
+#: ../../locales/../src/interface/StatusView.cpp:284
+#: ../../locales/../src/interface/StatusView.cpp:346
 msgid "Error:"
 msgstr "Feil:"
 
@@ -4288,9 +4290,9 @@ msgid "Found new %s %s\n"
 msgstr "Fant ny %s: %s\n"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:49
-#, c-format
+#, fuzzy, c-format
 msgid "Function %s failed"
-msgstr "Funksjon %s mislyktes"
+msgstr "Autentisering mislyktes."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3598
 msgid "Further documentation"
@@ -4944,8 +4946,8 @@ msgid "Listen socket closed"
 msgstr "Lyttesokkel lukket"
 
 #: ../../locales/../src/engine/logging.cpp:120
-#: ../../locales/../src/interface/StatusView.cpp:291
-#: ../../locales/../src/interface/StatusView.cpp:370
+#: ../../locales/../src/interface/StatusView.cpp:295
+#: ../../locales/../src/interface/StatusView.cpp:374
 msgid "Listing:"
 msgstr "Liste:"
 
@@ -5993,7 +5995,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:115
 msgid "Please re-add local data directories in the settings dialog."
-msgstr "Legg til lokale datamapper på nytt via dialogvinduet Innstillinger."
+msgstr ""
 
 #: ../../locales/../src/interface/netconfwizard.cpp:592
 msgid ""
@@ -6578,8 +6580,8 @@ msgstr "Ressursen er midlertidig utilgjengelig"
 
 #: ../../locales/../src/engine/logging.cpp:115
 #: ../../locales/../src/interface/netconfwizard.cpp:421
-#: ../../locales/../src/interface/StatusView.cpp:285
-#: ../../locales/../src/interface/StatusView.cpp:353
+#: ../../locales/../src/interface/StatusView.cpp:289
+#: ../../locales/../src/interface/StatusView.cpp:357
 msgid "Response:"
 msgstr "Respons:"
 
@@ -7338,8 +7340,8 @@ msgid "Status"
 msgstr "Status"
 
 #: ../../locales/../src/engine/logging.cpp:112
-#: ../../locales/../src/interface/StatusView.cpp:294
-#: ../../locales/../src/interface/StatusView.cpp:377
+#: ../../locales/../src/interface/StatusView.cpp:298
+#: ../../locales/../src/interface/StatusView.cpp:381
 msgid "Status:"
 msgstr "Status:"
 
@@ -8028,8 +8030,8 @@ msgid "Too many redirects"
 msgstr "For mange videresendinger"
 
 #: ../../locales/../src/engine/logging.cpp:116
-#: ../../locales/../src/interface/StatusView.cpp:288
-#: ../../locales/../src/interface/StatusView.cpp:363
+#: ../../locales/../src/interface/StatusView.cpp:292
+#: ../../locales/../src/interface/StatusView.cpp:367
 msgid "Trace:"
 msgstr "Sporing:"
 
