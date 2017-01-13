@@ -230,6 +230,10 @@ void CStatusView::AddToLog(MessageType messagetype, std::wstring const& message,
 		m_pTextCtrl->AppendText(m_formattedMessage);
 	else
 		m_pTextCtrl->WriteText(m_formattedMessage);
+	#ifdef __WXGTK3__
+		// Some smooth scrolling oddities prevent auto-scrolling. Manuall tell it to scroll.
+		m_pTextCtrl->ShowPosition(m_pTextCtrl->GetInsertionPoint());
+	#endif
 #elif defined(__WXMAC__)
 	m_pTextCtrl->WriteText(m_formattedMessage);
 #else
