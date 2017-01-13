@@ -101,6 +101,33 @@ Var OfferReadLineTemp
 
 !macroend
 
+Function OfferInit
+
+  ; Do not present offers when installer is silent
+  ${If} ${Silent}
+    StrCpy $OfferSkip 1
+  ${EndIf}
+
+  ; Do not present offers during automated updates
+  ${If} $PERFORM_UPDATE == 1
+    StrCpy $OfferSkip 1
+  ${EndIf}
+
+  ${If} $OfferSkip == 1
+    Return
+  ${EndIf}
+
+  ; Next, get the offer data
+  GetTempFileName $OfferFile
+  inetc::get /SILENT ${OfferDataUrl} $OfferFile
+  Pop $R0
+  ${If} $R0 != "OK"
+    Delete $OfferFile
+    StrCpy $OfferFile ''
+  ${EndIf}
+
+FunctionEnd
+
 Function OfferPageOnRadio
 
   Pop $R0
@@ -136,28 +163,11 @@ FunctionEnd
 
 Function OfferPage
 
-  ; Do not present offers when installer is silent
-  ${If} ${Silent}
-    StrCpy $OfferSkip 1
-  ${EndIf}
-
-  ; Do not present offers during automated updates
-  ${If} $PERFORM_UPDATE == 1
-    StrCpy $OfferSkip 1
-  ${EndIf}
-
   ${If} $OfferSkip == 1
     Abort
   ${EndIf}
 
-  ; Disable next button while fetching data
-  EnableWindow $mui.Button.Next 0
-
-  ; Next, get the offer data
-  GetTempFileName $OfferFile
-  inetc::get /SILENT ${OfferDataUrl} $OfferFile
-  Pop $R0
-  ${If} $R0 != "OK"
+  ${If} $OfferFile == ''
     Abort
   ${EndIf}
 
@@ -374,10 +384,11 @@ Function OfferPage
   ${Loop}
 
   FileClose $OfferFileHandle
-  Delete $OfferFile
   ${If} ${Errors}
     ; Something went wrong. Don't show offers.
     StrCpy $OfferSkip 1
+    Delete $OfferFile
+    StrCpy $OfferFile ''
     SendMessage $HWNDPARENT ${WM_COMMAND} 1 $mui.Button.Next
     nsDialogs::Show
     Abort
@@ -406,26 +417,32 @@ FunctionEnd
 Function OfferPageLeave
 
   ${If} $OfferSkip != 1
-  ${AndIf} $OfferResult == 1
 
-    EnableWindow $mui.Button.Next 0
-    EnableWindow $mui.Button.Back 0
-    EnableWindow $mui.Button.Cancel 0
+    Delete $OfferFile
+    StrCpy $OfferFile ''
 
-    GetTempFileName $R1
-    inetc::get $OfferInstallUrl $R1
-    Pop $R0
+    ${If} $OfferResult == 1
 
-    EnableWindow $mui.Button.Next 1
-    EnableWindow $mui.Button.Back 1
-    EnableWindow $mui.Button.Cancel 1
+      EnableWindow $mui.Button.Next 0
+      EnableWindow $mui.Button.Back 0
+      EnableWindow $mui.Button.Cancel 0
 
-    ${If} $R0 == "OK"
-      StrCpy $OfferSkip 1
-      Rename "$R1" $PLUGINSDIR\$OfferInstallFilename
-      ExecShell '' '"$PLUGINSDIR\$OfferInstallFilename"' '$OfferInstallArgs' 'SW_SHOWNORMAL'
-    ${ElseIf} $R0 == "Cancelled"
-      Abort
+      GetTempFileName $R1
+      inetc::get $OfferInstallUrl $R1
+      Pop $R0
+
+      EnableWindow $mui.Button.Next 1
+      EnableWindow $mui.Button.Back 1
+      EnableWindow $mui.Button.Cancel 1
+
+      ${If} $R0 == "OK"
+        StrCpy $OfferSkip 1
+        Rename "$R1" $PLUGINSDIR\$OfferInstallFilename
+        ExecShell '' '"$PLUGINSDIR\$OfferInstallFilename"' '$OfferInstallArgs' 'SW_SHOWNORMAL'
+      ${ElseIf} $R0 == "Cancelled"
+        Abort
+      ${EndIf}
+
     ${EndIf}
 
   ${EndIf}
