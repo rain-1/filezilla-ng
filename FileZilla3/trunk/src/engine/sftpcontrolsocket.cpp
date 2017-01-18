@@ -838,7 +838,6 @@ public:
 	bool fallback_to_current{};
 
 	CDirectoryListing directoryListing;
-	int mtime_index{};
 
 	fz::monotonic_clock m_time_before_locking;
 };
