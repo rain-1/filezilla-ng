@@ -219,9 +219,6 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 	fz::scoped_lock lock(mutex_);
 	m_pLogging->LogMessage(MessageType::Debug_Debug, L"CFileZillaEnginePrivate::ResetOperation(%d)", nErrorCode);
 
-	if (nErrorCode & FZ_REPLY_DISCONNECTED)
-		m_lastListDir.clear();
-
 	if (m_pCurrentCommand) {
 		if ((nErrorCode & FZ_REPLY_NOTSUPPORTED) == FZ_REPLY_NOTSUPPORTED) {
 			m_pLogging->LogMessage(MessageType::Error, _("Command not supported by this protocol"));
@@ -330,19 +327,19 @@ int CFileZillaEnginePrivate::List(CListCommand const& command)
 		const CServer* pServer = m_pControlSocket->GetCurrentServer();
 		if (pServer) {
 			CServerPath path(path_cache_.Lookup(*pServer, command.GetPath(), command.GetSubDir()));
-			if (path.empty() && command.GetSubDir().empty())
+			if (path.empty() && command.GetSubDir().empty()) {
 				path = command.GetPath();
+			}
 			if (!path.empty()) {
 				CDirectoryListing *pListing = new CDirectoryListing;
 				bool is_outdated = false;
 				bool found = directory_cache_.Lookup(*pListing, *pServer, path, true, is_outdated);
 				if (found && !is_outdated) {
-					if (pListing->get_unsure_flags())
+					if (pListing->get_unsure_flags()) {
 						flags |= LIST_FLAG_REFRESH;
+					}
 					else {
 						if (!avoid) {
-							m_lastListDir = pListing->path;
-							m_lastListTime = fz::monotonic_clock::now();
 							CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(pListing->path);
 							AddNotification(pNotification);
 						}
@@ -350,8 +347,9 @@ int CFileZillaEnginePrivate::List(CListCommand const& command)
 						return FZ_REPLY_OK;
 					}
 				}
-				if (is_outdated)
+				if (is_outdated) {
 					flags |= LIST_FLAG_REFRESH;
+				}
 				delete pListing;
 			}
 		}
@@ -403,57 +401,6 @@ int CFileZillaEnginePrivate::Rename(CRenameCommand const& command)
 int CFileZillaEnginePrivate::Chmod(CChmodCommand const& command)
 {
 	return m_pControlSocket->Chmod(command);
-}
-
-void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath& path, bool onList, bool modified, bool failed)
-{
-	fz::scoped_lock lock(mutex_);
-
-	assert(m_pControlSocket);
-
-	const CServer* const pOwnServer = m_pControlSocket->GetCurrentServer();
-	assert(pOwnServer);
-
-	m_lastListDir = path;
-
-	if (failed) {
-		AddNotification(new CDirectoryListingNotification(path, false, true));
-		m_lastListTime = fz::monotonic_clock::now();
-
-		// On failed messages, we don't notify other engines
-		return;
-	}
-
-	fz::monotonic_clock changeTime;
-	if (!directory_cache_.GetChangeTime(changeTime, *pOwnServer, path))
-		return;
-
-	AddNotification(new CDirectoryListingNotification(path, !onList));
-	m_lastListTime = changeTime;
-
-	if (!modified)
-		return;
-
-	// Iterate over the other engine, send notification if last listing
-	// directory is the same
-	for (auto & engine : m_engineList) {
-		if (!engine->m_pControlSocket || engine->m_pControlSocket == m_pControlSocket) {
-			continue;
-		}
-
-		CServer const* const pServer = engine->m_pControlSocket->GetCurrentServer();
-		if (!pServer || *pServer != *pOwnServer)
-			continue;
-
-		if (engine->m_lastListDir != path)
-			continue;
-
-		if (engine->m_lastListTime && changeTime <= engine->m_lastListTime)
-			continue;
-
-		engine->m_lastListTime = changeTime;
-		engine->AddNotification(new CDirectoryListingNotification(path, true));
-	}
 }
 
 void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, bool critical)
@@ -823,14 +770,16 @@ int CFileZillaEnginePrivate::CacheLookup(const CServerPath& path, CDirectoryList
 	// TODO: Possible optimization: Atomically get current server. The cache has its own mutex.
 	fz::scoped_lock lock(mutex_);
 
-	if (!IsConnected())
+	if (!IsConnected()) {
 		return FZ_REPLY_ERROR;
+	}
 
 	assert(m_pControlSocket->GetCurrentServer());
 
 	bool is_outdated = false;
-	if (!directory_cache_.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated))
+	if (!directory_cache_.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated)) {
 		return FZ_REPLY_ERROR;
+	}
 
 	return FZ_REPLY_OK;
 }

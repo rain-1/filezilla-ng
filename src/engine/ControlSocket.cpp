@@ -207,7 +207,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 					else {
 						bool updated = engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->remotePath, pData->remoteFile, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? pData->localFileSize : -1);
 						if (updated) {
-							engine_.SendDirectoryListingNotification(pData->remotePath, false, true, false);
+							SendDirectoryListingNotification(pData->remotePath, false, false);
 						}
 					}
 				}
@@ -1366,4 +1366,13 @@ void CControlSocket::SetActive(CFileZillaEngine::_direction direction)
 {
 	SetAlive();
 	engine_.SetActive(direction);
+}
+
+void CControlSocket::SendDirectoryListingNotification(CServerPath const& path, bool onList, bool failed)
+{
+	if (!m_pCurrentServer) {
+		return;
+	}
+
+	engine_.AddNotification(new CDirectoryListingNotification(path, !onList, failed));
 }

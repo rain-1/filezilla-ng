@@ -322,4 +322,8 @@ void CCommandQueue::ProcessDirectoryListing(CDirectoryListingNotification const&
 	else {
 		m_state.SetRemoteDir(pListing, listingNotification.Modified());
 	}
+
+	if (pListing && !listingNotification.Failed() && m_state.GetServer()) {
+		CContextManager::Get()->ProcessDirectoryListing(*m_state.GetServer(), pListing, listingIsRecursive ? 0 : &m_state);
+	}
 }

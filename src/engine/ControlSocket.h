@@ -171,6 +171,8 @@ public:
 	void InvalidateCurrentWorkingDir(const CServerPath& path);
 
 protected:
+	void SendDirectoryListingNotification(CServerPath const& path, bool onList, bool failed);
+
 	fz::duration GetTimezoneOffset() const;
 
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
