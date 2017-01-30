@@ -464,12 +464,19 @@ wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay)
 
 void CRemoteTreeView::CreateImageList()
 {
-	wxSize s = CThemeProvider::GetIconSize(iconSizeSmall);
-	m_pImageList = new wxImageList(s.x, s.y, true, 4);
-
 	// Normal directory
 	int index = GetIconIndex(iconType::dir, _T("{78013B9C-3532-4fe1-A418-5CD1955127CC}"), false);
-	m_pImageList->Add(CreateIcon(index));
+	wxBitmap dirIcon = CreateIcon(index);
+
+	wxSize s = dirIcon.GetSize();
+
+	// Must create image list only after we know actual icon size,
+	// wxSystemSettings cannot return the correct size due to a bug in
+	// Windows. On Vista and possibly 7, the documentation does not
+	// match Windows' actual behavior.
+	m_pImageList = new wxImageList(s.x, s.y, true, 4);
+
+	m_pImageList->Add(dirIcon);
 	m_pImageList->Add(CreateIcon(index, _T("ART_UNKNOWN")));
 
 	// Opened directory
