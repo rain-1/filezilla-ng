@@ -364,15 +364,17 @@ void CQueueView::OnEngineEvent(CFileZillaEngine* engine)
 void CQueueView::DoOnEngineEvent(CFileZillaEngine* engine)
 {
 	t_EngineData* const pEngineData = GetEngineData(engine);
-	if (!pEngineData)
+	if (!pEngineData) {
 		return;
+	}
 
 	std::unique_ptr<CNotification> pNotification = pEngineData->pEngine->GetNextNotification();
 	while (pNotification) {
 		ProcessNotification(pEngineData, std::move(pNotification));
 
-		if (m_engineData.empty() || !pEngineData->pEngine)
+		if (m_engineData.empty() || !pEngineData->pEngine) {
 			break;
+		}
 
 		pNotification = pEngineData->pEngine->GetNextNotification();
 	}
@@ -465,6 +467,17 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<
 			std::vector<CState*> const* pStates = CContextManager::Get()->GetAllStates();
 			for (auto state : *pStates) {
 				state->LocalDirCreated(localDirCreatedNotification.dir);
+			}
+		}
+		break;
+	case nId_listing:
+		{
+			auto const& listingNotification = static_cast<CDirectoryListingNotification const&>(*pNotification.get());
+			if (!listingNotification.GetPath().empty() && !listingNotification.Failed() && pEngineData->pEngine) {
+				std::shared_ptr<CDirectoryListing> pListing = std::make_shared<CDirectoryListing>();
+				if (pEngineData->pEngine->CacheLookup(listingNotification.GetPath(), *pListing) == FZ_REPLY_OK) {
+					CContextManager::Get()->ProcessDirectoryListing(pEngineData->lastServer, pListing, 0);
+				}
 			}
 		}
 		break;
@@ -2222,37 +2235,41 @@ t_EngineData* CQueueView::GetEngineData(const CFileZillaEngine* pEngine)
 
 void CQueueView::TryRefreshListings()
 {
-	if (m_quit)
+	if (m_quit) {
 		return;
+	}
 
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-	{
+	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
 		CState* pState = *iter;
 
 		const CServer* const pServer = pState->GetServer();
-		if (!pServer)
+		if (!pServer) {
 			continue;
+		}
 
 		const CDirectoryListing* const pListing = pState->GetRemoteDir().get();
-		if (!pListing)
+		if (!pListing) {
 			continue;
+		}
 
 		// See if there's an engine that is already listing
 		unsigned int i;
-		for (i = 0; i < m_engineData.size(); i++)
-		{
-			if (!m_engineData[i]->active || m_engineData[i]->state != t_EngineData::list)
+		for (i = 0; i < m_engineData.size(); ++i) {
+			if (!m_engineData[i]->active || m_engineData[i]->state != t_EngineData::list) {
 				continue;
+			}
 
-			if (m_engineData[i]->lastServer != *pServer)
+			if (m_engineData[i]->lastServer != *pServer) {
 				continue;
+			}
 
 			// This engine is already listing a directory on the current server
 			break;
 		}
-		if (i != m_engineData.size())
+		if (i != m_engineData.size()) {
 			continue;
+		}
 
 		if (m_last_refresh_server == *pServer && m_last_refresh_path == pListing->path &&
 			m_last_refresh_listing_time == pListing->m_firstListTime)
@@ -2262,11 +2279,13 @@ void CQueueView::TryRefreshListings()
 		}
 
 		t_EngineData* pEngineData = GetIdleEngine(pServer);
-		if (!pEngineData)
+		if (!pEngineData) {
 			continue;
+		}
 
-		if (!pEngineData->pEngine->IsConnected() || pEngineData->lastServer != *pServer)
+		if (!pEngineData->pEngine->IsConnected() || pEngineData->lastServer != *pServer) {
 			continue;
+		}
 
 		m_last_refresh_server = *pServer;
 		m_last_refresh_path = pListing->path;
@@ -2274,8 +2293,9 @@ void CQueueView::TryRefreshListings()
 
 		CListCommand command(pListing->path, _T(""), LIST_FLAG_AVOID);
 		int res = pEngineData->pEngine->Execute(command);
-		if (res != FZ_REPLY_WOULDBLOCK)
+		if (res != FZ_REPLY_WOULDBLOCK) {
 			continue;
+		}
 
 		pEngineData->active = true;
 		pEngineData->state = t_EngineData::list;

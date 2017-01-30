@@ -175,6 +175,18 @@ void CContextManager::NotifyGlobalHandlers(t_statechange_notifications notificat
 	}
 }
 
+void CContextManager::ProcessDirectoryListing(CServer const& server, std::shared_ptr<CDirectoryListing> const& listing, CState const* exempt)
+{
+	for (auto state : m_contexts) {
+		if (state == exempt) {
+			continue;
+		}
+		if (state->GetServer() && *state->GetServer() == server) {
+			state->SetRemoteDir(listing, true);
+		}
+	}
+}
+
 CState::CState(CMainFrame &mainFrame)
 	: m_mainFrame(mainFrame)
 {

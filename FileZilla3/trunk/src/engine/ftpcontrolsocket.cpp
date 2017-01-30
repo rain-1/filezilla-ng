@@ -1421,7 +1421,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			if (found) {
 				// We're done if listing is recent and has no outdated entries
 				if (!is_outdated && !hasUnsureEntries) {
-					engine_.SendDirectoryListingNotification(m_CurrentPath, true, false, false);
+					SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
 
 					ResetOperation(FZ_REPLY_OK);
 
@@ -1522,7 +1522,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 
 			engine_.GetDirectoryCache().Store(listing, *m_pCurrentServer);
 
-			engine_.SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
+			SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
 
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
@@ -1570,7 +1570,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 
 				engine_.GetDirectoryCache().Store(listing, *m_pCurrentServer);
 
-				engine_.SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
+				SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
 
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
@@ -1592,7 +1592,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 
 						engine_.GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
 
-						engine_.SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
+						SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
 
 						ResetOperation(FZ_REPLY_OK);
 						return FZ_REPLY_OK;
@@ -1600,7 +1600,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 				}
 
 				if (prevResult & FZ_REPLY_ERROR) {
-					engine_.SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, true);
+					SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true);
 				}
 			}
 
@@ -1643,7 +1643,7 @@ int CFtpControlSocket::ListSend()
 		if (found && !is_outdated && !listing.get_unsure_flags() &&
 			listing.m_firstListTime >= pData->m_time_before_locking)
 		{
-			engine_.SendDirectoryListingNotification(listing.path, !pData->pNextOpData, false, false);
+			SendDirectoryListingNotification(listing.path, !pData->pNextOpData, false);
 
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
@@ -1731,7 +1731,7 @@ int CFtpControlSocket::ListParseResponse()
 
 	engine_.GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
 
-	engine_.SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
+	SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
 
 	ResetOperation(FZ_REPLY_OK);
 	return FZ_REPLY_OK;
@@ -1807,7 +1807,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 	if (m_pCurOpData && m_pCurOpData->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
 		CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
 		if (pData->m_needSendListing) {
-			engine_.SendDirectoryListingNotification(pData->path, false, true, false);
+			SendDirectoryListingNotification(pData->path, false, false);
 		}
 	}
 
@@ -3055,7 +3055,7 @@ int CFtpControlSocket::DeleteParseResponse()
 
 		fz::datetime now = fz::datetime::now();
 		if (!pData->m_time.empty() && (now - pData->m_time).get_seconds() >= 1) {
-			engine_.SendDirectoryListingNotification(pData->path, false, true, false);
+			SendDirectoryListingNotification(pData->path, false, false);
 			pData->m_time = now;
 			pData->m_needSendListing = false;
 		}
@@ -3192,7 +3192,7 @@ int CFtpControlSocket::RemoveDirParseResponse()
 	}
 
 	engine_.GetDirectoryCache().RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, engine_.GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir));
-	engine_.SendDirectoryListingNotification(pData->path, false, true, false);
+	SendDirectoryListingNotification(pData->path, false, false);
 
 	return ResetOperation(FZ_REPLY_OK);
 }
@@ -3330,7 +3330,7 @@ int CFtpControlSocket::MkdirParseResponse()
 			}
 
 			engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.back(), true, CDirectoryCache::dir);
-			engine_.SendDirectoryListingNotification(pData->currentPath, false, true, false);
+			SendDirectoryListingNotification(pData->currentPath, false, false);
 
 			pData->currentPath.AddSegment(pData->segments.back());
 			pData->segments.pop_back();
@@ -3489,9 +3489,10 @@ int CFtpControlSocket::RenameParseResponse()
 		const CServerPath& toPath = pData->m_cmd.GetToPath();
 		engine_.GetDirectoryCache().Rename(*m_pCurrentServer, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
 
-		engine_.SendDirectoryListingNotification(fromPath, false, true, false);
-		if (fromPath != toPath)
-			engine_.SendDirectoryListingNotification(toPath, false, true, false);
+		SendDirectoryListingNotification(fromPath, false, false);
+		if (fromPath != toPath) {
+			SendDirectoryListingNotification(toPath, false, false);
+		}
 
 		ResetOperation(FZ_REPLY_OK);
 		return FZ_REPLY_OK;

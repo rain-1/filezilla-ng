@@ -887,14 +887,16 @@ void CMainFrame::DoOnEngineEvent(CFileZillaEngine* engine)
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 	CState* pState = 0;
 	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
-		if ((*iter)->m_pEngine != engine)
+		if ((*iter)->m_pEngine != engine) {
 			continue;
+		}
 
 		pState = *iter;
 		break;
 	}
-	if (!pState)
+	if (!pState) {
 		return;
+	}
 
 	std::unique_ptr<CNotification> pNotification = pState->m_pEngine->GetNextNotification();
 	while (pNotification) {
