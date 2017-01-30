@@ -1537,7 +1537,6 @@ void CRemoteListView::OnKeyDown(wxKeyEvent& event)
 
 		wxCommandEvent tmp;
 		OnMenuDelete(tmp);
-		return;
 	}
 	else if (code == WXK_F2) {
 		wxCommandEvent tmp;
@@ -1555,31 +1554,32 @@ void CRemoteListView::OnKeyDown(wxKeyEvent& event)
 	else if (code == 'N' && event.GetModifiers() == (wxMOD_CONTROL | wxMOD_SHIFT)) {
 		MenuMkdir();
 	}
-	else
+	else {
 		event.Skip();
+	}
 }
 
 bool CRemoteListView::OnBeginRename(const wxListEvent& event)
 {
-	if (!m_state.IsRemoteIdle())
-	{
+	if (!m_state.IsRemoteIdle()) {
 		wxBell();
 		return false;
 	}
 
-	if (!m_pDirectoryListing)
-	{
+	if (!m_pDirectoryListing) {
 		wxBell();
 		return false;
 	}
 
 	int item = event.GetIndex();
-	if (!item)
+	if (!item) {
 		return false;
+	}
 
 	int index = GetItemIndex(item);
-	if (index == -1 || m_fileData[index].comparison_flags == fill)
+	if (index == -1 || m_fileData[index].comparison_flags == fill) {
 		return false;
+	}
 
 	return true;
 }
@@ -1623,13 +1623,11 @@ bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 		}
 
 		// Check if target file already exists
-		for (unsigned int i = 0; i < m_pDirectoryListing->GetCount(); i++)
-		{
-			if (newFile == (*m_pDirectoryListing)[i].name)
-			{
-				if (wxMessageBoxEx(_("Target filename already exists, really continue?"), _("File exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
+		for (unsigned int i = 0; i < m_pDirectoryListing->GetCount(); ++i) {
+			if (newFile == (*m_pDirectoryListing)[i].name) {
+				if (wxMessageBoxEx(_("Target filename already exists, really continue?"), _("File exists"), wxICON_QUESTION | wxYES_NO) != wxYES) {
 					return false;
-
+				}
 				break;
 			}
 		}
