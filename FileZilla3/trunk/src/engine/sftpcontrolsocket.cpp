@@ -32,7 +32,7 @@ typedef fz::simple_event<sftp_event_type, sftp_message> CSftpEvent;
 struct terminate_event_type;
 typedef fz::simple_event<terminate_event_type, std::wstring> CTerminateEvent;
 
-class CSftpFileTransferOpData : public CFileTransferOpData
+class CSftpFileTransferOpData final : public CFileTransferOpData
 {
 public:
 	CSftpFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
@@ -213,8 +213,6 @@ public:
 	{
 	}
 
-	virtual ~CSftpDeleteOpData() {}
-
 	CServerPath path;
 	std::deque<std::wstring> files;
 
@@ -254,10 +252,6 @@ public:
 	CSftpConnectOpData()
 		: COpData(Command::connect)
 		, keyfile_(keyfiles_.cend())
-	{
-	}
-
-	virtual ~CSftpConnectOpData()
 	{
 	}
 
@@ -314,7 +308,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 
 	pData->keyfile_ = pData->keyfiles_.cbegin();
 
-	m_pProcess = new fz::process();
+	m_pProcess = std::make_unique<fz::process>();
 
 	engine_.GetRateLimiter().AddObject(this);
 
@@ -333,11 +327,10 @@ int CSftpControlSocket::Connect(const CServer &server)
 		return FZ_REPLY_ERROR;
 	}
 
-	m_pInputThread = new CSftpInputThread(this, *m_pProcess);
+	m_pInputThread = std::make_unique<CSftpInputThread>(this, *m_pProcess);
 	if (!m_pInputThread->spawn(engine_.GetThreadPool())) {
 		LogMessage(MessageType::Debug_Warning, _T("Thread creation failed"));
-		delete m_pInputThread;
-		m_pInputThread = 0;
+		m_pInputThread.reset();
 		DoClose();
 		return FZ_REPLY_ERROR;
 	}
@@ -822,12 +815,7 @@ public:
 	{
 	}
 
-	virtual ~CSftpListOpData()
-	{
-		delete pParser;
-	}
-
-	CDirectoryListingParser* pParser{};
+	std::unique_ptr<CDirectoryListingParser> pParser;
 
 	CServerPath path;
 	std::wstring subDir;
@@ -1025,8 +1013,9 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 		}
 	}
 
-	if (pData->path.empty())
+	if (pData->path.empty()) {
 		pData->path = m_CurrentPath;
+	}
 
 	if (!pData->refresh) {
 		assert(!pData->pNextOpData);
@@ -1100,7 +1089,7 @@ int CSftpControlSocket::ListSend()
 		return ListSubcommandResult(FZ_REPLY_OK);
 	}
 	else if (pData->opState == list_list) {
-		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer, listingEncoding::unknown);
+		pData->pParser = std::make_unique<CDirectoryListingParser>(this, *m_pCurrentServer, listingEncoding::unknown);
 		if (!SendCommand(_T("ls"))) {
 			return FZ_REPLY_ERROR;
 		}
@@ -1112,7 +1101,7 @@ int CSftpControlSocket::ListSend()
 	return FZ_REPLY_ERROR;
 }
 
-class CSftpChangeDirOpData : public CChangeDirOpData
+class CSftpChangeDirOpData final : public CChangeDirOpData
 {
 };
 
@@ -1795,8 +1784,7 @@ int CSftpControlSocket::DoClose(int nErrorCode)
 	}
 
 	if (m_pInputThread) {
-		delete m_pInputThread;
-		m_pInputThread = 0;
+		m_pInputThread.reset();
 
 		auto threadEventsFilter = [&](fz::event_loop::Events::value_type const& ev) -> bool {
 			if (ev.first != this) {
@@ -1810,10 +1798,7 @@ int CSftpControlSocket::DoClose(int nErrorCode)
 
 		event_loop_.filter_events(threadEventsFilter);
 	}
-	if (m_pProcess) {
-		delete m_pProcess;
-		m_pProcess = 0;
-	}
+	m_pProcess.reset();
 	return CControlSocket::DoClose(nErrorCode);
 }
 
@@ -2115,15 +2100,13 @@ int CSftpControlSocket::DeleteSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-class CSftpRemoveDirOpData : public COpData
+class CSftpRemoveDirOpData final : public COpData
 {
 public:
 	CSftpRemoveDirOpData()
 		: COpData(Command::removedir)
 	{
 	}
-
-	virtual ~CSftpRemoveDirOpData() {}
 
 	CServerPath path;
 	std::wstring subDir;
@@ -2191,19 +2174,16 @@ int CSftpControlSocket::RemoveDirParseResponse(bool successful, std::wstring con
 	return ResetOperation(FZ_REPLY_OK);
 }
 
-class CSftpChmodOpData : public COpData
+class CSftpChmodOpData final : public COpData
 {
 public:
 	CSftpChmodOpData(const CChmodCommand& command)
 		: COpData(Command::chmod), m_cmd(command)
 	{
-		m_useAbsolute = false;
 	}
 
-	virtual ~CSftpChmodOpData() {}
-
 	CChmodCommand m_cmd;
-	bool m_useAbsolute;
+	bool m_useAbsolute{};
 };
 
 enum chmodStates
@@ -2310,19 +2290,16 @@ int CSftpControlSocket::ChmodSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-class CSftpRenameOpData : public COpData
+class CSftpRenameOpData final : public COpData
 {
 public:
 	CSftpRenameOpData(const CRenameCommand& command)
 		: COpData(Command::rename), m_cmd(command)
 	{
-		m_useAbsolute = false;
 	}
 
-	virtual ~CSftpRenameOpData() {}
-
 	CRenameCommand m_cmd;
-	bool m_useAbsolute;
+	bool m_useAbsolute{};
 };
 
 enum renameStates
