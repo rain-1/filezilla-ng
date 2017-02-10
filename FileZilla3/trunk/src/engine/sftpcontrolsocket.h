@@ -67,11 +67,11 @@ protected:
 	// "filename""with""quotes"
 	std::wstring QuoteFilename(std::wstring const& filename);
 
-	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
+	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED) override;
 
-	virtual int ResetOperation(int nErrorCode);
-	virtual int SendNextCommand();
-	virtual int ParseSubcommandResult(int prevResult);
+	virtual int ResetOperation(int nErrorCode) override;
+	virtual int SendNextCommand() override;
+	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation) override;
 
 	void ProcessReply(int result, std::wstring const& reply);
 

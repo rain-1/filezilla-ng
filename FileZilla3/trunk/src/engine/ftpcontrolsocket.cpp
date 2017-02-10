@@ -1350,8 +1350,7 @@ int CFtpControlSocket::List(CServerPath path, std::wstring const& subDir, int fl
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("List called from other command"));
 	}
 	CFtpListOpData *pData = new CFtpListOpData;
-	pData->pNextOpData = m_pCurOpData;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	pData->opState = list_waitcwd;
 
@@ -1368,7 +1367,7 @@ int CFtpControlSocket::List(CServerPath path, std::wstring const& subDir, int fl
 		return res;
 	}
 
-	return ParseSubcommandResult(FZ_REPLY_OK);
+	return ListSubcommandResult(FZ_REPLY_OK);
 }
 
 int CFtpControlSocket::ListSubcommandResult(int prevResult)
@@ -1967,7 +1966,6 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 	}
 
 	CFtpChangeDirOpData *pData = new CFtpChangeDirOpData;
-	pData->pNextOpData = m_pCurOpData;
 	pData->opState = state;
 	pData->path = path;
 	pData->subDir = subDir;
@@ -1981,8 +1979,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 		assert(subDir.empty());
 	}
 
-
-	m_pCurOpData = pData;
+	Push(pData);
 
 	return SendNextCommand();
 }
@@ -2240,7 +2237,7 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 	}
 
 	CFtpFileTransferOpData *pData = new CFtpFileTransferOpData(download, localFile, remoteFile, remotePath);
-	m_pCurOpData = pData;
+	Push(pData);
 
 	pData->transferSettings = transferSettings;
 	pData->binary = transferSettings.binary;
@@ -2262,7 +2259,7 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 		return res;
 	}
 
-	return ParseSubcommandResult(FZ_REPLY_OK);
+	return FileTransferSubcommandResult(FZ_REPLY_OK);
 }
 
 int CFtpControlSocket::FileTransferParseResponse()
@@ -2910,7 +2907,7 @@ int CFtpControlSocket::RawCommand(std::wstring const& command)
 {
 	assert(!command.empty());
 
-	m_pCurOpData = new CRawCommandOpData(command);
+	Push(new CRawCommandOpData(command));
 
 	return SendNextCommand();
 }
@@ -2959,7 +2956,7 @@ int CFtpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&
 {
 	assert(!m_pCurOpData);
 	CFtpDeleteOpData *pData = new CFtpDeleteOpData();
-	m_pCurOpData = pData;
+	Push(pData);
 	pData->path = path;
 	pData->files = files;
 	pData->omitPath = true;
@@ -3094,7 +3091,7 @@ int CFtpControlSocket::RemoveDir(const CServerPath& path, std::wstring const& su
 {
 	assert(!m_pCurOpData);
 	CFtpRemoveDirOpData *pData = new CFtpRemoveDirOpData();
-	m_pCurOpData = pData;
+	Push(pData);
 	pData->path = path;
 	pData->subDir = subDir;
 	pData->omitPath = true;
@@ -3250,8 +3247,7 @@ int CFtpControlSocket::Mkdir(CServerPath const& path)
 		}
 	}
 
-	pData->pNextOpData = m_pCurOpData;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	return SendNextCommand();
 }
@@ -3456,7 +3452,7 @@ int CFtpControlSocket::Rename(CRenameCommand const& command)
 
 	CFtpRenameOpData *pData = new CFtpRenameOpData(command);
 	pData->opState = rename_rnfrom;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	int res = ChangeDir(command.GetFromPath());
 	if (res != FZ_REPLY_OK) {
@@ -3601,7 +3597,7 @@ int CFtpControlSocket::Chmod(CChmodCommand const& command)
 
 	CFtpChmodOpData *pData = new CFtpChmodOpData(command);
 	pData->opState = chmod_chmod;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	int res = ChangeDir(command.GetPath());
 	if (res != FZ_REPLY_OK) {
@@ -3890,8 +3886,7 @@ int CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* old
 	oldData->tranferCommandSent = false;
 
 	CRawTransferOpData *pData = new CRawTransferOpData;
-	pData->pNextOpData = m_pCurOpData;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	pData->cmd = cmd;
 	pData->pOldData = oldData;
@@ -4283,7 +4278,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 	}
 
 	CFtpLogonOpData* pData = new CFtpLogonOpData;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	// Do not use FTP proxy if generic proxy is set
 	int generic_proxy_type = engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
@@ -4452,7 +4447,7 @@ void CFtpControlSocket::StartKeepaliveTimer()
 	m_idleTimer = add_timer(fz::duration::from_seconds(30), true);
 }
 
-int CFtpControlSocket::ParseSubcommandResult(int prevResult)
+int CFtpControlSocket::ParseSubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ParseSubcommandResult(%d)"), prevResult);
 	if (!m_pCurOpData) {

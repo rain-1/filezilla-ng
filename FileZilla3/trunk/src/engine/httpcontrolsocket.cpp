@@ -324,7 +324,7 @@ int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	}
 
 	CHttpFileTransferOpData *pData = new CHttpFileTransferOpData(download, localFile, remoteFile, remotePath);
-	m_pCurOpData = pData;
+	Push(pData);
 	m_pHttpOpData = pData;
 
 	// TODO: Ordinarily we need to percent-encode the filename. With the current API we then however would not be able to pass the query part of the URL
@@ -434,8 +434,7 @@ int CHttpControlSocket::InternalConnect(std::wstring host, unsigned short port, 
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::InternalConnect()"));
 
 	CHttpConnectOpData* pData = new CHttpConnectOpData;
-	pData->pNextOpData = m_pCurOpData;
-	m_pCurOpData = pData;
+	Push(pData);
 	pData->port = port;
 	pData->tls = tls;
 
@@ -959,7 +958,7 @@ int CHttpControlSocket::ProcessData(char* p, int len)
 	return res;
 }
 
-int CHttpControlSocket::ParseSubcommandResult(int prevResult)
+int CHttpControlSocket::ParseSubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::SendNextCommand(%d)"), prevResult);
 	if (!m_pCurOpData) {
