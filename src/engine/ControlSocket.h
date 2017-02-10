@@ -42,7 +42,7 @@ class CFileTransferOpData : public COpData
 {
 public:
 	CFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path);
-	virtual ~CFileTransferOpData() = default;
+
 	// Transfer data
 	std::wstring localFile, remoteFile;
 	CServerPath remotePath;
@@ -81,10 +81,6 @@ class CChangeDirOpData : public COpData
 public:
 	CChangeDirOpData()
 		: COpData(Command::cwd)
-	{
-	}
-
-	virtual ~CChangeDirOpData()
 	{
 	}
 
@@ -295,10 +291,10 @@ protected:
 	CSocket* m_pSocket;
 
 	CBackend* m_pBackend;
-	CProxySocket* m_pProxyBackend;
+	CProxySocket* m_pProxyBackend{};
 
-	char *m_pSendBuffer;
-	int m_nSendBufferLen;
+	char *m_pSendBuffer{};
+	int m_nSendBufferLen{};
 };
 
 #endif

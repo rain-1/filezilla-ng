@@ -16,19 +16,12 @@
 
 // Connect is special for HTTP: It is done on a per-command basis, so we need
 // to establish a connection before each command.
-class CHttpConnectOpData : public CConnectOpData
+class CHttpConnectOpData final : public CConnectOpData
 {
 public:
-	CHttpConnectOpData()
-		: tls(false)
-	{
-	}
+	CHttpConnectOpData() = default;
 
-	virtual ~CHttpConnectOpData()
-	{
-	}
-
-	bool tls;
+	bool tls{};
 };
 
 class CHttpOpData
@@ -68,7 +61,7 @@ public:
 	} m_chunkData;
 };
 
-class CHttpFileTransferOpData : public CFileTransferOpData, public CHttpOpData
+class CHttpFileTransferOpData final : public CFileTransferOpData, public CHttpOpData
 {
 public:
 	CHttpFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, const CServerPath& remote_path)

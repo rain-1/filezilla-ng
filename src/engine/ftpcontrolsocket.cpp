@@ -86,14 +86,14 @@ enum class loginCommandType
 
 struct t_loginCommand
 {
-	bool optional;
-	bool hide_arguments;
+	bool optional{};
+	bool hide_arguments{};
 	loginCommandType type;
 
 	std::wstring command;
 };
 
-class CFtpLogonOpData : public CConnectOpData
+class CFtpLogonOpData final : public CConnectOpData
 {
 public:
 	CFtpLogonOpData()
@@ -1263,7 +1263,7 @@ bool CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool
 	return res;
 }
 
-class CFtpListOpData : public COpData, public CFtpTransferOpData
+class CFtpListOpData final : public COpData, public CFtpTransferOpData
 {
 public:
 	CFtpListOpData()
@@ -1861,7 +1861,7 @@ int CFtpControlSocket::SendNextCommand()
 	return FZ_REPLY_ERROR;
 }
 
-class CFtpChangeDirOpData : public CChangeDirOpData
+class CFtpChangeDirOpData final : public CChangeDirOpData
 {
 public:
 	CFtpChangeDirOpData() = default;
@@ -2855,7 +2855,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 	return true;
 }
 
-class CRawCommandOpData : public COpData
+class CRawCommandOpData final : public COpData
 {
 public:
 	CRawCommandOpData(std::wstring const& command)
@@ -3034,7 +3034,7 @@ int CFtpControlSocket::DeleteParseResponse()
 	return ResetOperation(pData->m_deleteFailed ? FZ_REPLY_ERROR : FZ_REPLY_OK);
 }
 
-class CFtpRemoveDirOpData : public COpData
+class CFtpRemoveDirOpData final : public COpData
 {
 public:
 	CFtpRemoveDirOpData()
@@ -3380,7 +3380,7 @@ int CFtpControlSocket::MkdirSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-class CFtpRenameOpData : public COpData
+class CFtpRenameOpData final : public COpData
 {
 public:
 	CFtpRenameOpData(CRenameCommand const& command)
@@ -3523,7 +3523,7 @@ int CFtpControlSocket::RenameSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-class CFtpChmodOpData : public COpData
+class CFtpChmodOpData final : public COpData
 {
 public:
 	CFtpChmodOpData(const CChmodCommand& command)

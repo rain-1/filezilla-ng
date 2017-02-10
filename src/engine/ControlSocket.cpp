@@ -863,17 +863,14 @@ CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate & engine)
 	m_pSocket = new CSocket(engine.GetThreadPool(), this);
 
 	m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
-	m_pProxyBackend = 0;
-
-	m_pSendBuffer = 0;
-	m_nSendBufferLen = 0;
 }
 
 CRealControlSocket::~CRealControlSocket()
 {
 	m_pSocket->Close();
-	if (m_pProxyBackend && m_pProxyBackend != m_pBackend)
+	if (m_pProxyBackend && m_pProxyBackend != m_pBackend) {
 		delete m_pProxyBackend;
+	}
 	delete m_pBackend;
 	m_pBackend = 0;
 

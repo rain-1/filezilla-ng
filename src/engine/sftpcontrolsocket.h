@@ -120,8 +120,8 @@ protected:
 	// see src/putty/wildcard.c
 	std::wstring WildcardEscape(std::wstring const& file);
 
-	fz::process* m_pProcess{};
-	CSftpInputThread* m_pInputThread{};
+	std::unique_ptr<fz::process> m_pProcess;
+	std::unique_ptr<CSftpInputThread> m_pInputThread;
 
 	virtual void operator()(fz::event_base const& ev);
 	void OnSftpEvent(sftp_message const& message);
