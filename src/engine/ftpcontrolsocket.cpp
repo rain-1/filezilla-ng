@@ -98,35 +98,24 @@ class CFtpLogonOpData : public CConnectOpData
 public:
 	CFtpLogonOpData()
 	{
-		waitChallenge = false;
-		gotPassword = false;
-		waitForAsyncRequest = false;
-		gotFirstWelcomeLine = false;
-		ftp_proxy_type = 0;
-
-		customCommandIndex = 0;
-
-		for (int i = 0; i < LOGON_DONE; ++i)
+		for (int i = 0; i < LOGON_DONE; ++i) {
 			neededCommands[i] = 1;
-	}
-
-	virtual ~CFtpLogonOpData()
-	{
+		}
 	}
 
 	std::wstring challenge; // Used for interactive logons
-	bool waitChallenge;
-	bool waitForAsyncRequest;
-	bool gotPassword;
-	bool gotFirstWelcomeLine;
+	bool waitChallenge{};
+	bool waitForAsyncRequest{};
+	bool gotPassword{};
+	bool gotFirstWelcomeLine{};
 
-	unsigned int customCommandIndex;
+	unsigned int customCommandIndex{};
 
 	int neededCommands[LOGON_DONE];
 
 	std::deque<t_loginCommand> loginSequence;
 
-	int ftp_proxy_type;
+	int ftp_proxy_type{};
 };
 
 class CFtpDeleteOpData final : public COpData
@@ -136,8 +125,6 @@ public:
 		: COpData(Command::del)
 	{
 	}
-
-	virtual ~CFtpDeleteOpData() {}
 
 	CServerPath path;
 	std::deque<std::wstring> files;
@@ -176,21 +163,11 @@ public:
 CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
 	: CRealControlSocket(engine)
 {
-	m_pIPResolver = 0;
-	m_pTransferSocket = 0;
-	m_sentRestartOffset = false;
-	m_bufferLen = 0;
-	m_repliesToSkip = 0;
-	m_pendingReplies = 1;
-	m_pTlsSocket = 0;
-	m_protectDataChannel = false;
-	m_lastTypeBinary = -1;
-
 	// Enable TCP_NODELAY, speeds things up a bit.
-	// Enable SO_KEEPALIVE, lots of clueless users have broken routers and
-	// firewalls which terminate the control connection on long transfers.
 	m_pSocket->SetFlags(CSocket::flag_nodelay | CSocket::flag_keepalive);
 
+	// Enable SO_KEEPALIVE, lots of clueless users have broken routers and
+	// firewalls which terminate the control connection on long transfers.
 	int v = engine_.GetOptions().GetOptionVal(OPTION_TCP_KEEPALIVE_INTERVAL);
 	if (v >= 1 && v < 10000) {
 		m_pSocket->SetKeepaliveInterval(fz::duration::from_minutes(v));
@@ -1294,16 +1271,11 @@ public:
 	{
 	}
 
-	virtual ~CFtpListOpData()
-	{
-		delete m_pDirectoryListingParser;
-	}
-
 	CServerPath path;
 	std::wstring subDir;
 	bool fallback_to_current{};
 
-	CDirectoryListingParser* m_pDirectoryListingParser{};
+	std::unique_ptr<CDirectoryListingParser> m_pDirectoryListingParser;
 
 	CDirectoryListing directoryListing;
 
@@ -1437,8 +1409,8 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			}
 		}
 
-		delete m_pTransferSocket;
-		m_pTransferSocket = new CTransferSocket(engine_, *this, TransferMode::list);
+		m_pTransferSocket.reset();
+		m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, TransferMode::list);
 
 		// Assume that a server supporting UTF-8 does not send EBCDIC listings.
 		listingEncoding::type encoding = listingEncoding::unknown;
@@ -1446,10 +1418,10 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			encoding = listingEncoding::normal;
 		}
 
-		pData->m_pDirectoryListingParser = new CDirectoryListingParser(this, *m_pCurrentServer, encoding);
+		pData->m_pDirectoryListingParser = std::make_unique<CDirectoryListingParser>(this, *m_pCurrentServer, encoding);
 
 		pData->m_pDirectoryListingParser->SetTimezoneOffset(GetTimezoneOffset());
-		m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser;
+		m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser.get();
 
 		engine_.transfer_status_.Init(-1, 0, true);
 
@@ -1492,10 +1464,10 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 					// Reset status
 					pData->transferEndReason = TransferEndReason::successful;
 					pData->tranferCommandSent = false;
-					delete m_pTransferSocket;
-					m_pTransferSocket = new CTransferSocket(engine_, *this, TransferMode::list);
+					m_pTransferSocket.reset();
+					m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, TransferMode::list);
 					pData->m_pDirectoryListingParser->Reset();
-					m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser;
+					m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser.get();
 
 					return Transfer(_T("LIST -a"), pData);
 				}
@@ -1550,10 +1522,10 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 						// Reset status
 						pData->transferEndReason = TransferEndReason::successful;
 						pData->tranferCommandSent = false;
-						delete m_pTransferSocket;
-						m_pTransferSocket = new CTransferSocket(engine_, *this, TransferMode::list);
+						m_pTransferSocket.reset();
+						m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, TransferMode::list);
 						pData->m_pDirectoryListingParser->Reset();
-						m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser;
+						m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser.get();
 
 						// Repeat with LIST -a
 						pData->viewHidden = true;
@@ -1766,11 +1738,8 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ResetOperation(%d)"), nErrorCode);
 
-	CTransferSocket* pTransferSocket = m_pTransferSocket;
-	m_pTransferSocket = 0;
-	delete pTransferSocket;
-	delete m_pIPResolver;
-	m_pIPResolver = 0;
+	m_pTransferSocket.reset();
+	m_pIPResolver.reset();
 
 	m_repliesToSkip = m_pendingReplies;
 
@@ -1842,21 +1811,18 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 int CFtpControlSocket::SendNextCommand()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::SendNextCommand()"));
-	if (!m_pCurOpData)
-	{
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("SendNextCommand called without active operation"));
+	if (!m_pCurOpData) {
+		LogMessage(MessageType::Debug_Warning, _T("SendNextCommand called without active operation"));
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (m_pCurOpData->waitForAsyncRequest)
-	{
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Waiting for async request, ignoring SendNextCommand..."));
+	if (m_pCurOpData->waitForAsyncRequest) {
+		LogMessage(MessageType::Debug_Info, _T("Waiting for async request, ignoring SendNextCommand..."));
 		return FZ_REPLY_WOULDBLOCK;
 	}
 
-	if (m_repliesToSkip)
-	{
+	if (m_repliesToSkip) {
 		LogMessage(MessageType::Status, _T("Waiting for replies to skip before sending next command..."));
 		SetWait(true);
 		return FZ_REPLY_WOULDBLOCK;
@@ -1899,7 +1865,6 @@ class CFtpChangeDirOpData : public CChangeDirOpData
 {
 public:
 	CFtpChangeDirOpData() = default;
-	virtual ~CFtpChangeDirOpData() = default;
 
 	bool tried_cdup{};
 };
@@ -2573,8 +2538,7 @@ int CFtpControlSocket::FileTransferSend()
 	case filetransfer_transfer:
 		if (m_pTransferSocket) {
 			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Verbose, _T("m_pTransferSocket != 0"));
-			delete m_pTransferSocket;
-			m_pTransferSocket = 0;
+			m_pTransferSocket.reset();
 		}
 
 		{
@@ -2724,7 +2688,7 @@ int CFtpControlSocket::FileTransferSend()
 			}
 		}
 
-		m_pTransferSocket = new CTransferSocket(engine_, *this, pData->download ? TransferMode::download : TransferMode::upload);
+		m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, pData->download ? TransferMode::download : TransferMode::upload);
 		m_pTransferSocket->m_binaryMode = pData->transferSettings.binary;
 		m_pTransferSocket->SetIOThread(pData->pIOThread);
 
@@ -3079,8 +3043,6 @@ public:
 	{
 	}
 
-	virtual ~CFtpRemoveDirOpData() {}
-
 	CServerPath path;
 	CServerPath fullPath;
 	std::wstring subDir;
@@ -3424,13 +3386,10 @@ public:
 	CFtpRenameOpData(CRenameCommand const& command)
 		: COpData(Command::rename), m_cmd(command)
 	{
-		m_useAbsolute = false;
 	}
 
-	virtual ~CFtpRenameOpData() {}
-
 	CRenameCommand m_cmd;
-	bool m_useAbsolute;
+	bool m_useAbsolute{};
 };
 
 enum renameStates
@@ -3570,13 +3529,10 @@ public:
 	CFtpChmodOpData(const CChmodCommand& command)
 		: COpData(Command::chmod), m_cmd(command)
 	{
-		m_useAbsolute = false;
 	}
 
-	virtual ~CFtpChmodOpData() {}
-
 	CChmodCommand m_cmd;
-	bool m_useAbsolute;
+	bool m_useAbsolute{};
 };
 
 enum chmodStates
@@ -3832,7 +3788,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 
 				LogMessage(MessageType::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress);
 
-				m_pIPResolver = new CExternalIPResolver(engine_.GetThreadPool(), *this);
+				m_pIPResolver = std::make_unique<CExternalIPResolver>(engine_.GetThreadPool(), *this);
 				m_pIPResolver->GetExternalIP(resolverAddress, CSocket::ipv4);
 				if (!m_pIPResolver->Done()) {
 					LogMessage(MessageType::Debug_Verbose, _T("Waiting for resolver thread"));
@@ -3840,8 +3796,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 				}
 			}
 			if (!m_pIPResolver->Successful()) {
-				delete m_pIPResolver;
-				m_pIPResolver = 0;
+				m_pIPResolver.reset();
 
 				LogMessage(MessageType::Debug_Warning, _("Failed to retrieve external ip address, using local address"));
 			}
@@ -3851,8 +3806,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 
 				engine_.GetOptions().SetOption(OPTION_LASTRESOLVEDIP, fz::to_wstring(address));
 
-				delete m_pIPResolver;
-				m_pIPResolver = 0;
+				m_pIPResolver.reset();
 
 				return FZ_REPLY_OK;
 			}
@@ -4256,7 +4210,7 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 					pData->opState = filetransfer_waitresumetest;
 					pData->resumeOffset = pData->remoteFileSize - 1;
 
-					m_pTransferSocket = new CTransferSocket(engine_, *this, TransferMode::resumetest);
+					m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, TransferMode::resumetest);
 
 					return Transfer(_T("RETR ") + pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath), pData);
 				}
@@ -4270,7 +4224,7 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 	return FZ_REPLY_OK;
 }
 
-int CFtpControlSocket::Connect(const CServer &server)
+int CFtpControlSocket::Connect(CServer const& server)
 {
 	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("deleting nonzero pData"));
@@ -4343,11 +4297,13 @@ int CFtpControlSocket::Connect(const CServer &server)
 			pData->neededCommands[LOGON_PROT] = 0;
 		}
 	}
-	if (server.GetPostLoginCommands().empty())
+	if (server.GetPostLoginCommands().empty()) {
 		pData->neededCommands[LOGON_CUSTOMCOMMANDS] = 0;
+	}
 
-	if (!GetLoginSequence(server))
+	if (!GetLoginSequence(server)) {
 		return DoClose(FZ_REPLY_INTERNALERROR);
+	}
 
 	return CRealControlSocket::Connect(server);
 }
@@ -4356,8 +4312,9 @@ bool CFtpControlSocket::CheckInclusion(const CDirectoryListing& listing1, const 
 {
 	// Check if listing2 is contained within listing1
 
-	if (listing2.GetCount() > listing1.GetCount())
+	if (listing2.GetCount() > listing1.GetCount()) {
 		return false;
+	}
 
 	std::vector<std::wstring> names1, names2;
 	listing1.GetFilenames(names1);
