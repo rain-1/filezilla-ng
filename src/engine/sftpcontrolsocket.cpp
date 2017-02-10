@@ -291,7 +291,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 	m_pCurrentServer = new CServer(server);
 
 	CSftpConnectOpData* pData = new CSftpConnectOpData;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	pData->opState = connect_init;
 
@@ -878,23 +878,24 @@ int CSftpControlSocket::List(CServerPath path, std::wstring const& subDir, int f
 	}
 
 	CSftpListOpData *pData = new CSftpListOpData;
-	pData->pNextOpData = m_pCurOpData;
-	m_pCurOpData = pData;
-
+	Push(pData);
+	
 	pData->opState = list_waitcwd;
 
-	if (path.GetType() == DEFAULT)
+	if (path.GetType() == DEFAULT) {
 		path.SetType(m_pCurrentServer->GetType());
+	}
 	pData->path = path;
 	pData->subDir = subDir;
 	pData->refresh = (flags & LIST_FLAG_REFRESH) != 0;
 	pData->fallback_to_current = !path.empty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
 
 	int res = ChangeDir(path, subDir, (flags & LIST_FLAG_LINK) != 0);
-	if (res != FZ_REPLY_OK)
+	if (res != FZ_REPLY_OK) {
 		return res;
+	}
 
-	return ParseSubcommandResult(FZ_REPLY_OK);
+	return ListSubcommandResult(FZ_REPLY_OK);
 }
 
 int CSftpControlSocket::ListParseResponse(bool successful, std::wstring const& reply)
@@ -1189,7 +1190,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool li
 		assert(subDir.empty());
 	}
 
-	m_pCurOpData = pData;
+	Push(pData);
 
 	return SendNextCommand();
 }
@@ -1475,7 +1476,7 @@ int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	}
 
 	CSftpFileTransferOpData *pData = new CSftpFileTransferOpData(download, localFile, remoteFile, remotePath);
-	m_pCurOpData = pData;
+	Push(pData);
 
 	pData->transferSettings = transferSettings;
 
@@ -1494,7 +1495,7 @@ int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	if (res != FZ_REPLY_OK)
 		return res;
 
-	return ParseSubcommandResult(FZ_REPLY_OK);
+	return FileTransferSubcommandResult(FZ_REPLY_OK);
 }
 
 int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
@@ -1876,8 +1877,7 @@ int CSftpControlSocket::Mkdir(const CServerPath& path)
 		}
 	}
 
-	pData->pNextOpData = m_pCurOpData;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	return SendNextCommand();
 }
@@ -2027,7 +2027,7 @@ int CSftpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::Delete"));
 	assert(!m_pCurOpData);
 	CSftpDeleteOpData *pData = new CSftpDeleteOpData();
-	m_pCurOpData = pData;
+	Push(pData);
 	pData->path = path;
 	pData->files = files;
 
@@ -2135,7 +2135,7 @@ int CSftpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& s
 
 	assert(!m_pCurOpData);
 	CSftpRemoveDirOpData *pData = new CSftpRemoveDirOpData();
-	m_pCurOpData = pData;
+	Push(pData);
 	pData->path = path;
 	pData->subDir = subDir;
 
@@ -2225,7 +2225,7 @@ int CSftpControlSocket::Chmod(const CChmodCommand& command)
 
 	CSftpChmodOpData *pData = new CSftpChmodOpData(command);
 	pData->opState = chmod_chmod;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	int res = ChangeDir(command.GetPath());
 	if (res != FZ_REPLY_OK)
@@ -2343,7 +2343,7 @@ int CSftpControlSocket::Rename(const CRenameCommand& command)
 
 	CSftpRenameOpData *pData = new CSftpRenameOpData(command);
 	pData->opState = rename_rename;
-	m_pCurOpData = pData;
+	Push(pData);
 
 	int res = ChangeDir(command.GetFromPath());
 	if (res != FZ_REPLY_OK) {
@@ -2506,7 +2506,7 @@ void CSftpControlSocket::OnQuotaRequest(CRateLimiter::rate_direction direction)
 }
 
 
-int CSftpControlSocket::ParseSubcommandResult(int prevResult)
+int CSftpControlSocket::ParseSubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ParseSubcommandResult(%d)"), prevResult);
 	if (!m_pCurOpData) {

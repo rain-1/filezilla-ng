@@ -97,7 +97,7 @@ protected:
 	void ParseFeat(std::wstring line);
 
 	virtual int SendNextCommand();
-	virtual int ParseSubcommandResult(int prevResult);
+	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
 
 	int GetReplyCode() const;
 

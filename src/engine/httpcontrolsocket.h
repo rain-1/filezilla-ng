@@ -18,7 +18,7 @@ protected:
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 	virtual int SendNextCommand();
-	virtual int ParseSubcommandResult(int prevResult);
+	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
 
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 		std::wstring const& remoteFile, bool download,

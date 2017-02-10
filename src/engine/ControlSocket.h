@@ -185,7 +185,7 @@ protected:
 	void LogTransferResultMessage(int nErrorCode, CFileTransferOpData *pData);
 
 	// Called by ResetOperation if there's a queued operation
-	virtual int ParseSubcommandResult(int prevResult);
+	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
 
 	std::wstring ConvertDomainName(std::wstring const& domain);
 
@@ -194,6 +194,8 @@ protected:
 	void CreateLocalDir(std::wstring const& local_file);
 
 	bool ParsePwdReply(std::wstring reply, bool unquoted = false, const CServerPath& defaultPath = CServerPath());
+
+	void Push(COpData *pNewOpData);
 
 	COpData *m_pCurOpData{};
 	CFileZillaEnginePrivate & engine_;

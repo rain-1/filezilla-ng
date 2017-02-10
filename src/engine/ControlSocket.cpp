@@ -129,6 +129,12 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 	}
 }
 
+void CControlSocket::Push(COpData *pNewOpData)
+{
+	pNewOpData->pNextOpData = m_pCurOpData;
+	m_pCurOpData = pNewOpData;
+}
+
 int CControlSocket::ResetOperation(int nErrorCode)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CControlSocket::ResetOperation(%d)"), nErrorCode);
@@ -142,19 +148,22 @@ int CControlSocket::ResetOperation(int nErrorCode)
 	}
 
 	if (m_pCurOpData && m_pCurOpData->pNextOpData) {
-		COpData *pNext = m_pCurOpData->pNextOpData;
-		m_pCurOpData->pNextOpData = 0;
-		delete m_pCurOpData;
-		m_pCurOpData = pNext;
+		COpData *oldOpData = m_pCurOpData;
+		m_pCurOpData = m_pCurOpData->pNextOpData;
+		oldOpData->pNextOpData = 0;
+
+		int ret;
 		if (nErrorCode == FZ_REPLY_OK ||
 			nErrorCode == FZ_REPLY_ERROR ||
 			nErrorCode == FZ_REPLY_CRITICALERROR)
 		{
-			return ParseSubcommandResult(nErrorCode);
+			ret = ParseSubcommandResult(nErrorCode, *oldOpData);
 		}
 		else {
-			return ResetOperation(nErrorCode);
+			ret = ResetOperation(nErrorCode);
 		}
+		delete oldOpData;
+		return ret;
 	}
 
 	std::wstring prefix;
@@ -608,7 +617,7 @@ int CControlSocket::SendNextCommand()
 	return FZ_REPLY_ERROR;
 }
 
-int CControlSocket::ParseSubcommandResult(int)
+int CControlSocket::ParseSubcommandResult(int, COpData const&)
 {
 	ResetOperation(FZ_REPLY_INTERNALERROR);
 	return FZ_REPLY_ERROR;
