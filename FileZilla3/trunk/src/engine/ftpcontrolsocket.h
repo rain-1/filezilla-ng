@@ -30,7 +30,7 @@ protected:
 
 	virtual int ResetOperation(int nErrorCode);
 
-	virtual int Connect(const CServer &server);
+	virtual int Connect(CServer const& server);
 	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
 	int ListParseResponse();
 	int ListSubcommandResult(int prevResult);
@@ -127,24 +127,24 @@ protected:
 	std::wstring m_MultilineResponseCode;
 	std::vector<std::wstring> m_MultilineResponseLines;
 
-	CTransferSocket *m_pTransferSocket;
+	std::unique_ptr<CTransferSocket> m_pTransferSocket;
 
 	// Some servers keep track of the offset specified by REST between sessions
 	// So we always sent a REST 0 for a normal transfer following a restarted one
-	bool m_sentRestartOffset;
+	bool m_sentRestartOffset{};
 
 	char m_receiveBuffer[RECVBUFFERSIZE];
-	int m_bufferLen;
-	int m_repliesToSkip; // Set to the amount of pending replies if cancelling an action
+	int m_bufferLen{};
+	int m_repliesToSkip{}; // Set to the amount of pending replies if cancelling an action
 
-	int m_pendingReplies;
+	int m_pendingReplies{1};
 
-	CExternalIPResolver* m_pIPResolver;
+	std::unique_ptr<CExternalIPResolver> m_pIPResolver;
 
-	CTlsSocket* m_pTlsSocket;
-	bool m_protectDataChannel;
+	CTlsSocket* m_pTlsSocket{};
+	bool m_protectDataChannel{};
 
-	int m_lastTypeBinary;
+	int m_lastTypeBinary{-1};
 
 	// Used by keepalive code so that we're not using keep alive
 	// till the end of time. Stop after a couple of minutes.
