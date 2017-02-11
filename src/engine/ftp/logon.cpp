@@ -88,7 +88,7 @@ int CFtpLogonOpData::Send()
 					return FZ_REPLY_DISCONNECTED | FZ_REPLY_CRITICALERROR;
 				}
 
-				controlSocket_.LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server_.Format(ServerFormat::with_optional_port), _T("FTP")); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
+				controlSocket_.LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server_.Format(ServerFormat::with_optional_port), L"FTP"); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
 			}
 			else {
 				ftp_proxy_type = 0;
@@ -100,16 +100,16 @@ int CFtpLogonOpData::Send()
 			return controlSocket_.CRealControlSocket::Connect(server_);
 	    }
 	case LOGON_AUTH_WAIT:
-		controlSocket_.LogMessage(MessageType::Debug_Info, _T("LogonSend() called during LOGON_AUTH_WAIT, ignoring"));
+		controlSocket_.LogMessage(MessageType::Debug_Info, L"LogonSend() called during LOGON_AUTH_WAIT, ignoring");
 		return FZ_REPLY_WOULDBLOCK;
 	case LOGON_AUTH_TLS:
-		res = controlSocket_.SendCommand(_T("AUTH TLS"), false, false);
+		res = controlSocket_.SendCommand(L"AUTH TLS", false, false);
 		break;
 	case LOGON_AUTH_SSL:
-		res = controlSocket_.SendCommand(_T("AUTH SSL"), false, false);
+		res = controlSocket_.SendCommand(L"AUTH SSL", false, false);
 		break;
 	case LOGON_SYST:
-		res = controlSocket_.SendCommand(_T("SYST"));
+		res = controlSocket_.SendCommand(L"SYST");
 		break;
 	case LOGON_LOGON:
 	    {
@@ -123,7 +123,7 @@ int CFtpLogonOpData::Send()
 				}
 
 				if (cmd.command.empty()) {
-					res = controlSocket_.SendCommand(_T("USER ") + currentServer()->GetUser());
+					res = controlSocket_.SendCommand(L"USER " + currentServer()->GetUser());
 				}
 				else {
 					res = controlSocket_.SendCommand(cmd.command);
@@ -141,20 +141,20 @@ int CFtpLogonOpData::Send()
 				}
 
 				if (cmd.command.empty()) {
-					res = controlSocket_.SendCommand(_T("PASS ") + currentServer()->GetPass(), true);
+					res = controlSocket_.SendCommand(L"PASS " + currentServer()->GetPass(), true);
 				}
 				else {
 					std::wstring c = cmd.command;
 					std::wstring pass = currentServer()->GetPass();
-					fz::replace_substrings(pass, _T("%"), _T("%%"));
-					fz::replace_substrings(c, _T("%p"), pass);
-					fz::replace_substrings(c, _T("%%"), _T("%"));
+					fz::replace_substrings(pass, L"%", L"%%");
+					fz::replace_substrings(c, L"%p", pass);
+					fz::replace_substrings(c, L"%%", L"%");
 					res = controlSocket_.SendCommand(c, true);
 				}
 				break;
 			case loginCommandType::account:
 				if (cmd.command.empty()) {
-					res = controlSocket_.SendCommand(_T("ACCT ") + currentServer()->GetAccount());
+					res = controlSocket_.SendCommand(L"ACCT " + currentServer()->GetAccount());
 				}
 				else {
 					res = controlSocket_.SendCommand(cmd.command);
@@ -171,7 +171,7 @@ int CFtpLogonOpData::Send()
 	    }
 		break;
 	case LOGON_FEAT:
-		res = controlSocket_.SendCommand(_T("FEAT"));
+		res = controlSocket_.SendCommand(L"FEAT");
 		break;
 	case LOGON_CLNT:
 		// Some servers refuse to enable UTF8 if client does not send CLNT command
@@ -179,7 +179,7 @@ int CFtpLogonOpData::Send()
 		// compatibility with other clients.
 		// Rather than forcing MS to fix Internet Explorer, letting other clients
 		// suffer is a questionable decision in my opinion.
-		res = controlSocket_.SendCommand(_T("CLNT FileZilla"));
+		res = controlSocket_.SendCommand(L"CLNT FileZilla");
 		break;
 	case LOGON_OPTSUTF8:
 		// Handle servers that disobey RFC 2640 by having UTF8 in their FEAT
@@ -187,17 +187,17 @@ int CFtpLogonOpData::Send()
 		// However these servers obey a conflicting ietf draft:
 		// http://www.ietf.org/proceedings/02nov/I-D/draft-ietf-ftpext-utf-8-option-00.txt
 		// Example servers are, amongst others, G6 FTP Server and RaidenFTPd.
-		res = controlSocket_.SendCommand(_T("OPTS UTF8 ON"));
+		res = controlSocket_.SendCommand(L"OPTS UTF8 ON");
 		break;
 	case LOGON_PBSZ:
-		res = controlSocket_.SendCommand(_T("PBSZ 0"));
+		res = controlSocket_.SendCommand(L"PBSZ 0");
 		break;
 	case LOGON_PROT:
-		res = controlSocket_.SendCommand(_T("PROT P"));
+		res = controlSocket_.SendCommand(L"PROT P");
 		break;
 	case LOGON_CUSTOMCOMMANDS:
 		if (customCommandIndex >= currentServer()->GetPostLoginCommands().size()) {
-			controlSocket_.LogMessage(MessageType::Debug_Warning, _T("pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()"));
+			controlSocket_.LogMessage(MessageType::Debug_Warning, L"pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()");
 			return FZ_REPLY_INTERNALERROR | FZ_REPLY_DISCONNECTED;
 		}
 		res = controlSocket_.SendCommand(currentServer()->GetPostLoginCommands()[customCommandIndex]);
@@ -206,7 +206,7 @@ int CFtpLogonOpData::Send()
 	    {
 		    std::wstring args;
 			CServerCapabilities::GetCapability(*currentServer(), opst_mlst_command, &args);
-			res = controlSocket_.SendCommand(_T("OPTS MLST " + args));
+			res = controlSocket_.SendCommand(L"OPTS MLST " + args);
 	    }
 		break;
 	default:
@@ -363,20 +363,20 @@ int CFtpLogonOpData::ParseResponse()
 		}
 
 		if (currentServer()->GetType() == DEFAULT && code == 2) {
-			if (response.size() > 7 && response.substr(3, 4) == _T(" MVS")) {
+			if (response.size() > 7 && response.substr(3, 4) == L" MVS") {
 				currentServer()->SetType(MVS);
 			}
-			else if (response.size() > 12 && fz::str_toupper_ascii(response.substr(3, 9)) == _T(" NONSTOP ")) {
+			else if (response.size() > 12 && fz::str_toupper_ascii(response.substr(3, 9)) == L" NONSTOP ") {
 				currentServer()->SetType(HPNONSTOP);
 			}
 
-			if (!controlSocket_.m_MultilineResponseLines.empty() && fz::str_tolower_ascii(controlSocket_.m_MultilineResponseLines.front().substr(4, 4)) == _T("z/vm")) {
-				CServerCapabilities::SetCapability(*currentServer(), syst_command, yes, controlSocket_.m_MultilineResponseLines.front().substr(4) + _T(" ") + response.substr(4));
+			if (!controlSocket_.m_MultilineResponseLines.empty() && fz::str_tolower_ascii(controlSocket_.m_MultilineResponseLines.front().substr(4, 4)) == L"z/vm") {
+				CServerCapabilities::SetCapability(*currentServer(), syst_command, yes, controlSocket_.m_MultilineResponseLines.front().substr(4) + L" " + response.substr(4));
 				currentServer()->SetType(ZVM);
 			}
 		}
 
-		if (response.find(_T("FileZilla")) != std::wstring::npos) {
+		if (response.find(L"FileZilla") != std::wstring::npos) {
 			neededCommands[LOGON_CLNT] = 0;
 			neededCommands[LOGON_OPTSUTF8] = 0;
 		}
@@ -422,7 +422,7 @@ int CFtpLogonOpData::ParseResponse()
 
 		if (opState == LOGON_DONE) {
 			controlSocket_.LogMessage(MessageType::Status, _("Logged in"));
-			controlSocket_.LogMessage(MessageType::Debug_Info, _T("Measured latency of %d ms"), controlSocket_.m_rtt.GetLatency());
+			controlSocket_.LogMessage(MessageType::Debug_Info, L"Measured latency of %d ms", controlSocket_.m_rtt.GetLatency());
 			return FZ_REPLY_OK;
 		}
 
@@ -437,18 +437,18 @@ int CFtpLogonOpData::ParseResponse()
 			}
 			else if (cap == yes) {
 				if (currentServer()->GetType() == DEFAULT) {
-					if (system.substr(0, 3) == _T("MVS")) {
+					if (system.substr(0, 3) == L"MVS") {
 						currentServer()->SetType(MVS);
 					}
-					else if (fz::str_toupper_ascii(system.substr(0, 4)) == _T("Z/VM")) {
+					else if (fz::str_toupper_ascii(system.substr(0, 4)) == L"Z/VM") {
 						currentServer()->SetType(ZVM);
 					}
-					else if (fz::str_toupper_ascii(system.substr(0, 8)) == _T("NONSTOP ")) {
+					else if (fz::str_toupper_ascii(system.substr(0, 8)) == L"NONSTOP ") {
 						currentServer()->SetType(HPNONSTOP);
 					}
 				}
 
-				if (system.find(_T("FileZilla")) != std::wstring::npos) {
+				if (system.find(L"FileZilla") != std::wstring::npos) {
 					neededCommands[LOGON_CLNT] = 0;
 					neededCommands[LOGON_OPTSUTF8] = 0;
 				}
@@ -526,22 +526,22 @@ int CFtpLogonOpData::ParseResponse()
 					}
 					facts = facts.substr(delim + 1);
 
-					if (fact == _T("type") ||
-					    fact == _T("size") ||
-					    fact == _T("modify") ||
-					    fact == _T("perm") ||
-					    fact == _T("unix.mode") ||
-					    fact == _T("unix.owner") ||
-					    fact == _T("unix.ownername") ||
-					    fact == _T("unix.group") ||
-					    fact == _T("unix.groupname") ||
-					    fact == _T("unix.user") ||
-					    fact == _T("unix.uid") ||
-					    fact == _T("unix.gid") ||
-					    fact == _T("x.hidden"))
+					if (fact == L"type" ||
+					    fact == L"size" ||
+					    fact == L"modify" ||
+					    fact == L"perm" ||
+					    fact == L"unix.mode" ||
+					    fact == L"unix.owner" ||
+					    fact == L"unix.ownername" ||
+					    fact == L"unix.group" ||
+					    fact == L"unix.groupname" ||
+					    fact == L"unix.user" ||
+					    fact == L"unix.uid" ||
+					    fact == L"unix.gid" ||
+					    fact == L"x.hidden")
 					{
 						had_unset |= !enabled;
-						opts_facts += fact + _T(";");
+						opts_facts += fact + L";";
 					}
 				}
 
@@ -683,19 +683,19 @@ bool CFtpLogonOpData::GetLoginSequence()
 			if (token.find(L"%u") != token.npos) {
 				isUser = true;
 			}
-			if (token.find(_T("%p")) != token.npos) {
+			if (token.find(L"%p") != token.npos) {
 				password = true;
 			}
-			if (token.find(_T("%s")) != token.npos) {
+			if (token.find(L"%s") != token.npos) {
 				isProxyUser = true;
 			}
-			if (token.find(_T("%w")) != token.npos) {
+			if (token.find(L"%w") != token.npos) {
 				isProxyPass = true;
 			}
 
 			// Skip account if empty
 			bool isAccount = false;
-			if (token.find(_T("%a")) != token.npos) {
+			if (token.find(L"%a") != token.npos) {
 				if (account.empty()) {
 					continue;
 				}
@@ -711,15 +711,15 @@ bool CFtpLogonOpData::GetLoginSequence()
 				continue;
 			}
 
-			fz::replace_substrings(token, _T("%s"), proxyUser);
-			fz::replace_substrings(token, _T("%w"), proxyPass);
-			fz::replace_substrings(token, _T("%h"), host);
-			fz::replace_substrings(token, _T("%u"), user);
-			fz::replace_substrings(token, _T("%a"), account);
+			fz::replace_substrings(token, L"%s", proxyUser);
+			fz::replace_substrings(token, L"%w", proxyPass);
+			fz::replace_substrings(token, L"%h", host);
+			fz::replace_substrings(token, L"%u", user);
+			fz::replace_substrings(token, L"%a", account);
 			// Pass will be replaced before sending to cope with interactve login
 
 			if (!password) {
-				fz::replace_substrings(token, _T("%%"), _T("%"));
+				fz::replace_substrings(token, L"%%", L"%");
 			}
 
 			t_loginCommand cmd;
