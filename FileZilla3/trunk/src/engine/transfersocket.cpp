@@ -1,7 +1,7 @@
 #include <filezilla.h>
 #include "directorylistingparser.h"
 #include "engineprivate.h"
-#include "ftpcontrolsocket.h"
+#include "ftp/ftpcontrolsocket.h"
 #include "iothread.h"
 #include "optionsbase.h"
 #include "tlssocket.h"

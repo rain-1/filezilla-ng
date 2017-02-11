@@ -101,7 +101,6 @@ protected:
 
 	int GetReplyCode() const;
 
-	int Logon();
 	int LogonParseResponse();
 	int LogonSend();
 
@@ -120,8 +119,6 @@ protected:
 	bool CheckInclusion(const CDirectoryListing& listing1, const CDirectoryListing& listing2);
 
 	void StartKeepaliveTimer();
-
-	bool GetLoginSequence(const CServer& server);
 
 	std::wstring m_Response;
 	std::wstring m_MultilineResponseCode;
@@ -160,9 +157,30 @@ protected:
 	void OnTimer(fz::timer_id id);
 
 	std::unique_ptr<std::wregex> m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
+
+	friend class CFtpOpData;
+	friend class CFtpLogonOpData;
 };
 
 class CIOThread;
+
+class CFtpOpData
+{
+public:
+	CFtpOpData(CFtpControlSocket& controlSocket)
+	    : controlSocket_(controlSocket)
+	{
+
+	}
+
+	CServer* currentServer() {
+		return controlSocket_.m_pCurrentServer;
+	}
+
+	virtual ~CFtpOpData() = default;
+
+	CFtpControlSocket & controlSocket_;
+};
 
 class CFtpTransferOpData
 {

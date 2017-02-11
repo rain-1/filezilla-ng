@@ -14,6 +14,19 @@ public:
 	COpData(COpData const&) = delete;
 	COpData& operator=(COpData const&) = delete;
 
+	// Functions here must return one of '4' values:
+	// - FZ_REPLY_OK, operation succeeded
+	// - FZ_REPLY_ERROR (possibly with flags)
+	// - FZ_REPLY_WOULDBLOCK, waiting on some exvent
+	// - FZ_REPLY_CONTINUE, caller should issue the next command
+
+
+	virtual int Send() { return FZ_REPLY_INTERNALERROR; }
+
+	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation) { return FZ_REPLY_INTERNALERROR; }
+
+	virtual int ParseResponse() { return FZ_REPLY_INTERNALERROR; }
+
 	int opState{};
 	Command const opId;
 
@@ -26,13 +39,15 @@ public:
 class CConnectOpData : public COpData
 {
 public:
-	CConnectOpData()
+	CConnectOpData(CServer const& server)
 		: COpData(Command::connect)
+		, server_(server)
 	{
 	}
 
 	std::wstring host;
 	unsigned int port{};
+	CServer server_;
 };
 
 class wxMBConv;
