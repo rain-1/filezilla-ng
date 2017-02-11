@@ -115,8 +115,9 @@ bool CFileZillaEnginePrivate::IsBusy() const
 bool CFileZillaEnginePrivate::IsConnected() const
 {
 	fz::scoped_lock lock(mutex_);
-	if (!m_pControlSocket)
+	if (!m_pControlSocket) {
 		return false;
+	}
 
 	return m_pControlSocket->Connected();
 }
@@ -253,8 +254,9 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 			notification->commandId = m_pCurrentCommand->GetId();
 			AddNotification(notification);
 		}
-		else
+		else {
 			m_nControlSocketError |= nErrorCode;
+		}
 
 		m_pCurrentCommand.reset();
 	}
@@ -286,8 +288,9 @@ unsigned int CFileZillaEnginePrivate::GetNextAsyncRequestNumber()
 // Command handlers
 int CFileZillaEnginePrivate::Connect(CConnectCommand const& command)
 {
-	if (IsConnected())
+	if (IsConnected()) {
 		return FZ_REPLY_ALREADYCONNECTED;
+	}
 
 	m_retryCount = 0;
 
@@ -464,8 +467,6 @@ void CFileZillaEnginePrivate::OnTimer(fz::timer_id)
 		m_pLogging->LogMessage(MessageType::Debug_Warning, L"CFileZillaEnginePrivate::OnTimer called without pending Command::connect");
 		return;
 	}
-
-	assert(!IsConnected());
 
 	m_pControlSocket.reset();
 
