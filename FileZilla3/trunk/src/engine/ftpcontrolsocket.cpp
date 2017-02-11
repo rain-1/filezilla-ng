@@ -86,8 +86,8 @@ enum class loginCommandType
 
 struct t_loginCommand
 {
-	bool optional{};
-	bool hide_arguments{};
+	bool optional;
+	bool hide_arguments;
 	loginCommandType type;
 
 	std::wstring command;
