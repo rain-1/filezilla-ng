@@ -2,7 +2,7 @@
 #include "ControlSocket.h"
 #include "directorycache.h"
 #include "engineprivate.h"
-#include "ftpcontrolsocket.h"
+#include "ftp/ftpcontrolsocket.h"
 #include "httpcontrolsocket.h"
 #include "logging_private.h"
 #include "pathcache.h"

@@ -19,7 +19,9 @@
 class CHttpConnectOpData final : public CConnectOpData
 {
 public:
-	CHttpConnectOpData() = default;
+	CHttpConnectOpData()
+		: CConnectOpData(CServer())
+	{}
 
 	bool tls{};
 };

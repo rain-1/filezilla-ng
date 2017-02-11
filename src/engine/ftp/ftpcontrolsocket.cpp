@@ -6,11 +6,12 @@
 #include "externalipresolver.h"
 #include "ftpcontrolsocket.h"
 #include "iothread.h"
+#include "logon.h"
 #include "pathcache.h"
+#include "proxy.h"
 #include "servercapabilities.h"
 #include "tlssocket.h"
 #include "transfersocket.h"
-#include "proxy.h"
 
 #include <libfilezilla/file.hpp>
 #include <libfilezilla/iputils.hpp>
@@ -18,21 +19,6 @@
 #include <libfilezilla/util.hpp>
 
 #include <algorithm>
-
-#define LOGON_WELCOME	0
-#define LOGON_AUTH_TLS	1
-#define LOGON_AUTH_SSL	2
-#define LOGON_AUTH_WAIT	3
-#define LOGON_LOGON		4
-#define LOGON_SYST		5
-#define LOGON_FEAT		6
-#define LOGON_CLNT		7
-#define LOGON_OPTSUTF8	8
-#define LOGON_PBSZ		9
-#define LOGON_PROT		10
-#define LOGON_OPTSMLST	11
-#define LOGON_CUSTOMCOMMANDS 12
-#define LOGON_DONE		13
 
 CFtpFileTransferOpData::CFtpFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
 	: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
@@ -74,48 +60,6 @@ enum rawtransferStates
 	rawtransfer_waittransferpre,
 	rawtransfer_waittransfer,
 	rawtransfer_waitsocket
-};
-
-enum class loginCommandType
-{
-	user,
-	pass,
-	account,
-	other
-};
-
-struct t_loginCommand
-{
-	bool optional;
-	bool hide_arguments;
-	loginCommandType type;
-
-	std::wstring command;
-};
-
-class CFtpLogonOpData final : public CConnectOpData
-{
-public:
-	CFtpLogonOpData()
-	{
-		for (int i = 0; i < LOGON_DONE; ++i) {
-			neededCommands[i] = 1;
-		}
-	}
-
-	std::wstring challenge; // Used for interactive logons
-	bool waitChallenge{};
-	bool waitForAsyncRequest{};
-	bool gotPassword{};
-	bool gotFirstWelcomeLine{};
-
-	unsigned int customCommandIndex{};
-
-	int neededCommands[LOGON_DONE];
-
-	std::deque<t_loginCommand> loginSequence;
-
-	int ftp_proxy_type{};
 };
 
 class CFtpDeleteOpData final : public COpData
@@ -409,8 +353,9 @@ void CFtpControlSocket::OnConnect()
 
 			return;
 		}
-		else
+		else {
 			LogMessage(MessageType::Status, _("TLS connection established, waiting for welcome message..."));
+		}
 	}
 	else if ((m_pCurrentServer->GetProtocol() == FTPES || m_pCurrentServer->GetProtocol() == FTP) && m_pTlsSocket) {
 		LogMessage(MessageType::Status, _("TLS connection established."));
@@ -422,7 +367,6 @@ void CFtpControlSocket::OnConnect()
 	}
 	m_pendingReplies = 1;
 	m_repliesToSkip = 0;
-	Logon();
 }
 
 void CFtpControlSocket::ParseResponse()
@@ -461,765 +405,30 @@ void CFtpControlSocket::ParseResponse()
 		return;
 	}
 
-	Command commandId = GetCurrentCommandId();
-	switch (commandId)
-	{
-	case Command::connect:
-		LogonParseResponse();
-		break;
-	case Command::list:
-		ListParseResponse();
-		break;
-	case Command::cwd:
-		ChangeDirParseResponse();
-		break;
-	case Command::transfer:
-		FileTransferParseResponse();
-		break;
-	case Command::raw:
-		RawCommandParseResponse();
-		break;
-	case Command::del:
-		DeleteParseResponse();
-		break;
-	case Command::removedir:
-		RemoveDirParseResponse();
-		break;
-	case Command::mkdir:
-		MkdirParseResponse();
-		break;
-	case Command::rename:
-		RenameParseResponse();
-		break;
-	case Command::chmod:
-		ChmodParseResponse();
-		break;
-	case Command::rawtransfer:
-		TransferParseResponse();
-		break;
-	case Command::none:
-		LogMessage(MessageType::Debug_Verbose, _T("Out-of-order reply, ignoring."));
-		break;
-	default:
-		LogMessage(MessageType::Debug_Warning, _T("No action for parsing replies to command %d"), (int)commandId);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		break;
-	}
-}
-
-bool CFtpControlSocket::GetLoginSequence(CServer const& server)
-{
-	CFtpLogonOpData *pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
-	pData->loginSequence.clear();
-
-	if (!pData->ftp_proxy_type) {
-		// User
-		t_loginCommand cmd = {false, false, loginCommandType::user, _T("")};
-		pData->loginSequence.push_back(cmd);
-
-		// Password
-		cmd.optional = true;
-		cmd.hide_arguments = true;
-		cmd.type = loginCommandType::pass;
-		pData->loginSequence.push_back(cmd);
-
-		// Optional account
-		if (!server.GetAccount().empty()) {
-			cmd.hide_arguments = false;
-			cmd.type = loginCommandType::account;
-			pData->loginSequence.push_back(cmd);
-		}
-	}
-	else if (pData->ftp_proxy_type == 1) {
-		std::wstring const proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
-		if (!proxyUser.empty()) {
-			// Proxy logon (if credendials are set)
-			t_loginCommand cmd = {false, false, loginCommandType::other, _T("USER ") + proxyUser};
-			pData->loginSequence.push_back(cmd);
-			cmd.optional = true;
-			cmd.hide_arguments = true;
-			cmd.command = _T("PASS ") + engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
-			pData->loginSequence.push_back(cmd);
-		}
-		// User@host
-		t_loginCommand cmd = {false, false, loginCommandType::user, fz::sprintf(L"USER %s@%s", server.GetUser(), server.Format(ServerFormat::with_optional_port))};
-		pData->loginSequence.push_back(cmd);
-
-		// Password
-		cmd.optional = true;
-		cmd.hide_arguments = true;
-		cmd.type = loginCommandType::pass;
-		cmd.command = _T("");
-		pData->loginSequence.push_back(cmd);
-
-		// Optional account
-		if (!server.GetAccount().empty()) {
-			cmd.hide_arguments = false;
-			cmd.type = loginCommandType::account;
-			pData->loginSequence.push_back(cmd);
-		}
-	}
-	else if (pData->ftp_proxy_type == 2 || pData->ftp_proxy_type == 3) {
-		std::wstring const proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
-		if (!proxyUser.empty()) {
-			// Proxy logon (if credendials are set)
-			t_loginCommand cmd = {false, false, loginCommandType::other, _T("USER ") + proxyUser};
-			pData->loginSequence.push_back(cmd);
-			cmd.optional = true;
-			cmd.hide_arguments = true;
-			cmd.command = _T("PASS ") + engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
-			pData->loginSequence.push_back(cmd);
-		}
-
-		// Site or Open
-		t_loginCommand cmd = {false, false, loginCommandType::user, _T("")};
-		if (pData->ftp_proxy_type == 2) {
-			cmd.command = _T("SITE ") + server.Format(ServerFormat::with_optional_port);
-		}
-		else {
-			cmd.command = _T("OPEN ") + server.Format(ServerFormat::with_optional_port);
-		}
-		pData->loginSequence.push_back(cmd);
-
-		// User
-		cmd.type = loginCommandType::user;
-		cmd.command = _T("");
-		pData->loginSequence.push_back(cmd);
-
-		// Password
-		cmd.optional = true;
-		cmd.hide_arguments = true;
-		cmd.type = loginCommandType::pass;
-		pData->loginSequence.push_back(cmd);
-
-		// Optional account
-		if (!server.GetAccount().empty()) {
-			cmd.hide_arguments = false;
-			cmd.type = loginCommandType::account;
-			pData->loginSequence.push_back(cmd);
-		}
-	}
-	else if (pData->ftp_proxy_type == 4) {
-		std::wstring proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
-		std::wstring proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
-		std::wstring host = server.Format(ServerFormat::with_optional_port);
-		std::wstring user = server.GetUser();
-		std::wstring account = server.GetAccount();
-		fz::replace_substrings(proxyUser, _T("%"), _T("%%"));
-		fz::replace_substrings(proxyPass, _T("%"), _T("%%"));
-		fz::replace_substrings(host, _T("%"), _T("%%"));
-		fz::replace_substrings(user, _T("%"), _T("%%"));
-		fz::replace_substrings(account, _T("%"), _T("%%"));
-
-		std::wstring const loginSequence = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_CUSTOMLOGINSEQUENCE);
-		std::vector<std::wstring> const tokens = fz::strtok(loginSequence, L"\r\n");
-
-		for (auto token : tokens) {
-			bool isHost = false;
-			bool isUser = false;
-			bool password = false;
-			bool isProxyUser = false;
-			bool isProxyPass = false;
-			if (token.find(_T("%h")) != token.npos) {
-				isHost = true;
-			}
-			if (token.find(_T("%u")) != token.npos) {
-				isUser = true;
-			}
-			if (token.find(_T("%p")) != token.npos) {
-				password = true;
-			}
-			if (token.find(_T("%s")) != token.npos) {
-				isProxyUser = true;
-			}
-			if (token.find(_T("%w")) != token.npos) {
-				isProxyPass = true;
-			}
-
-			// Skip account if empty
-			bool isAccount = false;
-			if (token.find(_T("%a")) != token.npos) {
-				if (account.empty()) {
-					continue;
-				}
-				else {
-					isAccount = true;
-				}
-			}
-
-			if (isProxyUser && !isHost && !isUser && proxyUser.empty()) {
-				continue;
-			}
-			if (isProxyPass && !isHost && !isUser && proxyUser.empty()) {
-				continue;
-			}
-
-			fz::replace_substrings(token, _T("%s"), proxyUser);
-			fz::replace_substrings(token, _T("%w"), proxyPass);
-			fz::replace_substrings(token, _T("%h"), host);
-			fz::replace_substrings(token, _T("%u"), user);
-			fz::replace_substrings(token, _T("%a"), account);
-			// Pass will be replaced before sending to cope with interactve login
-
-			if (!password) {
-				fz::replace_substrings(token, _T("%%"), _T("%"));
-			}
-
-			t_loginCommand cmd;
-			if (password || isProxyPass) {
-				cmd.hide_arguments = true;
-			}
-			else {
-				cmd.hide_arguments = false;
-			}
-
-			if (isUser && !password && !isAccount) {
-				cmd.optional = false;
-				cmd.type = loginCommandType::user;
-			}
-			else if (password && !isUser && !isAccount) {
-				cmd.optional = true;
-				cmd.type = loginCommandType::pass;
-			}
-			else if (isAccount && !isUser && !password) {
-				cmd.optional = true;
-				cmd.type = loginCommandType::account;
-			}
-			else {
-				cmd.optional = false;
-				cmd.type = loginCommandType::other;
-			}
-
-			cmd.command = token;
-
-			pData->loginSequence.push_back(cmd);
-		}
-
-		if (pData->loginSequence.empty()) {
-			LogMessage(MessageType::Error, _("Could not generate custom login sequence."));
-			return false;
-		}
-	}
-	else {
-		LogMessage(MessageType::Error, _("Unknown FTP proxy type, cannot generate login sequence."));
-		return false;
-	}
-
-	return true;
-}
-
-int CFtpControlSocket::Logon()
-{
-	const CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
-	if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != no) {
-		m_useUTF8 = true;
-	}
-	else if (encoding == ENCODING_UTF8) {
-		m_useUTF8 = true;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-int CFtpControlSocket::LogonParseResponse()
-{
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("LogonParseResponse without m_pCurOpData called"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_INTERNALERROR;
+		LogMessage(MessageType::Debug_Info, _T("Skipping reply without active operation."));
+		return;
 	}
 
-	CFtpLogonOpData *pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
-
-	int code = GetReplyCode();
-
-	if (pData->opState == LOGON_WELCOME) {
-		if (code != 2 && code != 3) {
-			DoClose(code == 5 ? FZ_REPLY_CRITICALERROR : 0);
-			return FZ_REPLY_DISCONNECTED;
+	int res = m_pCurOpData->ParseResponse();
+	if (res == FZ_REPLY_OK) {
+		ResetOperation(FZ_REPLY_OK);
+	}
+	else if (res == FZ_REPLY_CONTINUE) {
+		SendNextCommand();
+	}
+	else if (res & FZ_REPLY_ERROR) {
+		if (m_pCurOpData->opId == Command::connect) {
+			DoClose(res | FZ_REPLY_DISCONNECTED);
 		}
-	}
-	else if (pData->opState == LOGON_AUTH_TLS ||
-			 pData->opState == LOGON_AUTH_SSL)
-	{
-		if (code != 2 && code != 3) {
-			CServerCapabilities::SetCapability(*m_pCurrentServer, (pData->opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, no);
-			if (pData->opState == LOGON_AUTH_SSL) {
-				if (m_pCurrentServer->GetProtocol() == FTP) {
-					// For now. In future make TLS mandatory unless explicitly requested INSECURE_FTP as protocol
-					LogMessage(MessageType::Status, _("Insecure server, it does not support FTP over TLS."));
-					pData->neededCommands[LOGON_PBSZ] = 0;
-					pData->neededCommands[LOGON_PROT] = 0;
-
-					pData->opState = LOGON_LOGON;
-					return SendNextCommand();
-				}
-				else {
-					DoClose(code == 5 ? FZ_REPLY_CRITICALERROR : 0);
-					return FZ_REPLY_DISCONNECTED;
-				}
-			}
+		else if ((res & FZ_REPLY_DISCONNECTED) == FZ_REPLY_DISCONNECTED) {
+			DoClose(res);
 		}
 		else {
-			CServerCapabilities::SetCapability(*m_pCurrentServer, (pData->opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, yes);
-
-			LogMessage(MessageType::Status, _("Initializing TLS..."));
-
-			assert(!m_pTlsSocket);
-			delete m_pBackend;
-
-			m_pTlsSocket = new CTlsSocket(this, *m_pSocket, this);
-			m_pBackend = m_pTlsSocket;
-
-			if (!m_pTlsSocket->Init()) {
-				LogMessage(MessageType::Error, _("Failed to initialize TLS."));
-				DoClose(FZ_REPLY_INTERNALERROR);
-				return FZ_REPLY_ERROR;
-			}
-
-			int res = m_pTlsSocket->Handshake();
-			if (res == FZ_REPLY_ERROR) {
-				DoClose();
-				return FZ_REPLY_ERROR;
-			}
-
-			pData->neededCommands[LOGON_AUTH_SSL] = 0;
-			pData->opState = LOGON_AUTH_WAIT;
-
-			if (res == FZ_REPLY_WOULDBLOCK) {
-				return FZ_REPLY_WOULDBLOCK;
-			}
+			ResetOperation(res);
 		}
 	}
-	else if (pData->opState == LOGON_LOGON) {
-		t_loginCommand cmd = pData->loginSequence.front();
-
-		if (code != 2 && code != 3) {
-			if (cmd.type == loginCommandType::user || cmd.type == loginCommandType::pass) {
-				auto const user = m_pCurrentServer->GetUser();
-				if (!user.empty() && (user.front() == ' ' || user.back() == ' ')) {
-					LogMessage(MessageType::Status, _("Check your login credentials. The entered username starts or ends with a space character."));
-				}
-				auto const pw = m_pCurrentServer->GetPass();
-				if (!pw.empty() && (pw.front() == ' ' || pw.back() == ' ')) {
-					LogMessage(MessageType::Status, _("Check your login credentials. The entered password starts or ends with a space character."));
-				}
-			}
-
-			if (m_pCurrentServer->GetEncodingType() == ENCODING_AUTO && m_useUTF8) {
-				// Fall back to local charset for the case that the server might not
-				// support UTF8 and the login data contains non-ascii characters.
-				bool asciiOnly = true;
-				if (!fz::str_is_ascii(m_pCurrentServer->GetUser())) {
-					asciiOnly = false;
-				}
-				if (!fz::str_is_ascii(m_pCurrentServer->GetPass())) {
-					asciiOnly = false;
-				}
-				if (!fz::str_is_ascii(m_pCurrentServer->GetAccount())) {
-					asciiOnly = false;
-				}
-				if (!asciiOnly) {
-					if (pData->ftp_proxy_type) {
-						LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Cannot fall back to local charset since using proxy."));
-						int error = FZ_REPLY_DISCONNECTED;
-						if (cmd.type == loginCommandType::pass && code == 5) {
-							error |= FZ_REPLY_PASSWORDFAILED;
-						}
-						DoClose(error);
-						return FZ_REPLY_ERROR;
-					}
-					LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Trying local charset."));
-					m_useUTF8 = false;
-					if (!GetLoginSequence(*m_pCurrentServer)) {
-						int error = FZ_REPLY_DISCONNECTED;
-						if (cmd.type == loginCommandType::pass && code == 5) {
-							error |= FZ_REPLY_PASSWORDFAILED;
-						}
-						DoClose(error);
-						return FZ_REPLY_ERROR;
-					}
-					return SendNextCommand();
-				}
-			}
-
-			int error = FZ_REPLY_DISCONNECTED;
-			if (cmd.type == loginCommandType::pass && code == 5) {
-				error |= FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED;
-			}
-			DoClose(error);
-			return FZ_REPLY_ERROR;
-		}
-
-		pData->loginSequence.pop_front();
-		if (code == 2) {
-			while (!pData->loginSequence.empty() && pData->loginSequence.front().optional) {
-				pData->loginSequence.pop_front();
-			}
-		}
-		else if (code == 3 && pData->loginSequence.empty()) {
-			LogMessage(MessageType::Error, _("Login sequence fully executed yet not logged in, aborting."));
-			if (cmd.type == loginCommandType::pass && m_pCurrentServer->GetAccount().empty()) {
-				LogMessage(MessageType::Error, _("Server might require an account. Try specifying an account using the Site Manager"));
-			}
-			DoClose(FZ_REPLY_CRITICALERROR);
-			return FZ_REPLY_ERROR;
-		}
-
-		if (!pData->loginSequence.empty()) {
-			pData->waitChallenge = false;
-
-			return SendNextCommand();
-		}
-	}
-	else if (pData->opState == LOGON_SYST) {
-		if (code == 2) {
-			CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_Response.substr(4));
-		}
-		else {
-			CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, no);
-		}
-
-		if (m_pCurrentServer->GetType() == DEFAULT && code == 2) {
-			if (m_Response.size() > 7 && m_Response.substr(3, 4) == _T(" MVS")) {
-				m_pCurrentServer->SetType(MVS);
-			}
-			else if (m_Response.size() > 12 && fz::str_toupper_ascii(m_Response.substr(3, 9)) == _T(" NONSTOP ")) {
-				m_pCurrentServer->SetType(HPNONSTOP);
-			}
-
-			if (!m_MultilineResponseLines.empty() && fz::str_tolower_ascii(m_MultilineResponseLines.front().substr(4, 4)) == _T("z/vm")) {
-				CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_MultilineResponseLines.front().substr(4) + _T(" ") + m_Response.substr(4));
-				m_pCurrentServer->SetType(ZVM);
-			}
-		}
-
-		if (m_Response.find(_T("FileZilla")) != std::wstring::npos) {
-			pData->neededCommands[LOGON_CLNT] = 0;
-			pData->neededCommands[LOGON_OPTSUTF8] = 0;
-		}
-	}
-	else if (pData->opState == LOGON_FEAT) {
-		if (code == 2) {
-			CServerCapabilities::SetCapability(*GetCurrentServer(), feat_command, yes);
-			if (CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes) {
-				CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, no);
-			}
-			if (CServerCapabilities::GetCapability(*m_pCurrentServer, clnt_command) != yes) {
-				CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, no);
-			}
-		}
-		else {
-			CServerCapabilities::SetCapability(*GetCurrentServer(), feat_command, no);
-		}
-
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, tvfs_support) != yes) {
-			CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, no);
-		}
-
-		const CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
-		if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes) {
-			LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
-			m_useUTF8 = false;
-		}
-	}
-	else if (pData->opState == LOGON_PROT) {
-		if (code == 2 || code == 3) {
-			m_protectDataChannel = true;
-		}
-	}
-	else if (pData->opState == LOGON_CUSTOMCOMMANDS) {
-		++pData->customCommandIndex;
-		if (pData->customCommandIndex < m_pCurrentServer->GetPostLoginCommands().size()) {
-			return SendNextCommand();
-		}
-	}
-
-	for (;;) {
-		++pData->opState;
-
-		if (pData->opState == LOGON_DONE) {
-			LogMessage(MessageType::Status, _("Logged in"));
-			ResetOperation(FZ_REPLY_OK);
-			LogMessage(MessageType::Debug_Info, _T("Measured latency of %d ms"), m_rtt.GetLatency());
-			return true;
-		}
-
-		if (!pData->neededCommands[pData->opState]) {
-			continue;
-		}
-		else if (pData->opState == LOGON_SYST) {
-			std::wstring system;
-			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), syst_command, &system);
-			if (cap == unknown) {
-				break;
-			}
-			else if (cap == yes) {
-				if (m_pCurrentServer->GetType() == DEFAULT) {
-					if (system.substr(0, 3) == _T("MVS")) {
-						m_pCurrentServer->SetType(MVS);
-					}
-					else if (fz::str_toupper_ascii(system.substr(0, 4)) == _T("Z/VM")) {
-						m_pCurrentServer->SetType(ZVM);
-					}
-					else if (fz::str_toupper_ascii(system.substr(0, 8)) == _T("NONSTOP ")) {
-						m_pCurrentServer->SetType(HPNONSTOP);
-					}
-				}
-
-				if (system.find(_T("FileZilla")) != std::wstring::npos) {
-					pData->neededCommands[LOGON_CLNT] = 0;
-					pData->neededCommands[LOGON_OPTSUTF8] = 0;
-				}
-			}
-		}
-		else if (pData->opState == LOGON_FEAT) {
-			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), feat_command);
-			if (cap == unknown) {
-				break;
-			}
-			const CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
-			if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes) {
-				LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
-				m_useUTF8 = false;
-			}
-		}
-		else if (pData->opState == LOGON_CLNT) {
-			if (!m_useUTF8) {
-				continue;
-			}
-
-			if (CServerCapabilities::GetCapability(*GetCurrentServer(), clnt_command) == yes) {
-				break;
-			}
-		}
-		else if (pData->opState == LOGON_OPTSUTF8) {
-			if (!m_useUTF8) {
-				continue;
-			}
-
-			if (CServerCapabilities::GetCapability(*GetCurrentServer(), utf8_command) == yes) {
-				break;
-			}
-		}
-		else if (pData->opState == LOGON_OPTSMLST) {
-			std::wstring facts;
-			if (CServerCapabilities::GetCapability(*GetCurrentServer(), mlsd_command, &facts) != yes) {
-				continue;
-			}
-			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), opst_mlst_command);
-			if (cap == unknown) {
-				facts = fz::str_tolower_ascii(facts);
-
-				bool had_unset = false;
-				std::wstring opts_facts;
-
-				// Create a list of all facts understood by both FZ and the server.
-				// Check if there's any supported fact not enabled by default, should that
-				// be the case we need to send OPTS MLST
-				while (!facts.empty()) {
-					size_t delim = facts.find(';');
-					if (delim == std::wstring::npos) {
-						break;
-					}
-
-					if (!delim) {
-						facts = facts.substr(1);
-						continue;
-					}
-
-					bool enabled;
-					std::wstring fact;
-
-					if (facts[delim - 1] == '*') {
-						if (delim == 1) {
-							facts = facts.substr(delim + 1);
-							continue;
-						}
-						enabled = true;
-						fact = facts.substr(0, delim - 1);
-					}
-					else {
-						enabled = false;
-						fact = facts.substr(0, delim);
-					}
-					facts = facts.substr(delim + 1);
-
-					if (fact == _T("type") ||
-						fact == _T("size") ||
-						fact == _T("modify") ||
-						fact == _T("perm") ||
-						fact == _T("unix.mode") ||
-						fact == _T("unix.owner") ||
-						fact == _T("unix.ownername") ||
-						fact == _T("unix.group") ||
-						fact == _T("unix.groupname") ||
-						fact == _T("unix.user") ||
-						fact == _T("unix.uid") ||
-						fact == _T("unix.gid") ||
-						fact == _T("x.hidden"))
-					{
-						had_unset |= !enabled;
-						opts_facts += fact + _T(";");
-					}
-				}
-
-				if (had_unset) {
-					CServerCapabilities::SetCapability(*GetCurrentServer(), opst_mlst_command, yes, opts_facts);
-					break;
-				}
-				else {
-					CServerCapabilities::SetCapability(*GetCurrentServer(), opst_mlst_command, no);
-				}
-			}
-			else if (cap == yes) {
-				break;
-			}
-		}
-		else {
-			break;
-		}
-	}
-
-	return SendNextCommand();
 }
-
-int CFtpControlSocket::LogonSend()
-{
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("LogonParseResponse without m_pCurOpData called"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	CFtpLogonOpData *pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
-
-	bool res;
-	switch (pData->opState)
-	{
-	case LOGON_AUTH_WAIT:
-		res = FZ_REPLY_WOULDBLOCK;
-		LogMessage(MessageType::Debug_Info, _T("LogonSend() called during LOGON_AUTH_WAIT, ignoring"));
-		break;
-	case LOGON_AUTH_TLS:
-		res = SendCommand(_T("AUTH TLS"), false, false);
-		break;
-	case LOGON_AUTH_SSL:
-		res = SendCommand(_T("AUTH SSL"), false, false);
-		break;
-	case LOGON_SYST:
-		res = SendCommand(_T("SYST"));
-		break;
-	case LOGON_LOGON:
-		{
-			t_loginCommand cmd = pData->loginSequence.front();
-			switch (cmd.type)
-			{
-			case loginCommandType::user:
-				if (m_pCurrentServer->GetLogonType() == INTERACTIVE) {
-					pData->waitChallenge = true;
-					pData->challenge.clear();
-				}
-
-				if (cmd.command.empty()) {
-					res = SendCommand(_T("USER ") + m_pCurrentServer->GetUser());
-				}
-				else {
-					res = SendCommand(cmd.command);
-				}
-				break;
-			case loginCommandType::pass:
-				if (!pData->challenge.empty()) {
-					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(CInteractiveLoginNotification::interactive, pData->challenge, false);
-					pNotification->server = *m_pCurrentServer;
-					pData->challenge.clear();
-
-					SendAsyncRequest(pNotification);
-
-					return FZ_REPLY_WOULDBLOCK;
-				}
-
-				if (cmd.command.empty()) {
-					res = SendCommand(_T("PASS ") + m_pCurrentServer->GetPass(), true);
-				}
-				else {
-					std::wstring c = cmd.command;
-					std::wstring pass = m_pCurrentServer->GetPass();
-					fz::replace_substrings(pass, _T("%"), _T("%%"));
-					fz::replace_substrings(c, _T("%p"), pass);
-					fz::replace_substrings(c, _T("%%"), _T("%"));
-					res = SendCommand(c, true);
-				}
-				break;
-			case loginCommandType::account:
-				if (cmd.command.empty()) {
-					res = SendCommand(_T("ACCT ") + m_pCurrentServer->GetAccount());
-				}
-				else {
-					res = SendCommand(cmd.command);
-				}
-				break;
-			case loginCommandType::other:
-				assert(!cmd.command.empty());
-				res = SendCommand(cmd.command, cmd.hide_arguments);
-				break;
-			default:
-				res = false;
-				break;
-			}
-		}
-		break;
-	case LOGON_FEAT:
-		res = SendCommand(_T("FEAT"));
-		break;
-	case LOGON_CLNT:
-		// Some servers refuse to enable UTF8 if client does not send CLNT command
-		// to fix compatibility with Internet Explorer, but in the process breaking
-		// compatibility with other clients.
-		// Rather than forcing MS to fix Internet Explorer, letting other clients
-		// suffer is a questionable decision in my opinion.
-		res = SendCommand(_T("CLNT FileZilla"));
-		break;
-	case LOGON_OPTSUTF8:
-		// Handle servers that disobey RFC 2640 by having UTF8 in their FEAT
-		// response but do not use UTF8 unless OPTS UTF8 ON gets send.
-		// However these servers obey a conflicting ietf draft:
-		// http://www.ietf.org/proceedings/02nov/I-D/draft-ietf-ftpext-utf-8-option-00.txt
-		// Example servers are, amongst others, G6 FTP Server and RaidenFTPd.
-		res = SendCommand(_T("OPTS UTF8 ON"));
-		break;
-	case LOGON_PBSZ:
-		res = SendCommand(_T("PBSZ 0"));
-		break;
-	case LOGON_PROT:
-		res = SendCommand(_T("PROT P"));
-		break;
-	case LOGON_CUSTOMCOMMANDS:
-		if (pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()) {
-			LogMessage(MessageType::Debug_Warning, _T("pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()"));
-			DoClose(FZ_REPLY_INTERNALERROR);
-			return FZ_REPLY_ERROR;
-		}
-		res = SendCommand(m_pCurrentServer->GetPostLoginCommands()[pData->customCommandIndex]);
-		break;
-	case LOGON_OPTSMLST:
-		{
-			std::wstring args;
-			CServerCapabilities::GetCapability(*GetCurrentServer(), opst_mlst_command, &args);
-			res = SendCommand(_T("OPTS MLST " + args));
-		}
-		break;
-	default:
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!res) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
 int CFtpControlSocket::GetReplyCode() const
 {
 	if (m_Response.empty()) {
@@ -1817,48 +1026,40 @@ int CFtpControlSocket::SendNextCommand()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (m_pCurOpData->waitForAsyncRequest) {
-		LogMessage(MessageType::Debug_Info, _T("Waiting for async request, ignoring SendNextCommand..."));
-		return FZ_REPLY_WOULDBLOCK;
+	while (m_pCurOpData) {
+		if (m_pCurOpData->waitForAsyncRequest) {
+			LogMessage(MessageType::Debug_Info, _T("Waiting for async request, ignoring SendNextCommand..."));
+			return FZ_REPLY_WOULDBLOCK;
+		}
+
+		if (m_repliesToSkip) {
+			LogMessage(MessageType::Status, _T("Waiting for replies to skip before sending next command..."));
+			SetWait(true);
+			return FZ_REPLY_WOULDBLOCK;
+		}
+
+		int res = m_pCurOpData->Send();
+		if (res != FZ_REPLY_CONTINUE) {
+			if (res == FZ_REPLY_OK) {
+				return ResetOperation(res);
+			}
+			else if ((res & FZ_REPLY_DISCONNECTED) == FZ_REPLY_DISCONNECTED) {
+				return DoClose(res);
+			}
+			else if (res & FZ_REPLY_ERROR) {
+				ResetOperation(res);
+			}
+			else if (res == FZ_REPLY_WOULDBLOCK) {
+				return FZ_REPLY_WOULDBLOCK;
+			}
+			else if (res != FZ_REPLY_CONTINUE) {
+				LogMessage(MessageType::Debug_Warning, L"Unknown result %d returned by m_pCurOpData->Send()");
+				return ResetOperation(FZ_REPLY_INTERNALERROR);
+			}
+		}
 	}
 
-	if (m_repliesToSkip) {
-		LogMessage(MessageType::Status, _T("Waiting for replies to skip before sending next command..."));
-		SetWait(true);
-		return FZ_REPLY_WOULDBLOCK;
-	}
-
-	switch (m_pCurOpData->opId)
-	{
-	case Command::list:
-		return ListSend();
-	case Command::connect:
-		return LogonSend();
-	case Command::cwd:
-		return ChangeDirSend();
-	case Command::transfer:
-		return FileTransferSend();
-	case Command::mkdir:
-		return MkdirSend();
-	case Command::rename:
-		return RenameSend();
-	case Command::chmod:
-		return ChmodSend();
-	case Command::rawtransfer:
-		return TransferSend();
-	case Command::raw:
-		return RawCommandSend();
-	case Command::del:
-		return DeleteSend();
-	case Command::removedir:
-		return RemoveDirSend();
-	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown opID (%d) in SendNextCommand"), m_pCurOpData->opId);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		break;
-	}
-
-	return FZ_REPLY_ERROR;
+	return FZ_REPLY_OK;
 }
 
 class CFtpChangeDirOpData final : public CChangeDirOpData
@@ -4227,85 +3428,14 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 int CFtpControlSocket::Connect(CServer const& server)
 {
 	if (m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("deleting nonzero pData"));
+		LogMessage(MessageType::Debug_Info, _T("CFtpControlSocket::Connect(): deleting nonzero pData"));
 		delete m_pCurOpData;
 	}
 
-	CFtpLogonOpData* pData = new CFtpLogonOpData;
+	CFtpLogonOpData* pData = new CFtpLogonOpData(*this, server);
 	Push(pData);
 
-	// Do not use FTP proxy if generic proxy is set
-	int generic_proxy_type = engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
-	if ((generic_proxy_type <= CProxySocket::unknown || generic_proxy_type >= CProxySocket::proxytype_count) &&
-		(pData->ftp_proxy_type = engine_.GetOptions().GetOptionVal(OPTION_FTP_PROXY_TYPE)) && !server.GetBypassProxy())
-	{
-		pData->host = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_HOST);
-
-		size_t pos = -1;
-		if (!pData->host.empty() && pData->host[0] == '[') {
-			// Probably IPv6 address
-			pos = pData->host.find(']');
-			if (pos == std::wstring::npos) {
-				LogMessage(MessageType::Error, _("Proxy host starts with '[' but no closing bracket found."));
-				DoClose(FZ_REPLY_CRITICALERROR);
-				return FZ_REPLY_ERROR;
-			}
-			if (pData->host.size() > (pos + 1) && pData->host[pos + 1]) {
-				if (pData->host[pos + 1] != ':') {
-					LogMessage(MessageType::Error, _("Invalid proxy host, after closing bracket only colon and port may follow."));
-					DoClose(FZ_REPLY_CRITICALERROR);
-					return FZ_REPLY_ERROR;
-				}
-				++pos;
-			}
-			else {
-				pos = std::wstring::npos;
-			}
-		}
-		else {
-			pos = pData->host.find(':');
-		}
-
-		if (pos != std::wstring::npos) {
-			pData->port = fz::to_integral<unsigned int>(pData->host.substr(pos + 1));
-			pData->host = pData->host.substr(0, pos);
-		}
-		else {
-			pData->port = 21;
-		}
-
-		if (pData->host.empty() || pData->port < 1 || pData->port > 65535) {
-			LogMessage(MessageType::Error, _("Proxy set but proxy host or port invalid"));
-			DoClose(FZ_REPLY_CRITICALERROR);
-			return FZ_REPLY_ERROR;
-		}
-
-		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server.Format(ServerFormat::with_optional_port), _T("FTP")); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
-	}
-	else {
-		pData->ftp_proxy_type = 0;
-		pData->host = server.GetHost();
-		pData->port = server.GetPort();
-	}
-
-	if (server.GetProtocol() != FTPES && server.GetProtocol() != FTP) {
-		pData->neededCommands[LOGON_AUTH_TLS] = 0;
-		pData->neededCommands[LOGON_AUTH_SSL] = 0;
-		pData->neededCommands[LOGON_AUTH_WAIT] = 0;
-		if (server.GetProtocol() != FTPS) {
-			pData->neededCommands[LOGON_PBSZ] = 0;
-			pData->neededCommands[LOGON_PROT] = 0;
-		}
-	}
-	if (server.GetPostLoginCommands().empty()) {
-		pData->neededCommands[LOGON_CUSTOMCOMMANDS] = 0;
-	}
-
-	if (!GetLoginSequence(server)) {
-		return DoClose(FZ_REPLY_INTERNALERROR);
-	}
-
-	return CRealControlSocket::Connect(server);
+	return SendNextCommand();
 }
 
 bool CFtpControlSocket::CheckInclusion(const CDirectoryListing& listing1, const CDirectoryListing& listing2)

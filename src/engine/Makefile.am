@@ -1,3 +1,5 @@
+AUTOMAKE_OPTIONS = subdir-objects
+
 noinst_LIBRARIES = libengine.a
 
 libengine_a_CPPFLAGS = -I$(srcdir)/../include
@@ -17,7 +19,8 @@ libengine_a_SOURCES = \
 		engineprivate.cpp \
 		externalipresolver.cpp \
 		FileZillaEngine.cpp \
-		ftpcontrolsocket.cpp \
+		ftp/ftpcontrolsocket.cpp \
+		ftp/logon.cpp \
 		httpcontrolsocket.cpp \
 		iothread.cpp \
 		local_path.cpp \
@@ -44,7 +47,8 @@ noinst_HEADERS = backend.h \
 		directorylistingparser.h \
 		engineprivate.h \
 		filezilla.h \
-		ftpcontrolsocket.h \
+		ftp/ftpcontrolsocket.h \
+		ftp/logon.h \
 		httpcontrolsocket.h \
 		iothread.h \
 		logging_private.h \
