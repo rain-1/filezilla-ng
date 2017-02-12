@@ -34,7 +34,6 @@ protected:
 	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
 	int ListParseResponse();
 	int ListSubcommandResult(int prevResult);
-	int ListSend();
 	int ListCheckTimezoneDetection(CDirectoryListing& listing);
 
 	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
@@ -101,9 +100,6 @@ protected:
 
 	int GetReplyCode() const;
 
-	int LogonParseResponse();
-	int LogonSend();
-
 	std::wstring GetPassiveCommand(CRawTransferOpData& data);
 	bool ParsePasvResponse(CRawTransferOpData* pData);
 	bool ParseEpsvResponse(CRawTransferOpData* pData);
@@ -158,8 +154,9 @@ protected:
 
 	std::unique_ptr<std::wregex> m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
 
-	friend class CFtpOpData;
+	friend class CFtpListOpData;
 	friend class CFtpLogonOpData;
+	friend class CFtpOpData;
 };
 
 class CIOThread;
@@ -175,6 +172,11 @@ public:
 
 	CServer* currentServer() {
 		return controlSocket_.m_pCurrentServer;
+	}
+
+	template<typename...Args>
+	void LogMessage(Args&& ...args) const {
+		controlSocket_.LogMessage(std::forward<Args>(args)...);
 	}
 
 	virtual ~CFtpOpData() = default;

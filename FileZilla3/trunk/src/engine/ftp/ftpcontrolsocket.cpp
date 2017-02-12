@@ -6,6 +6,7 @@
 #include "externalipresolver.h"
 #include "ftpcontrolsocket.h"
 #include "iothread.h"
+#include "list.h"
 #include "logon.h"
 #include "pathcache.h"
 #include "proxy.h"
@@ -472,46 +473,12 @@ bool CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool
 	return res;
 }
 
-class CFtpListOpData final : public COpData, public CFtpTransferOpData
-{
-public:
-	CFtpListOpData()
-		: COpData(Command::list)
-	{
-	}
-
-	CServerPath path;
-	std::wstring subDir;
-	bool fallback_to_current{};
-
-	std::unique_ptr<CDirectoryListingParser> m_pDirectoryListingParser;
-
-	CDirectoryListing directoryListing;
-
-	// Set to true to get a directory listing even if a cache
-	// lookup can be made after finding out true remote directory
-	bool refresh{};
-
-	bool viewHiddenCheck{};
-	bool viewHidden{}; // Uses LIST -a command
-
-	// Listing index for list_mdtm
-	int mdtm_index{};
-
-	fz::monotonic_clock m_time_before_locking;
-};
-
-enum listStates
-{
-	list_init = 0,
-	list_waitcwd,
-	list_waitlock,
-	list_waittransfer,
-	list_mdtm
-};
-
 int CFtpControlSocket::List(CServerPath path, std::wstring const& subDir, int flags)
 {
+	if (m_pCurOpData) {
+		LogMessage(MessageType::Debug_Info, L"List called from other command");
+	}
+
 	CServerPath newPath = m_CurrentPath;
 	if (!path.empty()) {
 		newPath = path;
@@ -527,42 +494,24 @@ int CFtpControlSocket::List(CServerPath path, std::wstring const& subDir, int fl
 		LogMessage(MessageType::Status, _("Retrieving directory listing of \"%s\"..."), newPath.GetPath());
 	}
 
-	if (m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("List called from other command"));
-	}
-	CFtpListOpData *pData = new CFtpListOpData;
+	CFtpListOpData *pData = new CFtpListOpData(*this, path, subDir, flags);
 	Push(pData);
 
-	pData->opState = list_waitcwd;
-
-	if (path.GetType() == DEFAULT) {
-		path.SetType(m_pCurrentServer->GetType());
-	}
-	pData->path = path;
-	pData->subDir = subDir;
-	pData->refresh = (flags & LIST_FLAG_REFRESH) != 0;
-	pData->fallback_to_current = !path.empty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
-
-	int res = ChangeDir(path, subDir, (flags & LIST_FLAG_LINK) != 0);
-	if (res != FZ_REPLY_OK) {
-		return res;
-	}
-
-	return ListSubcommandResult(FZ_REPLY_OK);
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFtpControlSocket::ListSubcommandResult(int prevResult)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ListSubcommandResult()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ListSubcommandResult()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
+	LogMessage(MessageType::Debug_Debug, L"  state = %d", pData->opState);
 
 	if (pData->opState == list_waitcwd) {
 		if (prevResult != FZ_REPLY_OK) {
@@ -574,8 +523,8 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			if (pData->fallback_to_current) {
 				// List current directory instead
 				pData->fallback_to_current = false;
-				pData->path.clear();
-				pData->subDir = _T("");
+				pData->path_.clear();
+				pData->subDir_.clear();
 				int res = ChangeDir();
 				if (res != FZ_REPLY_OK)
 					return res;
@@ -585,10 +534,10 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 				return FZ_REPLY_ERROR;
 			}
 		}
-		if (pData->path.empty()) {
-			pData->path = m_CurrentPath;
-			assert(pData->subDir.empty());
-			assert(!pData->path.empty());
+		if (pData->path_.empty()) {
+			pData->path_ = m_CurrentPath;
+			assert(pData->subDir_.empty());
+			assert(!pData->path_.empty());
 		}
 
 		if (!pData->refresh) {
@@ -793,60 +742,6 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
-}
-
-int CFtpControlSocket::ListSend()
-{
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ListSend()"));
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
-
-	if (pData->opState == list_waitlock) {
-		if (!pData->holdsLock) {
-			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Not holding the lock as expected"));
-			ResetOperation(FZ_REPLY_INTERNALERROR);
-			return FZ_REPLY_ERROR;
-		}
-
-		// Check if we can use already existing listing
-		CDirectoryListing listing;
-		bool is_outdated = false;
-		assert(pData->subDir.empty()); // Did do ChangeDir before trying to lock
-		bool found = engine_.GetDirectoryCache().Lookup(listing, *m_pCurrentServer, pData->path, true, is_outdated);
-		if (found && !is_outdated && !listing.get_unsure_flags() &&
-			listing.m_firstListTime >= pData->m_time_before_locking)
-		{
-			SendDirectoryListingNotification(listing.path, !pData->pNextOpData, false);
-
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-
-		pData->opState = list_waitcwd;
-
-		return ListSubcommandResult(FZ_REPLY_OK);
-	}
-	if (pData->opState == list_mdtm) {
-		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
-		std::wstring cmd = L"MDTM " + m_CurrentPath.FormatFilename(pData->directoryListing[pData->mdtm_index].name, true);
-		if (!SendCommand(cmd)) {
-			return FZ_REPLY_ERROR;
-		}
-		else {
-			return FZ_REPLY_WOULDBLOCK;
-		}
-	}
-
-	LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("invalid opstate"));
-	ResetOperation(FZ_REPLY_INTERNALERROR);
-	return FZ_REPLY_ERROR;
 }
 
 int CFtpControlSocket::ListParseResponse()
@@ -3435,7 +3330,7 @@ int CFtpControlSocket::Connect(CServer const& server)
 	CFtpLogonOpData* pData = new CFtpLogonOpData(*this, server);
 	Push(pData);
 
-	return SendNextCommand();
+	return FZ_REPLY_CONTINUE;
 }
 
 bool CFtpControlSocket::CheckInclusion(const CDirectoryListing& listing1, const CDirectoryListing& listing2)

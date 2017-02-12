@@ -302,8 +302,9 @@ int CFileZillaEnginePrivate::Connect(CConnectCommand const& command)
 
 	if (command.GetServer().GetPort() != CServer::GetDefaultPort(command.GetServer().GetProtocol())) {
 		ServerProtocol protocol = CServer::GetProtocolFromPort(command.GetServer().GetPort(), true);
-		if (protocol != UNKNOWN && protocol != command.GetServer().GetProtocol())
+		if (protocol != UNKNOWN && protocol != command.GetServer().GetProtocol()) {
 			m_pLogging->LogMessage(MessageType::Status, _("Selected port usually in use by a different protocol."));
+		}
 	}
 
 	return ContinueConnect();
@@ -513,8 +514,9 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	}
 
 	int res = m_pControlSocket->Connect(server);
-	if (m_retryTimer)
+	if (m_retryTimer) {
 		return FZ_REPLY_WOULDBLOCK;
+	}
 
 	return res;
 }
@@ -618,14 +620,21 @@ void CFileZillaEnginePrivate::OnCommandEvent()
 			}
 		}
 
-		if (id != Command::disconnect)
+		if (id != Command::disconnect) {
 			res |= m_nControlSocketError;
-		else if (res & FZ_REPLY_DISCONNECTED)
+		}
+		else if (res & FZ_REPLY_DISCONNECTED) {
 			res = FZ_REPLY_OK;
+		}
 		m_nControlSocketError = 0;
 
-		if (res != FZ_REPLY_WOULDBLOCK)
+		if (res == FZ_REPLY_CONTINUE) {
+			assert(m_pControlSocket);
+			m_pControlSocket->SendNextCommand();
+		}
+		else if (res != FZ_REPLY_WOULDBLOCK) {
 			ResetOperation(res);
+		}
 	}
 }
 

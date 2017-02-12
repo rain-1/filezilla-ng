@@ -798,8 +798,9 @@ CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 
 void CControlSocket::OnObtainLock()
 {
-	if (ObtainLockFromEvent() == lock_unknown)
+	if (ObtainLockFromEvent() == lock_unknown) {
 		return;
+	}
 
 	SendNextCommand();
 
