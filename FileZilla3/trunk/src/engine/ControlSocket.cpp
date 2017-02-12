@@ -765,26 +765,31 @@ void CControlSocket::UnlockCache()
 
 CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 {
-	if (!m_pCurOpData)
+	if (!m_pCurOpData) {
 		return lock_unknown;
+	}
 
 	std::list<t_lockInfo>::iterator own = GetLockStatus();
-	if (own == m_lockInfoList.end())
+	if (own == m_lockInfoList.end()) {
 		return lock_unknown;
+	}
 
-	if (!own->waiting)
+	if (!own->waiting) {
 		return lock_unknown;
+	}
 
-	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != own; ++iter)
-	{
-		if (*m_pCurrentServer != *iter->pControlSocket->m_pCurrentServer)
+	for (auto iter = m_lockInfoList.cbegin(); iter != own; ++iter) {
+		if (*m_pCurrentServer != *iter->pControlSocket->m_pCurrentServer) {
 			continue;
+		}
 
-		if (iter->directory != own->directory)
+		if (iter->directory != own->directory) {
 			continue;
+		}
 
-		if (iter->reason != own->reason)
+		if (iter->reason != own->reason) {
 			continue;
+		}
 
 		// Another instance comes before us
 		return lock_unknown;

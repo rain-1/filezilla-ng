@@ -1,5 +1,6 @@
 #include <filezilla.h>
 
+#include "cwd.h"
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "engineprivate.h"
@@ -515,7 +516,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 
 	if (pData->opState == list_waitcwd) {
 		if (prevResult != FZ_REPLY_OK) {
-			if (prevResult & FZ_REPLY_LINKNOTDIR) {
+			if ((prevResult & FZ_REPLY_LINKNOTDIR) == FZ_REPLY_LINKNOTDIR) {
 				ResetOperation(prevResult);
 				return FZ_REPLY_ERROR;
 			}
@@ -526,8 +527,9 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 				pData->path_.clear();
 				pData->subDir_.clear();
 				int res = ChangeDir();
-				if (res != FZ_REPLY_OK)
+				if (res != FZ_REPLY_OK) {
 					return res;
+				}
 			}
 			else {
 				ResetOperation(prevResult);
@@ -744,74 +746,6 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 	}
 }
 
-int CFtpControlSocket::ListParseResponse()
-{
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ListParseResponse()"));
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Empty m_pCurOpData"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
-
-	if (pData->opState != list_mdtm) {
-		LogMessage(MessageType::Debug_Warning, _T("ListParseResponse should never be called if opState != list_mdtm"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-
-	// First condition prevents problems with concurrent MDTM
-	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown &&
-		m_Response.substr(0, 4) == _T("213 ") && m_Response.size() > 16)
-	{
-		fz::datetime date(m_Response.substr(4), fz::datetime::utc);
-		if (!date.empty()) {
-			assert(pData->directoryListing[pData->mdtm_index].has_date());
-			fz::datetime listTime = pData->directoryListing[pData->mdtm_index].time;
-			listTime -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
-
-			int serveroffset = static_cast<int>((date - listTime).get_seconds());
-			if (!pData->directoryListing[pData->mdtm_index].has_seconds()) {
-				// Round offset to full minutes
-				if (serveroffset < 0) {
-					serveroffset -= 59;
-				}
-				serveroffset -= serveroffset % 60;
-			}
-
-			LogMessage(MessageType::Status, _("Timezone offset of server is %d seconds."), -serveroffset);
-
-			fz::duration span = fz::duration::from_seconds(serveroffset);
-			const int count = pData->directoryListing.GetCount();
-			for (int i = 0; i < count; ++i) {
-				CDirentry& entry = pData->directoryListing.get(i);
-				entry.time += span;
-			}
-
-			// TODO: Correct cached listings
-
-			CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, yes, serveroffset);
-		}
-		else {
-			CServerCapabilities::SetCapability(*m_pCurrentServer, mdtm_command, no);
-			CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
-		}
-	}
-	else {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
-	}
-
-	engine_.GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
-
-	SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
-
-	ResetOperation(FZ_REPLY_OK);
-	return FZ_REPLY_OK;
-}
-
 int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
 {
 	assert(m_pCurOpData);
@@ -957,24 +891,6 @@ int CFtpControlSocket::SendNextCommand()
 	return FZ_REPLY_OK;
 }
 
-class CFtpChangeDirOpData final : public CChangeDirOpData
-{
-public:
-	CFtpChangeDirOpData() = default;
-
-	bool tried_cdup{};
-};
-
-enum cwdStates
-{
-	cwd_init = 0,
-	cwd_pwd,
-	cwd_cwd,
-	cwd_pwd_cwd,
-	cwd_cwd_subdir,
-	cwd_pwd_subdir
-};
-
 int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool link_discovery)
 {
 	cwdStates state = cwd_init;
@@ -1026,7 +942,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 		}
 	}
 
-	CFtpChangeDirOpData *pData = new CFtpChangeDirOpData;
+	CFtpChangeDirOpData *pData = new CFtpChangeDirOpData(*this);
 	pData->opState = state;
 	pData->path = path;
 	pData->subDir = subDir;
@@ -1041,169 +957,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 	}
 
 	Push(pData);
-
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::ChangeDirParseResponse()
-{
-	if (!m_pCurOpData) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-	CFtpChangeDirOpData *pData = static_cast<CFtpChangeDirOpData *>(m_pCurOpData);
-
-	int code = GetReplyCode();
-	bool error = false;
-	switch (pData->opState)
-	{
-	case cwd_pwd:
-		if (code != 2 && code != 3) {
-			error = true;
-		}
-		else if (ParsePwdReply(m_Response)) {
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-		else {
-			error = true;
-		}
-		break;
-	case cwd_cwd:
-		if (code != 2 && code != 3) {
-			// Create remote directory if part of a file upload
-			if (pData->tryMkdOnFail) {
-				pData->tryMkdOnFail = false;
-				int res = Mkdir(pData->path);
-				if (res != FZ_REPLY_OK) {
-					return res;
-				}
-			}
-			else {
-				error = true;
-			}
-		}
-		else {
-			if (pData->target.empty()) {
-				pData->opState = cwd_pwd_cwd;
-			}
-			else {
-				m_CurrentPath = pData->target;
-				if (pData->subDir.empty()) {
-					ResetOperation(FZ_REPLY_OK);
-					return FZ_REPLY_OK;
-				}
-
-				pData->target.clear();
-				pData->opState = cwd_cwd_subdir;
-			}
-		}
-		break;
-	case cwd_pwd_cwd:
-		if (code != 2 && code != 3) {
-			LogMessage(MessageType::Debug_Warning, _T("PWD failed, assuming path is '%s'."), pData->path.GetPath());
-			m_CurrentPath = pData->path;
-
-			if (pData->target.empty()) {
-				engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
-			}
-
-			if (pData->subDir.empty()) {
-				ResetOperation(FZ_REPLY_OK);
-				return FZ_REPLY_OK;
-			}
-			else {
-				pData->opState = cwd_cwd_subdir;
-			}
-		}
-		else if (ParsePwdReply(m_Response, false, pData->path)) {
-			if (pData->target.empty()) {
-				engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
-			}
-			if (pData->subDir.empty()) {
-				ResetOperation(FZ_REPLY_OK);
-				return FZ_REPLY_OK;
-			}
-			else {
-				pData->opState = cwd_cwd_subdir;
-			}
-		}
-		else {
-			error = true;
-		}
-		break;
-	case cwd_cwd_subdir:
-		if (code != 2 && code != 3) {
-			if (pData->subDir == _T("..") && !pData->tried_cdup && m_Response.substr(0, 2) == _T("50")) {
-				// CDUP command not implemented, try again using CWD ..
-				pData->tried_cdup = true;
-			}
-			else if (pData->link_discovery) {
-				LogMessage(MessageType::Debug_Info, _T("Symlink does not link to a directory, probably a file"));
-				ResetOperation(FZ_REPLY_LINKNOTDIR);
-				return FZ_REPLY_ERROR;
-			}
-			else {
-				error = true;
-			}
-		}
-		else {
-			pData->opState = cwd_pwd_subdir;
-		}
-		break;
-	case cwd_pwd_subdir:
-		{
-			CServerPath assumedPath(pData->path);
-			if (pData->subDir == _T("..")) {
-				if (!assumedPath.HasParent()) {
-					assumedPath.clear();
-				}
-				else {
-					assumedPath = assumedPath.GetParent();
-				}
-			}
-			else {
-				assumedPath.AddSegment(pData->subDir);
-			}
-
-			if (code != 2 && code != 3) {
-				if (!assumedPath.empty()) {
-					LogMessage(MessageType::Debug_Warning, _T("PWD failed, assuming path is '%s'."), assumedPath.GetPath());
-					m_CurrentPath = assumedPath;
-
-					if (pData->target.empty()) {
-						engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
-					}
-
-					ResetOperation(FZ_REPLY_OK);
-					return FZ_REPLY_OK;
-				}
-				else {
-					LogMessage(MessageType::Debug_Warning, _T("PWD failed, unable to guess current path."));
-					error = true;
-				}
-			}
-			else if (ParsePwdReply(m_Response, false, assumedPath)) {
-				if (pData->target.empty()) {
-					engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
-				}
-
-				ResetOperation(FZ_REPLY_OK);
-				return FZ_REPLY_OK;
-			}
-			else {
-				error = true;
-			}
-		}
-		break;
-	}
-
-	if (error) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return SendNextCommand();
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFtpControlSocket::ChangeDirSubcommandResult(int)
@@ -1211,62 +965,6 @@ int CFtpControlSocket::ChangeDirSubcommandResult(int)
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ChangeDirSubcommandResult()"));
 
 	return SendNextCommand();
-}
-
-int CFtpControlSocket::ChangeDirSend()
-{
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ChangeDirSend()"));
-
-	if (!m_pCurOpData) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-	CFtpChangeDirOpData *pData = static_cast<CFtpChangeDirOpData *>(m_pCurOpData);
-
-	std::wstring cmd;
-	switch (pData->opState)
-	{
-	case cwd_pwd:
-	case cwd_pwd_cwd:
-	case cwd_pwd_subdir:
-		cmd = _T("PWD");
-		break;
-	case cwd_cwd:
-		if (pData->tryMkdOnFail && !pData->holdsLock) {
-			if (IsLocked(lock_mkdir, pData->path)) {
-				// Some other engine is already creating this directory or
-				// performing an action that will lead to its creation
-				pData->tryMkdOnFail = false;
-			}
-			if (!TryLockCache(lock_mkdir, pData->path)) {
-				return FZ_REPLY_WOULDBLOCK;
-			}
-		}
-		cmd = _T("CWD ") + pData->path.GetPath();
-		m_CurrentPath.clear();
-		break;
-	case cwd_cwd_subdir:
-		if (pData->subDir.empty()) {
-			ResetOperation(FZ_REPLY_INTERNALERROR);
-			return FZ_REPLY_ERROR;
-		}
-		else if (pData->subDir == _T("..") && !pData->tried_cdup) {
-			cmd = _T("CDUP");
-		}
-		else {
-			cmd = _T("CWD ") + pData->path.FormatSubdir(pData->subDir);
-		}
-		m_CurrentPath.clear();
-		break;
-	}
-
-	if (!cmd.empty()) {
-		if (!SendCommand(cmd)) {
-			return FZ_REPLY_ERROR;
-		}
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
 }
 
 int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,

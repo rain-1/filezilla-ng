@@ -85,6 +85,7 @@
     <ClCompile Include="FileZillaEngine.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ftp\cwd.cpp" />
     <ClCompile Include="ftp\ftpcontrolsocket.cpp" />
     <ClCompile Include="ftp\list.cpp" />
     <ClCompile Include="ftp\logon.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="engineprivate.h" />
     <ClInclude Include="filezilla.h" />
     <ClInclude Include="..\include\FileZillaEngine.h" />
+    <ClInclude Include="ftp\cwd.h" />
     <ClInclude Include="ftp\ftpcontrolsocket.h" />
     <ClInclude Include="ftp\list.h" />
     <ClInclude Include="ftp\logon.h" />
