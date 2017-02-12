@@ -46,6 +46,8 @@ enum class Command
 #define FZ_REPLY_WRITEFAILED	(0x2000 | FZ_REPLY_ERROR) // Happens if local file could not be written during transfer
 #define FZ_REPLY_LINKNOTDIR		(0x4000)
 
+#define FZ_REPLY_CONTINUE 0x8000 // Used internally
+
 // --------------- //
 // Actual commands //
 // --------------- //

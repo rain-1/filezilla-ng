@@ -181,6 +181,8 @@ public:
 	// Only called from the engine, see there for description
 	void InvalidateCurrentWorkingDir(const CServerPath& path);
 
+	virtual int SendNextCommand();
+
 protected:
 	void SendDirectoryListingNotification(CServerPath const& path, bool onList, bool failed);
 
@@ -190,8 +192,6 @@ protected:
 	bool m_closed{};
 
 	virtual int ResetOperation(int nErrorCode);
-
-	virtual int SendNextCommand();
 
 	void LogTransferResultMessage(int nErrorCode, CFileTransferOpData *pData);
 
