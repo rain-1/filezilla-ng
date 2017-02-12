@@ -8,7 +8,6 @@ class CDirectoryListingParser;
 
 enum listStates
 {
-	list_cwd = 0,
 	list_waitcwd,
 	list_waitlock,
 	list_waittransfer,
@@ -21,6 +20,7 @@ public:
 	CFtpListOpData(CFtpControlSocket & controlSocket, CServerPath const& path, std::wstring const& subDir, int flags);
 
 	virtual int Send() override;
+	virtual int ParseResponse() override;
 
 	CServerPath path_;
 	std::wstring subDir_;

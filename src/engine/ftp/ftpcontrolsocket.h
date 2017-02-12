@@ -32,14 +32,11 @@ protected:
 
 	virtual int Connect(CServer const& server);
 	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
-	int ListParseResponse();
 	int ListSubcommandResult(int prevResult);
 	int ListCheckTimezoneDetection(CDirectoryListing& listing);
 
 	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
-	int ChangeDirParseResponse();
 	int ChangeDirSubcommandResult(int prevResult);
-	int ChangeDirSend();
 
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
@@ -154,6 +151,7 @@ protected:
 
 	std::unique_ptr<std::wregex> m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
 
+	friend class CFtpChangeDirOpData;
 	friend class CFtpListOpData;
 	friend class CFtpLogonOpData;
 	friend class CFtpOpData;

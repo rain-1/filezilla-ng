@@ -57,12 +57,12 @@ int CFtpLogonOpData::Send()
 					// Probably IPv6 address
 					pos = host.find(']');
 					if (pos == std::wstring::npos) {
-						controlSocket_.LogMessage(MessageType::Error, _("Proxy host starts with '[' but no closing bracket found."));
+						LogMessage(MessageType::Error, _("Proxy host starts with '[' but no closing bracket found."));
 						return FZ_REPLY_DISCONNECTED | FZ_REPLY_CRITICALERROR;
 					}
 					if (host.size() > (pos + 1) && host[pos + 1]) {
 						if (host[pos + 1] != ':') {
-							controlSocket_.LogMessage(MessageType::Error, _("Invalid proxy host, after closing bracket only colon and port may follow."));
+							LogMessage(MessageType::Error, _("Invalid proxy host, after closing bracket only colon and port may follow."));
 							return FZ_REPLY_DISCONNECTED | FZ_REPLY_CRITICALERROR;
 						}
 						++pos;
@@ -84,11 +84,11 @@ int CFtpLogonOpData::Send()
 				}
 
 				if (host.empty() || port < 1 || port > 65535) {
-					controlSocket_.LogMessage(MessageType::Error, _("Proxy set but proxy host or port invalid"));
+					LogMessage(MessageType::Error, _("Proxy set but proxy host or port invalid"));
 					return FZ_REPLY_DISCONNECTED | FZ_REPLY_CRITICALERROR;
 				}
 
-				controlSocket_.LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server_.Format(ServerFormat::with_optional_port), L"FTP"); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
+				LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server_.Format(ServerFormat::with_optional_port), L"FTP"); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
 			}
 			else {
 				ftp_proxy_type = 0;
@@ -100,7 +100,7 @@ int CFtpLogonOpData::Send()
 			return controlSocket_.CRealControlSocket::Connect(server_);
 	    }
 	case LOGON_AUTH_WAIT:
-		controlSocket_.LogMessage(MessageType::Debug_Info, L"LogonSend() called during LOGON_AUTH_WAIT, ignoring");
+		LogMessage(MessageType::Debug_Info, L"LogonSend() called during LOGON_AUTH_WAIT, ignoring");
 		return FZ_REPLY_WOULDBLOCK;
 	case LOGON_AUTH_TLS:
 		res = controlSocket_.SendCommand(L"AUTH TLS", false, false);
@@ -197,7 +197,7 @@ int CFtpLogonOpData::Send()
 		break;
 	case LOGON_CUSTOMCOMMANDS:
 		if (customCommandIndex >= currentServer()->GetPostLoginCommands().size()) {
-			controlSocket_.LogMessage(MessageType::Debug_Warning, L"pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()");
+			LogMessage(MessageType::Debug_Warning, L"pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()");
 			return FZ_REPLY_INTERNALERROR | FZ_REPLY_DISCONNECTED;
 		}
 		res = controlSocket_.SendCommand(currentServer()->GetPostLoginCommands()[customCommandIndex]);
@@ -238,7 +238,7 @@ int CFtpLogonOpData::ParseResponse()
 			if (opState == LOGON_AUTH_SSL) {
 				if (currentServer()->GetProtocol() == FTP) {
 					// For now. In future make TLS mandatory unless explicitly requested INSECURE_FTP as protocol
-					controlSocket_.LogMessage(MessageType::Status, _("Insecure server, it does not support FTP over TLS."));
+					LogMessage(MessageType::Status, _("Insecure server, it does not support FTP over TLS."));
 					neededCommands[LOGON_PBSZ] = 0;
 					neededCommands[LOGON_PROT] = 0;
 
@@ -253,7 +253,7 @@ int CFtpLogonOpData::ParseResponse()
 		else {
 			CServerCapabilities::SetCapability(*currentServer(), (opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, yes);
 
-			controlSocket_.LogMessage(MessageType::Status, _("Initializing TLS..."));
+			LogMessage(MessageType::Status, _("Initializing TLS..."));
 
 			assert(!controlSocket_.m_pTlsSocket);
 			delete controlSocket_.m_pBackend;
@@ -262,7 +262,7 @@ int CFtpLogonOpData::ParseResponse()
 			controlSocket_.m_pBackend = controlSocket_.m_pTlsSocket;
 
 			if (!controlSocket_.m_pTlsSocket->Init()) {
-				controlSocket_.LogMessage(MessageType::Error, _("Failed to initialize TLS."));
+				LogMessage(MessageType::Error, _("Failed to initialize TLS."));
 				return FZ_REPLY_INTERNALERROR | FZ_REPLY_DISCONNECTED;
 			}
 
@@ -284,11 +284,11 @@ int CFtpLogonOpData::ParseResponse()
 			if (cmd.type == loginCommandType::user || cmd.type == loginCommandType::pass) {
 				auto const user = currentServer()->GetUser();
 				if (!user.empty() && (user.front() == ' ' || user.back() == ' ')) {
-					controlSocket_.LogMessage(MessageType::Status, _("Check your login credentials. The entered username starts or ends with a space character."));
+					LogMessage(MessageType::Status, _("Check your login credentials. The entered username starts or ends with a space character."));
 				}
 				auto const pw = currentServer()->GetPass();
 				if (!pw.empty() && (pw.front() == ' ' || pw.back() == ' ')) {
-					controlSocket_.LogMessage(MessageType::Status, _("Check your login credentials. The entered password starts or ends with a space character."));
+					LogMessage(MessageType::Status, _("Check your login credentials. The entered password starts or ends with a space character."));
 				}
 			}
 
@@ -307,14 +307,14 @@ int CFtpLogonOpData::ParseResponse()
 				}
 				if (!asciiOnly) {
 					if (ftp_proxy_type) {
-						controlSocket_.LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Cannot fall back to local charset since using proxy."));
+						LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Cannot fall back to local charset since using proxy."));
 						int error = FZ_REPLY_DISCONNECTED;
 						if (cmd.type == loginCommandType::pass && code == 5) {
 							error |= FZ_REPLY_PASSWORDFAILED;
 						}
 						return error;
 					}
-					controlSocket_.LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Trying local charset."));
+					LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Trying local charset."));
 					controlSocket_.m_useUTF8 = false;
 					if (!GetLoginSequence()) {
 						int error = FZ_REPLY_DISCONNECTED;
@@ -341,9 +341,9 @@ int CFtpLogonOpData::ParseResponse()
 			}
 		}
 		else if (code == 3 && loginSequence.empty()) {
-			controlSocket_.LogMessage(MessageType::Error, _("Login sequence fully executed yet not logged in, aborting."));
+			LogMessage(MessageType::Error, _("Login sequence fully executed yet not logged in, aborting."));
 			if (cmd.type == loginCommandType::pass && currentServer()->GetAccount().empty()) {
-				controlSocket_.LogMessage(MessageType::Error, _("Server might require an account. Try specifying an account using the Site Manager"));
+				LogMessage(MessageType::Error, _("Server might require an account. Try specifying an account using the Site Manager"));
 			}
 			return FZ_REPLY_CRITICALERROR | FZ_REPLY_DISCONNECTED;
 		}
@@ -401,7 +401,7 @@ int CFtpLogonOpData::ParseResponse()
 
 		const CharsetEncoding encoding = currentServer()->GetEncodingType();
 		if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*currentServer(), utf8_command) != yes) {
-			controlSocket_.LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
+			LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
 			controlSocket_.m_useUTF8 = false;
 		}
 	}
@@ -421,8 +421,8 @@ int CFtpLogonOpData::ParseResponse()
 		++opState;
 
 		if (opState == LOGON_DONE) {
-			controlSocket_.LogMessage(MessageType::Status, _("Logged in"));
-			controlSocket_.LogMessage(MessageType::Debug_Info, L"Measured latency of %d ms", controlSocket_.m_rtt.GetLatency());
+			LogMessage(MessageType::Status, _("Logged in"));
+			LogMessage(MessageType::Debug_Info, L"Measured latency of %d ms", controlSocket_.m_rtt.GetLatency());
 			return FZ_REPLY_OK;
 		}
 
@@ -461,7 +461,7 @@ int CFtpLogonOpData::ParseResponse()
 			}
 			const CharsetEncoding encoding = currentServer()->GetEncodingType();
 			if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*currentServer(), utf8_command) != yes) {
-				controlSocket_.LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
+				LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
 				controlSocket_.m_useUTF8 = false;
 			}
 		}
@@ -753,12 +753,12 @@ bool CFtpLogonOpData::GetLoginSequence()
 		}
 
 		if (loginSequence.empty()) {
-			controlSocket_.LogMessage(MessageType::Error, _("Could not generate custom login sequence."));
+			LogMessage(MessageType::Error, _("Could not generate custom login sequence."));
 			return false;
 		}
 	}
 	else {
-		controlSocket_.LogMessage(MessageType::Error, _("Unknown FTP proxy type, cannot generate login sequence."));
+		LogMessage(MessageType::Error, _("Unknown FTP proxy type, cannot generate login sequence."));
 		return false;
 	}
 
