@@ -17,12 +17,12 @@ int CFtpChangeDirOpData::Send()
 		break;
 	case cwd_cwd:
 		if (tryMkdOnFail && !holdsLock) {
-			if (controlSocket_.IsLocked(CControlSocket::lock_mkdir, path)) {
+			if (controlSocket_.IsLocked(CFtpControlSocket::lock_mkdir, path)) {
 				// Some other engine is already creating this directory or
 				// performing an action that will lead to its creation
 				tryMkdOnFail = false;
 			}
-			if (!controlSocket_.TryLockCache(CControlSocket::lock_mkdir, path)) {
+			if (!controlSocket_.TryLockCache(CFtpControlSocket::lock_mkdir, path)) {
 				return FZ_REPLY_WOULDBLOCK;
 			}
 		}
