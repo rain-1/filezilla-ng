@@ -23,9 +23,9 @@ public:
 
 	virtual int Send() { return FZ_REPLY_INTERNALERROR; }
 
-	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation) { return FZ_REPLY_INTERNALERROR; }
-
 	virtual int ParseResponse() { return FZ_REPLY_INTERNALERROR; }
+
+	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) { return FZ_REPLY_INTERNALERROR; }
 
 	int opState{};
 	Command const opId;
@@ -77,7 +77,7 @@ public:
 	bool transferInitiated{};
 };
 
-class CMkdirOpData final : public COpData
+class CMkdirOpData : public COpData
 {
 public:
 	CMkdirOpData()

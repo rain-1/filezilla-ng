@@ -21,6 +21,7 @@ public:
 
 	virtual int Send() override;
 	virtual int ParseResponse() override;
+	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) override;
 
 	CServerPath path_;
 	std::wstring subDir_;

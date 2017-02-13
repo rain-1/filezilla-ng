@@ -32,7 +32,6 @@ protected:
 
 	virtual int Connect(CServer const& server);
 	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
-	int ListSubcommandResult(int prevResult);
 	int ListCheckTimezoneDetection(CDirectoryListing& listing);
 
 	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
@@ -60,9 +59,7 @@ protected:
 	int RemoveDirSend();
 	int RemoveDirParseResponse();
 
-	virtual int Mkdir(const CServerPath& path);
-	virtual int MkdirParseResponse();
-	virtual int MkdirSend();
+	virtual int Mkdir(CServerPath const& path) override;
 
 	virtual int Rename(const CRenameCommand& command);
 	virtual int RenameParseResponse();
@@ -154,6 +151,7 @@ protected:
 	friend class CFtpChangeDirOpData;
 	friend class CFtpListOpData;
 	friend class CFtpLogonOpData;
+	friend class CFtpMkdirOpData;
 	friend class CFtpOpData;
 };
 
