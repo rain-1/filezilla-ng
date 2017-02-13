@@ -90,6 +90,7 @@
     <ClCompile Include="ftp\list.cpp" />
     <ClCompile Include="ftp\logon.cpp" />
     <ClCompile Include="ftp\mkd.cpp" />
+    <ClCompile Include="ftp\rawtransfer.cpp" />
     <ClCompile Include="httpcontrolsocket.cpp" />
     <ClCompile Include="iothread.cpp" />
     <ClCompile Include="local_path.cpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="ftp\list.h" />
     <ClInclude Include="ftp\logon.h" />
     <ClInclude Include="ftp\mkd.h" />
+    <ClInclude Include="ftp\rawtransfer.h" />
     <ClInclude Include="httpcontrolsocket.h" />
     <ClInclude Include="iothread.h" />
     <ClInclude Include="..\include\libfilezilla_engine.h" />
