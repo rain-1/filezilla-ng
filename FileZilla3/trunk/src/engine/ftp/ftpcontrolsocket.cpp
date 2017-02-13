@@ -9,6 +9,7 @@
 #include "iothread.h"
 #include "list.h"
 #include "logon.h"
+#include "mkd.h"
 #include "pathcache.h"
 #include "proxy.h"
 #include "servercapabilities.h"
@@ -129,7 +130,7 @@ CFtpControlSocket::~CFtpControlSocket()
 
 void CFtpControlSocket::OnReceive()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::OnReceive()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::OnReceive()");
 
 	for (;;) {
 		int error;
@@ -205,13 +206,13 @@ void CFtpControlSocket::ParseFeat(std::wstring line)
 	fz::trim(line);
 	std::wstring up = fz::str_toupper_ascii(line);
 
-	if (HasFeature(up, _T("UTF8"))) {
+	if (HasFeature(up, L"UTF8")) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
 	}
-	else if (HasFeature(up, _T("CLNT"))) {
+	else if (HasFeature(up, L"CLNT")) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, yes);
 	}
-	else if (HasFeature(up, _T("MLSD"))) {
+	else if (HasFeature(up, L"MLSD")) {
 		std::wstring facts;
 		// FEAT output for MLST overrides MLSD
 		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command, &facts) != yes || facts.empty()) {
@@ -227,7 +228,7 @@ void CFtpControlSocket::ParseFeat(std::wstring line)
 		// MLST/MLSD specs require use of UTC
 		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 	}
-	else if (HasFeature(up, _T("MLST"))) {
+	else if (HasFeature(up, L"MLST")) {
 		std::wstring facts;
 		if (line.size() > 5) {
 			facts = line.substr(5);
@@ -243,25 +244,25 @@ void CFtpControlSocket::ParseFeat(std::wstring line)
 		// MLST/MLSD specs require use of UTC
 		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 	}
-	else if (HasFeature(up, _T("MODE Z"))) {
+	else if (HasFeature(up, L"MODE Z")) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, mode_z_support, yes);
 	}
-	else if (HasFeature(up, _T("MFMT"))) {
+	else if (HasFeature(up, L"MFMT")) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, mfmt_command, yes);
 	}
-	else if (HasFeature(up, _T("MDTM"))) {
+	else if (HasFeature(up, L"MDTM")) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, mdtm_command, yes);
 	}
-	else if (HasFeature(up, _T("SIZE"))) {
+	else if (HasFeature(up, L"SIZE")) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
 	}
-	else if (HasFeature(up, _T("TVFS"))) {
+	else if (HasFeature(up, L"TVFS")) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, yes);
 	}
-	else if (HasFeature(up, _T("REST STREAM"))) {
+	else if (HasFeature(up, L"REST STREAM")) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, rest_stream, yes);
 	}
-	else if (HasFeature(up, _T("EPSV"))) {
+	else if (HasFeature(up, L"EPSV")) {
 		CServerCapabilities::SetCapability(*m_pCurrentServer, epsv_command, yes);
 	}
 }
@@ -278,9 +279,9 @@ void CFtpControlSocket::ParseLine(std::wstring line)
 			std::wstring& challenge = pData->challenge;
 			if (!challenge.empty())
 #ifdef FZ_WINDOWS
-				challenge += _T("\r\n");
+				challenge += L"\r\n";
 #else
-				challenge += _T("\n");
+				challenge += L"\n";
 #endif
 			challenge += line;
 		}
@@ -289,7 +290,7 @@ void CFtpControlSocket::ParseLine(std::wstring line)
 		}
 		else if (pData->opState == LOGON_WELCOME) {
 			if (!pData->gotFirstWelcomeLine) {
-				if (fz::str_tolower_ascii(line).substr(0, 3) == _T("ssh")) {
+				if (fz::str_tolower_ascii(line).substr(0, 3) == L"ssh") {
 					LogMessage(MessageType::Error, _("Cannot establish FTP connection to an SFTP server. Please select proper protocol."));
 					DoClose(FZ_REPLY_CRITICALERROR);
 					return;
@@ -306,7 +307,7 @@ void CFtpControlSocket::ParseLine(std::wstring line)
 				m_MultilineResponseCode.clear();
 				m_Response = line;
 				ParseResponse();
-				m_Response = _T("");
+				m_Response.clear();
 				m_MultilineResponseLines.clear();
 			}
 			else {
@@ -316,13 +317,13 @@ void CFtpControlSocket::ParseLine(std::wstring line)
 		// start of new multi-line
 		else if (line[3] == '-') {
 			// DDD<SP> is the end of a multi-line response
-			m_MultilineResponseCode = line.substr(0, 3) + _T(" ");
+			m_MultilineResponseCode = line.substr(0, 3) + L" ";
 			m_MultilineResponseLines.push_back(line);
 		}
 		else {
 			m_Response = line;
 			ParseResponse();
-			m_Response = _T("");
+			m_Response.clear();
 		}
 	}
 }
@@ -374,7 +375,7 @@ void CFtpControlSocket::OnConnect()
 void CFtpControlSocket::ParseResponse()
 {
 	if (m_Response.empty()) {
-		LogMessage(MessageType::Debug_Warning, _T("No reply in ParseResponse"));
+		LogMessage(MessageType::Debug_Warning, L"No reply in ParseResponse");
 		return;
 	}
 
@@ -383,13 +384,13 @@ void CFtpControlSocket::ParseResponse()
 			m_pendingReplies--;
 		}
 		else {
-			LogMessage(MessageType::Debug_Warning, _T("Unexpected reply, no reply was pending."));
+			LogMessage(MessageType::Debug_Warning, L"Unexpected reply, no reply was pending.");
 			return;
 		}
 	}
 
 	if (m_repliesToSkip) {
-		LogMessage(MessageType::Debug_Info, _T("Skipping reply after cancelled operation or keepalive command."));
+		LogMessage(MessageType::Debug_Info, L"Skipping reply after cancelled operation or keepalive command.");
 		if (m_Response[0] != '1') {
 			--m_repliesToSkip;
 		}
@@ -408,7 +409,7 @@ void CFtpControlSocket::ParseResponse()
 	}
 
 	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, _T("Skipping reply without active operation."));
+		LogMessage(MessageType::Debug_Info, L"Skipping reply without active operation.");
 		return;
 	}
 
@@ -431,6 +432,7 @@ void CFtpControlSocket::ParseResponse()
 		}
 	}
 }
+
 int CFtpControlSocket::GetReplyCode() const
 {
 	if (m_Response.empty()) {
@@ -501,251 +503,6 @@ int CFtpControlSocket::List(CServerPath path, std::wstring const& subDir, int fl
 	return FZ_REPLY_CONTINUE;
 }
 
-int CFtpControlSocket::ListSubcommandResult(int prevResult)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ListSubcommandResult()");
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, L"  state = %d", pData->opState);
-
-	if (pData->opState == list_waitcwd) {
-		if (prevResult != FZ_REPLY_OK) {
-			if ((prevResult & FZ_REPLY_LINKNOTDIR) == FZ_REPLY_LINKNOTDIR) {
-				ResetOperation(prevResult);
-				return FZ_REPLY_ERROR;
-			}
-
-			if (pData->fallback_to_current) {
-				// List current directory instead
-				pData->fallback_to_current = false;
-				pData->path_.clear();
-				pData->subDir_.clear();
-				int res = ChangeDir();
-				if (res != FZ_REPLY_OK) {
-					return res;
-				}
-			}
-			else {
-				ResetOperation(prevResult);
-				return FZ_REPLY_ERROR;
-			}
-		}
-		if (pData->path_.empty()) {
-			pData->path_ = m_CurrentPath;
-			assert(pData->subDir_.empty());
-			assert(!pData->path_.empty());
-		}
-
-		if (!pData->refresh) {
-			assert(!pData->pNextOpData);
-
-			// Do a cache lookup now that we know the correct directory
-			int hasUnsureEntries;
-			bool is_outdated = false;
-			bool found = engine_.GetDirectoryCache().DoesExist(*m_pCurrentServer, m_CurrentPath, hasUnsureEntries, is_outdated);
-			if (found) {
-				// We're done if listing is recent and has no outdated entries
-				if (!is_outdated && !hasUnsureEntries) {
-					SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
-
-					ResetOperation(FZ_REPLY_OK);
-
-					return FZ_REPLY_OK;
-				}
-			}
-		}
-
-		if (!pData->holdsLock) {
-			if (!TryLockCache(lock_list, m_CurrentPath)) {
-				pData->opState = list_waitlock;
-				pData->m_time_before_locking = fz::monotonic_clock::now();
-				return FZ_REPLY_WOULDBLOCK;
-			}
-		}
-
-		m_pTransferSocket.reset();
-		m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, TransferMode::list);
-
-		// Assume that a server supporting UTF-8 does not send EBCDIC listings.
-		listingEncoding::type encoding = listingEncoding::unknown;
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) == yes) {
-			encoding = listingEncoding::normal;
-		}
-
-		pData->m_pDirectoryListingParser = std::make_unique<CDirectoryListingParser>(this, *m_pCurrentServer, encoding);
-
-		pData->m_pDirectoryListingParser->SetTimezoneOffset(GetTimezoneOffset());
-		m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser.get();
-
-		engine_.transfer_status_.Init(-1, 0, true);
-
-		pData->opState = list_waittransfer;
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command) == yes) {
-			return Transfer(_T("MLSD"), pData);
-		}
-		else {
-			if (engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES)) {
-				capabilities cap = CServerCapabilities::GetCapability(*m_pCurrentServer, list_hidden_support);
-				if (cap == unknown) {
-					pData->viewHiddenCheck = true;
-				}
-				else if (cap == yes) {
-					pData->viewHidden = true;
-				}
-				else {
-					LogMessage(MessageType::Debug_Info, _("View hidden option set, but unsupported by server"));
-				}
-			}
-
-			if (pData->viewHidden) {
-				return Transfer(_T("LIST -a"), pData);
-			}
-			else {
-				return Transfer(_T("LIST"), pData);
-			}
-		}
-	}
-	else if (pData->opState == list_waittransfer) {
-		if (prevResult == FZ_REPLY_OK) {
-			CDirectoryListing listing = pData->m_pDirectoryListingParser->Parse(m_CurrentPath);
-
-			if (pData->viewHiddenCheck) {
-				if (!pData->viewHidden) {
-					// Repeat with LIST -a
-					pData->viewHidden = true;
-					pData->directoryListing = listing;
-
-					// Reset status
-					pData->transferEndReason = TransferEndReason::successful;
-					pData->tranferCommandSent = false;
-					m_pTransferSocket.reset();
-					m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, TransferMode::list);
-					pData->m_pDirectoryListingParser->Reset();
-					m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser.get();
-
-					return Transfer(_T("LIST -a"), pData);
-				}
-				else {
-					if (CheckInclusion(listing, pData->directoryListing)) {
-						LogMessage(MessageType::Debug_Info, _T("Server seems to support LIST -a"));
-						CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, yes);
-					}
-					else {
-						LogMessage(MessageType::Debug_Info, _T("Server does not seem to support LIST -a"));
-						CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, no);
-						listing = pData->directoryListing;
-					}
-				}
-			}
-
-			SetAlive();
-
-			int res = ListCheckTimezoneDetection(listing);
-			if (res != FZ_REPLY_OK) {
-				return res;
-			}
-
-			engine_.GetDirectoryCache().Store(listing, *m_pCurrentServer);
-
-			SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
-
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-		else {
-			if (pData->tranferCommandSent && IsMisleadingListResponse()) {
-				CDirectoryListing listing;
-				listing.path = m_CurrentPath;
-				listing.m_firstListTime = fz::monotonic_clock::now();
-
-				if (pData->viewHiddenCheck) {
-					if (pData->viewHidden) {
-						if (pData->directoryListing.GetCount()) {
-							// Less files with LIST -a
-							// Not supported
-							LogMessage(MessageType::Debug_Info, _T("Server does not seem to support LIST -a"));
-							CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, no);
-							listing = pData->directoryListing;
-						}
-						else {
-							LogMessage(MessageType::Debug_Info, _T("Server seems to support LIST -a"));
-							CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, yes);
-						}
-					}
-					else {
-						// Reset status
-						pData->transferEndReason = TransferEndReason::successful;
-						pData->tranferCommandSent = false;
-						m_pTransferSocket.reset();
-						m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, TransferMode::list);
-						pData->m_pDirectoryListingParser->Reset();
-						m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser.get();
-
-						// Repeat with LIST -a
-						pData->viewHidden = true;
-						pData->directoryListing = listing;
-						return Transfer(_T("LIST -a"), pData);
-					}
-				}
-
-				int res = ListCheckTimezoneDetection(listing);
-				if (res != FZ_REPLY_OK) {
-					return res;
-				}
-
-				engine_.GetDirectoryCache().Store(listing, *m_pCurrentServer);
-
-				SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
-
-				ResetOperation(FZ_REPLY_OK);
-				return FZ_REPLY_OK;
-			}
-			else {
-				if (pData->viewHiddenCheck) {
-					// If server does not support LIST -a, the server might reject this command
-					// straight away. In this case, back to the previously retrieved listing.
-					// On other failures like timeouts and such, return an error
-					if (pData->viewHidden &&
-						pData->transferEndReason == TransferEndReason::transfer_command_failure_immediate)
-					{
-						CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, no);
-
-						int res = ListCheckTimezoneDetection(pData->directoryListing);
-						if (res != FZ_REPLY_OK) {
-							return res;
-						}
-
-						engine_.GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
-
-						SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
-
-						ResetOperation(FZ_REPLY_OK);
-						return FZ_REPLY_OK;
-					}
-				}
-
-				if (prevResult & FZ_REPLY_ERROR) {
-					SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true);
-				}
-			}
-
-			ResetOperation(FZ_REPLY_ERROR);
-			return FZ_REPLY_ERROR;
-		}
-	}
-	else {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Wrong opState: %d"), pData->opState);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-}
-
 int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
 {
 	assert(m_pCurOpData);
@@ -774,7 +531,7 @@ int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
 
 int CFtpControlSocket::ResetOperation(int nErrorCode)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ResetOperation(%d)"), nErrorCode);
+ 	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ResetOperation(%d)", nErrorCode);
 
 	m_pTransferSocket.reset();
 	m_pIPResolver.reset();
@@ -805,7 +562,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 				// Download failed and a new local file was created before, but
 				// nothing has been written to it. Remove it again, so we don't
 				// leave a bunch of empty files all over the place.
-				LogMessage(MessageType::Debug_Verbose, _T("Deleting empty file"));
+				LogMessage(MessageType::Debug_Verbose, L"Deleting empty file");
 				fz::remove_file(fz::to_native(pData->localFile));
 			}
 		}
@@ -848,21 +605,21 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 
 int CFtpControlSocket::SendNextCommand()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::SendNextCommand()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::SendNextCommand()");
 	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Warning, _T("SendNextCommand called without active operation"));
+		LogMessage(MessageType::Debug_Warning, L"SendNextCommand called without active operation");
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	while (m_pCurOpData) {
 		if (m_pCurOpData->waitForAsyncRequest) {
-			LogMessage(MessageType::Debug_Info, _T("Waiting for async request, ignoring SendNextCommand..."));
+			LogMessage(MessageType::Debug_Info, L"Waiting for async request, ignoring SendNextCommand...");
 			return FZ_REPLY_WOULDBLOCK;
 		}
 
 		if (m_repliesToSkip) {
-			LogMessage(MessageType::Status, _T("Waiting for replies to skip before sending next command..."));
+			LogMessage(MessageType::Status, L"Waiting for replies to skip before sending next command...");
 			SetWait(true);
 			return FZ_REPLY_WOULDBLOCK;
 		}
@@ -923,7 +680,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 			}
 			else {
 				// Target unknown, check for the parent's target
-				target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
+				target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, L"");
 				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
 					target.clear();
 					state = cwd_cwd_subdir;
@@ -934,7 +691,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 			}
 		}
 		else {
-			target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
+			target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, L"");
 			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
 				return FZ_REPLY_OK;
 			}
@@ -962,7 +719,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 
 int CFtpControlSocket::ChangeDirSubcommandResult(int)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ChangeDirSubcommandResult()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ChangeDirSubcommandResult()");
 
 	return SendNextCommand();
 }
@@ -971,7 +728,7 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 									std::wstring const& remoteFile, bool download,
 									CFileTransferCommand::t_transferSettings const& transferSettings)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::FileTransfer()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::FileTransfer()");
 
 	if (localFile.empty()) {
 		if (!download) {
@@ -991,7 +748,7 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 		LogMessage(MessageType::Status, _("Starting upload of %s"), localFile);
 	}
 	if (m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("deleting nonzero pData"));
+		LogMessage(MessageType::Debug_Info, L"deleting nonzero pData");
 		delete m_pCurOpData;
 	}
 
@@ -1023,10 +780,10 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 
 int CFtpControlSocket::FileTransferParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("FileTransferParseResponse()"));
+	LogMessage(MessageType::Debug_Verbose, L"FileTransferParseResponse()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1043,9 +800,9 @@ int CFtpControlSocket::FileTransferParseResponse()
 	case filetransfer_size:
 		if (code != 2 && code != 3) {
 			if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == yes ||
-				fz::str_tolower_ascii(m_Response.substr(4)) == _T("file not found") ||
-				(fz::str_tolower_ascii(pData->remotePath.FormatFilename(pData->remoteFile)).find(_T("file not found")) == std::wstring::npos &&
-				 fz::str_tolower_ascii(m_Response).find(_T("file not found")) != std::wstring::npos))
+				fz::str_tolower_ascii(m_Response.substr(4)) == L"file not found" ||
+				(fz::str_tolower_ascii(pData->remotePath.FormatFilename(pData->remoteFile)).find(L"file not found") == std::wstring::npos &&
+				 fz::str_tolower_ascii(m_Response).find(L"file not found") != std::wstring::npos))
 			{
 				// Server supports SIZE command but command failed. Most likely MDTM will fail as well, so
 				// skip it.
@@ -1062,7 +819,7 @@ int CFtpControlSocket::FileTransferParseResponse()
 		}
 		else {
 			pData->opState = filetransfer_mdtm;
-			if (m_Response.substr(0, 4) == _T("213 ") && m_Response.size() > 4) {
+			if (m_Response.substr(0, 4) == L"213 " && m_Response.size() > 4) {
 				if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == unknown) {
 					CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
 				}
@@ -1079,13 +836,13 @@ int CFtpControlSocket::FileTransferParseResponse()
 				pData->remoteFileSize = size;
 			}
 			else {
-				LogMessage(MessageType::Debug_Info, _T("Invalid SIZE reply"));
+				LogMessage(MessageType::Debug_Info, L"Invalid SIZE reply");
 			}
 		}
 		break;
 	case filetransfer_mdtm:
 		pData->opState = filetransfer_resumetest;
-		if (m_Response.substr(0, 4) == _T("213 ") && m_Response.size() > 16) {
+		if (m_Response.substr(0, 4) == L"213 " && m_Response.size() > 16) {
 			pData->fileTime = fz::datetime(m_Response.substr(4), fz::datetime::utc);
 			if (!pData->fileTime.empty()) {
 				pData->fileTime += fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
@@ -1104,7 +861,7 @@ int CFtpControlSocket::FileTransferParseResponse()
 		ResetOperation(FZ_REPLY_OK);
 		return FZ_REPLY_OK;
 	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown op state"));
+		LogMessage(MessageType::Debug_Warning, L"Unknown op state");
 		error = true;
 		break;
 	}
@@ -1950,15 +1707,6 @@ int CFtpControlSocket::RemoveDirParseResponse()
 	return ResetOperation(FZ_REPLY_OK);
 }
 
-enum mkdStates
-{
-	mkd_init = 0,
-	mkd_findparent,
-	mkd_mkdsub,
-	mkd_cwdsub,
-	mkd_tryfull
-};
-
 int CFtpControlSocket::Mkdir(CServerPath const& path)
 {
 	/* Directory creation works like this: First find a parent directory into
@@ -2005,173 +1753,7 @@ int CFtpControlSocket::Mkdir(CServerPath const& path)
 
 	Push(pData);
 
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::MkdirParseResponse()
-{
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::MkdirParseResonse"));
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CMkdirOpData *pData = static_cast<CMkdirOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
-
-	int code = GetReplyCode();
-	bool error = false;
-	switch (pData->opState) {
-	case mkd_findparent:
-		if (code == 2 || code == 3) {
-			m_CurrentPath = pData->currentPath;
-			pData->opState = mkd_mkdsub;
-		}
-		else if (pData->currentPath == pData->commonParent) {
-			pData->opState = mkd_tryfull;
-		}
-		else if (pData->currentPath.HasParent()) {
-			const CServerPath& parent = pData->currentPath.GetParent();
-			pData->segments.push_back(pData->currentPath.GetLastSegment());
-			pData->currentPath = parent;
-		}
-		else {
-			pData->opState = mkd_tryfull;
-		}
-		break;
-	case mkd_mkdsub:
-		if (code != 2 && code != 3) {
-			// Don't fall back to using the full path if the error message
-			// is "already exists".
-			// Case 1: Full response a known "already exists" message.
-			// Case 2: Substrng of response contains "already exists". pData->path may not
-			//         contain this substring as the path might be returned in the reply.
-			// Case 3: Substrng of response contains "file exists". pData->path may not
-			//         contain this substring as the path might be returned in the reply.
-			std::wstring const response = fz::str_tolower_ascii(m_Response.substr(4));
-			std::wstring const path = fz::str_tolower_ascii(pData->path.GetPath());
-			if (response != _T("directory already exists") &&
-				(path.find(_T("already exists")) != std::wstring::npos ||
-				 response.find(_T("already exists")) == std::wstring::npos) &&
-				(path.find(_T("file exists")) != std::wstring::npos ||
-				 response.find(_T("file exists")) == std::wstring::npos)
-				)
-			{
-				pData->opState = mkd_tryfull;
-				break;
-			}
-		}
-
-		{
-			if (pData->segments.empty()) {
-				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("  pData->segments is empty"));
-				ResetOperation(FZ_REPLY_INTERNALERROR);
-				return FZ_REPLY_ERROR;
-			}
-
-			// If entry did exist and is a file instead of a directory, report failure.
-			int result = FZ_REPLY_OK;
-			if (code != 2 && code != 3) {
-				CDirentry entry;
-				bool tmp;
-				if (engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->currentPath, pData->segments.back(), tmp, tmp) && !entry.is_dir()) {
-					result = FZ_REPLY_ERROR;
-				}
-			}
-
-			engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.back(), true, CDirectoryCache::dir);
-			SendDirectoryListingNotification(pData->currentPath, false, false);
-
-			pData->currentPath.AddSegment(pData->segments.back());
-			pData->segments.pop_back();
-
-			if (pData->segments.empty() || result != FZ_REPLY_OK) {
-				ResetOperation(result);
-				return result;
-			}
-			else {
-				pData->opState = mkd_cwdsub;
-			}
-		}
-		break;
-	case mkd_cwdsub:
-		if (code == 2 || code == 3) {
-			m_CurrentPath = pData->currentPath;
-			pData->opState = mkd_mkdsub;
-		}
-		else {
-			pData->opState = mkd_tryfull;
-		}
-		break;
-	case mkd_tryfull:
-		if (code != 2 && code != 3) {
-			error = true;
-		}
-		else {
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-		break;
-	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("unknown op state: %d"), pData->opState);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (error) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::MkdirSend()
-{
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::MkdirSend"));
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CMkdirOpData *pData = static_cast<CMkdirOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
-
-	if (!pData->holdsLock) {
-		if (!TryLockCache(lock_mkdir, pData->path)) {
-			return FZ_REPLY_WOULDBLOCK;
-		}
-	}
-
-	bool res;
-	switch (pData->opState)
-	{
-	case mkd_findparent:
-	case mkd_cwdsub:
-		m_CurrentPath.clear();
-		res = SendCommand(_T("CWD ") + pData->currentPath.GetPath());
-		break;
-	case mkd_mkdsub:
-		res = SendCommand(_T("MKD ") + pData->segments.back());
-		break;
-	case mkd_tryfull:
-		res = SendCommand(_T("MKD ") + pData->path.GetPath());
-		break;
-	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("unknown op state: %d"), pData->opState);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!res) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
+	return FZ_REPLY_CONTINUE;
 }
 
 class CFtpRenameOpData final : public COpData
@@ -2196,9 +1778,9 @@ enum renameStates
 int CFtpControlSocket::Rename(CRenameCommand const& command)
 {
 	if (m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData not empty"));
+		LogMessage(MessageType::Debug_Warning, L"CFtpControlSocket::Rename(): m_pCurOpData not empty");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
+		return FZ_REPLY_INTERNALERROR;
 	}
 
 	LogMessage(MessageType::Status, _("Renaming '%s' to '%s'"), command.GetFromPath().FormatFilename(command.GetFromFile()), command.GetToPath().FormatFilename(command.GetToFile()));
@@ -2212,7 +1794,7 @@ int CFtpControlSocket::Rename(CRenameCommand const& command)
 		return res;
 	}
 
-	return SendNextCommand();
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFtpControlSocket::RenameParseResponse()
@@ -3127,38 +2709,25 @@ void CFtpControlSocket::StartKeepaliveTimer()
 	m_idleTimer = add_timer(fz::duration::from_seconds(30), true);
 }
 
-int CFtpControlSocket::ParseSubcommandResult(int prevResult, COpData const&)
+int CFtpControlSocket::ParseSubcommandResult(int prevResult, COpData const& opData)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ParseSubcommandResult(%d)"), prevResult);
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ParseSubcommandResult(%d)", prevResult);
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("ParseSubcommandResult called without active operation"));
+		LogMessage(MessageType::Debug_Warning, "ParseSubcommandResult called without active operation");
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	switch (m_pCurOpData->opId)
-	{
-	case Command::cwd:
-		return ChangeDirSubcommandResult(prevResult);
-	case Command::list:
-		return ListSubcommandResult(prevResult);
-	case Command::transfer:
-		return FileTransferSubcommandResult(prevResult);
-	case Command::del:
-		return DeleteSubcommandResult(prevResult);
-	case Command::removedir:
-		return RemoveDirSubcommandResult(prevResult);
-	case Command::rename:
-		return RenameSubcommandResult(prevResult);
-	case Command::chmod:
-		return ChmodSubcommandResult(prevResult);
-	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown opID (%d) in ParseSubcommandResult"), m_pCurOpData->opId);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		break;
+	int res = m_pCurOpData->SubcommandResult(prevResult, opData);
+	if (res == FZ_REPLY_WOULDBLOCK) {
+		return FZ_REPLY_WOULDBLOCK;
 	}
-
-	return FZ_REPLY_ERROR;
+	else if (res == FZ_REPLY_CONTINUE) {
+		return SendNextCommand();
+	}
+	else {
+		return ResetOperation(res);
+	}
 }
 
 void CFtpControlSocket::operator()(fz::event_base const& ev)
