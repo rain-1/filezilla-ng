@@ -24,6 +24,7 @@ libengine_a_SOURCES = \
 		ftp/list.cpp \
 		ftp/logon.cpp \
 		ftp/mkd.cpp \
+		ftp/rawtransfer.cpp \
 		httpcontrolsocket.cpp \
 		iothread.cpp \
 		local_path.cpp \
@@ -55,6 +56,7 @@ noinst_HEADERS = backend.h \
 		ftp/list.h \
 		ftp/logon.h \
 		ftp/mkd.h \
+		ftp/rawtransfer.h \
 		httpcontrolsocket.h \
 		iothread.h \
 		logging_private.h \

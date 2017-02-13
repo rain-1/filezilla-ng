@@ -13,7 +13,7 @@
 
 class CTransferSocket;
 class CFtpTransferOpData;
-class CRawTransferOpData;
+class CFtpRawTransferOpData;
 class CTlsSocket;
 
 class CFtpControlSocket final : public CRealControlSocket
@@ -72,8 +72,6 @@ protected:
 	virtual int ChmodSend();
 
 	virtual int Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData);
-	virtual int TransferParseResponse();
-	virtual int TransferSend();
 
 	virtual void OnConnect();
 	virtual void OnReceive();
@@ -93,10 +91,6 @@ protected:
 	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
 
 	int GetReplyCode() const;
-
-	std::wstring GetPassiveCommand(CRawTransferOpData& data);
-	bool ParsePasvResponse(CRawTransferOpData* pData);
-	bool ParseEpsvResponse(CRawTransferOpData* pData);
 
 	// Some servers are broken. Instead of an empty listing, some MVS servers
 	// for example they return "550 no members found"
@@ -153,6 +147,7 @@ protected:
 	friend class CFtpLogonOpData;
 	friend class CFtpMkdirOpData;
 	friend class CFtpOpData;
+	friend class CFtpRawTransferOpData;
 };
 
 class CIOThread;

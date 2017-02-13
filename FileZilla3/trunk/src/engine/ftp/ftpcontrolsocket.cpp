@@ -12,6 +12,7 @@
 #include "mkd.h"
 #include "pathcache.h"
 #include "proxy.h"
+#include "rawtransfer.h"
 #include "servercapabilities.h"
 #include "tlssocket.h"
 #include "transfersocket.h"
@@ -52,19 +53,6 @@ enum filetransferStates
 	filetransfer_mfmt
 };
 
-enum rawtransferStates
-{
-	rawtransfer_init = 0,
-	rawtransfer_type,
-	rawtransfer_port_pasv,
-	rawtransfer_rest,
-	rawtransfer_transfer,
-	rawtransfer_waitfinish,
-	rawtransfer_waittransferpre,
-	rawtransfer_waittransfer,
-	rawtransfer_waitsocket
-};
-
 class CFtpDeleteOpData final : public COpData
 {
 public:
@@ -85,26 +73,6 @@ public:
 
 	// Set to true if deletion of at least one file failed
 	bool m_deleteFailed{};
-};
-
-class CRawTransferOpData final : public COpData
-{
-public:
-	CRawTransferOpData()
-		: COpData(Command::rawtransfer)
-	{
-	}
-
-	std::wstring cmd;
-
-	CFtpTransferOpData* pOldData{};
-
-	bool bPasv{true};
-	bool bTriedPasv{};
-	bool bTriedActive{};
-
-	std::wstring host;
-	int port{};
 };
 
 CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
@@ -577,7 +545,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 	if (m_pCurOpData && m_pCurOpData->opId == Command::rawtransfer &&
 		nErrorCode != FZ_REPLY_OK)
 	{
-		CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
+		CFtpRawTransferOpData *pData = static_cast<CFtpRawTransferOpData *>(m_pCurOpData);
 		if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
 			if ((nErrorCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT) {
 				pData->pOldData->transferEndReason = TransferEndReason::timeout;
@@ -1310,7 +1278,7 @@ void CFtpControlSocket::TransferEnd()
 		SetAlive();
 	}
 
-	CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
+	CFtpRawTransferOpData *pData = static_cast<CFtpRawTransferOpData *>(m_pCurOpData);
 	if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
 		pData->pOldData->transferEndReason = reason;
 	}
@@ -2029,103 +1997,6 @@ bool CFtpControlSocket::IsMisleadingListResponse() const
 	return false;
 }
 
-bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
-{
-	size_t pos = m_Response.find(L"(|||");
-	if (pos == std::wstring::npos) {
-		return false;
-	}
-
-	size_t pos2 = m_Response.find(L"|)", pos + 4);
-	if (pos2 == std::wstring::npos || pos2 == pos + 4) {
-		return false;
-	}
-
-	std::wstring number = m_Response.substr(pos + 4, pos2 - pos - 4);
-	auto port = fz::to_integral<unsigned int>(number);
-
-	if (port == 0 || port > 65535) {
-		return false;
-	}
-
-	pData->port = port;
-
-	if (m_pProxyBackend) {
-		pData->host = m_pCurrentServer->GetHost();
-	}
-	else {
-		pData->host = fz::to_wstring(m_pSocket->GetPeerIP());
-	}
-	return true;
-}
-
-bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
-{
-	// Validate ip address
-	if (!m_pasvReplyRegex) {
-		std::wstring digit = _T("0*[0-9]{1,3}");
-		wchar_t const* const  dot = _T(",");
-		std::wstring exp = _T("( |\\()(") + digit + dot + digit + dot + digit + dot + digit + dot + digit + dot + digit + _T(")( |\\)|$)");
-		m_pasvReplyRegex = std::make_unique<std::wregex>(exp);
-	}
-
-	std::wsmatch m;
-	if (!std::regex_search(m_Response, m, *m_pasvReplyRegex)) {
-		return false;
-	}
-
-	pData->host = m[2].str();
-
-	size_t i = pData->host.rfind(',');
-	if (i == std::wstring::npos) {
-		return false;
-	}
-	auto number = fz::to_integral<unsigned int>(pData->host.substr(i + 1));
-	if (number > 255) {
-		return false;
-	}
-
-	pData->port = number; //get ls byte of server socket
-	pData->host = pData->host.substr(0, i);
-	i = pData->host.rfind(',');
-	if (i == std::string::npos) {
-		return false;
-	}
-	number = fz::to_integral<unsigned int>(pData->host.substr(i + 1));
-	if (number > 255) {
-		return false;
-	}
-
-	pData->port += 256 * number; //add ms byte of server socket
-	pData->host = pData-> host.substr(0, i);
-	fz::replace_substrings(pData->host, L",", L".");
-
-	if (m_pProxyBackend) {
-		// We do not have any information about the proxy's inner workings
-		return true;
-	}
-
-	std::wstring const peerIP = fz::to_wstring(m_pSocket->GetPeerIP());
-	if (!fz::is_routable_address(pData->host) && fz::is_routable_address(peerIP)) {
-		if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive) {
-			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Using server address instead."));
-			LogMessage(MessageType::Debug_Info, _T("  Reply: %s, peer: %s"), pData->host, peerIP);
-			pData->host = peerIP;
-		}
-		else {
-			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Passive mode failed."));
-			LogMessage(MessageType::Debug_Info, _T("  Reply: %s, peer: %s"), pData->host, peerIP);
-			return false;
-		}
-	}
-	else if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) == 2) {
-		// Always use server address
-		pData->host = peerIP;
-	}
-
-	return true;
-}
-
 int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 {
 	// Local IP should work. Only a complete moron would use IPv6
@@ -2215,10 +2086,10 @@ int CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* old
 	assert(oldData);
 	oldData->tranferCommandSent = false;
 
-	CRawTransferOpData *pData = new CRawTransferOpData;
+	CFtpRawTransferOpData *pData = new CFtpRawTransferOpData(*this);
 	Push(pData);
 
-	pData->cmd = cmd;
+	pData->cmd_ = cmd;
 	pData->pOldData = oldData;
 	pData->pOldData->transferEndReason = TransferEndReason::successful;
 
@@ -2255,290 +2126,7 @@ int CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* old
 		pData->opState = rawtransfer_type;
 	}
 
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::TransferParseResponse()
-{
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::TransferParseResponse()"));
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
-	if (pData->opState == rawtransfer_init) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	int code = GetReplyCode();
-
-	LogMessage(MessageType::Debug_Debug, _T("  code = %d"), code);
-	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
-
-	bool error = false;
-	switch (pData->opState)
-	{
-	case rawtransfer_type:
-		if (code != 2 && code != 3) {
-			error = true;
-		}
-		else {
-			pData->opState = rawtransfer_port_pasv;
-			m_lastTypeBinary = pData->pOldData->binary ? 1 : 0;
-		}
-		break;
-	case rawtransfer_port_pasv:
-		if (code != 2 && code != 3) {
-			if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
-				error = true;
-				break;
-			}
-
-			if (pData->bTriedPasv) {
-				if (pData->bTriedActive) {
-					error = true;
-				}
-				else {
-					pData->bPasv = false;
-				}
-			}
-			else {
-				pData->bPasv = true;
-			}
-			break;
-		}
-		if (pData->bPasv) {
-			bool parsed;
-			if (GetPassiveCommand(*pData) == _T("EPSV")) {
-				parsed = ParseEpsvResponse(pData);
-			}
-			else {
-				parsed = ParsePasvResponse(pData);
-			}
-			if (!parsed) {
-				if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
-					error = true;
-					break;
-				}
-
-				if (!pData->bTriedActive) {
-					pData->bPasv = false;
-				}
-				else {
-					error = true;
-				}
-				break;
-			}
-		}
-		if (pData->pOldData->resumeOffset > 0 || m_sentRestartOffset) {
-			pData->opState = rawtransfer_rest;
-		}
-		else {
-			pData->opState = rawtransfer_transfer;
-		}
-		break;
-	case rawtransfer_rest:
-		if (pData->pOldData->resumeOffset <= 0) {
-			m_sentRestartOffset = false;
-		}
-		if (pData->pOldData->resumeOffset > 0 && code != 2 && code != 3) {
-			error = true;
-		}
-		else {
-			pData->opState = rawtransfer_transfer;
-		}
-		break;
-	case rawtransfer_transfer:
-		if (code == 1) {
-			pData->opState = rawtransfer_waitfinish;
-		}
-		else if (code == 2 || code == 3) {
-			// A few broken servers omit the 1yz reply.
-			pData->opState = rawtransfer_waitsocket;
-		}
-		else {
-			if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
-				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure_immediate;
-			}
-			error = true;
-		}
-		break;
-	case rawtransfer_waittransferpre:
-		if (code == 1) {
-			pData->opState = rawtransfer_waittransfer;
-		}
-		else if (code == 2 || code == 3) {
-			// A few broken servers omit the 1yz reply.
-			if (pData->pOldData->transferEndReason != TransferEndReason::successful) {
-				error = true;
-				break;
-			}
-
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-		else {
-			if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
-				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure_immediate;
-			}
-			error = true;
-		}
-		break;
-	case rawtransfer_waitfinish:
-		if (code != 2 && code != 3) {
-			if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
-				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure;
-			}
-			error = true;
-		}
-		else {
-			pData->opState = rawtransfer_waitsocket;
-		}
-		break;
-	case rawtransfer_waittransfer:
-		if (code != 2 && code != 3) {
-			if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
-				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure;
-			}
-			error = true;
-		}
-		else {
-			if (pData->pOldData->transferEndReason != TransferEndReason::successful) {
-				error = true;
-				break;
-			}
-
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-		break;
-	case rawtransfer_waitsocket:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Extra reply received during rawtransfer_waitsocket."));
-		error = true;
-		break;
-	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown op state"));
-		error = true;
-	}
-	if (error) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::TransferSend()
-{
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::TransferSend()"));
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!m_pTransferSocket) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pTransferSocket"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
-
-	std::wstring cmd;
-	bool measureRTT = false;
-	switch (pData->opState)
-	{
-	case rawtransfer_type:
-		m_lastTypeBinary = -1;
-		if (pData->pOldData->binary) {
-			cmd = _T("TYPE I");
-		}
-		else {
-			cmd = _T("TYPE A");
-		}
-		measureRTT = true;
-		break;
-	case rawtransfer_port_pasv:
-		if (pData->bPasv) {
-			cmd = GetPassiveCommand(*pData);
-		}
-		else {
-			std::string address;
-			int res = GetExternalIPAddress(address);
-			if (res == FZ_REPLY_WOULDBLOCK) {
-				return res;
-			}
-			else if (res == FZ_REPLY_OK) {
-				std::wstring portArgument = m_pTransferSocket->SetupActiveTransfer(address);
-				if (!portArgument.empty()) {
-					pData->bTriedActive = true;
-					if (m_pSocket->GetAddressFamily() == CSocket::ipv6) {
-						cmd = _T("EPRT " + portArgument);
-					}
-					else {
-						cmd = _T("PORT " + portArgument);
-					}
-					break;
-				}
-			}
-
-			if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK) || pData->bTriedPasv) {
-				LogMessage(MessageType::Error, _("Failed to create listening socket for active mode transfer"));
-				ResetOperation(FZ_REPLY_ERROR);
-				return FZ_REPLY_ERROR;
-			}
-			LogMessage(MessageType::Debug_Warning, _("Failed to create listening socket for active mode transfer"));
-			pData->bTriedActive = true;
-			pData->bPasv = true;
-			cmd = GetPassiveCommand(*pData);
-		}
-		break;
-	case rawtransfer_rest:
-		cmd = _T("REST ") + std::to_wstring(pData->pOldData->resumeOffset);
-		if (pData->pOldData->resumeOffset > 0) {
-			m_sentRestartOffset = true;
-		}
-		measureRTT = true;
-		break;
-	case rawtransfer_transfer:
-		if (pData->bPasv) {
-			if (!m_pTransferSocket->SetupPassiveTransfer(pData->host, pData->port)) {
-				LogMessage(MessageType::Error, _("Could not establish connection to server"));
-				ResetOperation(FZ_REPLY_ERROR);
-				return FZ_REPLY_ERROR;
-			}
-		}
-
-		cmd = pData->cmd;
-		pData->pOldData->tranferCommandSent = true;
-
-		engine_.transfer_status_.SetStartTime();
-		m_pTransferSocket->SetActive();
-		break;
-	case rawtransfer_waitfinish:
-	case rawtransfer_waittransferpre:
-	case rawtransfer_waittransfer:
-	case rawtransfer_waitsocket:
-		break;
-	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("invalid opstate"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-	if (!cmd.empty()) {
-		if (!SendCommand(cmd, false, measureRTT)) {
-			return FZ_REPLY_ERROR;
-		}
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFtpControlSocket::FileTransferTestResumeCapability()
@@ -2741,25 +2329,4 @@ void CFtpControlSocket::operator()(fz::event_base const& ev)
 	}
 
 	CRealControlSocket::operator()(ev);
-}
-
-std::wstring CFtpControlSocket::GetPassiveCommand(CRawTransferOpData& data)
-{
-	std::wstring ret = L"PASV";
-
-	assert(data.bPasv);
-	data.bTriedPasv = true;
-
-	if (m_pProxyBackend) {
-		// We don't actually know the address family the other end of the proxy uses to reach the server. Hence prefer EPSV
-		// if the server supports it.
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, epsv_command) == yes) {
-			ret = L"EPSV";
-		}
-	}
-	else if (m_pSocket->GetAddressFamily() == CSocket::ipv6) {
-		// EPSV is mandatory for IPv6, don't check capabilities
-		ret = L"EPSV";
-	}
-	return ret;
 }
