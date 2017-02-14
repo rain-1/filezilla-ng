@@ -125,11 +125,8 @@ int CFtpChangeDirOpData::ParseResponse()
 			if (tryMkdOnFail) {
 				tryMkdOnFail = false;
 
-				// FIXME
-				int res = controlSocket_.Mkdir(path);
-				if (res != FZ_REPLY_OK) {
-					return res;
-				}
+				controlSocket_.Mkdir(path);
+				return FZ_REPLY_CONTINUE;
 			}
 			else {
 				error = true;

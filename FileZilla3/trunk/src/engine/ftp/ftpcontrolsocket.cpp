@@ -1137,7 +1137,8 @@ int CFtpControlSocket::FileTransferSend()
 		cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
 		pData->opState = filetransfer_waittransfer;
-		return Transfer(cmd, pData);
+		Transfer(cmd, pData);
+		return FZ_REPLY_CONTINUE;
 	case filetransfer_mfmt:
 		{
 			cmd = L"MFMT ";
@@ -1577,45 +1578,14 @@ int CFtpControlSocket::Mkdir(CServerPath const& path)
 	 * fails, try MKD with the full path directly.
 	 */
 
-	if (!m_pCurOpData) {
+	if (!m_pCurOpData && !path.empty()) {
 		LogMessage(MessageType::Status, _("Creating directory '%s'..."), path.GetPath());
 	}
 
 	CMkdirOpData *pData = new CMkdirOpData;
 	pData->path = path;
 
-	if (!m_CurrentPath.empty()) {
-		// Unless the server is broken, a directory already exists if current directory is a subdir of it.
-		if (m_CurrentPath == path || m_CurrentPath.IsSubdirOf(path, false)) {
-			delete pData;
-			return FZ_REPLY_OK;
-		}
-
-		if (m_CurrentPath.IsParentOf(path, false)) {
-			pData->commonParent = m_CurrentPath;
-		}
-		else {
-			pData->commonParent = path.GetCommonParent(m_CurrentPath);
-		}
-	}
-
-	if (!path.HasParent()) {
-		pData->opState = mkd_tryfull;
-	}
-	else {
-		pData->currentPath = path.GetParent();
-		pData->segments.push_back(path.GetLastSegment());
-
-		if (pData->currentPath == m_CurrentPath) {
-			pData->opState = mkd_mkdsub;
-		}
-		else {
-			pData->opState = mkd_findparent;
-		}
-	}
-
 	Push(pData);
-
 	return FZ_REPLY_CONTINUE;
 }
 
@@ -1937,7 +1907,7 @@ void CFtpControlSocket::OnExternalIPAddress()
 	SendNextCommand();
 }
 
-int CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData)
+void CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData)
 {
 	assert(oldData);
 	oldData->tranferCommandSent = false;
@@ -1981,8 +1951,6 @@ int CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* old
 	else {
 		pData->opState = rawtransfer_type;
 	}
-
-	return FZ_REPLY_CONTINUE;
 }
 
 int CFtpControlSocket::FileTransferTestResumeCapability()
@@ -2032,7 +2000,8 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 
 					m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, TransferMode::resumetest);
 
-					return Transfer(L"RETR " + pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath), pData);
+					Transfer(L"RETR " + pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath), pData);
+					return FZ_REPLY_CONTINUE;
 				}
 				break;
 			case no:
