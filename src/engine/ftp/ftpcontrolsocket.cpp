@@ -146,7 +146,7 @@ void CFtpControlSocket::OnReceive()
 				ParseLine(line);
 
 				// Abort if connection got closed
-				if (!m_pCurrentServer) {
+				if (!currentServer_) {
 					return;
 				}
 			}
@@ -175,15 +175,15 @@ void CFtpControlSocket::ParseFeat(std::wstring line)
 	std::wstring up = fz::str_toupper_ascii(line);
 
 	if (HasFeature(up, L"UTF8")) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
+		CServerCapabilities::SetCapability(currentServer_, utf8_command, yes);
 	}
 	else if (HasFeature(up, L"CLNT")) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, yes);
+		CServerCapabilities::SetCapability(currentServer_, clnt_command, yes);
 	}
 	else if (HasFeature(up, L"MLSD")) {
 		std::wstring facts;
 		// FEAT output for MLST overrides MLSD
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command, &facts) != yes || facts.empty()) {
+		if (CServerCapabilities::GetCapability(currentServer_, mlsd_command, &facts) != yes || facts.empty()) {
 			if (line.size() > 5) {
 				facts = line.substr(5);
 			}
@@ -191,10 +191,10 @@ void CFtpControlSocket::ParseFeat(std::wstring line)
 				facts.clear();
 			}
 		}
-		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, facts);
+		CServerCapabilities::SetCapability(currentServer_, mlsd_command, yes, facts);
 
 		// MLST/MLSD specs require use of UTC
-		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
+		CServerCapabilities::SetCapability(currentServer_, timezone_offset, no);
 	}
 	else if (HasFeature(up, L"MLST")) {
 		std::wstring facts;
@@ -203,35 +203,35 @@ void CFtpControlSocket::ParseFeat(std::wstring line)
 		}
 		// FEAT output for MLST overrides MLSD
 		if (facts.empty()) {
-			if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command, &facts) != yes) {
+			if (CServerCapabilities::GetCapability(currentServer_, mlsd_command, &facts) != yes) {
 				facts.clear();
 			}
 		}
-		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, facts);
+		CServerCapabilities::SetCapability(currentServer_, mlsd_command, yes, facts);
 
 		// MLST/MLSD specs require use of UTC
-		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
+		CServerCapabilities::SetCapability(currentServer_, timezone_offset, no);
 	}
 	else if (HasFeature(up, L"MODE Z")) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, mode_z_support, yes);
+		CServerCapabilities::SetCapability(currentServer_, mode_z_support, yes);
 	}
 	else if (HasFeature(up, L"MFMT")) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, mfmt_command, yes);
+		CServerCapabilities::SetCapability(currentServer_, mfmt_command, yes);
 	}
 	else if (HasFeature(up, L"MDTM")) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, mdtm_command, yes);
+		CServerCapabilities::SetCapability(currentServer_, mdtm_command, yes);
 	}
 	else if (HasFeature(up, L"SIZE")) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
+		CServerCapabilities::SetCapability(currentServer_, size_command, yes);
 	}
 	else if (HasFeature(up, L"TVFS")) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, yes);
+		CServerCapabilities::SetCapability(currentServer_, tvfs_support, yes);
 	}
 	else if (HasFeature(up, L"REST STREAM")) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, rest_stream, yes);
+		CServerCapabilities::SetCapability(currentServer_, rest_stream, yes);
 	}
 	else if (HasFeature(up, L"EPSV")) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, epsv_command, yes);
+		CServerCapabilities::SetCapability(currentServer_, epsv_command, yes);
 	}
 }
 
@@ -302,7 +302,7 @@ void CFtpControlSocket::OnConnect()
 
 	SetAlive();
 
-	if (m_pCurrentServer->GetProtocol() == FTPS) {
+	if (currentServer_.GetProtocol() == FTPS) {
 		if (!m_pTlsSocket) {
 			LogMessage(MessageType::Status, _("Connection established, initializing TLS..."));
 
@@ -328,7 +328,7 @@ void CFtpControlSocket::OnConnect()
 			LogMessage(MessageType::Status, _("TLS connection established, waiting for welcome message..."));
 		}
 	}
-	else if ((m_pCurrentServer->GetProtocol() == FTPES || m_pCurrentServer->GetProtocol() == FTP) && m_pTlsSocket) {
+	else if ((currentServer_.GetProtocol() == FTPES || currentServer_.GetProtocol() == FTP) && m_pTlsSocket) {
 		LogMessage(MessageType::Status, _("TLS connection established."));
 		SendNextCommand();
 		return;
@@ -477,9 +477,9 @@ int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
 
 	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
 
-	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown) {
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) != yes) {
-			CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
+	if (CServerCapabilities::GetCapability(currentServer_, timezone_offset) == unknown) {
+		if (CServerCapabilities::GetCapability(currentServer_, mdtm_command) != yes) {
+			CServerCapabilities::SetCapability(currentServer_, timezone_offset, no);
 		}
 		else {
 			const int count = listing.GetCount();
@@ -621,7 +621,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 	cwdStates state = cwd_init;
 
 	if (path.GetType() == DEFAULT) {
-		path.SetType(m_pCurrentServer->GetType());
+		path.SetType(currentServer_.GetType());
 	}
 
 	CServerPath target;
@@ -636,7 +636,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 	else {
 		if (!subDir.empty()) {
 			// Check if the target is in cache already
-			target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, subDir);
+			target = engine_.GetPathCache().Lookup(currentServer_, path, subDir);
 			if (!target.empty()) {
 				if (m_CurrentPath == target) {
 					return FZ_REPLY_OK;
@@ -648,7 +648,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 			}
 			else {
 				// Target unknown, check for the parent's target
-				target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, L"");
+				target = engine_.GetPathCache().Lookup(currentServer_, path, L"");
 				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
 					target.clear();
 					state = cwd_cwd_subdir;
@@ -659,7 +659,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool lin
 			}
 		}
 		else {
-			target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, L"");
+			target = engine_.GetPathCache().Lookup(currentServer_, path, L"");
 			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
 				return FZ_REPLY_OK;
 			}
@@ -735,7 +735,7 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 	pData->opState = filetransfer_waitcwd;
 
 	if (pData->remotePath.GetType() == DEFAULT) {
-		pData->remotePath.SetType(m_pCurrentServer->GetType());
+		pData->remotePath.SetType(currentServer_.GetType());
 	}
 
 	int res = ChangeDir(pData->remotePath);
@@ -767,7 +767,7 @@ int CFtpControlSocket::FileTransferParseResponse()
 	{
 	case filetransfer_size:
 		if (code != 2 && code != 3) {
-			if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == yes ||
+			if (CServerCapabilities::GetCapability(currentServer_, size_command) == yes ||
 				fz::str_tolower_ascii(m_Response.substr(4)) == L"file not found" ||
 				(fz::str_tolower_ascii(pData->remotePath.FormatFilename(pData->remoteFile)).find(L"file not found") == std::wstring::npos &&
 				 fz::str_tolower_ascii(m_Response).find(L"file not found") != std::wstring::npos))
@@ -788,8 +788,8 @@ int CFtpControlSocket::FileTransferParseResponse()
 		else {
 			pData->opState = filetransfer_mdtm;
 			if (m_Response.substr(0, 4) == L"213 " && m_Response.size() > 4) {
-				if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == unknown) {
-					CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
+				if (CServerCapabilities::GetCapability(currentServer_, size_command) == unknown) {
+					CServerCapabilities::SetCapability(currentServer_, size_command, yes);
 				}
 				std::wstring str = m_Response.substr(4);
 				int64_t size = 0;
@@ -813,7 +813,7 @@ int CFtpControlSocket::FileTransferParseResponse()
 		if (m_Response.substr(0, 4) == L"213 " && m_Response.size() > 16) {
 			pData->fileTime = fz::datetime(m_Response.substr(4), fz::datetime::utc);
 			if (!pData->fileTime.empty()) {
-				pData->fileTime += fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+				pData->fileTime += fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 			}
 		}
 
@@ -859,13 +859,13 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist)
 					pData->opState = filetransfer_waitlist;
 				else if (pData->download &&
 					engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-					CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
+					CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes)
 				{
 					pData->opState = filetransfer_mdtm;
 				}
@@ -887,7 +887,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 						if (pData->download &&
 							!entry.has_time() &&
 							engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
+							CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes)
 						{
 							pData->opState = filetransfer_mdtm;
 						}
@@ -925,14 +925,14 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist) {
 					pData->opState = filetransfer_size;
 				}
 				else if (pData->download &&
 					engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-					CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
+					CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes)
 				{
 					pData->opState = filetransfer_mdtm;
 				}
@@ -950,7 +950,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 					if (pData->download &&
 						!entry.has_time() &&
 						engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-						CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
+						CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes)
 					{
 						pData->opState = filetransfer_mdtm;
 					}
@@ -977,7 +977,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 	else if (pData->opState == filetransfer_waittransfer) {
 		if (prevResult == FZ_REPLY_OK && engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS)) {
 			if (!pData->download &&
-				CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
+				CServerCapabilities::GetCapability(currentServer_, mfmt_command) == yes)
 			{
 				fz::datetime mtime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile));
 				if (!mtime.empty()) {
@@ -1001,11 +1001,11 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 		if (prevResult != FZ_REPLY_OK) {
 			if (pData->transferEndReason == TransferEndReason::failed_resumetest) {
 				if (pData->localFileSize > (1ll << 32)) {
-					CServerCapabilities::SetCapability(*m_pCurrentServer, resume4GBbug, yes);
+					CServerCapabilities::SetCapability(currentServer_, resume4GBbug, yes);
 					LogMessage(MessageType::Error, _("Server does not support resume of files > 4GB."));
 				}
 				else {
-					CServerCapabilities::SetCapability(*m_pCurrentServer, resume2GBbug, yes);
+					CServerCapabilities::SetCapability(currentServer_, resume2GBbug, yes);
 					LogMessage(MessageType::Error, _("Server does not support resume of files > 2GB."));
 				}
 
@@ -1018,10 +1018,10 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			return prevResult;
 		}
 		if (pData->localFileSize > (1ll << 32)) {
-			CServerCapabilities::SetCapability(*m_pCurrentServer, resume4GBbug, no);
+			CServerCapabilities::SetCapability(currentServer_, resume4GBbug, no);
 		}
 		else {
-			CServerCapabilities::SetCapability(*m_pCurrentServer, resume2GBbug, no);
+			CServerCapabilities::SetCapability(currentServer_, resume2GBbug, no);
 		}
 
 		pData->opState = filetransfer_transfer;
@@ -1155,7 +1155,7 @@ int CFtpControlSocket::FileTransferSend()
 							LogMessage(MessageType::Debug_Info, _T("No need to resume, remote file size matches local file size."));
 
 							if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
+								CServerCapabilities::GetCapability(currentServer_, mfmt_command) == yes)
 							{
 								fz::datetime mtime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile));
 								if (!mtime.empty()) {
@@ -1184,7 +1184,7 @@ int CFtpControlSocket::FileTransferSend()
 					startOffset = 0;
 				}
 
-				if (CServerCapabilities::GetCapability(*m_pCurrentServer, rest_stream) == yes) {
+				if (CServerCapabilities::GetCapability(currentServer_, rest_stream) == yes) {
 					// Use REST + STOR if resuming
 					pData->resumeOffset = startOffset;
 				}
@@ -1215,7 +1215,7 @@ int CFtpControlSocket::FileTransferSend()
 			cmd = _T("RETR ");
 		}
 		else if (pData->resume) {
-			if (CServerCapabilities::GetCapability(*m_pCurrentServer, rest_stream) == yes) {
+			if (CServerCapabilities::GetCapability(currentServer_, rest_stream) == yes) {
 				cmd = _T("STOR "); // In this case REST gets sent since resume offset was set earlier
 			}
 			else {
@@ -1234,7 +1234,7 @@ int CFtpControlSocket::FileTransferSend()
 		{
 			cmd = _T("MFMT ");
 			fz::datetime t = pData->fileTime;
-			t -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+			t -= fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 			cmd += t.format(_T("%Y%m%d%H%M%S "), fz::datetime::utc);
 			cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
@@ -1338,7 +1338,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				ResetOperation(FZ_REPLY_CANCELED);
 				return false;
 			}
-			m_pCurrentServer->SetUser(m_pCurrentServer->GetUser(), pInteractiveLoginNotification->server.GetPass());
+			currentServer_.SetUser(currentServer_.GetUser(), pInteractiveLoginNotification->server.GetPass());
 			pData->gotPassword = true;
 			SendNextCommand();
 		}
@@ -1405,8 +1405,8 @@ int CFtpControlSocket::RawCommandSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	engine_.GetDirectoryCache().InvalidateServer(*m_pCurrentServer);
-	engine_.GetPathCache().InvalidateServer(*m_pCurrentServer);
+	engine_.GetDirectoryCache().InvalidateServer(currentServer_);
+	engine_.GetPathCache().InvalidateServer(currentServer_);
 	m_CurrentPath.clear();
 
 	m_lastTypeBinary = -1;
@@ -1503,7 +1503,7 @@ int CFtpControlSocket::DeleteSend()
 		pData->m_time = fz::datetime::now();
 	}
 
-	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
+	engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->path, file);
 
 	if (!SendCommand(L"DELE " + filename)) {
 		return FZ_REPLY_ERROR;
@@ -1531,7 +1531,7 @@ int CFtpControlSocket::DeleteParseResponse()
 	else {
 		std::wstring const& file = pData->files.front();
 
-		engine_.GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
+		engine_.GetDirectoryCache().RemoveFile(currentServer_, pData->path, file);
 
 		fz::datetime now = fz::datetime::now();
 		if (!pData->m_time.empty() && (now - pData->m_time).get_seconds() >= 1) {
@@ -1626,16 +1626,16 @@ int CFtpControlSocket::RemoveDirSend()
 
 	CFtpRemoveDirOpData *pData = static_cast<CFtpRemoveDirOpData *>(m_pCurOpData);
 
-	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, pData->subDir);
+	engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->path, pData->subDir);
 
-	CServerPath path(engine_.GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir));
+	CServerPath path(engine_.GetPathCache().Lookup(currentServer_, pData->path, pData->subDir));
 	if (path.empty()) {
 		path = pData->path;
 		path.AddSegment(pData->subDir);
 	}
 	engine_.InvalidateCurrentWorkingDirs(path);
 
-	engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
+	engine_.GetPathCache().InvalidatePath(currentServer_, pData->path, pData->subDir);
 
 	if (pData->omitPath) {
 		if (!SendCommand(_T("RMD ") + pData->subDir)) {
@@ -1669,7 +1669,7 @@ int CFtpControlSocket::RemoveDirParseResponse()
 		return FZ_REPLY_ERROR;
 	}
 
-	engine_.GetDirectoryCache().RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, engine_.GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir));
+	engine_.GetDirectoryCache().RemoveDir(currentServer_, pData->path, pData->subDir, engine_.GetPathCache().Lookup(currentServer_, pData->path, pData->subDir));
 	SendDirectoryListingNotification(pData->path, false, false);
 
 	return ResetOperation(FZ_REPLY_OK);
@@ -1786,7 +1786,7 @@ int CFtpControlSocket::RenameParseResponse()
 	else {
 		const CServerPath& fromPath = pData->m_cmd.GetFromPath();
 		const CServerPath& toPath = pData->m_cmd.GetToPath();
-		engine_.GetDirectoryCache().Rename(*m_pCurrentServer, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
+		engine_.GetDirectoryCache().Rename(currentServer_, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
 
 		SendDirectoryListingNotification(fromPath, false, false);
 		if (fromPath != toPath) {
@@ -1837,18 +1837,18 @@ int CFtpControlSocket::RenameSend()
 		break;
 	case rename_rnto:
 		{
-			engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-			engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
+			engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
+			engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
-			CServerPath path(engine_.GetPathCache().Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile()));
+			CServerPath path(engine_.GetPathCache().Lookup(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile()));
 			if (path.empty()) {
 				path = pData->m_cmd.GetFromPath();
 				path.AddSegment(pData->m_cmd.GetFromFile());
 			}
 			engine_.InvalidateCurrentWorkingDirs(path);
 
-			engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-			engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
+			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
+			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
 			res = SendCommand(_T("RNTO ") + pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
 			break;
@@ -1922,7 +1922,7 @@ int CFtpControlSocket::ChmodParseResponse()
 		return FZ_REPLY_ERROR;
 	}
 
-	engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
+	engine_.GetDirectoryCache().UpdateFile(currentServer_, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
 
 	ResetOperation(FZ_REPLY_OK);
 	return FZ_REPLY_OK;
@@ -2103,7 +2103,7 @@ int CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* old
 		pData->bTriedActive = true;
 	}
 	else {
-		switch (m_pCurrentServer->GetPasvMode())
+		switch (currentServer_.GetPasvMode())
 		{
 		case MODE_PASSIVE:
 			pData->bPasv = true;
@@ -2147,7 +2147,7 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 
 	for (int i = 0; i < 2; ++i) {
 		if (pData->localFileSize >= (1ll << (i ? 31 : 32))) {
-			switch (CServerCapabilities::GetCapability(*GetCurrentServer(), i ? resume2GBbug : resume4GBbug))
+			switch (CServerCapabilities::GetCapability(currentServer_, i ? resume2GBbug : resume4GBbug))
 			{
 			case yes:
 				if (pData->remoteFileSize == pData->localFileSize) {

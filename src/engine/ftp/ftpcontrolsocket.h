@@ -161,8 +161,8 @@ public:
 
 	}
 
-	CServer* currentServer() {
-		return controlSocket_.m_pCurrentServer;
+	CServer & currentServer() {
+		return controlSocket_.currentServer_;
 	}
 
 	template<typename...Args>

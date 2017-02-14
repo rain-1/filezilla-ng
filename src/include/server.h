@@ -4,7 +4,7 @@
 enum ServerProtocol
 {
 	// Never change any existing values or user's saved sites will become
-	// corrupted.
+	// corruptedf
 	UNKNOWN = -1,
 	FTP, // FTP, attempts AUTH TLS
 	SFTP,
@@ -75,9 +75,11 @@ class CServer final
 public:
 
 	// No error checking is done in the constructors
-	CServer();
+	CServer() = default;
 	CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int);
 	CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int, std::wstring const& user, std::wstring const& pass = std::wstring(), std::wstring const& account = std::wstring());
+
+	void clear();
 
 	void SetType(ServerType type);
 
@@ -159,26 +161,24 @@ public:
 	explicit operator bool() const { return !m_host.empty(); }
 
 protected:
-	void Initialize();
-
-	ServerProtocol m_protocol;
-	ServerType m_type;
+	ServerProtocol m_protocol{UNKNOWN};
+	ServerType m_type{DEFAULT};
 	std::wstring m_host;
-	unsigned int m_port;
-	LogonType m_logonType;
+	unsigned int m_port{21};
+	LogonType m_logonType{ANONYMOUS};
 	std::wstring m_user;
 	std::wstring m_pass;
 	std::wstring m_account;
 	std::wstring m_keyFile;
-	int m_timezoneOffset;
-	PasvMode m_pasvMode;
-	int m_maximumMultipleConnections;
-	CharsetEncoding m_encodingType;
+	int m_timezoneOffset{};
+	PasvMode m_pasvMode{MODE_DEFAULT};
+	int m_maximumMultipleConnections{};
+	CharsetEncoding m_encodingType{ENCODING_AUTO};
 	std::wstring m_customEncoding;
 	std::wstring m_name;
 
 	std::vector<std::wstring> m_postLoginCommands;
-	bool m_bypassProxy;
+	bool m_bypassProxy{};
 };
 
 #endif

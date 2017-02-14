@@ -109,7 +109,7 @@ int CFtpChangeDirOpData::ParseResponse()
 			controlSocket_.m_CurrentPath = path;
 
 			if (target.empty()) {
-				controlSocket_.engine_.GetPathCache().Store(*currentServer(), controlSocket_.m_CurrentPath, path);
+				controlSocket_.engine_.GetPathCache().Store(currentServer(), controlSocket_.m_CurrentPath, path);
 			}
 
 			if (subDir.empty()) {
@@ -121,7 +121,7 @@ int CFtpChangeDirOpData::ParseResponse()
 		}
 		else if (controlSocket_.ParsePwdReply(response, false, path)) {
 			if (target.empty()) {
-				controlSocket_.engine_.GetPathCache().Store(*currentServer(), controlSocket_.m_CurrentPath, path);
+				controlSocket_.engine_.GetPathCache().Store(currentServer(), controlSocket_.m_CurrentPath, path);
 			}
 			if (subDir.empty()) {
 				return FZ_REPLY_OK;
@@ -173,7 +173,7 @@ int CFtpChangeDirOpData::ParseResponse()
 					controlSocket_.m_CurrentPath = assumedPath;
 
 					if (target.empty()) {
-						controlSocket_.engine_.GetPathCache().Store(*currentServer(), controlSocket_.m_CurrentPath, path, subDir);
+						controlSocket_.engine_.GetPathCache().Store(currentServer(), controlSocket_.m_CurrentPath, path, subDir);
 					}
 
 					return FZ_REPLY_OK;
@@ -185,7 +185,7 @@ int CFtpChangeDirOpData::ParseResponse()
 			}
 			else if (controlSocket_.ParsePwdReply(response, false, assumedPath)) {
 				if (target.empty()) {
-					controlSocket_.engine_.GetPathCache().Store(*currentServer(), controlSocket_.m_CurrentPath, path, subDir);
+					controlSocket_.engine_.GetPathCache().Store(currentServer(), controlSocket_.m_CurrentPath, path, subDir);
 				}
 
 				return FZ_REPLY_OK;

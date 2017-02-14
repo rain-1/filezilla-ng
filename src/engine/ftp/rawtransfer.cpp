@@ -289,7 +289,7 @@ bool CFtpRawTransferOpData::ParseEpsvResponse()
 	port = port;
 
 	if (controlSocket_.m_pProxyBackend) {
-		host = currentServer()->GetHost();
+		host = currentServer().GetHost();
 	}
 	else {
 		host = fz::to_wstring(controlSocket_.m_pSocket->GetPeerIP());
@@ -374,7 +374,7 @@ std::wstring CFtpRawTransferOpData::GetPassiveCommand()
 	if (controlSocket_.m_pProxyBackend) {
 		// We don't actually know the address family the other end of the proxy uses to reach the server. Hence prefer EPSV
 		// if the server supports it.
-		if (CServerCapabilities::GetCapability(*currentServer(), epsv_command) == yes) {
+		if (CServerCapabilities::GetCapability(currentServer(), epsv_command) == yes) {
 			ret = L"EPSV";
 		}
 	}

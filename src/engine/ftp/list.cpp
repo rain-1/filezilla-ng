@@ -15,7 +15,7 @@ CFtpListOpData::CFtpListOpData(CFtpControlSocket & controlSocket, CServerPath co
 	opState = list_waitcwd;
 
 	if (path_.GetType() == DEFAULT) {
-		path_.SetType(currentServer()->GetType());
+		path_.SetType(currentServer().GetType());
 	}
 	refresh = (flags & LIST_FLAG_REFRESH) != 0;
 	fallback_to_current = !path.empty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
@@ -41,7 +41,7 @@ int CFtpListOpData::Send()
 		CDirectoryListing listing;
 		bool is_outdated = false;
 		assert(subDir_.empty()); // Did do ChangeDir before trying to lock
-		bool found = controlSocket_.engine_.GetDirectoryCache().Lookup(listing, *currentServer(), path_, true, is_outdated);
+		bool found = controlSocket_.engine_.GetDirectoryCache().Lookup(listing, currentServer(), path_, true, is_outdated);
 		if (found && !is_outdated && !listing.get_unsure_flags() &&
 		    listing.m_firstListTime >= m_time_before_locking)
 		{
@@ -83,14 +83,14 @@ int CFtpListOpData::ParseResponse()
 	std::wstring const& response = controlSocket_.m_Response;
 
 	// First condition prevents problems with concurrent MDTM
-	if (CServerCapabilities::GetCapability(*currentServer(), timezone_offset) == unknown &&
+	if (CServerCapabilities::GetCapability(currentServer(), timezone_offset) == unknown &&
 	    response.substr(0, 4) == L"213 " && response.size() > 16)
 	{
 		fz::datetime date(response.substr(4), fz::datetime::utc);
 		if (!date.empty()) {
 			assert(directoryListing[mdtm_index].has_date());
 			fz::datetime listTime = directoryListing[mdtm_index].time;
-			listTime -= fz::duration::from_minutes(currentServer()->GetTimezoneOffset());
+			listTime -= fz::duration::from_minutes(currentServer().GetTimezoneOffset());
 
 			int serveroffset = static_cast<int>((date - listTime).get_seconds());
 			if (!directoryListing[mdtm_index].has_seconds()) {
@@ -112,18 +112,18 @@ int CFtpListOpData::ParseResponse()
 
 			// TODO: Correct cached listings
 
-			CServerCapabilities::SetCapability(*currentServer(), timezone_offset, yes, serveroffset);
+			CServerCapabilities::SetCapability(currentServer(), timezone_offset, yes, serveroffset);
 		}
 		else {
-			CServerCapabilities::SetCapability(*currentServer(), mdtm_command, no);
-			CServerCapabilities::SetCapability(*currentServer(), timezone_offset, no);
+			CServerCapabilities::SetCapability(currentServer(), mdtm_command, no);
+			CServerCapabilities::SetCapability(currentServer(), timezone_offset, no);
 		}
 	}
 	else {
-		CServerCapabilities::SetCapability(*currentServer(), timezone_offset, no);
+		CServerCapabilities::SetCapability(currentServer(), timezone_offset, no);
 	}
 
-	controlSocket_.engine_.GetDirectoryCache().Store(directoryListing, *currentServer());
+	controlSocket_.engine_.GetDirectoryCache().Store(directoryListing, currentServer());
 
 	controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
 
@@ -169,7 +169,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 			// Do a cache lookup now that we know the correct directory
 			int hasUnsureEntries;
 			bool is_outdated = false;
-			bool found = controlSocket_.engine_.GetDirectoryCache().DoesExist(*currentServer(), controlSocket_.m_CurrentPath, hasUnsureEntries, is_outdated);
+			bool found = controlSocket_.engine_.GetDirectoryCache().DoesExist(currentServer(), controlSocket_.m_CurrentPath, hasUnsureEntries, is_outdated);
 			if (found) {
 				// We're done if listing is recent and has no outdated entries
 				if (!is_outdated && !hasUnsureEntries) {
@@ -193,11 +193,11 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 
 		// Assume that a server supporting UTF-8 does not send EBCDIC listings.
 		listingEncoding::type encoding = listingEncoding::unknown;
-		if (CServerCapabilities::GetCapability(*currentServer(), utf8_command) == yes) {
+		if (CServerCapabilities::GetCapability(currentServer(), utf8_command) == yes) {
 			encoding = listingEncoding::normal;
 		}
 
-		m_pDirectoryListingParser = std::make_unique<CDirectoryListingParser>(&controlSocket_, *currentServer(), encoding);
+		m_pDirectoryListingParser = std::make_unique<CDirectoryListingParser>(&controlSocket_, currentServer(), encoding);
 
 		m_pDirectoryListingParser->SetTimezoneOffset(controlSocket_.GetTimezoneOffset());
 		controlSocket_.m_pTransferSocket->m_pDirectoryListingParser = m_pDirectoryListingParser.get();
@@ -205,12 +205,12 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 		controlSocket_.engine_.transfer_status_.Init(-1, 0, true);
 
 		opState = list_waittransfer;
-		if (CServerCapabilities::GetCapability(*currentServer(), mlsd_command) == yes) {
+		if (CServerCapabilities::GetCapability(currentServer(), mlsd_command) == yes) {
 			return controlSocket_.Transfer(L"MLSD", this);
 		}
 		else {
 			if (controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES)) {
-				capabilities cap = CServerCapabilities::GetCapability(*currentServer(), list_hidden_support);
+				capabilities cap = CServerCapabilities::GetCapability(currentServer(), list_hidden_support);
 				if (cap == unknown) {
 					viewHiddenCheck = true;
 				}
@@ -253,11 +253,11 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 				else {
 					if (controlSocket_.CheckInclusion(listing, directoryListing)) {
 						LogMessage(MessageType::Debug_Info, L"Server seems to support LIST -a");
-						CServerCapabilities::SetCapability(*currentServer(), list_hidden_support, yes);
+						CServerCapabilities::SetCapability(currentServer(), list_hidden_support, yes);
 					}
 					else {
 						LogMessage(MessageType::Debug_Info, L"Server does not seem to support LIST -a");
-						CServerCapabilities::SetCapability(*currentServer(), list_hidden_support, no);
+						CServerCapabilities::SetCapability(currentServer(), list_hidden_support, no);
 						listing = directoryListing;
 					}
 				}
@@ -270,7 +270,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 				return res;
 			}
 
-			controlSocket_.engine_.GetDirectoryCache().Store(listing, *currentServer());
+			controlSocket_.engine_.GetDirectoryCache().Store(listing, currentServer());
 
 			controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
 
@@ -288,12 +288,12 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 							// Less files with LIST -a
 							// Not supported
 							LogMessage(MessageType::Debug_Info, L"Server does not seem to support LIST -a");
-							CServerCapabilities::SetCapability(*currentServer(), list_hidden_support, no);
+							CServerCapabilities::SetCapability(currentServer(), list_hidden_support, no);
 							listing = directoryListing;
 						}
 						else {
 							LogMessage(MessageType::Debug_Info, L"Server seems to support LIST -a");
-							CServerCapabilities::SetCapability(*currentServer(), list_hidden_support, yes);
+							CServerCapabilities::SetCapability(currentServer(), list_hidden_support, yes);
 						}
 					}
 					else {
@@ -317,7 +317,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 					return res;
 				}
 
-				controlSocket_.engine_.GetDirectoryCache().Store(listing, *currentServer());
+				controlSocket_.engine_.GetDirectoryCache().Store(listing, currentServer());
 
 				controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
 
@@ -331,14 +331,14 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 					if (viewHidden &&
 						transferEndReason == TransferEndReason::transfer_command_failure_immediate)
 					{
-						CServerCapabilities::SetCapability(*currentServer(), list_hidden_support, no);
+						CServerCapabilities::SetCapability(currentServer(), list_hidden_support, no);
 
 						int res = controlSocket_.ListCheckTimezoneDetection(directoryListing);
 						if (res != FZ_REPLY_OK) {
 							return res;
 						}
 
-						controlSocket_.engine_.GetDirectoryCache().Store(directoryListing, *currentServer());
+						controlSocket_.engine_.GetDirectoryCache().Store(directoryListing, currentServer());
 
 						controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
 

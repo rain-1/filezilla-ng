@@ -328,16 +328,16 @@ int CFileZillaEnginePrivate::List(CListCommand const& command)
 	bool const avoid = (command.GetFlags() & LIST_FLAG_AVOID) != 0;
 
 	if (!refresh && !command.GetPath().empty()) {
-		const CServer* pServer = m_pControlSocket->GetCurrentServer();
-		if (pServer) {
-			CServerPath path(path_cache_.Lookup(*pServer, command.GetPath(), command.GetSubDir()));
+		CServer const& server =m_pControlSocket->GetCurrentServer();
+		if (server) {
+			CServerPath path(path_cache_.Lookup(server, command.GetPath(), command.GetSubDir()));
 			if (path.empty() && command.GetSubDir().empty()) {
 				path = command.GetPath();
 			}
 			if (!path.empty()) {
 				CDirectoryListing *pListing = new CDirectoryListing;
 				bool is_outdated = false;
-				bool found = directory_cache_.Lookup(*pListing, *pServer, path, true, is_outdated);
+				bool found = directory_cache_.Lookup(*pListing, server, path, true, is_outdated);
 				if (found && !is_outdated) {
 					if (pListing->get_unsure_flags()) {
 						flags |= LIST_FLAG_REFRESH;
@@ -526,19 +526,22 @@ void CFileZillaEnginePrivate::InvalidateCurrentWorkingDirs(const CServerPath& pa
 	fz::scoped_lock lock(mutex_);
 
 	assert(m_pControlSocket);
-	const CServer* const pOwnServer = m_pControlSocket->GetCurrentServer();
-	assert(pOwnServer);
+	CServer const& ownServer  = m_pControlSocket->GetCurrentServer();
+	assert(ownServer);
 
 	for (auto & engine : m_engineList) {
-		if (!engine || engine == this)
+		if (!engine || engine == this) {
 			continue;
+		}
 
-		if (!engine->m_pControlSocket)
+		if (!engine->m_pControlSocket) {
 			continue;
+		}
 
-		const CServer* const pServer = engine->m_pControlSocket->GetCurrentServer();
-		if (!pServer || *pServer != *pOwnServer)
+		CServer const& server = engine->m_pControlSocket->GetCurrentServer();
+		if (server != ownServer) {
 			continue;
+		}
 
 		engine->m_pControlSocket->InvalidateCurrentWorkingDir(path);
 	}
@@ -787,7 +790,7 @@ int CFileZillaEnginePrivate::CacheLookup(const CServerPath& path, CDirectoryList
 	assert(m_pControlSocket->GetCurrentServer());
 
 	bool is_outdated = false;
-	if (!directory_cache_.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated)) {
+	if (!directory_cache_.Lookup(listing, m_pControlSocket->GetCurrentServer(), path, true, is_outdated)) {
 		return FZ_REPLY_ERROR;
 	}
 

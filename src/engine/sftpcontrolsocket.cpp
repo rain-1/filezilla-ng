@@ -281,16 +281,15 @@ int CSftpControlSocket::Connect(const CServer &server)
 		m_useUTF8 = true;
 	}
 
-	delete m_pCurrentServer;
-	m_pCurrentServer = new CServer(server);
+	currentServer_ = server;
 
 	CSftpConnectOpData* pData = new CSftpConnectOpData;
 	Push(pData);
 
 	pData->opState = connect_init;
 
-	if (m_pCurrentServer->GetLogonType() == KEY) {
-		pData->keyfiles_ = fz::strtok(m_pCurrentServer->GetKeyFile(), L"\r\n");
+	if (currentServer_.GetLogonType() == KEY) {
+		pData->keyfiles_ = fz::strtok(currentServer_.GetKeyFile(), L"\r\n");
 	}
 	else {
 		pData->keyfiles_ = fz::strtok(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES), L"\r\n");
@@ -368,7 +367,7 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, std::wstring const
 			DoClose(FZ_REPLY_INTERNALERROR);
 			return FZ_REPLY_ERROR;
 		}
-		if (engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE) && !m_pCurrentServer->GetBypassProxy()) {
+		if (engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE) && !currentServer_.GetBypassProxy()) {
 			pData->opState = connect_proxy;
 		}
 		else if (pData->keyfile_ != pData->keyfiles_.cend()) {
@@ -464,7 +463,7 @@ int CSftpControlSocket::ConnectSend()
 		res = SendCommand(L"keyfile \"" + *(pData->keyfile_++) + L"\"");
 		break;
 	case connect_open:
-		res = SendCommand(fz::sprintf(L"open \"%s@%s\" %d", m_pCurrentServer->GetUser(), m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort()));
+		res = SendCommand(fz::sprintf(L"open \"%s@%s\" %d", currentServer_.GetUser(), currentServer_.GetHost(), currentServer_.GetPort()));
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown op state: %d"), pData->opState);
@@ -482,7 +481,7 @@ int CSftpControlSocket::ConnectSend()
 
 void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 {
-	if (!m_pCurrentServer) {
+	if (!currentServer_) {
 		return;
 	}
 
@@ -583,7 +582,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 			std::wstring const challengeIdentifier = m_requestPreamble + _T("\n") + m_requestInstruction + _T("\n") + message.text[0];
 
 			CInteractiveLoginNotification::type t = CInteractiveLoginNotification::interactive;
-			if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_requestPreamble == _T("SSH key passphrase")) {
+			if (currentServer_.GetLogonType() == INTERACTIVE || m_requestPreamble == _T("SSH key passphrase")) {
 				if (m_requestPreamble == _T("SSH key passphrase")) {
 					t = CInteractiveLoginNotification::keyfile;
 				}
@@ -599,7 +598,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 					challenge += message.text[0];
 				}
 				CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(t, challenge, pData->lastChallenge == challengeIdentifier);
-				pNotification->server = *m_pCurrentServer;
+				pNotification->server = currentServer_;
 
 				SendAsyncRequest(pNotification);
 			}
@@ -616,7 +615,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 					return;
 				}
 
-				std::wstring const pass = m_pCurrentServer->GetPass();
+				std::wstring const pass = currentServer_.GetPass();
 				std::wstring show = _T("Pass: ");
 				show.append(pass.size(), '*');
 				SendCommand(pass, show);
@@ -754,7 +753,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 	case reqId_hostkeyChanged:
 		{
 			if (GetCurrentCommandId() != Command::connect ||
-				!m_pCurrentServer)
+				!currentServer_)
 			{
 				LogMessage(MessageType::Debug_Info, _T("SetAsyncRequestReply called to wrong time"));
 				return false;
@@ -793,7 +792,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 				return false;
 			}
 			std::wstring const pass = pInteractiveLoginNotification->server.GetPass();
-			m_pCurrentServer->SetUser(m_pCurrentServer->GetUser(), pass);
+			currentServer_.SetUser(currentServer_.GetUser(), pass);
 			std::wstring show = L"Pass: ";
 			show.append(pass.size(), '*');
 			SendCommand(pass, show);
@@ -859,7 +858,7 @@ int CSftpControlSocket::List(CServerPath path, std::wstring const& subDir, int f
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("List called from other command"));
 	}
 
-	if (!m_pCurrentServer) {
+	if (!currentServer_) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurrenServer == 0"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -871,7 +870,7 @@ int CSftpControlSocket::List(CServerPath path, std::wstring const& subDir, int f
 	pData->opState = list_waitcwd;
 
 	if (path.GetType() == DEFAULT) {
-		path.SetType(m_pCurrentServer->GetType());
+		path.SetType(currentServer_.GetType());
 	}
 	pData->path = path;
 	pData->subDir = subDir;
@@ -916,7 +915,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, std::wstring const& r
 		}
 
 		pData->directoryListing = pData->pParser->Parse(m_CurrentPath);
-		engine_.GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
+		engine_.GetDirectoryCache().Store(pData->directoryListing, currentServer_);
 		SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
 
 		ResetOperation(FZ_REPLY_OK);
@@ -1024,7 +1023,7 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 
 		int hasUnsureEntries;
 		bool is_outdated = false;
-		bool found = engine_.GetDirectoryCache().DoesExist(*m_pCurrentServer, m_CurrentPath, hasUnsureEntries, is_outdated);
+		bool found = engine_.GetDirectoryCache().DoesExist(currentServer_, m_CurrentPath, hasUnsureEntries, is_outdated);
 		if (found) {
 			// We're done if listins is recent and has no outdated entries
 			if (!is_outdated && !hasUnsureEntries) {
@@ -1074,7 +1073,7 @@ int CSftpControlSocket::ListSend()
 		CDirectoryListing listing;
 		bool is_outdated = false;
 		assert(pData->subDir.empty()); // Did do ChangeDir before trying to lock
-		bool found = engine_.GetDirectoryCache().Lookup(listing, *m_pCurrentServer, pData->path, true, is_outdated);
+		bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, pData->path, true, is_outdated);
 		if (found && !is_outdated && !listing.get_unsure_flags() &&
 			listing.m_firstListTime >= pData->m_time_before_locking)
 		{
@@ -1089,7 +1088,7 @@ int CSftpControlSocket::ListSend()
 		return ListSubcommandResult(FZ_REPLY_OK);
 	}
 	else if (pData->opState == list_list) {
-		pData->pParser = std::make_unique<CDirectoryListingParser>(this, *m_pCurrentServer, listingEncoding::unknown);
+		pData->pParser = std::make_unique<CDirectoryListingParser>(this, currentServer_, listingEncoding::unknown);
 		if (!SendCommand(_T("ls"))) {
 			return FZ_REPLY_ERROR;
 		}
@@ -1118,7 +1117,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool li
 	cwdStates state = cwd_init;
 
 	if (path.GetType() == DEFAULT) {
-		path.SetType(m_pCurrentServer->GetType());
+		path.SetType(currentServer_.GetType());
 	}
 
 	CServerPath target;
@@ -1133,7 +1132,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool li
 	else {
 		if (!subDir.empty()) {
 			// Check if the target is in cache already
-			target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, subDir);
+			target = engine_.GetPathCache().Lookup(currentServer_, path, subDir);
 			if (!target.empty()) {
 				if (m_CurrentPath == target) {
 					return FZ_REPLY_OK;
@@ -1145,7 +1144,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool li
 			}
 			else {
 				// Target unknown, check for the parent's target
-				target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
+				target = engine_.GetPathCache().Lookup(currentServer_, path, _T(""));
 				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
 					target.clear();
 					state = cwd_cwd_subdir;
@@ -1156,7 +1155,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool li
 			}
 		}
 		else {
-			target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
+			target = engine_.GetPathCache().Lookup(currentServer_, path, _T(""));
 			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
 				return FZ_REPLY_OK;
 			}
@@ -1225,7 +1224,7 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, std::wstring con
 			error = true;
 		}
 		else if (ParsePwdReply(reply)) {
-			engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
+			engine_.GetPathCache().Store(currentServer_, m_CurrentPath, pData->path);
 
 			if (pData->subDir.empty()) {
 				ResetOperation(FZ_REPLY_OK);
@@ -1251,7 +1250,7 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, std::wstring con
 			}
 		}
 		else if (ParsePwdReply(reply)) {
-			engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
+			engine_.GetPathCache().Store(currentServer_, m_CurrentPath, pData->path, pData->subDir);
 
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
@@ -1478,7 +1477,7 @@ int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	pData->opState = filetransfer_waitcwd;
 
 	if (pData->remotePath.GetType() == DEFAULT)
-		pData->remotePath.SetType(m_pCurrentServer->GetType());
+		pData->remotePath.SetType(currentServer_.GetType());
 
 	int res = ChangeDir(pData->remotePath);
 	if (res != FZ_REPLY_OK)
@@ -1504,7 +1503,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist)
 					pData->opState = filetransfer_waitlist;
@@ -1560,7 +1559,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist)
 					pData->opState = filetransfer_mtime;
@@ -1683,7 +1682,7 @@ int CSftpControlSocket::FileTransferSend()
 		std::wstring quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
 
 		fz::datetime t = pData->fileTime;
-		t -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+		t -= fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 
 		// Y2K38
 		time_t ticks = t.get_time_t();
@@ -1746,7 +1745,7 @@ int CSftpControlSocket::FileTransferParseResponse(int result, std::wstring const
 				fz::datetime fileTime = fz::datetime(seconds, fz::datetime::seconds);
 				if (!fileTime.empty()) {
 					pData->fileTime = fileTime;
-					pData->fileTime += fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+					pData->fileTime += fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 				}
 			}
 		}
@@ -1906,7 +1905,7 @@ int CSftpControlSocket::MkdirParseResponse(bool successful, std::wstring const&)
 				ResetOperation(FZ_REPLY_INTERNALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.back(), true, CDirectoryCache::dir);
+			engine_.GetDirectoryCache().UpdateFile(currentServer_, pData->currentPath, pData->segments.back(), true, CDirectoryCache::dir);
 			SendDirectoryListingNotification(pData->currentPath, false, false);
 
 			pData->currentPath.AddSegment(pData->segments.back());
@@ -2040,7 +2039,7 @@ int CSftpControlSocket::DeleteParseResponse(bool successful, std::wstring const&
 	else {
 		std::wstring const& file = pData->files.front();
 
-		engine_.GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
+		engine_.GetDirectoryCache().RemoveFile(currentServer_, pData->path, file);
 
 		auto const now = fz::datetime::now();
 		if (!pData->m_time.empty() && (now - pData->m_time).get_seconds() >= 1) {
@@ -2089,7 +2088,7 @@ int CSftpControlSocket::DeleteSend()
 		pData->m_time = fz::datetime::now();
 	}
 
-	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
+	engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->path, file);
 
 	if (!SendCommand(L"rm " + WildcardEscape(QuoteFilename(filename)),
 			  L"rm " + QuoteFilename(filename)))
@@ -2122,7 +2121,7 @@ int CSftpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& s
 	pData->path = path;
 	pData->subDir = subDir;
 
-	CServerPath fullPath = engine_.GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir);
+	CServerPath fullPath = engine_.GetPathCache().Lookup(currentServer_, pData->path, pData->subDir);
 	if (fullPath.empty()) {
 		fullPath = pData->path;
 
@@ -2132,9 +2131,9 @@ int CSftpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& s
 		}
 	}
 
-	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, path, subDir);
+	engine_.GetDirectoryCache().InvalidateFile(currentServer_, path, subDir);
 
-	engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
+	engine_.GetPathCache().InvalidatePath(currentServer_, pData->path, pData->subDir);
 
 	engine_.InvalidateCurrentWorkingDirs(fullPath);
 	std::wstring quotedFilename = QuoteFilename(fullPath.GetPath());
@@ -2168,7 +2167,7 @@ int CSftpControlSocket::RemoveDirParseResponse(bool successful, std::wstring con
 		return FZ_REPLY_ERROR;
 	}
 
-	engine_.GetDirectoryCache().RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, engine_.GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir));
+	engine_.GetDirectoryCache().RemoveDir(currentServer_, pData->path, pData->subDir, engine_.GetPathCache().Lookup(currentServer_, pData->path, pData->subDir));
 	SendDirectoryListingNotification(pData->path, false, false);
 
 	return ResetOperation(FZ_REPLY_OK);
@@ -2268,7 +2267,7 @@ int CSftpControlSocket::ChmodSend()
 	{
 	case chmod_chmod:
 		{
-			engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
+			engine_.GetDirectoryCache().UpdateFile(currentServer_, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
 
 			std::wstring quotedFilename = QuoteFilename(pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
 
@@ -2347,7 +2346,7 @@ int CSftpControlSocket::RenameParseResponse(bool successful, std::wstring const&
 	const CServerPath& fromPath = pData->m_cmd.GetFromPath();
 	const CServerPath& toPath = pData->m_cmd.GetToPath();
 
-	engine_.GetDirectoryCache().Rename(*m_pCurrentServer, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
+	engine_.GetDirectoryCache().Rename(currentServer_, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
 
 	SendDirectoryListingNotification(fromPath, false, false);
 	if (fromPath != toPath) {
@@ -2393,18 +2392,18 @@ int CSftpControlSocket::RenameSend()
 	case rename_rename:
 		{
 			bool wasDir = false;
-			engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile(), &wasDir);
-			engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
+			engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile(), &wasDir);
+			engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
 			std::wstring fromQuoted = QuoteFilename(pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
 			std::wstring toQuoted = QuoteFilename(pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
 
-			engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-			engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
+			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
+			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
 			if (wasDir) {
 				// Need to invalidate current working directories
-				CServerPath path = engine_.GetPathCache().Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
+				CServerPath path = engine_.GetPathCache().Lookup(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
 				if (path.empty()) {
 					path = pData->m_cmd.GetFromPath();
 					path.AddSegment(pData->m_cmd.GetFromFile());
