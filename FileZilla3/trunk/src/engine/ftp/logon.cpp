@@ -117,13 +117,13 @@ int CFtpLogonOpData::Send()
 			switch (cmd.type)
 			{
 			case loginCommandType::user:
-				if (currentServer()->GetLogonType() == INTERACTIVE) {
+				if (currentServer().GetLogonType() == INTERACTIVE) {
 					waitChallenge = true;
 					challenge.clear();
 				}
 
 				if (cmd.command.empty()) {
-					res = controlSocket_.SendCommand(L"USER " + currentServer()->GetUser());
+					res = controlSocket_.SendCommand(L"USER " + currentServer().GetUser());
 				}
 				else {
 					res = controlSocket_.SendCommand(cmd.command);
@@ -132,7 +132,7 @@ int CFtpLogonOpData::Send()
 			case loginCommandType::pass:
 				if (!challenge.empty()) {
 					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(CInteractiveLoginNotification::interactive, challenge, false);
-					pNotification->server = *currentServer();
+					pNotification->server = currentServer();
 					challenge.clear();
 
 					controlSocket_.SendAsyncRequest(pNotification);
@@ -141,11 +141,11 @@ int CFtpLogonOpData::Send()
 				}
 
 				if (cmd.command.empty()) {
-					res = controlSocket_.SendCommand(L"PASS " + currentServer()->GetPass(), true);
+					res = controlSocket_.SendCommand(L"PASS " + currentServer().GetPass(), true);
 				}
 				else {
 					std::wstring c = cmd.command;
-					std::wstring pass = currentServer()->GetPass();
+					std::wstring pass = currentServer().GetPass();
 					fz::replace_substrings(pass, L"%", L"%%");
 					fz::replace_substrings(c, L"%p", pass);
 					fz::replace_substrings(c, L"%%", L"%");
@@ -154,7 +154,7 @@ int CFtpLogonOpData::Send()
 				break;
 			case loginCommandType::account:
 				if (cmd.command.empty()) {
-					res = controlSocket_.SendCommand(L"ACCT " + currentServer()->GetAccount());
+					res = controlSocket_.SendCommand(L"ACCT " + currentServer().GetAccount());
 				}
 				else {
 					res = controlSocket_.SendCommand(cmd.command);
@@ -196,16 +196,16 @@ int CFtpLogonOpData::Send()
 		res = controlSocket_.SendCommand(L"PROT P");
 		break;
 	case LOGON_CUSTOMCOMMANDS:
-		if (customCommandIndex >= currentServer()->GetPostLoginCommands().size()) {
+		if (customCommandIndex >= currentServer().GetPostLoginCommands().size()) {
 			LogMessage(MessageType::Debug_Warning, L"pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()");
 			return FZ_REPLY_INTERNALERROR | FZ_REPLY_DISCONNECTED;
 		}
-		res = controlSocket_.SendCommand(currentServer()->GetPostLoginCommands()[customCommandIndex]);
+		res = controlSocket_.SendCommand(currentServer().GetPostLoginCommands()[customCommandIndex]);
 		break;
 	case LOGON_OPTSMLST:
 	    {
 		    std::wstring args;
-			CServerCapabilities::GetCapability(*currentServer(), opst_mlst_command, &args);
+			CServerCapabilities::GetCapability(currentServer(), opst_mlst_command, &args);
 			res = controlSocket_.SendCommand(L"OPTS MLST " + args);
 	    }
 		break;
@@ -234,9 +234,9 @@ int CFtpLogonOpData::ParseResponse()
 	         opState == LOGON_AUTH_SSL)
 	{
 		if (code != 2 && code != 3) {
-			CServerCapabilities::SetCapability(*currentServer(), (opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, no);
+			CServerCapabilities::SetCapability(currentServer(), (opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, no);
 			if (opState == LOGON_AUTH_SSL) {
-				if (currentServer()->GetProtocol() == FTP) {
+				if (currentServer().GetProtocol() == FTP) {
 					// For now. In future make TLS mandatory unless explicitly requested INSECURE_FTP as protocol
 					LogMessage(MessageType::Status, _("Insecure server, it does not support FTP over TLS."));
 					neededCommands[LOGON_PBSZ] = 0;
@@ -251,7 +251,7 @@ int CFtpLogonOpData::ParseResponse()
 			}
 		}
 		else {
-			CServerCapabilities::SetCapability(*currentServer(), (opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, yes);
+			CServerCapabilities::SetCapability(currentServer(), (opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, yes);
 
 			LogMessage(MessageType::Status, _("Initializing TLS..."));
 
@@ -282,27 +282,27 @@ int CFtpLogonOpData::ParseResponse()
 
 		if (code != 2 && code != 3) {
 			if (cmd.type == loginCommandType::user || cmd.type == loginCommandType::pass) {
-				auto const user = currentServer()->GetUser();
+				auto const user = currentServer().GetUser();
 				if (!user.empty() && (user.front() == ' ' || user.back() == ' ')) {
 					LogMessage(MessageType::Status, _("Check your login credentials. The entered username starts or ends with a space character."));
 				}
-				auto const pw = currentServer()->GetPass();
+				auto const pw = currentServer().GetPass();
 				if (!pw.empty() && (pw.front() == ' ' || pw.back() == ' ')) {
 					LogMessage(MessageType::Status, _("Check your login credentials. The entered password starts or ends with a space character."));
 				}
 			}
 
-			if (currentServer()->GetEncodingType() == ENCODING_AUTO && controlSocket_.m_useUTF8) {
+			if (currentServer().GetEncodingType() == ENCODING_AUTO && controlSocket_.m_useUTF8) {
 				// Fall back to local charset for the case that the server might not
 				// support UTF8 and the login data contains non-ascii characters.
 				bool asciiOnly = true;
-				if (!fz::str_is_ascii(currentServer()->GetUser())) {
+				if (!fz::str_is_ascii(currentServer().GetUser())) {
 					asciiOnly = false;
 				}
-				if (!fz::str_is_ascii(currentServer()->GetPass())) {
+				if (!fz::str_is_ascii(currentServer().GetPass())) {
 					asciiOnly = false;
 				}
-				if (!fz::str_is_ascii(currentServer()->GetAccount())) {
+				if (!fz::str_is_ascii(currentServer().GetAccount())) {
 					asciiOnly = false;
 				}
 				if (!asciiOnly) {
@@ -342,7 +342,7 @@ int CFtpLogonOpData::ParseResponse()
 		}
 		else if (code == 3 && loginSequence.empty()) {
 			LogMessage(MessageType::Error, _("Login sequence fully executed yet not logged in, aborting."));
-			if (cmd.type == loginCommandType::pass && currentServer()->GetAccount().empty()) {
+			if (cmd.type == loginCommandType::pass && currentServer().GetAccount().empty()) {
 				LogMessage(MessageType::Error, _("Server might require an account. Try specifying an account using the Site Manager"));
 			}
 			return FZ_REPLY_CRITICALERROR | FZ_REPLY_DISCONNECTED;
@@ -356,23 +356,23 @@ int CFtpLogonOpData::ParseResponse()
 	}
 	else if (opState == LOGON_SYST) {
 		if (code == 2) {
-			CServerCapabilities::SetCapability(*currentServer(), syst_command, yes, response.substr(4));
+			CServerCapabilities::SetCapability(currentServer(), syst_command, yes, response.substr(4));
 		}
 		else {
-			CServerCapabilities::SetCapability(*currentServer(), syst_command, no);
+			CServerCapabilities::SetCapability(currentServer(), syst_command, no);
 		}
 
-		if (currentServer()->GetType() == DEFAULT && code == 2) {
+		if (currentServer().GetType() == DEFAULT && code == 2) {
 			if (response.size() > 7 && response.substr(3, 4) == L" MVS") {
-				currentServer()->SetType(MVS);
+				currentServer().SetType(MVS);
 			}
 			else if (response.size() > 12 && fz::str_toupper_ascii(response.substr(3, 9)) == L" NONSTOP ") {
-				currentServer()->SetType(HPNONSTOP);
+				currentServer().SetType(HPNONSTOP);
 			}
 
 			if (!controlSocket_.m_MultilineResponseLines.empty() && fz::str_tolower_ascii(controlSocket_.m_MultilineResponseLines.front().substr(4, 4)) == L"z/vm") {
-				CServerCapabilities::SetCapability(*currentServer(), syst_command, yes, controlSocket_.m_MultilineResponseLines.front().substr(4) + L" " + response.substr(4));
-				currentServer()->SetType(ZVM);
+				CServerCapabilities::SetCapability(currentServer(), syst_command, yes, controlSocket_.m_MultilineResponseLines.front().substr(4) + L" " + response.substr(4));
+				currentServer().SetType(ZVM);
 			}
 		}
 
@@ -383,24 +383,24 @@ int CFtpLogonOpData::ParseResponse()
 	}
 	else if (opState == LOGON_FEAT) {
 		if (code == 2) {
-			CServerCapabilities::SetCapability(*currentServer(), feat_command, yes);
-			if (CServerCapabilities::GetCapability(*currentServer(), utf8_command) != yes) {
-				CServerCapabilities::SetCapability(*currentServer(), utf8_command, no);
+			CServerCapabilities::SetCapability(currentServer(), feat_command, yes);
+			if (CServerCapabilities::GetCapability(currentServer(), utf8_command) != yes) {
+				CServerCapabilities::SetCapability(currentServer(), utf8_command, no);
 			}
-			if (CServerCapabilities::GetCapability(*currentServer(), clnt_command) != yes) {
-				CServerCapabilities::SetCapability(*currentServer(), clnt_command, no);
+			if (CServerCapabilities::GetCapability(currentServer(), clnt_command) != yes) {
+				CServerCapabilities::SetCapability(currentServer(), clnt_command, no);
 			}
 		}
 		else {
-			CServerCapabilities::SetCapability(*currentServer(), feat_command, no);
+			CServerCapabilities::SetCapability(currentServer(), feat_command, no);
 		}
 
-		if (CServerCapabilities::GetCapability(*currentServer(), tvfs_support) != yes) {
-			CServerCapabilities::SetCapability(*currentServer(), tvfs_support, no);
+		if (CServerCapabilities::GetCapability(currentServer(), tvfs_support) != yes) {
+			CServerCapabilities::SetCapability(currentServer(), tvfs_support, no);
 		}
 
-		const CharsetEncoding encoding = currentServer()->GetEncodingType();
-		if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*currentServer(), utf8_command) != yes) {
+		const CharsetEncoding encoding = currentServer().GetEncodingType();
+		if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(currentServer(), utf8_command) != yes) {
 			LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
 			controlSocket_.m_useUTF8 = false;
 		}
@@ -412,7 +412,7 @@ int CFtpLogonOpData::ParseResponse()
 	}
 	else if (opState == LOGON_CUSTOMCOMMANDS) {
 		++customCommandIndex;
-		if (customCommandIndex < currentServer()->GetPostLoginCommands().size()) {
+		if (customCommandIndex < currentServer().GetPostLoginCommands().size()) {
 			return FZ_REPLY_CONTINUE;
 		}
 	}
@@ -431,20 +431,20 @@ int CFtpLogonOpData::ParseResponse()
 		}
 		else if (opState == LOGON_SYST) {
 			std::wstring system;
-			capabilities cap = CServerCapabilities::GetCapability(*currentServer(), syst_command, &system);
+			capabilities cap = CServerCapabilities::GetCapability(currentServer(), syst_command, &system);
 			if (cap == unknown) {
 				break;
 			}
 			else if (cap == yes) {
-				if (currentServer()->GetType() == DEFAULT) {
+				if (currentServer().GetType() == DEFAULT) {
 					if (system.substr(0, 3) == L"MVS") {
-						currentServer()->SetType(MVS);
+						currentServer().SetType(MVS);
 					}
 					else if (fz::str_toupper_ascii(system.substr(0, 4)) == L"Z/VM") {
-						currentServer()->SetType(ZVM);
+						currentServer().SetType(ZVM);
 					}
 					else if (fz::str_toupper_ascii(system.substr(0, 8)) == L"NONSTOP ") {
-						currentServer()->SetType(HPNONSTOP);
+						currentServer().SetType(HPNONSTOP);
 					}
 				}
 
@@ -455,12 +455,12 @@ int CFtpLogonOpData::ParseResponse()
 			}
 		}
 		else if (opState == LOGON_FEAT) {
-			capabilities cap = CServerCapabilities::GetCapability(*currentServer(), feat_command);
+			capabilities cap = CServerCapabilities::GetCapability(currentServer(), feat_command);
 			if (cap == unknown) {
 				break;
 			}
-			const CharsetEncoding encoding = currentServer()->GetEncodingType();
-			if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*currentServer(), utf8_command) != yes) {
+			const CharsetEncoding encoding = currentServer().GetEncodingType();
+			if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(currentServer(), utf8_command) != yes) {
 				LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
 				controlSocket_.m_useUTF8 = false;
 			}
@@ -470,7 +470,7 @@ int CFtpLogonOpData::ParseResponse()
 				continue;
 			}
 
-			if (CServerCapabilities::GetCapability(*currentServer(), clnt_command) == yes) {
+			if (CServerCapabilities::GetCapability(currentServer(), clnt_command) == yes) {
 				break;
 			}
 		}
@@ -479,16 +479,16 @@ int CFtpLogonOpData::ParseResponse()
 				continue;
 			}
 
-			if (CServerCapabilities::GetCapability(*currentServer(), utf8_command) == yes) {
+			if (CServerCapabilities::GetCapability(currentServer(), utf8_command) == yes) {
 				break;
 			}
 		}
 		else if (opState == LOGON_OPTSMLST) {
 			std::wstring facts;
-			if (CServerCapabilities::GetCapability(*currentServer(), mlsd_command, &facts) != yes) {
+			if (CServerCapabilities::GetCapability(currentServer(), mlsd_command, &facts) != yes) {
 				continue;
 			}
-			capabilities cap = CServerCapabilities::GetCapability(*currentServer(), opst_mlst_command);
+			capabilities cap = CServerCapabilities::GetCapability(currentServer(), opst_mlst_command);
 			if (cap == unknown) {
 				facts = fz::str_tolower_ascii(facts);
 
@@ -546,11 +546,11 @@ int CFtpLogonOpData::ParseResponse()
 				}
 
 				if (had_unset) {
-					CServerCapabilities::SetCapability(*currentServer(), opst_mlst_command, yes, opts_facts);
+					CServerCapabilities::SetCapability(currentServer(), opst_mlst_command, yes, opts_facts);
 					break;
 				}
 				else {
-					CServerCapabilities::SetCapability(*currentServer(), opst_mlst_command, no);
+					CServerCapabilities::SetCapability(currentServer(), opst_mlst_command, no);
 				}
 			}
 			else if (cap == yes) {

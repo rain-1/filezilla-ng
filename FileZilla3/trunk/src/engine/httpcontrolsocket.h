@@ -14,7 +14,7 @@ public:
 
 protected:
 	virtual int ContinueConnect();
-	virtual bool Connected() { return m_pCurrentServer != 0; }
+	virtual bool Connected() { return static_cast<bool>(currentServer_); }
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 	virtual int SendNextCommand();

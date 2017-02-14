@@ -53,11 +53,6 @@ static const t_protocolInfo& GetProtocolInfo(ServerProtocol protocol)
 	return protocolInfos[i];
 }
 
-CServer::CServer()
-{
-	Initialize();
-}
-
 bool CServer::ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path)
 {
 	unsigned int nPort = 0;
@@ -311,54 +306,65 @@ CServer& CServer::operator=(const CServer &op)
 
 bool CServer::operator==(const CServer &op) const
 {
-	if (m_protocol != op.m_protocol)
+	if (m_protocol != op.m_protocol) {
 		return false;
-	else if (m_type != op.m_type)
+	}
+	else if (m_type != op.m_type) {
 		return false;
-	else if (m_host != op.m_host)
+	}
+	else if (m_host != op.m_host) {
 		return false;
-	else if (m_port != op.m_port)
+	}
+	else if (m_port != op.m_port) {
 		return false;
-	else if (m_logonType != op.m_logonType)
+	}
+	else if (m_logonType != op.m_logonType) {
 		return false;
-	else if (m_logonType != ANONYMOUS)
-	{
-		if (m_user != op.m_user)
+	}
+	else if (m_logonType != ANONYMOUS) {
+		if (m_user != op.m_user) {
 			return false;
+		}
 
-		if (m_logonType == NORMAL)
-		{
-			if (m_pass != op.m_pass)
+		if (m_logonType == NORMAL) {
+			if (m_pass != op.m_pass) {
 				return false;
+			}
 		}
-		else if (m_logonType == ACCOUNT)
-		{
-			if (m_pass != op.m_pass)
+		else if (m_logonType == ACCOUNT) {
+			if (m_pass != op.m_pass) {
 				return false;
-			if (m_account != op.m_account)
+			}
+			if (m_account != op.m_account) {
 				return false;
+			}
 		}
-		else if (m_logonType == KEY)
-		{
-			if (m_keyFile != op.m_keyFile)
+		else if (m_logonType == KEY) {
+			if (m_keyFile != op.m_keyFile) {
 				return false;
+			}
 		}
 	}
-	if (m_timezoneOffset != op.m_timezoneOffset)
+	if (m_timezoneOffset != op.m_timezoneOffset) {
 		return false;
-	else if (m_pasvMode != op.m_pasvMode)
+	}
+	else if (m_pasvMode != op.m_pasvMode) {
 		return false;
-	else if (m_encodingType != op.m_encodingType)
+	}
+	else if (m_encodingType != op.m_encodingType) {
 		return false;
-	else if (m_encodingType == ENCODING_CUSTOM)
-	{
-		if (m_customEncoding != op.m_customEncoding)
+	}
+	else if (m_encodingType == ENCODING_CUSTOM) {
+		if (m_customEncoding != op.m_customEncoding) {
 			return false;
+		}
 	}
-	if (m_postLoginCommands != op.m_postLoginCommands)
+	if (m_postLoginCommands != op.m_postLoginCommands) {
 		return false;
-	if (m_bypassProxy != op.m_bypassProxy)
+	}
+	if (m_bypassProxy != op.m_bypassProxy) {
 		return false;
+	}
 
 	// Do not compare number of allowed multiple connections
 
@@ -367,15 +373,19 @@ bool CServer::operator==(const CServer &op) const
 
 bool CServer::operator<(const CServer &op) const
 {
-	if (m_protocol < op.m_protocol)
+	if (m_protocol < op.m_protocol) {
 		return true;
-	else if (m_protocol > op.m_protocol)
+	}
+	else if (m_protocol > op.m_protocol) {
 		return false;
+	}
 
-	if (m_type < op.m_type)
+	if (m_type < op.m_type) {
 		return true;
-	else if (m_type > op.m_type)
+	}
+	else if (m_type > op.m_type) {
 		return false;
+	}
 
 	int cmp = m_host.compare(op.m_host);
 	if (cmp < 0) {
@@ -385,73 +395,91 @@ bool CServer::operator<(const CServer &op) const
 		return false;
 	}
 
-	if (m_port < op.m_port)
+	if (m_port < op.m_port) {
 		return true;
-	else if (m_port > op.m_port)
+	}
+	else if (m_port > op.m_port) {
 		return false;
+	}
 
-	if (m_logonType < op.m_logonType)
+	if (m_logonType < op.m_logonType) {
 		return true;
-	else if (m_logonType > op.m_logonType)
+	}
+	else if (m_logonType > op.m_logonType) {
 		return false;
+	}
 
-	if (m_logonType != ANONYMOUS)
-	{
+	if (m_logonType != ANONYMOUS) {
 		cmp = m_user.compare(op.m_user);
-		if (cmp < 0)
+		if (cmp < 0) {
 			return true;
-		else if (cmp > 0)
-			return false;
-
-		if (m_logonType == NORMAL)
-		{
-			cmp = m_pass.compare(op.m_pass);
-			if (cmp < 0)
-				return true;
-			else if (cmp > 0)
-				return false;
 		}
-		else if (m_logonType == ACCOUNT)
-		{
+		else if (cmp > 0) {
+			return false;
+		}
+
+		if (m_logonType == NORMAL) {
 			cmp = m_pass.compare(op.m_pass);
-			if (cmp < 0)
+			if (cmp < 0) {
 				return true;
-			else if (cmp > 0)
+			}
+			else if (cmp > 0) {
 				return false;
+			}
+		}
+		else if (m_logonType == ACCOUNT) {
+			cmp = m_pass.compare(op.m_pass);
+			if (cmp < 0) {
+				return true;
+			}
+			else if (cmp > 0) {
+				return false;
+			}
 
 			cmp = m_account.compare(op.m_account);
-			if (cmp < 0)
+			if (cmp < 0) {
 				return true;
-			else if (cmp > 0)
+			}
+			else if (cmp > 0) {
 				return false;
+			}
 		}
 	}
-	if (m_timezoneOffset < op.m_timezoneOffset)
+	if (m_timezoneOffset < op.m_timezoneOffset) {
 		return true;
-	else if (m_timezoneOffset > op.m_timezoneOffset)
-		return false;
-
-	if (m_pasvMode < op.m_pasvMode)
-		return true;
-	else if (m_pasvMode > op.m_pasvMode)
-		return false;
-
-	if (m_encodingType < op.m_encodingType)
-		return true;
-	else if (m_encodingType > op.m_encodingType)
-		return false;
-
-	if (m_encodingType == ENCODING_CUSTOM)
-	{
-		if (m_customEncoding < op.m_customEncoding)
-			return true;
-		else if (m_customEncoding > op.m_customEncoding)
-			return false;
 	}
-	if (m_bypassProxy < op.m_bypassProxy)
-		return true;
-	else if (m_bypassProxy > op.m_bypassProxy)
+	else if (m_timezoneOffset > op.m_timezoneOffset) {
 		return false;
+	}
+
+	if (m_pasvMode < op.m_pasvMode) {
+		return true;
+	}
+	else if (m_pasvMode > op.m_pasvMode) {
+		return false;
+	}
+
+	if (m_encodingType < op.m_encodingType) {
+		return true;
+	}
+	else if (m_encodingType > op.m_encodingType) {
+		return false;
+	}
+
+	if (m_encodingType == ENCODING_CUSTOM) {
+		if (m_customEncoding < op.m_customEncoding) {
+			return true;
+		}
+		else if (m_customEncoding > op.m_customEncoding) {
+			return false;
+		}
+	}
+	if (m_bypassProxy < op.m_bypassProxy) {
+		return true;
+	}
+	else if (m_bypassProxy > op.m_bypassProxy) {
+		return false;
+	}
 
 	// Do not compare number of allowed multiple connections
 
@@ -465,40 +493,54 @@ bool CServer::operator!=(const CServer &op) const
 
 bool CServer::EqualsNoPass(const CServer &op) const
 {
-	if (m_protocol != op.m_protocol)
+	if (m_protocol != op.m_protocol) {
 		return false;
-	else if (m_type != op.m_type)
+	}
+	else if (m_type != op.m_type) {
 		return false;
-	else if (m_host != op.m_host)
+	}
+	else if (m_host != op.m_host) {
 		return false;
-	else if (m_port != op.m_port)
+	}
+	else if (m_port != op.m_port) {
 		return false;
-	else if ((m_logonType == ANONYMOUS) != (op.m_logonType == ANONYMOUS))
+	}
+	else if ((m_logonType == ANONYMOUS) != (op.m_logonType == ANONYMOUS)) {
 		return false;
-	else if ((m_logonType == ACCOUNT) != (op.m_logonType == ACCOUNT))
+	}
+	else if ((m_logonType == ACCOUNT) != (op.m_logonType == ACCOUNT)) {
 		return false;
-	else if (m_logonType != ANONYMOUS)
-	{
-		if (m_user != op.m_user)
+	}
+	else if (m_logonType != ANONYMOUS) {
+		if (m_user != op.m_user) {
 			return false;
-		if (m_logonType == ACCOUNT)
-			if (m_account != op.m_account)
+		}
+		if (m_logonType == ACCOUNT) {
+			if (m_account != op.m_account) {
 				return false;
+			}
+		}
 	}
-	if (m_timezoneOffset != op.m_timezoneOffset)
+	if (m_timezoneOffset != op.m_timezoneOffset) {
 		return false;
-	else if (m_pasvMode != op.m_pasvMode)
+	}
+	else if (m_pasvMode != op.m_pasvMode) {
 		return false;
-	else if (m_encodingType != op.m_encodingType)
+	}
+	else if (m_encodingType != op.m_encodingType) {
 		return false;
+	}
 	else if (m_encodingType == ENCODING_CUSTOM) {
-		if (m_customEncoding != op.m_customEncoding)
+		if (m_customEncoding != op.m_customEncoding) {
 			return false;
+		}
 	}
-	if (m_postLoginCommands != op.m_postLoginCommands)
+	if (m_postLoginCommands != op.m_postLoginCommands) {
 		return false;
-	if (m_bypassProxy != op.m_bypassProxy)
+	}
+	if (m_bypassProxy != op.m_bypassProxy) {
 		return false;
+	}
 
 	// Do not compare number of allowed multiple connections
 
@@ -507,7 +549,6 @@ bool CServer::EqualsNoPass(const CServer &op) const
 
 CServer::CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int port, std::wstring const& user, std::wstring const& pass, std::wstring const& account)
 {
-	Initialize();
 	m_protocol = protocol;
 	m_type = type;
 	m_host = host;
@@ -520,7 +561,6 @@ CServer::CServer(ServerProtocol protocol, ServerType type, std::wstring const& h
 
 CServer::CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int port)
 {
-	Initialize();
 	m_protocol = protocol;
 	m_type = type;
 	m_host = host;
@@ -712,22 +752,9 @@ std::wstring CServer::Format(ServerFormat formatType) const
 	return server;
 }
 
-void CServer::Initialize()
+void CServer::clear()
 {
-	m_protocol = UNKNOWN;
-	m_type = DEFAULT;
-	m_host.clear();
-	m_port = 21;
-	m_logonType = ANONYMOUS;
-	m_user.clear();
-	m_pass.clear();
-	m_account.clear();
-	m_timezoneOffset = 0;
-	m_pasvMode = MODE_DEFAULT;
-	m_maximumMultipleConnections = 0;
-	m_encodingType = ENCODING_AUTO;
-	m_customEncoding.clear();
-	m_bypassProxy = false;
+	*this = CServer();
 }
 
 bool CServer::SetEncodingType(CharsetEncoding type, std::wstring const& encoding)
@@ -901,18 +928,24 @@ ServerType CServer::GetServerTypeFromName(std::wstring const& name)
 
 LogonType CServer::GetLogonTypeFromName(std::wstring const& name)
 {
-	if (name == _("Normal"))
+	if (name == _("Normal")) {
 		return NORMAL;
-	else if (name == _("Ask for password"))
+	}
+	else if (name == _("Ask for password")) {
 		return ASK;
-	else if (name == _("Key file"))
+	}
+	else if (name == _("Key file")) {
 		return KEY;
-	else if (name == _("Interactive"))
+	}
+	else if (name == _("Interactive")) {
 		return INTERACTIVE;
-	else if (name == _("Account"))
+	}
+	else if (name == _("Account")) {
 		return ACCOUNT;
-	else
+	}
+	else {
 		return ANONYMOUS;
+	}
 }
 
 std::wstring CServer::GetNameFromLogonType(LogonType type)

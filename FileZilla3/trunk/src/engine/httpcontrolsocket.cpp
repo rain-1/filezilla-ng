@@ -116,11 +116,11 @@ int CHttpControlSocket::SendNextCommand()
 
 int CHttpControlSocket::ContinueConnect()
 {
-	LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Verbose, _T("CHttpControlSocket::ContinueConnect() &engine_=%p"), &engine_);
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::ContinueConnect() &engine_=%p", &engine_);
 	if (GetCurrentCommandId() != Command::connect ||
-		!m_pCurrentServer)
+		!currentServer_)
 	{
-		LogMessage(MessageType::Debug_Warning, _T("Invalid context for call to ContinueConnect(), cmd=%d, m_pCurrentServer=%p"), GetCurrentCommandId(), m_pCurrentServer);
+		LogMessage(MessageType::Debug_Warning, L"Invalid context for call to ContinueConnect(), cmd=%d, currentServer_ is %s", GetCurrentCommandId(), currentServer_ ? L"non-empty" : L"empty");
 		return DoClose(FZ_REPLY_INTERNALERROR);
 	}
 
@@ -323,7 +323,7 @@ int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	m_pHttpOpData = pData;
 
 	// TODO: Ordinarily we need to percent-encode the filename. With the current API we then however would not be able to pass the query part of the URL
-	m_current_uri = fz::uri(fz::to_utf8(m_pCurrentServer->Format(ServerFormat::url)) + fz::to_utf8(pData->remotePath.FormatFilename(pData->remoteFile)));
+	m_current_uri = fz::uri(fz::to_utf8(currentServer_.Format(ServerFormat::url)) + fz::to_utf8(pData->remotePath.FormatFilename(pData->remoteFile)));
 	if (m_current_uri.empty()) {
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -349,7 +349,7 @@ int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 		pData->opState = filetransfer_transfer;
 	}
 
-	int res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(), m_pCurrentServer->GetProtocol() == HTTPS);
+	int res = InternalConnect(currentServer_.GetHost(), currentServer_.GetPort(), currentServer_.GetProtocol() == HTTPS);
 	if (res != FZ_REPLY_OK) {
 		return res;
 	}
@@ -401,7 +401,7 @@ int CHttpControlSocket::FileTransferSend()
 			return res;
 		}
 
-		res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(), m_pCurrentServer->GetProtocol() == HTTPS);
+		res = InternalConnect(currentServer_.GetHost(), currentServer_.GetPort(), currentServer_.GetProtocol() == HTTPS);
 		if (res != FZ_REPLY_OK) {
 			return res;
 		}

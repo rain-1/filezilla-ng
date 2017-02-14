@@ -156,7 +156,7 @@ public:
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification) = 0;
 	bool SetFileExistsAction(CFileExistsNotification *pFileExistsNotification);
 
-	const CServer* GetCurrentServer() const;
+	CServer const& GetCurrentServer() const;
 
 	// Conversion function which convert between local and server charset.
 	std::wstring ConvToLocal(const char* buffer, size_t len);
@@ -210,7 +210,7 @@ protected:
 
 	COpData *m_pCurOpData{};
 	CFileZillaEnginePrivate & engine_;
-	CServer *m_pCurrentServer{};
+	CServer currentServer_;
 
 	CServerPath m_CurrentPath;
 

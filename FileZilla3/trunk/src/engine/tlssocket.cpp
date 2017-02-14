@@ -1391,8 +1391,8 @@ int CTlsSocket::VerifyCertificate()
 	int const algorithmWarnings = GetAlgorithmWarnings();
 
 	CCertificateNotification *pNotification = new CCertificateNotification(
-		m_pOwner->GetCurrentServer()->GetHost(),
-		m_pOwner->GetCurrentServer()->GetPort(),
+		m_pOwner->GetCurrentServer().GetHost(),
+		m_pOwner->GetCurrentServer().GetPort(),
 		GetProtocolName(),
 		GetKeyExchange(),
 		GetCipherName(),

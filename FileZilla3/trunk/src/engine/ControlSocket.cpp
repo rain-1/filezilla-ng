@@ -210,11 +210,11 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			{
 				CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
 				if (!pData->download && pData->transferInitiated) {
-					if (!m_pCurrentServer) {
-						LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurrentServer is 0"));
+					if (!currentServer_) {
+						LogMessage(MessageType::Debug_Warning, _T("currentServer_ is empty"));
 					}
 					else {
-						bool updated = engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->remotePath, pData->remoteFile, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? pData->localFileSize : -1);
+						bool updated = engine_.GetDirectoryCache().UpdateFile(currentServer_, pData->remotePath, pData->remoteFile, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? pData->localFileSize : -1);
 						if (updated) {
 							SendDirectoryListingNotification(pData->remotePath, false, false);
 						}
@@ -258,8 +258,7 @@ int CControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 
 	nErrorCode = ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED | nErrorCode);
 
-	delete m_pCurrentServer;
-	m_pCurrentServer = 0;
+	currentServer_.clear();
 
 	return nErrorCode;
 }
@@ -313,9 +312,9 @@ void CControlSocket::Cancel()
 	}
 }
 
-const CServer* CControlSocket::GetCurrentServer() const
+CServer const& CControlSocket::GetCurrentServer() const
 {
-	return m_pCurrentServer;
+	return currentServer_;
 }
 
 bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPath const& defaultPath)
@@ -352,7 +351,7 @@ bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPat
 		}
 	}
 
-	m_CurrentPath.SetType(m_pCurrentServer->GetType());
+	m_CurrentPath.SetType(currentServer_.GetType());
 	if (reply.empty() || !m_CurrentPath.SetPath(reply)) {
 		if (reply.empty()) {
 			LogMessage(MessageType::Error, _("Server returned empty path."));
@@ -398,7 +397,7 @@ int CControlSocket::CheckOverwriteFile()
 	else {
 		remotePath = m_CurrentPath;
 	}
-	bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, remotePath, pData->remoteFile, dirDidExist, matchedCase);
+	bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, remotePath, pData->remoteFile, dirDidExist, matchedCase);
 
 	// Ignore entries with wrong case
 	if (found && !matchedCase)
@@ -466,7 +465,7 @@ std::wstring CControlSocket::ConvToLocal(const char* buffer, size_t len)
 		}
 
 		// Fall back to local charset on error
-		if (m_pCurrentServer->GetEncodingType() != ENCODING_UTF8) {
+		if (currentServer_.GetEncodingType() != ENCODING_UTF8) {
 			LogMessage(MessageType::Status, _("Invalid character sequence received, disabling UTF-8. Select UTF-8 option in site manager to force UTF-8."));
 			m_useUTF8 = false;
 		}
@@ -523,7 +522,7 @@ wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_
 #endif
 
 		// Fall back to local charset on error
-		if (m_pCurrentServer->GetEncodingType() != ENCODING_UTF8) {
+		if (currentServer_.GetEncodingType() != ENCODING_UTF8) {
 			LogMessage(MessageType::Status, _("Invalid character sequence received, disabling UTF-8. Select UTF-8 option in site manager to force UTF-8."));
 			m_useUTF8 = false;
 		}
@@ -635,12 +634,11 @@ const std::list<CControlSocket::t_lockInfo>::iterator CControlSocket::GetLockSta
 
 bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& directory)
 {
-	assert(m_pCurrentServer);
+	assert(currentServer_);
 	assert(m_pCurOpData);
 
 	std::list<t_lockInfo>::iterator own = GetLockStatus();
-	if (own == m_lockInfoList.end())
-	{
+	if (own == m_lockInfoList.end()) {
 		t_lockInfo info;
 		info.directory = directory;
 		info.pControlSocket = this;
@@ -650,12 +648,9 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 		m_lockInfoList.push_back(info);
 		own = --m_lockInfoList.end();
 	}
-	else
-	{
-		if (own->lockcount)
-		{
-			if (!m_pCurOpData->holdsLock)
-			{
+	else {
+		if (own->lockcount) {
+			if (!m_pCurOpData->holdsLock) {
 				m_pCurOpData->holdsLock = true;
 				own->lockcount++;
 			}
@@ -670,14 +665,16 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 	m_pCurOpData->holdsLock = true;
 
 	// Try to find other instance holding the lock
-	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != own; ++iter)
-	{
-		if (*m_pCurrentServer != *iter->pControlSocket->m_pCurrentServer)
+	for (auto iter = m_lockInfoList.cbegin(); iter != own; ++iter) {
+		if (currentServer_ != iter->pControlSocket->currentServer_) {
 			continue;
-		if (directory != iter->directory)
+		}
+		if (directory != iter->directory) {
 			continue;
-		if (reason != iter->reason)
+		}
+		if (reason != iter->reason) {
 			continue;
+		}
 
 		// Some other instance is holding the lock
 		return false;
@@ -690,21 +687,24 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 
 bool CControlSocket::IsLocked(locking_reason reason, const CServerPath& directory)
 {
-	assert(m_pCurrentServer);
+	assert(currentServer_);
 
 	std::list<t_lockInfo>::iterator own = GetLockStatus();
-	if (own != m_lockInfoList.end())
+	if (own != m_lockInfoList.end()) {
 		return true;
+	}
 
 	// Try to find other instance holding the lock
-	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != own; ++iter)
-	{
-		if (*m_pCurrentServer != *iter->pControlSocket->m_pCurrentServer)
+	for (auto iter = m_lockInfoList.cbegin(); iter != own; ++iter) {
+		if (currentServer_ != iter->pControlSocket->currentServer_) {
 			continue;
-		if (directory != iter->directory)
+		}
+		if (directory != iter->directory) {
 			continue;
-		if (reason != iter->reason)
+		}
+		if (reason != iter->reason) {
 			continue;
+		}
 
 		// Some instance is holding the lock
 		return true;
@@ -715,21 +715,23 @@ bool CControlSocket::IsLocked(locking_reason reason, const CServerPath& director
 
 void CControlSocket::UnlockCache()
 {
-	if (!m_pCurOpData || !m_pCurOpData->holdsLock)
+	if (!m_pCurOpData || !m_pCurOpData->holdsLock) {
 		return;
+	}
 	m_pCurOpData->holdsLock = false;
 
 	std::list<t_lockInfo>::iterator iter = GetLockStatus();
-	if (iter == m_lockInfoList.end())
+	if (iter == m_lockInfoList.end()) {
 		return;
+	}
 
 	assert(!iter->waiting || iter->lockcount == 0);
-	if (!iter->waiting)
-	{
+	if (!iter->waiting) {
 		iter->lockcount--;
 		assert(iter->lockcount >= 0);
-		if (iter->lockcount)
+		if (iter->lockcount) {
 			return;
+		}
 	}
 
 	CServerPath directory = iter->directory;
@@ -738,24 +740,27 @@ void CControlSocket::UnlockCache()
 	m_lockInfoList.erase(iter);
 
 	// Find other instance waiting for the lock
-	if (!m_pCurrentServer) {
-		LogMessage(MessageType::Debug_Warning, _T("UnlockCache called with !m_pCurrentServer"));
+	if (!currentServer_) {
+		LogMessage(MessageType::Debug_Warning, _T("UnlockCache called with !currentServer_"));
 		return;
 	}
 	for (auto & lockInfo : m_lockInfoList) {
-		if (!lockInfo.pControlSocket->m_pCurrentServer){
-			LogMessage(MessageType::Debug_Warning, _T("UnlockCache found other instance with !m_pCurrentServer"));
+		if (!lockInfo.pControlSocket->currentServer_) {
+			LogMessage(MessageType::Debug_Warning, _T("UnlockCache found other instance with !currentServer_"));
 			continue;
 		}
 
-		if (*m_pCurrentServer != *lockInfo.pControlSocket->m_pCurrentServer)
+		if (currentServer_ != lockInfo.pControlSocket->currentServer_) {
 			continue;
+		}
 
-		if (lockInfo.directory != directory)
+		if (lockInfo.directory != directory) {
 			continue;
+		}
 
-		if (lockInfo.reason != reason)
+		if (lockInfo.reason != reason) {
 			continue;
+		}
 
 		// Send notification
 		lockInfo.pControlSocket->send_event<CObtainLockEvent>();
@@ -779,7 +784,7 @@ CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 	}
 
 	for (auto iter = m_lockInfoList.cbegin(); iter != own; ++iter) {
-		if (*m_pCurrentServer != *iter->pControlSocket->m_pCurrentServer) {
+		if (currentServer_ != iter->pControlSocket->currentServer_) {
 			continue;
 		}
 
@@ -839,9 +844,9 @@ void CControlSocket::InvalidateCurrentWorkingDir(const CServerPath& path)
 fz::duration CControlSocket::GetTimezoneOffset() const
 {
 	fz::duration ret;
-	if (m_pCurrentServer) {
+	if (currentServer_) {
 		int seconds = 0;
-		if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset, &seconds) == yes) {
+		if (CServerCapabilities::GetCapability(currentServer_, timezone_offset, &seconds) == yes) {
 			ret = fz::duration::from_seconds(seconds);
 		}
 	}
@@ -1051,11 +1056,10 @@ int CRealControlSocket::Connect(CServer const& server)
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 	}
 
-	delete m_pCurrentServer;
-	m_pCurrentServer = new CServer(server);
+	currentServer_ = server;
 
 	// International domain names
-	m_pCurrentServer->SetHost(ConvertDomainName(server.GetHost()), server.GetPort());
+	currentServer_.SetHost(ConvertDomainName(server.GetHost()), server.GetPort());
 
 	return ContinueConnect();
 }
@@ -1066,8 +1070,8 @@ int CRealControlSocket::ContinueConnect()
 	unsigned int port = 0;
 
 	const int proxy_type = engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
-	if (proxy_type > CProxySocket::unknown && proxy_type < CProxySocket::proxytype_count && !m_pCurrentServer->GetBypassProxy()) {
-		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), m_pCurrentServer->Format(ServerFormat::with_optional_port), CProxySocket::Name(static_cast<CProxySocket::ProxyType>(proxy_type)));
+	if (proxy_type > CProxySocket::unknown && proxy_type < CProxySocket::proxytype_count && !currentServer_.GetBypassProxy()) {
+		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), currentServer_.Format(ServerFormat::with_optional_port), CProxySocket::Name(static_cast<CProxySocket::ProxyType>(proxy_type)));
 
 		host = engine_.GetOptions().GetOption(OPTION_PROXY_HOST);
 		port = engine_.GetOptions().GetOptionVal(OPTION_PROXY_PORT);
@@ -1076,7 +1080,7 @@ int CRealControlSocket::ContinueConnect()
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, this);
 		m_pBackend = m_pProxyBackend;
 		int res = m_pProxyBackend->Handshake(static_cast<CProxySocket::ProxyType>(proxy_type),
-											m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(),
+											currentServer_.GetHost(), currentServer_.GetPort(),
 											engine_.GetOptions().GetOption(OPTION_PROXY_USER),
 											engine_.GetOptions().GetOption(OPTION_PROXY_PASS));
 
@@ -1093,8 +1097,8 @@ int CRealControlSocket::ContinueConnect()
 			port = pData->port;
 		}
 		if (host.empty()) {
-			host = m_pCurrentServer->GetHost();
-			port = m_pCurrentServer->GetPort();
+			host = currentServer_.GetHost();
+			port = currentServer_.GetPort();
 		}
 	}
 	if (fz::get_address_type(host) == fz::address_type::unknown) {
@@ -1271,7 +1275,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			CDirentry entry;
 			bool dir_did_exist;
 			bool matched_case;
-			if (engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) &&
+			if (engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) &&
 				matched_case)
 			{
 				pData->remoteFileSize = entry.size;
@@ -1382,7 +1386,7 @@ void CControlSocket::SetActive(CFileZillaEngine::_direction direction)
 
 void CControlSocket::SendDirectoryListingNotification(CServerPath const& path, bool onList, bool failed)
 {
-	if (!m_pCurrentServer) {
+	if (!currentServer_) {
 		return;
 	}
 
