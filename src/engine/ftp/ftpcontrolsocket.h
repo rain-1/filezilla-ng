@@ -37,11 +37,7 @@ protected:
 
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
-							 CFileTransferCommand::t_transferSettings const& transferSettings);
-	int FileTransferParseResponse();
-	int FileTransferSubcommandResult(int prevResult);
-	int FileTransferSend();
-	int FileTransferTestResumeCapability();
+							 CFileTransferCommand::t_transferSettings const& transferSettings) override;
 
 	virtual int RawCommand(std::wstring const& command);
 	int RawCommandSend();
@@ -68,7 +64,6 @@ protected:
 	virtual int ChmodParseResponse();
 	virtual int ChmodSubcommandResult(int prevResult);
 	virtual int ChmodSend();
-
 
 	// Implicit FZ_REPLY_CONTINUE
 	void Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData);
@@ -135,6 +130,7 @@ protected:
 	std::unique_ptr<std::wregex> m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
 
 	friend class CFtpChangeDirOpData;
+	friend class CFtpFileTransferOpData;
 	friend class CFtpListOpData;
 	friend class CFtpLogonOpData;
 	friend class CFtpMkdirOpData;
@@ -178,16 +174,6 @@ public:
 
 	int64_t resumeOffset{};
 	bool binary{true};
-};
-
-class CFtpFileTransferOpData final : public CFileTransferOpData, public CFtpTransferOpData
-{
-public:
-	CFtpFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path);
-	virtual ~CFtpFileTransferOpData();
-
-	CIOThread *pIOThread{};
-	bool fileDidExist{true};
 };
 
 #endif
