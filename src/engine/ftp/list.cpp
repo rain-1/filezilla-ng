@@ -51,9 +51,8 @@ int CFtpListOpData::Send()
 	controlSocket_.LogMessage(MessageType::Debug_Debug, L"  state = %d", opState);
 
 	if (opState == list_waitcwd) {
-		// FIXME
-		int res = controlSocket_.ChangeDir(path_, subDir_, (flags_ & LIST_FLAG_LINK));
-		return res;
+		controlSocket_.ChangeDir(path_, subDir_, (flags_ & LIST_FLAG_LINK));
+		return FZ_REPLY_CONTINUE;
 	}
 	if (opState == list_waitlock) {
 		assert(subDir_.empty()); // We did do ChangeDir before trying to lock
@@ -211,10 +210,8 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 				fallback_to_current = false;
 				path_.clear();
 				subDir_.clear();
-				int res = controlSocket_.ChangeDir();
-				if (res != FZ_REPLY_OK) {
-					return res;
-				}
+				controlSocket_.ChangeDir();
+				return FZ_REPLY_CONTINUE;
 			}
 			else {
 				return prevResult;

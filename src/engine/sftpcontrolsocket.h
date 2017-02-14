@@ -48,7 +48,7 @@ public:
 	CSftpControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CSftpControlSocket();
 
-	virtual int Connect(const CServer &server);
+	virtual void Connect(CServer const& server);
 
 	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);

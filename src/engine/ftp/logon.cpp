@@ -97,7 +97,7 @@ int CFtpLogonOpData::Send()
 			}
 
 			opState = LOGON_WELCOME;
-			return controlSocket_.CRealControlSocket::Connect(server_);
+			return controlSocket_.DoConnect(server_);
 	    }
 	case LOGON_AUTH_WAIT:
 		LogMessage(MessageType::Debug_Info, L"LogonSend() called during LOGON_AUTH_WAIT, ignoring");

@@ -16,6 +16,12 @@ protected:
 	virtual int ContinueConnect();
 	virtual bool Connected() { return static_cast<bool>(currentServer_); }
 
+
+	virtual void Connect(CServer const& server) override
+	{
+		// FIXME
+	}
+
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 	virtual int SendNextCommand();
 	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);

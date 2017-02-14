@@ -21,8 +21,10 @@ public:
 	// - FZ_REPLY_CONTINUE, caller should issue the next command
 
 
-	virtual int Send() { return FZ_REPLY_INTERNALERROR; }
+	// TODO: Make pure virtual
+	virtual int Send() { return FZ_REPLY_NOTSUPPORTED; }
 
+	// TODO: Make pure virtual
 	virtual int ParseResponse() { return FZ_REPLY_INTERNALERROR; }
 
 	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) { return FZ_REPLY_INTERNALERROR; }
@@ -34,6 +36,17 @@ public:
 	bool holdsLock{};
 
 	COpData *pNextOpData{};
+};
+
+class CNotSupportedOpData : public COpData
+{
+public:
+	CNotSupportedOpData(Command op_Id)
+		: COpData(op_Id)
+	{}
+
+	virtual int Send() { return FZ_REPLY_NOTSUPPORTED; }
+	virtual int ParseResponse() { return FZ_REPLY_INTERNALERROR; }
 };
 
 class CConnectOpData : public COpData
@@ -131,10 +144,10 @@ public:
 	CControlSocket(CControlSocket const&) = delete;
 	CControlSocket& operator=(CControlSocket const&) = delete;
 
-	virtual int Connect(const CServer &server) = 0;
+	virtual void Connect(CServer const& server) = 0;
 	virtual int Disconnect();
 	virtual void Cancel();
-	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
+	virtual void List(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
 							 CFileTransferCommand::t_transferSettings const& transferSettings);
@@ -283,7 +296,7 @@ public:
 	CRealControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CRealControlSocket();
 
-	virtual int Connect(const CServer &server);
+	int DoConnect(CServer const& server);
 	virtual int ContinueConnect();
 
 	virtual bool Connected() { return m_pSocket->GetState() == CSocket::connected; }

@@ -30,11 +30,10 @@ protected:
 
 	virtual int ResetOperation(int nErrorCode);
 
-	virtual int Connect(CServer const& server);
-	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
+	virtual void Connect(CServer const& server) override;
+	virtual void List(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0) override;
 
-	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
-	int ChangeDirSubcommandResult(int prevResult);
+	void ChangeDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), bool link_discovery = false);
 
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,

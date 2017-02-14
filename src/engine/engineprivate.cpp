@@ -236,12 +236,13 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 				if ((nErrorCode & FZ_REPLY_CRITICALERROR) != FZ_REPLY_CRITICALERROR) {
 					++m_retryCount;
 					if (m_retryCount < m_options.GetOptionVal(OPTION_RECONNECTCOUNT) && connectCommand.RetryConnecting()) {
-						unsigned int delay = GetRemainingReconnectDelay(connectCommand.GetServer());
-						if (!delay)
-							delay = 1;
+						fz::duration delay = GetRemainingReconnectDelay(connectCommand.GetServer());
+						if (!delay) {
+							delay = fz::duration::from_seconds(1);
+						}
 						m_pLogging->LogMessage(MessageType::Status, _("Waiting to retry..."));
 						stop_timer(m_retryTimer);
-						m_retryTimer = add_timer(fz::duration::from_milliseconds(delay), true);
+						m_retryTimer = add_timer(delay, true);
 						return FZ_REPLY_WOULDBLOCK;
 					}
 				}
@@ -359,7 +360,8 @@ int CFileZillaEnginePrivate::List(CListCommand const& command)
 		}
 	}
 
-	return m_pControlSocket->List(command.GetPath(), command.GetSubDir(), flags);
+	m_pControlSocket->List(command.GetPath(), command.GetSubDir(), flags);
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::FileTransfer(CFileTransferCommand const& command)
@@ -431,30 +433,30 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 	m_failedLogins.push_back(failure);
 }
 
-unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& server)
+fz::duration CFileZillaEnginePrivate::GetRemainingReconnectDelay(CServer const& server)
 {
 	fz::scoped_lock lock(mutex_);
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
 	while (iter != m_failedLogins.end()) {
 		fz::duration const span = fz::datetime::now() - iter->time;
-		const int delay = m_options.GetOptionVal(OPTION_RECONNECTDELAY);
-		if (span.get_seconds() >= delay) {
+		fz::duration const delay = fz::duration::from_seconds(m_options.GetOptionVal(OPTION_RECONNECTDELAY));
+		if (span >= delay) {
 			std::list<t_failedLogins>::iterator prev = iter;
 			++iter;
 			m_failedLogins.erase(prev);
 		}
 		else if (!iter->critical && iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort()) {
-			return delay * 1000 - span.get_milliseconds();
+			return delay - span;
 		}
 		else if (iter->server == server) {
-			return delay * 1000 - span.get_milliseconds();
+			return delay - span;
 		}
 		else {
 			++iter;
 		}
 	}
 
-	return 0;
+	return fz::duration();
 }
 
 void CFileZillaEnginePrivate::OnTimer(fz::timer_id)
@@ -485,11 +487,11 @@ int CFileZillaEnginePrivate::ContinueConnect()
 
 	const CConnectCommand *pConnectCommand = static_cast<CConnectCommand *>(m_pCurrentCommand.get());
 	const CServer& server = pConnectCommand->GetServer();
-	unsigned int delay = GetRemainingReconnectDelay(server);
+	fz::duration const& delay = GetRemainingReconnectDelay(server);
 	if (delay) {
-		m_pLogging->LogMessage(MessageType::Status, fztranslate("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
+		m_pLogging->LogMessage(MessageType::Status, fztranslate("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay.get_milliseconds() + 999) / 1000), (delay.get_milliseconds() + 999) / 1000);
 		stop_timer(m_retryTimer);
-		m_retryTimer = add_timer(fz::duration::from_milliseconds(delay), true);
+		m_retryTimer = add_timer(delay, true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
 
@@ -513,12 +515,8 @@ int CFileZillaEnginePrivate::ContinueConnect()
 		return FZ_REPLY_SYNTAXERROR|FZ_REPLY_DISCONNECTED;
 	}
 
-	int res = m_pControlSocket->Connect(server);
-	if (m_retryTimer) {
-		return FZ_REPLY_WOULDBLOCK;
-	}
-
-	return res;
+	m_pControlSocket->Connect(server);
+	return FZ_REPLY_CONTINUE;
 }
 
 void CFileZillaEnginePrivate::InvalidateCurrentWorkingDirs(const CServerPath& path)

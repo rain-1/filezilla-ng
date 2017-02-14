@@ -5,11 +5,58 @@
 
 int CFtpChangeDirOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, "CFtpChangeDirOpData::Send()");
+	LogMessage(MessageType::Debug_Verbose, "CFtpChangeDirOpData::Send() in state %d", opState);
 
 	std::wstring cmd;
 	switch (opState)
 	{
+	case cwd_init:
+		if (path.GetType() == DEFAULT) {
+			path.SetType(currentServer().GetType());
+		}
+
+		if (path.empty()) {
+			if (controlSocket_.m_CurrentPath.empty()) {
+				opState = cwd_pwd;
+			}
+			else {
+				return FZ_REPLY_OK;
+			}
+		}
+		else {
+			if (!subDir.empty()) {
+				// Check if the target is in cache already
+				target = controlSocket_.engine_.GetPathCache().Lookup(currentServer(), path, subDir);
+				if (!target.empty()) {
+					if (controlSocket_.m_CurrentPath == target) {
+						return FZ_REPLY_OK;
+					}
+
+					path = target;
+					subDir.clear();
+					opState = cwd_cwd;
+				}
+				else {
+					// Target unknown, check for the parent's target
+					target = controlSocket_.engine_.GetPathCache().Lookup(currentServer(), path, L"");
+					if (controlSocket_.m_CurrentPath == path || (!target.empty() && target == controlSocket_.m_CurrentPath)) {
+						target.clear();
+						opState = cwd_cwd_subdir;
+					}
+					else {
+						opState = cwd_cwd;
+					}
+				}
+			}
+			else {
+				target = controlSocket_.engine_.GetPathCache().Lookup(currentServer(), path, L"");
+				if (controlSocket_.m_CurrentPath == path || (!target.empty() && target == controlSocket_.m_CurrentPath)) {
+					return FZ_REPLY_OK;
+				}
+				opState = cwd_cwd;
+			}
+		}
+		return Send();
 	case cwd_pwd:
 	case cwd_pwd_cwd:
 	case cwd_pwd_subdir:

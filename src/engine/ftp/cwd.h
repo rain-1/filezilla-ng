@@ -23,6 +23,12 @@ public:
 	virtual int Send() override;
 	virtual int ParseResponse() override;
 
+	virtual int SubcommandResult(int, COpData const&) override
+	{
+		LogMessage(MessageType::Debug_Verbose, L"CFtpChangeDirOpData::SubcommandResult()");
+		return FZ_REPLY_CONTINUE;
+	}
+
 	bool tried_cdup{};
 };
 
