@@ -237,7 +237,7 @@ int CFtpRawTransferOpData::Send()
 		break;
 	case rawtransfer_transfer:
 		if (bPasv) {
-			if (!controlSocket_.m_pTransferSocket->SetupPassiveTransfer(host, port)) {
+			if (!controlSocket_.m_pTransferSocket->SetupPassiveTransfer(host_, port_)) {
 				LogMessage(MessageType::Error, _("Could not establish connection to server"));
 				return FZ_REPLY_ERROR;
 			}
@@ -286,13 +286,13 @@ bool CFtpRawTransferOpData::ParseEpsvResponse()
 		return false;
 	}
 
-	port = port;
+	port_ = port;
 
 	if (controlSocket_.m_pProxyBackend) {
-		host = currentServer().GetHost();
+		host_ = currentServer().GetHost();
 	}
 	else {
-		host = fz::to_wstring(controlSocket_.m_pSocket->GetPeerIP());
+		host_ = fz::to_wstring(controlSocket_.m_pSocket->GetPeerIP());
 	}
 	return true;
 }
@@ -312,31 +312,31 @@ bool CFtpRawTransferOpData::ParsePasvResponse()
 		return false;
 	}
 
-	host = m[2].str();
+	host_ = m[2].str();
 
-	size_t i = host.rfind(',');
+	size_t i = host_.rfind(',');
 	if (i == std::wstring::npos) {
 		return false;
 	}
-	auto number = fz::to_integral<unsigned int>(host.substr(i + 1));
+	auto number = fz::to_integral<unsigned int>(host_.substr(i + 1));
 	if (number > 255) {
 		return false;
 	}
 
-	port = number; //get ls byte of server socket
-	host = host.substr(0, i);
-	i = host.rfind(',');
+	port_ = number; //get ls byte of server socket
+	host_ = host_.substr(0, i);
+	i = host_.rfind(',');
 	if (i == std::string::npos) {
 		return false;
 	}
-	number = fz::to_integral<unsigned int>(host.substr(i + 1));
+	number = fz::to_integral<unsigned int>(host_.substr(i + 1));
 	if (number > 255) {
 		return false;
 	}
 
-	port += 256 * number; //add ms byte of server socket
-	host = host.substr(0, i);
-	fz::replace_substrings(host, L",", L".");
+	port_ += 256 * number; //add ms byte of server socket
+	host_ = host_.substr(0, i);
+	fz::replace_substrings(host_, L",", L".");
 
 	if (controlSocket_.m_pProxyBackend) {
 		// We do not have any information about the proxy's inner workings
@@ -344,21 +344,21 @@ bool CFtpRawTransferOpData::ParsePasvResponse()
 	}
 
 	std::wstring const peerIP = fz::to_wstring(controlSocket_.m_pSocket->GetPeerIP());
-	if (!fz::is_routable_address(host) && fz::is_routable_address(peerIP)) {
+	if (!fz::is_routable_address(host_) && fz::is_routable_address(peerIP)) {
 		if (controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || bTriedActive) {
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Using server address instead."));
-			LogMessage(MessageType::Debug_Info, L"  Reply: %s, peer: %s", host, peerIP);
-			host = peerIP;
+			LogMessage(MessageType::Debug_Info, L"  Reply: %s, peer: %s", host_, peerIP);
+			host_ = peerIP;
 		}
 		else {
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Passive mode failed."));
-			LogMessage(MessageType::Debug_Info, L"  Reply: %s, peer: %s", host, peerIP);
+			LogMessage(MessageType::Debug_Info, L"  Reply: %s, peer: %s", host_, peerIP);
 			return false;
 		}
 	}
 	else if (controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) == 2) {
 		// Always use server address
-		host = peerIP;
+		host_ = peerIP;
 	}
 
 	return true;
