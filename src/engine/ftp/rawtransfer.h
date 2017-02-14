@@ -40,8 +40,8 @@ public:
 	bool bTriedPasv{};
 	bool bTriedActive{};
 
-	std::wstring host;
-	int port{};
+	std::wstring host_;
+	int port_{};
 };
 
 #endif
