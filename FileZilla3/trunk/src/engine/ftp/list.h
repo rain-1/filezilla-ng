@@ -23,6 +23,10 @@ public:
 	virtual int ParseResponse() override;
 	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) override;
 
+
+private:
+	int CheckTimezoneDetection(CDirectoryListing& listing);
+
 	CServerPath path_;
 	std::wstring subDir_;
 	bool fallback_to_current{};

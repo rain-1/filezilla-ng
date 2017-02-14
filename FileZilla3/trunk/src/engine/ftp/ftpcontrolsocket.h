@@ -32,7 +32,6 @@ protected:
 
 	virtual int Connect(CServer const& server);
 	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
-	int ListCheckTimezoneDetection(CDirectoryListing& listing);
 
 	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
 	int ChangeDirSubcommandResult(int prevResult);
@@ -92,15 +91,7 @@ protected:
 
 	int GetReplyCode() const;
 
-	// Some servers are broken. Instead of an empty listing, some MVS servers
-	// for example they return "550 no members found"
-	// Other servers return "550 No files found."
-	bool IsMisleadingListResponse() const;
-
 	int GetExternalIPAddress(std::string& address);
-
-	// Checks if listing2 is a subset of listing1. Compares only filenames.
-	bool CheckInclusion(const CDirectoryListing& listing1, const CDirectoryListing& listing2);
 
 	void StartKeepaliveTimer();
 

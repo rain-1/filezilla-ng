@@ -471,32 +471,6 @@ int CFtpControlSocket::List(CServerPath path, std::wstring const& subDir, int fl
 	return FZ_REPLY_CONTINUE;
 }
 
-int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
-{
-	assert(m_pCurOpData);
-
-	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
-
-	if (CServerCapabilities::GetCapability(currentServer_, timezone_offset) == unknown) {
-		if (CServerCapabilities::GetCapability(currentServer_, mdtm_command) != yes) {
-			CServerCapabilities::SetCapability(currentServer_, timezone_offset, no);
-		}
-		else {
-			const int count = listing.GetCount();
-			for (int i = 0; i < count; ++i) {
-				if (!listing[i].is_dir() && listing[i].has_time()) {
-					pData->opState = list_mdtm;
-					pData->directoryListing = listing;
-					pData->mdtm_index = i;
-					return SendNextCommand();
-				}
-			}
-		}
-	}
-
-	return FZ_REPLY_OK;
-}
-
 int CFtpControlSocket::ResetOperation(int nErrorCode)
 {
  	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ResetOperation(%d)", nErrorCode);
@@ -844,10 +818,10 @@ int CFtpControlSocket::FileTransferParseResponse()
 
 int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("FileTransferSubcommandResult()"));
+	LogMessage(MessageType::Debug_Verbose, L"FileTransferSubcommandResult()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, L"  empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -901,7 +875,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				}
 			}
 			if (pData->opState == filetransfer_waitlist) {
-				int res = List(CServerPath(), _T(""), LIST_FLAG_REFRESH);
+				int res = List(CServerPath(), L"", LIST_FLAG_REFRESH);
 				if (res != FZ_REPLY_OK) {
 					return res;
 				}
@@ -990,7 +964,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				delete pData->pIOThread;
 				pData->pIOThread = 0;
 				if (!fz::local_filesys::set_modification_time(fz::to_native(pData->localFile), pData->fileTime)) {
-					LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Could not set modification time"));
+					LogMessage(MessageType::Debug_Warning, L"Could not set modification time");
 				}
 			}
 		}
@@ -1032,10 +1006,10 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 
 int CFtpControlSocket::FileTransferSend()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("FileTransferSend()"));
+	LogMessage(MessageType::Debug_Verbose, L"FileTransferSend()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1046,17 +1020,17 @@ int CFtpControlSocket::FileTransferSend()
 	switch (pData->opState)
 	{
 	case filetransfer_size:
-		cmd = _T("SIZE ");
+		cmd = L"SIZE ";
 		cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 		break;
 	case filetransfer_mdtm:
-		cmd = _T("MDTM ");
+		cmd = L"MDTM ";
 		cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 		break;
 	case filetransfer_resumetest:
 	case filetransfer_transfer:
 		if (m_pTransferSocket) {
-			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Verbose, _T("m_pTransferSocket != 0"));
+			LogMessage(MessageType::Debug_Verbose, L"m_pTransferSocket != 0");
 			m_pTransferSocket.reset();
 		}
 
@@ -1119,12 +1093,12 @@ int CFtpControlSocket::FileTransferSend()
 					// Try to preallocate the file in order to reduce fragmentation
 					int64_t sizeToPreallocate = pData->remoteFileSize - startOffset;
 					if (sizeToPreallocate > 0) {
-						LogMessage(MessageType::Debug_Info, _T("Preallocating %d bytes for the file \"%s\""), sizeToPreallocate, pData->localFile);
+						LogMessage(MessageType::Debug_Info, L"Preallocating %d bytes for the file \"%s\"", sizeToPreallocate, pData->localFile);
 						auto oldPos = pFile->seek(0, fz::file::current);
 						if (oldPos >= 0) {
 							if (pFile->seek(sizeToPreallocate, fz::file::end) == pData->remoteFileSize) {
 								if (!pFile->truncate()) {
-									LogMessage(MessageType::Debug_Warning, _T("Could not preallocate the file"));
+									LogMessage(MessageType::Debug_Warning, L"Could not preallocate the file");
 								}
 							}
 							pFile->seek(oldPos, fz::file::begin);
@@ -1152,7 +1126,7 @@ int CFtpControlSocket::FileTransferSend()
 						}
 
 						if (startOffset == pData->localFileSize && pData->binary) {
-							LogMessage(MessageType::Debug_Info, _T("No need to resume, remote file size matches local file size."));
+							LogMessage(MessageType::Debug_Info, L"No need to resume, remote file size matches local file size.");
 
 							if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(currentServer_, mfmt_command) == yes)
@@ -1212,19 +1186,19 @@ int CFtpControlSocket::FileTransferSend()
 		m_pTransferSocket->SetIOThread(pData->pIOThread);
 
 		if (pData->download) {
-			cmd = _T("RETR ");
+			cmd = L"RETR ";
 		}
 		else if (pData->resume) {
 			if (CServerCapabilities::GetCapability(currentServer_, rest_stream) == yes) {
-				cmd = _T("STOR "); // In this case REST gets sent since resume offset was set earlier
+				cmd = L"STOR "; // In this case REST gets sent since resume offset was set earlier
 			}
 			else {
 				assert(pData->resumeOffset == 0);
-				cmd = _T("APPE ");
+				cmd = L"APPE ";
 			}
 		}
 		else {
-			cmd = _T("STOR ");
+			cmd = L"STOR ";
 		}
 		cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
@@ -1232,16 +1206,16 @@ int CFtpControlSocket::FileTransferSend()
 		return Transfer(cmd, pData);
 	case filetransfer_mfmt:
 		{
-			cmd = _T("MFMT ");
+			cmd = L"MFMT ";
 			fz::datetime t = pData->fileTime;
 			t -= fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
-			cmd += t.format(_T("%Y%m%d%H%M%S "), fz::datetime::utc);
+			cmd += t.format(L"%Y%m%d%H%M%S ", fz::datetime::utc);
 			cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
 			break;
 		}
 	default:
-		LogMessage(MessageType::Debug_Warning, _T("Unhandled opState: %d"), pData->opState);
+		LogMessage(MessageType::Debug_Warning, L"Unhandled opState: %d", pData->opState);
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1257,20 +1231,20 @@ int CFtpControlSocket::FileTransferSend()
 
 void CFtpControlSocket::TransferEnd()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::TransferEnd()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::TransferEnd()");
 
 	// If m_pTransferSocket is zero, the message was sent by the previous command.
 	// We can safely ignore it.
 	// It does not cause problems, since before creating the next transfer socket, other
 	// messages which were added to the queue later than this one will be processed first.
 	if (!m_pCurOpData || !m_pTransferSocket || GetCurrentCommandId() != Command::rawtransfer) {
-		LogMessage(MessageType::Debug_Verbose, _T("Call to TransferEnd at unusual time, ignoring"));
+		LogMessage(MessageType::Debug_Verbose, L"Call to TransferEnd at unusual time, ignoring");
 		return;
 	}
 
 	TransferEndReason reason = m_pTransferSocket->GetTransferEndreason();
 	if (reason == TransferEndReason::none) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Call to TransferEnd at unusual time"));
+		LogMessage(MessageType::Debug_Info, L"Call to TransferEnd at unusual time");
 		return;
 	}
 
@@ -1295,7 +1269,7 @@ void CFtpControlSocket::TransferEnd()
 		ResetOperation((reason == TransferEndReason::successful) ? FZ_REPLY_OK : FZ_REPLY_ERROR);
 		break;
 	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("TransferEnd at unusual op state, ignoring"));
+		LogMessage(MessageType::Debug_Info, L"TransferEnd at unusual op state %d, ignoring", m_pCurOpData->opState);
 		break;
 	}
 }
@@ -1304,7 +1278,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 {
 	if (m_pCurOpData) {
 		if (!m_pCurOpData->waitForAsyncRequest) {
-			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Not waiting for request reply, ignoring request reply %d"), pNotification->GetRequestID());
+			LogMessage(MessageType::Debug_Info, L"Not waiting for request reply, ignoring request reply %d", pNotification->GetRequestID());
 			return false;
 		}
 		m_pCurOpData->waitForAsyncRequest = false;
@@ -1316,7 +1290,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 	case reqId_fileexists:
 		{
 			if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer) {
-				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pNotification->GetRequestID());
+				LogMessage(MessageType::Debug_Info, L"No or invalid operation in progress, ignoring request reply %d", pNotification->GetRequestID());
 				return false;
 			}
 
@@ -1327,7 +1301,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 	case reqId_interactiveLogin:
 		{
 			if (!m_pCurOpData || m_pCurOpData->opId != Command::connect) {
-				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %d"), pNotification->GetRequestID());
+				LogMessage(MessageType::Debug_Info, L"No or invalid operation in progress, ignoring request reply %d", pNotification->GetRequestID());
 				return false;
 			}
 
@@ -1346,7 +1320,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 	case reqId_certificate:
 		{
 			if (!m_pTlsSocket || m_pTlsSocket->GetState() != CTlsSocket::TlsState::verifycert) {
-				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %d"), pNotification->GetRequestID());
+				LogMessage(MessageType::Debug_Info, L"No or invalid operation in progress, ignoring request reply %d", pNotification->GetRequestID());
 				return false;
 			}
 
@@ -1366,7 +1340,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 		}
 		break;
 	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown request %d"), pNotification->GetRequestID());
+		LogMessage(MessageType::Debug_Warning, L"Unknown request %d", pNotification->GetRequestID());
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return false;
 	}
@@ -1397,10 +1371,10 @@ int CFtpControlSocket::RawCommand(std::wstring const& command)
 
 int CFtpControlSocket::RawCommandSend()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RawCommandSend"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RawCommandSend");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1422,7 +1396,7 @@ int CFtpControlSocket::RawCommandSend()
 
 int CFtpControlSocket::RawCommandParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RawCommandParseResponse"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RawCommandParseResponse");
 
 	int code = GetReplyCode();
 	if (code == 2 || code == 3) {
@@ -1457,10 +1431,10 @@ int CFtpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&
 
 int CFtpControlSocket::DeleteSubcommandResult(int prevResult)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::DeleteSubcommandResult()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::DeleteSubcommandResult()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1476,10 +1450,10 @@ int CFtpControlSocket::DeleteSubcommandResult(int prevResult)
 
 int CFtpControlSocket::DeleteSend()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::DeleteSend"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::DeleteSend");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1487,7 +1461,7 @@ int CFtpControlSocket::DeleteSend()
 
 	std::wstring const& file = pData->files.front();
 	if (file.empty()) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty filename"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty filename");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1514,10 +1488,10 @@ int CFtpControlSocket::DeleteSend()
 
 int CFtpControlSocket::DeleteParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::DeleteParseResponse()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::DeleteParseResponse()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1594,10 +1568,10 @@ int CFtpControlSocket::RemoveDir(const CServerPath& path, std::wstring const& su
 
 int CFtpControlSocket::RemoveDirSubcommandResult(int prevResult)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RemoveDirSubcommandResult()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RemoveDirSubcommandResult()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1616,10 +1590,10 @@ int CFtpControlSocket::RemoveDirSubcommandResult(int prevResult)
 
 int CFtpControlSocket::RemoveDirSend()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RemoveDirSend()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RemoveDirSend()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1638,12 +1612,12 @@ int CFtpControlSocket::RemoveDirSend()
 	engine_.GetPathCache().InvalidatePath(currentServer_, pData->path, pData->subDir);
 
 	if (pData->omitPath) {
-		if (!SendCommand(_T("RMD ") + pData->subDir)) {
+		if (!SendCommand(L"RMD " + pData->subDir)) {
 			return FZ_REPLY_ERROR;
 		}
 	}
 	else {
-		if (!SendCommand(_T("RMD ") + pData->fullPath.GetPath())) {
+		if (!SendCommand(L"RMD " + pData->fullPath.GetPath())) {
 			return FZ_REPLY_ERROR;
 		}
 	}
@@ -1653,10 +1627,10 @@ int CFtpControlSocket::RemoveDirSend()
 
 int CFtpControlSocket::RemoveDirParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RemoveDirParseResponse()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RemoveDirParseResponse()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1769,7 +1743,7 @@ int CFtpControlSocket::RenameParseResponse()
 {
 	CFtpRenameOpData *pData = static_cast<CFtpRenameOpData*>(m_pCurOpData);
 	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1802,11 +1776,11 @@ int CFtpControlSocket::RenameParseResponse()
 
 int CFtpControlSocket::RenameSubcommandResult(int prevResult)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RenameSubcommandResult()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RenameSubcommandResult()");
 
 	CFtpRenameOpData *pData = static_cast<CFtpRenameOpData*>(m_pCurOpData);
 	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1820,11 +1794,11 @@ int CFtpControlSocket::RenameSubcommandResult(int prevResult)
 
 int CFtpControlSocket::RenameSend()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RenameSend()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RenameSend()");
 
 	CFtpRenameOpData *pData = static_cast<CFtpRenameOpData*>(m_pCurOpData);
 	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1833,7 +1807,7 @@ int CFtpControlSocket::RenameSend()
 	switch (pData->opState)
 	{
 	case rename_rnfrom:
-		res = SendCommand(_T("RNFR ") + pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
+		res = SendCommand(L"RNFR " + pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
 		break;
 	case rename_rnto:
 		{
@@ -1850,11 +1824,11 @@ int CFtpControlSocket::RenameSend()
 			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
 			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
-			res = SendCommand(_T("RNTO ") + pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
+			res = SendCommand(L"RNTO " + pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
 			break;
 		}
 	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("unknown op state: %d"), pData->opState);
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"unknown op state: %d", pData->opState);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1888,7 +1862,7 @@ enum chmodStates
 int CFtpControlSocket::Chmod(CChmodCommand const& command)
 {
 	if (m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData not empty"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData not empty");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1911,7 +1885,7 @@ int CFtpControlSocket::ChmodParseResponse()
 {
 	CFtpChmodOpData *pData = static_cast<CFtpChmodOpData*>(m_pCurOpData);
 	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1930,12 +1904,12 @@ int CFtpControlSocket::ChmodParseResponse()
 
 int CFtpControlSocket::ChmodSubcommandResult(int prevResult)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ChmodSubcommandResult()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ChmodSubcommandResult()");
 
 	CFtpChmodOpData *pData = static_cast<CFtpChmodOpData*>(m_pCurOpData);
 	if (!pData)
 	{
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1948,11 +1922,11 @@ int CFtpControlSocket::ChmodSubcommandResult(int prevResult)
 
 int CFtpControlSocket::ChmodSend()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ChmodSend()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ChmodSend()");
 
 	CFtpChmodOpData *pData = static_cast<CFtpChmodOpData*>(m_pCurOpData);
 	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData empty"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1960,10 +1934,10 @@ int CFtpControlSocket::ChmodSend()
 	bool res;
 	switch (pData->opState) {
 	case chmod_chmod:
-		res = SendCommand(_T("SITE CHMOD ") + pData->m_cmd.GetPermission() + _T(" ") + pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
+		res = SendCommand(L"SITE CHMOD " + pData->m_cmd.GetPermission() + L" " + pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
 		break;
 	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("unknown op state: %d"), pData->opState);
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"unknown op state: %d", pData->opState);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1974,27 +1948,6 @@ int CFtpControlSocket::ChmodSend()
 	}
 
 	return FZ_REPLY_WOULDBLOCK;
-}
-
-bool CFtpControlSocket::IsMisleadingListResponse() const
-{
-	// Some servers are broken. Instead of an empty listing, some MVS servers
-	// for example they return "550 no members found"
-	// Other servers return "550 No files found."
-
-	if (!fz::stricmp(m_Response, _T("550 No members found."))) {
-		return true;
-	}
-
-	if (!fz::stricmp(m_Response, _T("550 No data sets found."))) {
-		return true;
-	}
-
-	if (fz::str_tolower_ascii(m_Response) == _T("550 no files found.")) {
-		return true;
-	}
-
-	return false;
 }
 
 int CFtpControlSocket::GetExternalIPAddress(std::string& address)
@@ -2025,7 +1978,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 				std::string localAddress = m_pSocket->GetLocalIP(true);
 
 				if (!localAddress.empty() && localAddress == fz::to_string(engine_.GetOptions().GetOption(OPTION_LASTRESOLVEDIP))) {
-					LogMessage(MessageType::Debug_Verbose, _T("Using cached external IP address"));
+					LogMessage(MessageType::Debug_Verbose, L"Using cached external IP address");
 
 					address = localAddress;
 					return FZ_REPLY_OK;
@@ -2038,7 +1991,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 				m_pIPResolver = std::make_unique<CExternalIPResolver>(engine_.GetThreadPool(), *this);
 				m_pIPResolver->GetExternalIP(resolverAddress, CSocket::ipv4);
 				if (!m_pIPResolver->Done()) {
-					LogMessage(MessageType::Debug_Verbose, _T("Waiting for resolver thread"));
+					LogMessage(MessageType::Debug_Verbose, L"Waiting for resolver thread");
 					return FZ_REPLY_WOULDBLOCK;
 				}
 			}
@@ -2048,7 +2001,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 				LogMessage(MessageType::Debug_Warning, _("Failed to retrieve external ip address, using local address"));
 			}
 			else {
-				LogMessage(MessageType::Debug_Info, _T("Got external IP address"));
+				LogMessage(MessageType::Debug_Info, L"Got external IP address");
 				address = m_pIPResolver->GetIP();
 
 				engine_.GetOptions().SetOption(OPTION_LASTRESOLVEDIP, fz::to_wstring(address));
@@ -2072,9 +2025,9 @@ getLocalIP:
 
 void CFtpControlSocket::OnExternalIPAddress()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::OnExternalIPAddress()"));
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::OnExternalIPAddress()");
 	if (!m_pIPResolver) {
-		LogMessage(MessageType::Debug_Info, _T("Ignoring event"));
+		LogMessage(MessageType::Debug_Info, L"Ignoring event");
 		return;
 	}
 
@@ -2131,10 +2084,10 @@ int CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* old
 
 int CFtpControlSocket::FileTransferTestResumeCapability()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("FileTransferTestResumeCapability()"));
+	LogMessage(MessageType::Debug_Verbose, L"FileTransferTestResumeCapability()");
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, L"  empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -2176,7 +2129,7 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 
 					m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, *this, TransferMode::resumetest);
 
-					return Transfer(_T("RETR ") + pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath), pData);
+					return Transfer(L"RETR " + pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath), pData);
 				}
 				break;
 			case no:
@@ -2191,7 +2144,7 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 int CFtpControlSocket::Connect(CServer const& server)
 {
 	if (m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, _T("CFtpControlSocket::Connect(): deleting nonzero pData"));
+		LogMessage(MessageType::Debug_Info, L"CFtpControlSocket::Connect(): deleting nonzero pData");
 		delete m_pCurOpData;
 	}
 
@@ -2199,39 +2152,6 @@ int CFtpControlSocket::Connect(CServer const& server)
 	Push(pData);
 
 	return FZ_REPLY_CONTINUE;
-}
-
-bool CFtpControlSocket::CheckInclusion(const CDirectoryListing& listing1, const CDirectoryListing& listing2)
-{
-	// Check if listing2 is contained within listing1
-
-	if (listing2.GetCount() > listing1.GetCount()) {
-		return false;
-	}
-
-	std::vector<std::wstring> names1, names2;
-	listing1.GetFilenames(names1);
-	listing2.GetFilenames(names2);
-	std::sort(names1.begin(), names1.end());
-	std::sort(names2.begin(), names2.end());
-
-	std::vector<std::wstring>::const_iterator iter1, iter2;
-	iter1 = names1.cbegin();
-	iter2 = names2.cbegin();
-	while (iter2 != names2.cbegin()) {
-		if (iter1 == names1.cend())
-			return false;
-
-		if (*iter1 != *iter2) {
-			++iter1;
-			continue;
-		}
-
-		++iter1;
-		++iter2;
-	}
-
-	return true;
 }
 
 void CFtpControlSocket::OnTimer(fz::timer_id id)
@@ -2254,18 +2174,18 @@ void CFtpControlSocket::OnTimer(fz::timer_id id)
 	std::wstring cmd;
 	int i = fz::random_number(0, 2);
 	if (!i) {
-		cmd = _T("NOOP");
+		cmd = L"NOOP";
 	}
 	else if (i == 1) {
 		if (m_lastTypeBinary) {
-			cmd = _T("TYPE I");
+			cmd = L"TYPE I";
 		}
 		else {
-			cmd = _T("TYPE A");
+			cmd = L"TYPE A";
 		}
 	}
 	else {
-		cmd = _T("PWD");
+		cmd = L"PWD";
 	}
 
 	if (!SendCommand(cmd)) {
@@ -2301,7 +2221,7 @@ int CFtpControlSocket::ParseSubcommandResult(int prevResult, COpData const& opDa
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ParseSubcommandResult(%d)", prevResult);
 	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Warning, "ParseSubcommandResult called without active operation");
+		LogMessage(MessageType::Debug_Warning, L"ParseSubcommandResult called without active operation");
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}

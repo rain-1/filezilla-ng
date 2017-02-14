@@ -137,10 +137,10 @@ void CControlSocket::Push(COpData *pNewOpData)
 
 int CControlSocket::ResetOperation(int nErrorCode)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CControlSocket::ResetOperation(%d)"), nErrorCode);
+	LogMessage(MessageType::Debug_Verbose, L"CControlSocket::ResetOperation(%d)", nErrorCode);
 
 	if (nErrorCode & FZ_REPLY_WOULDBLOCK) {
-		LogMessage(MessageType::Debug_Warning, _T("ResetOperation with FZ_REPLY_WOULDBLOCK in nErrorCode (%d)"), nErrorCode);
+		LogMessage(MessageType::Debug_Warning, L"ResetOperation with FZ_REPLY_WOULDBLOCK in nErrorCode (%d)", nErrorCode);
 	}
 
 	if (m_pCurOpData && m_pCurOpData->holdsLock) {
@@ -170,7 +170,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 	if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR &&
 		(!m_pCurOpData || m_pCurOpData->opId != Command::transfer))
 	{
-		prefix = _("Critical error:") + _T(" ");
+		prefix = _("Critical error:") + L" ";
 	}
 
 	if (m_pCurOpData) {
@@ -211,7 +211,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 				CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
 				if (!pData->download && pData->transferInitiated) {
 					if (!currentServer_) {
-						LogMessage(MessageType::Debug_Warning, _T("currentServer_ is empty"));
+						LogMessage(MessageType::Debug_Warning, L"currentServer_ is empty");
 					}
 					else {
 						bool updated = engine_.GetDirectoryCache().UpdateFile(currentServer_, pData->remotePath, pData->remoteFile, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? pData->localFileSize : -1);
@@ -246,9 +246,9 @@ int CControlSocket::ResetOperation(int nErrorCode)
 	return engine_.ResetOperation(nErrorCode);
 }
 
-int CControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
+int CControlSocket::DoClose(int nErrorCode)
 {
-	LogMessage(MessageType::Debug_Debug, _T("CControlSocket::DoClose(%d)"), nErrorCode);
+	LogMessage(MessageType::Debug_Debug, L"CControlSocket::DoClose(%d)", nErrorCode);
 	if (m_closed) {
 		assert(!m_pCurOpData);
 		return nErrorCode;
@@ -268,7 +268,7 @@ std::wstring CControlSocket::ConvertDomainName(std::wstring const& domain)
 #ifdef FZ_WINDOWS
 	int len = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.c_str(), domain.size() + 1, 0, 0);
 	if (!len) {
-		LogMessage(MessageType::Debug_Warning, _T("Could not convert domain name"));
+		LogMessage(MessageType::Debug_Warning, L"Could not convert domain name");
 		return domain;
 	}
 
@@ -276,7 +276,7 @@ std::wstring CControlSocket::ConvertDomainName(std::wstring const& domain)
 	int res = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.c_str(), domain.size() + 1, output, len);
 	if (!res) {
 		delete [] output;
-		LogMessage(MessageType::Debug_Warning, _T("Could not convert domain name"));
+		LogMessage(MessageType::Debug_Warning, L"Could not convert domain name");
 		return domain;
 	}
 
@@ -290,7 +290,7 @@ std::wstring CControlSocket::ConvertDomainName(std::wstring const& domain)
 
 	char *output = 0;
 	if (idna_to_ascii_8z(utf8.c_str(), &output, IDNA_ALLOW_UNASSIGNED)) {
-		LogMessage(MessageType::Debug_Warning, _T("Could not convert domain name"));
+		LogMessage(MessageType::Debug_Warning, L"Could not convert domain name");
 		return domain;
 	}
 
@@ -329,11 +329,11 @@ bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPat
 			pos2 = reply.rfind('\'');
 
 			if (pos1 != std::wstring::npos && pos1 < pos2) {
-				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Broken server sending single-quoted path instead of double-quoted path."));
+				LogMessage(MessageType::Debug_Info, L"Broken server sending single-quoted path instead of double-quoted path.");
 			}
 		}
 		if (pos1 == std::wstring::npos || pos1 >= pos2) {
-			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Broken server, no quoted path found in pwd reply, trying first token as path"));
+			LogMessage(MessageType::Debug_Info, L"Broken server, no quoted path found in pwd reply, trying first token as path");
 			pos1 = reply.find(' ');
 			if (pos1 != std::wstring::npos) {
 				reply = reply.substr(pos1 + 1);
@@ -361,7 +361,7 @@ bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPat
 		}
 
 		if (!defaultPath.empty()) {
-			LogMessage(MessageType::Debug_Warning, _T("Assuming path is '%s'."), defaultPath.GetPath());
+			LogMessage(MessageType::Debug_Warning, L"Assuming path is '%s'.", defaultPath.GetPath());
 			m_CurrentPath = defaultPath;
 			return true;
 		}
@@ -374,7 +374,7 @@ bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPat
 int CControlSocket::CheckOverwriteFile()
 {
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData in CControlSocket::CheckOverwriteFile");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -480,7 +480,7 @@ std::wstring CControlSocket::ConvToLocal(const char* buffer, size_t len)
 		}
 	}
 
-	wxCSConv conv(_T("ISO-8859-1"));
+	wxCSConv conv(L"ISO-8859-1");
 	ret = conv.cMB2WX(buffer);
 	if (ret.empty()) {
 		ret = wxConvCurrent->cMB2WX(buffer);
@@ -493,8 +493,9 @@ wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, wxMBConv& conv, s
 {
 	assert(buffer && len > 0 && !buffer[len - 1]);
 	outlen = conv.ToWChar(0, 0, buffer, len);
-	if (!outlen || outlen == wxCONV_FAILED)
+	if (!outlen || outlen == wxCONV_FAILED) {
 		return 0;
+	}
 
 	wchar_t* unicode = new wchar_t[outlen];
 	conv.ToWChar(unicode, outlen, buffer, len);
@@ -517,8 +518,9 @@ wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_
 		}
 #else
 		wchar_t* res = ConvToLocalBuffer(buffer, wxConvUTF8, len, outlen);
-		if (res && *res)
+		if (res && *res) {
 			return res;
+		}
 #endif
 
 		// Fall back to local charset on error
@@ -530,8 +532,9 @@ wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_
 
 	if (m_pCSConv) {
 		wchar_t* res = ConvToLocalBuffer(buffer, *m_pCSConv, len, outlen);
-		if (res && *res)
+		if (res && *res) {
 			return res;
+		}
 	}
 
 	// Fallback: Conversion using current locale
@@ -741,12 +744,12 @@ void CControlSocket::UnlockCache()
 
 	// Find other instance waiting for the lock
 	if (!currentServer_) {
-		LogMessage(MessageType::Debug_Warning, _T("UnlockCache called with !currentServer_"));
+		LogMessage(MessageType::Debug_Warning, L"UnlockCache called with !currentServer_");
 		return;
 	}
 	for (auto & lockInfo : m_lockInfoList) {
 		if (!lockInfo.pControlSocket->currentServer_) {
-			LogMessage(MessageType::Debug_Warning, _T("UnlockCache found other instance with !currentServer_"));
+			LogMessage(MessageType::Debug_Warning, L"UnlockCache found other instance with !currentServer_");
 			continue;
 		}
 
@@ -970,7 +973,7 @@ void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, i
 		OnClose(error);
 		break;
 	default:
-		LogMessage(MessageType::Debug_Warning, _T("Unhandled socket event %d"), t);
+		LogMessage(MessageType::Debug_Warning, L"Unhandled socket event %d", t);
 		break;
 	}
 }
@@ -1034,7 +1037,7 @@ void CRealControlSocket::OnSend()
 
 void CRealControlSocket::OnClose(int error)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CRealControlSocket::OnClose(%d)"), error);
+	LogMessage(MessageType::Debug_Verbose, L"CRealControlSocket::OnClose(%d)", error);
 
 	auto cmd = GetCurrentCommandId();
 	if (cmd != Command::connect) {
@@ -1052,7 +1055,7 @@ int CRealControlSocket::Connect(CServer const& server)
 	SetWait(true);
 
 	if (server.GetEncodingType() == ENCODING_CUSTOM) {
-		LogMessage(MessageType::Debug_Info, _T("Using custom encoding: %s"), server.GetCustomEncoding());
+		LogMessage(MessageType::Debug_Info, L"Using custom encoding: %s", server.GetCustomEncoding());
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 	}
 
@@ -1149,7 +1152,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 	assert(pFileExistsNotification);
 
 	if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pFileExistsNotification->GetRequestID());
+		LogMessage(MessageType::Debug_Info, L"SetFileExistsAction: No or invalid operation in progress, ignoring request reply %f", pFileExistsNotification->GetRequestID());
 		return false;
 	}
 
@@ -1302,7 +1305,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		ResetOperation(FZ_REPLY_OK);
 		break;
 	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown file exists action: %d"), pFileExistsNotification->overwriteAction);
+		LogMessage(MessageType::Debug_Warning, L"Unknown file exists action: %d", pFileExistsNotification->overwriteAction);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return false;
 	}
