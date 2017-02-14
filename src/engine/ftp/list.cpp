@@ -5,6 +5,32 @@
 #include "list.h"
 #include "transfersocket.h"
 
+namespace {
+// Some servers are broken. Instead of an empty listing, some MVS servers
+// for example they return "550 no members found"
+// Other servers return "550 No files found."
+bool IsMisleadingListResponse(std::wstring const& response)
+{
+	// Some servers are broken. Instead of an empty listing, some MVS servers
+	// for example they return "550 no members found"
+	// Other servers return "550 No files found."
+
+	if (!fz::stricmp(response, L"550 No members found.")) {
+		return true;
+	}
+
+	if (!fz::stricmp(response, L"550 No data sets found.")) {
+		return true;
+	}
+
+	if (fz::str_tolower_ascii(response) == L"550 no files found.") {
+		return true;
+	}
+
+	return false;
+}
+}
+
 CFtpListOpData::CFtpListOpData(CFtpControlSocket & controlSocket, CServerPath const& path, std::wstring const& subDir, int flags)
     : COpData(Command::list)
     , CFtpOpData(controlSocket)
@@ -12,8 +38,6 @@ CFtpListOpData::CFtpListOpData(CFtpControlSocket & controlSocket, CServerPath co
     , subDir_(subDir)
     , flags_(flags)
 {
-	opState = list_waitcwd;
-
 	if (path_.GetType() == DEFAULT) {
 		path_.SetType(currentServer().GetType());
 	}
@@ -32,28 +56,67 @@ int CFtpListOpData::Send()
 		return res;
 	}
 	if (opState == list_waitlock) {
-		if (!holdsLock) {
-			LogMessage(MessageType::Debug_Warning, L"CFtpListOpData::ListSend(): Not holding the lock as expected");
-			return FZ_REPLY_INTERNALERROR;
-		}
+		assert(subDir_.empty()); // We did do ChangeDir before trying to lock
 
 		// Check if we can use already existing listing
 		CDirectoryListing listing;
 		bool is_outdated = false;
-		assert(subDir_.empty()); // Did do ChangeDir before trying to lock
-		bool found = controlSocket_.engine_.GetDirectoryCache().Lookup(listing, currentServer(), path_, true, is_outdated);
+		bool found = controlSocket_.engine_.GetDirectoryCache().Lookup(listing, currentServer(), controlSocket_.m_CurrentPath, true, is_outdated);
 		if (found && !is_outdated && !listing.get_unsure_flags() &&
-		    listing.m_firstListTime >= m_time_before_locking)
+			(!refresh || (holdsLock && listing.m_firstListTime >= m_time_before_locking)))
 		{
-			controlSocket_.SendDirectoryListingNotification(listing.path, !pNextOpData, false);
+			controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
 			return FZ_REPLY_OK;
 		}
 
-		opState = list_waitcwd;
+		if (!holdsLock) {
+			if (!controlSocket_.TryLockCache(CFtpControlSocket::lock_list, controlSocket_.m_CurrentPath)) {
+				m_time_before_locking = fz::monotonic_clock::now();
+				return FZ_REPLY_WOULDBLOCK;
+			}
+		}
 
-		// FIXME
-		return FZ_REPLY_INTERNALERROR;
-		//return ListSubcommandResult(FZ_REPLY_OK);
+		controlSocket_.m_pTransferSocket.reset();
+		controlSocket_.m_pTransferSocket = std::make_unique<CTransferSocket>(controlSocket_.engine_, controlSocket_, TransferMode::list);
+
+		// Assume that a server supporting UTF-8 does not send EBCDIC listings.
+		listingEncoding::type encoding = listingEncoding::unknown;
+		if (CServerCapabilities::GetCapability(currentServer(), utf8_command) == yes) {
+			encoding = listingEncoding::normal;
+		}
+
+		m_pDirectoryListingParser = std::make_unique<CDirectoryListingParser>(&controlSocket_, currentServer(), encoding);
+
+		m_pDirectoryListingParser->SetTimezoneOffset(controlSocket_.GetTimezoneOffset());
+		controlSocket_.m_pTransferSocket->m_pDirectoryListingParser = m_pDirectoryListingParser.get();
+
+		controlSocket_.engine_.transfer_status_.Init(-1, 0, true);
+
+		opState = list_waittransfer;
+		if (CServerCapabilities::GetCapability(currentServer(), mlsd_command) == yes) {
+			return controlSocket_.Transfer(L"MLSD", this);
+		}
+		else {
+			if (controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES)) {
+				capabilities cap = CServerCapabilities::GetCapability(currentServer(), list_hidden_support);
+				if (cap == unknown) {
+					viewHiddenCheck = true;
+				}
+				else if (cap == yes) {
+					viewHidden = true;
+				}
+				else {
+					LogMessage(MessageType::Debug_Info, _("View hidden option set, but unsupported by server"));
+				}
+			}
+
+			if (viewHidden) {
+				return controlSocket_.Transfer(L"LIST -a", this);
+			}
+			else {
+				return controlSocket_.Transfer(L"LIST", this);
+			}
+		}
 	}
 	if (opState == list_mdtm) {
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
@@ -133,7 +196,7 @@ int CFtpListOpData::ParseResponse()
 
 int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOperation)
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ListSubcommandResult()");
+	LogMessage(MessageType::Debug_Verbose, L"CFtpListOpData::SubcommandResult()");
 
 	LogMessage(MessageType::Debug_Debug, L"  state = %d", opState);
 
@@ -162,73 +225,8 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 			assert(subDir_.empty());
 			assert(!path_.empty());
 		}
-
-		if (!refresh) {
-			assert(!pNextOpData);
-
-			// Do a cache lookup now that we know the correct directory
-			int hasUnsureEntries;
-			bool is_outdated = false;
-			bool found = controlSocket_.engine_.GetDirectoryCache().DoesExist(currentServer(), controlSocket_.m_CurrentPath, hasUnsureEntries, is_outdated);
-			if (found) {
-				// We're done if listing is recent and has no outdated entries
-				if (!is_outdated && !hasUnsureEntries) {
-					controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
-
-					return FZ_REPLY_OK;
-				}
-			}
-		}
-
-		if (!holdsLock) {
-			if (!controlSocket_.TryLockCache(CFtpControlSocket::lock_list, controlSocket_.m_CurrentPath)) {
-				opState = list_waitlock;
-				m_time_before_locking = fz::monotonic_clock::now();
-				return FZ_REPLY_WOULDBLOCK;
-			}
-		}
-
-		controlSocket_.m_pTransferSocket.reset();
-		controlSocket_.m_pTransferSocket = std::make_unique<CTransferSocket>(controlSocket_.engine_, controlSocket_, TransferMode::list);
-
-		// Assume that a server supporting UTF-8 does not send EBCDIC listings.
-		listingEncoding::type encoding = listingEncoding::unknown;
-		if (CServerCapabilities::GetCapability(currentServer(), utf8_command) == yes) {
-			encoding = listingEncoding::normal;
-		}
-
-		m_pDirectoryListingParser = std::make_unique<CDirectoryListingParser>(&controlSocket_, currentServer(), encoding);
-
-		m_pDirectoryListingParser->SetTimezoneOffset(controlSocket_.GetTimezoneOffset());
-		controlSocket_.m_pTransferSocket->m_pDirectoryListingParser = m_pDirectoryListingParser.get();
-
-		controlSocket_.engine_.transfer_status_.Init(-1, 0, true);
-
-		opState = list_waittransfer;
-		if (CServerCapabilities::GetCapability(currentServer(), mlsd_command) == yes) {
-			return controlSocket_.Transfer(L"MLSD", this);
-		}
-		else {
-			if (controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES)) {
-				capabilities cap = CServerCapabilities::GetCapability(currentServer(), list_hidden_support);
-				if (cap == unknown) {
-					viewHiddenCheck = true;
-				}
-				else if (cap == yes) {
-					viewHidden = true;
-				}
-				else {
-					LogMessage(MessageType::Debug_Info, _("View hidden option set, but unsupported by server"));
-				}
-			}
-
-			if (viewHidden) {
-				return controlSocket_.Transfer(L"LIST -a", this);
-			}
-			else {
-				return controlSocket_.Transfer(L"LIST", this);
-			}
-		}
+		opState = list_waitlock;
+		return FZ_REPLY_CONTINUE;
 	}
 	else if (opState == list_waittransfer) {
 		if (prevResult == FZ_REPLY_OK) {
@@ -251,7 +249,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 					return controlSocket_.Transfer(L"LIST -a", this);
 				}
 				else {
-					if (controlSocket_.CheckInclusion(listing, directoryListing)) {
+					if (CheckInclusion(listing, directoryListing)) {
 						LogMessage(MessageType::Debug_Info, L"Server seems to support LIST -a");
 						CServerCapabilities::SetCapability(currentServer(), list_hidden_support, yes);
 					}
@@ -265,7 +263,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 
 			controlSocket_.SetAlive();
 
-			int res = controlSocket_.ListCheckTimezoneDetection(listing);
+			int res = CheckTimezoneDetection(listing);
 			if (res != FZ_REPLY_OK) {
 				return res;
 			}
@@ -277,7 +275,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 			return FZ_REPLY_OK;
 		}
 		else {
-			if (tranferCommandSent && controlSocket_.IsMisleadingListResponse()) {
+			if (tranferCommandSent && IsMisleadingListResponse(controlSocket_.m_Response)) {
 				CDirectoryListing listing;
 				listing.path = controlSocket_.m_CurrentPath;
 				listing.m_firstListTime = fz::monotonic_clock::now();
@@ -312,7 +310,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 					}
 				}
 
-				int res = controlSocket_.ListCheckTimezoneDetection(listing);
+				int res = CheckTimezoneDetection(listing);
 				if (res != FZ_REPLY_OK) {
 					return res;
 				}
@@ -333,7 +331,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 					{
 						CServerCapabilities::SetCapability(currentServer(), list_hidden_support, no);
 
-						int res = controlSocket_.ListCheckTimezoneDetection(directoryListing);
+						int res = CheckTimezoneDetection(directoryListing);
 						if (res != FZ_REPLY_OK) {
 							return res;
 						}
@@ -358,4 +356,26 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 		LogMessage(MessageType::Debug_Warning, L"Wrong opState: %d", opState);
 		return FZ_REPLY_INTERNALERROR;
 	}
+}
+
+int CFtpListOpData::CheckTimezoneDetection(CDirectoryListing& listing)
+{
+	if (CServerCapabilities::GetCapability(currentServer(), timezone_offset) == unknown) {
+		if (CServerCapabilities::GetCapability(currentServer(), mdtm_command) != yes) {
+			CServerCapabilities::SetCapability(currentServer(), timezone_offset, no);
+		}
+		else {
+			const int count = listing.GetCount();
+			for (int i = 0; i < count; ++i) {
+				if (!listing[i].is_dir() && listing[i].has_time()) {
+					opState = list_mdtm;
+					directoryListing = listing;
+					mdtm_index = i;
+					return FZ_REPLY_CONTINUE;
+				}
+			}
+		}
+	}
+
+	return FZ_REPLY_OK;
 }

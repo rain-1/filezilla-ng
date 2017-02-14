@@ -2,6 +2,8 @@
 
 #include <libfilezilla/format.hpp>
 
+#include <algorithm>
+
 std::wstring CDirentry::dump() const
 {
 	std::wstring str = fz::sprintf(L"name=%s\nsize=%d\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nunsure=%d\n",
@@ -206,4 +208,38 @@ void CDirectoryListing::ClearFindMap()
 void CDirectoryListing::Append(CDirentry&& entry)
 {
 	m_entries.get().emplace_back(entry);
+}
+
+bool CheckInclusion(const CDirectoryListing& listing1, const CDirectoryListing& listing2)
+{
+	// Check if listing2 is contained within listing1
+
+	if (listing2.GetCount() > listing1.GetCount()) {
+		return false;
+	}
+
+	std::vector<std::wstring> names1, names2;
+	listing1.GetFilenames(names1);
+	listing2.GetFilenames(names2);
+	std::sort(names1.begin(), names1.end());
+	std::sort(names2.begin(), names2.end());
+
+	std::vector<std::wstring>::const_iterator iter1, iter2;
+	iter1 = names1.cbegin();
+	iter2 = names2.cbegin();
+	while (iter2 != names2.cbegin()) {
+		if (iter1 == names1.cend()) {
+			return false;
+		}
+
+		if (*iter1 != *iter2) {
+			++iter1;
+			continue;
+		}
+
+		++iter1;
+		++iter2;
+	}
+
+	return true;
 }
