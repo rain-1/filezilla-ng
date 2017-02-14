@@ -114,7 +114,7 @@ int CFtpMkdirOpData::ParseResponse()
 
 int CFtpMkdirOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::Send");
+	LogMessage(MessageType::Debug_Verbose, L"CFtpMkdirOpData::Send()");
 
 	LogMessage(MessageType::Debug_Debug, L"  state = %d", opState);
 
@@ -127,6 +127,36 @@ int CFtpMkdirOpData::Send()
 	bool res;
 	switch (opState)
 	{
+	case mkd_init:
+		if (!controlSocket_.m_CurrentPath.empty()) {
+			// Unless the server is broken, a directory already exists if current directory is a subdir of it.
+			if (controlSocket_.m_CurrentPath == path || controlSocket_.m_CurrentPath.IsSubdirOf(path, false)) {
+				return FZ_REPLY_OK;
+			}
+
+			if (controlSocket_.m_CurrentPath.IsParentOf(path, false)) {
+				commonParent = controlSocket_.m_CurrentPath;
+			}
+			else {
+				commonParent = path.GetCommonParent(controlSocket_.m_CurrentPath);
+			}
+		}
+
+		if (!path.HasParent()) {
+			opState = mkd_tryfull;
+		}
+		else {
+			currentPath = path.GetParent();
+			segments.push_back(path.GetLastSegment());
+
+			if (currentPath == controlSocket_.m_CurrentPath) {
+				opState = mkd_mkdsub;
+			}
+			else {
+				opState = mkd_findparent;
+			}
+		}
+		return Send();
 	case mkd_findparent:
 	case mkd_cwdsub:
 		controlSocket_.m_CurrentPath.clear();

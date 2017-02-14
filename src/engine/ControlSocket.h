@@ -144,10 +144,16 @@ public:
 	CControlSocket(CControlSocket const&) = delete;
 	CControlSocket& operator=(CControlSocket const&) = delete;
 
+	// Implicit FZ_REPLY_CONTINUE
 	virtual void Connect(CServer const& server) = 0;
+
 	virtual int Disconnect();
+
 	virtual void Cancel();
+
+	// Implicit FZ_REPLY_CONTINUE
 	virtual void List(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
+
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
 							 CFileTransferCommand::t_transferSettings const& transferSettings);

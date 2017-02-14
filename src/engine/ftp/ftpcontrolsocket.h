@@ -69,7 +69,9 @@ protected:
 	virtual int ChmodSubcommandResult(int prevResult);
 	virtual int ChmodSend();
 
-	virtual int Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData);
+
+	// Implicit FZ_REPLY_CONTINUE
+	void Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData);
 
 	virtual void OnConnect();
 	virtual void OnReceive();

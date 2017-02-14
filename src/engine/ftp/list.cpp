@@ -93,7 +93,8 @@ int CFtpListOpData::Send()
 
 		opState = list_waittransfer;
 		if (CServerCapabilities::GetCapability(currentServer(), mlsd_command) == yes) {
-			return controlSocket_.Transfer(L"MLSD", this);
+			controlSocket_.Transfer(L"MLSD", this);
+			return FZ_REPLY_CONTINUE;
 		}
 		else {
 			if (controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES)) {
@@ -110,10 +111,12 @@ int CFtpListOpData::Send()
 			}
 
 			if (viewHidden) {
-				return controlSocket_.Transfer(L"LIST -a", this);
+				controlSocket_.Transfer(L"LIST -a", this);
+				return FZ_REPLY_CONTINUE;
 			}
 			else {
-				return controlSocket_.Transfer(L"LIST", this);
+				controlSocket_.Transfer(L"LIST", this);
+				return FZ_REPLY_CONTINUE;
 			}
 		}
 	}
@@ -243,7 +246,8 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 					m_pDirectoryListingParser->Reset();
 					controlSocket_.m_pTransferSocket->m_pDirectoryListingParser = m_pDirectoryListingParser.get();
 
-					return controlSocket_.Transfer(L"LIST -a", this);
+					controlSocket_.Transfer(L"LIST -a", this);
+					return FZ_REPLY_CONTINUE;
 				}
 				else {
 					if (CheckInclusion(listing, directoryListing)) {
@@ -303,7 +307,8 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 						// Repeat with LIST -a
 						viewHidden = true;
 						directoryListing = listing;
-						return controlSocket_.Transfer(L"LIST -a", this);
+						controlSocket_.Transfer(L"LIST -a", this);
+						return FZ_REPLY_CONTINUE;
 					}
 				}
 
