@@ -20,6 +20,7 @@ libengine_a_SOURCES = \
 		externalipresolver.cpp \
 		FileZillaEngine.cpp \
 		ftp/cwd.cpp \
+		ftp/filetransfer.cpp \
 		ftp/ftpcontrolsocket.cpp \
 		ftp/list.cpp \
 		ftp/logon.cpp \
@@ -52,6 +53,7 @@ noinst_HEADERS = backend.h \
 		engineprivate.h \
 		filezilla.h \
 		ftp/cwd.h \
+		ftp/filetransfer.h \
 		ftp/ftpcontrolsocket.h \
 		ftp/list.h \
 		ftp/logon.h \

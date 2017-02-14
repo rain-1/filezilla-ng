@@ -220,11 +220,8 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 				return prevResult;
 			}
 		}
-		if (path_.empty()) {
-			path_ = controlSocket_.m_CurrentPath;
-			assert(subDir_.empty());
-			assert(!path_.empty());
-		}
+		path_ = controlSocket_.m_CurrentPath;
+		subDir_.clear();
 		opState = list_waitlock;
 		return FZ_REPLY_CONTINUE;
 	}
