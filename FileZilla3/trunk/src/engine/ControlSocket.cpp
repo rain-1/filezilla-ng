@@ -980,8 +980,9 @@ void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, i
 
 void CRealControlSocket::OnHostAddress(CSocketEventSource*, std::string const& address)
 {
-	if (!m_pBackend)
+	if (!m_pBackend) {
 		return;
+	}
 
 	LogMessage(MessageType::Status, _("Connecting to %s..."), address);
 }
@@ -1050,7 +1051,7 @@ void CRealControlSocket::OnClose(int error)
 	DoClose();
 }
 
-int CRealControlSocket::Connect(CServer const& server)
+int CRealControlSocket::DoConnect(CServer const& server)
 {
 	SetWait(true);
 
@@ -1058,11 +1059,6 @@ int CRealControlSocket::Connect(CServer const& server)
 		LogMessage(MessageType::Debug_Info, L"Using custom encoding: %s", server.GetCustomEncoding());
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 	}
-
-	currentServer_ = server;
-
-	// International domain names
-	currentServer_.SetHost(ConvertDomainName(server.GetHost()), server.GetPort());
 
 	return ContinueConnect();
 }
@@ -1083,7 +1079,7 @@ int CRealControlSocket::ContinueConnect()
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, this);
 		m_pBackend = m_pProxyBackend;
 		int res = m_pProxyBackend->Handshake(static_cast<CProxySocket::ProxyType>(proxy_type),
-											currentServer_.GetHost(), currentServer_.GetPort(),
+											ConvertDomainName(currentServer_.GetHost()), currentServer_.GetPort(),
 											engine_.GetOptions().GetOption(OPTION_PROXY_USER),
 											engine_.GetOptions().GetOption(OPTION_PROXY_PASS));
 
@@ -1096,7 +1092,7 @@ int CRealControlSocket::ContinueConnect()
 	else {
 		if (m_pCurOpData && m_pCurOpData->opId == Command::connect) {
 			CConnectOpData* pData(static_cast<CConnectOpData*>(m_pCurOpData));
-			host = ConvertDomainName(pData->host);
+			host = pData->host;
 			port = pData->port;
 		}
 		if (host.empty()) {
@@ -1108,6 +1104,7 @@ int CRealControlSocket::ContinueConnect()
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 	}
 
+	host = ConvertDomainName(host);
 	int res = m_pSocket->Connect(fz::to_native(host), port);
 
 	// Treat success same as EINPROGRESS, we wait for connect notification in any case
@@ -1332,9 +1329,9 @@ void CControlSocket::CreateLocalDir(std::wstring const & local_file)
 	}
 }
 
-int CControlSocket::List(CServerPath, std::wstring const&, int)
+void CControlSocket::List(CServerPath const&, std::wstring const&, int)
 {
-	return FZ_REPLY_NOTSUPPORTED;
+	Push(new CNotSupportedOpData(Command::list));
 }
 
 int CControlSocket::FileTransfer(std::wstring const&, CServerPath const&,

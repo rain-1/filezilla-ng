@@ -176,8 +176,8 @@ protected:
 
 	void RegisterFailedLoginAttempt(const CServer& server, bool critical);
 
-	// Get the amount of time to wait till next reconnection attempt in milliseconds
-	unsigned int GetRemainingReconnectDelay(const CServer& server);
+	// Get the amount of time to wait till next reconnection attempt
+	fz::duration GetRemainingReconnectDelay(CServer const& server);
 
 	struct t_failedLogins final
 	{

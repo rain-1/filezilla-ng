@@ -263,7 +263,7 @@ public:
 	std::vector<std::wstring>::const_iterator keyfile_;
 };
 
-int CSftpControlSocket::Connect(const CServer &server)
+void CSftpControlSocket::Connect(CServer const& server)
 {
 	LogMessage(MessageType::Status, _("Connecting to %s..."), server.Format(ServerFormat::with_optional_port));
 	SetWait(true);
@@ -323,7 +323,8 @@ int CSftpControlSocket::Connect(const CServer &server)
 	if (!m_pProcess->spawn(executable, args)) {
 		LogMessage(MessageType::Debug_Warning, _T("Could not create process"));
 		DoClose();
-		return FZ_REPLY_ERROR;
+		// FIXME
+		//return FZ_REPLY_ERROR;
 	}
 
 	m_pInputThread = std::make_unique<CSftpInputThread>(this, *m_pProcess);
@@ -331,10 +332,9 @@ int CSftpControlSocket::Connect(const CServer &server)
 		LogMessage(MessageType::Debug_Warning, _T("Thread creation failed"));
 		m_pInputThread.reset();
 		DoClose();
-		return FZ_REPLY_ERROR;
+		// FIXME
+		//return FZ_REPLY_ERROR;
 	}
-
-	return FZ_REPLY_WOULDBLOCK;
 }
 
 int CSftpControlSocket::ConnectParseResponse(bool successful, std::wstring const& reply)
@@ -463,7 +463,7 @@ int CSftpControlSocket::ConnectSend()
 		res = SendCommand(L"keyfile \"" + *(pData->keyfile_++) + L"\"");
 		break;
 	case connect_open:
-		res = SendCommand(fz::sprintf(L"open \"%s@%s\" %d", currentServer_.GetUser(), currentServer_.GetHost(), currentServer_.GetPort()));
+		res = SendCommand(fz::sprintf(L"open \"%s@%s\" %d", currentServer_.GetUser(), ConvertDomainName(currentServer_.GetHost()), currentServer_.GetPort()));
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown op state: %d"), pData->opState);

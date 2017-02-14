@@ -130,11 +130,9 @@ int CHttpControlSocket::ContinueConnect()
 
 bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
 {
-	if (m_pCurOpData)
-	{
-		if (!m_pCurOpData->waitForAsyncRequest)
-		{
-			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Not waiting for request reply, ignoring request reply %d"), pNotification->GetRequestID());
+	if (m_pCurOpData) {
+		if (!m_pCurOpData->waitForAsyncRequest) {
+			LogMessage(MessageType::Debug_Info, L"Not waiting for request reply, ignoring request reply %d", pNotification->GetRequestID());
 			return false;
 		}
 		m_pCurOpData->waitForAsyncRequest = false;
@@ -437,7 +435,7 @@ int CHttpControlSocket::InternalConnect(std::wstring host, unsigned short port, 
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 	}
 
-	pData->host = host;
+	pData->host = ConvertDomainName(host);
 	return DoInternalConnect();
 }
 
@@ -445,8 +443,7 @@ int CHttpControlSocket::DoInternalConnect()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::DoInternalConnect()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -458,11 +455,13 @@ int CHttpControlSocket::DoInternalConnect()
 	m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
 
 	int res = m_pSocket->Connect(fz::to_native(pData->host), pData->port);
-	if (!res)
+	if (!res) {
 		return FZ_REPLY_OK;
+	}
 
-	if (res && res != EINPROGRESS)
+	if (res && res != EINPROGRESS) {
 		return ResetOperation(FZ_REPLY_ERROR);
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -630,7 +629,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					m_current_uri = pData->m_newLocation;
 
 					// International domain names
-					std::wstring host = ConvertDomainName(fz::to_wstring_from_utf8(m_current_uri.host_));
+					std::wstring host = fz::to_wstring_from_utf8(m_current_uri.host_);
 					if (host.empty()) {
 						LogMessage(MessageType::Error, _("Invalid hostname: %s"), pData->m_newLocation.to_string());
 						ResetOperation(FZ_REPLY_ERROR);
