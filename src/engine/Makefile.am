@@ -25,7 +25,9 @@ libengine_a_SOURCES = \
 		ftp/list.cpp \
 		ftp/logon.cpp \
 		ftp/mkd.cpp \
+		ftp/rawcommand.cpp \
 		ftp/rawtransfer.cpp \
+		ftp/transfersocket.cpp \
 		httpcontrolsocket.cpp \
 		iothread.cpp \
 		local_path.cpp \
@@ -43,7 +45,6 @@ libengine_a_SOURCES = \
 		sizeformatting_base.cpp \
 		socket.cpp \
 		tlssocket.cpp \
-		transfersocket.cpp \
 		uri.cpp
 
 noinst_HEADERS = backend.h \
@@ -58,7 +59,9 @@ noinst_HEADERS = backend.h \
 		ftp/list.h \
 		ftp/logon.h \
 		ftp/mkd.h \
+		ftp/rawcommand.h \
 		ftp/rawtransfer.h \
+		ftp/transfersocket.h \
 		httpcontrolsocket.h \
 		iothread.h \
 		logging_private.h \
@@ -68,8 +71,7 @@ noinst_HEADERS = backend.h \
 		rtt.h \
 		servercapabilities.h \
 		sftpcontrolsocket.h \
-		tlssocket.h \
-		transfersocket.h
+		tlssocket.h
 
 dist_noinst_DATA = engine.vcxproj
 
