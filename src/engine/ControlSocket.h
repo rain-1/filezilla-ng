@@ -321,7 +321,7 @@ protected:
 	void OnSend();
 	virtual void OnClose(int error);
 
-	bool Send(const char *buffer, int len);
+	int Send(const char *buffer, int len);
 
 	CSocket* m_pSocket;
 

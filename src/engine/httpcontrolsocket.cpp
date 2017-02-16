@@ -415,11 +415,7 @@ int CHttpControlSocket::FileTransferSend()
 	}
 	command += "\r\n";
 
-	if (!Send(command.c_str(), command.size())) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
+	return Send(command.c_str(), command.size());
 }
 
 int CHttpControlSocket::InternalConnect(std::wstring host, unsigned short port, bool tls)

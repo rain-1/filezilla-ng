@@ -891,7 +891,7 @@ CRealControlSocket::~CRealControlSocket()
 	delete m_pSocket;
 }
 
-bool CRealControlSocket::Send(const char *buffer, int len)
+int CRealControlSocket::Send(const char *buffer, int len)
 {
 	SetWait(true);
 	if (m_pSendBuffer) {
@@ -909,14 +909,14 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 			if (error != EAGAIN) {
 				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
 				LogMessage(MessageType::Error, _("Disconnected from server"));
-				DoClose();
-				return false;
+				return FZ_REPLY_DISCONNECTED;
 			}
 			written = 0;
 		}
 
-		if (written)
+		if (written) {
 			SetActive(CFileZillaEngine::send);
+		}
 
 		if (written < len) {
 			m_nSendBufferLen = len - written;
@@ -925,7 +925,7 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 		}
 	}
 
-	return true;
+	return FZ_REPLY_WOULDBLOCK;
 }
 
 void CRealControlSocket::operator()(fz::event_base const& ev)

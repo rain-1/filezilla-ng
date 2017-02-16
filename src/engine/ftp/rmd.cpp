@@ -20,9 +20,7 @@ int CFtpRemoveDirOpData::Send()
 	engine_.GetPathCache().InvalidatePath(currentServer_, path, subDir_);
 
 	if (omitPath_) {
-		if (!controlSocket_.SendCommand(L"RMD " + subDir_)) {
-			return FZ_REPLY_ERROR;
-		}
+		return controlSocket_.SendCommand(L"RMD " + subDir_);
 	}
 	else {
 		if (!fullPath_.AddSegment(subDir_)) {
@@ -30,12 +28,8 @@ int CFtpRemoveDirOpData::Send()
 			return FZ_REPLY_ERROR;
 		}
 
-		if (!controlSocket_.SendCommand(L"RMD " + fullPath_.GetPath())) {
-			return FZ_REPLY_ERROR;
-		}
+		return controlSocket_.SendCommand(L"RMD " + fullPath_.GetPath());
 	}
-
-	return FZ_REPLY_WOULDBLOCK;
 }
 
 int CFtpRemoveDirOpData::ParseResponse()

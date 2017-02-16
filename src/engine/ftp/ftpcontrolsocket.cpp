@@ -293,7 +293,7 @@ int CFtpControlSocket::GetReplyCode() const
 	}
 }
 
-bool CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool measureRTT)
+int CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool measureRTT)
 {
 	size_t pos;
 	if (maskArgs && (pos = str.find(' ')) != std::wstring::npos) {
@@ -307,8 +307,7 @@ bool CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool
 	std::string buffer = ConvToServer(str);
 	if (buffer.empty()) {
 		LogMessage(MessageType::Error, _("Failed to convert command to 8 bit charset"));
-		ResetOperation(FZ_REPLY_ERROR);
-		return false;
+		return FZ_REPLY_ERROR;
 	}
 	buffer += "\r\n";
 	bool res = CRealControlSocket::Send(buffer.c_str(), buffer.size());
@@ -320,7 +319,7 @@ bool CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool
 		m_rtt.Start();
 	}
 
-	return res;
+	return res ? FZ_REPLY_WOULDBLOCK : FZ_REPLY_ERROR;
 }
 
 void CFtpControlSocket::List(CServerPath const& path, std::wstring const& subDir, int flags)
@@ -626,7 +625,7 @@ void CFtpControlSocket::RawCommand(std::wstring const& command)
 	Push(new CFtpRawCommandOpData(*this, command));
 }
 
-int CFtpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)
+int CFtpControlSocket::Delete(CServerPath const& path, std::deque<std::wstring>&& files)
 {
 	assert(!m_pCurOpData);
 	CFtpDeleteOpData *pData = new CFtpDeleteOpData(*this);
@@ -639,7 +638,7 @@ int CFtpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&
 	return FZ_REPLY_CONTINUE;
 }
 
-int CFtpControlSocket::RemoveDir(const CServerPath& path, std::wstring const& subDir)
+int CFtpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& subDir)
 {
 	assert(!m_pCurOpData);
 	CFtpRemoveDirOpData *pData = new CFtpRemoveDirOpData(*this);
@@ -868,10 +867,13 @@ void CFtpControlSocket::OnTimer(fz::timer_id id)
 		cmd = L"PWD";
 	}
 
-	if (!SendCommand(cmd)) {
-		return;
+	int res = SendCommand(cmd);
+	if (res == FZ_REPLY_WOULDBLOCK) {
+		++m_repliesToSkip;
 	}
-	++m_repliesToSkip;
+	else {
+		DoClose(res);
+	}
 }
 
 void CFtpControlSocket::StartKeepaliveTimer()

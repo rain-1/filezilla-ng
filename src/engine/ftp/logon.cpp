@@ -36,7 +36,6 @@ CFtpLogonOpData::CFtpLogonOpData(CFtpControlSocket& controlSocket, CServer const
 
 int CFtpLogonOpData::Send()
 {
-	bool res;
 	switch (opState)
 	{
 	case LOGON_CONNECT:
@@ -103,14 +102,11 @@ int CFtpLogonOpData::Send()
 		LogMessage(MessageType::Debug_Info, L"LogonSend() called during LOGON_AUTH_WAIT, ignoring");
 		return FZ_REPLY_WOULDBLOCK;
 	case LOGON_AUTH_TLS:
-		res = controlSocket_.SendCommand(L"AUTH TLS", false, false);
-		break;
+		return controlSocket_.SendCommand(L"AUTH TLS", false, false);
 	case LOGON_AUTH_SSL:
-		res = controlSocket_.SendCommand(L"AUTH SSL", false, false);
-		break;
+		return controlSocket_.SendCommand(L"AUTH SSL", false, false);
 	case LOGON_SYST:
-		res = controlSocket_.SendCommand(L"SYST");
-		break;
+		return controlSocket_.SendCommand(L"SYST");
 	case LOGON_LOGON:
 	    {
 		    t_loginCommand cmd = loginSequence.front();
@@ -123,12 +119,11 @@ int CFtpLogonOpData::Send()
 				}
 
 				if (cmd.command.empty()) {
-					res = controlSocket_.SendCommand(L"USER " + currentServer_.GetUser());
+					return controlSocket_.SendCommand(L"USER " + currentServer_.GetUser());
 				}
 				else {
-					res = controlSocket_.SendCommand(cmd.command);
+					return controlSocket_.SendCommand(cmd.command);
 				}
-				break;
 			case loginCommandType::pass:
 				if (!challenge.empty()) {
 					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(CInteractiveLoginNotification::interactive, challenge, false);
@@ -141,7 +136,7 @@ int CFtpLogonOpData::Send()
 				}
 
 				if (cmd.command.empty()) {
-					res = controlSocket_.SendCommand(L"PASS " + currentServer_.GetPass(), true);
+					return controlSocket_.SendCommand(L"PASS " + currentServer_.GetPass(), true);
 				}
 				else {
 					std::wstring c = cmd.command;
@@ -149,75 +144,64 @@ int CFtpLogonOpData::Send()
 					fz::replace_substrings(pass, L"%", L"%%");
 					fz::replace_substrings(c, L"%p", pass);
 					fz::replace_substrings(c, L"%%", L"%");
-					res = controlSocket_.SendCommand(c, true);
+					return controlSocket_.SendCommand(c, true);
 				}
 				break;
 			case loginCommandType::account:
 				if (cmd.command.empty()) {
-					res = controlSocket_.SendCommand(L"ACCT " + currentServer_.GetAccount());
+					return controlSocket_.SendCommand(L"ACCT " + currentServer_.GetAccount());
 				}
 				else {
-					res = controlSocket_.SendCommand(cmd.command);
+					return controlSocket_.SendCommand(cmd.command);
 				}
 				break;
 			case loginCommandType::other:
 				assert(!cmd.command.empty());
-				res = controlSocket_.SendCommand(cmd.command, cmd.hide_arguments);
-				break;
+				return controlSocket_.SendCommand(cmd.command, cmd.hide_arguments);
 			default:
-				res = false;
-				break;
+				return FZ_REPLY_INTERNALERROR;
 			}
 	    }
 		break;
 	case LOGON_FEAT:
-		res = controlSocket_.SendCommand(L"FEAT");
-		break;
+		return controlSocket_.SendCommand(L"FEAT");
 	case LOGON_CLNT:
 		// Some servers refuse to enable UTF8 if client does not send CLNT command
 		// to fix compatibility with Internet Explorer, but in the process breaking
 		// compatibility with other clients.
 		// Rather than forcing MS to fix Internet Explorer, letting other clients
 		// suffer is a questionable decision in my opinion.
-		res = controlSocket_.SendCommand(L"CLNT FileZilla");
-		break;
+		return controlSocket_.SendCommand(L"CLNT FileZilla");
 	case LOGON_OPTSUTF8:
 		// Handle servers that disobey RFC 2640 by having UTF8 in their FEAT
 		// response but do not use UTF8 unless OPTS UTF8 ON gets send.
 		// However these servers obey a conflicting ietf draft:
 		// http://www.ietf.org/proceedings/02nov/I-D/draft-ietf-ftpext-utf-8-option-00.txt
 		// Example servers are, amongst others, G6 FTP Server and RaidenFTPd.
-		res = controlSocket_.SendCommand(L"OPTS UTF8 ON");
-		break;
+		return controlSocket_.SendCommand(L"OPTS UTF8 ON");
 	case LOGON_PBSZ:
-		res = controlSocket_.SendCommand(L"PBSZ 0");
-		break;
+		return controlSocket_.SendCommand(L"PBSZ 0");
 	case LOGON_PROT:
-		res = controlSocket_.SendCommand(L"PROT P");
-		break;
+		return controlSocket_.SendCommand(L"PROT P");
 	case LOGON_CUSTOMCOMMANDS:
 		if (customCommandIndex >= currentServer_.GetPostLoginCommands().size()) {
 			LogMessage(MessageType::Debug_Warning, L"pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size()");
 			return FZ_REPLY_INTERNALERROR | FZ_REPLY_DISCONNECTED;
 		}
-		res = controlSocket_.SendCommand(currentServer_.GetPostLoginCommands()[customCommandIndex]);
-		break;
+		return controlSocket_.SendCommand(currentServer_.GetPostLoginCommands()[customCommandIndex]);
 	case LOGON_OPTSMLST:
 	    {
 		    std::wstring args;
 			CServerCapabilities::GetCapability(currentServer_, opst_mlst_command, &args);
-			res = controlSocket_.SendCommand(L"OPTS MLST " + args);
+			return controlSocket_.SendCommand(L"OPTS MLST " + args);
 	    }
 		break;
 	default:
-		return FZ_REPLY_ERROR;
+		LogMessage(MessageType::Debug_Warning, L"unknown op state: %d", opState);
+		break;
 	}
 
-	if (!res) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
+	return FZ_REPLY_INTERNALERROR;
 }
 
 int CFtpLogonOpData::ParseResponse()

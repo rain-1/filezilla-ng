@@ -182,7 +182,7 @@ protected:
 	struct t_failedLogins final
 	{
 		CServer server;
-		fz::datetime time;
+		fz::monotonic_clock time;
 		bool critical{};
 	};
 	static std::list<t_failedLogins> m_failedLogins;
