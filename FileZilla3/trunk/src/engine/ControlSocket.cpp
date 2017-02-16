@@ -375,8 +375,7 @@ int CControlSocket::CheckOverwriteFile()
 {
 	if (!m_pCurOpData) {
 		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData in CControlSocket::CheckOverwriteFile");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
+		return FZ_REPLY_INTERNALERROR;
 	}
 
 	CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
@@ -616,21 +615,23 @@ void CControlSocket::SetWait(bool wait)
 int CControlSocket::SendNextCommand()
 {
 	ResetOperation(FZ_REPLY_INTERNALERROR);
-	return FZ_REPLY_ERROR;
+	return FZ_REPLY_INTERNALERROR;
 }
 
 int CControlSocket::ParseSubcommandResult(int, COpData const&)
 {
 	ResetOperation(FZ_REPLY_INTERNALERROR);
-	return FZ_REPLY_ERROR;
+	return FZ_REPLY_INTERNALERROR;
 }
 
 const std::list<CControlSocket::t_lockInfo>::iterator CControlSocket::GetLockStatus()
 {
 	std::list<t_lockInfo>::iterator iter;
-	for (iter = m_lockInfoList.begin(); iter != m_lockInfoList.end(); ++iter)
-		if (iter->pControlSocket == this)
+	for (iter = m_lockInfoList.begin(); iter != m_lockInfoList.end(); ++iter) {
+		if (iter->pControlSocket == this) {
 			break;
+		}
+	}
 
 	return iter;
 }
@@ -997,10 +998,8 @@ void CRealControlSocket::OnReceive()
 
 void CRealControlSocket::OnSend()
 {
-	if (m_pSendBuffer)
-	{
-		if (!m_nSendBufferLen)
-		{
+	if (m_pSendBuffer) {
+		if (!m_nSendBufferLen) {
 			delete [] m_pSendBuffer;
 			m_pSendBuffer = 0;
 			return;
@@ -1008,13 +1007,12 @@ void CRealControlSocket::OnSend()
 
 		int error;
 		int written = m_pBackend->Write(m_pSendBuffer, m_nSendBufferLen, error);
-		if (written < 0)
-		{
-			if (error != EAGAIN)
-			{
+		if (written < 0) {
+			if (error != EAGAIN) {
 				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
-				if (GetCurrentCommandId() != Command::connect)
+				if (GetCurrentCommandId() != Command::connect) {
 					LogMessage(MessageType::Error, _("Disconnected from server"));
+				}
 				DoClose();
 			}
 			return;
@@ -1085,8 +1083,7 @@ int CRealControlSocket::ContinueConnect()
 
 		if (res != EINPROGRESS) {
 			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), CSocket::GetErrorDescription(res));
-			DoClose();
-			return FZ_REPLY_ERROR;
+			return FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR;
 		}
 	}
 	else {
@@ -1110,14 +1107,13 @@ int CRealControlSocket::ContinueConnect()
 	// Treat success same as EINPROGRESS, we wait for connect notification in any case
 	if (res && res != EINPROGRESS) {
 		LogMessage(MessageType::Error, _("Could not connect to server: %s"), CSocket::GetErrorDescription(res));
-		DoClose();
-		return FZ_REPLY_ERROR;
+		return FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR; 
 	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-int CRealControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
+int CRealControlSocket::DoClose(int nErrorCode)
 {
 	ResetSocket();
 

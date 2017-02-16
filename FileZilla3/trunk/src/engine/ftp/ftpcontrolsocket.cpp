@@ -267,12 +267,12 @@ void CFtpControlSocket::ParseResponse()
 	else if (res == FZ_REPLY_CONTINUE) {
 		SendNextCommand();
 	}
+	else if (res & FZ_REPLY_DISCONNECTED) {
+		DoClose(res);
+	}
 	else if (res & FZ_REPLY_ERROR) {
 		if (m_pCurOpData->opId == Command::connect) {
 			DoClose(res | FZ_REPLY_DISCONNECTED);
-		}
-		else if ((res & FZ_REPLY_DISCONNECTED) == FZ_REPLY_DISCONNECTED) {
-			DoClose(res);
 		}
 		else {
 			ResetOperation(res);
@@ -450,7 +450,7 @@ int CFtpControlSocket::SendNextCommand()
 				return DoClose(res);
 			}
 			else if (res & FZ_REPLY_ERROR) {
-				ResetOperation(res);
+				return ResetOperation(res);
 			}
 			else if (res == FZ_REPLY_WOULDBLOCK) {
 				return FZ_REPLY_WOULDBLOCK;
