@@ -33,7 +33,7 @@ int CFtpRawTransferOpData::ParseResponse()
 		break;
 	case rawtransfer_port_pasv:
 		if (code != 2 && code != 3) {
-			if (!controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
+			if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
 				error = true;
 				break;
 			}
@@ -60,7 +60,7 @@ int CFtpRawTransferOpData::ParseResponse()
 				parsed = ParsePasvResponse();
 			}
 			if (!parsed) {
-				if (!controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
+				if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
 					error = true;
 					break;
 				}
@@ -218,7 +218,7 @@ int CFtpRawTransferOpData::Send()
 				}
 			}
 
-			if (!controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK) || bTriedPasv) {
+			if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK) || bTriedPasv) {
 				LogMessage(MessageType::Error, _("Failed to create listening socket for active mode transfer"));
 				return FZ_REPLY_ERROR;
 			}
@@ -246,7 +246,7 @@ int CFtpRawTransferOpData::Send()
 		cmd = cmd_;
 		pOldData->tranferCommandSent = true;
 
-		controlSocket_.engine_.transfer_status_.SetStartTime();
+		engine_.transfer_status_.SetStartTime();
 		controlSocket_.m_pTransferSocket->SetActive();
 		break;
 	case rawtransfer_waitfinish:
@@ -289,7 +289,7 @@ bool CFtpRawTransferOpData::ParseEpsvResponse()
 	port_ = port;
 
 	if (controlSocket_.m_pProxyBackend) {
-		host_ = currentServer().GetHost();
+		host_ = currentServer_.GetHost();
 	}
 	else {
 		host_ = fz::to_wstring(controlSocket_.m_pSocket->GetPeerIP());
@@ -345,7 +345,7 @@ bool CFtpRawTransferOpData::ParsePasvResponse()
 
 	std::wstring const peerIP = fz::to_wstring(controlSocket_.m_pSocket->GetPeerIP());
 	if (!fz::is_routable_address(host_) && fz::is_routable_address(peerIP)) {
-		if (controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || bTriedActive) {
+		if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || bTriedActive) {
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Using server address instead."));
 			LogMessage(MessageType::Debug_Info, L"  Reply: %s, peer: %s", host_, peerIP);
 			host_ = peerIP;
@@ -356,7 +356,7 @@ bool CFtpRawTransferOpData::ParsePasvResponse()
 			return false;
 		}
 	}
-	else if (controlSocket_.engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) == 2) {
+	else if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) == 2) {
 		// Always use server address
 		host_ = peerIP;
 	}
@@ -374,7 +374,7 @@ std::wstring CFtpRawTransferOpData::GetPassiveCommand()
 	if (controlSocket_.m_pProxyBackend) {
 		// We don't actually know the address family the other end of the proxy uses to reach the server. Hence prefer EPSV
 		// if the server supports it.
-		if (CServerCapabilities::GetCapability(currentServer(), epsv_command) == yes) {
+		if (CServerCapabilities::GetCapability(currentServer_, epsv_command) == yes) {
 			ret = L"EPSV";
 		}
 	}

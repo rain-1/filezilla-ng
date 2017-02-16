@@ -1,5 +1,5 @@
-#ifndef __FTPCONTROLSOCKET_H__
-#define __FTPCONTROLSOCKET_H__
+#ifndef FILEZILLA_ENGINE_FTP_FTPCONTROLSOCKET_HEADER
+#define FILEZILLA_ENGINE_FTP_FTPCONTROLSOCKET_HEADER
 
 #include "logging_private.h"
 #include "ControlSocket.h"
@@ -41,15 +41,9 @@ protected:
 
 	virtual void RawCommand(std::wstring const& command) override;
 
-	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
-	int DeleteSubcommandResult(int prevResult);
-	int DeleteSend();
-	int DeleteParseResponse();
+	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files) override;
 
 	virtual int RemoveDir(CServerPath const& path, std::wstring const& subDir);
-	int RemoveDirSubcommandResult(int prevResult);
-	int RemoveDirSend();
-	int RemoveDirParseResponse();
 
 	virtual int Mkdir(CServerPath const& path) override;
 
@@ -128,6 +122,7 @@ protected:
 	std::unique_ptr<std::wregex> m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
 
 	friend class CFtpChangeDirOpData;
+	friend class CFtpDeleteOpData;
 	friend class CFtpFileTransferOpData;
 	friend class CFtpListOpData;
 	friend class CFtpLogonOpData;
@@ -135,6 +130,7 @@ protected:
 	friend class CFtpOpData;
 	friend class CFtpRawCommandOpData;
 	friend class CFtpRawTransferOpData;
+	friend class CFtpRemoveDirOpData;
 };
 
 class CIOThread;
@@ -144,29 +140,29 @@ class CFtpOpData
 public:
 	CFtpOpData(CFtpControlSocket& controlSocket)
 	    : controlSocket_(controlSocket)
+		, engine_(controlSocket.engine_)
+		, currentServer_(controlSocket.currentServer_)
 	{
 
 	}
 
-	CServer & currentServer() {
-		return controlSocket_.currentServer_;
-	}
+	virtual ~CFtpOpData() = default;
 
 	template<typename...Args>
 	void LogMessage(Args&& ...args) const {
 		controlSocket_.LogMessage(std::forward<Args>(args)...);
 	}
 
-	virtual ~CFtpOpData() = default;
-
 	CFtpControlSocket & controlSocket_;
+	CFileZillaEnginePrivate & engine_;
+	CServer & currentServer_;
 };
 
 class CFtpTransferOpData
 {
 public:
 	CFtpTransferOpData() = default;
-	virtual ~CFtpTransferOpData() {}
+	virtual ~CFtpTransferOpData() = default;
 
 	TransferEndReason transferEndReason{TransferEndReason::successful};
 	bool tranferCommandSent{};
