@@ -30,35 +30,21 @@ protected:
 
 	virtual int ResetOperation(int nErrorCode);
 
+	// Implicit FZ_REPLY_CONTINUE
 	virtual void Connect(CServer const& server) override;
 	virtual void List(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0) override;
-
 	void ChangeDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), bool link_discovery = false);
-
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
 							 CFileTransferCommand::t_transferSettings const& transferSettings) override;
-
 	virtual void RawCommand(std::wstring const& command) override;
-
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files) override;
-
-	virtual int RemoveDir(CServerPath const& path, std::wstring const& subDir);
-
+	virtual int RemoveDir(CServerPath const& path, std::wstring const& subDir) override;
 	virtual int Mkdir(CServerPath const& path) override;
-
-	virtual int Rename(const CRenameCommand& command);
-	virtual int RenameParseResponse();
-	virtual int RenameSubcommandResult(int prevResult);
-	virtual int RenameSend();
-
-	virtual int Chmod(const CChmodCommand& command);
-	virtual int ChmodParseResponse();
-	virtual int ChmodSubcommandResult(int prevResult);
-	virtual int ChmodSend();
-
-	// Implicit FZ_REPLY_CONTINUE
+	virtual int Rename(const CRenameCommand& command) override;
+	virtual int Chmod(const CChmodCommand& command) override;
 	void Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData);
+
 
 	virtual void OnConnect();
 	virtual void OnReceive();
@@ -71,8 +57,6 @@ protected:
 	// Parse the actual response and delegate it to the handlers.
 	// It's the last line in a multi-line response.
 	void ParseResponse();
-
-	void ParseFeat(std::wstring line);
 
 	virtual int SendNextCommand();
 	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
@@ -122,6 +106,7 @@ protected:
 	std::unique_ptr<std::wregex> m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
 
 	friend class CFtpChangeDirOpData;
+	friend class CFtpChmodOpData;
 	friend class CFtpDeleteOpData;
 	friend class CFtpFileTransferOpData;
 	friend class CFtpListOpData;
@@ -131,6 +116,7 @@ protected:
 	friend class CFtpRawCommandOpData;
 	friend class CFtpRawTransferOpData;
 	friend class CFtpRemoveDirOpData;
+	friend class CFtpRenameOpData;
 };
 
 class CIOThread;

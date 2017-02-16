@@ -51,6 +51,8 @@ public:
 
 	bool GetLoginSequence();
 
+	void ParseFeat(std::wstring line);
+
 	std::wstring challenge; // Used for interactive logons
 	bool waitChallenge{};
 	bool waitForAsyncRequest{};
