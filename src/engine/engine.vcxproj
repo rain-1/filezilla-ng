@@ -91,6 +91,7 @@
     <ClCompile Include="ftp\list.cpp" />
     <ClCompile Include="ftp\logon.cpp" />
     <ClCompile Include="ftp\mkd.cpp" />
+    <ClCompile Include="ftp\rawcommand.cpp" />
     <ClCompile Include="ftp\rawtransfer.cpp" />
     <ClCompile Include="ftp\transfersocket.cpp" />
     <ClCompile Include="httpcontrolsocket.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="ftp\list.h" />
     <ClInclude Include="ftp\logon.h" />
     <ClInclude Include="ftp\mkd.h" />
+    <ClInclude Include="ftp\rawcommand.h" />
     <ClInclude Include="ftp\rawtransfer.h" />
     <ClInclude Include="ftp\transfersocket.h" />
     <ClInclude Include="httpcontrolsocket.h" />

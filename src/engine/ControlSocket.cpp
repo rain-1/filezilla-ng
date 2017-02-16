@@ -1331,7 +1331,7 @@ void CControlSocket::CreateLocalDir(std::wstring const & local_file)
 
 void CControlSocket::List(CServerPath const&, std::wstring const&, int)
 {
-	Push(new CNotSupportedOpData(Command::list));
+	Push(new CNotSupportedOpData());
 }
 
 int CControlSocket::FileTransfer(std::wstring const&, CServerPath const&,
@@ -1341,9 +1341,9 @@ int CControlSocket::FileTransfer(std::wstring const&, CServerPath const&,
 	return FZ_REPLY_NOTSUPPORTED;
 }
 
-int CControlSocket::RawCommand(std::wstring const&)
+void CControlSocket::RawCommand(std::wstring const&)
 {
-	return FZ_REPLY_NOTSUPPORTED;
+	Push(new CNotSupportedOpData());
 }
 
 int CControlSocket::Delete(const CServerPath&, std::deque<std::wstring>&&)
