@@ -764,3 +764,79 @@ bool CFtpLogonOpData::GetLoginSequence()
 
 	return true;
 }
+
+namespace {
+bool HasFeature(std::wstring const& line, std::wstring const& feature)
+{
+	if (line == feature) {
+		return true;
+	}
+	return line.size() > feature.size() && line.substr(0, feature.size()) == feature && line[feature.size()] == ' ';
+}
+}
+
+void CFtpLogonOpData::ParseFeat(std::wstring line)
+{
+	fz::trim(line);
+	std::wstring up = fz::str_toupper_ascii(line);
+
+	if (HasFeature(up, L"UTF8")) {
+		CServerCapabilities::SetCapability(currentServer_, utf8_command, yes);
+	}
+	else if (HasFeature(up, L"CLNT")) {
+		CServerCapabilities::SetCapability(currentServer_, clnt_command, yes);
+	}
+	else if (HasFeature(up, L"MLSD")) {
+		std::wstring facts;
+		// FEAT output for MLST overrides MLSD
+		if (CServerCapabilities::GetCapability(currentServer_, mlsd_command, &facts) != yes || facts.empty()) {
+			if (line.size() > 5) {
+				facts = line.substr(5);
+			}
+			else {
+				facts.clear();
+			}
+		}
+		CServerCapabilities::SetCapability(currentServer_, mlsd_command, yes, facts);
+
+		// MLST/MLSD specs require use of UTC
+		CServerCapabilities::SetCapability(currentServer_, timezone_offset, no);
+	}
+	else if (HasFeature(up, L"MLST")) {
+		std::wstring facts;
+		if (line.size() > 5) {
+			facts = line.substr(5);
+		}
+		// FEAT output for MLST overrides MLSD
+		if (facts.empty()) {
+			if (CServerCapabilities::GetCapability(currentServer_, mlsd_command, &facts) != yes) {
+				facts.clear();
+			}
+		}
+		CServerCapabilities::SetCapability(currentServer_, mlsd_command, yes, facts);
+
+		// MLST/MLSD specs require use of UTC
+		CServerCapabilities::SetCapability(currentServer_, timezone_offset, no);
+	}
+	else if (HasFeature(up, L"MODE Z")) {
+		CServerCapabilities::SetCapability(currentServer_, mode_z_support, yes);
+	}
+	else if (HasFeature(up, L"MFMT")) {
+		CServerCapabilities::SetCapability(currentServer_, mfmt_command, yes);
+	}
+	else if (HasFeature(up, L"MDTM")) {
+		CServerCapabilities::SetCapability(currentServer_, mdtm_command, yes);
+	}
+	else if (HasFeature(up, L"SIZE")) {
+		CServerCapabilities::SetCapability(currentServer_, size_command, yes);
+	}
+	else if (HasFeature(up, L"TVFS")) {
+		CServerCapabilities::SetCapability(currentServer_, tvfs_support, yes);
+	}
+	else if (HasFeature(up, L"REST STREAM")) {
+		CServerCapabilities::SetCapability(currentServer_, rest_stream, yes);
+	}
+	else if (HasFeature(up, L"EPSV")) {
+		CServerCapabilities::SetCapability(currentServer_, epsv_command, yes);
+	}
+}

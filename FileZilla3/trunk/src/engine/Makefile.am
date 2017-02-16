@@ -19,6 +19,7 @@ libengine_a_SOURCES = \
 		engineprivate.cpp \
 		externalipresolver.cpp \
 		FileZillaEngine.cpp \
+		ftp/chmod.cpp \
 		ftp/cwd.cpp \
 		ftp/delete.cpp \
 		ftp/filetransfer.cpp \
@@ -28,6 +29,7 @@ libengine_a_SOURCES = \
 		ftp/mkd.cpp \
 		ftp/rawcommand.cpp \
 		ftp/rawtransfer.cpp \
+		ftp/rename.cpp \
 		ftp/rmd.cpp \
 		ftp/transfersocket.cpp \
 		httpcontrolsocket.cpp \
@@ -55,6 +57,7 @@ noinst_HEADERS = backend.h \
 		directorylistingparser.h \
 		engineprivate.h \
 		filezilla.h \
+		ftp/chmod.h \
 		ftp/cwd.h \
 		ftp/delete.h \
 		ftp/filetransfer.h \
@@ -62,6 +65,7 @@ noinst_HEADERS = backend.h \
 		ftp/list.h \
 		ftp/logon.h \
 		ftp/mkd.h \
+		ftp/rename.h \
 		ftp/rawcommand.h \
 		ftp/rawtransfer.h \
 		ftp/rmd.h \

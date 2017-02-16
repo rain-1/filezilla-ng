@@ -1,6 +1,7 @@
 #include <filezilla.h>
 
 #include "cwd.h"
+#include "chmod.h"
 #include "delete.h"
 #include "directorycache.h"
 #include "directorylistingparser.h"
@@ -16,6 +17,7 @@
 #include "proxy.h"
 #include "rawcommand.h"
 #include "rawtransfer.h"
+#include "rename.h"
 #include "rmd.h"
 #include "servercapabilities.h"
 #include "tlssocket.h"
@@ -112,82 +114,6 @@ void CFtpControlSocket::OnReceive()
 	}
 }
 
-namespace {
-bool HasFeature(std::wstring const& line, std::wstring const& feature)
-{
-	if (line == feature) {
-		return true;
-	}
-	return line.size() > feature.size() && line.substr(0, feature.size()) == feature && line[feature.size()] == ' ';
-}
-}
-
-void CFtpControlSocket::ParseFeat(std::wstring line)
-{
-	fz::trim(line);
-	std::wstring up = fz::str_toupper_ascii(line);
-
-	if (HasFeature(up, L"UTF8")) {
-		CServerCapabilities::SetCapability(currentServer_, utf8_command, yes);
-	}
-	else if (HasFeature(up, L"CLNT")) {
-		CServerCapabilities::SetCapability(currentServer_, clnt_command, yes);
-	}
-	else if (HasFeature(up, L"MLSD")) {
-		std::wstring facts;
-		// FEAT output for MLST overrides MLSD
-		if (CServerCapabilities::GetCapability(currentServer_, mlsd_command, &facts) != yes || facts.empty()) {
-			if (line.size() > 5) {
-				facts = line.substr(5);
-			}
-			else {
-				facts.clear();
-			}
-		}
-		CServerCapabilities::SetCapability(currentServer_, mlsd_command, yes, facts);
-
-		// MLST/MLSD specs require use of UTC
-		CServerCapabilities::SetCapability(currentServer_, timezone_offset, no);
-	}
-	else if (HasFeature(up, L"MLST")) {
-		std::wstring facts;
-		if (line.size() > 5) {
-			facts = line.substr(5);
-		}
-		// FEAT output for MLST overrides MLSD
-		if (facts.empty()) {
-			if (CServerCapabilities::GetCapability(currentServer_, mlsd_command, &facts) != yes) {
-				facts.clear();
-			}
-		}
-		CServerCapabilities::SetCapability(currentServer_, mlsd_command, yes, facts);
-
-		// MLST/MLSD specs require use of UTC
-		CServerCapabilities::SetCapability(currentServer_, timezone_offset, no);
-	}
-	else if (HasFeature(up, L"MODE Z")) {
-		CServerCapabilities::SetCapability(currentServer_, mode_z_support, yes);
-	}
-	else if (HasFeature(up, L"MFMT")) {
-		CServerCapabilities::SetCapability(currentServer_, mfmt_command, yes);
-	}
-	else if (HasFeature(up, L"MDTM")) {
-		CServerCapabilities::SetCapability(currentServer_, mdtm_command, yes);
-	}
-	else if (HasFeature(up, L"SIZE")) {
-		CServerCapabilities::SetCapability(currentServer_, size_command, yes);
-	}
-	else if (HasFeature(up, L"TVFS")) {
-		CServerCapabilities::SetCapability(currentServer_, tvfs_support, yes);
-	}
-	else if (HasFeature(up, L"REST STREAM")) {
-		CServerCapabilities::SetCapability(currentServer_, rest_stream, yes);
-	}
-	else if (HasFeature(up, L"EPSV")) {
-		CServerCapabilities::SetCapability(currentServer_, epsv_command, yes);
-	}
-}
-
 void CFtpControlSocket::ParseLine(std::wstring line)
 {
 	m_rtt.Stop();
@@ -207,7 +133,7 @@ void CFtpControlSocket::ParseLine(std::wstring line)
 			challenge += line;
 		}
 		else if (pData->opState == LOGON_FEAT) {
-			ParseFeat(line);
+			pData->ParseFeat(line);
 		}
 		else if (pData->opState == LOGON_WELCOME) {
 			if (!pData->gotFirstWelcomeLine) {
@@ -745,238 +671,24 @@ int CFtpControlSocket::Mkdir(CServerPath const& path)
 	return FZ_REPLY_CONTINUE;
 }
 
-class CFtpRenameOpData final : public COpData
-{
-public:
-	CFtpRenameOpData(CRenameCommand const& command)
-		: COpData(Command::rename), m_cmd(command)
-	{
-	}
-
-	CRenameCommand m_cmd;
-	bool m_useAbsolute{};
-};
-
-enum renameStates
-{
-	rename_init = 0,
-	rename_rnfrom,
-	rename_rnto
-};
-
 int CFtpControlSocket::Rename(CRenameCommand const& command)
 {
-	if (m_pCurOpData) {
-		LogMessage(MessageType::Debug_Warning, L"CFtpControlSocket::Rename(): m_pCurOpData not empty");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
 	LogMessage(MessageType::Status, _("Renaming '%s' to '%s'"), command.GetFromPath().FormatFilename(command.GetFromFile()), command.GetToPath().FormatFilename(command.GetToFile()));
 
-	CFtpRenameOpData *pData = new CFtpRenameOpData(command);
-	pData->opState = rename_rnfrom;
-	Push(pData);
+	Push(new CFtpRenameOpData(*this, command));
 
 	ChangeDir(command.GetFromPath());
 	return FZ_REPLY_CONTINUE;
 }
 
-int CFtpControlSocket::RenameParseResponse()
-{
-	CFtpRenameOpData *pData = static_cast<CFtpRenameOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	int code = GetReplyCode();
-	if (code != 2 && code != 3) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (pData->opState == rename_rnfrom) {
-		pData->opState = rename_rnto;
-	}
-	else {
-		const CServerPath& fromPath = pData->m_cmd.GetFromPath();
-		const CServerPath& toPath = pData->m_cmd.GetToPath();
-		engine_.GetDirectoryCache().Rename(currentServer_, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
-
-		SendDirectoryListingNotification(fromPath, false, false);
-		if (fromPath != toPath) {
-			SendDirectoryListingNotification(toPath, false, false);
-		}
-
-		ResetOperation(FZ_REPLY_OK);
-		return FZ_REPLY_OK;
-	}
-
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::RenameSubcommandResult(int prevResult)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RenameSubcommandResult()");
-
-	CFtpRenameOpData *pData = static_cast<CFtpRenameOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (prevResult != FZ_REPLY_OK) {
-		pData->m_useAbsolute = true;
-	}
-
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::RenameSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RenameSend()");
-
-	CFtpRenameOpData *pData = static_cast<CFtpRenameOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	bool res;
-	switch (pData->opState)
-	{
-	case rename_rnfrom:
-		res = SendCommand(L"RNFR " + pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
-		break;
-	case rename_rnto:
-		{
-			engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-			engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
-
-			CServerPath path(engine_.GetPathCache().Lookup(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile()));
-			if (path.empty()) {
-				path = pData->m_cmd.GetFromPath();
-				path.AddSegment(pData->m_cmd.GetFromFile());
-			}
-			engine_.InvalidateCurrentWorkingDirs(path);
-
-			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
-
-			res = SendCommand(L"RNTO " + pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
-			break;
-		}
-	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"unknown op state: %d", pData->opState);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!res) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-class CFtpChmodOpData final : public COpData
-{
-public:
-	CFtpChmodOpData(const CChmodCommand& command)
-		: COpData(Command::chmod), m_cmd(command)
-	{
-	}
-
-	CChmodCommand m_cmd;
-	bool m_useAbsolute{};
-};
-
-enum chmodStates
-{
-	chmod_init = 0,
-	chmod_chmod
-};
-
 int CFtpControlSocket::Chmod(CChmodCommand const& command)
 {
-	LogMessage(MessageType::Status, _("Set permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()), command.GetPermission());
+	LogMessage(MessageType::Status, _("Setting permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()), command.GetPermission());
 
-	CFtpChmodOpData *pData = new CFtpChmodOpData(command);
-	pData->opState = chmod_chmod;
-	Push(pData);
+	Push(new CFtpChmodOpData(*this, command));
 
 	ChangeDir(command.GetPath());
 	return FZ_REPLY_CONTINUE;
-}
-
-int CFtpControlSocket::ChmodParseResponse()
-{
-	CFtpChmodOpData *pData = static_cast<CFtpChmodOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData empty");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	int code = GetReplyCode();
-	if (code != 2 && code != 3) {
-		return FZ_REPLY_ERROR;
-	}
-
-	engine_.GetDirectoryCache().UpdateFile(currentServer_, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
-
-	return FZ_REPLY_OK;
-}
-
-int CFtpControlSocket::ChmodSubcommandResult(int prevResult)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ChmodSubcommandResult()");
-
-	CFtpChmodOpData *pData = static_cast<CFtpChmodOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (prevResult != FZ_REPLY_OK) {
-		pData->m_useAbsolute = true;
-	}
-
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::ChmodSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ChmodSend()");
-
-	CFtpChmodOpData *pData = static_cast<CFtpChmodOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	bool res;
-	switch (pData->opState) {
-	case chmod_chmod:
-		res = SendCommand(L"SITE CHMOD " + pData->m_cmd.GetPermission() + L" " + pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
-		break;
-	default:
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, L"unknown op state: %d", pData->opState);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!res) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
 }
 
 int CFtpControlSocket::GetExternalIPAddress(std::string& address)

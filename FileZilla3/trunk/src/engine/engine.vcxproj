@@ -85,6 +85,7 @@
     <ClCompile Include="FileZillaEngine.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ftp\chmod.cpp" />
     <ClCompile Include="ftp\cwd.cpp" />
     <ClCompile Include="ftp\delete.cpp" />
     <ClCompile Include="ftp\filetransfer.cpp" />
@@ -94,6 +95,7 @@
     <ClCompile Include="ftp\mkd.cpp" />
     <ClCompile Include="ftp\rawcommand.cpp" />
     <ClCompile Include="ftp\rawtransfer.cpp" />
+    <ClCompile Include="ftp\rename.cpp" />
     <ClCompile Include="ftp\rmd.cpp" />
     <ClCompile Include="ftp\transfersocket.cpp" />
     <ClCompile Include="httpcontrolsocket.cpp" />
@@ -133,6 +135,7 @@
     <ClInclude Include="engineprivate.h" />
     <ClInclude Include="filezilla.h" />
     <ClInclude Include="..\include\FileZillaEngine.h" />
+    <ClInclude Include="ftp\chmod.h" />
     <ClInclude Include="ftp\cwd.h" />
     <ClInclude Include="ftp\delete.h" />
     <ClInclude Include="ftp\filetransfer.h" />
@@ -142,6 +145,7 @@
     <ClInclude Include="ftp\mkd.h" />
     <ClInclude Include="ftp\rawcommand.h" />
     <ClInclude Include="ftp\rawtransfer.h" />
+    <ClInclude Include="ftp\rename.h" />
     <ClInclude Include="ftp\rmd.h" />
     <ClInclude Include="ftp\transfersocket.h" />
     <ClInclude Include="httpcontrolsocket.h" />
