@@ -52,6 +52,8 @@
       <PrecompiledHeaderFile>filezilla.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
     </ClCompile>
     <Lib />
   </ItemDefinitionGroup>
@@ -70,6 +72,8 @@
       <PrecompiledHeaderOutputFile>$(IntDir)filezilla.pch</PrecompiledHeaderOutputFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -98,7 +102,8 @@
     <ClCompile Include="ftp\rename.cpp" />
     <ClCompile Include="ftp\rmd.cpp" />
     <ClCompile Include="ftp\transfersocket.cpp" />
-    <ClCompile Include="httpcontrolsocket.cpp" />
+    <ClCompile Include="http\filetransfer.cpp" />
+    <ClCompile Include="http\httpcontrolsocket.cpp" />
     <ClCompile Include="iothread.cpp" />
     <ClCompile Include="local_path.cpp" />
     <ClCompile Include="logging.cpp" />
@@ -148,7 +153,9 @@
     <ClInclude Include="ftp\rename.h" />
     <ClInclude Include="ftp\rmd.h" />
     <ClInclude Include="ftp\transfersocket.h" />
-    <ClInclude Include="httpcontrolsocket.h" />
+    <ClInclude Include="http\connect.h" />
+    <ClInclude Include="http\filetransfer.h" />
+    <ClInclude Include="http\httpcontrolsocket.h" />
     <ClInclude Include="iothread.h" />
     <ClInclude Include="..\include\libfilezilla_engine.h" />
     <ClInclude Include="..\include\local_path.h" />

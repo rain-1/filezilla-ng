@@ -41,35 +41,7 @@ public:
 		LogToFile(nMessageType, notification->msg);
 		engine_.AddLogNotification(notification);
 	}
-
-	template<typename String, typename String2, typename...Args>
-	void LogMessage(String&& sourceFile, int nSourceLine, void *pInstance, MessageType nMessageType
-					, String2&& msgFormat, Args&& ...args) const
-	{
-		if (!ShouldLog(nMessageType)) {
-			return;
-		}
-
-		std::wstring source(sourceFile);
-		auto pos = source.rfind('\\');
-		if (pos != std::wstring::npos) {
-			source = source.substr(pos + 1);
-		}
-
-		pos = source.rfind('/');
-		if (pos != std::wstring::npos) {
-			source = source.substr(pos + 1);
-		}
-
-		auto const text = fz::sprintf(std::forward<String2>(msgFormat), std::forward<Args>(args)...);
-
-		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType);
-		notification->msg = fz::sprintf(L"%s(%d): %s   caller=%p", source, nSourceLine, text, pInstance);
-
-		LogToFile(nMessageType, notification->msg);
-		engine_.AddLogNotification(notification);
-	}
-
+	
 	bool ShouldLog(MessageType nMessageType) const;
 
 	// Only affects calling thread

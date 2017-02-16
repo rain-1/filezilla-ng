@@ -58,8 +58,13 @@ public:
 	{
 	}
 
-	std::wstring host;
-	unsigned int port{};
+	// What to connect the socket to,
+	// can be different from server_ if using
+	// a proxy
+	std::wstring host_;
+	unsigned int port_{};
+
+	// Target server
 	CServer server_;
 };
 
@@ -74,20 +79,20 @@ public:
 	// Transfer data
 	std::wstring localFile, remoteFile;
 	CServerPath remotePath;
-	const bool download;
+	bool const download_;
 
 	fz::datetime fileTime;
 	int64_t localFileSize{-1};
 	int64_t remoteFileSize{-1};
 
-	bool tryAbsolutePath{};
-	bool resume{};
+	bool tryAbsolutePath_{};
+	bool resume_{};
 
 	CFileTransferCommand::t_transferSettings transferSettings;
 
 	// Set to true when sending the command which
 	// starts the actual transfer
-	bool transferInitiated{};
+	bool transferInitiated_{};
 };
 
 class CMkdirOpData : public COpData
@@ -164,7 +169,7 @@ public:
 	virtual int Rename(const CRenameCommand& command);
 	virtual int Chmod(const CChmodCommand& command);
 
-	virtual bool Connected() = 0;
+	virtual bool Connected() const = 0;
 
 	// If m_pCurrentOpData is zero, this function returns the current command
 	// from the engine.
@@ -306,7 +311,7 @@ public:
 	int DoConnect(CServer const& server);
 	virtual int ContinueConnect();
 
-	virtual bool Connected() { return m_pSocket->GetState() == CSocket::connected; }
+	virtual bool Connected() const override { return m_pSocket->GetState() == CSocket::connected; }
 
 protected:
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);

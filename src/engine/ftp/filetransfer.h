@@ -31,7 +31,7 @@ public:
 	int TestResumeCapability();
 
 	std::unique_ptr<CIOThread> ioThread_;
-	bool fileDidExist{ true };
+	bool fileDidExist{true};
 };
 
 #endif

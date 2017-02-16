@@ -58,7 +58,7 @@ public:
 	virtual int Chmod(const CChmodCommand& command);
 	virtual void Cancel();
 
-	virtual bool Connected() { return m_pInputThread != 0; }
+	virtual bool Connected() const override { return m_pInputThread != 0; }
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 
