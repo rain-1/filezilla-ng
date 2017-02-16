@@ -92,6 +92,7 @@
     <ClCompile Include="ftp\logon.cpp" />
     <ClCompile Include="ftp\mkd.cpp" />
     <ClCompile Include="ftp\rawtransfer.cpp" />
+    <ClCompile Include="ftp\transfersocket.cpp" />
     <ClCompile Include="httpcontrolsocket.cpp" />
     <ClCompile Include="iothread.cpp" />
     <ClCompile Include="local_path.cpp" />
@@ -114,7 +115,6 @@
       <PrecompiledHeader />
     </ClCompile>
     <ClCompile Include="tlssocket.cpp" />
-    <ClCompile Include="transfersocket.cpp" />
     <ClCompile Include="uri.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +137,7 @@
     <ClInclude Include="ftp\logon.h" />
     <ClInclude Include="ftp\mkd.h" />
     <ClInclude Include="ftp\rawtransfer.h" />
+    <ClInclude Include="ftp\transfersocket.h" />
     <ClInclude Include="httpcontrolsocket.h" />
     <ClInclude Include="iothread.h" />
     <ClInclude Include="..\include\libfilezilla_engine.h" />
@@ -158,7 +159,6 @@
     <ClInclude Include="..\include\sizeformatting_base.h" />
     <ClInclude Include="..\include\socket.h" />
     <ClInclude Include="tlssocket.h" />
-    <ClInclude Include="transfersocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
