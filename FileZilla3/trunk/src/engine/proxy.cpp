@@ -548,13 +548,15 @@ void CProxySocket::OnReceive()
 			{
 			case socks5_auth:
 				{
-					m_sendBufferLen = m_user.size() + m_pass.size() + 3;
+					auto ulen = static_cast<unsigned char>(std::min(m_user.size(), 255u));
+					auto plen = static_cast<unsigned char>(std::min(m_pass.size(), 255u));
+					m_sendBufferLen = ulen + plen + 3;
 					m_pSendBuffer = new char[m_sendBufferLen];
 					m_pSendBuffer[0] = 1;
-					m_pSendBuffer[1] = m_user.size();
-					memcpy(m_pSendBuffer + 2, m_user.c_str(), m_user.size());
-					m_pSendBuffer[m_user.size() + 2] = m_pass.size();
-					memcpy(m_pSendBuffer + m_user.size() + 3, m_pass.c_str(), m_pass.size());
+					m_pSendBuffer[1] = ulen;
+					memcpy(m_pSendBuffer + 2, m_user.c_str(), ulen);
+					m_pSendBuffer[ulen + 2] = plen;
+					memcpy(m_pSendBuffer + ulen + 3, m_pass.c_str(), plen);
 					m_recvBufferLen = 2;
 				}
 				break;
@@ -598,9 +600,11 @@ void CProxySocket::OnReceive()
 					}
 					else {
 						m_pSendBuffer[3] = 3; // Domain name
-						m_pSendBuffer[4] = host.size();
-						memcpy(m_pSendBuffer + 5, host.c_str(), host.size());
-						addrlen = host.size() + 1;
+
+						auto hlen = static_cast<unsigned char>(host.size());
+						m_pSendBuffer[4] = hlen;
+						memcpy(m_pSendBuffer + 5, host.c_str(), hlen);
+						addrlen = hlen + 1;
 					}
 
 					m_pSendBuffer[addrlen + 4] = (m_port >> 8) & 0xFF; // Port in network order
