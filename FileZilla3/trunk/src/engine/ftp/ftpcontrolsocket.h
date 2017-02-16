@@ -39,9 +39,7 @@ protected:
 							 std::wstring const& remoteFile, bool download,
 							 CFileTransferCommand::t_transferSettings const& transferSettings) override;
 
-	virtual int RawCommand(std::wstring const& command);
-	int RawCommandSend();
-	int RawCommandParseResponse();
+	virtual void RawCommand(std::wstring const& command) override;
 
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
 	int DeleteSubcommandResult(int prevResult);
@@ -135,6 +133,7 @@ protected:
 	friend class CFtpLogonOpData;
 	friend class CFtpMkdirOpData;
 	friend class CFtpOpData;
+	friend class CFtpRawCommandOpData;
 	friend class CFtpRawTransferOpData;
 };
 

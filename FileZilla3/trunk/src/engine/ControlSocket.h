@@ -41,8 +41,8 @@ public:
 class CNotSupportedOpData : public COpData
 {
 public:
-	CNotSupportedOpData(Command op_Id)
-		: COpData(op_Id)
+	CNotSupportedOpData()
+		: COpData(Command::none)
 	{}
 
 	virtual int Send() { return FZ_REPLY_NOTSUPPORTED; }
@@ -157,12 +157,13 @@ public:
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
 							 CFileTransferCommand::t_transferSettings const& transferSettings);
-	virtual int RawCommand(std::wstring const& command = std::wstring());
+	virtual void RawCommand(std::wstring const& command = std::wstring());
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
 	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
 	virtual int Mkdir(const CServerPath& path);
 	virtual int Rename(const CRenameCommand& command);
 	virtual int Chmod(const CChmodCommand& command);
+
 	virtual bool Connected() = 0;
 
 	// If m_pCurrentOpData is zero, this function returns the current command

@@ -13,6 +13,7 @@
 #include "mkd.h"
 #include "pathcache.h"
 #include "proxy.h"
+#include "rawcommand.h"
 #include "rawtransfer.h"
 #include "servercapabilities.h"
 #include "tlssocket.h"
@@ -712,65 +713,11 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 	return true;
 }
 
-class CRawCommandOpData final : public COpData
-{
-public:
-	CRawCommandOpData(std::wstring const& command)
-		: COpData(Command::raw)
-	{
-		m_command = command;
-	}
-
-	std::wstring m_command;
-};
-
-int CFtpControlSocket::RawCommand(std::wstring const& command)
+void CFtpControlSocket::RawCommand(std::wstring const& command)
 {
 	assert(!command.empty());
 
-	Push(new CRawCommandOpData(command));
-
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::RawCommandSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RawCommandSend");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	engine_.GetDirectoryCache().InvalidateServer(currentServer_);
-	engine_.GetPathCache().InvalidateServer(currentServer_);
-	m_CurrentPath.clear();
-
-	m_lastTypeBinary = -1;
-
-	CRawCommandOpData *pData = static_cast<CRawCommandOpData *>(m_pCurOpData);
-
-	if (!SendCommand(pData->m_command, false, false)) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-int CFtpControlSocket::RawCommandParseResponse()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RawCommandParseResponse");
-
-	int code = GetReplyCode();
-	if (code == 2 || code == 3) {
-		ResetOperation(FZ_REPLY_OK);
-		return FZ_REPLY_OK;
-	}
-	else {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
+	Push(new CFtpRawCommandOpData(*this, command));
 }
 
 int CFtpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)

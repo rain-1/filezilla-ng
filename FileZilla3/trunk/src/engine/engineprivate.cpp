@@ -375,7 +375,8 @@ int CFileZillaEnginePrivate::RawCommand(CRawCommand const& command)
 		fz::scoped_lock lock(notification_mutex_);
 		queue_logs_ = false;
 	}
-	return m_pControlSocket->RawCommand(command.GetCommand());
+	m_pControlSocket->RawCommand(command.GetCommand());
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::Delete(CDeleteCommand& command)
