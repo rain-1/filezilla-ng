@@ -1,6 +1,7 @@
 #include <filezilla.h>
 
 #include "cwd.h"
+#include "delete.h"
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "engineprivate.h"
@@ -15,6 +16,7 @@
 #include "proxy.h"
 #include "rawcommand.h"
 #include "rawtransfer.h"
+#include "rmd.h"
 #include "servercapabilities.h"
 #include "tlssocket.h"
 #include "transfersocket.h"
@@ -25,28 +27,6 @@
 #include <libfilezilla/util.hpp>
 
 #include <algorithm>
-
-class CFtpDeleteOpData final : public COpData
-{
-public:
-	CFtpDeleteOpData()
-		: COpData(Command::del)
-	{
-	}
-
-	CServerPath path;
-	std::deque<std::wstring> files;
-	bool omitPath{};
-
-	// Set to fz::datetime::Now initially and after
-	// sending an updated listing to the UI.
-	fz::datetime m_time;
-
-	bool m_needSendListing{};
-
-	// Set to true if deletion of at least one file failed
-	bool m_deleteFailed{};
-};
 
 CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
 	: CRealControlSocket(engine)
@@ -481,8 +461,8 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 	}
 	if (m_pCurOpData && m_pCurOpData->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
 		CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
-		if (pData->m_needSendListing) {
-			SendDirectoryListingNotification(pData->path, false, false);
+		if (pData->needSendListing_) {
+			SendDirectoryListingNotification(pData->path_, false, false);
 		}
 	}
 
@@ -723,228 +703,28 @@ void CFtpControlSocket::RawCommand(std::wstring const& command)
 int CFtpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)
 {
 	assert(!m_pCurOpData);
-	CFtpDeleteOpData *pData = new CFtpDeleteOpData();
+	CFtpDeleteOpData *pData = new CFtpDeleteOpData(*this);
 	Push(pData);
-	pData->path = path;
-	pData->files = files;
-	pData->omitPath = true;
+	pData->path_ = path;
+	pData->files_ = files;
+	pData->omitPath_ = true;
 
-	ChangeDir(pData->path);
+	ChangeDir(pData->path_);
 	return FZ_REPLY_CONTINUE;
 }
-
-int CFtpControlSocket::DeleteSubcommandResult(int prevResult)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::DeleteSubcommandResult()");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"  empty m_pCurOpData");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
-
-	if (prevResult != FZ_REPLY_OK) {
-		pData->omitPath = false;
-	}
-
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::DeleteSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::DeleteSend");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		return FZ_REPLY_INTERNALERROR;
-	}
-	CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
-
-	std::wstring const& file = pData->files.front();
-	if (file.empty()) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty filename");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	std::wstring filename = pData->path.FormatFilename(file, pData->omitPath);
-	if (filename.empty()) {
-		LogMessage(MessageType::Error, _("Filename cannot be constructed for directory %s and filename %s"), pData->path.GetPath(), file);
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (pData->m_time.empty()) {
-		pData->m_time = fz::datetime::now();
-	}
-
-	engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->path, file);
-
-	if (!SendCommand(L"DELE " + filename)) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-int CFtpControlSocket::DeleteParseResponse()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::DeleteParseResponse()");
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
-
-	int code = GetReplyCode();
-	if (code != 2 && code != 3) {
-		pData->m_deleteFailed = true;
-	}
-	else {
-		std::wstring const& file = pData->files.front();
-
-		engine_.GetDirectoryCache().RemoveFile(currentServer_, pData->path, file);
-
-		fz::datetime now = fz::datetime::now();
-		if (!pData->m_time.empty() && (now - pData->m_time).get_seconds() >= 1) {
-			SendDirectoryListingNotification(pData->path, false, false);
-			pData->m_time = now;
-			pData->m_needSendListing = false;
-		}
-		else {
-			pData->m_needSendListing = true;
-		}
-	}
-
-	pData->files.pop_front();
-
-	if (!pData->files.empty()) {
-		return SendNextCommand();
-	}
-
-	return ResetOperation(pData->m_deleteFailed ? FZ_REPLY_ERROR : FZ_REPLY_OK);
-}
-
-class CFtpRemoveDirOpData final : public COpData
-{
-public:
-	CFtpRemoveDirOpData()
-		: COpData(Command::removedir)
-		, omitPath()
-	{
-	}
-
-	CServerPath path;
-	CServerPath fullPath;
-	std::wstring subDir;
-	bool omitPath;
-};
 
 int CFtpControlSocket::RemoveDir(const CServerPath& path, std::wstring const& subDir)
 {
 	assert(!m_pCurOpData);
-	CFtpRemoveDirOpData *pData = new CFtpRemoveDirOpData();
+	CFtpRemoveDirOpData *pData = new CFtpRemoveDirOpData(*this);
 	Push(pData);
-	pData->path = path;
-	pData->subDir = subDir;
-	pData->omitPath = true;
-	pData->fullPath = path;
+	pData->path_ = path;
+	pData->subDir_ = subDir;
+	pData->omitPath_ = true;
+	pData->fullPath_ = path;
 
-	if (!pData->fullPath.AddSegment(subDir)) {
-		LogMessage(MessageType::Error, _("Path cannot be constructed for directory %s and subdir %s"), path.GetPath(), subDir);
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	ChangeDir(pData->path);
+	ChangeDir(pData->path_);
 	return FZ_REPLY_CONTINUE;
-}
-
-int CFtpControlSocket::RemoveDirSubcommandResult(int prevResult)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RemoveDirSubcommandResult()");
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CFtpRemoveDirOpData *pData = static_cast<CFtpRemoveDirOpData *>(m_pCurOpData);
-
-	if (prevResult != FZ_REPLY_OK) {
-		pData->omitPath = false;
-	}
-	else {
-		pData->path = m_CurrentPath;
-	}
-
-	return SendNextCommand();
-}
-
-int CFtpControlSocket::RemoveDirSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RemoveDirSend()");
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CFtpRemoveDirOpData *pData = static_cast<CFtpRemoveDirOpData *>(m_pCurOpData);
-
-	engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->path, pData->subDir);
-
-	CServerPath path(engine_.GetPathCache().Lookup(currentServer_, pData->path, pData->subDir));
-	if (path.empty()) {
-		path = pData->path;
-		path.AddSegment(pData->subDir);
-	}
-	engine_.InvalidateCurrentWorkingDirs(path);
-
-	engine_.GetPathCache().InvalidatePath(currentServer_, pData->path, pData->subDir);
-
-	if (pData->omitPath) {
-		if (!SendCommand(L"RMD " + pData->subDir)) {
-			return FZ_REPLY_ERROR;
-		}
-	}
-	else {
-		if (!SendCommand(L"RMD " + pData->fullPath.GetPath())) {
-			return FZ_REPLY_ERROR;
-		}
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-int CFtpControlSocket::RemoveDirParseResponse()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::RemoveDirParseResponse()");
-
-	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CFtpRemoveDirOpData *pData = static_cast<CFtpRemoveDirOpData *>(m_pCurOpData);
-
-	int code = GetReplyCode();
-	if (code != 2 && code != 3) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	engine_.GetDirectoryCache().RemoveDir(currentServer_, pData->path, pData->subDir, engine_.GetPathCache().Lookup(currentServer_, pData->path, pData->subDir));
-	SendDirectoryListingNotification(pData->path, false, false);
-
-	return ResetOperation(FZ_REPLY_OK);
 }
 
 int CFtpControlSocket::Mkdir(CServerPath const& path)

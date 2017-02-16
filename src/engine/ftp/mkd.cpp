@@ -64,12 +64,12 @@ int CFtpMkdirOpData::ParseResponse()
 			if (code != 2 && code != 3) {
 				CDirentry entry;
 				bool tmp;
-				if (controlSocket_.engine_.GetDirectoryCache().LookupFile(entry, currentServer(), currentPath, segments.back(), tmp, tmp) && !entry.is_dir()) {
+				if (engine_.GetDirectoryCache().LookupFile(entry, currentServer_, currentPath, segments.back(), tmp, tmp) && !entry.is_dir()) {
 					result = FZ_REPLY_ERROR;
 				}
 			}
 
-			controlSocket_.engine_.GetDirectoryCache().UpdateFile(currentServer(), currentPath, segments.back(), true, CDirectoryCache::dir);
+			engine_.GetDirectoryCache().UpdateFile(currentServer_, currentPath, segments.back(), true, CDirectoryCache::dir);
 			controlSocket_.SendDirectoryListingNotification(currentPath, false, false);
 
 			currentPath.AddSegment(segments.back());

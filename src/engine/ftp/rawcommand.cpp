@@ -8,8 +8,8 @@ int CFtpRawCommandOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpRawCommandOpData::Send");
 
-	controlSocket_.engine_.GetDirectoryCache().InvalidateServer(currentServer());
-	controlSocket_.engine_.GetPathCache().InvalidateServer(currentServer());
+	engine_.GetDirectoryCache().InvalidateServer(currentServer_);
+	engine_.GetPathCache().InvalidateServer(currentServer_);
 	controlSocket_.m_CurrentPath.clear();
 
 	controlSocket_.m_lastTypeBinary = -1;
