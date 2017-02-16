@@ -23,7 +23,7 @@ int CFtpFileTransferOpData::Send()
 	{
 	case filetransfer_init:
 		if (localFile.empty()) {
-			if (!download) {
+			if (!download_) {
 				return FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED;
 			}
 			else {
@@ -31,7 +31,7 @@ int CFtpFileTransferOpData::Send()
 			}
 		}
 
-		if (download) {
+		if (download_) {
 			std::wstring filename = remotePath.FormatFilename(remoteFile);
 			LogMessage(MessageType::Status, _("Starting download of %s"), filename);
 		}
@@ -55,11 +55,11 @@ int CFtpFileTransferOpData::Send()
 		return FZ_REPLY_CONTINUE;
 	case filetransfer_size:
 		cmd = L"SIZE ";
-		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath);
+		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath_);
 		break;
 	case filetransfer_mdtm:
 		cmd = L"MDTM ";
-		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath);
+		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath_);
 		break;
 	case filetransfer_resumetest:
 	case filetransfer_transfer:
@@ -70,13 +70,13 @@ int CFtpFileTransferOpData::Send()
 
 		{
 			auto pFile = std::make_unique<fz::file>();
-			if (download) {
+			if (download_) {
 				int64_t startOffset = 0;
 
 				// Potentially racy
 				bool didExist = fz::local_filesys::get_file_type(fz::to_native(localFile)) != fz::local_filesys::unknown;
 
-				if (resume) {
+				if (resume_) {
 					if (!pFile->open(fz::to_native(localFile), fz::file::writing, fz::file::existing)) {
 						LogMessage(MessageType::Error, _("Failed to open \"%s\" for appending/writing"), localFile);
 						return FZ_REPLY_ERROR;
@@ -112,7 +112,7 @@ int CFtpFileTransferOpData::Send()
 					localFileSize = 0;
 				}
 
-				resumeOffset = resume ? localFileSize : 0;
+				resumeOffset = resume_ ? localFileSize : 0;
 
 				engine_.transfer_status_.Init(remoteFileSize, startOffset, false);
 
@@ -140,7 +140,7 @@ int CFtpFileTransferOpData::Send()
 				}
 
 				int64_t startOffset;
-				if (resume) {
+				if (resume_) {
 					if (remoteFileSize > 0) {
 						startOffset = remoteFileSize;
 
@@ -195,7 +195,7 @@ int CFtpFileTransferOpData::Send()
 				engine_.transfer_status_.Init(len, startOffset, false);
 			}
 			ioThread_ = std::make_unique<CIOThread>();
-			if (!ioThread_->Create(engine_.GetThreadPool(), std::move(pFile), !download, binary)) {
+			if (!ioThread_->Create(engine_.GetThreadPool(), std::move(pFile), !download_, binary)) {
 				// CIOThread will delete pFile
 				ioThread_.reset();
 				LogMessage(MessageType::Error, _("Could not spawn IO thread"));
@@ -203,14 +203,14 @@ int CFtpFileTransferOpData::Send()
 			}
 		}
 
-		controlSocket_.m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, controlSocket_, download ? TransferMode::download : TransferMode::upload);
+		controlSocket_.m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, controlSocket_, download_ ? TransferMode::download : TransferMode::upload);
 		controlSocket_.m_pTransferSocket->m_binaryMode = transferSettings.binary;
 		controlSocket_.m_pTransferSocket->SetIOThread(ioThread_.get());
 
-		if (download) {
+		if (download_) {
 			cmd = L"RETR ";
 		}
-		else if (resume) {
+		else if (resume_) {
 			if (CServerCapabilities::GetCapability(currentServer_, rest_stream) == yes) {
 				cmd = L"STOR "; // In this case REST gets sent since resume offset was set earlier
 			}
@@ -222,7 +222,7 @@ int CFtpFileTransferOpData::Send()
 		else {
 			cmd = L"STOR ";
 		}
-		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath);
+		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath_);
 
 		opState = filetransfer_waittransfer;
 		controlSocket_.Transfer(cmd, this);
@@ -233,7 +233,7 @@ int CFtpFileTransferOpData::Send()
 		fz::datetime t = fileTime;
 		t -= fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 		cmd += t.format(L"%Y%m%d%H%M%S ", fz::datetime::utc);
-		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath);
+		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath_);
 
 		break;
 	}
@@ -253,7 +253,7 @@ int CFtpFileTransferOpData::TestResumeCapability()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpFileTransferOpData::TestResumeCapability()");
 
-	if (!download) {
+	if (!download_) {
 		return FZ_REPLY_CONTINUE;
 	}
 
@@ -285,7 +285,7 @@ int CFtpFileTransferOpData::TestResumeCapability()
 
 					controlSocket_.m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, controlSocket_, TransferMode::resumetest);
 
-					controlSocket_.Transfer(L"RETR " + remotePath.FormatFilename(remoteFile, !tryAbsolutePath), this);
+					controlSocket_.Transfer(L"RETR " + remotePath.FormatFilename(remoteFile, !tryAbsolutePath_), this);
 					return FZ_REPLY_CONTINUE;
 				}
 				break;
@@ -307,11 +307,11 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, tryAbsolutePath ? remotePath : controlSocket_.m_CurrentPath, remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, tryAbsolutePath_ ? remotePath : controlSocket_.m_CurrentPath, remoteFile, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist)
 					opState = filetransfer_waitlist;
-				else if (download &&
+				else if (download_ &&
 					engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 					CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes)
 				{
@@ -332,7 +332,7 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 							fileTime = entry.time;
 						}
 
-						if (download &&
+						if (download_ &&
 							!entry.has_time() &&
 							engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 							CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes)
@@ -360,7 +360,7 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			}
 		}
 		else {
-			tryAbsolutePath = true;
+			tryAbsolutePath_ = true;
 			opState = filetransfer_size;
 		}
 	}
@@ -369,12 +369,12 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, tryAbsolutePath ? remotePath : controlSocket_.m_CurrentPath, remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, tryAbsolutePath_ ? remotePath : controlSocket_.m_CurrentPath, remoteFile, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist) {
 					opState = filetransfer_size;
 				}
-				else if (download &&
+				else if (download_ &&
 					engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 					CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes)
 				{
@@ -391,7 +391,7 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 						fileTime = entry.time;
 					}
 
-					if (download &&
+					if (download_ &&
 						!entry.has_time() &&
 						engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 						CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes)
@@ -420,7 +420,7 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 	}
 	else if (opState == filetransfer_waittransfer) {
 		if (prevResult == FZ_REPLY_OK && engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS)) {
-			if (!download &&
+			if (!download_ &&
 				CServerCapabilities::GetCapability(currentServer_, mfmt_command) == yes)
 			{
 				fz::datetime mtime = fz::local_filesys::get_modification_time(fz::to_native(localFile));
@@ -430,7 +430,7 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 					return FZ_REPLY_CONTINUE;
 				}
 			}
-			else if (download && !fileTime.empty()) {
+			else if (download_ && !fileTime.empty()) {
 				ioThread_.reset();
 				if (!fz::local_filesys::set_modification_time(fz::to_native(localFile), fileTime)) {
 					LogMessage(MessageType::Debug_Warning, L"Could not set modification time");

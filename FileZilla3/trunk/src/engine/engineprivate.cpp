@@ -3,7 +3,7 @@
 #include "directorycache.h"
 #include "engineprivate.h"
 #include "ftp/ftpcontrolsocket.h"
-#include "httpcontrolsocket.h"
+#include "http/httpcontrolsocket.h"
 #include "logging_private.h"
 #include "pathcache.h"
 #include "ratelimiter.h"

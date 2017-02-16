@@ -113,7 +113,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 			LogMessage(MessageType::Error, _("File transfer aborted by user"));
 		}
 		else if (nErrorCode == FZ_REPLY_OK) {
-			if (pData->transferInitiated) {
+			if (pData->transferInitiated_) {
 				LogMessage(MessageType::Status, _("File transfer successful"));
 			}
 			else {
@@ -209,7 +209,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		case Command::transfer:
 			{
 				CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
-				if (!pData->download && pData->transferInitiated) {
+				if (!pData->download_ && pData->transferInitiated_) {
 					if (!currentServer_) {
 						LogMessage(MessageType::Debug_Warning, L"currentServer_ is empty");
 					}
@@ -380,7 +380,7 @@ int CControlSocket::CheckOverwriteFile()
 
 	CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
 
-	if (pData->download) {
+	if (pData->download_) {
 		if (fz::local_filesys::get_file_type(fz::to_native(pData->localFile), true) != fz::local_filesys::file) {
 			return FZ_REPLY_OK;
 		}
@@ -390,7 +390,7 @@ int CControlSocket::CheckOverwriteFile()
 	bool dirDidExist;
 	bool matchedCase;
 	CServerPath remotePath;
-	if (pData->tryAbsolutePath || m_CurrentPath.empty()) {
+	if (pData->tryAbsolutePath_ || m_CurrentPath.empty()) {
 		remotePath = pData->remotePath;
 	}
 	else {
@@ -402,7 +402,7 @@ int CControlSocket::CheckOverwriteFile()
 	if (found && !matchedCase)
 		found = false;
 
-	if (!pData->download) {
+	if (!pData->download_) {
 		if (!found && pData->remoteFileSize < 0 && pData->fileTime.empty()) {
 			return FZ_REPLY_OK;
 		}
@@ -410,7 +410,7 @@ int CControlSocket::CheckOverwriteFile()
 
 	CFileExistsNotification *pNotification = new CFileExistsNotification;
 
-	pNotification->download = pData->download;
+	pNotification->download = pData->download_;
 	pNotification->localFile = pData->localFile;
 	pNotification->remoteFile = pData->remoteFile;
 	pNotification->remotePath = pData->remotePath;
@@ -419,10 +419,10 @@ int CControlSocket::CheckOverwriteFile()
 	pNotification->remoteTime = pData->fileTime;
 	pNotification->ascii = !pData->transferSettings.binary;
 
-	if (pData->download && pNotification->localSize >= 0) {
+	if (pData->download_ && pNotification->localSize >= 0) {
 		pNotification->canResume = true;
 	}
-	else if (!pData->download && pNotification->remoteSize >= 0) {
+	else if (!pData->download_ && pNotification->remoteSize >= 0) {
 		pNotification->canResume = true;
 	}
 	else {
@@ -446,7 +446,7 @@ int CControlSocket::CheckOverwriteFile()
 CFileTransferOpData::CFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
 	: COpData(Command::transfer)
 	, localFile(local_file), remoteFile(remote_file), remotePath(remote_path)
-	, download(is_download)
+	, download_(is_download)
 {
 }
 
@@ -1089,8 +1089,8 @@ int CRealControlSocket::ContinueConnect()
 	else {
 		if (m_pCurOpData && m_pCurOpData->opId == Command::connect) {
 			CConnectOpData* pData(static_cast<CConnectOpData*>(m_pCurOpData));
-			host = pData->host;
-			port = pData->port;
+			host = pData->host_;
+			port = pData->port_;
 		}
 		if (host.empty()) {
 			host = currentServer_.GetHost();
@@ -1167,7 +1167,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			SendNextCommand();
 		}
 		else {
-			if (pData->download) {
+			if (pData->download_) {
 				std::wstring filename = pData->remotePath.FormatFilename(pData->remoteFile);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
@@ -1184,7 +1184,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			SendNextCommand();
 		}
 		else {
-			if (pData->download) {
+			if (pData->download_) {
 				std::wstring filename = pData->remotePath.FormatFilename(pData->remoteFile);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
@@ -1210,7 +1210,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			SendNextCommand();
 		}
 		else {
-			if (pData->download) {
+			if (pData->download_) {
 				auto const filename = pData->remotePath.FormatFilename(pData->remoteFile);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
@@ -1221,16 +1221,16 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		break;
 	case CFileExistsNotification::resume:
-		if (pData->download && pData->localFileSize >= 0) {
-			pData->resume = true;
+		if (pData->download_ && pData->localFileSize >= 0) {
+			pData->resume_ = true;
 		}
-		else if (!pData->download && pData->remoteFileSize >= 0) {
-			pData->resume = true;
+		else if (!pData->download_ && pData->remoteFileSize >= 0) {
+			pData->resume_ = true;
 		}
 		SendNextCommand();
 		break;
 	case CFileExistsNotification::rename:
-		if (pData->download) {
+		if (pData->download_) {
 			{
 				std::wstring tmp;
 				CLocalPath l(pData->localFile, &tmp);
@@ -1271,7 +1271,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			CDirentry entry;
 			bool dir_did_exist;
 			bool matched_case;
-			if (engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) &&
+			if (engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath_ ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) &&
 				matched_case)
 			{
 				pData->remoteFileSize = entry.size;
@@ -1288,7 +1288,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		break;
 	case CFileExistsNotification::skip:
-		if (pData->download) {
+		if (pData->download_) {
 			std::wstring filename = pData->remotePath.FormatFilename(pData->remoteFile);
 			LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 		}

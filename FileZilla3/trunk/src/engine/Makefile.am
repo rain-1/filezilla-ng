@@ -32,7 +32,8 @@ libengine_a_SOURCES = \
 		ftp/rename.cpp \
 		ftp/rmd.cpp \
 		ftp/transfersocket.cpp \
-		httpcontrolsocket.cpp \
+		http/filetransfer.cpp \
+		http/httpcontrolsocket.cpp \
 		iothread.cpp \
 		local_path.cpp \
 		logging.cpp \
@@ -70,7 +71,9 @@ noinst_HEADERS = backend.h \
 		ftp/rawtransfer.h \
 		ftp/rmd.h \
 		ftp/transfersocket.h \
-		httpcontrolsocket.h \
+		http/connect.h \
+		http/filetransfer.h \
+		http/httpcontrolsocket.h \
 		iothread.h \
 		logging_private.h \
 		pathcache.h \

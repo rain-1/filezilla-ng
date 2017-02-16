@@ -49,18 +49,18 @@ int CFtpLogonOpData::Send()
 			if ((generic_proxy_type <= CProxySocket::unknown || generic_proxy_type >= CProxySocket::proxytype_count) &&
 			    (ftp_proxy_type = engine_.GetOptions().GetOptionVal(OPTION_FTP_PROXY_TYPE)) && !server_.GetBypassProxy())
 			{
-				host = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_HOST);
+				host_ = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_HOST);
 
 				size_t pos = -1;
-				if (!host.empty() && host[0] == '[') {
+				if (!host_.empty() && host_[0] == '[') {
 					// Probably IPv6 address
-					pos = host.find(']');
+					pos = host_.find(']');
 					if (pos == std::wstring::npos) {
 						LogMessage(MessageType::Error, _("Proxy host starts with '[' but no closing bracket found."));
 						return FZ_REPLY_DISCONNECTED | FZ_REPLY_CRITICALERROR;
 					}
-					if (host.size() > (pos + 1) && host[pos + 1]) {
-						if (host[pos + 1] != ':') {
+					if (host_.size() > (pos + 1) && host_[pos + 1]) {
+						if (host_[pos + 1] != ':') {
 							LogMessage(MessageType::Error, _("Invalid proxy host, after closing bracket only colon and port may follow."));
 							return FZ_REPLY_DISCONNECTED | FZ_REPLY_CRITICALERROR;
 						}
@@ -71,18 +71,18 @@ int CFtpLogonOpData::Send()
 					}
 				}
 				else {
-					pos = host.find(':');
+					pos = host_.find(':');
 				}
 
 				if (pos != std::wstring::npos) {
-					port = fz::to_integral<unsigned int>(host.substr(pos + 1));
-					host = host.substr(0, pos);
+					port_ = fz::to_integral<unsigned int>(host_.substr(pos + 1));
+					host_ = host_.substr(0, pos);
 				}
 				else {
-					port = 21;
+					port_ = 21;
 				}
 
-				if (host.empty() || port < 1 || port > 65535) {
+				if (host_.empty() || port_ < 1 || port_ > 65535) {
 					LogMessage(MessageType::Error, _("Proxy set but proxy host or port invalid"));
 					return FZ_REPLY_DISCONNECTED | FZ_REPLY_CRITICALERROR;
 				}
@@ -91,8 +91,8 @@ int CFtpLogonOpData::Send()
 			}
 			else {
 				ftp_proxy_type = 0;
-				host = server_.GetHost();
-				port = server_.GetPort();
+				host_ = server_.GetHost();
+				port_ = server_.GetPort();
 			}
 
 			opState = LOGON_WELCOME;

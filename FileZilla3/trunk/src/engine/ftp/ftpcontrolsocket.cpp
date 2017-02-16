@@ -363,7 +363,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 				nErrorCode |= FZ_REPLY_CRITICALERROR | FZ_REPLY_WRITEFAILED;
 			}
 			if (pData->transferEndReason != TransferEndReason::transfer_command_failure_immediate || GetReplyCode() != 5) {
-				pData->transferInitiated = true;
+				pData->transferInitiated_ = true;
 			}
 			else {
 				if (nErrorCode == FZ_REPLY_ERROR) {
@@ -371,7 +371,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 				}
 			}
 		}
-		if (nErrorCode != FZ_REPLY_OK && pData->download && !pData->fileDidExist) {
+		if (nErrorCode != FZ_REPLY_OK && pData->download_ && !pData->fileDidExist) {
 			pData->ioThread_.reset();
 			int64_t size;
 			bool isLink;
@@ -476,7 +476,7 @@ void CFtpControlSocket::ChangeDir(CServerPath const& path, std::wstring const& s
 	pData->link_discovery = link_discovery;
 
 	if (pData->pNextOpData && pData->pNextOpData->opId == Command::transfer &&
-		!static_cast<CFtpFileTransferOpData *>(pData->pNextOpData)->download)
+		!static_cast<CFtpFileTransferOpData *>(pData->pNextOpData)->download_)
 	{
 		pData->tryMkdOnFail = true;
 		assert(subDir.empty());
