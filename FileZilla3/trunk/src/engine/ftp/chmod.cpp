@@ -7,11 +7,7 @@ int CFtpChmodOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpChmodOpData::Send");
 
-	if (!controlSocket_.SendCommand(L"SITE CHMOD " + command_.GetPermission() + L" " + command_.GetPath().FormatFilename(command_.GetFile(), !useAbsolute_))) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
+	return controlSocket_.SendCommand(L"SITE CHMOD " + command_.GetPermission() + L" " + command_.GetPath().FormatFilename(command_.GetFile(), !useAbsolute_));
 }
 
 int CFtpChmodOpData::ParseResponse()

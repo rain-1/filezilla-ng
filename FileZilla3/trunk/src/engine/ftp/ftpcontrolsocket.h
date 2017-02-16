@@ -38,18 +38,18 @@ protected:
 							 std::wstring const& remoteFile, bool download,
 							 CFileTransferCommand::t_transferSettings const& transferSettings) override;
 	virtual void RawCommand(std::wstring const& command) override;
-	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files) override;
+	virtual int Delete(CServerPath const& path, std::deque<std::wstring>&& files) override;
 	virtual int RemoveDir(CServerPath const& path, std::wstring const& subDir) override;
 	virtual int Mkdir(CServerPath const& path) override;
-	virtual int Rename(const CRenameCommand& command) override;
-	virtual int Chmod(const CChmodCommand& command) override;
+	virtual int Rename(CRenameCommand const& command) override;
+	virtual int Chmod(CChmodCommand const& command) override;
 	void Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData);
 
 
 	virtual void OnConnect();
 	virtual void OnReceive();
 
-	bool SendCommand(std::wstring const& str, bool maskArgs = false, bool measureRTT = true);
+	int SendCommand(std::wstring const& str, bool maskArgs = false, bool measureRTT = true);
 
 	// Parse the latest reply line from the server
 	void ParseLine(std::wstring line);

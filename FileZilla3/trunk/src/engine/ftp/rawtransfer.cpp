@@ -259,9 +259,7 @@ int CFtpRawTransferOpData::Send()
 		return FZ_REPLY_INTERNALERROR;
 	}
 	if (!cmd.empty()) {
-		if (!controlSocket_.SendCommand(cmd, false, measureRTT)) {
-			return FZ_REPLY_ERROR;
-		}
+		return controlSocket_.SendCommand(cmd, false, measureRTT);
 	}
 
 	return FZ_REPLY_WOULDBLOCK;

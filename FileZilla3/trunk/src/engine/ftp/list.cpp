@@ -94,7 +94,6 @@ int CFtpListOpData::Send()
 		opState = list_waittransfer;
 		if (CServerCapabilities::GetCapability(currentServer_, mlsd_command) == yes) {
 			controlSocket_.Transfer(L"MLSD", this);
-			return FZ_REPLY_CONTINUE;
 		}
 		else {
 			if (engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES)) {
@@ -112,23 +111,17 @@ int CFtpListOpData::Send()
 
 			if (viewHidden) {
 				controlSocket_.Transfer(L"LIST -a", this);
-				return FZ_REPLY_CONTINUE;
 			}
 			else {
 				controlSocket_.Transfer(L"LIST", this);
-				return FZ_REPLY_CONTINUE;
 			}
 		}
+		return FZ_REPLY_CONTINUE;
 	}
 	if (opState == list_mdtm) {
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
 		std::wstring cmd = L"MDTM " + controlSocket_.m_CurrentPath.FormatFilename(directoryListing[mdtm_index].name, true);
-		if (!controlSocket_.SendCommand(cmd)) {
-			return FZ_REPLY_ERROR;
-		}
-		else {
-			return FZ_REPLY_WOULDBLOCK;
-		}
+		return controlSocket_.SendCommand(cmd);
 	}
 
 	LogMessage(MessageType::Debug_Warning, L"invalid opstate %d", opState);

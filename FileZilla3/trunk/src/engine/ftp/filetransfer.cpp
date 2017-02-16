@@ -243,9 +243,7 @@ int CFtpFileTransferOpData::Send()
 	}
 
 	if (!cmd.empty()) {
-		if (!controlSocket_.SendCommand(cmd)) {
-			return FZ_REPLY_ERROR;
-		}
+		return controlSocket_.SendCommand(cmd);
 	}
 
 	return FZ_REPLY_WOULDBLOCK;

@@ -124,7 +124,6 @@ int CFtpMkdirOpData::Send()
 		}
 	}
 
-	bool res;
 	switch (opState)
 	{
 	case mkd_init:
@@ -160,22 +159,15 @@ int CFtpMkdirOpData::Send()
 	case mkd_findparent:
 	case mkd_cwdsub:
 		controlSocket_.m_CurrentPath.clear();
-		res = controlSocket_.SendCommand(L"CWD " + currentPath.GetPath());
-		break;
+		return controlSocket_.SendCommand(L"CWD " + currentPath.GetPath());
 	case mkd_mkdsub:
-		res = controlSocket_.SendCommand(L"MKD " + segments.back());
-		break;
+		return controlSocket_.SendCommand(L"MKD " + segments.back());
 	case mkd_tryfull:
-		res = controlSocket_.SendCommand(L"MKD " + path.GetPath());
-		break;
+		return controlSocket_.SendCommand(L"MKD " + path.GetPath());
 	default:
 		LogMessage(MessageType::Debug_Warning, L"unknown op state: %d", opState);
-		return FZ_REPLY_INTERNALERROR;
+		break;
 	}
 
-	if (!res) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
+	return FZ_REPLY_INTERNALERROR;
 }

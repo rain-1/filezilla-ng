@@ -14,11 +14,7 @@ int CFtpRawCommandOpData::Send()
 
 	controlSocket_.m_lastTypeBinary = -1;
 
-	if (!controlSocket_.SendCommand(command_, false, false)) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
+	return controlSocket_.SendCommand(command_, false, false);
 }
 
 int CFtpRawCommandOpData::ParseResponse()

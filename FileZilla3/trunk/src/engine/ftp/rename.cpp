@@ -8,12 +8,10 @@ int CFtpRenameOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpRenameOpData::Send");
 
-	bool res;
 	switch (opState)
 	{
 	case rename_rnfrom:
-		res = controlSocket_.SendCommand(L"RNFR " + command_.GetFromPath().FormatFilename(command_.GetFromFile(), !useAbsolute_));
-		break;
+		return controlSocket_.SendCommand(L"RNFR " + command_.GetFromPath().FormatFilename(command_.GetFromFile(), !useAbsolute_));
 	case rename_rnto:
 	{
 		engine_.GetDirectoryCache().InvalidateFile(currentServer_, command_.GetFromPath(), command_.GetFromFile());
@@ -29,19 +27,14 @@ int CFtpRenameOpData::Send()
 		engine_.GetPathCache().InvalidatePath(currentServer_, command_.GetFromPath(), command_.GetFromFile());
 		engine_.GetPathCache().InvalidatePath(currentServer_, command_.GetToPath(), command_.GetToFile());
 
-		res = controlSocket_.SendCommand(L"RNTO " + command_.GetToPath().FormatFilename(command_.GetToFile(), !useAbsolute_ && command_.GetFromPath() == command_.GetToPath()));
-		break;
+		return controlSocket_.SendCommand(L"RNTO " + command_.GetToPath().FormatFilename(command_.GetToFile(), !useAbsolute_ && command_.GetFromPath() == command_.GetToPath()));
 	}
 	default:
 		LogMessage(MessageType::Debug_Warning, L"unknown op state: %d", opState);
-		return FZ_REPLY_INTERNALERROR;
+		break;
 	}
 
-	if (!res) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
+	return FZ_REPLY_INTERNALERROR;
 }
 
 int CFtpRenameOpData::ParseResponse()

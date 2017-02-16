@@ -21,11 +21,7 @@ int CFtpDeleteOpData::Send()
 
 	engine_.GetDirectoryCache().InvalidateFile(currentServer_, path_, file);
 
-	if (!controlSocket_.SendCommand(L"DELE " + filename)) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
+	return controlSocket_.SendCommand(L"DELE " + filename);
 }
 
 int CFtpDeleteOpData::ParseResponse()
