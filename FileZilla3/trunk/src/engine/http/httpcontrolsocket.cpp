@@ -330,7 +330,7 @@ int CHttpControlSocket::FileTransferSubcommandResult(int prevResult)
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferSubcommandResult(%d)"), prevResult);
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -348,15 +348,13 @@ int CHttpControlSocket::FileTransferSend()
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferSend()"));
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
+		LogMessage(MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		return FZ_REPLY_INTERNALERROR;
 	}
 
 	if (m_current_uri.scheme_.empty() || m_current_uri.host_.empty() || !m_current_uri.is_absolute()) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, "Invalid URI: %s", m_current_uri.to_string());
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
+		LogMessage(MessageType::Debug_Warning, "Invalid URI: %s", m_current_uri.to_string());
+		return FZ_REPLY_INTERNALERROR;
 	}
 
 	CHttpFileTransferOpData *pData = static_cast<CHttpFileTransferOpData *>(m_pCurOpData);
@@ -410,7 +408,7 @@ int CHttpControlSocket::DoInternalConnect()
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::DoInternalConnect()"));
 
 	if (!m_pCurOpData) {
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
