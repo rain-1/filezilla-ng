@@ -20,9 +20,13 @@ public:
 	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) override;
 
 	int OnReceive();
+	int OnClose();
+
 private:
 	int ParseHeader();
+	int ProcessCompleteHeader();
 	int ParseChunkedData();
+	int ProcessData(unsigned char* data, unsigned int len);
 
 	HttpRequest & request_;
 	HttpResponse & response_;
@@ -47,6 +51,7 @@ private:
 		int64_t size{};
 	} chunk_data_;
 
+	int64_t contentLength_{-1};
 	int64_t receivedData_{};
 };
 

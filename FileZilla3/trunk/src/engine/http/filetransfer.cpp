@@ -8,7 +8,8 @@ enum filetransferStates
 {
 	filetransfer_init = 0,
 	filetransfer_waitfileexists,
-	filetransfer_transfer
+	filetransfer_transfer,
+	filetransfer_waittransfer
 };
 
 int CHttpFileTransferOpData::Send()
@@ -45,13 +46,16 @@ int CHttpFileTransferOpData::Send()
 			}
 		}
 		opState = filetransfer_transfer;
-
+		return FZ_REPLY_CONTINUE;
+	case filetransfer_transfer:
 		if (resume_) {
 			req_.headers_["Range"] = fz::sprintf("bytes=%d-", localFileSize_);
 		}
 
+		response_.on_header_ = [this]() { return this->OnHeader(); };
 		response_.on_data_ = [this](auto data, auto len) { return this->OnData(data, len); };
 
+		opState = filetransfer_waittransfer;
 		controlSocket_.Request(req_, response_);
 		return FZ_REPLY_CONTINUE;
 	default:
@@ -69,6 +73,7 @@ int CHttpFileTransferOpData::ParseResponse()
 
 int CHttpFileTransferOpData::OpenFile()
 {
+	LogMessage(MessageType::Debug_Verbose, L"CHttpFileTransferOpData::OpenFile");
 	file_.close();
 
 	controlSocket_.CreateLocalDir(localFile_);
@@ -83,6 +88,10 @@ int CHttpFileTransferOpData::OpenFile()
 
 	assert(download_);
 	int64_t end = file_.seek(0, fz::file::end);
+	if (end < 0) {
+		LogMessage(MessageType::Error, _("Could not seek to the end of the file"));
+		return FZ_REPLY_ERROR;
+	}
 	if (!end) {
 		resume_ = false;
 	}
@@ -90,31 +99,91 @@ int CHttpFileTransferOpData::OpenFile()
 	return FZ_REPLY_OK;
 }
 
-int CHttpFileTransferOpData::OnData(unsigned char const* data, unsigned int len)
+int CHttpFileTransferOpData::OnHeader()
 {
-	// TODO: Check if first call
+	LogMessage(MessageType::Debug_Verbose, L"CHttpFileTransferOpData::OnHeader");
 
-	/* if (engine_.transfer_status_.empty()) {
-		engine_.transfer_status_.Init(pData->m_totalSize, 0, false);
+	if (response_.code_ < 200 || response_.code_ >= 400) {
+		return FZ_REPLY_ERROR;
+	}
+
+	if (response_.code_ == 416 && resume_) {
+		assert(file_.opened());
+		if (file_.seek(0, fz::file::begin) != 0) {
+			LogMessage(MessageType::Error, _("Could not seek to the beginning of the file"));
+			return FZ_REPLY_ERROR;
+		}
+		resume_ = false;
+
+		opState = filetransfer_transfer;
+		return FZ_REPLY_ERROR;
+	}
+
+	// Handle any redirects
+	if (response_.code_ >= 300) {
+
+		// FIXME
+		opState = filetransfer_transfer;
+		return FZ_REPLY_ERROR;
+	}
+
+	// Check if the server disallowed resume
+	if (resume_ && response_.code_ != 206) {
+		assert(file_.opened());
+		if (file_.seek(0, fz::file::begin) != 0) {
+			LogMessage(MessageType::Error, _("Could not seek to the beginning of the file"));
+			return FZ_REPLY_ERROR;
+		}
+		resume_ = false;
+	}
+
+	int64_t totalSize = fz::to_integral<int64_t>(response_.get_header("Content-Length"), -1);
+	if (totalSize == -1) {
+		if (remoteFileSize_ != -1) {
+			totalSize = remoteFileSize_;
+		}
+	}
+
+	if (engine_.transfer_status_.empty()) {
+		engine_.transfer_status_.Init(totalSize, resume_ ? localFileSize_ : 0, false);
 		engine_.transfer_status_.SetStartTime();
 	}
 
-	if (pData->localFile.empty()) {
+	return FZ_REPLY_CONTINUE;
+}
+
+int CHttpFileTransferOpData::OnData(unsigned char const* data, unsigned int len)
+{
+	if (opState != filetransfer_waittransfer) {
+		return FZ_REPLY_INTERNALERROR;
+	}
+
+	if (localFile_.empty()) {
 		char* q = new char[len];
-		memcpy(q, p, len);
+		memcpy(q, data, len);
 		engine_.AddNotification(new CDataNotification(q, len));
 	}
 	else {
-		assert(pData->file.opened());
+		assert(file_.opened());
 
 		auto write = static_cast<int64_t>(len);
-		if (pData->file.write(p, write) != write) {
-			LogMessage(MessageType::Error, _("Failed to write to file %s"), pData->localFile);
+		if (file_.write(data, write) != write) {
+			LogMessage(MessageType::Error, _("Failed to write to file %s"), localFile_);
 			return FZ_REPLY_ERROR;
 		}
 	}
 
 	engine_.transfer_status_.Update(len);
-*/
-	return FZ_REPLY_ERROR;
+
+	return FZ_REPLY_CONTINUE;
+}
+
+int CHttpFileTransferOpData::SubcommandResult(int prevResult, COpData const& previousOperation)
+{
+	LogMessage(MessageType::Debug_Verbose, L"CHttpFileTransferOpData::SubcommandResult");
+
+	if (opState == filetransfer_transfer) {
+		return FZ_REPLY_CONTINUE;
+	}
+	return prevResult;
 }
