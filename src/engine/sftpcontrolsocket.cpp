@@ -1466,20 +1466,21 @@ int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	CSftpFileTransferOpData *pData = new CSftpFileTransferOpData(download, localFile, remoteFile, remotePath);
 	Push(pData);
 
-	pData->transferSettings = transferSettings;
+	pData->transferSettings_ = transferSettings;
 
 	int64_t size;
 	bool isLink;
-	if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file) {
-		pData->localFileSize = size;
+	if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile_), isLink, &size, 0, 0) == fz::local_filesys::file) {
+		pData->localFileSize_ = size;
 	}
 
 	pData->opState = filetransfer_waitcwd;
 
-	if (pData->remotePath.GetType() == DEFAULT)
-		pData->remotePath.SetType(currentServer_.GetType());
+	if (pData->remotePath_.GetType() == DEFAULT) {
+		pData->remotePath_.SetType(currentServer_.GetType());
+	}
 
-	int res = ChangeDir(pData->remotePath);
+	int res = ChangeDir(pData->remotePath_);
 	if (res != FZ_REPLY_OK)
 		return res;
 
@@ -1488,10 +1489,10 @@ int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 
 int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::FileTransferSubcommandResult()"));
+	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::FileTransferSubcommandResult()");
 
 	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1503,7 +1504,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath_ ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath_ ? pData->remotePath_ : m_CurrentPath, pData->remoteFile_, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist)
 					pData->opState = filetransfer_waitlist;
@@ -1520,9 +1521,9 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 					pData->opState = filetransfer_waitlist;
 				else {
 					if (matchedCase) {
-						pData->remoteFileSize = entry.size;
+						pData->remoteFileSize_ = entry.size;
 						if (entry.has_date())
-							pData->fileTime = entry.time;
+							pData->fileTime_ = entry.time;
 
 						if (pData->download_ && !entry.has_time() &&
 							engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
@@ -1559,7 +1560,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath_ ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath_ ? pData->remotePath_ : m_CurrentPath, pData->remoteFile_, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist)
 					pData->opState = filetransfer_mtime;
@@ -1573,9 +1574,9 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else {
 				if (matchedCase && !entry.is_unsure()) {
-					pData->remoteFileSize = entry.size;
+					pData->remoteFileSize_ = entry.size;
 					if (!entry.has_date())
-						pData->fileTime = entry.time;
+						pData->fileTime_ = entry.time;
 
 					if (pData->download_ && !entry.has_time() &&
 						engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
@@ -1598,7 +1599,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			pData->opState = filetransfer_mtime;
 	}
 	else {
-		LogMessage(MessageType::Debug_Warning, _T("  Unknown opState (%d)"), pData->opState);
+		LogMessage(MessageType::Debug_Warning, L"  Unknown opState (%d)", pData->opState);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1625,14 +1626,14 @@ int CSftpControlSocket::FileTransferSend()
 		}
 		if (pData->download_) {
 			if (!pData->resume_) {
-				CreateLocalDir(pData->localFile);
+				CreateLocalDir(pData->localFile_);
 			}
 
-			engine_.transfer_status_.Init(pData->remoteFileSize, pData->resume_ ? pData->localFileSize : 0, false);
+			engine_.transfer_status_.Init(pData->remoteFileSize_, pData->resume_ ? pData->localFileSize_ : 0, false);
 			cmd += L"get ";
-			cmd += QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath_)) + L" ";
+			cmd += QuoteFilename(pData->remotePath_.FormatFilename(pData->remoteFile_, !pData->tryAbsolutePath_)) + L" ";
 
-			std::wstring localFile = QuoteFilename(pData->localFile);
+			std::wstring localFile = QuoteFilename(pData->localFile_);
 			std::wstring logstr = cmd;
 			logstr += localFile;
 			LogMessageRaw(MessageType::Command, logstr);
@@ -1643,12 +1644,12 @@ int CSftpControlSocket::FileTransferSend()
 			}
 		}
 		else {
-			engine_.transfer_status_.Init(pData->localFileSize, pData->resume_ ? pData->remoteFileSize : 0, false);
+			engine_.transfer_status_.Init(pData->localFileSize_, pData->resume_ ? pData->remoteFileSize_ : 0, false);
 			cmd += L"put ";
 
 			std::wstring logstr = cmd;
-			std::wstring localFile = QuoteFilename(pData->localFile) + L" ";
-			std::wstring remoteFile = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath_));
+			std::wstring localFile = QuoteFilename(pData->localFile_) + L" ";
+			std::wstring remoteFile = QuoteFilename(pData->remotePath_.FormatFilename(pData->remoteFile_, !pData->tryAbsolutePath_));
 
 			logstr += localFile;
 			logstr += remoteFile;
@@ -1666,22 +1667,22 @@ int CSftpControlSocket::FileTransferSend()
 		pData->transferInitiated_ = true;
 	}
 	else if (pData->opState == filetransfer_mtime) {
-		std::wstring quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath_));
+		std::wstring quotedFilename = QuoteFilename(pData->remotePath_.FormatFilename(pData->remoteFile_, !pData->tryAbsolutePath_));
 		if (!SendCommand(_T("mtime ") + WildcardEscape(quotedFilename),
 			L"mtime " + quotedFilename))
 			return FZ_REPLY_ERROR;
 	}
 	else if (pData->opState == filetransfer_chmtime) {
-		assert(!pData->fileTime.empty());
+		assert(!pData->fileTime_.empty());
 		if (pData->download_) {
 			LogMessage(MessageType::Debug_Info, _T("  filetransfer_chmtime during download"));
 			ResetOperation(FZ_REPLY_INTERNALERROR);
 			return FZ_REPLY_ERROR;
 		}
 
-		std::wstring quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath_));
+		std::wstring quotedFilename = QuoteFilename(pData->remotePath_.FormatFilename(pData->remoteFile_, !pData->tryAbsolutePath_));
 
-		fz::datetime t = pData->fileTime;
+		fz::datetime t = pData->fileTime_;
 		t -= fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 
 		// Y2K38
@@ -1715,14 +1716,14 @@ int CSftpControlSocket::FileTransferParseResponse(int result, std::wstring const
 
 		if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS)) {
 			if (pData->download_) {
-				if (!pData->fileTime.empty()) {
-					if (!fz::local_filesys::set_modification_time(fz::to_native(pData->localFile), pData->fileTime))
+				if (!pData->fileTime_.empty()) {
+					if (!fz::local_filesys::set_modification_time(fz::to_native(pData->localFile_), pData->fileTime_))
 						LogMessage(MessageType::Debug_Warning, _T("Could not set modification time"));
 				}
 			}
 			else {
-				pData->fileTime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile));
-				if (!pData->fileTime.empty()) {
+				pData->fileTime_ = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile_));
+				if (!pData->fileTime_.empty()) {
 					pData->opState = filetransfer_chmtime;
 					return SendNextCommand();
 				}
@@ -1744,8 +1745,8 @@ int CSftpControlSocket::FileTransferParseResponse(int result, std::wstring const
 			if (parsed) {
 				fz::datetime fileTime = fz::datetime(seconds, fz::datetime::seconds);
 				if (!fileTime.empty()) {
-					pData->fileTime = fileTime;
-					pData->fileTime += fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
+					pData->fileTime_ = fileTime;
+					pData->fileTime_ += fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 				}
 			}
 		}

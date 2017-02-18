@@ -22,7 +22,7 @@ int CFtpFileTransferOpData::Send()
 	switch (opState)
 	{
 	case filetransfer_init:
-		if (localFile.empty()) {
+		if (localFile_.empty()) {
 			if (!download_) {
 				return FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED;
 			}
@@ -32,34 +32,34 @@ int CFtpFileTransferOpData::Send()
 		}
 
 		if (download_) {
-			std::wstring filename = remotePath.FormatFilename(remoteFile);
+			std::wstring filename = remotePath_.FormatFilename(remoteFile_);
 			LogMessage(MessageType::Status, _("Starting download of %s"), filename);
 		}
 		else {
-			LogMessage(MessageType::Status, _("Starting upload of %s"), localFile);
+			LogMessage(MessageType::Status, _("Starting upload of %s"), localFile_);
 		}
 
 		int64_t size;
 		bool isLink;
-		if (fz::local_filesys::get_file_info(fz::to_native(localFile), isLink, &size, 0, 0) == fz::local_filesys::file) {
-			localFileSize = size;
+		if (fz::local_filesys::get_file_info(fz::to_native(localFile_), isLink, &size, 0, 0) == fz::local_filesys::file) {
+			localFileSize_ = size;
 		}
 
 		opState = filetransfer_waitcwd;
 
-		if (remotePath.GetType() == DEFAULT) {
-			remotePath.SetType(currentServer_.GetType());
+		if (remotePath_.GetType() == DEFAULT) {
+			remotePath_.SetType(currentServer_.GetType());
 		}
 
-		controlSocket_.ChangeDir(remotePath);
+		controlSocket_.ChangeDir(remotePath_);
 		return FZ_REPLY_CONTINUE;
 	case filetransfer_size:
 		cmd = L"SIZE ";
-		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath_);
+		cmd += remotePath_.FormatFilename(remoteFile_, !tryAbsolutePath_);
 		break;
 	case filetransfer_mdtm:
 		cmd = L"MDTM ";
-		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath_);
+		cmd += remotePath_.FormatFilename(remoteFile_, !tryAbsolutePath_);
 		break;
 	case filetransfer_resumetest:
 	case filetransfer_transfer:
@@ -74,11 +74,11 @@ int CFtpFileTransferOpData::Send()
 				int64_t startOffset = 0;
 
 				// Potentially racy
-				bool didExist = fz::local_filesys::get_file_type(fz::to_native(localFile)) != fz::local_filesys::unknown;
+				bool didExist = fz::local_filesys::get_file_type(fz::to_native(localFile_)) != fz::local_filesys::unknown;
 
 				if (resume_) {
-					if (!pFile->open(fz::to_native(localFile), fz::file::writing, fz::file::existing)) {
-						LogMessage(MessageType::Error, _("Failed to open \"%s\" for appending/writing"), localFile);
+					if (!pFile->open(fz::to_native(localFile_), fz::file::writing, fz::file::existing)) {
+						LogMessage(MessageType::Error, _("Failed to open \"%s\" for appending/writing"), localFile_);
 						return FZ_REPLY_ERROR;
 					}
 
@@ -90,7 +90,7 @@ int CFtpFileTransferOpData::Send()
 						LogMessage(MessageType::Error, _("Could not seek to the end of the file"));
 						return FZ_REPLY_ERROR;
 					}
-					localFileSize = startOffset;
+					localFileSize_ = startOffset;
 
 					// Check resume capabilities
 					if (opState == filetransfer_resumetest) {
@@ -101,29 +101,29 @@ int CFtpFileTransferOpData::Send()
 					}
 				}
 				else {
-					controlSocket_.CreateLocalDir(localFile);
+					controlSocket_.CreateLocalDir(localFile_);
 
-					if (!pFile->open(fz::to_native(localFile), fz::file::writing, fz::file::empty)) {
-						LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), localFile);
+					if (!pFile->open(fz::to_native(localFile_), fz::file::writing, fz::file::empty)) {
+						LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), localFile_);
 						return FZ_REPLY_ERROR;
 					}
 
 					fileDidExist = didExist;
-					localFileSize = 0;
+					localFileSize_ = 0;
 				}
 
-				resumeOffset = resume_ ? localFileSize : 0;
+				resumeOffset = resume_ ? localFileSize_ : 0;
 
-				engine_.transfer_status_.Init(remoteFileSize, startOffset, false);
+				engine_.transfer_status_.Init(remoteFileSize_, startOffset, false);
 
 				if (engine_.GetOptions().GetOptionVal(OPTION_PREALLOCATE_SPACE)) {
 					// Try to preallocate the file in order to reduce fragmentation
-					int64_t sizeToPreallocate = remoteFileSize - startOffset;
+					int64_t sizeToPreallocate = remoteFileSize_ - startOffset;
 					if (sizeToPreallocate > 0) {
-						LogMessage(MessageType::Debug_Info, L"Preallocating %d bytes for the file \"%s\"", sizeToPreallocate, localFile);
+						LogMessage(MessageType::Debug_Info, L"Preallocating %d bytes for the file \"%s\"", sizeToPreallocate, localFile_);
 						auto oldPos = pFile->seek(0, fz::file::current);
 						if (oldPos >= 0) {
-							if (pFile->seek(sizeToPreallocate, fz::file::end) == remoteFileSize) {
+							if (pFile->seek(sizeToPreallocate, fz::file::end) == remoteFileSize_) {
 								if (!pFile->truncate()) {
 									LogMessage(MessageType::Debug_Warning, L"Could not preallocate the file");
 								}
@@ -134,32 +134,32 @@ int CFtpFileTransferOpData::Send()
 				}
 			}
 			else {
-				if (!pFile->open(fz::to_native(localFile), fz::file::reading)) {
-					LogMessage(MessageType::Error, _("Failed to open \"%s\" for reading"), localFile);
+				if (!pFile->open(fz::to_native(localFile_), fz::file::reading)) {
+					LogMessage(MessageType::Error, _("Failed to open \"%s\" for reading"), localFile_);
 					return FZ_REPLY_ERROR;
 				}
 
 				int64_t startOffset;
 				if (resume_) {
-					if (remoteFileSize > 0) {
-						startOffset = remoteFileSize;
+					if (remoteFileSize_ > 0) {
+						startOffset = remoteFileSize_;
 
-						if (localFileSize < 0) {
+						if (localFileSize_ < 0) {
 							auto s = pFile->size();
 							if (s >= 0) {
-								localFileSize = s;
+								localFileSize_ = s;
 							}
 						}
 
-						if (startOffset == localFileSize && binary) {
+						if (startOffset == localFileSize_ && binary) {
 							LogMessage(MessageType::Debug_Info, L"No need to resume, remote file size matches local file size.");
 
 							if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(currentServer_, mfmt_command) == yes)
 							{
-								fz::datetime mtime = fz::local_filesys::get_modification_time(fz::to_native(localFile));
+								fz::datetime mtime = fz::local_filesys::get_modification_time(fz::to_native(localFile_));
 								if (!mtime.empty()) {
-									fileTime = mtime;
+									fileTime_ = mtime;
 									opState = filetransfer_mfmt;
 									return Send();
 								}
@@ -204,7 +204,7 @@ int CFtpFileTransferOpData::Send()
 		}
 
 		controlSocket_.m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, controlSocket_, download_ ? TransferMode::download : TransferMode::upload);
-		controlSocket_.m_pTransferSocket->m_binaryMode = transferSettings.binary;
+		controlSocket_.m_pTransferSocket->m_binaryMode = transferSettings_.binary;
 		controlSocket_.m_pTransferSocket->SetIOThread(ioThread_.get());
 
 		if (download_) {
@@ -222,7 +222,7 @@ int CFtpFileTransferOpData::Send()
 		else {
 			cmd = L"STOR ";
 		}
-		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath_);
+		cmd += remotePath_.FormatFilename(remoteFile_, !tryAbsolutePath_);
 
 		opState = filetransfer_waittransfer;
 		controlSocket_.Transfer(cmd, this);
@@ -230,10 +230,10 @@ int CFtpFileTransferOpData::Send()
 	case filetransfer_mfmt:
 	{
 		cmd = L"MFMT ";
-		fz::datetime t = fileTime;
+		fz::datetime t = fileTime_;
 		t -= fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 		cmd += t.format(L"%Y%m%d%H%M%S ", fz::datetime::utc);
-		cmd += remotePath.FormatFilename(remoteFile, !tryAbsolutePath_);
+		cmd += remotePath_.FormatFilename(remoteFile_, !tryAbsolutePath_);
 
 		break;
 	}
@@ -258,34 +258,34 @@ int CFtpFileTransferOpData::TestResumeCapability()
 	}
 
 	for (int i = 0; i < 2; ++i) {
-		if (localFileSize >= (1ll << (i ? 31 : 32))) {
+		if (localFileSize_ >= (1ll << (i ? 31 : 32))) {
 			switch (CServerCapabilities::GetCapability(currentServer_, i ? resume2GBbug : resume4GBbug))
 			{
 			case yes:
-				if (remoteFileSize == localFileSize) {
+				if (remoteFileSize_ == localFileSize_) {
 					LogMessage(MessageType::Debug_Info, _("Server does not support resume of files > %d GB. End transfer since file sizes match."), i ? 2 : 4);
 					return FZ_REPLY_OK;
 				}
 				LogMessage(MessageType::Error, _("Server does not support resume of files > %d GB."), i ? 2 : 4);
 				return FZ_REPLY_CRITICALERROR;
 			case unknown:
-				if (remoteFileSize < localFileSize) {
+				if (remoteFileSize_ < localFileSize_) {
 					// Don't perform test
 					break;
 				}
-				if (remoteFileSize == localFileSize) {
+				if (remoteFileSize_ == localFileSize_) {
 					LogMessage(MessageType::Debug_Info, _("Server may not support resume of files > %d GB. End transfer since file sizes match."), i ? 2 : 4);
 					return FZ_REPLY_OK;
 				}
-				else if (remoteFileSize > localFileSize) {
+				else if (remoteFileSize_ > localFileSize_) {
 					LogMessage(MessageType::Status, _("Testing resume capabilities of server"));
 
 					opState = filetransfer_waitresumetest;
-					resumeOffset = remoteFileSize - 1;
+					resumeOffset = remoteFileSize_ - 1;
 
 					controlSocket_.m_pTransferSocket = std::make_unique<CTransferSocket>(engine_, controlSocket_, TransferMode::resumetest);
 
-					controlSocket_.Transfer(L"RETR " + remotePath.FormatFilename(remoteFile, !tryAbsolutePath_), this);
+					controlSocket_.Transfer(L"RETR " + remotePath_.FormatFilename(remoteFile_, !tryAbsolutePath_), this);
 					return FZ_REPLY_CONTINUE;
 				}
 				break;
@@ -307,7 +307,7 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, tryAbsolutePath_ ? remotePath : controlSocket_.m_CurrentPath, remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, tryAbsolutePath_ ? remotePath_ : controlSocket_.m_CurrentPath, remoteFile_, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist)
 					opState = filetransfer_waitlist;
@@ -327,9 +327,9 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 				}
 				else {
 					if (matchedCase) {
-						remoteFileSize = entry.size;
+						remoteFileSize_ = entry.size;
 						if (entry.has_date()) {
-							fileTime = entry.time;
+							fileTime_ = entry.time;
 						}
 
 						if (download_ &&
@@ -369,7 +369,7 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, tryAbsolutePath_ ? remotePath : controlSocket_.m_CurrentPath, remoteFile, dirDidExist, matchedCase);
+			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, tryAbsolutePath_ ? remotePath_ : controlSocket_.m_CurrentPath, remoteFile_, dirDidExist, matchedCase);
 			if (!found) {
 				if (!dirDidExist) {
 					opState = filetransfer_size;
@@ -386,9 +386,9 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			}
 			else {
 				if (matchedCase && !entry.is_unsure()) {
-					remoteFileSize = entry.size;
+					remoteFileSize_ = entry.size;
 					if (entry.has_date()) {
-						fileTime = entry.time;
+						fileTime_ = entry.time;
 					}
 
 					if (download_ &&
@@ -423,16 +423,16 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			if (!download_ &&
 				CServerCapabilities::GetCapability(currentServer_, mfmt_command) == yes)
 			{
-				fz::datetime mtime = fz::local_filesys::get_modification_time(fz::to_native(localFile));
+				fz::datetime mtime = fz::local_filesys::get_modification_time(fz::to_native(localFile_));
 				if (!mtime.empty()) {
-					fileTime = mtime;
+					fileTime_ = mtime;
 					opState = filetransfer_mfmt;
 					return FZ_REPLY_CONTINUE;
 				}
 			}
-			else if (download_ && !fileTime.empty()) {
+			else if (download_ && !fileTime_.empty()) {
 				ioThread_.reset();
-				if (!fz::local_filesys::set_modification_time(fz::to_native(localFile), fileTime)) {
+				if (!fz::local_filesys::set_modification_time(fz::to_native(localFile_), fileTime_)) {
 					LogMessage(MessageType::Debug_Warning, L"Could not set modification time");
 				}
 			}
@@ -442,7 +442,7 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 	else if (opState == filetransfer_waitresumetest) {
 		if (prevResult != FZ_REPLY_OK) {
 			if (transferEndReason == TransferEndReason::failed_resumetest) {
-				if (localFileSize > (1ll << 32)) {
+				if (localFileSize_ > (1ll << 32)) {
 					CServerCapabilities::SetCapability(currentServer_, resume4GBbug, yes);
 					LogMessage(MessageType::Error, _("Server does not support resume of files > 4GB."));
 				}
@@ -455,7 +455,7 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			}
 			return prevResult;
 		}
-		if (localFileSize > (1ll << 32)) {
+		if (localFileSize_ > (1ll << 32)) {
 			CServerCapabilities::SetCapability(currentServer_, resume4GBbug, no);
 		}
 		else {
@@ -482,7 +482,7 @@ int CFtpFileTransferOpData::ParseResponse()
 		if (code != 2 && code != 3) {
 			if (CServerCapabilities::GetCapability(currentServer_, size_command) == yes ||
 				fz::str_tolower_ascii(response.substr(4)) == L"file not found" ||
-				(fz::str_tolower_ascii(remotePath.FormatFilename(remoteFile)).find(L"file not found") == std::wstring::npos &&
+				(fz::str_tolower_ascii(remotePath_.FormatFilename(remoteFile_)).find(L"file not found") == std::wstring::npos &&
 					fz::str_tolower_ascii(response).find(L"file not found") != std::wstring::npos))
 			{
 				// Server supports SIZE command but command failed. Most likely MDTM will fail as well, so
@@ -514,7 +514,7 @@ int CFtpFileTransferOpData::ParseResponse()
 					size *= 10;
 					size += c - '0';
 				}
-				remoteFileSize = size;
+				remoteFileSize_ = size;
 			}
 			else {
 				LogMessage(MessageType::Debug_Info, L"Invalid SIZE reply");
@@ -524,9 +524,9 @@ int CFtpFileTransferOpData::ParseResponse()
 	case filetransfer_mdtm:
 		opState = filetransfer_resumetest;
 		if (response.substr(0, 4) == L"213 " && response.size() > 16) {
-			fileTime = fz::datetime(response.substr(4), fz::datetime::utc);
-			if (!fileTime.empty()) {
-				fileTime += fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
+			fileTime_ = fz::datetime(response.substr(4), fz::datetime::utc);
+			if (!fileTime_.empty()) {
+				fileTime_ += fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 			}
 		}
 

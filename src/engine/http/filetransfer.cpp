@@ -2,6 +2,8 @@
 
 #include "filetransfer.h"
 
+#include <libfilezilla/local_filesys.hpp>
+
 enum filetransferStates
 {
 	filetransfer_init = 0,
@@ -20,39 +22,38 @@ int CHttpFileTransferOpData::Send()
 		}
 
 		// TODO: Ordinarily we need to percent-encode the filename. With the current API we then however would not be able to pass the query part of the URL
-		req_.uri_ = fz::uri(fz::to_utf8(currentServer_.Format(ServerFormat::url)) + fz::to_utf8(remotePath.FormatFilename(remoteFile)));
+		req_.uri_ = fz::uri(fz::to_utf8(currentServer_.Format(ServerFormat::url)) + fz::to_utf8(remotePath_.FormatFilename(remoteFile_)));
 		if (req_.uri_.empty()) {
 			LogMessage(MessageType::Error, _("Could not create URI for this transfer."));
 			return FZ_REPLY_ERROR;
 		}
 
-		return FZ_REPLY_INTERNALERROR;
-		/*
-		if (!localFile.empty()) {
-			httpRequestOpData->localFileSize = fz::local_filesys::get_size(fz::to_native(httpRequestOpData->localFile));
+		req_.verb_ = "GET";
 
-			httpRequestOpData->opState = filetransfer_waitfileexists;
-			int res = CheckOverwriteFile();
+		if (!localFile_.empty()) {
+			localFileSize_ = fz::local_filesys::get_size(fz::to_native(localFile_));
+
+			opState = filetransfer_waitfileexists;
+			int res = controlSocket_.CheckOverwriteFile();
 			if (res != FZ_REPLY_OK) {
 				return res;
 			}
 
-			httpRequestOpData->opState = filetransfer_transfer;
-
-			res = OpenFile(pData);
+			res = OpenFile();
 			if (res != FZ_REPLY_OK) {
 				return res;
 			}
 		}
-		else {
-			httpRequestOpData->opState = filetransfer_transfer;
+		opState = filetransfer_transfer;
+
+		if (resume_) {
+			req_.headers_["Range"] = fz::sprintf("bytes=%d-", localFileSize_);
 		}
 
-		int res = InternalConnect(currentServer_.GetHost(), currentServer_.GetPort(), currentServer_.GetProtocol() == HTTPS);
-		if (res != FZ_REPLY_OK) {
-			return res;
-		}
-		*/
+		response_.on_data_ = [this](auto data, auto len) { return OnData(data, len); };
+
+		controlSocket_.Request(req_, response_);
+		return FZ_REPLY_CONTINUE;
 	default:
 		break;
 	}
@@ -64,4 +65,32 @@ int CHttpFileTransferOpData::ParseResponse()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpFileTransferOpData::ParseResponse");
 	return FZ_REPLY_INTERNALERROR;
+}
+
+int CHttpFileTransferOpData::OpenFile()
+{
+	file_.close();
+
+	controlSocket_.CreateLocalDir(localFile_);
+
+	if (!file_.open(fz::to_native(localFile_),
+		download_ ? fz::file::writing : fz::file::reading,
+		fz::file::existing))
+	{
+		LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), localFile_);
+		return FZ_REPLY_ERROR;
+	}
+
+	assert(download_);
+	int64_t end = file_.seek(0, fz::file::end);
+	if (!end) {
+		resume_ = false;
+	}
+	localFileSize_ = fz::local_filesys::get_size(fz::to_native(localFile_));
+	return FZ_REPLY_OK;
+}
+
+int CHttpFileTransferOpData::OnData(unsigned char const* data, unsigned int len)
+{
+	return FZ_REPLY_ERROR;
 }
