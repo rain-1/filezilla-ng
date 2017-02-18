@@ -334,10 +334,10 @@ void CHttpControlSocket::Request(HttpRequest & request, HttpResponse & response)
 /*
 int CHttpControlSocket::FileTransferSubcommandResult(int prevResult)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferSubcommandResult(%d)"), prevResult);
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::FileTransferSubcommandResult(%d)", prevResult);
 
 	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -352,10 +352,10 @@ int CHttpControlSocket::FileTransferSubcommandResult(int prevResult)
 
 int CHttpControlSocket::FileTransferSend()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferSend()"));
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::FileTransferSend()");
 
 	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
 		return FZ_REPLY_INTERNALERROR;
 	}
 
@@ -395,7 +395,7 @@ int CHttpControlSocket::FileTransferSend()
 
 int CHttpControlSocket::InternalConnect(std::wstring host, unsigned short port, bool tls)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::InternalConnect()"));
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::InternalConnect()");
 
 	CHttpInternalConnectOpData* pData = new CHttpInternalConnectOpData;
 	Push(pData);
@@ -412,10 +412,10 @@ int CHttpControlSocket::InternalConnect(std::wstring host, unsigned short port, 
 
 int CHttpControlSocket::DoInternalConnect()
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::DoInternalConnect()"));
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::DoInternalConnect()");
 
 	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -825,7 +825,7 @@ int CHttpControlSocket::ResetOperation(int nErrorCode)
 
 void CHttpControlSocket::OnClose(int error)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::OnClose(%d)"), error);
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::OnClose(%d)", error);
 
 	if (error) {
 		LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
