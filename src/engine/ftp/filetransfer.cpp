@@ -475,7 +475,6 @@ int CFtpFileTransferOpData::ParseResponse()
 	int code = controlSocket_.GetReplyCode();
 	auto const& response = controlSocket_.m_Response;
 
-	bool error = false;
 	switch (opState)
 	{
 	case filetransfer_size:
