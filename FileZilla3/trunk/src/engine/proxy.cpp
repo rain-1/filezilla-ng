@@ -548,8 +548,8 @@ void CProxySocket::OnReceive()
 			{
 			case socks5_auth:
 				{
-					auto ulen = static_cast<unsigned char>(std::min(m_user.size(), 255u));
-					auto plen = static_cast<unsigned char>(std::min(m_pass.size(), 255u));
+					auto ulen = static_cast<unsigned char>(std::min(m_user.size(), size_t(255)));
+					auto plen = static_cast<unsigned char>(std::min(m_pass.size(), size_t(255)));
 					m_sendBufferLen = ulen + plen + 3;
 					m_pSendBuffer = new char[m_sendBufferLen];
 					m_pSendBuffer[0] = 1;
@@ -601,7 +601,7 @@ void CProxySocket::OnReceive()
 					else {
 						m_pSendBuffer[3] = 3; // Domain name
 
-						auto hlen = static_cast<unsigned char>(host.size());
+						auto hlen = static_cast<unsigned char>(std::min(host.size(), size_t(255)));
 						m_pSendBuffer[4] = hlen;
 						memcpy(m_pSendBuffer + 5, host.c_str(), hlen);
 						addrlen = hlen + 1;
