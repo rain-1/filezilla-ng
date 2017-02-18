@@ -206,7 +206,8 @@ public:
 	// Only called from the engine, see there for description
 	void InvalidateCurrentWorkingDir(const CServerPath& path);
 
-	virtual int SendNextCommand();
+	virtual bool CanSendNextCommand() const { return true; }
+	int SendNextCommand();
 
 protected:
 	void SendDirectoryListingNotification(CServerPath const& path, bool onList, bool failed);

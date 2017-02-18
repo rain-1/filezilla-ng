@@ -1014,45 +1014,6 @@ int CSftpControlSocket::ResetOperation(int nErrorCode)
 	return CControlSocket::ResetOperation(nErrorCode);
 }
 
-int CSftpControlSocket::SendNextCommand()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::SendNextCommand()");
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Warning, L"SendNextCommand called without active operation");
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	while (m_pCurOpData) {
-		if (m_pCurOpData->waitForAsyncRequest) {
-			LogMessage(MessageType::Debug_Info, L"Waiting for async request, ignoring SendNextCommand...");
-			return FZ_REPLY_WOULDBLOCK;
-		}
-
-		int res = m_pCurOpData->Send();
-		if (res != FZ_REPLY_CONTINUE) {
-			if (res == FZ_REPLY_OK) {
-				return ResetOperation(res);
-			}
-			else if ((res & FZ_REPLY_DISCONNECTED) == FZ_REPLY_DISCONNECTED) {
-				return DoClose(res);
-			}
-			else if (res & FZ_REPLY_ERROR) {
-				return ResetOperation(res);
-			}
-			else if (res == FZ_REPLY_WOULDBLOCK) {
-				return FZ_REPLY_WOULDBLOCK;
-			}
-			else if (res != FZ_REPLY_CONTINUE) {
-				LogMessage(MessageType::Debug_Warning, L"Unknown result %d returned by m_pCurOpData->Send()");
-				return ResetOperation(FZ_REPLY_INTERNALERROR);
-			}
-		}
-	}
-
-	return FZ_REPLY_OK;
-}
-
 int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 									std::wstring const& remoteFile, bool download,
 									CFileTransferCommand::t_transferSettings const& transferSettings)

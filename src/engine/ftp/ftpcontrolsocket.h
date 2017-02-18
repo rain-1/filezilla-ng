@@ -63,7 +63,7 @@ protected:
 	// It's the last line in a multi-line response.
 	void ParseResponse();
 
-	virtual int SendNextCommand() override;
+	virtual bool CanSendNextCommand() const override;
 	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
 
 	int GetReplyCode() const;

@@ -87,8 +87,6 @@ protected:
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 
-	virtual int SendNextCommand() override;
-
 	CTlsSocket* m_pTlsSocket{};
 
 	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
