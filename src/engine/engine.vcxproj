@@ -119,7 +119,7 @@
     <ClCompile Include="server.cpp" />
     <ClCompile Include="servercapabilities.cpp" />
     <ClCompile Include="serverpath.cpp" />
-    <ClCompile Include="sftpcontrolsocket.cpp" />
+    <ClCompile Include="sftp\sftpcontrolsocket.cpp" />
     <ClCompile Include="sizeformatting_base.cpp" />
     <ClCompile Include="socket.cpp">
       <PrecompiledHeader />
@@ -172,9 +172,9 @@
     <ClInclude Include="rtt.h" />
     <ClInclude Include="servercapabilities.h" />
     <ClInclude Include="..\include\serverpath.h" />
-    <ClInclude Include="sftpcontrolsocket.h" />
     <ClInclude Include="..\include\sizeformatting_base.h" />
     <ClInclude Include="..\include\socket.h" />
+    <ClInclude Include="sftp\sftpcontrolsocket.h" />
     <ClInclude Include="tlssocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -46,7 +46,7 @@ libengine_a_SOURCES = \
 		rtt.cpp \
 		server.cpp serverpath.cpp\
 		servercapabilities.cpp \
-		sftpcontrolsocket.cpp \
+		sftp/sftpcontrolsocket.cpp \
 		sizeformatting_base.cpp \
 		socket.cpp \
 		tlssocket.cpp \
@@ -81,7 +81,7 @@ noinst_HEADERS = backend.h \
 		ratelimiter.h \
 		rtt.h \
 		servercapabilities.h \
-		sftpcontrolsocket.h \
+		sftp/sftpcontrolsocket.h \
 		tlssocket.h
 
 dist_noinst_DATA = engine.vcxproj
