@@ -92,5 +92,29 @@ int CHttpFileTransferOpData::OpenFile()
 
 int CHttpFileTransferOpData::OnData(unsigned char const* data, unsigned int len)
 {
+	// TODO: Check if first call
+
+	/* if (engine_.transfer_status_.empty()) {
+		engine_.transfer_status_.Init(pData->m_totalSize, 0, false);
+		engine_.transfer_status_.SetStartTime();
+	}
+
+	if (pData->localFile.empty()) {
+		char* q = new char[len];
+		memcpy(q, p, len);
+		engine_.AddNotification(new CDataNotification(q, len));
+	}
+	else {
+		assert(pData->file.opened());
+
+		auto write = static_cast<int64_t>(len);
+		if (pData->file.write(p, write) != write) {
+			LogMessage(MessageType::Error, _("Failed to write to file %s"), pData->localFile);
+			return FZ_REPLY_ERROR;
+		}
+	}
+
+	engine_.transfer_status_.Update(len);
+*/
 	return FZ_REPLY_ERROR;
 }

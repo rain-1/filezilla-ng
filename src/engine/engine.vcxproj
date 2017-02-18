@@ -104,6 +104,8 @@
     <ClCompile Include="ftp\transfersocket.cpp" />
     <ClCompile Include="http\filetransfer.cpp" />
     <ClCompile Include="http\httpcontrolsocket.cpp" />
+    <ClCompile Include="http\internalconnect.cpp" />
+    <ClCompile Include="http\request.cpp" />
     <ClCompile Include="iothread.cpp" />
     <ClCompile Include="local_path.cpp" />
     <ClCompile Include="logging.cpp" />
@@ -156,6 +158,8 @@
     <ClInclude Include="http\connect.h" />
     <ClInclude Include="http\filetransfer.h" />
     <ClInclude Include="http\httpcontrolsocket.h" />
+    <ClInclude Include="http\internalconnect.h" />
+    <ClInclude Include="http\request.h" />
     <ClInclude Include="iothread.h" />
     <ClInclude Include="..\include\libfilezilla_engine.h" />
     <ClInclude Include="..\include\local_path.h" />

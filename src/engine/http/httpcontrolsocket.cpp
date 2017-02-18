@@ -5,14 +5,14 @@
 #include "engineprivate.h"
 #include "filetransfer.h"
 #include "httpcontrolsocket.h"
+#include "internalconnect.h"
+#include "request.h"
 #include "tlssocket.h"
 #include "uri.h"
 
 #include <libfilezilla/file.hpp>
 #include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
-
-#include <wx/string.h>
 
 /*
 #define FZ_REPLY_REDIRECTED FZ_REPLY_ALREADYCONNECTED
@@ -268,14 +268,14 @@ int CHttpControlSocket::DoReceive()
 
 	return 0;
 }
-
+*/
 void CHttpControlSocket::OnConnect()
 {
-	assert(GetCurrentCommandId() == Command::connect);
+	assert(GetCurrentCommandId() == PrivCommand::http_connect);
 
 	CHttpInternalConnectOpData *pData = static_cast<CHttpInternalConnectOpData *>(m_pCurOpData);
 
-	if (pData->tls) {
+	if (pData->tls_) {
 		if (!m_pTlsSocket) {
 			LogMessage(MessageType::Status, _("Connection established, initializing TLS..."));
 
@@ -307,8 +307,6 @@ void CHttpControlSocket::OnConnect()
 	}
 }
 
-
-*/
 int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 									std::wstring const& remoteFile, bool download,
 									CFileTransferCommand::t_transferSettings const&)
@@ -327,8 +325,7 @@ int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 void CHttpControlSocket::Request(HttpRequest & request, HttpResponse & response)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::Request()");
-
-	// FIXME
+	Push(new CHttpRequestOpData(*this, request, response));
 }
 
 /*
@@ -350,133 +347,18 @@ int CHttpControlSocket::FileTransferSubcommandResult(int prevResult)
 	return FileTransferSend();
 }
 
-int CHttpControlSocket::FileTransferSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::FileTransferSend()");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	if (m_current_uri.scheme_.empty() || m_current_uri.host_.empty() || !m_current_uri.is_absolute()) {
-		LogMessage(MessageType::Debug_Warning, "Invalid URI: %s", m_current_uri.to_string());
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	CHttpFileTransferOpData *pData = static_cast<CHttpFileTransferOpData *>(m_pCurOpData);
-
-	if (pData->opState == filetransfer_waitfileexists) {
-		pData->opState = filetransfer_transfer;
-
-		int res = OpenFile(pData);
-		if (res != FZ_REPLY_OK) {
-			return res;
-		}
-
-		res = InternalConnect(currentServer_.GetHost(), currentServer_.GetPort(), currentServer_.GetProtocol() == HTTPS);
-		if (res != FZ_REPLY_OK) {
-			return res;
-		}
-	}
-
-	std::string action = fz::sprintf("GET %s HTTP/1.1", m_current_uri.get_request());
-	LogMessageRaw(MessageType::Command, action);
-
-	std::string host = m_current_uri.get_authority(false);
-	std::string command = fz::sprintf("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n", action, host, PACKAGE_STRING);
-	if (pData->resume) {
-		command += fz::sprintf("Range: bytes=%d-\r\n", pData->localFileSize);
-	}
-	command += "\r\n";
-
-	return Send(command.c_str(), command.size());
-}
-
-int CHttpControlSocket::InternalConnect(std::wstring host, unsigned short port, bool tls)
+*/
+void CHttpControlSocket::InternalConnect(std::wstring const& host, unsigned short port, bool tls)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::InternalConnect()");
-
-	CHttpInternalConnectOpData* pData = new CHttpInternalConnectOpData;
-	Push(pData);
-	pData->port_ = port;
-	pData->tls = tls;
 
 	if (fz::get_address_type(host) == fz::address_type::unknown) {
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 	}
 
-	pData->host_ = ConvertDomainName(host);
-	return DoInternalConnect();
+	Push(new CHttpInternalConnectOpData(*this, ConvertDomainName(host), port, tls));
 }
-
-int CHttpControlSocket::DoInternalConnect()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::DoInternalConnect()");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CHttpInternalConnectOpData *pData = static_cast<CHttpInternalConnectOpData *>(m_pCurOpData);
-
-	delete m_pBackend;
-	m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
-
-	int res = m_pSocket->Connect(fz::to_native(pData->host_), pData->port_);
-	if (!res) {
-		return FZ_REPLY_OK;
-	}
-
-	if (res && res != EINPROGRESS) {
-		return ResetOperation(FZ_REPLY_ERROR);
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::FileTransferParseResponse(%p, %d)", p, len);
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	CHttpFileTransferOpData *pData = static_cast<CHttpFileTransferOpData *>(m_pCurOpData);
-
-	if (!p) {
-		return FZ_REPLY_OK;
-	}
-
-	if (engine_.transfer_status_.empty()) {
-		engine_.transfer_status_.Init(pData->m_totalSize, 0, false);
-		engine_.transfer_status_.SetStartTime();
-	}
-
-	if (pData->localFile.empty()) {
-		char* q = new char[len];
-		memcpy(q, p, len);
-		engine_.AddNotification(new CDataNotification(q, len));
-	}
-	else {
-		assert(pData->file.opened());
-
-		auto write = static_cast<int64_t>(len);
-		if (pData->file.write(p, write) != write) {
-			LogMessage(MessageType::Error, _("Failed to write to file %s"), pData->localFile);
-			return FZ_REPLY_ERROR;
-		}
-	}
-
-	engine_.transfer_status_.Update(len);
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
+/*
 int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 {
 	// Parse the HTTP header.
@@ -921,27 +803,27 @@ int CHttpControlSocket::ProcessData(char* p, int len)
 
 	return res;
 }
+*/
 
-int CHttpControlSocket::ParseSubcommandResult(int prevResult, COpData const&)
+int CHttpControlSocket::ParseSubcommandResult(int prevResult, COpData const& opData)
 {
-	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::ParseSubcommandResult(%d)", prevResult);
+	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ParseSubcommandResult(%d)", prevResult);
 	if (!m_pCurOpData) {
 		LogMessage(MessageType::Debug_Warning, L"ParseSubcommandResult called without active operation");
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	switch (m_pCurOpData->opId)
-	{
-	case Command::transfer:
-		return FileTransferSubcommandResult(prevResult);
-	default:
-		LogMessage(MessageType::Debug_Warning, L"Unknown opID (%d) in CHttpControlSocket::ParseSubcommandResult", m_pCurOpData->opId);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		break;
+	int res = m_pCurOpData->SubcommandResult(prevResult, opData);
+	if (res == FZ_REPLY_WOULDBLOCK) {
+		return FZ_REPLY_WOULDBLOCK;
 	}
-
-	return FZ_REPLY_ERROR;
+	else if (res == FZ_REPLY_CONTINUE) {
+		return SendNextCommand();
+	}
+	else {
+		return ResetOperation(res);
+	}
 }
 
 int CHttpControlSocket::Disconnect()
@@ -949,8 +831,6 @@ int CHttpControlSocket::Disconnect()
 	DoClose();
 	return FZ_REPLY_OK;
 }
-
-*/
 
 void CHttpControlSocket::Connect(CServer const& server)
 {
