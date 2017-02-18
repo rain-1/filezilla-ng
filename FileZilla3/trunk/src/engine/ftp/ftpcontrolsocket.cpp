@@ -375,12 +375,12 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 			pData->ioThread_.reset();
 			int64_t size;
 			bool isLink;
-			if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file && size == 0) {
+			if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile_), isLink, &size, 0, 0) == fz::local_filesys::file && size == 0) {
 				// Download failed and a new local file was created before, but
 				// nothing has been written to it. Remove it again, so we don't
 				// leave a bunch of empty files all over the place.
 				LogMessage(MessageType::Debug_Verbose, L"Deleting empty file");
-				fz::remove_file(fz::to_native(pData->localFile));
+				fz::remove_file(fz::to_native(pData->localFile_));
 			}
 		}
 	}
@@ -492,7 +492,7 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::FileTransfer()");
 
 	CFtpFileTransferOpData *pData = new CFtpFileTransferOpData(*this, download, localFile, remoteFile, remotePath);
-	pData->transferSettings = transferSettings;
+	pData->transferSettings_ = transferSettings;
 	pData->binary = transferSettings.binary;
 	Push(pData);
 

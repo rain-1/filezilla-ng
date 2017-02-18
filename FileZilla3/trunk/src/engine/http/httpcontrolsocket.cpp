@@ -324,6 +324,13 @@ int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 	return FZ_REPLY_CONTINUE;
 }
 
+void CHttpControlSocket::Request(HttpRequest & request, HttpResponse & response)
+{
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::Request()");
+
+	// FIXME
+}
+
 /*
 int CHttpControlSocket::FileTransferSubcommandResult(int prevResult)
 {
@@ -943,27 +950,6 @@ int CHttpControlSocket::Disconnect()
 	return FZ_REPLY_OK;
 }
 
-int CHttpControlSocket::OpenFile(CHttpFileTransferOpData* pData)
-{
-	pData->file.close();
-
-	CreateLocalDir(pData->localFile);
-
-	if (!pData->file.open(fz::to_native(pData->localFile),
-		pData->download ? fz::file::writing : fz::file::reading,
-		fz::file::existing))
-	{
-		LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), pData->localFile);
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-	int64_t end = pData->file.seek(0, fz::file::end);
-	if (!end) {
-		pData->resume = false;
-	}
-	pData->localFileSize = fz::local_filesys::get_size(fz::to_native(pData->localFile));
-	return FZ_REPLY_OK;
-}
 */
 
 void CHttpControlSocket::Connect(CServer const& server)

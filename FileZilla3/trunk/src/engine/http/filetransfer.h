@@ -14,9 +14,16 @@ public:
 	{}
 
 	virtual int Send() override;
-	virtual int ParseResponse();
+	virtual int ParseResponse() override;
+
+private:
+	int OpenFile();
+
+	int OnData(unsigned char const* data, unsigned int len);
 
 	HttpRequest req_;
+	HttpResponse response_;
+	fz::file file_;
 };
 
 #endif

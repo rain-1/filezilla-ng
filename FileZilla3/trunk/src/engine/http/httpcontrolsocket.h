@@ -4,28 +4,42 @@
 #include "ControlSocket.h"
 #include "uri.h"
 
+#include <libfilezilla/file.hpp>
+
 struct HeaderCmp
 {
 	template<typename T>
-	bool operator()(T const& a, T const& b) {
-		return fz::tolower_ascii(lhs) < fz::tolower_ascii(rhs);
+	bool operator()(T const& lhs, T const& rhs) const {
+		return fz::str_tolower_ascii(lhs) < fz::str_tolower_ascii(rhs);
 	}
 };
 
 typedef std::map<std::string, std::string, HeaderCmp> Headers;
 
-
 class HttpRequest
 {
-
 public:
 	fz::uri uri_;
 	std::string verb_;
-	Headers request_headers_;
+	Headers headers_;
 
-	// localFile_ and payload_ cannot both be set.
-	std::string localFile_;
-	std::string payload_;
+	// Gets called for the request body data.
+	// If set, the headers_ must include a valid Content-Length.
+	// Callback must write up to len bytes into the provided buffer,
+	// and update len with the amount written.
+	// Callback must return FZ_REPLY_CONTINUE or FZ_REPLY_ERROR
+	std::function<int(unsigned char* data, unsigned int &len)> _data_request_;
+};
+
+class HttpResponse
+{
+public:
+	unsigned int code_{};
+	Headers headers_;
+
+	// If this callback is called, code_ and headers_ are already filled.
+	// Callback must return FZ_REPLY_CONTINUE or FZ_REPLY_ERROR
+	std::function<int(unsigned char const* data, unsigned int len)> on_data_;
 };
 
 class CTlsSocket;
@@ -41,6 +55,7 @@ protected:
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 		std::wstring const& remoteFile, bool download,
 		CFileTransferCommand::t_transferSettings const& transferSettings) override;
+	void Request(HttpRequest & request, HttpResponse & response);
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 
@@ -70,8 +85,6 @@ protected:
 	virtual void ResetSocket();
 	virtual void ResetHttpData(CHttpOpData* pData);
 
-	int OpenFile( CHttpFileTransferOpData* pData);
-
 	int ParseHeader(CHttpOpData* pData);
 	int OnChunkedData(CHttpOpData* pData);
 
@@ -84,6 +97,7 @@ protected:
 	fz::uri m_current_uri;
 	*/
 
+	friend class CHttpFileTransferOpData;
 	friend class CHttpOpData;
 };
 

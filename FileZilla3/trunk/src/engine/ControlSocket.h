@@ -77,18 +77,18 @@ public:
 	CFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path);
 
 	// Transfer data
-	std::wstring localFile, remoteFile;
-	CServerPath remotePath;
+	std::wstring localFile_, remoteFile_;
+	CServerPath remotePath_;
 	bool const download_;
 
-	fz::datetime fileTime;
-	int64_t localFileSize{-1};
-	int64_t remoteFileSize{-1};
+	fz::datetime fileTime_;
+	int64_t localFileSize_{-1};
+	int64_t remoteFileSize_{-1};
 
 	bool tryAbsolutePath_{};
 	bool resume_{};
 
-	CFileTransferCommand::t_transferSettings transferSettings;
+	CFileTransferCommand::t_transferSettings transferSettings_;
 
 	// Set to true when sending the command which
 	// starts the actual transfer
