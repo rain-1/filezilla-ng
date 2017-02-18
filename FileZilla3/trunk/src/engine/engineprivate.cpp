@@ -7,7 +7,7 @@
 #include "logging_private.h"
 #include "pathcache.h"
 #include "ratelimiter.h"
-#include "sftpcontrolsocket.h"
+#include "sftp/sftpcontrolsocket.h"
 
 #include <libfilezilla/event_loop.hpp>
 

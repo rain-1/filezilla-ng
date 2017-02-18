@@ -342,14 +342,12 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, std::wstring const
 	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ConnectParseResponse(%s)", reply);
 
 	if (!successful) {
-		DoClose(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
+		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 	}
 
 	if (!m_pCurOpData) {
 		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		DoClose(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
+		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 	}
 
 	CSftpConnectOpData *pData = static_cast<CSftpConnectOpData *>(m_pCurOpData);
