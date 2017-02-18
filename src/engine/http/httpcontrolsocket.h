@@ -7,6 +7,7 @@
 #include <libfilezilla/file.hpp>
 
 namespace PrivCommand {
+auto const http_request = Command::private2;
 auto const http_connect = Command::private3;
 }
 
@@ -80,27 +81,16 @@ protected:
 	int DoInternalConnect();
 	*/
 	virtual void OnConnect();
-	/*
 	virtual void OnClose(int error);
 	virtual void OnReceive();
-	int DoReceive();
-
+	/*
 	
 	virtual int ResetOperation(int nErrorCode);
 
 	virtual void ResetSocket();
 	virtual void ResetHttpData(CHttpOpData* pData);
 
-	int ParseHeader(CHttpOpData* pData);
-	int OnChunkedData(CHttpOpData* pData);
-
 	int ProcessData(char* p, int len);
-
-	char* m_pRecvBuffer{};
-	unsigned int m_recvBufferPos{};
-	static const unsigned int m_recvBufferLen = 4096;
-
-	fz::uri m_current_uri;
 	*/
 
 	friend class CHttpFileTransferOpData;
