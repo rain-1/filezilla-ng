@@ -37,7 +37,6 @@ protected:
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED) override;
 
 	virtual int ResetOperation(int nErrorCode) override;
-	virtual int SendNextCommand() override;
 	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation) override;
 
 	void ProcessReply(int result, std::wstring const& reply);

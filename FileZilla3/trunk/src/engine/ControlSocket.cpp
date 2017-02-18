@@ -614,8 +614,46 @@ void CControlSocket::SetWait(bool wait)
 
 int CControlSocket::SendNextCommand()
 {
-	ResetOperation(FZ_REPLY_INTERNALERROR);
-	return FZ_REPLY_INTERNALERROR;
+	LogMessage(MessageType::Debug_Verbose, L"CControlSocket::SendNextCommand()");
+	if (!m_pCurOpData) {
+		LogMessage(MessageType::Debug_Warning, L"SendNextCommand called without active operation");
+		ResetOperation(FZ_REPLY_ERROR);
+		return FZ_REPLY_ERROR;
+	}
+
+	while (m_pCurOpData) {
+		if (m_pCurOpData->waitForAsyncRequest) {
+			LogMessage(MessageType::Debug_Info, L"Waiting for async request, ignoring SendNextCommand...");
+			return FZ_REPLY_WOULDBLOCK;
+		}
+
+		if (!CanSendNextCommand()) {
+			SetWait(true);
+			return FZ_REPLY_WOULDBLOCK;
+		}
+
+		int res = m_pCurOpData->Send();
+		if (res != FZ_REPLY_CONTINUE) {
+			if (res == FZ_REPLY_OK) {
+				return ResetOperation(res);
+			}
+			else if ((res & FZ_REPLY_DISCONNECTED) == FZ_REPLY_DISCONNECTED) {
+				return DoClose(res);
+			}
+			else if (res & FZ_REPLY_ERROR) {
+				return ResetOperation(res);
+			}
+			else if (res == FZ_REPLY_WOULDBLOCK) {
+				return FZ_REPLY_WOULDBLOCK;
+			}
+			else if (res != FZ_REPLY_CONTINUE) {
+				LogMessage(MessageType::Debug_Warning, L"Unknown result %d returned by m_pCurOpData->Send()");
+				return ResetOperation(FZ_REPLY_INTERNALERROR);
+			}
+		}
+	}
+
+	return FZ_REPLY_OK;
 }
 
 int CControlSocket::ParseSubcommandResult(int, COpData const&)
