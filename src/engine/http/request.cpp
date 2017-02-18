@@ -84,6 +84,11 @@ int CHttpRequestOpData::OnReceive()
 		}
 
 		unsigned int len = m_recvBufferLen - m_recvBufferPos;
+		if (!len) {
+			LogMessage(MessageType::Debug_Warning, L"Read data isn't being consumed.");
+			return FZ_REPLY_INTERNALERROR;
+		}
+
 		int error;
 		int read = controlSocket_.m_pBackend->Read(recv_buffer_.get() + m_recvBufferPos, len, error);
 		if (read == -1) {
@@ -111,7 +116,10 @@ int CHttpRequestOpData::OnReceive()
 			if (!read) {
 				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 			}
-			ParseChunkedData();
+			int res = ParseChunkedData();
+			if (res != FZ_REPLY_WOULDBLOCK) {
+				return res;
+			}
 		}
 		else {
 			if (!read) {
@@ -119,13 +127,10 @@ int CHttpRequestOpData::OnReceive()
 				return FZ_REPLY_OK;
 			}
 			else {
-				receivedData_ += m_recvBufferPos;
-				if (response_.on_data_) {
-					int res = response_.on_data_(recv_buffer_.get(), m_recvBufferPos);
-					if (res != FZ_REPLY_CONTINUE) {
-						return res;
-					}
-				}
+				int res = ProcessData(recv_buffer_.get(), m_recvBufferPos);
+				if (res != FZ_REPLY_CONTINUE) {
+					return res;
+				}		
 				m_recvBufferPos = 0;
 			}
 		}
@@ -194,6 +199,10 @@ int CHttpRequestOpData::ParseHeader()
 			if (!i) {
 				// End of header, data from now on
 				got_header_ = true;
+				int res = ProcessCompleteHeader();
+				if (res != FZ_REPLY_CONTINUE) {
+					return res;
+				}
 
 				memmove(recv_buffer_.get(), recv_buffer_.get() + 2, m_recvBufferPos - 2);
 				m_recvBufferPos -= 2;
@@ -206,12 +215,9 @@ int CHttpRequestOpData::ParseHeader()
 					return ParseChunkedData();
 				}
 				else {
-					receivedData_ += m_recvBufferPos;
-					if (response_.on_data_) {
-						int res = response_.on_data_(recv_buffer_.get(), m_recvBufferPos);
-						if (res != FZ_REPLY_CONTINUE) {
-							return res;
-						}
+					int res = ProcessData(recv_buffer_.get(), m_recvBufferPos);
+					if (res != FZ_REPLY_CONTINUE) {
+						return res;
 					}
 					m_recvBufferPos = 0;
 					return FZ_REPLY_WOULDBLOCK;
@@ -227,30 +233,6 @@ int CHttpRequestOpData::ParseHeader()
 			}
 
 			response_.headers_[line.substr(0, pos)] = line.substr(pos + 2);
-			/*
-			else if (m_recvBufferPos > 21 && !memcmp(m_pRecvBuffer, "Transfer-Encoding: ", 19)) {
-				if (!strcmp(m_pRecvBuffer + 19, "chunked")) {
-					transfer_encoding_ = CHttpOpData::chunked;
-				}
-				else if (!strcmp(m_pRecvBuffer + 19, "identity")) {
-					transfer_encoding_ = CHttpOpData::identity;
-				}
-				else {
-					transfer_encoding_ = CHttpOpData::unknown;
-				}
-			}
-			else if (i > 16 && !memcmp(m_pRecvBuffer, "Content-Length: ", 16)) {
-				m_totalSize = 0;
-				char* p = m_pRecvBuffer + 16;
-				while (*p) {
-					if (*p < '0' || *p > '9') {
-						LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
-						ResetOperation(FZ_REPLY_ERROR);
-						return FZ_REPLY_ERROR;
-					}
-					m_totalSize = m_totalSize * 10 + *p++ - '0';
-				}
-			}*/
 		}
 
 		memmove(recv_buffer_.get(), recv_buffer_.get() + i + 2, m_recvBufferPos - i - 2);
@@ -264,30 +246,61 @@ int CHttpRequestOpData::ParseHeader()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
+int CHttpRequestOpData::ProcessCompleteHeader()
+{
+	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::ParseHeader()");
+
+	auto const te = fz::str_tolower_ascii(response_.get_header("Transfer-Encoding"));
+	if (te == "chunked") {
+		transfer_encoding_ = chunked;
+	}
+	else if (te == "identity") {
+		transfer_encoding_ = identity;
+	}
+	else if (!te.empty()) {
+		LogMessage(MessageType::Error, _("Malformed header: %s"), _("Unknown transfer encoding"));
+		return FZ_REPLY_ERROR;
+	}
+	
+	auto const cl = response_.get_header("Content-Length");
+	if (!cl.empty()) {
+		contentLength_ = fz::to_integral<int64_t>(cl, -1);
+		if (contentLength_ < 0) {
+			LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
+			return FZ_REPLY_ERROR;
+		}
+	}
+
+	int res = FZ_REPLY_CONTINUE;
+	if (response_.on_header_) {
+		res = response_.on_header_();
+	}
+
+	return res;
+}
+
 int CHttpRequestOpData::ParseChunkedData()
 {
-	/*
-	char* p = m_pRecvBuffer;
+	unsigned char* p = recv_buffer_.get();
 	unsigned int len = m_recvBufferPos;
 
 	for (;;) {
-		if (pData->m_chunkData.size != 0) {
+		if (chunk_data_.size != 0) {
 			unsigned int dataLen = len;
-			if (pData->m_chunkData.size < len) {
-				dataLen = static_cast<unsigned int>(pData->m_chunkData.size);
+			if (chunk_data_.size < len) {
+				dataLen = static_cast<unsigned int>(chunk_data_.size);
 			}
-			pData->m_receivedData += dataLen;
 			int res = ProcessData(p, dataLen);
-			if (res != FZ_REPLY_WOULDBLOCK) {
+			if (res != FZ_REPLY_CONTINUE) {
 				return res;
 			}
 
-			pData->m_chunkData.size -= dataLen;
+			chunk_data_.size -= dataLen;
 			p += dataLen;
 			len -= dataLen;
 
-			if (pData->m_chunkData.size == 0) {
-				pData->m_chunkData.terminateChunk = true;
+			if (chunk_data_.size == 0) {
+				chunk_data_.terminateChunk = true;
 			}
 
 			if (!len) {
@@ -301,7 +314,6 @@ int CHttpRequestOpData::ParseChunkedData()
 			if (p[i] == '\r') {
 				if (p[i + 1] != '\n') {
 					LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Wrong line endings"));
-					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
 				break;
@@ -311,7 +323,6 @@ int CHttpRequestOpData::ParseChunkedData()
 			if (len == m_recvBufferLen) {
 				// We don't support lines larger than 4096
 				LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Line length exceeded"));
-				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
 			break;
@@ -319,47 +330,44 @@ int CHttpRequestOpData::ParseChunkedData()
 
 		p[i] = 0;
 
-		if (pData->m_chunkData.terminateChunk) {
+		if (chunk_data_.terminateChunk) {
 			if (i) {
 				// The chunk data has to end with CRLF. If i is nonzero,
 				// it didn't end with just CRLF.
 				LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Chunk data improperly terminated"));
-				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
-			pData->m_chunkData.terminateChunk = false;
+			chunk_data_.terminateChunk = false;
 		}
-		else if (pData->m_chunkData.getTrailer) {
+		else if (chunk_data_.getTrailer) {
 			if (!i) {
 				// We're done
-				return ProcessData(0, 0);
+				return FZ_REPLY_OK;
 			}
 
 			// Ignore the trailer
 		}
-		else
-		{
+		else {
 			// Read chunk size
-			for (char* q = p; *q && *q != ';' && *q != ' '; ++q) {
-				pData->m_chunkData.size *= 16;
+			for (unsigned char* q = p; *q && *q != ';' && *q != ' '; ++q) {
+				chunk_data_.size *= 16;
 				if (*q >= '0' && *q <= '9') {
-					pData->m_chunkData.size += *q - '0';
+					chunk_data_.size += *q - '0';
 				}
 				else if (*q >= 'A' && *q <= 'F') {
-					pData->m_chunkData.size += *q - 'A' + 10;
+					chunk_data_.size += *q - 'A' + 10;
 				}
 				else if (*q >= 'a' && *q <= 'f') {
-					pData->m_chunkData.size += *q - 'a' + 10;
+					chunk_data_.size += *q - 'a' + 10;
 				}
 				else {
 					// Invalid size
 					LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Invalid chunk size"));
-					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
 			}
-			if (!pData->m_chunkData.size) {
-				pData->m_chunkData.getTrailer = true;
+			if (!chunk_data_.size) {
+				chunk_data_.getTrailer = true;
 			}
 		}
 
@@ -371,12 +379,51 @@ int CHttpRequestOpData::ParseChunkedData()
 		}
 	}
 
-	if (p != m_pRecvBuffer) {
-		memmove(m_pRecvBuffer, p, len);
+	if (p != recv_buffer_.get()) {
+		memmove(recv_buffer_.get(), p, len);
 		m_recvBufferPos = len;
 	}
 
 	return FZ_REPLY_WOULDBLOCK;
-	*/
-	return FZ_REPLY_INTERNALERROR;
+}
+
+int CHttpRequestOpData::ProcessData(unsigned char* data, unsigned int len)
+{
+	receivedData_ += len;
+	if (contentLength_ != -1 && receivedData_ > contentLength_) {
+		LogMessage(MessageType::Error, _("Malformed response: Server sent too much data."));
+		return FZ_REPLY_ERROR;
+	}
+
+	int res = FZ_REPLY_CONTINUE;
+	if (response_.on_data_) {
+		res = response_.on_data_(data, len);
+	}
+
+	return res;
+}
+
+int CHttpRequestOpData::OnClose()
+{
+	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::OnClose()");
+
+	if (!got_header_) {
+		LogMessage(MessageType::Debug_Verbose, L"Socket closed before headers got received");
+		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
+	}
+
+	if (transfer_encoding_ == chunked) {
+		if (!chunk_data_.getTrailer) {
+			LogMessage(MessageType::Debug_Verbose, L"Socket closed, chunk incomplete");
+			return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
+		}
+	}
+	else {
+		if (contentLength_ != -1 && receivedData_ != contentLength_) {
+			LogMessage(MessageType::Debug_Verbose, L"Socket closed, content length not reached");
+			return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
+		}
+	}
+
+	return FZ_REPLY_OK;
 }

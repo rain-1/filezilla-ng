@@ -15,10 +15,12 @@ public:
 
 	virtual int Send() override;
 	virtual int ParseResponse() override;
+	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) override;
 
 private:
 	int OpenFile();
 
+	int OnHeader();
 	int OnData(unsigned char const* data, unsigned int len);
 
 	HttpRequest req_;

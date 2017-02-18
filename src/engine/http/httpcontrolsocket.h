@@ -34,6 +34,15 @@ public:
 	// and update len with the amount written.
 	// Callback must return FZ_REPLY_CONTINUE or FZ_REPLY_ERROR
 	std::function<int(unsigned char* data, unsigned int &len)> _data_request_;
+
+	std::string get_header(std::string const& key) const
+	{
+		auto it = headers_.find(key);
+		if (it != headers_.end()) {
+			return it->second;
+		}
+		return std::string();
+	}
 };
 
 class HttpResponse
@@ -42,9 +51,21 @@ public:
 	unsigned int code_{};
 	Headers headers_;
 
-	// If this callback is called, code_ and headers_ are already filled.
+	// Called once the complete header has been received.
+	std::function<int()> on_header_;
+
+	// Is only called after the on_header_ callback.
 	// Callback must return FZ_REPLY_CONTINUE or FZ_REPLY_ERROR
 	std::function<int(unsigned char const* data, unsigned int len)> on_data_;
+
+	std::string get_header(std::string const& key) const
+	{
+		auto it = headers_.find(key);
+		if (it != headers_.end()) {
+			return it->second;
+		}
+		return std::string();
+	}
 };
 
 class CTlsSocket;

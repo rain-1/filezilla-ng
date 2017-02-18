@@ -346,47 +346,6 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					return res;
 				}
 
-				if (static_cast<CHttpFileTransferOpData*>(pData)->opId == Command::transfer) {
-					CHttpFileTransferOpData* pTransfer = static_cast<CHttpFileTransferOpData*>(pData);
-					if (pTransfer->resume && pData->m_responseCode != 206) {
-						pTransfer->resume = false;
-						int res = OpenFile(pTransfer);
-						if (res != FZ_REPLY_OK) {
-							return res;
-						}
-					}
-				}
-
-	
-			if (m_recvBufferPos > 12 && !memcmp(m_pRecvBuffer, "Location: ", 10)) {
-				pData->m_newLocation = fz::uri(m_pRecvBuffer + 10);
-				if (!pData->m_newLocation.empty()) {
-					pData->m_newLocation.resolve(m_current_uri);
-				}
-			}
-			else if (m_recvBufferPos > 21 && !memcmp(m_pRecvBuffer, "Transfer-Encoding: ", 19)) {
-				if (!strcmp(m_pRecvBuffer + 19, "chunked")) {
-					pData->m_transferEncoding = CHttpOpData::chunked;
-				}
-				else if (!strcmp(m_pRecvBuffer + 19, "identity")) {
-					pData->m_transferEncoding = CHttpOpData::identity;
-				}
-				else {
-					pData->m_transferEncoding = CHttpOpData::unknown;
-				}
-			}
-			else if (i > 16 && !memcmp(m_pRecvBuffer, "Content-Length: ", 16)) {
-				pData->m_totalSize = 0;
-				char* p = m_pRecvBuffer + 16;
-				while (*p) {
-					if (*p < '0' || *p > '9') {
-						LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
-						ResetOperation(FZ_REPLY_ERROR);
-						return FZ_REPLY_ERROR;
-					}
-					pData->m_totalSize = pData->m_totalSize * 10 + *p++ - '0';
-				}
-			}
 		}
 }
 
@@ -425,42 +384,14 @@ void CHttpControlSocket::OnClose(int error)
 		return;
 	}
 
-	// HTTP socket isn't connected outside operations
-	if (!m_pCurOpData) {
-		return;
-	}
-
-	if (m_pCurOpData->pNextOpData) {
-		LogMessageRaw(MessageType::Debug_Verbose, L"Socket closed inside a nested operation");
-		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
-		return;
-	}
-
-	// FIXME
-	/*
-	auto httpOpData = reinterpret_cast<CHttpOpData*>(m_pCurOpData);
-	if (!httpRequestOpData->m_gotHeader) {
-		LogMessageRaw(MessageType::Debug_Verbose, L"Socket closed, headers not received");
-		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
-		return;
-	}
-
-	if (httpRequestOpData->m_transferEncoding == CHttpOpData::chunked) {
-		if (!httpRequestOpData->m_chunkData.getTrailer) {
-			LogMessageRaw(MessageType::Debug_Verbose, L"Socket closed, chunk incomplete");
-			ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
-			return;
-		}
+	if (m_pCurOpData && m_pCurOpData->opId == PrivCommand::http_request) {
+		auto requestData = reinterpret_cast<CHttpRequestOpData*>(m_pCurOpData);
+		int res = requestData->OnClose();
+		ResetOperation(res);
 	}
 	else {
-		if (httpRequestOpData->m_totalSize != -1 && httpRequestOpData->m_receivedData != httpRequestOpData->m_totalSize) {
-			LogMessageRaw(MessageType::Debug_Verbose, L"Socket closed, content length not reached");
-			ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
-			return;
-		}
+		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 	}
-
-	ProcessData(0, 0);*/
 }
 /*
 void CHttpControlSocket::ResetSocket()
