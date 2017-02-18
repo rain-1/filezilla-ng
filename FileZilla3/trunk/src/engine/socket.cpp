@@ -1565,7 +1565,7 @@ int CSocket::DoSetFlags(int fd, int flags, int flags_mask, fz::duration const& k
 #if FZ_WINDOWS
 		tcp_keepalive v{};
 		v.onoff = (flags & flag_keepalive) ? 1 : 0;
-		v.keepalivetime = keepalive_interval.get_milliseconds();
+		v.keepalivetime = static_cast<ULONG>(keepalive_interval.get_milliseconds());
 		v.keepaliveinterval = 1000;
 		DWORD tmp{};
 		int res = WSAIoctl(fd, SIO_KEEPALIVE_VALS, &v, sizeof(v), 0, 0, &tmp, 0, 0);

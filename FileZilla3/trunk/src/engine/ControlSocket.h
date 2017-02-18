@@ -1,5 +1,5 @@
-#ifndef __CONTROLSOCKET_H__
-#define __CONTROLSOCKET_H__
+#ifndef FILEZILLA_ENGINE_CONTROLSOCKET_HEADER
+#define FILEZILLA_ENGINE_CONTROLSOCKET_HEADER
 
 #include "socket.h"
 #include "logging_private.h"
