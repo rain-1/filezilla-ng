@@ -1,39 +1,7 @@
-#ifndef __SFTPCONTROLSOCKET_H__
-#define __SFTPCONTROLSOCKET_H__
+#ifndef FILEZILLA_ENGINE_SFTP_SFTPCONTROLSOCKET_HEADER
+#define FILEZILLA_ENGINE_SFTP_SFTPCONTROLSOCKET_HEADER
 
 #include "ControlSocket.h"
-
-enum class sftpEvent {
-	Unknown = -1,
-	Reply = 0,
-	Done,
-	Error,
-	Verbose,
-	Info,
-	Status,
-	Recv,
-	Send,
-	Listentry,
-	AskHostkey,
-	AskHostkeyChanged,
-	AskHostkeyBetteralg,
-	AskPassword,
-	Transfer,
-	RequestPreamble,
-	RequestInstruction,
-	UsedQuotaRecv,
-	UsedQuotaSend,
-	KexAlgorithm,
-	KexHash,
-	KexCurve,
-	CipherClientToServer,
-	CipherServerToClient,
-	MacClientToServer,
-	MacServerToClient,
-	Hostkey,
-
-	count
-};
 
 namespace fz {
 class process;
@@ -48,17 +16,16 @@ public:
 	CSftpControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CSftpControlSocket();
 
-	virtual void Connect(CServer const& server);
-
-	virtual int List(CServerPath path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
-	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
+	virtual void Connect(CServer const& server) override;
+	virtual void List(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0) override;
+	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files) override;
 	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
 	virtual int Mkdir(const CServerPath& path);
 	virtual int Rename(const CRenameCommand& command);
 	virtual int Chmod(const CChmodCommand& command);
 	virtual void Cancel();
 
-	virtual bool Connected() const override { return m_pInputThread != 0; }
+	virtual bool Connected() const override { return input_thread_.operator bool(); }
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 
@@ -74,9 +41,6 @@ protected:
 	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation) override;
 
 	void ProcessReply(int result, std::wstring const& reply);
-
-	int ConnectParseResponse(bool successful, std::wstring const& reply);
-	int ConnectSend();
 
 	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
@@ -111,8 +75,8 @@ protected:
 	int RenameSubcommandResult(int prevResult);
 	int RenameSend();
 
-	bool SendCommand(std::wstring const& cmd, std::wstring const& show = std::wstring());
-	bool AddToStream(std::wstring const& cmd, bool force_utf8 = false);
+	int SendCommand(std::wstring const& cmd, std::wstring const& show = std::wstring());
+	int AddToStream(std::wstring const& cmd, bool force_utf8 = false);
 
 	virtual void OnRateAvailable(CRateLimiter::rate_direction direction);
 	void OnQuotaRequest(CRateLimiter::rate_direction direction);
@@ -120,8 +84,8 @@ protected:
 	// see src/putty/wildcard.c
 	std::wstring WildcardEscape(std::wstring const& file);
 
-	std::unique_ptr<fz::process> m_pProcess;
-	std::unique_ptr<CSftpInputThread> m_pInputThread;
+	std::unique_ptr<fz::process> process_;
+	std::unique_ptr<CSftpInputThread> input_thread_;
 
 	virtual void operator()(fz::event_base const& ev);
 	void OnSftpEvent(sftp_message const& message);
@@ -131,6 +95,35 @@ protected:
 	std::wstring m_requestInstruction;
 
 	CSftpEncryptionNotification m_sftpEncryptionDetails;
+
+	int result_;
+	std::wstring response_;
+
+	friend class CSftpConnectOpData;
+	friend class CSftpOpData;
 };
 
-#endif //__SFTPCONTROLSOCKET_H__
+
+class CSftpOpData
+{
+public:
+	CSftpOpData(CSftpControlSocket & controlSocket)
+		: controlSocket_(controlSocket)
+		, engine_(controlSocket.engine_)
+		, currentServer_(controlSocket.currentServer_)
+	{
+	}
+
+	virtual ~CSftpOpData() = default;
+
+	template<typename...Args>
+	void LogMessage(Args&& ...args) const {
+		controlSocket_.LogMessage(std::forward<Args>(args)...);
+	}
+
+	CSftpControlSocket & controlSocket_;
+	CFileZillaEnginePrivate & engine_;
+	CServer & currentServer_;
+};
+
+#endif

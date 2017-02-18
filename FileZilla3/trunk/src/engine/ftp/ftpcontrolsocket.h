@@ -8,6 +8,11 @@
 
 #include <regex>
 
+namespace PrivCommand {
+auto const cwd = Command::private1;
+auto const rawtransfer = Command::private2;
+}
+
 #define RECVBUFFERSIZE 4096
 #define MAXLINELEN 2000
 
