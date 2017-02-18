@@ -26,6 +26,8 @@ private:
 	HttpRequest req_;
 	HttpResponse response_;
 	fz::file file_;
+
+	int redirectCount_{};
 };
 
 #endif

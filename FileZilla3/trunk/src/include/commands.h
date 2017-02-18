@@ -20,8 +20,11 @@ enum class Command
 	raw,
 
 	// Only used internally
-	cwd,
-	rawtransfer
+	private1,
+	private2,
+	private3,
+	cwd = private1,
+	rawtransfer = private2
 };
 
 // Reply codes
