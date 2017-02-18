@@ -6,6 +6,10 @@
 
 #include <libfilezilla/file.hpp>
 
+namespace PrivCommand {
+auto const http_connect = Command::private3;
+}
+
 struct HeaderCmp
 {
 	template<typename T>
@@ -56,6 +60,8 @@ protected:
 		std::wstring const& remoteFile, bool download,
 		CFileTransferCommand::t_transferSettings const& transferSettings) override;
 	void Request(HttpRequest & request, HttpResponse & response);
+	void InternalConnect(std::wstring const& host, unsigned short port, bool tls);
+	virtual int Disconnect() override;
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 
@@ -63,23 +69,23 @@ protected:
 
 	CTlsSocket* m_pTlsSocket{};
 
+	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
 
 /*	virtual int ContinueConnect();
 	virtual bool Connected() { return static_cast<bool>(currentServer_); }
 
 	
-	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
 
 	int InternalConnect(std::wstring host, unsigned short port, bool tls);
 	int DoInternalConnect();
-
+	*/
 	virtual void OnConnect();
+	/*
 	virtual void OnClose(int error);
 	virtual void OnReceive();
 	int DoReceive();
 
-	virtual int Disconnect();
-
+	
 	virtual int ResetOperation(int nErrorCode);
 
 	virtual void ResetSocket();
@@ -98,7 +104,9 @@ protected:
 	*/
 
 	friend class CHttpFileTransferOpData;
+	friend class CHttpInternalConnectOpData;
 	friend class CHttpOpData;
+	friend class CHttpRequestOpData;
 };
 
 class CHttpOpData
