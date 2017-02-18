@@ -1,5 +1,5 @@
-#ifndef __PATHCACHE_H__
-#define __PATHCACHE_H__
+#ifndef FILEZILLA_ENGINE_PATHCACHE_HEADER
+#define FILEZILLA_ENGINE_PATHCACHE_HEADER
 
 #include <libfilezilla/mutex.hpp>
 
@@ -56,4 +56,4 @@ protected:
 
 };
 
-#endif //__PATHCACHE_H__
+#endif

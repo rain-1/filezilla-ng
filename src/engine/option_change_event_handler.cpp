@@ -6,10 +6,6 @@
 std::vector<COptionChangeEventHandler*> COptionChangeEventHandler::m_handlers;
 std::size_t COptionChangeEventHandler::notify_index_ = 0;
 
-COptionChangeEventHandler::COptionChangeEventHandler()
-{
-}
-
 COptionChangeEventHandler::~COptionChangeEventHandler()
 {
 	UnregisterAllOptions();
@@ -27,8 +23,9 @@ void COptionChangeEventHandler::UnregisterAllOptions()
 
 void COptionChangeEventHandler::RegisterOption(int option)
 {
-	if (option < 0 )
+	if (option < 0) {
 		return;
+	}
 
 	if (m_handled_options.none()) {
 		m_handlers.push_back(this);

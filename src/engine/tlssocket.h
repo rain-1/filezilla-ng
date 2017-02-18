@@ -1,5 +1,5 @@
-#ifndef __TLSSOCKET_H__
-#define __TLSSOCKET_H__
+#ifndef FILEZILLA_ENGINE_TLSSOCKET_HEADER
+#define FILEZILLA_ENGINE_TLSSOCKET_HEADER
 
 // TODO: Figure our ssize_t mess
 #include <wx/defs.h>
@@ -138,4 +138,4 @@ protected:
 	friend class CTlsSocketCallbacks;
 };
 
-#endif //__TLSSOCKET_H__
+#endif

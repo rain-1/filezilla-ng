@@ -1,5 +1,5 @@
-#ifndef __IOTHREAD_H__
-#define __IOTHREAD_H__
+#ifndef FILEZILLA_ENGINE_IOTHREAD_HEADER
+#define FILEZILLA_ENGINE_IOTHREAD_HEADER
 
 #include <libfilezilla/event.hpp>
 #include <libfilezilla/thread_pool.hpp>
@@ -98,4 +98,4 @@ private:
 	fz::async_task thread_;
 };
 
-#endif //__IOTHREAD_H__
+#endif
