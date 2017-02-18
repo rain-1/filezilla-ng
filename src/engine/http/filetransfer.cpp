@@ -39,8 +39,10 @@ int CHttpFileTransferOpData::Send()
 			if (res != FZ_REPLY_OK) {
 				return res;
 			}
-
-			res = OpenFile();
+		}
+	case filetransfer_waitfileexists:
+		if (!localFile_.empty()) {
+			int res = OpenFile();
 			if (res != FZ_REPLY_OK) {
 				return res;
 			}
@@ -52,6 +54,7 @@ int CHttpFileTransferOpData::Send()
 			req_.headers_["Range"] = fz::sprintf("bytes=%d-", localFileSize_);
 		}
 
+		response_ = HttpResponse();
 		response_.on_header_ = [this]() { return this->OnHeader(); };
 		response_.on_data_ = [this](auto data, auto len) { return this->OnData(data, len); };
 
@@ -122,7 +125,41 @@ int CHttpFileTransferOpData::OnHeader()
 	// Handle any redirects
 	if (response_.code_ >= 300) {
 
-		// FIXME
+		if (++redirectCount_ >= 6) {
+			LogMessage(MessageType::Error, _("Too many redirects"));
+			return FZ_REPLY_ERROR;
+		}
+
+		if (response_.code_ == 305) {
+			LogMessage(MessageType::Error, _("Unsupported redirect"));
+			return FZ_REPLY_ERROR;
+		}
+
+		fz::uri location = fz::uri(response_.get_header("Location"));
+		if (!location.empty()) {
+			location.resolve(req_.uri_);
+		}
+		
+		if (location.scheme_.empty() || location.host_.empty() || !location.is_absolute()) {
+			LogMessage(MessageType::Error, _("Redirection to invalid or unsupported URI: %s"), location.to_string());
+			return FZ_REPLY_ERROR;
+		}
+
+		ServerProtocol protocol = CServer::GetProtocolFromPrefix(fz::to_wstring_from_utf8(location.scheme_));
+		if (protocol != HTTP && protocol != HTTPS) {
+			LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), location.to_string());
+			return FZ_REPLY_ERROR;
+		}
+
+		// International domain names
+		std::wstring host = fz::to_wstring_from_utf8(location.host_);
+		if (host.empty()) {
+			LogMessage(MessageType::Error, _("Invalid hostname: %s"), location.to_string());
+			return FZ_REPLY_ERROR;
+		}
+
+		req_.uri_ = location;
+
 		opState = filetransfer_transfer;
 		return FZ_REPLY_ERROR;
 	}

@@ -93,27 +93,14 @@ protected:
 
 	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
 
-/*	virtual int ContinueConnect();
-	virtual bool Connected() { return static_cast<bool>(currentServer_); }
-
-	
-
-	int InternalConnect(std::wstring host, unsigned short port, bool tls);
-	int DoInternalConnect();
-	*/
 	virtual void OnConnect();
 	virtual void OnClose(int error);
 	virtual void OnReceive();
-	/*
 	
-	virtual int ResetOperation(int nErrorCode);
+	virtual int ResetOperation(int nErrorCode) override;
 
 	virtual void ResetSocket();
-	virtual void ResetHttpData(CHttpOpData* pData);
-
-	int ProcessData(char* p, int len);
-	*/
-
+	
 	friend class CHttpFileTransferOpData;
 	friend class CHttpInternalConnectOpData;
 	friend class CHttpOpData;
