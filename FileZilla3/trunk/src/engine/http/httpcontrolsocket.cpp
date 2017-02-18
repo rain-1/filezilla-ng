@@ -15,25 +15,6 @@
 #include <libfilezilla/local_filesys.hpp>
 
 /*
-#define FZ_REPLY_REDIRECTED FZ_REPLY_ALREADYCONNECTED
-
-// Connect is special for HTTP: It is done on a per-command basis, so we need
-// to establish a connection before each command.
-class CHttpInternalConnectOpData final : public CConnectOpData, public CHttpOpData
-{
-public:
-	CHttpInternalConnectOpData(CHttpControlSocket& controlSocket)
-		: CConnectOpData(CServer())
-		, CHttpOpData(controlSocket)
-	{}
-
-	virtual int Send() { return FZ_REPLY_NOTSUPPORTED; }
-
-	virtual int ParseResponse() { return FZ_REPLY_INTERNALERROR; }
-
-	bool tls_{};
-};
-
 class CHttpRequestOpData : public COpData, public CHttpOpData
 {
 public:
@@ -49,22 +30,6 @@ public:
 	int m_redirectionCount{};
 
 	int64_t m_totalSize{-1};
-	int64_t m_receivedData{};
-
-	enum transferEncodings
-	{
-		identity,
-		chunked,
-		unknown
-	};
-	transferEncodings m_transferEncoding{unknown};
-
-	struct t_chunkData
-	{
-		bool getTrailer{};
-		bool terminateChunk{};
-		int64_t size{};
-	} m_chunkData;
 };
 
 class CHttpFileTransferOpData final : public CFileTransferOpData, public CHttpOpData
@@ -189,86 +154,22 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 	return true;
 }
 
-/*
+
 void CHttpControlSocket::OnReceive()
 {
-	DoReceive();
-}
-
-int CHttpControlSocket::DoReceive()
-{
-	do {
-		const CSocket::SocketState state = m_pSocket->GetState();
-		if (state != CSocket::connected && state != CSocket::closing) {
-			return 0;
-		}
-
-		if (!m_pRecvBuffer) {
-			m_pRecvBuffer = new char[m_recvBufferLen];
-			m_recvBufferPos = 0;
-		}
-
-		unsigned int len = m_recvBufferLen - m_recvBufferPos;
-		int error;
-		int read = m_pBackend->Read(m_pRecvBuffer + m_recvBufferPos, len, error);
-		if (read == -1) {
-			if (error != EAGAIN) {
-				ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
-			}
-			return 0;
-		}
-
-		SetActive(CFileZillaEngine::recv);
-
-		if (!m_pCurOpData || m_pCurOpData->opId == Command::connect) {
-			// Just ignore all further data
-			m_recvBufferPos = 0;
-			return 0;
-		}
-
-		auto httpRequestOpData = reinterpret_cast<CHttpRequestOpData*>(m_pCurOpData);
-
-		m_recvBufferPos += read;
-
-		if (!httpRequestOpData->m_gotHeader) {
-			if (!read) {
-				ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
-				return 0;
-			}
-
-			int res = ParseHeader(httpOpData);
-			if ((res & FZ_REPLY_REDIRECTED) == FZ_REPLY_REDIRECTED) {
-				return FZ_REPLY_REDIRECTED;
-			}
-			if (res != FZ_REPLY_WOULDBLOCK) {
-				return 0;
-			}
-		}
-		else if (httpRequestOpData->m_transferEncoding == CHttpOpData::chunked) {
-			if (!read) {
-				ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
-				return 0;
-			}
-			OnChunkedData(httpOpData);
-		}
-		else {
-			if (!read) {
-				assert(!m_recvBufferPos);
-				ProcessData(0, 0);
-				return 0;
-			}
-			else {
-				httpRequestOpData->m_receivedData += m_recvBufferPos;
-				ProcessData(m_pRecvBuffer, m_recvBufferPos);
-				m_recvBufferPos = 0;
-			}
-		}
+	if (!m_pCurOpData || m_pCurOpData->opId != PrivCommand::http_request) {
+		LogMessage(MessageType::Debug_Warning, L"OnReceive called while not processing http request");
 	}
-	while (m_pSocket);
 
-	return 0;
+	int res = static_cast<CHttpRequestOpData*>(m_pCurOpData)->OnReceive();
+	if (res == FZ_REPLY_CONTINUE) {
+		SendNextCommand();
+	}
+	else if (res != FZ_REPLY_WOULDBLOCK) {
+		ResetOperation(res);
+	}
 }
-*/
+
 void CHttpControlSocket::OnConnect()
 {
 	assert(GetCurrentCommandId() == PrivCommand::http_connect);
@@ -366,55 +267,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 	// Redirects are supported though if the server sends the Location field.
 
 	for (;;) {
-		// Find line ending
-		unsigned int i = 0;
-		for (i = 0; (i + 1) < m_recvBufferPos; i++) {
-			if (m_pRecvBuffer[i] == '\r') {
-				if (m_pRecvBuffer[i + 1] != '\n') {
-					LogMessage(MessageType::Error, _("Malformed reply, server not sending proper line endings"));
-					ResetOperation(FZ_REPLY_ERROR);
-					return FZ_REPLY_ERROR;
-				}
-				break;
-			}
-		}
-		if ((i + 1) >= m_recvBufferPos) {
-			if (m_recvBufferPos == m_recvBufferLen) {
-				// We don't support header lines larger than 4096
-				LogMessage(MessageType::Error, _("Too long header line"));
-				ResetOperation(FZ_REPLY_ERROR);
-				return FZ_REPLY_ERROR;
-			}
-			return FZ_REPLY_WOULDBLOCK;
-		}
-
-		m_pRecvBuffer[i] = 0;
-		std::wstring const line = wxString(m_pRecvBuffer, wxConvLocal).ToStdWstring();
-		if (!line.empty()) {
-			LogMessageRaw(MessageType::Response, line);
-		}
-
-		if (pData->m_responseCode == -1) {
-			pData->m_responseString = line;
-			if (m_recvBufferPos < 16 || memcmp(m_pRecvBuffer, "HTTP/1.", 7)) {
-				// Invalid HTTP Status-Line
-				LogMessage(MessageType::Error, _("Invalid HTTP Response"));
-				ResetOperation(FZ_REPLY_ERROR);
-				return FZ_REPLY_ERROR;
-			}
-
-			if (m_pRecvBuffer[9] < '1' || m_pRecvBuffer[9] > '5' ||
-				m_pRecvBuffer[10] < '0' || m_pRecvBuffer[10] > '9' ||
-				m_pRecvBuffer[11] < '0' || m_pRecvBuffer[11] > '9')
-			{
-				// Invalid response code
-				LogMessage(MessageType::Error, _("Invalid response code"));
-				ResetOperation(FZ_REPLY_ERROR);
-				return FZ_REPLY_ERROR;
-			}
-
-			pData->m_responseCode = (m_pRecvBuffer[9] - '0') * 100 + (m_pRecvBuffer[10] - '0') * 10 + m_pRecvBuffer[11] - '0';
-
+	
 			if (pData->m_responseCode == 416) {
 				CHttpFileTransferOpData* pTransfer = static_cast<CHttpFileTransferOpData*>(pData);
 				if (pTransfer->resume) {
@@ -504,26 +357,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					}
 				}
 
-				pData->m_gotHeader = true;
-
-				memmove(m_pRecvBuffer, m_pRecvBuffer + 2, m_recvBufferPos - 2);
-				m_recvBufferPos -= 2;
-
-				if (m_recvBufferPos) {
-					int res;
-					if (pData->m_transferEncoding == pData->chunked) {
-						res = OnChunkedData(pData);
-					}
-					else {
-						pData->m_receivedData += m_recvBufferPos;
-						res = ProcessData(m_pRecvBuffer, m_recvBufferPos);
-						m_recvBufferPos = 0;
-					}
-					return res;
-				}
-
-				return FZ_REPLY_WOULDBLOCK;
-			}
+	
 			if (m_recvBufferPos > 12 && !memcmp(m_pRecvBuffer, "Location: ", 10)) {
 				pData->m_newLocation = fz::uri(m_pRecvBuffer + 10);
 				if (!pData->m_newLocation.empty()) {
@@ -554,130 +388,6 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				}
 			}
 		}
-
-		memmove(m_pRecvBuffer, m_pRecvBuffer + i + 2, m_recvBufferPos - i - 2);
-		m_recvBufferPos -= i + 2;
-
-		if (!m_recvBufferPos) {
-			break;
-		}
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
-{
-	char* p = m_pRecvBuffer;
-	unsigned int len = m_recvBufferPos;
-
-	for (;;) {
-		if (pData->m_chunkData.size != 0) {
-			unsigned int dataLen = len;
-			if (pData->m_chunkData.size < len) {
-				dataLen = static_cast<unsigned int>(pData->m_chunkData.size);
-			}
-			pData->m_receivedData += dataLen;
-			int res = ProcessData(p, dataLen);
-			if (res != FZ_REPLY_WOULDBLOCK) {
-				return res;
-			}
-
-			pData->m_chunkData.size -= dataLen;
-			p += dataLen;
-			len -= dataLen;
-
-			if (pData->m_chunkData.size == 0) {
-				pData->m_chunkData.terminateChunk = true;
-			}
-
-			if (!len) {
-				break;
-			}
-		}
-
-		// Find line ending
-		unsigned int i = 0;
-		for (i = 0; (i + 1) < len; ++i) {
-			if (p[i] == '\r') {
-				if (p[i + 1] != '\n') {
-					LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Wrong line endings"));
-					ResetOperation(FZ_REPLY_ERROR);
-					return FZ_REPLY_ERROR;
-				}
-				break;
-			}
-		}
-		if ((i + 1) >= len) {
-			if (len == m_recvBufferLen) {
-				// We don't support lines larger than 4096
-				LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Line length exceeded"));
-				ResetOperation(FZ_REPLY_ERROR);
-				return FZ_REPLY_ERROR;
-			}
-			break;
-		}
-
-		p[i] = 0;
-
-		if (pData->m_chunkData.terminateChunk) {
-			if (i) {
-				// The chunk data has to end with CRLF. If i is nonzero,
-				// it didn't end with just CRLF.
-				LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Chunk data improperly terminated"));
-				ResetOperation(FZ_REPLY_ERROR);
-				return FZ_REPLY_ERROR;
-			}
-			pData->m_chunkData.terminateChunk = false;
-		}
-		else if (pData->m_chunkData.getTrailer) {
-			if (!i) {
-				// We're done
-				return ProcessData(0, 0);
-			}
-
-			// Ignore the trailer
-		}
-		else
-		{
-			// Read chunk size
-			for (char* q = p; *q && *q != ';' && *q != ' '; ++q) {
-				pData->m_chunkData.size *= 16;
-				if (*q >= '0' && *q <= '9') {
-					pData->m_chunkData.size += *q - '0';
-				}
-				else if (*q >= 'A' && *q <= 'F') {
-					pData->m_chunkData.size += *q - 'A' + 10;
-				}
-				else if (*q >= 'a' && *q <= 'f') {
-					pData->m_chunkData.size += *q - 'a' + 10;
-				}
-				else {
-					// Invalid size
-					LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Invalid chunk size"));
-					ResetOperation(FZ_REPLY_ERROR);
-					return FZ_REPLY_ERROR;
-				}
-			}
-			if (!pData->m_chunkData.size) {
-				pData->m_chunkData.getTrailer = true;
-			}
-		}
-
-		p += i + 2;
-		len -= i + 2;
-
-		if (!len) {
-			break;
-		}
-	}
-
-	if (p != m_pRecvBuffer) {
-		memmove(m_pRecvBuffer, p, len);
-		m_recvBufferPos = len;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
 }
 
 int CHttpControlSocket::ResetOperation(int nErrorCode)
@@ -704,7 +414,7 @@ int CHttpControlSocket::ResetOperation(int nErrorCode)
 
 	return CControlSocket::ResetOperation(nErrorCode);
 }
-
+*/
 void CHttpControlSocket::OnClose(int error)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::OnClose(%d)", error);
@@ -726,6 +436,8 @@ void CHttpControlSocket::OnClose(int error)
 		return;
 	}
 
+	// FIXME
+	/*
 	auto httpOpData = reinterpret_cast<CHttpOpData*>(m_pCurOpData);
 	if (!httpRequestOpData->m_gotHeader) {
 		LogMessageRaw(MessageType::Debug_Verbose, L"Socket closed, headers not received");
@@ -748,9 +460,9 @@ void CHttpControlSocket::OnClose(int error)
 		}
 	}
 
-	ProcessData(0, 0);
+	ProcessData(0, 0);*/
 }
-
+/*
 void CHttpControlSocket::ResetSocket()
 {
 	delete[] m_pRecvBuffer;
