@@ -1,8 +1,11 @@
 #include <filezilla.h>
 
+#include "connect.h"
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "engineprivate.h"
+#include "event.h"
+#include "input_thread.h"
 #include "pathcache.h"
 #include "proxy.h"
 #include "servercapabilities.h"
@@ -11,26 +14,11 @@
 #include <libfilezilla/event_loop.hpp>
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/process.hpp>
-#include <libfilezilla/thread_pool.hpp>
 
 #include <wx/string.h>
 
 #include <algorithm>
 #include <cwchar>
-
-#define FZSFTP_PROTOCOL_VERSION 8
-
-struct sftp_message
-{
-	sftpEvent type;
-	mutable std::wstring text[3];
-};
-
-struct sftp_event_type;
-typedef fz::simple_event<sftp_event_type, sftp_message> CSftpEvent;
-
-struct terminate_event_type;
-typedef fz::simple_event<terminate_event_type, std::wstring> CTerminateEvent;
 
 class CSftpFileTransferOpData final : public CFileTransferOpData
 {
@@ -49,160 +37,6 @@ enum filetransferStates
 	filetransfer_mtime,
 	filetransfer_transfer,
 	filetransfer_chmtime
-};
-
-class CSftpInputThread final
-{
-public:
-	CSftpInputThread(CSftpControlSocket* pOwner, fz::process& proc)
-		: process_(proc)
-		, m_pOwner(pOwner)
-	{
-	}
-
-	~CSftpInputThread()
-	{
-		thread_.join();
-	}
-
-	bool spawn(fz::thread_pool & pool)
-	{
-		if (!thread_) {
-			thread_ = pool.spawn([this]() { entry(); });
-		}
-		return thread_.operator bool();
-	}
-
-protected:
-
-	std::wstring ReadLine(std::wstring &error)
-	{
-		int len = 0;
-		const int buffersize = 4096;
-		char buffer[buffersize];
-
-		while (true) {
-			char c;
-			int read = process_.read(&c, 1);
-			if (read != 1) {
-				if (!read) {
-					error = L"Unexpected EOF.";
-				}
-				else {
-					error = L"Unknown error reading from process";
-				}
-				return std::wstring();
-			}
-
-			if (c == '\n') {
-				break;
-			}
-
-			if (len == buffersize - 1) {
-				// Cap string length
-				continue;
-			}
-
-			buffer[len++] = c;
-		}
-
-		while (len && buffer[len - 1] == '\r') {
-			--len;
-		}
-
-		buffer[len] = 0;
-
-		std::wstring const line = m_pOwner->ConvToLocal(buffer, len + 1);
-		if (len && line.empty()) {
-			error = L"Failed to convert reply to local character set.";
-		}
-
-		return line;
-	}
-
-	void entry()
-	{
-		std::wstring error;
-		while (error.empty()) {
-			char readType = 0;
-			int read = process_.read(&readType, 1);
-			if (read != 1) {
-				break;
-			}
-
-			readType -= '0';
-
-			if (readType < 0 || readType >= static_cast<char>(sftpEvent::count) ) {
-				error = fz::sprintf(L"Unknown eventType %d", readType);
-				break;
-			}
-
-			sftpEvent eventType = static_cast<sftpEvent>(readType);
-
-			int lines{};
-			switch (eventType)
-			{
-			case sftpEvent::count:
-			case sftpEvent::Unknown:
-				error = fz::sprintf(L"Unknown eventType %d", readType);
-				break;
-			case sftpEvent::Recv:
-			case sftpEvent::Send:
-			case sftpEvent::UsedQuotaRecv:
-			case sftpEvent::UsedQuotaSend:
-				break;
-			case sftpEvent::Reply:
-			case sftpEvent::Done:
-			case sftpEvent::Error:
-			case sftpEvent::Verbose:
-			case sftpEvent::Info:
-			case sftpEvent::Status:
-			case sftpEvent::Transfer:
-			case sftpEvent::AskPassword:
-			case sftpEvent::RequestPreamble:
-			case sftpEvent::RequestInstruction:
-			case sftpEvent::KexAlgorithm:
-			case sftpEvent::KexHash:
-			case sftpEvent::KexCurve:
-			case sftpEvent::CipherClientToServer:
-			case sftpEvent::CipherServerToClient:
-			case sftpEvent::MacClientToServer:
-			case sftpEvent::MacServerToClient:
-			case sftpEvent::Hostkey:
-				lines = 1;
-				break;
-			case sftpEvent::AskHostkey:
-			case sftpEvent::AskHostkeyChanged:
-			case sftpEvent::AskHostkeyBetteralg:
-				lines = 2;
-				break;
-			case sftpEvent::Listentry:
-				lines = 3;
-				break;
-			};
-
-			auto msg = new CSftpEvent;
-			auto & message = std::get<0>(msg->v_);
-			message.type = eventType;
-			for (int i = 0; i < lines && error.empty(); ++i) {
-				message.text[i] = ReadLine(error);
-			}
-
-			if (!error.empty()) {
-				delete msg;
-				break;
-			}
-
-			m_pOwner->send_event(msg);
-		}
-
-		m_pOwner->send_event<CTerminateEvent>(error);
-	}
-
-	fz::process& process_;
-	CSftpControlSocket* m_pOwner;
-
-	fz::async_task thread_;
 };
 
 class CSftpDeleteOpData final : public COpData
@@ -238,31 +72,6 @@ CSftpControlSocket::~CSftpControlSocket()
 	DoClose();
 }
 
-enum connectStates
-{
-	connect_init,
-	connect_proxy,
-	connect_keys,
-	connect_open
-};
-
-class CSftpConnectOpData final : public COpData
-{
-public:
-	CSftpConnectOpData()
-		: COpData(Command::connect)
-		, keyfile_(keyfiles_.cend())
-	{
-	}
-
-	std::wstring lastChallenge;
-	CInteractiveLoginNotification::type lastChallengeType{CInteractiveLoginNotification::interactive};
-	bool criticalFailure{};
-
-	std::vector<std::wstring> keyfiles_;
-	std::vector<std::wstring>::const_iterator keyfile_;
-};
-
 void CSftpControlSocket::Connect(CServer const& server)
 {
 	LogMessage(MessageType::Status, _("Connecting to %s..."), server.Format(ServerFormat::with_optional_port));
@@ -283,10 +92,8 @@ void CSftpControlSocket::Connect(CServer const& server)
 
 	currentServer_ = server;
 
-	CSftpConnectOpData* pData = new CSftpConnectOpData;
+	CSftpConnectOpData* pData = new CSftpConnectOpData(*this);
 	Push(pData);
-
-	pData->opState = connect_init;
 
 	if (currentServer_.GetLogonType() == KEY) {
 		pData->keyfiles_ = fz::strtok(currentServer_.GetKeyFile(), L"\r\n");
@@ -307,174 +114,9 @@ void CSftpControlSocket::Connect(CServer const& server)
 
 	pData->keyfile_ = pData->keyfiles_.cbegin();
 
-	m_pProcess = std::make_unique<fz::process>();
+	process_ = std::make_unique<fz::process>();
 
 	engine_.GetRateLimiter().AddObject(this);
-
-	auto executable = fz::to_native(engine_.GetOptions().GetOption(OPTION_FZSFTP_EXECUTABLE));
-	if (executable.empty())
-		executable = fzT("fzsftp");
-	LogMessage(MessageType::Debug_Verbose, L"Going to execute %s", executable);
-
-	std::vector<fz::native_string> args = {fzT("-v")};
-	if (engine_.GetOptions().GetOptionVal(OPTION_SFTP_COMPRESSION)) {
-		args.push_back(fzT("-C"));
-	}
-	if (!m_pProcess->spawn(executable, args)) {
-		LogMessage(MessageType::Debug_Warning, L"Could not create process");
-		DoClose();
-		// FIXME
-		//return FZ_REPLY_ERROR;
-	}
-
-	m_pInputThread = std::make_unique<CSftpInputThread>(this, *m_pProcess);
-	if (!m_pInputThread->spawn(engine_.GetThreadPool())) {
-		LogMessage(MessageType::Debug_Warning, L"Thread creation failed");
-		m_pInputThread.reset();
-		DoClose();
-		// FIXME
-		//return FZ_REPLY_ERROR;
-	}
-}
-
-int CSftpControlSocket::ConnectParseResponse(bool successful, std::wstring const& reply)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ConnectParseResponse(%s)", reply);
-
-	if (!successful) {
-		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
-	}
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
-	}
-
-	CSftpConnectOpData *pData = static_cast<CSftpConnectOpData *>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData of wrong type");
-		DoClose(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	switch (pData->opState)
-	{
-	case connect_init:
-		if (reply != fz::sprintf(L"fzSftp started, protocol_version=%d", FZSFTP_PROTOCOL_VERSION)) {
-			LogMessage(MessageType::Error, _("fzsftp belongs to a different version of FileZilla"));
-			DoClose(FZ_REPLY_INTERNALERROR);
-			return FZ_REPLY_ERROR;
-		}
-		if (engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE) && !currentServer_.GetBypassProxy()) {
-			pData->opState = connect_proxy;
-		}
-		else if (pData->keyfile_ != pData->keyfiles_.cend()) {
-			pData->opState = connect_keys;
-		}
-		else {
-			pData->opState = connect_open;
-		}
-		break;
-	case connect_proxy:
-		if (pData->keyfile_ != pData->keyfiles_.cend()) {
-			pData->opState = connect_keys;
-		}
-		else {
-			pData->opState = connect_open;
-		}
-		break;
-	case connect_keys:
-		if (pData->keyfile_ == pData->keyfiles_.cend()) {
-			pData->opState = connect_open;
-		}
-		break;
-	case connect_open:
-		engine_.AddNotification(new CSftpEncryptionNotification(m_sftpEncryptionDetails));
-		ResetOperation(FZ_REPLY_OK);
-		return FZ_REPLY_OK;
-	default:
-		LogMessage(MessageType::Debug_Warning, L"Unknown op state: %d", pData->opState);
-		DoClose(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return SendNextCommand();
-}
-
-int CSftpControlSocket::ConnectSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ConnectSend()");
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		DoClose(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CSftpConnectOpData *pData = static_cast<CSftpConnectOpData *>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData of wrong type");
-		DoClose(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	bool res;
-	switch (pData->opState)
-	{
-	case connect_proxy:
-		{
-			int type;
-			switch (engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE))
-			{
-			case CProxySocket::HTTP:
-				type = 1;
-				break;
-			case CProxySocket::SOCKS5:
-				type = 2;
-				break;
-			case CProxySocket::SOCKS4:
-				type = 3;
-				break;
-			default:
-				LogMessage(MessageType::Debug_Warning, L"Unsupported proxy type");
-				DoClose(FZ_REPLY_INTERNALERROR);
-				return FZ_REPLY_ERROR;
-			}
-
-			std::wstring cmd = fz::sprintf(L"proxy %d \"%s\" %d", type,
-											engine_.GetOptions().GetOption(OPTION_PROXY_HOST),
-											engine_.GetOptions().GetOptionVal(OPTION_PROXY_PORT));
-			std::wstring user = engine_.GetOptions().GetOption(OPTION_PROXY_USER);
-			if (!user.empty()) {
-				cmd += L" \"" + user + L"\"";
-			}
-
-			std::wstring show = cmd;
-			std::wstring pass = engine_.GetOptions().GetOption(OPTION_PROXY_PASS);
-			if (!pass.empty()) {
-				cmd += L" \"" + pass + L"\"";
-				show += L" \"" + std::wstring(pass.size(), '*') + L"\"";
-			}
-			res = SendCommand(cmd, show);
-		}
-		break;
-	case connect_keys:
-		res = SendCommand(L"keyfile \"" + *(pData->keyfile_++) + L"\"");
-		break;
-	case connect_open:
-		res = SendCommand(fz::sprintf(L"open \"%s@%s\" %d", currentServer_.GetUser(), ConvertDomainName(currentServer_.GetHost()), currentServer_.GetPort()));
-		break;
-	default:
-		LogMessage(MessageType::Debug_Warning, L"Unknown op state: %d", pData->opState);
-		DoClose(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (res) {
-		return FZ_REPLY_WOULDBLOCK;
-	}
-	else {
-		return FZ_REPLY_ERROR;
-	}
 }
 
 void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
@@ -483,7 +125,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 		return;
 	}
 
-	if (!m_pInputThread) {
+	if (!input_thread_) {
 		return;
 	}
 
@@ -688,12 +330,12 @@ void CSftpControlSocket::OnTerminate(std::wstring const& error)
 	else {
 		LogMessageRaw(MessageType::Debug_Info, L"CSftpControlSocket::OnTerminate without error");
 	}
-	if (m_pProcess) {
+	if (process_) {
 		DoClose();
 	}
 }
 
-bool CSftpControlSocket::SendCommand(std::wstring const& cmd, std::wstring const& show)
+int CSftpControlSocket::SendCommand(std::wstring const& cmd, std::wstring const& show)
 {
 	SetWait(true);
 
@@ -705,16 +347,15 @@ bool CSftpControlSocket::SendCommand(std::wstring const& cmd, std::wstring const
 		cmd.find('\r') != std::wstring::npos)
 	{
 		LogMessage(MessageType::Debug_Warning, L"Command containing newline characters, aborting.");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return false;
+		return FZ_REPLY_INTERNALERROR;
 	}
 
 	return AddToStream(cmd + L"\n");
 }
 
-bool CSftpControlSocket::AddToStream(std::wstring const& cmd, bool force_utf8)
+int CSftpControlSocket::AddToStream(std::wstring const& cmd, bool force_utf8)
 {
-	if (!m_pProcess) {
+	if (!process_) {
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return false;
 	}
@@ -726,7 +367,7 @@ bool CSftpControlSocket::AddToStream(std::wstring const& cmd, bool force_utf8)
 		return false;
 	}
 
-	return m_pProcess->write(str);
+	return process_->write(str);
 }
 
 bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
@@ -835,7 +476,7 @@ enum listStates
 	list_list
 };
 
-int CSftpControlSocket::List(CServerPath path, std::wstring const& subDir, int flags)
+void CSftpControlSocket::List(CServerPath const& path, std::wstring const& subDir, int flags)
 {
 	CServerPath newPath = m_CurrentPath;
 	if (!path.empty()) {
@@ -859,7 +500,7 @@ int CSftpControlSocket::List(CServerPath path, std::wstring const& subDir, int f
 	if (!currentServer_) {
 		LogMessage(MessageType::Debug_Warning, L"m_pCurrenServer == 0");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
+	//	return FZ_REPLY_ERROR;
 	}
 
 	CSftpListOpData *pData = new CSftpListOpData;
@@ -867,9 +508,9 @@ int CSftpControlSocket::List(CServerPath path, std::wstring const& subDir, int f
 	
 	pData->opState = list_waitcwd;
 
-	if (path.GetType() == DEFAULT) {
-		path.SetType(currentServer_.GetType());
-	}
+	//if (path.GetType() == DEFAULT) {
+//		path.SetType(currentServer_.GetType());
+//	}
 	pData->path = path;
 	pData->subDir = subDir;
 	pData->refresh = (flags & LIST_FLAG_REFRESH) != 0;
@@ -877,10 +518,10 @@ int CSftpControlSocket::List(CServerPath path, std::wstring const& subDir, int f
 
 	int res = ChangeDir(path, subDir, (flags & LIST_FLAG_LINK) != 0);
 	if (res != FZ_REPLY_OK) {
-		return res;
+	//	return res;
 	}
 
-	return ListSubcommandResult(FZ_REPLY_OK);
+//	return ListSubcommandResult(FZ_REPLY_OK);
 }
 
 int CSftpControlSocket::ListParseResponse(bool successful, std::wstring const& reply)
@@ -1319,9 +960,6 @@ void CSftpControlSocket::ProcessReply(int result, std::wstring const& reply)
 	Command commandId = GetCurrentCommandId();
 	switch (commandId)
 	{
-	case Command::connect:
-		ConnectParseResponse(result == FZ_REPLY_OK, reply);
-		break;
 	case Command::list:
 		ListParseResponse(result == FZ_REPLY_OK, reply);
 		break;
@@ -1378,40 +1016,41 @@ int CSftpControlSocket::ResetOperation(int nErrorCode)
 
 int CSftpControlSocket::SendNextCommand()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::SendNextCommand()");
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::SendNextCommand()");
 	if (!m_pCurOpData) {
 		LogMessage(MessageType::Debug_Warning, L"SendNextCommand called without active operation");
+		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (m_pCurOpData->waitForAsyncRequest) {
-		LogMessage(MessageType::Debug_Info, L"Waiting for async request, ignoring SendNextCommand");
-		return FZ_REPLY_WOULDBLOCK;
+	while (m_pCurOpData) {
+		if (m_pCurOpData->waitForAsyncRequest) {
+			LogMessage(MessageType::Debug_Info, L"Waiting for async request, ignoring SendNextCommand...");
+			return FZ_REPLY_WOULDBLOCK;
+		}
+
+		int res = m_pCurOpData->Send();
+		if (res != FZ_REPLY_CONTINUE) {
+			if (res == FZ_REPLY_OK) {
+				return ResetOperation(res);
+			}
+			else if ((res & FZ_REPLY_DISCONNECTED) == FZ_REPLY_DISCONNECTED) {
+				return DoClose(res);
+			}
+			else if (res & FZ_REPLY_ERROR) {
+				return ResetOperation(res);
+			}
+			else if (res == FZ_REPLY_WOULDBLOCK) {
+				return FZ_REPLY_WOULDBLOCK;
+			}
+			else if (res != FZ_REPLY_CONTINUE) {
+				LogMessage(MessageType::Debug_Warning, L"Unknown result %d returned by m_pCurOpData->Send()");
+				return ResetOperation(FZ_REPLY_INTERNALERROR);
+			}
+		}
 	}
 
-	switch (m_pCurOpData->opId)
-	{
-	case Command::connect:
-		return ConnectSend();
-	case Command::list:
-		return ListSend();
-	case Command::transfer:
-		return FileTransferSend();
-	case Command::cwd:
-		return ChangeDirSend();
-	case Command::mkdir:
-		return MkdirSend();
-	case Command::rename:
-		return RenameSend();
-	case Command::chmod:
-		return ChmodSend();
-	case Command::del:
-		return DeleteSend();
-	default:
-		LogMessage(MessageType::Debug_Warning, L"Unknown opID (%d) in SendNextCommand", m_pCurOpData->opId);
-		break;
-	}
-	return FZ_REPLY_INTERNALERROR;
+	return FZ_REPLY_OK;
 }
 
 int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
@@ -1522,7 +1161,8 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 				}
 			}
 			if (pData->opState == filetransfer_waitlist) {
-				int res = List(CServerPath(), L"", LIST_FLAG_REFRESH);
+				// FIXME
+				int res = 0;//List(CServerPath(), L"", LIST_FLAG_REFRESH);
 				if (res != FZ_REPLY_OK) {
 					return res;
 				}
@@ -1762,12 +1402,12 @@ int CSftpControlSocket::DoClose(int nErrorCode)
 {
 	engine_.GetRateLimiter().RemoveObject(this);
 
-	if (m_pProcess) {
-		m_pProcess->kill();
+	if (process_) {
+		process_->kill();
 	}
 
-	if (m_pInputThread) {
-		m_pInputThread.reset();
+	if (input_thread_) {
+		input_thread_.reset();
 
 		auto threadEventsFilter = [&](fz::event_loop::Events::value_type const& ev) -> bool {
 			if (ev.first != this) {
@@ -1781,7 +1421,7 @@ int CSftpControlSocket::DoClose(int nErrorCode)
 
 		event_loop_.filter_events(threadEventsFilter);
 	}
-	m_pProcess.reset();
+	process_.reset();
 	return CControlSocket::DoClose(nErrorCode);
 }
 

@@ -20,7 +20,7 @@ class CFtpRawTransferOpData final : public COpData, public CFtpOpData
 {
 public:
 	CFtpRawTransferOpData(CFtpControlSocket& controlSocket)
-		: COpData(Command::rawtransfer)
+		: COpData(PrivCommand::rawtransfer)
 		, CFtpOpData(controlSocket)
 	{
 	}

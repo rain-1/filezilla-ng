@@ -391,7 +391,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 		}
 	}
 
-	if (m_pCurOpData && m_pCurOpData->opId == Command::rawtransfer &&
+	if (m_pCurOpData && m_pCurOpData->opId == PrivCommand::rawtransfer &&
 		nErrorCode != FZ_REPLY_OK)
 	{
 		CFtpRawTransferOpData *pData = static_cast<CFtpRawTransferOpData *>(m_pCurOpData);
@@ -507,7 +507,7 @@ void CFtpControlSocket::TransferEnd()
 	// We can safely ignore it.
 	// It does not cause problems, since before creating the next transfer socket, other
 	// messages which were added to the queue later than this one will be processed first.
-	if (!m_pCurOpData || !m_pTransferSocket || GetCurrentCommandId() != Command::rawtransfer) {
+	if (!m_pCurOpData || !m_pTransferSocket || GetCurrentCommandId() != PrivCommand::rawtransfer) {
 		LogMessage(MessageType::Debug_Verbose, L"Call to TransferEnd at unusual time, ignoring");
 		return;
 	}

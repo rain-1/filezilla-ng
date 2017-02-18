@@ -46,8 +46,11 @@ libengine_a_SOURCES = \
 		proxy.cpp \
 		ratelimiter.cpp \
 		rtt.cpp \
-		server.cpp serverpath.cpp\
+		server.cpp \
+		serverpath.cpp\
 		servercapabilities.cpp \
+		sftp/connect.cpp \
+		sftp/input_thread.cpp \
 		sftp/sftpcontrolsocket.cpp \
 		sizeformatting_base.cpp \
 		socket.cpp \
@@ -85,6 +88,9 @@ noinst_HEADERS = backend.h \
 		ratelimiter.h \
 		rtt.h \
 		servercapabilities.h \
+		sftp/connect.h \
+		sftp/event.h \
+		sftp/input_thread.h \
 		sftp/sftpcontrolsocket.h \
 		tlssocket.h
 

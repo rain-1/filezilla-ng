@@ -7,8 +7,8 @@
 #include <libfilezilla/file.hpp>
 
 namespace PrivCommand {
-auto const http_request = Command::private2;
-auto const http_connect = Command::private3;
+auto const http_request = Command::private1;
+auto const http_connect = Command::private2;
 }
 
 struct HeaderCmp
