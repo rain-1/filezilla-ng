@@ -50,7 +50,7 @@ int CHttpFileTransferOpData::Send()
 			req_.headers_["Range"] = fz::sprintf("bytes=%d-", localFileSize_);
 		}
 
-		response_.on_data_ = [this](auto data, auto len) { return OnData(data, len); };
+		response_.on_data_ = [this](auto data, auto len) { return this->OnData(data, len); };
 
 		controlSocket_.Request(req_, response_);
 		return FZ_REPLY_CONTINUE;
