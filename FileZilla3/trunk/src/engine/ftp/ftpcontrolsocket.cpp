@@ -585,7 +585,7 @@ void CFtpControlSocket::RawCommand(std::wstring const& command)
 	Push(new CFtpRawCommandOpData(*this, command));
 }
 
-int CFtpControlSocket::Delete(CServerPath const& path, std::deque<std::wstring>&& files)
+void CFtpControlSocket::Delete(CServerPath const& path, std::deque<std::wstring>&& files)
 {
 	assert(!m_pCurOpData);
 	CFtpDeleteOpData *pData = new CFtpDeleteOpData(*this);
@@ -595,10 +595,9 @@ int CFtpControlSocket::Delete(CServerPath const& path, std::deque<std::wstring>&
 	pData->omitPath_ = true;
 
 	ChangeDir(pData->path_);
-	return FZ_REPLY_CONTINUE;
 }
 
-int CFtpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& subDir)
+void CFtpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& subDir)
 {
 	assert(!m_pCurOpData);
 	CFtpRemoveDirOpData *pData = new CFtpRemoveDirOpData(*this);
@@ -609,10 +608,9 @@ int CFtpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& su
 	pData->fullPath_ = path;
 
 	ChangeDir(pData->path_);
-	return FZ_REPLY_CONTINUE;
 }
 
-int CFtpControlSocket::Mkdir(CServerPath const& path)
+void CFtpControlSocket::Mkdir(CServerPath const& path)
 {
 	/* Directory creation works like this: First find a parent directory into
 	 * which we can CWD, then create the subdirs one by one. If either part
@@ -624,10 +622,9 @@ int CFtpControlSocket::Mkdir(CServerPath const& path)
 	}
 
 	CMkdirOpData *pData = new CMkdirOpData;
-	pData->path = path;
+	pData->path_ = path;
 
 	Push(pData);
-	return FZ_REPLY_CONTINUE;
 }
 
 int CFtpControlSocket::Rename(CRenameCommand const& command)

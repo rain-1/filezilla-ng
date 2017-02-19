@@ -102,6 +102,7 @@ int CSftpFileTransferOpData::Send()
 		}
 		engine_.transfer_status_.SetStartTime();
 		transferInitiated_ = true;
+		controlSocket_.SetWait(true);
 
 		controlSocket_.LogMessageRaw(MessageType::Command, logstr);
 		return controlSocket_.AddToStream(cmd + "\r\n");

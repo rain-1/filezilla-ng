@@ -1388,27 +1388,27 @@ void CControlSocket::RawCommand(std::wstring const&)
 	Push(new CNotSupportedOpData());
 }
 
-int CControlSocket::Delete(const CServerPath&, std::deque<std::wstring>&&)
+void CControlSocket::Delete(CServerPath const&, std::deque<std::wstring>&&)
+{
+	Push(new CNotSupportedOpData());
+}
+
+void CControlSocket::RemoveDir(CServerPath const&, std::wstring const&)
+{
+	Push(new CNotSupportedOpData());
+}
+
+void CControlSocket::Mkdir(CServerPath const&)
+{
+	Push(new CNotSupportedOpData());
+}
+
+int CControlSocket::Rename(CRenameCommand const&)
 {
 	return FZ_REPLY_NOTSUPPORTED;
 }
 
-int CControlSocket::RemoveDir(CServerPath const&, std::wstring const&)
-{
-	return FZ_REPLY_NOTSUPPORTED;
-}
-
-int CControlSocket::Mkdir(const CServerPath&)
-{
-	return FZ_REPLY_NOTSUPPORTED;
-}
-
-int CControlSocket::Rename(const CRenameCommand&)
-{
-	return FZ_REPLY_NOTSUPPORTED;
-}
-
-int CControlSocket::Chmod(const CChmodCommand&)
+int CControlSocket::Chmod(CChmodCommand const&)
 {
 	return FZ_REPLY_NOTSUPPORTED;
 }
