@@ -5,6 +5,7 @@
 
 enum chmodStates
 {
+	chmod_init,
 	chmod_waitcwd,
 	chmod_chmod
 };
@@ -13,7 +14,12 @@ int CSftpChmodOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CSftpChmodOpData::Send");
 	
-	if (opState == chmod_chmod) {
+	if (opState == chmod_init) {
+		controlSocket_.ChangeDir(command_.GetPath());
+		opState = chmod_waitcwd;
+		return FZ_REPLY_CONTINUE;
+	}
+	else if (opState == chmod_chmod) {
 		engine_.GetDirectoryCache().UpdateFile(currentServer_, command_.GetPath(), command_.GetFile(), false, CDirectoryCache::unknown);
 
 		std::wstring quotedFilename = controlSocket_.QuoteFilename(command_.GetPath().FormatFilename(command_.GetFile(), !useAbsolute_));
@@ -36,10 +42,15 @@ int CSftpChmodOpData::SubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CSftpChmodOpData::SubcommandResult");
 
-	if (prevResult != FZ_REPLY_OK) {
-		useAbsolute_ = true;
-	}
+	if (opState == chmod_waitcwd) {
+		if (prevResult != FZ_REPLY_OK) {
+			useAbsolute_ = true;
+		}
 
-	opState = chmod_chmod;
-	return FZ_REPLY_CONTINUE;
+		opState = chmod_chmod;
+		return FZ_REPLY_CONTINUE;
+	}
+	else {
+		return FZ_REPLY_INTERNALERROR;
+	}
 }

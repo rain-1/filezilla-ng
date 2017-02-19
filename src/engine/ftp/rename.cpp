@@ -4,12 +4,24 @@
 #include "../directorycache.h"
 #include "../pathcache.h"
 
+enum renameStates
+{
+	rename_init,
+	rename_waitcwd,
+	rename_rnfrom,
+	rename_rnto
+};
+
 int CFtpRenameOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpRenameOpData::Send");
 
 	switch (opState)
 	{
+	case rename_init:
+		controlSocket_.ChangeDir(command_.GetFromPath());
+		opState = rename_waitcwd;
+		return FZ_REPLY_CONTINUE;
 	case rename_rnfrom:
 		return controlSocket_.SendCommand(L"RNFR " + command_.GetFromPath().FormatFilename(command_.GetFromFile(), !useAbsolute_));
 	case rename_rnto:
@@ -69,9 +81,15 @@ int CFtpRenameOpData::SubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpRenameOpData::SubcommandResult");
 
-	if (prevResult != FZ_REPLY_OK) {
-		useAbsolute_ = true;
-	}
+	if (opState == rename_waitcwd) {
+		if (prevResult != FZ_REPLY_OK) {
+			useAbsolute_ = true;
+		}
 
-	return FZ_REPLY_CONTINUE;
+		opState = rename_rnfrom;
+		return FZ_REPLY_CONTINUE;
+	}
+	else {
+		return FZ_REPLY_INTERNALERROR;
+	}
 }

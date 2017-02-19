@@ -3,12 +3,6 @@
 
 #include "ftpcontrolsocket.h"
 
-enum renameStates
-{
-	rename_rnfrom,
-	rename_rnto
-};
-
 class CFtpRenameOpData final : public COpData, public CFtpOpData
 {
 public:

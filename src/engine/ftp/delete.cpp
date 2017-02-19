@@ -3,25 +3,42 @@
 #include "delete.h"
 #include "../directorycache.h"
 
+enum rmdStates
+{
+	del_init,
+	del_waitcwd,
+	del_del
+};
+
 int CFtpDeleteOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpDeleteOpData::Send");
 
-	std::wstring const& file = files_.front();
-	if (file.empty()) {
-		LogMessage(MessageType::Debug_Info, L"Empty filename");
-		return FZ_REPLY_INTERNALERROR;
+	if (opState == del_init) {
+		controlSocket_.ChangeDir(path_);
+		opState = del_waitcwd;
+		return FZ_REPLY_CONTINUE;
+	}
+	else if (opState == del_del) {
+		std::wstring const& file = files_.front();
+		if (file.empty()) {
+			LogMessage(MessageType::Debug_Info, L"Empty filename");
+			return FZ_REPLY_INTERNALERROR;
+		}
+
+		std::wstring filename = path_.FormatFilename(file, omitPath_);
+		if (filename.empty()) {
+			LogMessage(MessageType::Error, _("Filename cannot be constructed for directory %s and filename %s"), path_.GetPath(), file);
+			return FZ_REPLY_ERROR;
+		}
+
+		engine_.GetDirectoryCache().InvalidateFile(currentServer_, path_, file);
+
+		return controlSocket_.SendCommand(L"DELE " + filename);
 	}
 
-	std::wstring filename = path_.FormatFilename(file, omitPath_);
-	if (filename.empty()) {
-		LogMessage(MessageType::Error, _("Filename cannot be constructed for directory %s and filename %s"), path_.GetPath(), file);
-		return FZ_REPLY_ERROR;
-	}
-
-	engine_.GetDirectoryCache().InvalidateFile(currentServer_, path_, file);
-
-	return controlSocket_.SendCommand(L"DELE " + filename);
+	LogMessage(MessageType::Debug_Warning, L"Unkown op state %d", opState);
+	return FZ_REPLY_INTERNALERROR;
 }
 
 int CFtpDeleteOpData::ParseResponse()
@@ -61,11 +78,17 @@ int CFtpDeleteOpData::SubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpDeleteOpData::SubcommandResult()");
 
-	if (prevResult != FZ_REPLY_OK) {
-		omitPath_ = false;
+	if (opState == del_waitcwd) {
+		opState = del_del;
+
+		if (prevResult != FZ_REPLY_OK) {
+			omitPath_ = false;
+		}
+
+		time_ = fz::monotonic_clock::now();
+		return FZ_REPLY_CONTINUE;
 	}
-
-	time_ = fz::monotonic_clock::now();
-
-	return FZ_REPLY_CONTINUE;
+	else {
+		return FZ_REPLY_INTERNALERROR;
+	}
 }
