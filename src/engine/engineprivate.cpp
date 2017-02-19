@@ -388,17 +388,20 @@ int CFileZillaEnginePrivate::Delete(CDeleteCommand& command)
 	else {
 		m_pLogging->LogMessage(MessageType::Status, _("Deleting %u files from \"%s\""), static_cast<unsigned int>(command.GetFiles().size()), command.GetPath().GetPath());
 	}
-	return m_pControlSocket->Delete(command.GetPath(), command.ExtractFiles());
+	m_pControlSocket->Delete(command.GetPath(), command.ExtractFiles());
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::RemoveDir(CRemoveDirCommand const& command)
 {
-	return m_pControlSocket->RemoveDir(command.GetPath(), command.GetSubDir());
+	m_pControlSocket->RemoveDir(command.GetPath(), command.GetSubDir());
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::Mkdir(CMkdirCommand const& command)
 {
-	return m_pControlSocket->Mkdir(command.GetPath());
+	m_pControlSocket->Mkdir(command.GetPath());
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::Rename(CRenameCommand const& command)

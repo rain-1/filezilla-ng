@@ -2,6 +2,7 @@
 
 #include "connect.h"
 #include "cwd.h"
+#include "delete.h"
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "engineprivate.h"
@@ -9,8 +10,10 @@
 #include "filetransfer.h"
 #include "list.h"
 #include "input_thread.h"
+#include "mkd.h"
 #include "pathcache.h"
 #include "proxy.h"
+#include "rmd.h"
 #include "servercapabilities.h"
 #include "sftpcontrolsocket.h"
 
@@ -22,27 +25,6 @@
 
 #include <algorithm>
 #include <cwchar>
-
-class CSftpDeleteOpData final : public COpData
-{
-public:
-	CSftpDeleteOpData()
-		: COpData(Command::del)
-	{
-	}
-
-	CServerPath path;
-	std::deque<std::wstring> files;
-
-	// Set to fz::datetime::Now initially and after
-	// sending an updated listing to the UI.
-	fz::datetime m_time;
-
-	bool m_needSendListing{};
-
-	// Set to true if deletion of at least one file failed
-	bool m_deleteFailed{};
-};
 
 CSftpControlSocket::CSftpControlSocket(CFileZillaEnginePrivate & engine)
 	: CControlSocket(engine)
@@ -528,8 +510,8 @@ int CSftpControlSocket::ResetOperation(int nErrorCode)
 	}
 	if (m_pCurOpData && m_pCurOpData->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
 		CSftpDeleteOpData *pData = static_cast<CSftpDeleteOpData *>(m_pCurOpData);
-		if (pData->m_needSendListing) {
-			SendDirectoryListingNotification(pData->path, false, false);
+		if (pData->needSendListing_) {
+			SendDirectoryListingNotification(pData->path_, false, false);
 		}
 	}
 
@@ -579,16 +561,7 @@ void CSftpControlSocket::Cancel()
 	}
 }
 
-enum mkdStates
-{
-	mkd_init = 0,
-	mkd_findparent,
-	mkd_mkdsub,
-	mkd_cwdsub,
-	mkd_tryfull
-};
-
-int CSftpControlSocket::Mkdir(const CServerPath& path)
+void CSftpControlSocket::Mkdir(CServerPath const& path)
 {
 	/* Directory creation works like this: First find a parent directory into
 	 * which we can CWD, then create the subdirs one by one. If either part
@@ -600,176 +573,8 @@ int CSftpControlSocket::Mkdir(const CServerPath& path)
 	}
 
 	CMkdirOpData *pData = new CMkdirOpData;
-	pData->path = path;
-
-	if (!currentPath_.empty()) {
-		// Unless the server is broken, a directory already exists if current directory is a subdir of it.
-		if (currentPath_ == path || currentPath_.IsSubdirOf(path, false)) {
-			delete pData;
-			return FZ_REPLY_OK;
-		}
-
-		if (currentPath_.IsParentOf(path, false)) {
-			pData->commonParent = currentPath_;
-		}
-		else {
-			pData->commonParent = path.GetCommonParent(currentPath_);
-		}
-	}
-
-	if (!path.HasParent()) {
-		pData->opState = mkd_tryfull;
-	}
-	else {
-		pData->currentPath = path.GetParent();
-		pData->segments.push_back(path.GetLastSegment());
-
-		if (pData->currentPath == currentPath_) {
-			pData->opState = mkd_mkdsub;
-		}
-		else {
-			pData->opState = mkd_findparent;
-		}
-	}
-
+	pData->path_ = path;
 	Push(pData);
-
-	return SendNextCommand();
-}
-
-int CSftpControlSocket::MkdirParseResponse(bool successful, std::wstring const&)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::MkdirParseResonse");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CMkdirOpData *pData = static_cast<CMkdirOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, L"  state = %d", pData->opState);
-
-	bool error = false;
-	switch (pData->opState)
-	{
-	case mkd_findparent:
-		if (successful) {
-			currentPath_ = pData->currentPath;
-			pData->opState = mkd_mkdsub;
-		}
-		else if (pData->currentPath == pData->commonParent) {
-			pData->opState = mkd_tryfull;
-		}
-		else if (pData->currentPath.HasParent()) {
-			pData->segments.push_back(pData->currentPath.GetLastSegment());
-			pData->currentPath = pData->currentPath.GetParent();
-		}
-		else {
-			pData->opState = mkd_tryfull;
-		}
-		break;
-	case mkd_mkdsub:
-		if (successful) {
-			if (pData->segments.empty()) {
-				LogMessage(MessageType::Debug_Warning, L"  pData->segments is empty");
-				ResetOperation(FZ_REPLY_INTERNALERROR);
-				return FZ_REPLY_ERROR;
-			}
-			engine_.GetDirectoryCache().UpdateFile(currentServer_, pData->currentPath, pData->segments.back(), true, CDirectoryCache::dir);
-			SendDirectoryListingNotification(pData->currentPath, false, false);
-
-			pData->currentPath.AddSegment(pData->segments.back());
-			pData->segments.pop_back();
-
-			if (pData->segments.empty()) {
-				ResetOperation(FZ_REPLY_OK);
-				return FZ_REPLY_OK;
-			}
-			else {
-				pData->opState = mkd_cwdsub;
-			}
-		}
-		else {
-			pData->opState = mkd_tryfull;
-		}
-		break;
-	case mkd_cwdsub:
-		if (successful) {
-			currentPath_ = pData->currentPath;
-			pData->opState = mkd_mkdsub;
-		}
-		else {
-			pData->opState = mkd_tryfull;
-		}
-		break;
-	case mkd_tryfull:
-		if (!successful) {
-			error = true;
-		}
-		else {
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-		break;
-	default:
-		LogMessage(MessageType::Debug_Warning, L"unknown op state: %d", pData->opState);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (error) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return MkdirSend();
-}
-
-int CSftpControlSocket::MkdirSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::MkdirSend");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CMkdirOpData *pData = static_cast<CMkdirOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, L"  state = %d", pData->opState);
-
-	if (!pData->holdsLock_) {
-		if (!TryLockCache(lock_mkdir, pData->path)) {
-			return FZ_REPLY_WOULDBLOCK;
-		}
-	}
-
-	bool res;
-	switch (pData->opState)
-	{
-	case mkd_findparent:
-	case mkd_cwdsub:
-		currentPath_.clear();
-		res = SendCommand(L"cd " + QuoteFilename(pData->currentPath.GetPath()));
-		break;
-	case mkd_mkdsub:
-		res = SendCommand(L"mkdir " + QuoteFilename(pData->segments.back()));
-		break;
-	case mkd_tryfull:
-		res = SendCommand(L"mkdir " + QuoteFilename(pData->path.GetPath()));
-		break;
-	default:
-		LogMessage(MessageType::Debug_Warning, L"unknown op state: %d", pData->opState);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!res) {
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
 }
 
 std::wstring CSftpControlSocket::QuoteFilename(std::wstring const& filename)
@@ -777,171 +582,28 @@ std::wstring CSftpControlSocket::QuoteFilename(std::wstring const& filename)
 	return L"\"" + fz::replaced_substrings(filename, L"\"", L"\"\"") + L"\"";
 }
 
-int CSftpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)
+void CSftpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::Delete");
-	assert(!m_pCurOpData);
-	CSftpDeleteOpData *pData = new CSftpDeleteOpData();
+	
+	CSftpDeleteOpData *pData = new CSftpDeleteOpData(*this);
 	Push(pData);
-	pData->path = path;
-	pData->files = files;
+	pData->path_ = path;
+	pData->files_ = files;
 
 	// CFileZillaEnginePrivate should have checked this already
 	assert(!files.empty());
-
-	return SendNextCommand();
 }
 
-int CSftpControlSocket::DeleteParseResponse(bool successful, std::wstring const&)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::DeleteParseResponse");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CSftpDeleteOpData *pData = static_cast<CSftpDeleteOpData *>(m_pCurOpData);
-
-	if (!successful) {
-		pData->m_deleteFailed = true;
-	}
-	else {
-		std::wstring const& file = pData->files.front();
-
-		engine_.GetDirectoryCache().RemoveFile(currentServer_, pData->path, file);
-
-		auto const now = fz::datetime::now();
-		if (!pData->m_time.empty() && (now - pData->m_time).get_seconds() >= 1) {
-			SendDirectoryListingNotification(pData->path, false, false);
-			pData->m_time = now;
-			pData->m_needSendListing = false;
-		}
-		else
-			pData->m_needSendListing = true;
-	}
-
-	pData->files.pop_front();
-
-	if (!pData->files.empty())
-		return SendNextCommand();
-
-	return ResetOperation(pData->m_deleteFailed ? FZ_REPLY_ERROR : FZ_REPLY_OK);
-}
-
-int CSftpControlSocket::DeleteSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::DeleteSend");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-	CSftpDeleteOpData *pData = static_cast<CSftpDeleteOpData *>(m_pCurOpData);
-
-	std::wstring const& file = pData->files.front();
-	if (file.empty()) {
-		LogMessage(MessageType::Debug_Info, L"Empty filename");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	std::wstring filename = pData->path.FormatFilename(file);
-	if (filename.empty()) {
-		LogMessage(MessageType::Error, _("Filename cannot be constructed for directory %s and filename %s"), pData->path.GetPath(), file);
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (pData->m_time.empty()) {
-		pData->m_time = fz::datetime::now();
-	}
-
-	engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->path, file);
-
-	if (!SendCommand(L"rm " + WildcardEscape(QuoteFilename(filename)),
-			  L"rm " + QuoteFilename(filename)))
-	{
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-class CSftpRemoveDirOpData final : public COpData
-{
-public:
-	CSftpRemoveDirOpData()
-		: COpData(Command::removedir)
-	{
-	}
-
-	CServerPath path;
-	std::wstring subDir;
-};
-
-int CSftpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& subDir)
+void CSftpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& subDir)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::RemoveDir");
 
 	assert(!m_pCurOpData);
-	CSftpRemoveDirOpData *pData = new CSftpRemoveDirOpData();
+	CSftpRemoveDirOpData *pData = new CSftpRemoveDirOpData(*this);
 	Push(pData);
-	pData->path = path;
-	pData->subDir = subDir;
-
-	CServerPath fullPath = engine_.GetPathCache().Lookup(currentServer_, pData->path, pData->subDir);
-	if (fullPath.empty()) {
-		fullPath = pData->path;
-
-		if (!fullPath.AddSegment(subDir)) {
-			LogMessage(MessageType::Error, _("Path cannot be constructed for directory %s and subdir %s"), path.GetPath(), subDir);
-			return FZ_REPLY_ERROR;
-		}
-	}
-
-	engine_.GetDirectoryCache().InvalidateFile(currentServer_, path, subDir);
-
-	engine_.GetPathCache().InvalidatePath(currentServer_, pData->path, pData->subDir);
-
-	engine_.InvalidateCurrentWorkingDirs(fullPath);
-	std::wstring quotedFilename = QuoteFilename(fullPath.GetPath());
-	if (!SendCommand(L"rmdir " + WildcardEscape(quotedFilename),
-			  L"rmdir " + quotedFilename))
-		return FZ_REPLY_ERROR;
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-int CSftpControlSocket::RemoveDirParseResponse(bool successful, std::wstring const&)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::RemoveDirParseResponse");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!successful) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CSftpRemoveDirOpData *pData = static_cast<CSftpRemoveDirOpData *>(m_pCurOpData);
-	if (pData->path.empty())
-	{
-		LogMessage(MessageType::Debug_Info, L"Empty pData->path");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	engine_.GetDirectoryCache().RemoveDir(currentServer_, pData->path, pData->subDir, engine_.GetPathCache().Lookup(currentServer_, pData->path, pData->subDir));
-	SendDirectoryListingNotification(pData->path, false, false);
-
-	return ResetOperation(FZ_REPLY_OK);
+	pData->path_ = path;
+	pData->subDir_ = subDir;
 }
 
 class CSftpChmodOpData final : public COpData

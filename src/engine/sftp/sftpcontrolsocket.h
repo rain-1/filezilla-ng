@@ -22,16 +22,16 @@ public:
 	virtual void FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 		std::wstring const& remoteFile, bool download,
 		CFileTransferCommand::t_transferSettings const& transferSettings) override;
-	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files) override;
-	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
-	virtual int Mkdir(const CServerPath& path);
-	virtual int Rename(const CRenameCommand& command);
-	virtual int Chmod(const CChmodCommand& command);
-	virtual void Cancel();
+	virtual void Delete(CServerPath const& path, std::deque<std::wstring>&& files) override;
+	virtual void RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring()) override;
+	virtual void Mkdir(CServerPath const& path) override;
+	virtual int Rename(CRenameCommand const& command) override;
+	virtual int Chmod(CChmodCommand const& command) override;
+	virtual void Cancel() override;
 
 	virtual bool Connected() const override { return input_thread_.operator bool(); }
 
-	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
+	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification) override;
 
 protected:
 	// Replaces filename"with"quotes with
@@ -43,14 +43,6 @@ protected:
 	virtual int ResetOperation(int nErrorCode) override;
 
 	void ProcessReply(int result, std::wstring const& reply);
-
-	int MkdirParseResponse(bool successful, std::wstring const& reply);
-	int MkdirSend();
-
-	int DeleteParseResponse(bool successful, std::wstring const& reply);
-	int DeleteSend();
-
-	int RemoveDirParseResponse(bool successful, std::wstring const& reply);
 
 	int ChmodParseResponse(bool successful, std::wstring const& reply);
 	int ChmodSubcommandResult(int prevResult);
@@ -88,8 +80,11 @@ protected:
 	friend class CProtocolOpData<CSftpControlSocket>;
 	friend class CSftpChangeDirOpData;
 	friend class CSftpConnectOpData;
+	friend class CSftpDeleteOpData;
 	friend class CSftpFileTransferOpData;
 	friend class CSftpListOpData;
+	friend class CSftpMkdirOpData;
+	friend class CSftpRemoveDirOpData;
 };
 
 typedef CProtocolOpData<CSftpControlSocket> CSftpOpData;

@@ -128,10 +128,10 @@ public:
 	{
 	}
 
-	CServerPath path;
-	CServerPath currentPath;
-	CServerPath commonParent;
-	std::vector<std::wstring> segments;
+	CServerPath path_;
+	CServerPath currentMkdPath_;
+	CServerPath commonParent_;
+	std::vector<std::wstring> segments_;
 };
 
 class CChangeDirOpData : public COpData
@@ -186,11 +186,11 @@ public:
 							 std::wstring const& remoteFile, bool download,
 							 CFileTransferCommand::t_transferSettings const& transferSettings) = 0;
 	virtual void RawCommand(std::wstring const& command = std::wstring());
-	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
-	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
-	virtual int Mkdir(const CServerPath& path);
-	virtual int Rename(const CRenameCommand& command);
-	virtual int Chmod(const CChmodCommand& command);
+	virtual void Delete(CServerPath const& path, std::deque<std::wstring>&& files);
+	virtual void RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
+	virtual void Mkdir(CServerPath const& path);
+	virtual int Rename(CRenameCommand const& command);
+	virtual int Chmod(CChmodCommand const& command);
 
 	virtual bool Connected() const = 0;
 
