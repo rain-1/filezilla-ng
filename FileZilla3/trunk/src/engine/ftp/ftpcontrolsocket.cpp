@@ -120,10 +120,10 @@ void CFtpControlSocket::ParseLine(std::wstring line)
 	LogMessageRaw(MessageType::Response, line);
 	SetAlive();
 
-	if (m_pCurOpData && m_pCurOpData->opId == Command::connect) {
-		CFtpLogonOpData* pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
-		if (pData->waitChallenge) {
-			std::wstring& challenge = pData->challenge;
+	if (!operations_.empty() && operations_.back()->opId == Command::connect) {
+		auto & data = static_cast<CFtpLogonOpData &>(*operations_.back());
+		if (data.waitChallenge) {
+			std::wstring& challenge = data.challenge;
 			if (!challenge.empty())
 #ifdef FZ_WINDOWS
 				challenge += L"\r\n";
@@ -132,17 +132,17 @@ void CFtpControlSocket::ParseLine(std::wstring line)
 #endif
 			challenge += line;
 		}
-		else if (pData->opState == LOGON_FEAT) {
-			pData->ParseFeat(line);
+		else if (data.opState == LOGON_FEAT) {
+			data.ParseFeat(line);
 		}
-		else if (pData->opState == LOGON_WELCOME) {
-			if (!pData->gotFirstWelcomeLine) {
+		else if (data.opState == LOGON_WELCOME) {
+			if (!data.gotFirstWelcomeLine) {
 				if (fz::str_tolower_ascii(line).substr(0, 3) == L"ssh") {
 					LogMessage(MessageType::Error, _("Cannot establish FTP connection to an SFTP server. Please select proper protocol."));
 					DoClose(FZ_REPLY_CRITICALERROR);
 					return;
 				}
-				pData->gotFirstWelcomeLine = true;
+				data.gotFirstWelcomeLine = true;
 			}
 		}
 	}
@@ -244,7 +244,7 @@ void CFtpControlSocket::ParseResponse()
 
 		if (!m_repliesToSkip) {
 			SetWait(false);
-			if (!m_pCurOpData) {
+			if (operations_.empty()) {
 				StartKeepaliveTimer();
 			}
 			else if (!m_pendingReplies) {
@@ -255,12 +255,12 @@ void CFtpControlSocket::ParseResponse()
 		return;
 	}
 
-	if (!m_pCurOpData) {
+	if (operations_.empty()) {
 		LogMessage(MessageType::Debug_Info, L"Skipping reply without active operation.");
 		return;
 	}
 
-	int res = m_pCurOpData->ParseResponse();
+	int res = operations_.back()->ParseResponse();
 	if (res == FZ_REPLY_OK) {
 		ResetOperation(FZ_REPLY_OK);
 	}
@@ -271,7 +271,7 @@ void CFtpControlSocket::ParseResponse()
 		DoClose(res);
 	}
 	else if (res & FZ_REPLY_ERROR) {
-		if (m_pCurOpData->opId == Command::connect) {
+		if (operations_.back()->opId == Command::connect) {
 			DoClose(res | FZ_REPLY_DISCONNECTED);
 		}
 		else {
@@ -324,10 +324,6 @@ int CFtpControlSocket::SendCommand(std::wstring const& str, bool maskArgs, bool 
 
 void CFtpControlSocket::List(CServerPath const& path, std::wstring const& subDir, int flags)
 {
-	if (m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"List called from other command");
-	}
-
 	CServerPath newPath = currentPath_;
 	if (!path.empty()) {
 		newPath = path;
@@ -343,8 +339,7 @@ void CFtpControlSocket::List(CServerPath const& path, std::wstring const& subDir
 		LogMessage(MessageType::Status, _("Retrieving directory listing of \"%s\"..."), newPath.GetPath());
 	}
 
-	CFtpListOpData *pData = new CFtpListOpData(*this, path, subDir, flags);
-	Push(pData);
+	Push(std::make_unique<CFtpListOpData>(*this, path, subDir, flags, operations_.empty()));
 }
 
 int CFtpControlSocket::ResetOperation(int nErrorCode)
@@ -356,14 +351,14 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 
 	m_repliesToSkip = m_pendingReplies;
 
-	if (m_pCurOpData && m_pCurOpData->opId == Command::transfer) {
-		CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
-		if (pData->tranferCommandSent) {
-			if (pData->transferEndReason == TransferEndReason::transfer_failure_critical) {
+	if (!operations_.empty() && operations_.back()->opId == Command::transfer) {
+		auto & data = static_cast<CFtpFileTransferOpData &>(*operations_.back());
+		if (data.tranferCommandSent) {
+			if (data.transferEndReason == TransferEndReason::transfer_failure_critical) {
 				nErrorCode |= FZ_REPLY_CRITICALERROR | FZ_REPLY_WRITEFAILED;
 			}
-			if (pData->transferEndReason != TransferEndReason::transfer_command_failure_immediate || GetReplyCode() != 5) {
-				pData->transferInitiated_ = true;
+			if (data.transferEndReason != TransferEndReason::transfer_command_failure_immediate || GetReplyCode() != 5) {
+				data.transferInitiated_ = true;
 			}
 			else {
 				if (nErrorCode == FZ_REPLY_ERROR) {
@@ -371,45 +366,45 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 				}
 			}
 		}
-		if (nErrorCode != FZ_REPLY_OK && pData->download_ && !pData->fileDidExist_) {
-			pData->ioThread_.reset();
+		if (nErrorCode != FZ_REPLY_OK && data.download_ && !data.fileDidExist_) {
+			data.ioThread_.reset();
 			int64_t size;
 			bool isLink;
-			if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile_), isLink, &size, 0, 0) == fz::local_filesys::file && size == 0) {
+			if (fz::local_filesys::get_file_info(fz::to_native(data.localFile_), isLink, &size, 0, 0) == fz::local_filesys::file && size == 0) {
 				// Download failed and a new local file was created before, but
 				// nothing has been written to it. Remove it again, so we don't
 				// leave a bunch of empty files all over the place.
 				LogMessage(MessageType::Debug_Verbose, L"Deleting empty file");
-				fz::remove_file(fz::to_native(pData->localFile_));
+				fz::remove_file(fz::to_native(data.localFile_));
 			}
 		}
 	}
-	if (m_pCurOpData && m_pCurOpData->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
-		CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
-		if (pData->needSendListing_) {
-			SendDirectoryListingNotification(pData->path_, false, false);
+	if (!operations_.empty() && operations_.back()->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
+		auto & data = static_cast<CFtpDeleteOpData &>(*operations_.back());
+		if (data.needSendListing_) {
+			SendDirectoryListingNotification(data.path_, false, false);
 		}
 	}
 
-	if (m_pCurOpData && m_pCurOpData->opId == PrivCommand::rawtransfer &&
+	if (!operations_.empty() && operations_.back()->opId == PrivCommand::rawtransfer &&
 		nErrorCode != FZ_REPLY_OK)
 	{
-		CFtpRawTransferOpData *pData = static_cast<CFtpRawTransferOpData *>(m_pCurOpData);
-		if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
+		auto & data = static_cast<CFtpRawTransferOpData &>(*operations_.back());
+		if (data.pOldData->transferEndReason == TransferEndReason::successful) {
 			if ((nErrorCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT) {
-				pData->pOldData->transferEndReason = TransferEndReason::timeout;
+				data.pOldData->transferEndReason = TransferEndReason::timeout;
 			}
-			else if (!pData->pOldData->tranferCommandSent) {
-				pData->pOldData->transferEndReason = TransferEndReason::pre_transfer_command_failure;
+			else if (!data.pOldData->tranferCommandSent) {
+				data.pOldData->transferEndReason = TransferEndReason::pre_transfer_command_failure;
 			}
 			else {
-				pData->pOldData->transferEndReason = TransferEndReason::failure;
+				data.pOldData->transferEndReason = TransferEndReason::failure;
 			}
 		}
 	}
 
 	m_lastCommandCompletionTime = fz::monotonic_clock::now();
-	if (m_pCurOpData && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
+	if (!operations_.empty() && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
 		StartKeepaliveTimer();
 	}
 	else {
@@ -432,19 +427,19 @@ bool CFtpControlSocket::CanSendNextCommand() const
 
 void CFtpControlSocket::ChangeDir(CServerPath const& path, std::wstring const& subDir, bool link_discovery)
 {
-	CFtpChangeDirOpData *pData = new CFtpChangeDirOpData(*this);
+	auto pData = std::make_unique<CFtpChangeDirOpData>(*this);
 	pData->path_ = path;
 	pData->subDir_ = subDir;
 	pData->link_discovery_ = link_discovery;
 
-	if (pData->pNextOpData && pData->pNextOpData->opId == Command::transfer &&
-		!static_cast<CFtpFileTransferOpData *>(pData->pNextOpData)->download_)
+	if (!operations_.empty() && operations_.back()->opId == Command::transfer &&
+		!static_cast<CFtpFileTransferOpData &>(*operations_.back()).download_)
 	{
 		pData->tryMkdOnFail_ = true;
 		assert(subDir.empty());
 	}
 
-	Push(pData);
+	Push(std::move(pData));
 }
 
 void CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
@@ -453,10 +448,10 @@ void CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::FileTransfer()");
 
-	CFtpFileTransferOpData *pData = new CFtpFileTransferOpData(*this, download, localFile, remoteFile, remotePath);
+	auto pData = std::make_unique<CFtpFileTransferOpData>(*this, download, localFile, remoteFile, remotePath);
 	pData->transferSettings_ = transferSettings;
 	pData->binary = transferSettings.binary;
-	Push(pData);
+	Push(std::move(pData));
 }
 
 void CFtpControlSocket::TransferEnd()
@@ -467,7 +462,7 @@ void CFtpControlSocket::TransferEnd()
 	// We can safely ignore it.
 	// It does not cause problems, since before creating the next transfer socket, other
 	// messages which were added to the queue later than this one will be processed first.
-	if (!m_pCurOpData || !m_pTransferSocket || GetCurrentCommandId() != PrivCommand::rawtransfer) {
+	if (operations_.empty() || !m_pTransferSocket || operations_.back()->opId != PrivCommand::rawtransfer) {
 		LogMessage(MessageType::Debug_Verbose, L"Call to TransferEnd at unusual time, ignoring");
 		return;
 	}
@@ -482,44 +477,42 @@ void CFtpControlSocket::TransferEnd()
 		SetAlive();
 	}
 
-	CFtpRawTransferOpData *pData = static_cast<CFtpRawTransferOpData *>(m_pCurOpData);
-	if (pData->pOldData->transferEndReason == TransferEndReason::successful) {
-		pData->pOldData->transferEndReason = reason;
+	auto & data = static_cast<CFtpRawTransferOpData &>(*operations_.back());
+	if (data.pOldData->transferEndReason == TransferEndReason::successful) {
+		data.pOldData->transferEndReason = reason;
 	}
 
-	switch (m_pCurOpData->opState)
+	switch (data.opState)
 	{
 	case rawtransfer_transfer:
-		pData->opState = rawtransfer_waittransferpre;
+		data.opState = rawtransfer_waittransferpre;
 		break;
 	case rawtransfer_waitfinish:
-		pData->opState = rawtransfer_waittransfer;
+		data.opState = rawtransfer_waittransfer;
 		break;
 	case rawtransfer_waitsocket:
 		ResetOperation((reason == TransferEndReason::successful) ? FZ_REPLY_OK : FZ_REPLY_ERROR);
 		break;
 	default:
-		LogMessage(MessageType::Debug_Info, L"TransferEnd at unusual op state %d, ignoring", m_pCurOpData->opState);
+		LogMessage(MessageType::Debug_Info, L"TransferEnd at unusual op state %d, ignoring", data.opState);
 		break;
 	}
 }
 
 bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
 {
-	if (m_pCurOpData) {
-		if (!m_pCurOpData->waitForAsyncRequest) {
-			LogMessage(MessageType::Debug_Info, L"Not waiting for request reply, ignoring request reply %d", pNotification->GetRequestID());
-			return false;
-		}
-		m_pCurOpData->waitForAsyncRequest = false;
+	if (operations_.empty() || !operations_.back()->waitForAsyncRequest) {
+		LogMessage(MessageType::Debug_Info, L"Not waiting for request reply, ignoring request reply %d", pNotification->GetRequestID());
+		return false;
 	}
+	operations_.back()->waitForAsyncRequest = false;
 
 	const RequestId requestId = pNotification->GetRequestID();
 	switch (requestId)
 	{
 	case reqId_fileexists:
 		{
-			if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer) {
+			if (operations_.empty() || operations_.back()->opId != Command::transfer) {
 				LogMessage(MessageType::Debug_Info, L"No or invalid operation in progress, ignoring request reply %d", pNotification->GetRequestID());
 				return false;
 			}
@@ -530,12 +523,12 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 		break;
 	case reqId_interactiveLogin:
 		{
-			if (!m_pCurOpData || m_pCurOpData->opId != Command::connect) {
+			if (operations_.empty() || operations_.back()->opId != Command::connect) {
 				LogMessage(MessageType::Debug_Info, L"No or invalid operation in progress, ignoring request reply %d", pNotification->GetRequestID());
 				return false;
 			}
 
-			CFtpLogonOpData* pData = static_cast<CFtpLogonOpData*>(m_pCurOpData);
+			auto & data = static_cast<CFtpLogonOpData&>(*operations_.back());
 
 			CInteractiveLoginNotification *pInteractiveLoginNotification = static_cast<CInteractiveLoginNotification *>(pNotification);
 			if (!pInteractiveLoginNotification->passwordSet) {
@@ -543,7 +536,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				return false;
 			}
 			currentServer_.SetUser(currentServer_.GetUser(), pInteractiveLoginNotification->server.GetPass());
-			pData->gotPassword = true;
+			data.gotPassword = true;
 			SendNextCommand();
 		}
 		break;
@@ -562,10 +555,10 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				return false;
 			}
 
-			if (m_pCurOpData && m_pCurOpData->opId == Command::connect &&
-				m_pCurOpData->opState == LOGON_AUTH_WAIT)
+			if (!operations_.empty() && operations_.back()->opId == Command::connect &&
+				operations_.back()->opState == LOGON_AUTH_WAIT)
 			{
-				m_pCurOpData->opState = LOGON_LOGON;
+				operations_.back()->opState = LOGON_LOGON;
 			}
 		}
 		break;
@@ -581,33 +574,27 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 void CFtpControlSocket::RawCommand(std::wstring const& command)
 {
 	assert(!command.empty());
-
-	Push(new CFtpRawCommandOpData(*this, command));
+	Push(std::make_unique<CFtpRawCommandOpData>(*this, command));
 }
 
 void CFtpControlSocket::Delete(CServerPath const& path, std::deque<std::wstring>&& files)
 {
-	assert(!m_pCurOpData);
-	CFtpDeleteOpData *pData = new CFtpDeleteOpData(*this);
-	Push(pData);
+	auto pData = std::make_unique<CFtpDeleteOpData>(*this);
 	pData->path_ = path;
-	pData->files_ = files;
+	pData->files_ = std::move(files);
 	pData->omitPath_ = true;
 
-	ChangeDir(pData->path_);
+	Push(std::move(pData));
 }
 
 void CFtpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& subDir)
 {
-	assert(!m_pCurOpData);
-	CFtpRemoveDirOpData *pData = new CFtpRemoveDirOpData(*this);
-	Push(pData);
+	auto pData = std::make_unique<CFtpRemoveDirOpData>(*this);
 	pData->path_ = path;
 	pData->subDir_ = subDir;
 	pData->omitPath_ = true;
 	pData->fullPath_ = path;
-
-	ChangeDir(pData->path_);
+	Push(std::move(pData));
 }
 
 void CFtpControlSocket::Mkdir(CServerPath const& path)
@@ -617,32 +604,28 @@ void CFtpControlSocket::Mkdir(CServerPath const& path)
 	 * fails, try MKD with the full path directly.
 	 */
 
-	if (!m_pCurOpData && !path.empty()) {
+	if (operations_.empty() && !path.empty()) {
 		LogMessage(MessageType::Status, _("Creating directory '%s'..."), path.GetPath());
 	}
 
-	CFtpMkdirOpData *pData = new CFtpMkdirOpData(*this);
+	auto pData = std::make_unique<CFtpMkdirOpData>(*this);
 	pData->path_ = path;
 
-	Push(pData);
+	Push(std::move(pData));
 }
 
 void CFtpControlSocket::Rename(CRenameCommand const& command)
 {
 	LogMessage(MessageType::Status, _("Renaming '%s' to '%s'"), command.GetFromPath().FormatFilename(command.GetFromFile()), command.GetToPath().FormatFilename(command.GetToFile()));
 
-	Push(new CFtpRenameOpData(*this, command));
-
-	ChangeDir(command.GetFromPath());
+	Push(std::make_unique<CFtpRenameOpData>(*this, command));
 }
 
 void CFtpControlSocket::Chmod(CChmodCommand const& command)
 {
 	LogMessage(MessageType::Status, _("Setting permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()), command.GetPermission());
 
-	Push(new CFtpChmodOpData(*this, command));
-
-	ChangeDir(command.GetPath());
+	Push(std::make_unique<CFtpChmodOpData>(*this, command));
 }
 
 int CFtpControlSocket::GetExternalIPAddress(std::string& address)
@@ -734,8 +717,7 @@ void CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* ol
 	assert(oldData);
 	oldData->tranferCommandSent = false;
 
-	CFtpRawTransferOpData *pData = new CFtpRawTransferOpData(*this);
-	Push(pData);
+	auto pData = std::make_unique<CFtpRawTransferOpData>(*this);
 
 	pData->cmd_ = cmd;
 	pData->pOldData = oldData;
@@ -773,19 +755,20 @@ void CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* ol
 	else {
 		pData->opState = rawtransfer_type;
 	}
+
+	Push(std::move(pData));
 }
 
 void CFtpControlSocket::Connect(CServer const& server)
 {
-	if (m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"CFtpControlSocket::Connect(): deleting nonzero pData");
-		delete m_pCurOpData;
+	if (!operations_.empty()) {
+		LogMessage(MessageType::Debug_Warning, L"CFtpControlSocket::Connect(): deleting stale operations");
+		operations_.clear();
 	}
 
 	currentServer_ = server;
 
-	CFtpLogonOpData* pData = new CFtpLogonOpData(*this, server);
-	Push(pData);
+	Push(std::make_unique<CFtpLogonOpData>(*this, server));
 }
 
 void CFtpControlSocket::OnTimer(fz::timer_id id)
@@ -795,7 +778,7 @@ void CFtpControlSocket::OnTimer(fz::timer_id id)
 		return;
 	}
 
-	if (m_pCurOpData) {
+	if (operations_.empty()) {
 		return;
 	}
 

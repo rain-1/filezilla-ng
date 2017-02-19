@@ -33,16 +33,6 @@ typedef fz::simple_event<obtain_lock_event_type> CObtainLockEvent;
 
 std::list<CControlSocket::t_lockInfo> CControlSocket::m_lockInfoList;
 
-COpData::COpData(Command op_Id)
-	: opId(op_Id)
-{
-}
-
-COpData::~COpData()
-{
-	delete pNextOpData;
-}
-
 CControlSocket::CControlSocket(CFileZillaEnginePrivate & engine)
 	: CLogging(engine)
 	, event_handler(engine.event_loop_)
@@ -69,8 +59,8 @@ int CControlSocket::Disconnect()
 
 Command CControlSocket::GetCurrentCommandId() const
 {
-	if (m_pCurOpData) {
-		return m_pCurOpData->opId;
+	if (!operations_.empty()) {
+		return operations_.back()->opId;
 	}
 
 	return engine_.GetCurrentCommandId();
@@ -129,10 +119,9 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 	}
 }
 
-void CControlSocket::Push(COpData *pNewOpData)
+void CControlSocket::Push(std::unique_ptr<COpData> && operation)
 {
-	pNewOpData->pNextOpData = m_pCurOpData;
-	m_pCurOpData = pNewOpData;
+	operations_.emplace_back(std::move(operation));
 }
 
 int CControlSocket::ResetOperation(int nErrorCode)
@@ -143,38 +132,38 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		LogMessage(MessageType::Debug_Warning, L"ResetOperation with FZ_REPLY_WOULDBLOCK in nErrorCode (%d)", nErrorCode);
 	}
 
-	if (m_pCurOpData && m_pCurOpData->holdsLock_) {
-		UnlockCache();
+	std::unique_ptr<COpData> oldOperation;
+	if (!operations_.empty()) {
+		oldOperation = std::move(operations_.back());
+		operations_.pop_back();
+
+		if (oldOperation->holdsLock_) {
+			UnlockCache();
+		}
 	}
-
-	if (m_pCurOpData && m_pCurOpData->pNextOpData) {
-		COpData *oldOpData = m_pCurOpData;
-		m_pCurOpData = m_pCurOpData->pNextOpData;
-		oldOpData->pNextOpData = 0;
-
+	if (!operations_.empty()) {
 		int ret;
 		if (nErrorCode == FZ_REPLY_OK ||
 			nErrorCode == FZ_REPLY_ERROR ||
 			nErrorCode == FZ_REPLY_CRITICALERROR)
 		{
-			ret = ParseSubcommandResult(nErrorCode, *oldOpData);
+			ret = ParseSubcommandResult(nErrorCode, *oldOperation);
 		}
 		else {
 			ret = ResetOperation(nErrorCode);
 		}
-		delete oldOpData;
 		return ret;
 	}
 
 	std::wstring prefix;
 	if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR &&
-		(!m_pCurOpData || m_pCurOpData->opId != Command::transfer))
+		(!oldOperation || oldOperation->opId != Command::transfer))
 	{
 		prefix = _("Critical error:") + L" ";
 	}
 
-	if (m_pCurOpData) {
-		const Command commandId = m_pCurOpData->opId;
+	if (oldOperation) {
+		const Command commandId = oldOperation->opId;
 		switch (commandId)
 		{
 		case Command::none:
@@ -208,19 +197,19 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			break;
 		case Command::transfer:
 			{
-				CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
-				if (!pData->download_ && pData->transferInitiated_) {
+				auto & data = static_cast<CFileTransferOpData &>(*oldOperation);
+				if (!data.download_ && data.transferInitiated_) {
 					if (!currentServer_) {
 						LogMessage(MessageType::Debug_Warning, L"currentServer_ is empty");
 					}
 					else {
-						bool updated = engine_.GetDirectoryCache().UpdateFile(currentServer_, pData->remotePath_, pData->remoteFile_, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? pData->localFileSize_ : -1);
+						bool updated = engine_.GetDirectoryCache().UpdateFile(currentServer_, data.remotePath_, data.remoteFile_, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? data.localFileSize_ : -1);
 						if (updated) {
-							SendDirectoryListingNotification(pData->remotePath_, false, false);
+							SendDirectoryListingNotification(data.remotePath_, false, false);
 						}
 					}
 				}
-				LogTransferResultMessage(nErrorCode, pData);
+				LogTransferResultMessage(nErrorCode, &data);
 			}
 			break;
 		default:
@@ -229,9 +218,6 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			}
 			break;
 		}
-
-		delete m_pCurOpData;
-		m_pCurOpData = 0;
 	}
 
 	engine_.transfer_status_.Reset();
@@ -250,7 +236,7 @@ int CControlSocket::DoClose(int nErrorCode)
 {
 	LogMessage(MessageType::Debug_Debug, L"CControlSocket::DoClose(%d)", nErrorCode);
 	if (m_closed) {
-		assert(!m_pCurOpData);
+		assert(operations_.empty());
 		return nErrorCode;
 	}
 
@@ -373,15 +359,15 @@ bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPat
 
 int CControlSocket::CheckOverwriteFile()
 {
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData in CControlSocket::CheckOverwriteFile");
+	if (operations_.empty() || operations_.back()->opId != Command::transfer) {
+		LogMessage(MessageType::Debug_Info, L"CheckOverwriteFile called without active transfer.");
 		return FZ_REPLY_INTERNALERROR;
 	}
 
-	CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
+	auto & data = static_cast<CFileTransferOpData &>(*operations_.back());
 
-	if (pData->download_) {
-		if (fz::local_filesys::get_file_type(fz::to_native(pData->localFile_), true) != fz::local_filesys::file) {
+	if (data.download_) {
+		if (fz::local_filesys::get_file_type(fz::to_native(data.localFile_), true) != fz::local_filesys::file) {
 			return FZ_REPLY_OK;
 		}
 	}
@@ -390,51 +376,51 @@ int CControlSocket::CheckOverwriteFile()
 	bool dirDidExist;
 	bool matchedCase;
 	CServerPath remotePath;
-	if (pData->tryAbsolutePath_ || currentPath_.empty()) {
-		remotePath = pData->remotePath_;
+	if (data.tryAbsolutePath_ || currentPath_.empty()) {
+		remotePath = data.remotePath_;
 	}
 	else {
 		remotePath = currentPath_;
 	}
-	bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, remotePath, pData->remoteFile_, dirDidExist, matchedCase);
+	bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, remotePath, data.remoteFile_, dirDidExist, matchedCase);
 
 	// Ignore entries with wrong case
 	if (found && !matchedCase)
 		found = false;
 
-	if (!pData->download_) {
-		if (!found && pData->remoteFileSize_ < 0 && pData->fileTime_.empty()) {
+	if (!data.download_) {
+		if (!found && data.remoteFileSize_ < 0 && data.fileTime_.empty()) {
 			return FZ_REPLY_OK;
 		}
 	}
 
 	CFileExistsNotification *pNotification = new CFileExistsNotification;
 
-	pNotification->download = pData->download_;
-	pNotification->localFile = pData->localFile_;
-	pNotification->remoteFile = pData->remoteFile_;
-	pNotification->remotePath = pData->remotePath_;
-	pNotification->localSize = pData->localFileSize_;
-	pNotification->remoteSize = pData->remoteFileSize_;
-	pNotification->remoteTime = pData->fileTime_;
-	pNotification->ascii = !pData->transferSettings_.binary;
+	pNotification->download = data.download_;
+	pNotification->localFile = data.localFile_;
+	pNotification->remoteFile = data.remoteFile_;
+	pNotification->remotePath = data.remotePath_;
+	pNotification->localSize = data.localFileSize_;
+	pNotification->remoteSize = data.remoteFileSize_;
+	pNotification->remoteTime = data.fileTime_;
+	pNotification->ascii = !data.transferSettings_.binary;
 
-	if (pData->download_ && pNotification->localSize >= 0) {
+	if (data.download_ && pNotification->localSize >= 0) {
 		pNotification->canResume = true;
 	}
-	else if (!pData->download_ && pNotification->remoteSize >= 0) {
+	else if (!data.download_ && pNotification->remoteSize >= 0) {
 		pNotification->canResume = true;
 	}
 	else {
 		pNotification->canResume = false;
 	}
 
-	pNotification->localTime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile_));
+	pNotification->localTime = fz::local_filesys::get_modification_time(fz::to_native(data.localFile_));
 
 	if (found) {
 		if (pNotification->remoteTime.empty() && entry.has_date()) {
 			pNotification->remoteTime = entry.time;
-			pData->fileTime_ = entry.time;
+			data.fileTime_ = entry.time;
 		}
 	}
 
@@ -572,7 +558,7 @@ void CControlSocket::OnTimer(fz::timer_id)
 	if (timeout > 0) {
 		fz::duration elapsed = fz::monotonic_clock::now() - m_lastActivity;
 
-		if ((!m_pCurOpData || !m_pCurOpData->waitForAsyncRequest) && !IsWaitingForLock()) {
+		if ((operations_.empty() || operations_.back()->waitForAsyncRequest) && !IsWaitingForLock()) {
 			if (elapsed > fz::duration::from_seconds(timeout)) {
 				LogMessage(MessageType::Error, fztranslate("Connection timed out after %d second of inactivity", "Connection timed out after %d seconds of inactivity", timeout), timeout);
 				DoClose(FZ_REPLY_TIMEOUT);
@@ -615,14 +601,15 @@ void CControlSocket::SetWait(bool wait)
 int CControlSocket::SendNextCommand()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CControlSocket::SendNextCommand()");
-	if (!m_pCurOpData) {
+	if (operations_.empty()) {
 		LogMessage(MessageType::Debug_Warning, L"SendNextCommand called without active operation");
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	while (m_pCurOpData) {
-		if (m_pCurOpData->waitForAsyncRequest) {
+	while (!operations_.empty()) {
+		auto & data = *operations_.back();
+		if (data.waitForAsyncRequest) {
 			LogMessage(MessageType::Debug_Info, L"Waiting for async request, ignoring SendNextCommand...");
 			return FZ_REPLY_WOULDBLOCK;
 		}
@@ -632,7 +619,7 @@ int CControlSocket::SendNextCommand()
 			return FZ_REPLY_WOULDBLOCK;
 		}
 
-		int res = m_pCurOpData->Send();
+		int res = data.Send();
 		if (res != FZ_REPLY_CONTINUE) {
 			if (res == FZ_REPLY_OK) {
 				return ResetOperation(res);
@@ -647,7 +634,7 @@ int CControlSocket::SendNextCommand()
 				return FZ_REPLY_WOULDBLOCK;
 			}
 			else if (res != FZ_REPLY_CONTINUE) {
-				LogMessage(MessageType::Debug_Warning, L"Unknown result %d returned by m_pCurOpData->Send()");
+				LogMessage(MessageType::Debug_Warning, L"Unknown result %d returned by COpData::Send()", res);
 				return ResetOperation(FZ_REPLY_INTERNALERROR);
 			}
 		}
@@ -659,13 +646,14 @@ int CControlSocket::SendNextCommand()
 int CControlSocket::ParseSubcommandResult(int prevResult, COpData const& opData)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CControlSocket::ParseSubcommandResult(%d)", prevResult);
-	if (!m_pCurOpData) {
+	if (operations_.empty()) {
 		LogMessage(MessageType::Debug_Warning, L"ParseSubcommandResult called without active operation");
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	int res = m_pCurOpData->SubcommandResult(prevResult, opData);
+	auto & data = *operations_.back();
+	int res = data.SubcommandResult(prevResult, opData);
 	if (res == FZ_REPLY_WOULDBLOCK) {
 		return FZ_REPLY_WOULDBLOCK;
 	}
@@ -689,10 +677,10 @@ const std::list<CControlSocket::t_lockInfo>::iterator CControlSocket::GetLockSta
 	return iter;
 }
 
-bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& directory)
+bool CControlSocket::TryLockCache(locking_reason reason, CServerPath const& directory)
 {
 	assert(currentServer_);
-	assert(m_pCurOpData);
+	assert(!operations_.empty());
 
 	std::list<t_lockInfo>::iterator own = GetLockStatus();
 	if (own == m_lockInfoList.end()) {
@@ -707,8 +695,8 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 	}
 	else {
 		if (own->lockcount) {
-			if (!m_pCurOpData->holdsLock_) {
-				m_pCurOpData->holdsLock_ = true;
+			if (!operations_.back()->holdsLock_) {
+				operations_.back()->holdsLock_ = true;
 				own->lockcount++;
 			}
 			return true;
@@ -719,7 +707,7 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 
 	// Needs to be set in any case so that ResetOperation
 	// unlocks or cancels the lock wait
-	m_pCurOpData->holdsLock_ = true;
+	operations_.back()->holdsLock_ = true;
 
 	// Try to find other instance holding the lock
 	for (auto iter = m_lockInfoList.cbegin(); iter != own; ++iter) {
@@ -742,7 +730,7 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 	return true;
 }
 
-bool CControlSocket::IsLocked(locking_reason reason, const CServerPath& directory)
+bool CControlSocket::IsLocked(locking_reason reason, CServerPath const& directory)
 {
 	assert(currentServer_);
 
@@ -772,10 +760,10 @@ bool CControlSocket::IsLocked(locking_reason reason, const CServerPath& director
 
 void CControlSocket::UnlockCache()
 {
-	if (!m_pCurOpData || !m_pCurOpData->holdsLock_) {
+	if (operations_.empty() || !operations_.back()->holdsLock_) {
 		return;
 	}
-	m_pCurOpData->holdsLock_ = false;
+	operations_.back()->holdsLock_ = false;
 
 	std::list<t_lockInfo>::iterator iter = GetLockStatus();
 	if (iter == m_lockInfoList.end()) {
@@ -827,7 +815,7 @@ void CControlSocket::UnlockCache()
 
 CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 {
-	if (!m_pCurOpData) {
+	if (operations_.empty()) {
 		return lock_unknown;
 	}
 
@@ -886,15 +874,17 @@ bool CControlSocket::IsWaitingForLock()
 void CControlSocket::InvalidateCurrentWorkingDir(const CServerPath& path)
 {
 	assert(!path.empty());
-	if (currentPath_.empty())
+	if (currentPath_.empty()) {
 		return;
+	}
 
-	if (currentPath_ == path || path.IsParentOf(currentPath_, false))
-	{
-		if (m_pCurOpData)
+	if (currentPath_ == path || path.IsParentOf(currentPath_, false)) {
+		if (!operations_.empty()) {
 			m_invalidateCurrentPath = true;
-		else
+		}
+		else {
 			currentPath_.clear();
+		}
 	}
 }
 
@@ -913,11 +903,13 @@ fz::duration CControlSocket::GetTimezoneOffset() const
 void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 {
 	assert(pNotification);
+	assert(!operations_.empty());
 
 	pNotification->requestNumber = engine_.GetNextAsyncRequestNumber();
 
-	if (m_pCurOpData)
-		m_pCurOpData->waitForAsyncRequest = true;
+	if (!operations_.empty()) {
+		operations_.back()->waitForAsyncRequest = true;
+	}
 	engine_.AddNotification(pNotification);
 }
 
@@ -1140,10 +1132,10 @@ int CRealControlSocket::ContinueConnect()
 		}
 	}
 	else {
-		if (m_pCurOpData && m_pCurOpData->opId == Command::connect) {
-			CConnectOpData* pData(static_cast<CConnectOpData*>(m_pCurOpData));
-			host = pData->host_;
-			port = pData->port_;
+		if (!operations_.empty() && operations_.back()->opId == Command::connect) {
+			auto & data = static_cast<CConnectOpData&>(*operations_.back());
+			host = data.host_;
+			port = data.port_;
 		}
 		if (host.empty()) {
 			host = currentServer_.GetHost();
@@ -1197,12 +1189,12 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 {
 	assert(pFileExistsNotification);
 
-	if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer) {
+	if (operations_.empty() || operations_.back()->opId != Command::transfer) {
 		LogMessage(MessageType::Debug_Info, L"SetFileExistsAction: No or invalid operation in progress, ignoring request reply %f", pFileExistsNotification->GetRequestID());
 		return false;
 	}
 
-	CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
+	auto & data = static_cast<CFileTransferOpData &>(*operations_.back());
 
 	switch (pFileExistsNotification->overwriteAction)
 	{
@@ -1220,29 +1212,29 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			SendNextCommand();
 		}
 		else {
-			if (pData->download_) {
-				std::wstring filename = pData->remotePath_.FormatFilename(pData->remoteFile_);
+			if (data.download_) {
+				std::wstring filename = data.remotePath_.FormatFilename(data.remoteFile_);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
 			else {
-				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile_);
+				LogMessage(MessageType::Status, _("Skipping upload of %s"), data.localFile_);
 			}
 			ResetOperation(FZ_REPLY_OK);
 		}
 		break;
 	case CFileExistsNotification::overwriteSize:
-		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
-		Second compare flags the remaining case in which we need to send command : both size unknown */
+		// First compare flags both size known but different, one size known and the other not (obviously they are different).
+		// Second compare flags the remaining case in which we need to send command : both size unknown
 		if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize < 0)) {
 			SendNextCommand();
 		}
 		else {
-			if (pData->download_) {
-				std::wstring filename = pData->remotePath_.FormatFilename(pData->remoteFile_);
+			if (data.download_) {
+				std::wstring filename = data.remotePath_.FormatFilename(data.remoteFile_);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
 			else {
-				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile_);
+				LogMessage(MessageType::Status, _("Skipping upload of %s"), data.localFile_);
 			}
 			ResetOperation(FZ_REPLY_OK);
 		}
@@ -1251,8 +1243,8 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		if (pFileExistsNotification->localTime.empty() || pFileExistsNotification->remoteTime.empty()) {
 			SendNextCommand();
 		}
-		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
-		Second compare flags the remaining case in which we need to send command : both size unknown */
+		// First compare flags both size known but different, one size known and the other not (obviously they are different).
+		// Second compare flags the remaining case in which we need to send command : both size unknown
 		else if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize < 0)) {
 			SendNextCommand();
 		}
@@ -1263,30 +1255,30 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			SendNextCommand();
 		}
 		else {
-			if (pData->download_) {
-				auto const filename = pData->remotePath_.FormatFilename(pData->remoteFile_);
+			if (data.download_) {
+				auto const filename = data.remotePath_.FormatFilename(data.remoteFile_);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
 			else {
-				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile_);
+				LogMessage(MessageType::Status, _("Skipping upload of %s"), data.localFile_);
 			}
 			ResetOperation(FZ_REPLY_OK);
 		}
 		break;
 	case CFileExistsNotification::resume:
-		if (pData->download_ && pData->localFileSize_ >= 0) {
-			pData->resume_ = true;
+		if (data.download_ && data.localFileSize_ >= 0) {
+			data.resume_ = true;
 		}
-		else if (!pData->download_ && pData->remoteFileSize_ >= 0) {
-			pData->resume_ = true;
+		else if (!data.download_ && data.remoteFileSize_ >= 0) {
+			data.resume_ = true;
 		}
 		SendNextCommand();
 		break;
 	case CFileExistsNotification::rename:
-		if (pData->download_) {
+		if (data.download_) {
 			{
 				std::wstring tmp;
-				CLocalPath l(pData->localFile_, &tmp);
+				CLocalPath l(data.localFile_, &tmp);
 				if (l.empty() || tmp.empty()) {
 					ResetOperation(FZ_REPLY_INTERNALERROR);
 					return false;
@@ -1300,16 +1292,16 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 					return false;
 				}
 
-				pData->localFile_ = l.GetPath() + tmp;
+				data.localFile_ = l.GetPath() + tmp;
 			}
 
 			int64_t size;
 			bool isLink;
-			if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile_), isLink, &size, 0, 0) == fz::local_filesys::file) {
-				pData->localFileSize_ = size;
+			if (fz::local_filesys::get_file_info(fz::to_native(data.localFile_), isLink, &size, 0, 0) == fz::local_filesys::file) {
+				data.localFileSize_ = size;
 			}
 			else {
-				pData->localFileSize_ = -1;
+				data.localFileSize_ = -1;
 			}
 
 			if (CheckOverwriteFile() == FZ_REPLY_OK) {
@@ -1317,19 +1309,19 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			}
 		}
 		else {
-			pData->remoteFile_ = pFileExistsNotification->newName;
-			pData->fileTime_ = fz::datetime();
-			pData->remoteFileSize_ = -1;
+			data.remoteFile_ = pFileExistsNotification->newName;
+			data.fileTime_ = fz::datetime();
+			data.remoteFileSize_ = -1;
 
 			CDirentry entry;
 			bool dir_did_exist;
 			bool matched_case;
-			if (engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath_ ? pData->remotePath_ : currentPath_, pData->remoteFile_, dir_did_exist, matched_case) &&
+			if (engine_.GetDirectoryCache().LookupFile(entry, currentServer_, data.tryAbsolutePath_ ? data.remotePath_ : currentPath_, data.remoteFile_, dir_did_exist, matched_case) &&
 				matched_case)
 			{
-				pData->remoteFileSize_ = entry.size;
+				data.remoteFileSize_ = entry.size;
 				if (entry.has_date()) {
-					pData->fileTime_ = entry.time;
+					data.fileTime_ = entry.time;
 				}
 
 				if (CheckOverwriteFile() != FZ_REPLY_OK) {
@@ -1341,12 +1333,12 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		break;
 	case CFileExistsNotification::skip:
-		if (pData->download_) {
-			std::wstring filename = pData->remotePath_.FormatFilename(pData->remoteFile_);
+		if (data.download_) {
+			std::wstring filename = data.remotePath_.FormatFilename(data.remoteFile_);
 			LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 		}
 		else {
-			LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile_);
+			LogMessage(MessageType::Status, _("Skipping upload of %s"), data.localFile_);
 		}
 		ResetOperation(FZ_REPLY_OK);
 		break;
@@ -1380,37 +1372,37 @@ void CControlSocket::CreateLocalDir(std::wstring const & local_file)
 
 void CControlSocket::List(CServerPath const&, std::wstring const&, int)
 {
-	Push(new CNotSupportedOpData());
+	Push(std::make_unique<CNotSupportedOpData>());
 }
 
 void CControlSocket::RawCommand(std::wstring const&)
 {
-	Push(new CNotSupportedOpData());
+	Push(std::make_unique<CNotSupportedOpData>());
 }
 
 void CControlSocket::Delete(CServerPath const&, std::deque<std::wstring>&&)
 {
-	Push(new CNotSupportedOpData());
+	Push(std::make_unique<CNotSupportedOpData>());
 }
 
 void CControlSocket::RemoveDir(CServerPath const&, std::wstring const&)
 {
-	Push(new CNotSupportedOpData());
+	Push(std::make_unique<CNotSupportedOpData>());
 }
 
 void CControlSocket::Mkdir(CServerPath const&)
 {
-	Push(new CNotSupportedOpData());
+	Push(std::make_unique<CNotSupportedOpData>());
 }
 
 void CControlSocket::Rename(CRenameCommand const&)
 {
-	Push(new CNotSupportedOpData());
+	Push(std::make_unique<CNotSupportedOpData>());
 }
 
 void CControlSocket::Chmod(CChmodCommand const&)
 {
-	Push(new CNotSupportedOpData());
+	Push(std::make_unique<CNotSupportedOpData>());
 }
 
 void CControlSocket::operator()(fz::event_base const& ev)

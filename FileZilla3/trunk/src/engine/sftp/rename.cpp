@@ -6,7 +6,8 @@
 
 enum renameStates
 {
-	rename_waitcwd = 0,
+	rename_init,
+	rename_waitcwd,
 	rename_rename
 };
 
@@ -16,6 +17,10 @@ int CSftpRenameOpData::Send()
 	
 	switch (opState)
 	{
+	case rename_init:
+		controlSocket_.ChangeDir(command_.GetFromPath());
+		opState = rename_waitcwd;
+		return FZ_REPLY_CONTINUE;
 	case rename_rename:
 	{
 		bool wasDir = false;

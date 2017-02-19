@@ -27,19 +27,17 @@ CHttpControlSocket::~CHttpControlSocket()
 
 bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
 {
-	if (m_pCurOpData) {
-		if (!m_pCurOpData->waitForAsyncRequest) {
-			LogMessage(MessageType::Debug_Info, L"Not waiting for request reply, ignoring request reply %d", pNotification->GetRequestID());
-			return false;
-		}
-		m_pCurOpData->waitForAsyncRequest = false;
+	if (operations_.empty() || !operations_.back()->waitForAsyncRequest) {
+		LogMessage(MessageType::Debug_Info, L"Not waiting for request reply, ignoring request reply %d", pNotification->GetRequestID());
 	}
+
+	operations_.back()->waitForAsyncRequest = false;
 
 	switch (pNotification->GetRequestID())
 	{
 	case reqId_fileexists:
 		{
-			if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer) {
+			if (operations_.back()->opId != Command::transfer) {
 				LogMessage(MessageType::Debug_Info, L"No or invalid operation in progress, ignoring request reply %f", pNotification->GetRequestID());
 				return false;
 			}
@@ -71,11 +69,11 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 
 void CHttpControlSocket::OnReceive()
 {
-	if (!m_pCurOpData || m_pCurOpData->opId != PrivCommand::http_request) {
+	if (operations_.empty() || operations_.back()->opId != PrivCommand::http_request) {
 		LogMessage(MessageType::Debug_Warning, L"OnReceive called while not processing http request");
 	}
 
-	int res = static_cast<CHttpRequestOpData*>(m_pCurOpData)->OnReceive();
+	int res = static_cast<CHttpRequestOpData&>(*operations_.back()).OnReceive();
 	if (res == FZ_REPLY_CONTINUE) {
 		SendNextCommand();
 	}
@@ -88,9 +86,13 @@ void CHttpControlSocket::OnConnect()
 {
 	assert(GetCurrentCommandId() == PrivCommand::http_connect);
 
-	CHttpInternalConnectOpData *pData = static_cast<CHttpInternalConnectOpData *>(m_pCurOpData);
+	if (operations_.empty() || operations_.back()->opId != Command::connect) {
+		return;
+	}
 
-	if (pData->tls_) {
+	auto & data = static_cast<CHttpInternalConnectOpData &>(*operations_.back());
+
+	if (data.tls_) {
 		if (!m_pTlsSocket) {
 			LogMessage(MessageType::Status, _("Connection established, initializing TLS..."));
 
@@ -113,8 +115,6 @@ void CHttpControlSocket::OnConnect()
 			LogMessage(MessageType::Status, _("TLS connection established, sending HTTP request"));
 			ResetOperation(FZ_REPLY_OK);
 		}
-
-		return;
 	}
 	else {
 		LogMessage(MessageType::Status, _("Connection established, sending HTTP request"));
@@ -132,15 +132,13 @@ void CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath
 		LogMessage(MessageType::Status, _("Downloading %s"), remotePath.FormatFilename(remoteFile));
 	}
 
-	CHttpFileTransferOpData *pData = new CHttpFileTransferOpData(*this, download, localFile, remoteFile, remotePath);
-	Push(pData);
+	Push(std::make_unique<CHttpFileTransferOpData>(*this, download, localFile, remoteFile, remotePath));
 }
 
 void CHttpControlSocket::Request(HttpRequest & request, HttpResponse & response)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::Request()");
-
-	Push(new CHttpRequestOpData(*this, request, response));
+	Push(std::make_unique<CHttpRequestOpData>(*this, request, response));
 }
 
 void CHttpControlSocket::InternalConnect(std::wstring const& host, unsigned short port, bool tls)
@@ -151,14 +149,14 @@ void CHttpControlSocket::InternalConnect(std::wstring const& host, unsigned shor
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 	}
 
-	Push(new CHttpInternalConnectOpData(*this, ConvertDomainName(host), port, tls));
+	Push(std::make_unique<CHttpInternalConnectOpData>(*this, ConvertDomainName(host), port, tls));
 }
 
 int CHttpControlSocket::ResetOperation(int nErrorCode)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::ResetOperation(%d)", nErrorCode);
 
-	if (m_pCurOpData && m_pCurOpData->opId == PrivCommand::http_request) {
+	if (!operations_.empty() && operations_.back()->opId == PrivCommand::http_request) {
 		if (m_pBackend) {
 			if (nErrorCode == FZ_REPLY_OK) {
 				LogMessage(MessageType::Status, _("Disconnected from server"));
@@ -183,9 +181,9 @@ void CHttpControlSocket::OnClose(int error)
 		return;
 	}
 
-	if (m_pCurOpData && m_pCurOpData->opId == PrivCommand::http_request) {
-		auto requestData = reinterpret_cast<CHttpRequestOpData*>(m_pCurOpData);
-		int res = requestData->OnClose();
+	if (!operations_.empty() && operations_.back()->opId == PrivCommand::http_request) {
+		auto & data = static_cast<CHttpRequestOpData&>(*operations_.back());
+		int res = data.OnClose();
 		ResetOperation(res);
 	}
 	else {
@@ -214,5 +212,5 @@ int CHttpControlSocket::Disconnect()
 void CHttpControlSocket::Connect(CServer const& server)
 {
 	currentServer_ = server;
-	Push(new CHttpConnectOpData(*this));
+	Push(std::make_unique<CHttpConnectOpData>(*this));
 }

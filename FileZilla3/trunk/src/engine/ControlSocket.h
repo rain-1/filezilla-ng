@@ -8,8 +8,11 @@
 class COpData
 {
 public:
-	COpData(Command op_Id);
-	virtual ~COpData();
+	explicit COpData(Command op_Id)
+		: opId(op_Id)
+	{}
+
+	virtual ~COpData() = default;
 
 	COpData(COpData const&) = delete;
 	COpData& operator=(COpData const&) = delete;
@@ -30,8 +33,6 @@ public:
 
 	bool waitForAsyncRequest{};
 	bool holdsLock_{};
-
-	COpData *pNextOpData{};
 };
 
 template<typename T>
@@ -251,9 +252,9 @@ protected:
 
 	bool ParsePwdReply(std::wstring reply, bool unquoted = false, const CServerPath& defaultPath = CServerPath());
 
-	void Push(COpData *pNewOpData);
+	void Push(std::unique_ptr<COpData> && pNewOpData);
 
-	COpData *m_pCurOpData{};
+	std::vector<std::unique_ptr<COpData>> operations_;
 	CFileZillaEnginePrivate & engine_;
 	CServer currentServer_;
 
@@ -282,8 +283,8 @@ protected:
 	// SendNextCommand will be called once the lock gets available
 	// and engine could obtain it.
 	// Lock is recursive. Lock counter increases on suboperations.
-	bool TryLockCache(locking_reason reason, const CServerPath& directory);
-	bool IsLocked(locking_reason reason, const CServerPath& directory);
+	bool TryLockCache(locking_reason reason, CServerPath const& directory);
+	bool IsLocked(locking_reason reason, CServerPath const& directory);
 
 	// Unlocks the cache. Can be called if not holding the lock
 	// Doesn't need reason as one engine can at most hold one lock
