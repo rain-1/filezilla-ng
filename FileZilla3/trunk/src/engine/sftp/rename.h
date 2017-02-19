@@ -17,7 +17,7 @@ public:
 	virtual int SubcommandResult(int, COpData const&) override;
 
 	CRenameCommand command_;
-	bool useAbsolute_;
+	bool useAbsolute_{};
 };
 
 #endif

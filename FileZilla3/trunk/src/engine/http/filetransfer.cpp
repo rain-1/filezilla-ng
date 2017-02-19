@@ -33,15 +33,16 @@ int CHttpFileTransferOpData::Send()
 
 		req_.verb_ = "GET";
 
+		opState = filetransfer_waitfileexists;
 		if (!localFile_.empty()) {
 			localFileSize_ = fz::local_filesys::get_size(fz::to_native(localFile_));
 
-			opState = filetransfer_waitfileexists;
 			int res = controlSocket_.CheckOverwriteFile();
 			if (res != FZ_REPLY_OK) {
 				return res;
 			}
 		}
+		return FZ_REPLY_CONTINUE;
 	case filetransfer_waitfileexists:
 		if (!localFile_.empty()) {
 			int res = OpenFile();
