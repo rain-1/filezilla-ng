@@ -134,12 +134,11 @@ int CControlSocket::ResetOperation(int nErrorCode)
 
 	std::unique_ptr<COpData> oldOperation;
 	if (!operations_.empty()) {
-		oldOperation = std::move(operations_.back());
-		operations_.pop_back();
-
-		if (oldOperation->holdsLock_) {
+		if (operations_.back()->holdsLock_) {
 			UnlockCache();
 		}
+		oldOperation = std::move(operations_.back());
+		operations_.pop_back();		
 	}
 	if (!operations_.empty()) {
 		int ret;

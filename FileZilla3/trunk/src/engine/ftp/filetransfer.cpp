@@ -16,7 +16,7 @@ CFtpFileTransferOpData::CFtpFileTransferOpData(CFtpControlSocket& controlSocket,
 
 int CFtpFileTransferOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpFileTransferOpData::Send()()");
+	LogMessage(MessageType::Debug_Verbose, L"CFtpFileTransferOpData::Send()");
 
 	std::wstring cmd;
 	switch (opState)
@@ -298,6 +298,85 @@ int CFtpFileTransferOpData::TestResumeCapability()
 	return FZ_REPLY_CONTINUE;
 }
 
+int CFtpFileTransferOpData::ParseResponse()
+{
+	LogMessage(MessageType::Debug_Verbose, L"CFtpFileTransferOpData::ParseResponse()");
+
+	int code = controlSocket_.GetReplyCode();
+	auto const& response = controlSocket_.m_Response;
+
+	switch (opState)
+	{
+	case filetransfer_size:
+		if (code != 2 && code != 3) {
+			if (CServerCapabilities::GetCapability(currentServer_, size_command) == yes ||
+				fz::str_tolower_ascii(response.substr(4)) == L"file not found" ||
+				(fz::str_tolower_ascii(remotePath_.FormatFilename(remoteFile_)).find(L"file not found") == std::wstring::npos &&
+					fz::str_tolower_ascii(response).find(L"file not found") != std::wstring::npos))
+			{
+				// Server supports SIZE command but command failed. Most likely MDTM will fail as well, so
+				// skip it.
+				opState = filetransfer_resumetest;
+
+				int res = controlSocket_.CheckOverwriteFile();
+				if (res != FZ_REPLY_OK) {
+					return res;
+				}
+			}
+			else {
+				opState = filetransfer_mdtm;
+			}
+		}
+		else {
+			opState = filetransfer_mdtm;
+			if (response.substr(0, 4) == L"213 " && response.size() > 4) {
+				if (CServerCapabilities::GetCapability(currentServer_, size_command) == unknown) {
+					CServerCapabilities::SetCapability(currentServer_, size_command, yes);
+				}
+				std::wstring str = response.substr(4);
+				int64_t size = 0;
+				for (auto c : str) {
+					if (c < '0' || c > '9') {
+						break;
+					}
+
+					size *= 10;
+					size += c - '0';
+				}
+				remoteFileSize_ = size;
+			}
+			else {
+				LogMessage(MessageType::Debug_Info, L"Invalid SIZE reply");
+			}
+		}
+		break;
+	case filetransfer_mdtm:
+		opState = filetransfer_resumetest;
+		if (response.substr(0, 4) == L"213 " && response.size() > 16) {
+			fileTime_ = fz::datetime(response.substr(4), fz::datetime::utc);
+			if (!fileTime_.empty()) {
+				fileTime_ += fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
+			}
+		}
+
+		{
+			int res = controlSocket_.CheckOverwriteFile();
+			if (res != FZ_REPLY_OK) {
+				return res;
+			}
+		}
+
+		break;
+	case filetransfer_mfmt:
+		return FZ_REPLY_OK;
+	default:
+		LogMessage(MessageType::Debug_Warning, L"Unknown op state");
+		return FZ_REPLY_INTERNALERROR;
+	}
+
+	return FZ_REPLY_CONTINUE;
+}
+
 int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpFileTransferOpData::SubcommandResult()");
@@ -461,85 +540,6 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 		}
 
 		opState = filetransfer_transfer;
-	}
-
-	return FZ_REPLY_CONTINUE;
-}
-
-int CFtpFileTransferOpData::ParseResponse()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpFileTransferOpData::ParseResponse()");
-
-	int code = controlSocket_.GetReplyCode();
-	auto const& response = controlSocket_.m_Response;
-
-	switch (opState)
-	{
-	case filetransfer_size:
-		if (code != 2 && code != 3) {
-			if (CServerCapabilities::GetCapability(currentServer_, size_command) == yes ||
-				fz::str_tolower_ascii(response.substr(4)) == L"file not found" ||
-				(fz::str_tolower_ascii(remotePath_.FormatFilename(remoteFile_)).find(L"file not found") == std::wstring::npos &&
-					fz::str_tolower_ascii(response).find(L"file not found") != std::wstring::npos))
-			{
-				// Server supports SIZE command but command failed. Most likely MDTM will fail as well, so
-				// skip it.
-				opState = filetransfer_resumetest;
-
-				int res = controlSocket_.CheckOverwriteFile();
-				if (res != FZ_REPLY_OK) {
-					return res;
-				}
-			}
-			else {
-				opState = filetransfer_mdtm;
-			}
-		}
-		else {
-			opState = filetransfer_mdtm;
-			if (response.substr(0, 4) == L"213 " && response.size() > 4) {
-				if (CServerCapabilities::GetCapability(currentServer_, size_command) == unknown) {
-					CServerCapabilities::SetCapability(currentServer_, size_command, yes);
-				}
-				std::wstring str = response.substr(4);
-				int64_t size = 0;
-				for (auto c : str) {
-					if (c < '0' || c > '9') {
-						break;
-					}
-
-					size *= 10;
-					size += c - '0';
-				}
-				remoteFileSize_ = size;
-			}
-			else {
-				LogMessage(MessageType::Debug_Info, L"Invalid SIZE reply");
-			}
-		}
-		break;
-	case filetransfer_mdtm:
-		opState = filetransfer_resumetest;
-		if (response.substr(0, 4) == L"213 " && response.size() > 16) {
-			fileTime_ = fz::datetime(response.substr(4), fz::datetime::utc);
-			if (!fileTime_.empty()) {
-				fileTime_ += fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
-			}
-		}
-
-		{
-			int res = controlSocket_.CheckOverwriteFile();
-			if (res != FZ_REPLY_OK) {
-				return res;
-			}
-		}
-
-		break;
-	case filetransfer_mfmt:
-		return FZ_REPLY_OK;
-	default:
-		LogMessage(MessageType::Debug_Warning, L"Unknown op state");
-		return FZ_REPLY_INTERNALERROR;
 	}
 
 	return FZ_REPLY_CONTINUE;
