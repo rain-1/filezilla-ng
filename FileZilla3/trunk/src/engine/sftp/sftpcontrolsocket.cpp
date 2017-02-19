@@ -447,7 +447,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 
 void CSftpControlSocket::List(CServerPath const& path, std::wstring const& subDir, int flags)
 {
-	CServerPath newPath = m_CurrentPath;
+	CServerPath newPath = currentPath_;
 	if (!path.empty()) {
 		newPath = path;
 	}
@@ -602,18 +602,18 @@ int CSftpControlSocket::Mkdir(const CServerPath& path)
 	CMkdirOpData *pData = new CMkdirOpData;
 	pData->path = path;
 
-	if (!m_CurrentPath.empty()) {
+	if (!currentPath_.empty()) {
 		// Unless the server is broken, a directory already exists if current directory is a subdir of it.
-		if (m_CurrentPath == path || m_CurrentPath.IsSubdirOf(path, false)) {
+		if (currentPath_ == path || currentPath_.IsSubdirOf(path, false)) {
 			delete pData;
 			return FZ_REPLY_OK;
 		}
 
-		if (m_CurrentPath.IsParentOf(path, false)) {
-			pData->commonParent = m_CurrentPath;
+		if (currentPath_.IsParentOf(path, false)) {
+			pData->commonParent = currentPath_;
 		}
 		else {
-			pData->commonParent = path.GetCommonParent(m_CurrentPath);
+			pData->commonParent = path.GetCommonParent(currentPath_);
 		}
 	}
 
@@ -624,7 +624,7 @@ int CSftpControlSocket::Mkdir(const CServerPath& path)
 		pData->currentPath = path.GetParent();
 		pData->segments.push_back(path.GetLastSegment());
 
-		if (pData->currentPath == m_CurrentPath) {
+		if (pData->currentPath == currentPath_) {
 			pData->opState = mkd_mkdsub;
 		}
 		else {
@@ -655,7 +655,7 @@ int CSftpControlSocket::MkdirParseResponse(bool successful, std::wstring const&)
 	{
 	case mkd_findparent:
 		if (successful) {
-			m_CurrentPath = pData->currentPath;
+			currentPath_ = pData->currentPath;
 			pData->opState = mkd_mkdsub;
 		}
 		else if (pData->currentPath == pData->commonParent) {
@@ -696,7 +696,7 @@ int CSftpControlSocket::MkdirParseResponse(bool successful, std::wstring const&)
 		break;
 	case mkd_cwdsub:
 		if (successful) {
-			m_CurrentPath = pData->currentPath;
+			currentPath_ = pData->currentPath;
 			pData->opState = mkd_mkdsub;
 		}
 		else {
@@ -750,7 +750,7 @@ int CSftpControlSocket::MkdirSend()
 	{
 	case mkd_findparent:
 	case mkd_cwdsub:
-		m_CurrentPath.clear();
+		currentPath_.clear();
 		res = SendCommand(L"cd " + QuoteFilename(pData->currentPath.GetPath()));
 		break;
 	case mkd_mkdsub:

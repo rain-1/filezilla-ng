@@ -38,6 +38,31 @@ public:
 	COpData *pNextOpData{};
 };
 
+template<typename T>
+class CProtocolOpData
+{
+public:
+	CProtocolOpData(T & controlSocket)
+		: controlSocket_(controlSocket)
+		, engine_(controlSocket.engine_)
+		, currentServer_(controlSocket.currentServer_)
+		, currentPath_(controlSocket.currentPath_)
+	{
+	}
+
+	virtual ~CProtocolOpData() = default;
+
+	template<typename...Args>
+	void LogMessage(Args&& ...args) const {
+		controlSocket_.LogMessage(std::forward<Args>(args)...);
+	}
+
+	T & controlSocket_;
+	CFileZillaEnginePrivate & engine_;
+	CServer & currentServer_;
+	CServerPath& currentPath_;
+};
+
 class CNotSupportedOpData : public COpData
 {
 public:
@@ -236,7 +261,7 @@ protected:
 	CFileZillaEnginePrivate & engine_;
 	CServer currentServer_;
 
-	CServerPath m_CurrentPath;
+	CServerPath currentPath_;
 
 	wxCSConv *m_pCSConv{};
 	bool m_useUTF8{};

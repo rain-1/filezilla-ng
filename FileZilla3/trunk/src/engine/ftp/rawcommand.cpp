@@ -10,7 +10,7 @@ int CFtpRawCommandOpData::Send()
 
 	engine_.GetDirectoryCache().InvalidateServer(currentServer_);
 	engine_.GetPathCache().InvalidateServer(currentServer_);
-	controlSocket_.m_CurrentPath.clear();
+	currentPath_.clear();
 
 	controlSocket_.m_lastTypeBinary = -1;
 

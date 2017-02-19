@@ -55,7 +55,7 @@ int CFtpRemoveDirOpData::SubcommandResult(int prevResult, COpData const&)
 		omitPath_ = false;
 	}
 	else {
-		path_ = controlSocket_.m_CurrentPath;
+		path_ = currentPath_;
 	}
 
 	return FZ_REPLY_CONTINUE;

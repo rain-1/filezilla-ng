@@ -46,7 +46,7 @@ int CSftpListOpData::Send()
 		}
 
 		if (!holdsLock_) {
-			if (!controlSocket_.TryLockCache(CSftpControlSocket::lock_list, controlSocket_.m_CurrentPath)) {
+			if (!controlSocket_.TryLockCache(CSftpControlSocket::lock_list, currentPath_)) {
 				time_before_locking_ = fz::monotonic_clock::now();
 				return FZ_REPLY_WOULDBLOCK;
 			}
@@ -78,9 +78,9 @@ int CSftpListOpData::ParseResponse()
 			return FZ_REPLY_INTERNALERROR;
 		}
 
-		directoryListing_ = listing_parser_->Parse(controlSocket_.m_CurrentPath);
+		directoryListing_ = listing_parser_->Parse(currentPath_);
 		engine_.GetDirectoryCache().Store(directoryListing_, currentServer_);
-		controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
+		controlSocket_.SendDirectoryListingNotification(currentPath_, !pNextOpData, false);
 
 		return FZ_REPLY_OK;
 	}
@@ -111,7 +111,7 @@ int CSftpListOpData::SubcommandResult(int prevResult, COpData const& previousOpe
 		}
 	}
 
-	path_ = controlSocket_.m_CurrentPath;
+	path_ = currentPath_;
 	subDir_.clear();
 	opState = list_waitlock;
 	return FZ_REPLY_CONTINUE;
