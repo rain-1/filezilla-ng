@@ -37,7 +37,6 @@ protected:
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED) override;
 
 	virtual int ResetOperation(int nErrorCode) override;
-	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation) override;
 
 	void ProcessReply(int result, std::wstring const& reply);
 
@@ -47,11 +46,6 @@ protected:
 	int FileTransferSubcommandResult(int prevResult);
 	int FileTransferSend();
 	int FileTransferParseResponse(int result, std::wstring const& reply);
-
-	int ListSubcommandResult(int prevResult);
-	int ListSend();
-	int ListParseResponse(bool successful, std::wstring const& reply);
-	int ListParseEntry(std::wstring && entry, std::wstring const& stime, std::wstring && name);
 
 	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
 	int ChangeDirParseResponse(bool successful, std::wstring const& reply);
@@ -99,6 +93,7 @@ protected:
 	std::wstring response_;
 
 	friend class CSftpConnectOpData;
+	friend class CSftpListOpData;
 	friend class CSftpOpData;
 };
 

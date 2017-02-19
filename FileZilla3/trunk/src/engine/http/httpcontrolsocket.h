@@ -89,8 +89,6 @@ protected:
 
 	CTlsSocket* m_pTlsSocket{};
 
-	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
-
 	virtual void OnConnect();
 	virtual void OnClose(int error);
 	virtual void OnReceive();

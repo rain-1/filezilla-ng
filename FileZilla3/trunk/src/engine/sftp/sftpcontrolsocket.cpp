@@ -5,6 +5,7 @@
 #include "directorylistingparser.h"
 #include "engineprivate.h"
 #include "event.h"
+#include "list.h"
 #include "input_thread.h"
 #include "pathcache.h"
 #include "proxy.h"
@@ -169,7 +170,16 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 		SetActive(CFileZillaEngine::send);
 		break;
 	case sftpEvent::Listentry:
-		ListParseEntry(std::move(message.text[0]), message.text[1], std::move(message.text[2]));
+		if (!m_pCurOpData || m_pCurOpData->opId != Command::list) {
+			LogMessage(MessageType::Debug_Warning, L"sftpEvent::Listentry outside list operation, ignoring.");
+			break;
+		}
+		else {
+			int res = static_cast<CSftpListOpData*>(m_pCurOpData)->ParseEntry(std::move(message.text[0]), message.text[1], std::move(message.text[2]));
+			if (res != FZ_REPLY_WOULDBLOCK) {
+				ResetOperation(res);
+			}
+		}
 		break;
 	case sftpEvent::Transfer:
 		{
@@ -356,18 +366,20 @@ int CSftpControlSocket::SendCommand(std::wstring const& cmd, std::wstring const&
 int CSftpControlSocket::AddToStream(std::wstring const& cmd, bool force_utf8)
 {
 	if (!process_) {
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return false;
+		return FZ_REPLY_INTERNALERROR;
 	}
 
 	std::string const str = ConvToServer(cmd, force_utf8);
 	if (str.empty()) {
 		LogMessage(MessageType::Error, _("Could not convert command to server encoding"));
-		ResetOperation(FZ_REPLY_OK);
-		return false;
+		return FZ_REPLY_ERROR;
 	}
 
-	return process_->write(str);
+	if (!process_->write(str)) {
+		FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
+	}
+
+	return FZ_REPLY_WOULDBLOCK;
 }
 
 bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
@@ -445,37 +457,6 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 	return true;
 }
 
-class CSftpListOpData final : public COpData
-{
-public:
-	CSftpListOpData()
-		: COpData(Command::list)
-	{
-	}
-
-	std::unique_ptr<CDirectoryListingParser> pParser;
-
-	CServerPath path;
-	std::wstring subDir;
-
-	// Set to true to get a directory listing even if a cache
-	// lookup can be made after finding out true remote directory
-	bool refresh{};
-	bool fallback_to_current{};
-
-	CDirectoryListing directoryListing;
-
-	fz::monotonic_clock m_time_before_locking;
-};
-
-enum listStates
-{
-	list_init = 0,
-	list_waitcwd,
-	list_waitlock,
-	list_list
-};
-
 void CSftpControlSocket::List(CServerPath const& path, std::wstring const& subDir, int flags)
 {
 	CServerPath newPath = m_CurrentPath;
@@ -493,236 +474,8 @@ void CSftpControlSocket::List(CServerPath const& path, std::wstring const& subDi
 		LogMessage(MessageType::Status, _("Retrieving directory listing of \"%s\"..."), newPath.GetPath());
 	}
 
-	if (m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"List called from other command");
-	}
-
-	if (!currentServer_) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurrenServer == 0");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-	//	return FZ_REPLY_ERROR;
-	}
-
-	CSftpListOpData *pData = new CSftpListOpData;
+	CSftpListOpData *pData = new CSftpListOpData(*this, path, subDir, flags);
 	Push(pData);
-	
-	pData->opState = list_waitcwd;
-
-	//if (path.GetType() == DEFAULT) {
-//		path.SetType(currentServer_.GetType());
-//	}
-	pData->path = path;
-	pData->subDir = subDir;
-	pData->refresh = (flags & LIST_FLAG_REFRESH) != 0;
-	pData->fallback_to_current = !path.empty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
-
-	int res = ChangeDir(path, subDir, (flags & LIST_FLAG_LINK) != 0);
-	if (res != FZ_REPLY_OK) {
-	//	return res;
-	}
-
-//	return ListSubcommandResult(FZ_REPLY_OK);
-}
-
-int CSftpControlSocket::ListParseResponse(bool successful, std::wstring const& reply)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ListParseResponse(%s)", reply);
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData of wrong type");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	if (pData->opState == list_list) {
-		if (!successful) {
-			return FZ_REPLY_ERROR;
-		}
-
-		if (!pData->pParser) {
-			LogMessage(MessageType::Debug_Warning, L"pData->pParser is 0");
-			return FZ_REPLY_INTERNALERROR;
-		}
-
-		pData->directoryListing = pData->pParser->Parse(m_CurrentPath);
-		engine_.GetDirectoryCache().Store(pData->directoryListing, currentServer_);
-		SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
-
-		return FZ_REPLY_OK;
-	}
-
-	LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at inproper time: %d", pData->opState);
-	return FZ_REPLY_INTERNALERROR;
-}
-
-int CSftpControlSocket::ListParseEntry(std::wstring && entry, std::wstring const& stime, std::wstring && name)
-{
-	if (!m_pCurOpData) {
-		LogMessageRaw(MessageType::RawList, entry);
-		LogMessage(MessageType::Debug_Warning, L"Empty m_pCurOpData");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	if (m_pCurOpData->opId != Command::list) {
-		LogMessageRaw(MessageType::RawList, entry);
-		LogMessage(MessageType::Debug_Warning, L"Listentry received, but current operation is not Command::list");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
-	if (!pData) {
-		LogMessageRaw(MessageType::RawList, entry);
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData of wrong type");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	if (pData->opState != list_list) {
-		LogMessageRaw(MessageType::RawList, entry);
-		LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at inproper time: %d", pData->opState);
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	if (!pData->pParser) {
-		LogMessageRaw(MessageType::RawList, entry);
-		LogMessage(MessageType::Debug_Warning, L"pData->pParser is 0");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	fz::datetime time;
-	if (!stime.empty()) {
-		int64_t t = std::wcstoll(stime.c_str(), 0, 10);
-		if (t > 0) {
-			time = fz::datetime(static_cast<time_t>(t), fz::datetime::seconds);
-		}
-	}
-	pData->pParser->AddLine(std::move(entry), std::move(name), time);
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-int CSftpControlSocket::ListSubcommandResult(int prevResult)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ListSubcommandResult()");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, L"  state = %d", pData->opState);
-
-	if (pData->opState != list_waitcwd) {
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	if (prevResult != FZ_REPLY_OK) {
-		if (pData->fallback_to_current) {
-			// List current directory instead
-			pData->fallback_to_current = false;
-			pData->path.clear();
-			pData->subDir = L"";
-			int res = ChangeDir();
-			if (res != FZ_REPLY_OK) {
-				return res;
-			}
-		}
-		else {
-			ResetOperation(prevResult);
-			return FZ_REPLY_ERROR;
-		}
-	}
-
-	if (pData->path.empty()) {
-		pData->path = m_CurrentPath;
-	}
-
-	if (!pData->refresh) {
-		assert(!pData->pNextOpData);
-
-		// Do a cache lookup now that we know the correct directory
-
-		int hasUnsureEntries;
-		bool is_outdated = false;
-		bool found = engine_.GetDirectoryCache().DoesExist(currentServer_, m_CurrentPath, hasUnsureEntries, is_outdated);
-		if (found) {
-			// We're done if listins is recent and has no outdated entries
-			if (!is_outdated && !hasUnsureEntries) {
-				SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, false);
-
-				ResetOperation(FZ_REPLY_OK);
-
-				return FZ_REPLY_OK;
-			}
-		}
-	}
-
-	if (!pData->holdsLock) {
-		if (!TryLockCache(lock_list, m_CurrentPath)) {
-			pData->opState = list_waitlock;
-			pData->m_time_before_locking = fz::monotonic_clock::now();
-			return FZ_REPLY_WOULDBLOCK;
-		}
-	}
-
-	pData->opState = list_list;
-
-	return SendNextCommand();
-}
-
-int CSftpControlSocket::ListSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ListSend()");
-
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Info, L"Empty m_pCurOpData");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
-	LogMessage(MessageType::Debug_Debug, L"  state = %d", pData->opState);
-
-	if (pData->opState == list_waitlock) {
-		if (!pData->holdsLock) {
-			LogMessage(MessageType::Debug_Warning, L"Not holding the lock as expected");
-			return FZ_REPLY_INTERNALERROR;
-		}
-
-		// Check if we can use already existing listing
-		CDirectoryListing listing;
-		bool is_outdated = false;
-		assert(pData->subDir.empty()); // Did do ChangeDir before trying to lock
-		bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, pData->path, true, is_outdated);
-		if (found && !is_outdated && !listing.get_unsure_flags() &&
-			listing.m_firstListTime >= pData->m_time_before_locking)
-		{
-			SendDirectoryListingNotification(listing.path, !pData->pNextOpData, false);
-
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-
-		pData->opState = list_waitcwd;
-
-		return ListSubcommandResult(FZ_REPLY_OK);
-	}
-	else if (pData->opState == list_list) {
-		pData->pParser = std::make_unique<CDirectoryListingParser>(this, currentServer_, listingEncoding::unknown);
-		if (!SendCommand(L"ls")) {
-			return FZ_REPLY_ERROR;
-		}
-		return FZ_REPLY_WOULDBLOCK;
-	}
-
-	LogMessage(MessageType::Debug_Warning, L"Unknown opStatein CSftpControlSocket::ListSend");
-	ResetOperation(FZ_REPLY_INTERNALERROR);
-	return FZ_REPLY_ERROR;
 }
 
 class CSftpChangeDirOpData final : public CChangeDirOpData
@@ -921,7 +674,7 @@ int CSftpControlSocket::ChangeDirSend()
 		cmd = L"pwd";
 		break;
 	case cwd_cwd:
-		if (pData->tryMkdOnFail && !pData->holdsLock) {
+		if (pData->tryMkdOnFail && !pData->holdsLock_) {
 			if (IsLocked(lock_mkdir, pData->path)) {
 				// Some other engine is already creating this directory or
 				// performing an action that will lead to its creation
@@ -957,37 +710,31 @@ int CSftpControlSocket::ChangeDirSend()
 
 void CSftpControlSocket::ProcessReply(int result, std::wstring const& reply)
 {
-	Command commandId = GetCurrentCommandId();
-	switch (commandId)
-	{
-	case Command::list:
-		ListParseResponse(result == FZ_REPLY_OK, reply);
-		break;
-	case Command::transfer:
-		FileTransferParseResponse(result, reply);
-		break;
-	case Command::cwd:
-		ChangeDirParseResponse(result == FZ_REPLY_OK, reply);
-		break;
-	case Command::mkdir:
-		MkdirParseResponse(result == FZ_REPLY_OK, reply);
-		break;
-	case Command::del:
-		DeleteParseResponse(result == FZ_REPLY_OK, reply);
-		break;
-	case Command::removedir:
-		RemoveDirParseResponse(result == FZ_REPLY_OK, reply);
-		break;
-	case Command::chmod:
-		ChmodParseResponse(result == FZ_REPLY_OK, reply);
-		break;
-	case Command::rename:
-		RenameParseResponse(result == FZ_REPLY_OK, reply);
-		break;
-	default:
-		LogMessage(MessageType::Debug_Warning, L"No action for parsing replies to command %d", commandId);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		break;
+	result_ = result;
+	response_ = reply;
+
+	if (!m_pCurOpData) {
+		LogMessage(MessageType::Debug_Info, L"Skipping reply without active operation.");
+		return;
+	}
+
+	int res = m_pCurOpData->ParseResponse();
+	if (res == FZ_REPLY_OK) {
+		ResetOperation(FZ_REPLY_OK);
+	}
+	else if (res == FZ_REPLY_CONTINUE) {
+		SendNextCommand();
+	}
+	else if (res & FZ_REPLY_DISCONNECTED) {
+		DoClose(res);
+	}
+	else if (res & FZ_REPLY_ERROR) {
+		if (m_pCurOpData->opId == Command::connect) {
+			DoClose(res | FZ_REPLY_DISCONNECTED);
+		}
+		else {
+			ResetOperation(res);
+		}
 	}
 }
 
@@ -1553,7 +1300,7 @@ int CSftpControlSocket::MkdirSend()
 	CMkdirOpData *pData = static_cast<CMkdirOpData *>(m_pCurOpData);
 	LogMessage(MessageType::Debug_Debug, L"  state = %d", pData->opState);
 
-	if (!pData->holdsLock) {
+	if (!pData->holdsLock_) {
 		if (!TryLockCache(lock_mkdir, pData->path)) {
 			return FZ_REPLY_WOULDBLOCK;
 		}
@@ -2064,37 +1811,6 @@ void CSftpControlSocket::OnQuotaRequest(CRateLimiter::rate_direction direction)
 	else if (bytes < 0) {
 		AddToStream(fz::sprintf(L"-%d-\n", direction));
 	}
-}
-
-
-int CSftpControlSocket::ParseSubcommandResult(int prevResult, COpData const&)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ParseSubcommandResult(%d)", prevResult);
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Warning, L"ParseSubcommandResult called without active operation");
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	switch (m_pCurOpData->opId)
-	{
-	case Command::cwd:
-		return ChangeDirSubcommandResult(prevResult);
-	case Command::list:
-		return ListSubcommandResult(prevResult);
-	case Command::transfer:
-		return FileTransferSubcommandResult(prevResult);
-	case Command::rename:
-		return RenameSubcommandResult(prevResult);
-	case Command::chmod:
-		return ChmodSubcommandResult(prevResult);
-	default:
-		LogMessage(MessageType::Debug_Warning, L"Unknown opID (%d) in ParseSubcommandResult", m_pCurOpData->opId);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		break;
-	}
-
-	return FZ_REPLY_ERROR;
 }
 
 void CSftpControlSocket::operator()(fz::event_base const& ev)

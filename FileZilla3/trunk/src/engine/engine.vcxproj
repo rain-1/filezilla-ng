@@ -123,6 +123,7 @@
     <ClCompile Include="serverpath.cpp" />
     <ClCompile Include="sftp\connect.cpp" />
     <ClCompile Include="sftp\input_thread.cpp" />
+    <ClCompile Include="sftp\list.cpp" />
     <ClCompile Include="sftp\sftpcontrolsocket.cpp" />
     <ClCompile Include="sizeformatting_base.cpp" />
     <ClCompile Include="socket.cpp">
@@ -183,6 +184,7 @@
     <ClInclude Include="sftp\connect.h" />
     <ClInclude Include="sftp\event.h" />
     <ClInclude Include="sftp\input_thread.h" />
+    <ClInclude Include="sftp\list.h" />
     <ClInclude Include="sftp\sftpcontrolsocket.h" />
     <ClInclude Include="tlssocket.h" />
   </ItemGroup>

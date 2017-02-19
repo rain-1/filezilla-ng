@@ -206,27 +206,6 @@ void CHttpControlSocket::ResetSocket()
 	CRealControlSocket::ResetSocket();
 }
 
-int CHttpControlSocket::ParseSubcommandResult(int prevResult, COpData const& opData)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ParseSubcommandResult(%d)", prevResult);
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Warning, L"ParseSubcommandResult called without active operation");
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	int res = m_pCurOpData->SubcommandResult(prevResult, opData);
-	if (res == FZ_REPLY_WOULDBLOCK) {
-		return FZ_REPLY_WOULDBLOCK;
-	}
-	else if (res == FZ_REPLY_CONTINUE) {
-		return SendNextCommand();
-	}
-	else {
-		return ResetOperation(res);
-	}
-}
-
 int CHttpControlSocket::Disconnect()
 {
 	DoClose();

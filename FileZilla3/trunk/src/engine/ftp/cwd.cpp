@@ -63,7 +63,7 @@ int CFtpChangeDirOpData::Send()
 		cmd = L"PWD";
 		break;
 	case cwd_cwd:
-		if (tryMkdOnFail && !holdsLock) {
+		if (tryMkdOnFail && !holdsLock_) {
 			if (controlSocket_.IsLocked(CFtpControlSocket::lock_mkdir, path)) {
 				// Some other engine is already creating this directory or
 				// performing an action that will lead to its creation
