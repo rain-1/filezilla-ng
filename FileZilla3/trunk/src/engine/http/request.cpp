@@ -2,6 +2,8 @@
 
 #include "request.h"
 
+#include <string.h>
+
 enum requestStates
 {
 	request_init = 0,
