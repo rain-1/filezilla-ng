@@ -66,7 +66,7 @@ protected:
 
 	CSftpEncryptionNotification m_sftpEncryptionDetails;
 
-	int result_;
+	int result_{};
 	std::wstring response_;
 
 	friend class CProtocolOpData<CSftpControlSocket>;
