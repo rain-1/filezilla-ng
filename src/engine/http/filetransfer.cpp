@@ -4,6 +4,8 @@
 
 #include <libfilezilla/local_filesys.hpp>
 
+#include <string.h>
+
 enum filetransferStates
 {
 	filetransfer_init = 0,
