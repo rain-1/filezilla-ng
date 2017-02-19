@@ -49,6 +49,7 @@ libengine_a_SOURCES = \
 		server.cpp \
 		serverpath.cpp\
 		servercapabilities.cpp \
+		sftp/chmod.cpp \
 		sftp/connect.cpp \
 		sftp/cwd.cpp \
 		sftp/delete.cpp \
@@ -56,6 +57,7 @@ libengine_a_SOURCES = \
 		sftp/input_thread.cpp \
 		sftp/list.cpp \
 		sftp/mkd.cpp \
+		sftp/rename.cpp \
 		sftp/rmd.cpp \
 		sftp/sftpcontrolsocket.cpp \
 		sizeformatting_base.cpp \
@@ -94,6 +96,7 @@ noinst_HEADERS = backend.h \
 		ratelimiter.h \
 		rtt.h \
 		servercapabilities.h \
+		sftp/chmod.h \
 		sftp/connect.h \
 		sftp/cwd.h \
 		sftp/delete.h \
@@ -102,6 +105,7 @@ noinst_HEADERS = backend.h \
 		sftp/input_thread.h \
 		sftp/list.h \
 		sftp/mkd.h \
+		sftp/rename.h \
 		sftp/rmd.h \
 		sftp/sftpcontrolsocket.h \
 		tlssocket.h

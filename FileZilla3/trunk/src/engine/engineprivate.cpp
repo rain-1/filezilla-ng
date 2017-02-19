@@ -406,12 +406,14 @@ int CFileZillaEnginePrivate::Mkdir(CMkdirCommand const& command)
 
 int CFileZillaEnginePrivate::Rename(CRenameCommand const& command)
 {
-	return m_pControlSocket->Rename(command);
+	m_pControlSocket->Rename(command);
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::Chmod(CChmodCommand const& command)
 {
-	return m_pControlSocket->Chmod(command);
+	m_pControlSocket->Chmod(command);
+	return FZ_REPLY_CONTINUE;
 }
 
 void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, bool critical)

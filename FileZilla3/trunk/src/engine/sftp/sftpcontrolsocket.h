@@ -25,8 +25,8 @@ public:
 	virtual void Delete(CServerPath const& path, std::deque<std::wstring>&& files) override;
 	virtual void RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring()) override;
 	virtual void Mkdir(CServerPath const& path) override;
-	virtual int Rename(CRenameCommand const& command) override;
-	virtual int Chmod(CChmodCommand const& command) override;
+	virtual void Rename(CRenameCommand const& command) override;
+	virtual void Chmod(CChmodCommand const& command) override;
 	virtual void Cancel() override;
 
 	virtual bool Connected() const override { return input_thread_.operator bool(); }
@@ -43,14 +43,6 @@ protected:
 	virtual int ResetOperation(int nErrorCode) override;
 
 	void ProcessReply(int result, std::wstring const& reply);
-
-	int ChmodParseResponse(bool successful, std::wstring const& reply);
-	int ChmodSubcommandResult(int prevResult);
-	int ChmodSend();
-
-	int RenameParseResponse(bool successful, std::wstring const& reply);
-	int RenameSubcommandResult(int prevResult);
-	int RenameSend();
 
 	int SendCommand(std::wstring const& cmd, std::wstring const& show = std::wstring());
 	int AddToStream(std::wstring const& cmd);
@@ -79,12 +71,14 @@ protected:
 
 	friend class CProtocolOpData<CSftpControlSocket>;
 	friend class CSftpChangeDirOpData;
+	friend class CSftpChmodOpData;
 	friend class CSftpConnectOpData;
 	friend class CSftpDeleteOpData;
 	friend class CSftpFileTransferOpData;
 	friend class CSftpListOpData;
 	friend class CSftpMkdirOpData;
 	friend class CSftpRemoveDirOpData;
+	friend class CSftpRenameOpData;
 };
 
 typedef CProtocolOpData<CSftpControlSocket> CSftpOpData;
