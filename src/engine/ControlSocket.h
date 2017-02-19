@@ -20,12 +20,8 @@ public:
 	// - FZ_REPLY_WOULDBLOCK, waiting on some exvent
 	// - FZ_REPLY_CONTINUE, caller should issue the next command
 
-
-	// TODO: Make pure virtual
-	virtual int Send() { return FZ_REPLY_NOTSUPPORTED; }
-
-	// TODO: Make pure virtual
-	virtual int ParseResponse() { return FZ_REPLY_INTERNALERROR; }
+	virtual int Send() = 0;
+	virtual int ParseResponse() = 0;
 
 	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) { return FZ_REPLY_INTERNALERROR; }
 
@@ -189,8 +185,8 @@ public:
 	virtual void Delete(CServerPath const& path, std::deque<std::wstring>&& files);
 	virtual void RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
 	virtual void Mkdir(CServerPath const& path);
-	virtual int Rename(CRenameCommand const& command);
-	virtual int Chmod(CChmodCommand const& command);
+	virtual void Rename(CRenameCommand const& command);
+	virtual void Chmod(CChmodCommand const& command);
 
 	virtual bool Connected() const = 0;
 

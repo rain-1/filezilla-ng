@@ -621,30 +621,28 @@ void CFtpControlSocket::Mkdir(CServerPath const& path)
 		LogMessage(MessageType::Status, _("Creating directory '%s'..."), path.GetPath());
 	}
 
-	CMkdirOpData *pData = new CMkdirOpData;
+	CFtpMkdirOpData *pData = new CFtpMkdirOpData(*this);
 	pData->path_ = path;
 
 	Push(pData);
 }
 
-int CFtpControlSocket::Rename(CRenameCommand const& command)
+void CFtpControlSocket::Rename(CRenameCommand const& command)
 {
 	LogMessage(MessageType::Status, _("Renaming '%s' to '%s'"), command.GetFromPath().FormatFilename(command.GetFromFile()), command.GetToPath().FormatFilename(command.GetToFile()));
 
 	Push(new CFtpRenameOpData(*this, command));
 
 	ChangeDir(command.GetFromPath());
-	return FZ_REPLY_CONTINUE;
 }
 
-int CFtpControlSocket::Chmod(CChmodCommand const& command)
+void CFtpControlSocket::Chmod(CChmodCommand const& command)
 {
 	LogMessage(MessageType::Status, _("Setting permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()), command.GetPermission());
 
 	Push(new CFtpChmodOpData(*this, command));
 
 	ChangeDir(command.GetPath());
-	return FZ_REPLY_CONTINUE;
 }
 
 int CFtpControlSocket::GetExternalIPAddress(std::string& address)

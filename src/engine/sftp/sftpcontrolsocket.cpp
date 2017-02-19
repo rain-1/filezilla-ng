@@ -1,5 +1,6 @@
 #include <filezilla.h>
 
+#include "chmod.h"
 #include "connect.h"
 #include "cwd.h"
 #include "delete.h"
@@ -13,6 +14,7 @@
 #include "mkd.h"
 #include "pathcache.h"
 #include "proxy.h"
+#include "rename.h"
 #include "rmd.h"
 #include "servercapabilities.h"
 #include "sftpcontrolsocket.h"
@@ -572,7 +574,7 @@ void CSftpControlSocket::Mkdir(CServerPath const& path)
 		LogMessage(MessageType::Status, _("Creating directory '%s'..."), path.GetPath());
 	}
 
-	CMkdirOpData *pData = new CMkdirOpData;
+	CSftpMkdirOpData *pData = new CSftpMkdirOpData(*this);
 	pData->path_ = path;
 	Push(pData);
 }
@@ -606,251 +608,23 @@ void CSftpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& 
 	pData->subDir_ = subDir;
 }
 
-class CSftpChmodOpData final : public COpData
+void CSftpControlSocket::Chmod(CChmodCommand const& command)
 {
-public:
-	CSftpChmodOpData(const CChmodCommand& command)
-		: COpData(Command::chmod), m_cmd(command)
-	{
-	}
-
-	CChmodCommand m_cmd;
-	bool m_useAbsolute{};
-};
-
-enum chmodStates
-{
-	chmod_init = 0,
-	chmod_chmod
-};
-
-int CSftpControlSocket::Chmod(const CChmodCommand& command)
-{
-	if (m_pCurOpData)
-	{
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData not empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
 	LogMessage(MessageType::Status, _("Set permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()), command.GetPermission());
 
-	CSftpChmodOpData *pData = new CSftpChmodOpData(command);
-	pData->opState = chmod_chmod;
+	CSftpChmodOpData *pData = new CSftpChmodOpData(*this, command);
 	Push(pData);
 
 	ChangeDir(command.GetPath());
-	return FZ_REPLY_CONTINUE;
 }
 
-int CSftpControlSocket::ChmodParseResponse(bool successful, std::wstring const&)
+void CSftpControlSocket::Rename(CRenameCommand const& command)
 {
-	CSftpChmodOpData *pData = static_cast<CSftpChmodOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!successful) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	ResetOperation(FZ_REPLY_OK);
-	return FZ_REPLY_OK;
-}
-
-int CSftpControlSocket::ChmodSubcommandResult(int prevResult)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ChmodSend()");
-
-	CSftpChmodOpData *pData = static_cast<CSftpChmodOpData*>(m_pCurOpData);
-	if (!pData)
-	{
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (prevResult != FZ_REPLY_OK)
-		pData->m_useAbsolute = true;
-
-	return SendNextCommand();
-}
-
-int CSftpControlSocket::ChmodSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ChmodSend()");
-
-	CSftpChmodOpData *pData = static_cast<CSftpChmodOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	bool res;
-	switch (pData->opState)
-	{
-	case chmod_chmod:
-		{
-			engine_.GetDirectoryCache().UpdateFile(currentServer_, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
-
-			std::wstring quotedFilename = QuoteFilename(pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
-
-			res = SendCommand(L"chmod " + pData->m_cmd.GetPermission() + L" " + WildcardEscape(quotedFilename),
-					   L"chmod " + pData->m_cmd.GetPermission() + L" " + quotedFilename);
-		}
-		break;
-	default:
-		LogMessage(MessageType::Debug_Warning, L"unknown op state: %d", pData->opState);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!res) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
-}
-
-class CSftpRenameOpData final : public COpData
-{
-public:
-	CSftpRenameOpData(const CRenameCommand& command)
-		: COpData(Command::rename), m_cmd(command)
-	{
-	}
-
-	CRenameCommand m_cmd;
-	bool m_useAbsolute{};
-};
-
-enum renameStates
-{
-	rename_init = 0,
-	rename_rename
-};
-
-int CSftpControlSocket::Rename(const CRenameCommand& command)
-{
-	if (m_pCurOpData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData not empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
 	LogMessage(MessageType::Status, _("Renaming '%s' to '%s'"), command.GetFromPath().FormatFilename(command.GetFromFile()), command.GetToPath().FormatFilename(command.GetToFile()));
 
-	CSftpRenameOpData *pData = new CSftpRenameOpData(command);
-	pData->opState = rename_rename;
+	CSftpRenameOpData *pData = new CSftpRenameOpData(*this, command);
 	Push(pData);
-
 	ChangeDir(command.GetFromPath());
-	return FZ_REPLY_CONTINUE;
-}
-
-int CSftpControlSocket::RenameParseResponse(bool successful, std::wstring const&)
-{
-	CSftpRenameOpData *pData = static_cast<CSftpRenameOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!successful) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	const CServerPath& fromPath = pData->m_cmd.GetFromPath();
-	const CServerPath& toPath = pData->m_cmd.GetToPath();
-
-	engine_.GetDirectoryCache().Rename(currentServer_, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
-
-	SendDirectoryListingNotification(fromPath, false, false);
-	if (fromPath != toPath) {
-		SendDirectoryListingNotification(toPath, false, false);
-	}
-
-	ResetOperation(FZ_REPLY_OK);
-	return FZ_REPLY_OK;
-}
-
-int CSftpControlSocket::RenameSubcommandResult(int prevResult)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::RenameSubcommandResult()");
-
-	CSftpRenameOpData *pData = static_cast<CSftpRenameOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (prevResult != FZ_REPLY_OK) {
-		pData->m_useAbsolute = true;
-	}
-
-	return SendNextCommand();
-}
-
-int CSftpControlSocket::RenameSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::RenameSend()");
-
-	CSftpRenameOpData *pData = static_cast<CSftpRenameOpData*>(m_pCurOpData);
-	if (!pData) {
-		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData empty");
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	bool res;
-	switch (pData->opState)
-	{
-	case rename_rename:
-		{
-			bool wasDir = false;
-			engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile(), &wasDir);
-			engine_.GetDirectoryCache().InvalidateFile(currentServer_, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
-
-			std::wstring fromQuoted = QuoteFilename(pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
-			std::wstring toQuoted = QuoteFilename(pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
-
-			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-			engine_.GetPathCache().InvalidatePath(currentServer_, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
-
-			if (wasDir) {
-				// Need to invalidate current working directories
-				CServerPath path = engine_.GetPathCache().Lookup(currentServer_, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-				if (path.empty()) {
-					path = pData->m_cmd.GetFromPath();
-					path.AddSegment(pData->m_cmd.GetFromFile());
-				}
-				engine_.InvalidateCurrentWorkingDirs(path);
-			}
-
-			res = SendCommand(L"mv " + WildcardEscape(fromQuoted) + L" " + toQuoted,
-					   L"mv " + fromQuoted + L" " + toQuoted);
-		}
-		break;
-	default:
-		LogMessage(MessageType::Debug_Warning, L"unknown op state: %d", pData->opState);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (!res) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
 }
 
 std::wstring CSftpControlSocket::WildcardEscape(std::wstring const& file)

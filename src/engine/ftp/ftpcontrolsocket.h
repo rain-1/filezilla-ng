@@ -46,8 +46,8 @@ protected:
 	virtual void Delete(CServerPath const& path, std::deque<std::wstring>&& files) override;
 	virtual void RemoveDir(CServerPath const& path, std::wstring const& subDir) override;
 	virtual void Mkdir(CServerPath const& path) override;
-	virtual int Rename(CRenameCommand const& command) override;
-	virtual int Chmod(CChmodCommand const& command) override;
+	virtual void Rename(CRenameCommand const& command) override;
+	virtual void Chmod(CChmodCommand const& command) override;
 	void Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData);
 
 

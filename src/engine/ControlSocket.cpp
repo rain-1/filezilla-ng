@@ -1403,14 +1403,14 @@ void CControlSocket::Mkdir(CServerPath const&)
 	Push(new CNotSupportedOpData());
 }
 
-int CControlSocket::Rename(CRenameCommand const&)
+void CControlSocket::Rename(CRenameCommand const&)
 {
-	return FZ_REPLY_NOTSUPPORTED;
+	Push(new CNotSupportedOpData());
 }
 
-int CControlSocket::Chmod(CChmodCommand const&)
+void CControlSocket::Chmod(CChmodCommand const&)
 {
-	return FZ_REPLY_NOTSUPPORTED;
+	Push(new CNotSupportedOpData());
 }
 
 void CControlSocket::operator()(fz::event_base const& ev)
