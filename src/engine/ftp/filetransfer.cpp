@@ -161,7 +161,7 @@ int CFtpFileTransferOpData::Send()
 								if (!mtime.empty()) {
 									fileTime_ = mtime;
 									opState = filetransfer_mfmt;
-									return Send();
+									return FZ_REPLY_CONTINUE;
 								}
 							}
 							return FZ_REPLY_OK;
@@ -309,12 +309,10 @@ int CFtpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			bool matchedCase;
 			bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, tryAbsolutePath_ ? remotePath_ : controlSocket_.m_CurrentPath, remoteFile_, dirDidExist, matchedCase);
 			if (!found) {
-				if (!dirDidExist)
+				if (!dirDidExist) {
 					opState = filetransfer_waitlist;
-				else if (download_ &&
-					engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-					CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes)
-				{
+				}
+				else if (download_ && engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) && CServerCapabilities::GetCapability(currentServer_, mdtm_command) == yes) {
 					opState = filetransfer_mdtm;
 				}
 				else {

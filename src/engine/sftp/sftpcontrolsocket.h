@@ -44,10 +44,6 @@ protected:
 
 	void ProcessReply(int result, std::wstring const& reply);
 
-	int FileTransferSubcommandResult(int prevResult);
-	int FileTransferSend();
-	int FileTransferParseResponse(int result, std::wstring const& reply);
-
 	int MkdirParseResponse(bool successful, std::wstring const& reply);
 	int MkdirSend();
 
@@ -65,7 +61,8 @@ protected:
 	int RenameSend();
 
 	int SendCommand(std::wstring const& cmd, std::wstring const& show = std::wstring());
-	int AddToStream(std::wstring const& cmd, bool force_utf8 = false);
+	int AddToStream(std::wstring const& cmd);
+	int AddToStream(std::string const& cmd);
 
 	virtual void OnRateAvailable(CRateLimiter::rate_direction direction);
 	void OnQuotaRequest(CRateLimiter::rate_direction direction);
@@ -90,6 +87,7 @@ protected:
 
 	friend class CSftpChangeDirOpData;
 	friend class CSftpConnectOpData;
+	friend class CSftpFileTransferOpData;
 	friend class CSftpListOpData;
 	friend class CSftpOpData;
 };
