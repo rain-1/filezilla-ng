@@ -8,8 +8,8 @@ class process;
 }
 
 class CSftpInputThread;
-
 struct sftp_message;
+
 class CSftpControlSocket final : public CControlSocket, public CRateLimiterObject
 {
 public:
@@ -85,34 +85,13 @@ protected:
 	int result_;
 	std::wstring response_;
 
+	friend class CProtocolOpData<CSftpControlSocket>;
 	friend class CSftpChangeDirOpData;
 	friend class CSftpConnectOpData;
 	friend class CSftpFileTransferOpData;
 	friend class CSftpListOpData;
-	friend class CSftpOpData;
 };
 
-
-class CSftpOpData
-{
-public:
-	CSftpOpData(CSftpControlSocket & controlSocket)
-		: controlSocket_(controlSocket)
-		, engine_(controlSocket.engine_)
-		, currentServer_(controlSocket.currentServer_)
-	{
-	}
-
-	virtual ~CSftpOpData() = default;
-
-	template<typename...Args>
-	void LogMessage(Args&& ...args) const {
-		controlSocket_.LogMessage(std::forward<Args>(args)...);
-	}
-
-	CSftpControlSocket & controlSocket_;
-	CFileZillaEnginePrivate & engine_;
-	CServer & currentServer_;
-};
+typedef CProtocolOpData<CSftpControlSocket> CSftpOpData;
 
 #endif

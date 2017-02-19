@@ -198,11 +198,11 @@ int CControlSocket::ResetOperation(int nErrorCode)
 				LogMessage(MessageType::Error, prefix + _("Failed to retrieve directory listing"));
 			}
 			else {
-				if (m_CurrentPath.empty()) {
+				if (currentPath_.empty()) {
 					LogMessage(MessageType::Status, _("Directory listing successful"));
 				}
 				else {
-					LogMessage(MessageType::Status, _("Directory listing of \"%s\" successful"), m_CurrentPath.GetPath());
+					LogMessage(MessageType::Status, _("Directory listing of \"%s\" successful"), currentPath_.GetPath());
 				}
 			}
 			break;
@@ -239,7 +239,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 	SetWait(false);
 
 	if (m_invalidateCurrentPath) {
-		m_CurrentPath.clear();
+		currentPath_.clear();
 		m_invalidateCurrentPath = false;
 	}
 
@@ -351,8 +351,8 @@ bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPat
 		}
 	}
 
-	m_CurrentPath.SetType(currentServer_.GetType());
-	if (reply.empty() || !m_CurrentPath.SetPath(reply)) {
+	currentPath_.SetType(currentServer_.GetType());
+	if (reply.empty() || !currentPath_.SetPath(reply)) {
 		if (reply.empty()) {
 			LogMessage(MessageType::Error, _("Server returned empty path."));
 		}
@@ -362,7 +362,7 @@ bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPat
 
 		if (!defaultPath.empty()) {
 			LogMessage(MessageType::Debug_Warning, L"Assuming path is '%s'.", defaultPath.GetPath());
-			m_CurrentPath = defaultPath;
+			currentPath_ = defaultPath;
 			return true;
 		}
 		return false;
@@ -390,11 +390,11 @@ int CControlSocket::CheckOverwriteFile()
 	bool dirDidExist;
 	bool matchedCase;
 	CServerPath remotePath;
-	if (pData->tryAbsolutePath_ || m_CurrentPath.empty()) {
+	if (pData->tryAbsolutePath_ || currentPath_.empty()) {
 		remotePath = pData->remotePath_;
 	}
 	else {
-		remotePath = m_CurrentPath;
+		remotePath = currentPath_;
 	}
 	bool found = engine_.GetDirectoryCache().LookupFile(entry, currentServer_, remotePath, pData->remoteFile_, dirDidExist, matchedCase);
 
@@ -886,15 +886,15 @@ bool CControlSocket::IsWaitingForLock()
 void CControlSocket::InvalidateCurrentWorkingDir(const CServerPath& path)
 {
 	assert(!path.empty());
-	if (m_CurrentPath.empty())
+	if (currentPath_.empty())
 		return;
 
-	if (m_CurrentPath == path || path.IsParentOf(m_CurrentPath, false))
+	if (currentPath_ == path || path.IsParentOf(currentPath_, false))
 	{
 		if (m_pCurOpData)
 			m_invalidateCurrentPath = true;
 		else
-			m_CurrentPath.clear();
+			currentPath_.clear();
 	}
 }
 
@@ -1324,7 +1324,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			CDirentry entry;
 			bool dir_did_exist;
 			bool matched_case;
-			if (engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath_ ? pData->remotePath_ : m_CurrentPath, pData->remoteFile_, dir_did_exist, matched_case) &&
+			if (engine_.GetDirectoryCache().LookupFile(entry, currentServer_, pData->tryAbsolutePath_ ? pData->remotePath_ : currentPath_, pData->remoteFile_, dir_did_exist, matched_case) &&
 				matched_case)
 			{
 				pData->remoteFileSize_ = entry.size;

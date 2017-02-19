@@ -61,16 +61,16 @@ int CFtpListOpData::Send()
 		// Check if we can use already existing listing
 		CDirectoryListing listing;
 		bool is_outdated = false;
-		bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, controlSocket_.m_CurrentPath, true, is_outdated);
+		bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, currentPath_, true, is_outdated);
 		if (found && !is_outdated && !listing.get_unsure_flags() &&
 			(!refresh_ || (holdsLock_ && listing.m_firstListTime >= time_before_locking_)))
 		{
-			controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
+			controlSocket_.SendDirectoryListingNotification(currentPath_, !pNextOpData, false);
 			return FZ_REPLY_OK;
 		}
 
 		if (!holdsLock_) {
-			if (!controlSocket_.TryLockCache(CFtpControlSocket::lock_list, controlSocket_.m_CurrentPath)) {
+			if (!controlSocket_.TryLockCache(CFtpControlSocket::lock_list, currentPath_)) {
 				time_before_locking_ = fz::monotonic_clock::now();
 				return FZ_REPLY_WOULDBLOCK;
 			}
@@ -121,7 +121,7 @@ int CFtpListOpData::Send()
 	}
 	if (opState == list_mdtm) {
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
-		std::wstring cmd = L"MDTM " + controlSocket_.m_CurrentPath.FormatFilename(directoryListing_[mdtm_index_].name, true);
+		std::wstring cmd = L"MDTM " + currentPath_.FormatFilename(directoryListing_[mdtm_index_].name, true);
 		return controlSocket_.SendCommand(cmd);
 	}
 
@@ -184,7 +184,7 @@ int CFtpListOpData::ParseResponse()
 
 	engine_.GetDirectoryCache().Store(directoryListing_, currentServer_);
 
-	controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
+	controlSocket_.SendDirectoryListingNotification(currentPath_, !pNextOpData, false);
 
 	return FZ_REPLY_OK;
 }
@@ -212,14 +212,14 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 				return prevResult;
 			}
 		}
-		path_ = controlSocket_.m_CurrentPath;
+		path_ = currentPath_;
 		subDir_.clear();
 		opState = list_waitlock;
 		return FZ_REPLY_CONTINUE;
 	}
 	else if (opState == list_waittransfer) {
 		if (prevResult == FZ_REPLY_OK) {
-			CDirectoryListing listing = listing_parser_->Parse(controlSocket_.m_CurrentPath);
+			CDirectoryListing listing = listing_parser_->Parse(currentPath_);
 
 			if (viewHiddenCheck_) {
 				if (!viewHidden_) {
@@ -260,14 +260,14 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 
 			engine_.GetDirectoryCache().Store(listing, currentServer_);
 
-			controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
+			controlSocket_.SendDirectoryListingNotification(currentPath_, !pNextOpData, false);
 
 			return FZ_REPLY_OK;
 		}
 		else {
 			if (tranferCommandSent && IsMisleadingListResponse(controlSocket_.m_Response)) {
 				CDirectoryListing listing;
-				listing.path = controlSocket_.m_CurrentPath;
+				listing.path = currentPath_;
 				listing.m_firstListTime = fz::monotonic_clock::now();
 
 				if (viewHiddenCheck_) {
@@ -308,7 +308,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 
 				engine_.GetDirectoryCache().Store(listing, currentServer_);
 
-				controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
+				controlSocket_.SendDirectoryListingNotification(currentPath_, !pNextOpData, false);
 
 				return FZ_REPLY_OK;
 			}
@@ -329,14 +329,14 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 
 						engine_.GetDirectoryCache().Store(directoryListing_, currentServer_);
 
-						controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
+						controlSocket_.SendDirectoryListingNotification(currentPath_, !pNextOpData, false);
 
 						return FZ_REPLY_OK;
 					}
 				}
 
 				if (prevResult & FZ_REPLY_ERROR) {
-					controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, true);
+					controlSocket_.SendDirectoryListingNotification(currentPath_, !pNextOpData, true);
 				}
 			}
 

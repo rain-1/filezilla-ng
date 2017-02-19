@@ -97,32 +97,12 @@ protected:
 
 	virtual void ResetSocket();
 	
+	friend class CProtocolOpData<CHttpControlSocket>;
 	friend class CHttpFileTransferOpData;
 	friend class CHttpInternalConnectOpData;
-	friend class CHttpOpData;
 	friend class CHttpRequestOpData;
 };
 
-class CHttpOpData
-{
-public:
-	CHttpOpData(CHttpControlSocket & controlSocket)
-		: controlSocket_(controlSocket)
-		, engine_(controlSocket.engine_)
-		, currentServer_(controlSocket.currentServer_)
-	{
-	}
-
-	virtual ~CHttpOpData() = default;
-
-	template<typename...Args>
-	void LogMessage(Args&& ...args) const {
-		controlSocket_.LogMessage(std::forward<Args>(args)...);
-	}
-
-	CHttpControlSocket & controlSocket_;
-	CFileZillaEnginePrivate & engine_;
-	CServer & currentServer_;
-};
+typedef CProtocolOpData<CHttpControlSocket> CHttpOpData;
 
 #endif

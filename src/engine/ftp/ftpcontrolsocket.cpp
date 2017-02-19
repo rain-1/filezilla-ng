@@ -328,7 +328,7 @@ void CFtpControlSocket::List(CServerPath const& path, std::wstring const& subDir
 		LogMessage(MessageType::Debug_Info, L"List called from other command");
 	}
 
-	CServerPath newPath = m_CurrentPath;
+	CServerPath newPath = currentPath_;
 	if (!path.empty()) {
 		newPath = path;
 	}

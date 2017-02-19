@@ -109,6 +109,7 @@ protected:
 
 	std::unique_ptr<std::wregex> m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
 
+	friend class CProtocolOpData<CFtpControlSocket>;
 	friend class CFtpChangeDirOpData;
 	friend class CFtpChmodOpData;
 	friend class CFtpDeleteOpData;
@@ -116,37 +117,13 @@ protected:
 	friend class CFtpListOpData;
 	friend class CFtpLogonOpData;
 	friend class CFtpMkdirOpData;
-	friend class CFtpOpData;
 	friend class CFtpRawCommandOpData;
 	friend class CFtpRawTransferOpData;
 	friend class CFtpRemoveDirOpData;
 	friend class CFtpRenameOpData;
 };
 
-class CIOThread;
-
-class CFtpOpData
-{
-public:
-	CFtpOpData(CFtpControlSocket& controlSocket)
-	    : controlSocket_(controlSocket)
-		, engine_(controlSocket.engine_)
-		, currentServer_(controlSocket.currentServer_)
-	{
-
-	}
-
-	virtual ~CFtpOpData() = default;
-
-	template<typename...Args>
-	void LogMessage(Args&& ...args) const {
-		controlSocket_.LogMessage(std::forward<Args>(args)...);
-	}
-
-	CFtpControlSocket & controlSocket_;
-	CFileZillaEnginePrivate & engine_;
-	CServer & currentServer_;
-};
+typedef CProtocolOpData<CFtpControlSocket> CFtpOpData;
 
 class CFtpTransferOpData
 {
