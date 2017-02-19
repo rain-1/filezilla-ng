@@ -155,7 +155,7 @@ int CFtpMkdirOpData::Send()
 				opState = mkd_findparent;
 			}
 		}
-		return Send();
+		return FZ_REPLY_CONTINUE;
 	case mkd_findparent:
 	case mkd_cwdsub:
 		controlSocket_.m_CurrentPath.clear();
