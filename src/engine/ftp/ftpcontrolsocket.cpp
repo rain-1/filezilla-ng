@@ -864,27 +864,6 @@ void CFtpControlSocket::StartKeepaliveTimer()
 	m_idleTimer = add_timer(fz::duration::from_seconds(30), true);
 }
 
-int CFtpControlSocket::ParseSubcommandResult(int prevResult, COpData const& opData)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::ParseSubcommandResult(%d)", prevResult);
-	if (!m_pCurOpData) {
-		LogMessage(MessageType::Debug_Warning, L"ParseSubcommandResult called without active operation");
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	int res = m_pCurOpData->SubcommandResult(prevResult, opData);
-	if (res == FZ_REPLY_WOULDBLOCK) {
-		return FZ_REPLY_WOULDBLOCK;
-	}
-	else if (res == FZ_REPLY_CONTINUE) {
-		return SendNextCommand();
-	}
-	else {
-		return ResetOperation(res);
-	}
-}
-
 void CFtpControlSocket::operator()(fz::event_base const& ev)
 {
 	if (fz::dispatch<fz::timer_event>(ev, this, &CFtpControlSocket::OnTimer)) {

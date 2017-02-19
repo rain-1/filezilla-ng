@@ -51,6 +51,7 @@ libengine_a_SOURCES = \
 		servercapabilities.cpp \
 		sftp/connect.cpp \
 		sftp/input_thread.cpp \
+		sftp/list.cpp \
 		sftp/sftpcontrolsocket.cpp \
 		sizeformatting_base.cpp \
 		socket.cpp \
@@ -91,6 +92,7 @@ noinst_HEADERS = backend.h \
 		sftp/connect.h \
 		sftp/event.h \
 		sftp/input_thread.h \
+		sftp/list.h \
 		sftp/sftpcontrolsocket.h \
 		tlssocket.h
 

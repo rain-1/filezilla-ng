@@ -64,7 +64,6 @@ protected:
 	void ParseResponse();
 
 	virtual bool CanSendNextCommand() const override;
-	virtual int ParseSubcommandResult(int prevResult, COpData const& previousOperation);
 
 	int GetReplyCode() const;
 

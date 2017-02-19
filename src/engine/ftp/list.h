@@ -8,6 +8,7 @@ class CDirectoryListingParser;
 
 enum listStates
 {
+	list_init,
 	list_waitcwd,
 	list_waitlock,
 	list_waittransfer,
@@ -28,9 +29,9 @@ private:
 
 	CServerPath path_;
 	std::wstring subDir_;
-	bool fallback_to_current{};
+	bool fallback_to_current_{};
 
-	std::unique_ptr<CDirectoryListingParser> m_pDirectoryListingParser;
+	std::unique_ptr<CDirectoryListingParser> listing_parser_;
 
 	CDirectoryListing directoryListing;
 
@@ -38,15 +39,15 @@ private:
 
 	// Set to true to get a directory listing even if a cache
 	// lookup can be made after finding out true remote directory
-	bool refresh{};
+	bool refresh_{};
 
-	bool viewHiddenCheck{};
-	bool viewHidden{}; // Uses LIST -a command
+	bool viewHiddenCheck_{};
+	bool viewHidden_{}; // Uses LIST -a command
 
 	// Listing index for list_mdtm
-	int mdtm_index{};
+	int mdtm_index_{};
 
-	fz::monotonic_clock m_time_before_locking;
+	fz::monotonic_clock time_before_locking_;
 };
 
 #endif

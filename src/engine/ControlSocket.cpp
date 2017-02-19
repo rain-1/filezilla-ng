@@ -143,7 +143,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		LogMessage(MessageType::Debug_Warning, L"ResetOperation with FZ_REPLY_WOULDBLOCK in nErrorCode (%d)", nErrorCode);
 	}
 
-	if (m_pCurOpData && m_pCurOpData->holdsLock) {
+	if (m_pCurOpData && m_pCurOpData->holdsLock_) {
 		UnlockCache();
 	}
 
@@ -656,10 +656,25 @@ int CControlSocket::SendNextCommand()
 	return FZ_REPLY_OK;
 }
 
-int CControlSocket::ParseSubcommandResult(int, COpData const&)
+int CControlSocket::ParseSubcommandResult(int prevResult, COpData const& opData)
 {
-	ResetOperation(FZ_REPLY_INTERNALERROR);
-	return FZ_REPLY_INTERNALERROR;
+	LogMessage(MessageType::Debug_Verbose, L"CControlSocket::ParseSubcommandResult(%d)", prevResult);
+	if (!m_pCurOpData) {
+		LogMessage(MessageType::Debug_Warning, L"ParseSubcommandResult called without active operation");
+		ResetOperation(FZ_REPLY_ERROR);
+		return FZ_REPLY_ERROR;
+	}
+
+	int res = m_pCurOpData->SubcommandResult(prevResult, opData);
+	if (res == FZ_REPLY_WOULDBLOCK) {
+		return FZ_REPLY_WOULDBLOCK;
+	}
+	else if (res == FZ_REPLY_CONTINUE) {
+		return SendNextCommand();
+	}
+	else {
+		return ResetOperation(res);
+	}
 }
 
 const std::list<CControlSocket::t_lockInfo>::iterator CControlSocket::GetLockStatus()
@@ -692,8 +707,8 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 	}
 	else {
 		if (own->lockcount) {
-			if (!m_pCurOpData->holdsLock) {
-				m_pCurOpData->holdsLock = true;
+			if (!m_pCurOpData->holdsLock_) {
+				m_pCurOpData->holdsLock_ = true;
 				own->lockcount++;
 			}
 			return true;
@@ -704,7 +719,7 @@ bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& dire
 
 	// Needs to be set in any case so that ResetOperation
 	// unlocks or cancels the lock wait
-	m_pCurOpData->holdsLock = true;
+	m_pCurOpData->holdsLock_ = true;
 
 	// Try to find other instance holding the lock
 	for (auto iter = m_lockInfoList.cbegin(); iter != own; ++iter) {
@@ -757,10 +772,10 @@ bool CControlSocket::IsLocked(locking_reason reason, const CServerPath& director
 
 void CControlSocket::UnlockCache()
 {
-	if (!m_pCurOpData || !m_pCurOpData->holdsLock) {
+	if (!m_pCurOpData || !m_pCurOpData->holdsLock_) {
 		return;
 	}
-	m_pCurOpData->holdsLock = false;
+	m_pCurOpData->holdsLock_ = false;
 
 	std::list<t_lockInfo>::iterator iter = GetLockStatus();
 	if (iter == m_lockInfoList.end()) {
