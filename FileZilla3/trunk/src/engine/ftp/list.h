@@ -33,7 +33,7 @@ private:
 
 	std::unique_ptr<CDirectoryListingParser> listing_parser_;
 
-	CDirectoryListing directoryListing;
+	CDirectoryListing directoryListing_;
 
 	int flags_{};
 

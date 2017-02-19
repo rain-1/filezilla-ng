@@ -50,6 +50,7 @@ libengine_a_SOURCES = \
 		serverpath.cpp\
 		servercapabilities.cpp \
 		sftp/connect.cpp \
+		sftp/cwd.cpp \
 		sftp/input_thread.cpp \
 		sftp/list.cpp \
 		sftp/sftpcontrolsocket.cpp \
@@ -90,6 +91,7 @@ noinst_HEADERS = backend.h \
 		rtt.h \
 		servercapabilities.h \
 		sftp/connect.h \
+		sftp/cwd.h \
 		sftp/event.h \
 		sftp/input_thread.h \
 		sftp/list.h \

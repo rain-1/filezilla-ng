@@ -15,6 +15,7 @@ public:
 	virtual int Send() override;
 	virtual int ParseResponse() override;
 
+private:
 	std::wstring const command_;
 };
 

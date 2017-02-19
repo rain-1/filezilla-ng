@@ -366,7 +366,8 @@ int CFileZillaEnginePrivate::List(CListCommand const& command)
 
 int CFileZillaEnginePrivate::FileTransfer(CFileTransferCommand const& command)
 {
-	return m_pControlSocket->FileTransfer(command.GetLocalFile(), command.GetRemotePath(), command.GetRemoteFile(), command.Download(), command.GetTransferSettings());
+	m_pControlSocket->FileTransfer(command.GetLocalFile(), command.GetRemotePath(), command.GetRemoteFile(), command.Download(), command.GetTransferSettings());
+	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::RawCommand(CRawCommand const& command)

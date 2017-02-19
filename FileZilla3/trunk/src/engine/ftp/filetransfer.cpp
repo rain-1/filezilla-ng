@@ -82,7 +82,7 @@ int CFtpFileTransferOpData::Send()
 						return FZ_REPLY_ERROR;
 					}
 
-					fileDidExist = didExist;
+					fileDidExist_ = didExist;
 
 					startOffset = pFile->seek(0, fz::file::end);
 
@@ -108,7 +108,7 @@ int CFtpFileTransferOpData::Send()
 						return FZ_REPLY_ERROR;
 					}
 
-					fileDidExist = didExist;
+					fileDidExist_ = didExist;
 					localFileSize_ = 0;
 				}
 

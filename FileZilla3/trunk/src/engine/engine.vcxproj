@@ -122,6 +122,7 @@
     <ClCompile Include="servercapabilities.cpp" />
     <ClCompile Include="serverpath.cpp" />
     <ClCompile Include="sftp\connect.cpp" />
+    <ClCompile Include="sftp\cwd.cpp" />
     <ClCompile Include="sftp\input_thread.cpp" />
     <ClCompile Include="sftp\list.cpp" />
     <ClCompile Include="sftp\sftpcontrolsocket.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="..\include\sizeformatting_base.h" />
     <ClInclude Include="..\include\socket.h" />
     <ClInclude Include="sftp\connect.h" />
+    <ClInclude Include="sftp\cwd.h" />
     <ClInclude Include="sftp\event.h" />
     <ClInclude Include="sftp\input_thread.h" />
     <ClInclude Include="sftp\list.h" />

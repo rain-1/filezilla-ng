@@ -1,6 +1,7 @@
 #include <filezilla.h>
 
 #include "connect.h"
+#include "cwd.h"
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "engineprivate.h"
@@ -478,234 +479,21 @@ void CSftpControlSocket::List(CServerPath const& path, std::wstring const& subDi
 	Push(pData);
 }
 
-class CSftpChangeDirOpData final : public CChangeDirOpData
+void CSftpControlSocket::ChangeDir(CServerPath const& path, std::wstring const& subDir, bool link_discovery)
 {
-};
-
-enum cwdStates
-{
-	cwd_init = 0,
-	cwd_pwd,
-	cwd_cwd,
-	cwd_cwd_subdir
-};
-
-int CSftpControlSocket::ChangeDir(CServerPath path, std::wstring subDir, bool link_discovery)
-{
-	cwdStates state = cwd_init;
-
-	if (path.GetType() == DEFAULT) {
-		path.SetType(currentServer_.GetType());
-	}
-
-	CServerPath target;
-	if (path.empty()) {
-		if (m_CurrentPath.empty()) {
-			state = cwd_pwd;
-		}
-		else {
-			return FZ_REPLY_OK;
-		}
-	}
-	else {
-		if (!subDir.empty()) {
-			// Check if the target is in cache already
-			target = engine_.GetPathCache().Lookup(currentServer_, path, subDir);
-			if (!target.empty()) {
-				if (m_CurrentPath == target) {
-					return FZ_REPLY_OK;
-				}
-
-				path = target;
-				subDir.clear();
-				state = cwd_cwd;
-			}
-			else {
-				// Target unknown, check for the parent's target
-				target = engine_.GetPathCache().Lookup(currentServer_, path, L"");
-				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
-					target.clear();
-					state = cwd_cwd_subdir;
-				}
-				else {
-					state = cwd_cwd;
-				}
-			}
-		}
-		else {
-			target = engine_.GetPathCache().Lookup(currentServer_, path, L"");
-			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
-				return FZ_REPLY_OK;
-			}
-			state = cwd_cwd;
-		}
-	}
-
-	CSftpChangeDirOpData *pData = new CSftpChangeDirOpData;
-	pData->pNextOpData = m_pCurOpData;
-	pData->opState = state;
-	pData->path = path;
-	pData->subDir = subDir;
-	pData->target = target;
-	pData->link_discovery = link_discovery;
+	auto pData = new CSftpChangeDirOpData(*this);
+	pData->path_ = path;
+	pData->subDir_ = subDir;
+	pData->link_discovery_ = link_discovery;
 
 	if (pData->pNextOpData && pData->pNextOpData->opId == Command::transfer &&
 		!static_cast<CSftpFileTransferOpData *>(pData->pNextOpData)->download_)
 	{
-		pData->tryMkdOnFail = true;
+		pData->tryMkdOnFail_ = true;
 		assert(subDir.empty());
 	}
 
 	Push(pData);
-
-	return SendNextCommand();
-}
-
-int CSftpControlSocket::ChangeDirParseResponse(bool successful, std::wstring const& reply)
-{
-	if (!m_pCurOpData) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-	CSftpChangeDirOpData *pData = static_cast<CSftpChangeDirOpData *>(m_pCurOpData);
-
-	bool error = false;
-	switch (pData->opState)
-	{
-	case cwd_pwd:
-		if (!successful || reply.empty()) {
-			error = true;
-		}
-		if (ParsePwdReply(reply)) {
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-		else {
-			error = true;
-		}
-		break;
-	case cwd_cwd:
-		if (!successful) {
-			// Create remote directory if part of a file upload
-			if (pData->tryMkdOnFail) {
-				pData->tryMkdOnFail = false;
-				int res = Mkdir(pData->path);
-				if (res != FZ_REPLY_OK) {
-					return res;
-				}
-			}
-			else {
-				error = true;
-			}
-		}
-		else if (reply.empty()) {
-			error = true;
-		}
-		else if (ParsePwdReply(reply)) {
-			engine_.GetPathCache().Store(currentServer_, m_CurrentPath, pData->path);
-
-			if (pData->subDir.empty()) {
-				ResetOperation(FZ_REPLY_OK);
-				return FZ_REPLY_OK;
-			}
-
-			pData->target.clear();
-			pData->opState = cwd_cwd_subdir;
-		}
-		else {
-			error = true;
-		}
-		break;
-	case cwd_cwd_subdir:
-		if (!successful || reply.empty()) {
-			if (pData->link_discovery) {
-				LogMessage(MessageType::Debug_Info, L"Symlink does not link to a directory, probably a file");
-				ResetOperation(FZ_REPLY_LINKNOTDIR);
-				return FZ_REPLY_ERROR;
-			}
-			else {
-				error = true;
-			}
-		}
-		else if (ParsePwdReply(reply)) {
-			engine_.GetPathCache().Store(currentServer_, m_CurrentPath, pData->path, pData->subDir);
-
-			ResetOperation(FZ_REPLY_OK);
-			return FZ_REPLY_OK;
-		}
-		else {
-			error = true;
-		}
-		break;
-	default:
-		error = true;
-		break;
-	}
-
-	if (error) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-
-	return SendNextCommand();
-}
-
-int CSftpControlSocket::ChangeDirSubcommandResult(int prevResult)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ChangeDirSubcommandResult(%d)", prevResult);
-
-	return SendNextCommand();
-}
-
-int CSftpControlSocket::ChangeDirSend()
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ChangeDirSend()");
-
-	if (!m_pCurOpData) {
-		ResetOperation(FZ_REPLY_ERROR);
-		return FZ_REPLY_ERROR;
-	}
-	CSftpChangeDirOpData *pData = static_cast<CSftpChangeDirOpData *>(m_pCurOpData);
-
-	std::wstring cmd;
-	switch (pData->opState)
-	{
-	case cwd_pwd:
-		cmd = L"pwd";
-		break;
-	case cwd_cwd:
-		if (pData->tryMkdOnFail && !pData->holdsLock_) {
-			if (IsLocked(lock_mkdir, pData->path)) {
-				// Some other engine is already creating this directory or
-				// performing an action that will lead to its creation
-				pData->tryMkdOnFail = false;
-			}
-			if (!TryLockCache(lock_mkdir, pData->path)) {
-				return FZ_REPLY_WOULDBLOCK;
-			}
-		}
-		cmd = L"cd " + QuoteFilename(pData->path.GetPath());
-		m_CurrentPath.clear();
-		break;
-	case cwd_cwd_subdir:
-		if (pData->subDir.empty()) {
-			ResetOperation(FZ_REPLY_INTERNALERROR);
-			return FZ_REPLY_ERROR;
-		}
-		else {
-			cmd = L"cd " + QuoteFilename(pData->subDir);
-		}
-		m_CurrentPath.clear();
-		break;
-	}
-
-	if (!cmd.empty()) {
-		if (!SendCommand(cmd)) {
-			return FZ_REPLY_ERROR;
-		}
-	}
-
-	return FZ_REPLY_WOULDBLOCK;
 }
 
 void CSftpControlSocket::ProcessReply(int result, std::wstring const& reply)
@@ -761,10 +549,13 @@ int CSftpControlSocket::ResetOperation(int nErrorCode)
 	return CControlSocket::ResetOperation(nErrorCode);
 }
 
-int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+void CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 									std::wstring const& remoteFile, bool download,
 									CFileTransferCommand::t_transferSettings const& transferSettings)
 {
+	//FIXME
+
+	/*
 	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::FileTransfer(...)");
 
 	if (localFile.empty()) {
@@ -788,7 +579,7 @@ int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 		LogMessage(MessageType::Debug_Info, L"deleting nonzero pData");
 		delete m_pCurOpData;
 	}
-
+	*/
 	CSftpFileTransferOpData *pData = new CSftpFileTransferOpData(download, localFile, remoteFile, remotePath);
 	Push(pData);
 
@@ -806,12 +597,7 @@ int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 		pData->remotePath_.SetType(currentServer_.GetType());
 	}
 
-	int res = ChangeDir(pData->remotePath_);
-	if (res != FZ_REPLY_OK) {
-		return res;
-	}
-
-	return FileTransferSubcommandResult(FZ_REPLY_OK);
+	ChangeDir(pData->remotePath_);
 }
 
 int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
@@ -1538,25 +1324,20 @@ int CSftpControlSocket::Chmod(const CChmodCommand& command)
 	pData->opState = chmod_chmod;
 	Push(pData);
 
-	int res = ChangeDir(command.GetPath());
-	if (res != FZ_REPLY_OK)
-		return res;
-
-	return SendNextCommand();
+	ChangeDir(command.GetPath());
+	return FZ_REPLY_CONTINUE;
 }
 
 int CSftpControlSocket::ChmodParseResponse(bool successful, std::wstring const&)
 {
 	CSftpChmodOpData *pData = static_cast<CSftpChmodOpData*>(m_pCurOpData);
-	if (!pData)
-	{
+	if (!pData) {
 		LogMessage(MessageType::Debug_Warning, L"m_pCurOpData empty");
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!successful)
-	{
+	if (!successful) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1653,12 +1434,8 @@ int CSftpControlSocket::Rename(const CRenameCommand& command)
 	pData->opState = rename_rename;
 	Push(pData);
 
-	int res = ChangeDir(command.GetFromPath());
-	if (res != FZ_REPLY_OK) {
-		return res;
-	}
-
-	return SendNextCommand();
+	ChangeDir(command.GetFromPath());
+	return FZ_REPLY_CONTINUE;
 }
 
 int CSftpControlSocket::RenameParseResponse(bool successful, std::wstring const&)

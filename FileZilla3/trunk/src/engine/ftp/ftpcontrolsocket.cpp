@@ -371,7 +371,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 				}
 			}
 		}
-		if (nErrorCode != FZ_REPLY_OK && pData->download_ && !pData->fileDidExist) {
+		if (nErrorCode != FZ_REPLY_OK && pData->download_ && !pData->fileDidExist_) {
 			pData->ioThread_.reset();
 			int64_t size;
 			bool isLink;
@@ -432,25 +432,22 @@ bool CFtpControlSocket::CanSendNextCommand() const
 
 void CFtpControlSocket::ChangeDir(CServerPath const& path, std::wstring const& subDir, bool link_discovery)
 {
-	cwdStates state = cwd_init;
-
 	CFtpChangeDirOpData *pData = new CFtpChangeDirOpData(*this);
-	pData->opState = state;
-	pData->path = path;
-	pData->subDir = subDir;
-	pData->link_discovery = link_discovery;
+	pData->path_ = path;
+	pData->subDir_ = subDir;
+	pData->link_discovery_ = link_discovery;
 
 	if (pData->pNextOpData && pData->pNextOpData->opId == Command::transfer &&
 		!static_cast<CFtpFileTransferOpData *>(pData->pNextOpData)->download_)
 	{
-		pData->tryMkdOnFail = true;
+		pData->tryMkdOnFail_ = true;
 		assert(subDir.empty());
 	}
 
 	Push(pData);
 }
 
-int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+void CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 									std::wstring const& remoteFile, bool download,
 									CFileTransferCommand::t_transferSettings const& transferSettings)
 {
@@ -460,8 +457,6 @@ int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath c
 	pData->transferSettings_ = transferSettings;
 	pData->binary = transferSettings.binary;
 	Push(pData);
-
-	return FZ_REPLY_CONTINUE;
 }
 
 void CFtpControlSocket::TransferEnd()

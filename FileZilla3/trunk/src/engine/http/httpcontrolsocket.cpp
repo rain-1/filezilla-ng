@@ -122,7 +122,7 @@ void CHttpControlSocket::OnConnect()
 	}
 }
 
-int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+void CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 									std::wstring const& remoteFile, bool download,
 									CFileTransferCommand::t_transferSettings const&)
 {
@@ -134,7 +134,6 @@ int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 
 	CHttpFileTransferOpData *pData = new CHttpFileTransferOpData(*this, download, localFile, remoteFile, remotePath);
 	Push(pData);
-	return FZ_REPLY_CONTINUE;
 }
 
 void CHttpControlSocket::Request(HttpRequest & request, HttpResponse & response)
