@@ -3,6 +3,16 @@
 #include "cwd.h"
 #include "../pathcache.h"
 
+enum cwdStates
+{
+	cwd_init = 0,
+	cwd_pwd,
+	cwd_cwd,
+	cwd_pwd_cwd,
+	cwd_cwd_subdir,
+	cwd_pwd_subdir
+};
+
 int CFtpChangeDirOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, "CFtpChangeDirOpData::Send() in state %d", opState);
@@ -11,11 +21,11 @@ int CFtpChangeDirOpData::Send()
 	switch (opState)
 	{
 	case cwd_init:
-		if (path.GetType() == DEFAULT) {
-			path.SetType(currentServer_.GetType());
+		if (path_.GetType() == DEFAULT) {
+			path_.SetType(currentServer_.GetType());
 		}
 
-		if (path.empty()) {
+		if (path_.empty()) {
 			if (controlSocket_.m_CurrentPath.empty()) {
 				opState = cwd_pwd;
 			}
@@ -24,23 +34,23 @@ int CFtpChangeDirOpData::Send()
 			}
 		}
 		else {
-			if (!subDir.empty()) {
+			if (!subDir_.empty()) {
 				// Check if the target is in cache already
-				target = engine_.GetPathCache().Lookup(currentServer_, path, subDir);
-				if (!target.empty()) {
-					if (controlSocket_.m_CurrentPath == target) {
+				target_ = engine_.GetPathCache().Lookup(currentServer_, path_, subDir_);
+				if (!target_.empty()) {
+					if (controlSocket_.m_CurrentPath == target_) {
 						return FZ_REPLY_OK;
 					}
 
-					path = target;
-					subDir.clear();
+					path_ = target_;
+					subDir_.clear();
 					opState = cwd_cwd;
 				}
 				else {
 					// Target unknown, check for the parent's target
-					target = engine_.GetPathCache().Lookup(currentServer_, path, L"");
-					if (controlSocket_.m_CurrentPath == path || (!target.empty() && target == controlSocket_.m_CurrentPath)) {
-						target.clear();
+					target_ = engine_.GetPathCache().Lookup(currentServer_, path_, L"");
+					if (controlSocket_.m_CurrentPath == path_ || (!target_.empty() && target_ == controlSocket_.m_CurrentPath)) {
+						target_.clear();
 						opState = cwd_cwd_subdir;
 					}
 					else {
@@ -49,42 +59,42 @@ int CFtpChangeDirOpData::Send()
 				}
 			}
 			else {
-				target = engine_.GetPathCache().Lookup(currentServer_, path, L"");
-				if (controlSocket_.m_CurrentPath == path || (!target.empty() && target == controlSocket_.m_CurrentPath)) {
+				target_ = engine_.GetPathCache().Lookup(currentServer_, path_, L"");
+				if (controlSocket_.m_CurrentPath == path_ || (!target_.empty() && target_ == controlSocket_.m_CurrentPath)) {
 					return FZ_REPLY_OK;
 				}
 				opState = cwd_cwd;
 			}
 		}
-		return Send();
+		return FZ_REPLY_CONTINUE;
 	case cwd_pwd:
 	case cwd_pwd_cwd:
 	case cwd_pwd_subdir:
 		cmd = L"PWD";
 		break;
 	case cwd_cwd:
-		if (tryMkdOnFail && !holdsLock_) {
-			if (controlSocket_.IsLocked(CFtpControlSocket::lock_mkdir, path)) {
+		if (tryMkdOnFail_ && !holdsLock_) {
+			if (controlSocket_.IsLocked(CFtpControlSocket::lock_mkdir, path_)) {
 				// Some other engine is already creating this directory or
 				// performing an action that will lead to its creation
-				tryMkdOnFail = false;
+				tryMkdOnFail_ = false;
 			}
-			if (!controlSocket_.TryLockCache(CFtpControlSocket::lock_mkdir, path)) {
+			if (!controlSocket_.TryLockCache(CFtpControlSocket::lock_mkdir, path_)) {
 				return FZ_REPLY_WOULDBLOCK;
 			}
 		}
-		cmd = L"CWD " + path.GetPath();
+		cmd = L"CWD " + path_.GetPath();
 		controlSocket_.m_CurrentPath.clear();
 		break;
 	case cwd_cwd_subdir:
-		if (subDir.empty()) {
+		if (subDir_.empty()) {
 			return FZ_REPLY_INTERNALERROR;
 		}
-		else if (subDir == L".." && !tried_cdup) {
+		else if (subDir_ == L".." && !tried_cdup_) {
 			cmd = L"CDUP";
 		}
 		else {
-			cmd = L"CWD " + path.FormatSubdir(subDir);
+			cmd = L"CWD " + path_.FormatSubdir(subDir_);
 		}
 		controlSocket_.m_CurrentPath.clear();
 		break;
@@ -120,10 +130,10 @@ int CFtpChangeDirOpData::ParseResponse()
 	case cwd_cwd:
 		if (code != 2 && code != 3) {
 			// Create remote directory if part of a file upload
-			if (tryMkdOnFail) {
-				tryMkdOnFail = false;
+			if (tryMkdOnFail_) {
+				tryMkdOnFail_ = false;
 
-				controlSocket_.Mkdir(path);
+				controlSocket_.Mkdir(path_);
 				return FZ_REPLY_CONTINUE;
 			}
 			else {
@@ -131,41 +141,41 @@ int CFtpChangeDirOpData::ParseResponse()
 			}
 		}
 		else {
-			if (target.empty()) {
+			if (target_.empty()) {
 				opState = cwd_pwd_cwd;
 			}
 			else {
-				controlSocket_.m_CurrentPath = target;
-				if (subDir.empty()) {
+				controlSocket_.m_CurrentPath = target_;
+				if (subDir_.empty()) {
 					return FZ_REPLY_OK;
 				}
 
-				target.clear();
+				target_.clear();
 				opState = cwd_cwd_subdir;
 			}
 		}
 		break;
 	case cwd_pwd_cwd:
 		if (code != 2 && code != 3) {
-			LogMessage(MessageType::Debug_Warning, L"PWD failed, assuming path is '%s'.", path.GetPath());
-			controlSocket_.m_CurrentPath = path;
+			LogMessage(MessageType::Debug_Warning, L"PWD failed, assuming path is '%s'.", path_.GetPath());
+			controlSocket_.m_CurrentPath = path_;
 
-			if (target.empty()) {
-				engine_.GetPathCache().Store(currentServer_, controlSocket_.m_CurrentPath, path);
+			if (target_.empty()) {
+				engine_.GetPathCache().Store(currentServer_, controlSocket_.m_CurrentPath, path_);
 			}
 
-			if (subDir.empty()) {
+			if (subDir_.empty()) {
 				return FZ_REPLY_OK;
 			}
 			else {
 				opState = cwd_cwd_subdir;
 			}
 		}
-		else if (controlSocket_.ParsePwdReply(response, false, path)) {
-			if (target.empty()) {
-				engine_.GetPathCache().Store(currentServer_, controlSocket_.m_CurrentPath, path);
+		else if (controlSocket_.ParsePwdReply(response, false, path_)) {
+			if (target_.empty()) {
+				engine_.GetPathCache().Store(currentServer_, controlSocket_.m_CurrentPath, path_);
 			}
-			if (subDir.empty()) {
+			if (subDir_.empty()) {
 				return FZ_REPLY_OK;
 			}
 			else {
@@ -178,11 +188,11 @@ int CFtpChangeDirOpData::ParseResponse()
 		break;
 	case cwd_cwd_subdir:
 		if (code != 2 && code != 3) {
-			if (subDir == L".." && !tried_cdup && response.substr(0, 2) == L"50") {
+			if (subDir_ == L".." && !tried_cdup_ && response.substr(0, 2) == L"50") {
 				// CDUP command not implemented, try again using CWD ..
-				tried_cdup = true;
+				tried_cdup_ = true;
 			}
-			else if (link_discovery) {
+			else if (link_discovery_) {
 				LogMessage(MessageType::Debug_Info, L"Symlink does not link to a directory, probably a file");
 				return FZ_REPLY_LINKNOTDIR;
 			}
@@ -196,8 +206,8 @@ int CFtpChangeDirOpData::ParseResponse()
 		break;
 	case cwd_pwd_subdir:
 	    {
-		    CServerPath assumedPath(path);
-			if (subDir == L"..") {
+		    CServerPath assumedPath(path_);
+			if (subDir_ == L"..") {
 				if (!assumedPath.HasParent()) {
 					assumedPath.clear();
 				}
@@ -206,7 +216,7 @@ int CFtpChangeDirOpData::ParseResponse()
 				}
 			}
 			else {
-				assumedPath.AddSegment(subDir);
+				assumedPath.AddSegment(subDir_);
 			}
 
 			if (code != 2 && code != 3) {
@@ -214,8 +224,8 @@ int CFtpChangeDirOpData::ParseResponse()
 					LogMessage(MessageType::Debug_Warning, L"PWD failed, assuming path is '%s'.", assumedPath.GetPath());
 					controlSocket_.m_CurrentPath = assumedPath;
 
-					if (target.empty()) {
-						engine_.GetPathCache().Store(currentServer_, controlSocket_.m_CurrentPath, path, subDir);
+					if (target_.empty()) {
+						engine_.GetPathCache().Store(currentServer_, controlSocket_.m_CurrentPath, path_, subDir_);
 					}
 
 					return FZ_REPLY_OK;
@@ -226,8 +236,8 @@ int CFtpChangeDirOpData::ParseResponse()
 				}
 			}
 			else if (controlSocket_.ParsePwdReply(response, false, assumedPath)) {
-				if (target.empty()) {
-					engine_.GetPathCache().Store(currentServer_, controlSocket_.m_CurrentPath, path, subDir);
+				if (target_.empty()) {
+					engine_.GetPathCache().Store(currentServer_, controlSocket_.m_CurrentPath, path_, subDir_);
 				}
 
 				return FZ_REPLY_OK;

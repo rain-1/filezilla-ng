@@ -117,12 +117,12 @@ public:
 	{
 	}
 
-	CServerPath path;
-	std::wstring subDir;
-	bool tryMkdOnFail{};
-	CServerPath target;
+	CServerPath path_;
+	std::wstring subDir_;
+	bool tryMkdOnFail_{};
+	CServerPath target_;
 
-	bool link_discovery{};
+	bool link_discovery_{};
 };
 
 enum class TransferEndReason
@@ -149,19 +149,17 @@ public:
 	CControlSocket(CControlSocket const&) = delete;
 	CControlSocket& operator=(CControlSocket const&) = delete;
 
-	// Implicit FZ_REPLY_CONTINUE
-	virtual void Connect(CServer const& server) = 0;
-
 	virtual int Disconnect();
 
 	virtual void Cancel();
 
 	// Implicit FZ_REPLY_CONTINUE
+	virtual void Connect(CServer const& server) = 0;
 	virtual void List(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0);
 
-	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+	virtual void FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 							 std::wstring const& remoteFile, bool download,
-							 CFileTransferCommand::t_transferSettings const& transferSettings);
+							 CFileTransferCommand::t_transferSettings const& transferSettings) = 0;
 	virtual void RawCommand(std::wstring const& command = std::wstring());
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
 	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());

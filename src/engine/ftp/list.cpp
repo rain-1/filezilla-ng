@@ -121,7 +121,7 @@ int CFtpListOpData::Send()
 	}
 	if (opState == list_mdtm) {
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
-		std::wstring cmd = L"MDTM " + controlSocket_.m_CurrentPath.FormatFilename(directoryListing[mdtm_index_].name, true);
+		std::wstring cmd = L"MDTM " + controlSocket_.m_CurrentPath.FormatFilename(directoryListing_[mdtm_index_].name, true);
 		return controlSocket_.SendCommand(cmd);
 	}
 
@@ -147,12 +147,12 @@ int CFtpListOpData::ParseResponse()
 	{
 		fz::datetime date(response.substr(4), fz::datetime::utc);
 		if (!date.empty()) {
-			assert(directoryListing[mdtm_index_].has_date());
-			fz::datetime listTime = directoryListing[mdtm_index_].time;
+			assert(directoryListing_[mdtm_index_].has_date());
+			fz::datetime listTime = directoryListing_[mdtm_index_].time;
 			listTime -= fz::duration::from_minutes(currentServer_.GetTimezoneOffset());
 
 			int serveroffset = static_cast<int>((date - listTime).get_seconds());
-			if (!directoryListing[mdtm_index_].has_seconds()) {
+			if (!directoryListing_[mdtm_index_].has_seconds()) {
 				// Round offset to full minutes
 				if (serveroffset < 0) {
 					serveroffset -= 59;
@@ -163,9 +163,9 @@ int CFtpListOpData::ParseResponse()
 			LogMessage(MessageType::Status, L"Timezone offset of server is %d seconds.", -serveroffset);
 
 			fz::duration span = fz::duration::from_seconds(serveroffset);
-			const int count = directoryListing.GetCount();
+			const int count = directoryListing_.GetCount();
 			for (int i = 0; i < count; ++i) {
-				CDirentry& entry = directoryListing.get(i);
+				CDirentry& entry = directoryListing_.get(i);
 				entry.time += span;
 			}
 
@@ -182,7 +182,7 @@ int CFtpListOpData::ParseResponse()
 		CServerCapabilities::SetCapability(currentServer_, timezone_offset, no);
 	}
 
-	engine_.GetDirectoryCache().Store(directoryListing, currentServer_);
+	engine_.GetDirectoryCache().Store(directoryListing_, currentServer_);
 
 	controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
 
@@ -225,7 +225,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 				if (!viewHidden_) {
 					// Repeat with LIST -a
 					viewHidden_ = true;
-					directoryListing = listing;
+					directoryListing_ = listing;
 
 					// Reset status
 					transferEndReason = TransferEndReason::successful;
@@ -239,14 +239,14 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 					return FZ_REPLY_CONTINUE;
 				}
 				else {
-					if (CheckInclusion(listing, directoryListing)) {
+					if (CheckInclusion(listing, directoryListing_)) {
 						LogMessage(MessageType::Debug_Info, L"Server seems to support LIST -a");
 						CServerCapabilities::SetCapability(currentServer_, list_hidden_support, yes);
 					}
 					else {
 						LogMessage(MessageType::Debug_Info, L"Server does not seem to support LIST -a");
 						CServerCapabilities::SetCapability(currentServer_, list_hidden_support, no);
-						listing = directoryListing;
+						listing = directoryListing_;
 					}
 				}
 			}
@@ -272,12 +272,12 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 
 				if (viewHiddenCheck_) {
 					if (viewHidden_) {
-						if (directoryListing.GetCount()) {
+						if (directoryListing_.GetCount()) {
 							// Less files with LIST -a
 							// Not supported
 							LogMessage(MessageType::Debug_Info, L"Server does not seem to support LIST -a");
 							CServerCapabilities::SetCapability(currentServer_, list_hidden_support, no);
-							listing = directoryListing;
+							listing = directoryListing_;
 						}
 						else {
 							LogMessage(MessageType::Debug_Info, L"Server seems to support LIST -a");
@@ -295,7 +295,7 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 
 						// Repeat with LIST -a
 						viewHidden_ = true;
-						directoryListing = listing;
+						directoryListing_ = listing;
 						controlSocket_.Transfer(L"LIST -a", this);
 						return FZ_REPLY_CONTINUE;
 					}
@@ -322,12 +322,12 @@ int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOper
 					{
 						CServerCapabilities::SetCapability(currentServer_, list_hidden_support, no);
 
-						int res = CheckTimezoneDetection(directoryListing);
+						int res = CheckTimezoneDetection(directoryListing_);
 						if (res != FZ_REPLY_OK) {
 							return res;
 						}
 
-						engine_.GetDirectoryCache().Store(directoryListing, currentServer_);
+						engine_.GetDirectoryCache().Store(directoryListing_, currentServer_);
 
 						controlSocket_.SendDirectoryListingNotification(controlSocket_.m_CurrentPath, !pNextOpData, false);
 
@@ -360,7 +360,7 @@ int CFtpListOpData::CheckTimezoneDetection(CDirectoryListing& listing)
 			for (int i = 0; i < count; ++i) {
 				if (!listing[i].is_dir() && listing[i].has_time()) {
 					opState = list_mdtm;
-					directoryListing = listing;
+					directoryListing_ = listing;
 					mdtm_index_ = i;
 					return FZ_REPLY_CONTINUE;
 				}

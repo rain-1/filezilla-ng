@@ -1383,13 +1383,6 @@ void CControlSocket::List(CServerPath const&, std::wstring const&, int)
 	Push(new CNotSupportedOpData());
 }
 
-int CControlSocket::FileTransfer(std::wstring const&, CServerPath const&,
-					std::wstring const&, bool,
-					CFileTransferCommand::t_transferSettings const&)
-{
-	return FZ_REPLY_NOTSUPPORTED;
-}
-
 void CControlSocket::RawCommand(std::wstring const&)
 {
 	Push(new CNotSupportedOpData());

@@ -18,6 +18,10 @@ public:
 
 	virtual void Connect(CServer const& server) override;
 	virtual void List(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), int flags = 0) override;
+	void ChangeDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring(), bool link_discovery = false);
+	virtual void FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+		std::wstring const& remoteFile, bool download,
+		CFileTransferCommand::t_transferSettings const& transferSettings) override;
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files) override;
 	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
 	virtual int Mkdir(const CServerPath& path);
@@ -40,17 +44,9 @@ protected:
 
 	void ProcessReply(int result, std::wstring const& reply);
 
-	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
-							 std::wstring const& remoteFile, bool download,
-							 CFileTransferCommand::t_transferSettings const& transferSettings);
 	int FileTransferSubcommandResult(int prevResult);
 	int FileTransferSend();
 	int FileTransferParseResponse(int result, std::wstring const& reply);
-
-	int ChangeDir(CServerPath path = CServerPath(), std::wstring subDir = std::wstring(), bool link_discovery = false);
-	int ChangeDirParseResponse(bool successful, std::wstring const& reply);
-	int ChangeDirSubcommandResult(int prevResult);
-	int ChangeDirSend();
 
 	int MkdirParseResponse(bool successful, std::wstring const& reply);
 	int MkdirSend();
@@ -92,6 +88,7 @@ protected:
 	int result_;
 	std::wstring response_;
 
+	friend class CSftpChangeDirOpData;
 	friend class CSftpConnectOpData;
 	friend class CSftpListOpData;
 	friend class CSftpOpData;

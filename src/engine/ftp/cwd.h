@@ -3,16 +3,6 @@
 
 #include "ftpcontrolsocket.h"
 
-enum cwdStates
-{
-	cwd_init = 0,
-	cwd_pwd,
-	cwd_cwd,
-	cwd_pwd_cwd,
-	cwd_cwd_subdir,
-	cwd_pwd_subdir
-};
-
 class CFtpChangeDirOpData final : public CChangeDirOpData, public CFtpOpData
 {
 public:
@@ -29,7 +19,7 @@ public:
 		return FZ_REPLY_CONTINUE;
 	}
 
-	bool tried_cdup{};
+	bool tried_cdup_{};
 };
 
 #endif
