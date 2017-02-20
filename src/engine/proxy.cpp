@@ -104,7 +104,7 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, std::wstring const& ho
 			host_raw.c_str(), port,
 			host_raw.c_str(), port,
 			auth.c_str(),
-			fz::replaced_substrings(PACKAGE_STRING, " ", "/"));
+			fz::replaced_substrings(PACKAGE_STRING, " ", "/").c_str());
 
 		m_pRecvBuffer = new char[4096];
 		m_recvBufferLen = 4096;
