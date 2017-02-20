@@ -55,20 +55,20 @@ bool CUpdateDialog::IsRunning()
 int CUpdateDialog::ShowModal()
 {
 	wxString version(PACKAGE_VERSION, wxConvLocal);
-	if (version.empty() || version[0] < '0' || version[0] > '9')
-	{
+	if (version.empty() || version[0] < '0' || version[0] > '9') {
 		wxMessageBoxEx(_("Executable contains no version info, cannot check for updates."), _("Check for updates failed"), wxICON_ERROR, parent_);
 		return wxID_CANCEL;
 	}
 
-	if (!Load(parent_, _T("ID_UPDATE_DIALOG")))
+	if (!Load(parent_, _T("ID_UPDATE_DIALOG"))) {
 		return wxID_CANCEL;
+	}
 
 	LoadPanel(_T("ID_CHECKING_PANEL"));
 	LoadPanel(_T("ID_FAILURE_PANEL"));
 	LoadPanel(_T("ID_NEWVERSION_PANEL"));
 	LoadPanel(_T("ID_LATEST_PANEL"));
-	if( panels_.size() != 4 ) {
+	if (panels_.size() != 4) {
 		return wxID_CANCEL;
 	}
 
