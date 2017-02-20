@@ -2,7 +2,10 @@
  * winsftp.c: the Windows-specific parts of PSFTP and PSCP.
  */
 
+#include <winsock2.h> /* need to put this first, for winelib builds */
 #include <assert.h>
+
+#define NEED_DECLARATION_OF_SELECT
 
 #include "putty.h"
 #include "psftp.h"
@@ -808,23 +811,11 @@ char *ssh_sftp_get_cmdline(const char *prompt, int no_fds_ok)
     return ctx->line;
 }
 
-void platform_psftp_post_option_setup(void)
+void platform_psftp_pre_conn_setup(void)
 {
-#if !defined UNPROTECT && !defined NO_SECURITY
-    /*
-     * Protect our process.
-     */
-    {
-        char *error = NULL;
-        if (!setprocessacl(error)) {
-            char *message = dupprintf("Could not restrict process ACL: %s",
-                                      error);
-            logevent(NULL, message);
-            sfree(message);
-            sfree(error);
-        }
+    if (restricted_acl) {
+	logevent(NULL, "Running with restricted process ACL");
     }
-#endif
 }
 
 /* ----------------------------------------------------------------------

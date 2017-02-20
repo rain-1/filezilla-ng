@@ -309,6 +309,8 @@ int rsakey_pubblob(const Filename *filename, void **blob, int *bloblen,
             *commentptr = commentp ? dupstr(commentp) : NULL;
         *blob = rsa_public_blob(&key, bloblen);
         freersakey(&key);
+        sfree(line);
+        fclose(fp);
         return 1;
 
       not_public_either:
@@ -947,6 +949,7 @@ unsigned char *rfc4716_loadpub(FILE *fp, char **algorithm,
             }
 
             *q = '\0';
+            sfree(comment);   /* *just* in case of multiple Comment headers */
             comment = dupstr(line);
         } else if (!strcmp(line, "Subject") ||
                    !strncmp(line, "x-", 2)) {
@@ -1092,6 +1095,7 @@ unsigned char *openssh_loadpub(FILE *fp, char **algorithm,
         *commentptr = comment;
     else
         sfree(comment);
+    sfree(line);
     return pubblob;
 
   error:
