@@ -530,18 +530,18 @@ wxString CUpdater::GetLocalFile(build const& b, bool allow_existing)
 
 void CUpdater::ProcessData(CDataNotification& dataNotification)
 {
-	if( state_ != UpdaterState::checking ) {
+	if (state_ != UpdaterState::checking) {
 		return;
 	}
 
 	int len;
 	char* data = dataNotification.Detach(len);
 
-	if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+	if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
 		log_ += wxString::Format(_T("ProcessData %d\n"), len);
 	}
 
-	if( raw_version_information_.size() + len > 0x40000) {
+	if (raw_version_information_.size() + len > 0x40000) {
 		log_ += _("Received version information is too large");
 		engine_->Cancel();
 		SetState(UpdaterState::failed);
@@ -557,7 +557,7 @@ void CUpdater::ProcessData(CDataNotification& dataNotification)
 		}
 	}
 
-	if( state_ == UpdaterState::checking ) {
+	if (state_ == UpdaterState::checking) {
 		raw_version_information_ += wxString(data, wxConvUTF8, len);
 	}
 	delete [] data;

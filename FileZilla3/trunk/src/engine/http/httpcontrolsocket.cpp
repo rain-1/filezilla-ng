@@ -86,7 +86,7 @@ void CHttpControlSocket::OnConnect()
 {
 	assert(GetCurrentCommandId() == PrivCommand::http_connect);
 
-	if (operations_.empty() || operations_.back()->opId != Command::connect) {
+	if (operations_.empty() || operations_.back()->opId != PrivCommand::http_connect) {
 		return;
 	}
 
