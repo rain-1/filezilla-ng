@@ -48,7 +48,23 @@
 #define META_MANUAL_MASK (GDK_MOD1_MASK)
 #define JUST_USE_GTK_CLIPBOARD_UTF8 /* low-level gdk_selection_* fails */
 #define DEFAULT_CLIPBOARD GDK_SELECTION_CLIPBOARD /* OS X has no PRIMARY */
+
+#define BUILDINFO_PLATFORM "OS X (GTK)"
+#define BUILDINFO_GTK
+
+#elif defined NOT_X_WINDOWS
+
+#define BUILDINFO_PLATFORM "Unix (pure GTK)"
+#define BUILDINFO_GTK
+
+#else
+
+#define BUILDINFO_PLATFORM "Unix (GTK + X11)"
+#define BUILDINFO_GTK
+
 #endif
+
+char *buildinfo_gtk_version(void);
 
 struct Filename {
     char *path;
@@ -132,7 +148,6 @@ void gtkcomm_setup(void);
 const char *get_x_display(void *frontend);
 int font_dimension(void *frontend, int which);/* 0 for width, 1 for height */
 long get_windowid(void *frontend);
-int frontend_is_utf8(void *frontend);
 
 /* Things gtkdlg.c needs from pterm.c */
 void *get_window(void *frontend);      /* void * to avoid depending on gtk.h */

@@ -5,11 +5,15 @@
  * unfix.org.
  */
 
+#include <winsock2.h> /* need to put this first, for winelib builds */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
 #define DEFINE_PLUG_METHOD_MACROS
+#define NEED_DECLARATION_OF_SELECT     /* in order to initialise it */
+
 #include "putty.h"
 #include "network.h"
 #include "tree234.h"
@@ -17,8 +21,15 @@
 #include <ws2tcpip.h>
 
 #ifndef NO_IPV6
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-braces"
+#endif
 const struct in6_addr in6addr_any = IN6ADDR_ANY_INIT;
 const struct in6_addr in6addr_loopback = IN6ADDR_LOOPBACK_INIT;
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 #endif
 
 #define ipv4_is_loopback(addr) \
@@ -231,6 +242,13 @@ int sk_startup(int hi, int lo)
 #endif
     return TRUE;
 }
+
+/* Actually define this function pointer, which won't have been
+ * defined alongside all the others by PUTTY_DO_GLOBALS because of the
+ * annoying winelib header-ordering issue. (See comment in winstuff.h.) */
+DECL_WINDOWS_FUNCTION(/* empty */, int, select,
+		      (int, fd_set FAR *, fd_set FAR *,
+		       fd_set FAR *, const struct timeval FAR *));
 
 void sk_init(void)
 {
@@ -707,6 +725,35 @@ void sk_getaddr(SockAddr addr, char *buf, int buflen)
     }
 }
 
+/*
+ * This constructs a SockAddr that points at one specific sub-address
+ * of a parent SockAddr. The returned SockAddr does not own all its
+ * own memory: it points into the old one's data structures, so it
+ * MUST NOT be used after the old one is freed, and it MUST NOT be
+ * passed to sk_addr_free. (The latter is why it's returned by value
+ * rather than dynamically allocated - that should clue in anyone
+ * writing a call to it that something is weird about it.)
+ */
+static struct SockAddr_tag sk_extractaddr_tmp(
+    SockAddr addr, const SockAddrStep *step)
+{
+    struct SockAddr_tag toret;
+    toret = *addr;                    /* structure copy */
+    toret.refcount = 1;
+
+#ifndef NO_IPV6
+    toret.ais = step->ai;
+#endif
+    if (SOCKADDR_FAMILY(addr, *step) == AF_INET
+#ifndef NO_IPV6
+        && !toret.ais
+#endif
+        )
+        toret.addresses += step->curraddr;
+
+    return toret;
+}
+
 int sk_addr_needs_port(SockAddr addr)
 {
     return addr->namedpipe ? FALSE : TRUE;
@@ -729,6 +776,8 @@ static int ipv4_is_local_addr(struct in_addr addr)
     if (!n_local_interfaces) {
 	SOCKET s = p_socket(AF_INET, SOCK_DGRAM, 0);
 	DWORD retbytes;
+
+	SetHandleInformation((HANDLE)s, HANDLE_FLAG_INHERIT, 0);
 
 	if (p_WSAIoctl &&
 	    p_WSAIoctl(s, SIO_GET_INTERFACE_LIST, NULL, 0,
@@ -952,7 +1001,11 @@ static DWORD try_connect(Actual_Socket sock)
         p_closesocket(sock->s);
     }
 
-    plug_log(sock->plug, 0, sock->addr, sock->port, NULL, 0);
+    {
+        struct SockAddr_tag thisaddr = sk_extractaddr_tmp(
+            sock->addr, &sock->step);
+        plug_log(sock->plug, 0, &thisaddr, sock->port, NULL, 0);
+    }
 
     /*
      * Open socket.
@@ -975,6 +1028,8 @@ static DWORD try_connect(Actual_Socket sock)
 	sock->error = winsock_error_string(err);
 	goto ret;
     }
+
+	SetHandleInformation((HANDLE)s, HANDLE_FLAG_INHERIT, 0);
 
     if (sock->oobinline) {
 	BOOL b = TRUE;
@@ -1126,8 +1181,11 @@ static DWORD try_connect(Actual_Socket sock)
      */
     add234(sktree, sock);
 
-    if (err)
-	plug_log(sock->plug, 1, sock->addr, sock->port, sock->error, err);
+    if (err) {
+        struct SockAddr_tag thisaddr = sk_extractaddr_tmp(
+            sock->addr, &sock->step);
+	plug_log(sock->plug, 1, &thisaddr, sock->port, sock->error, err);
+    }
     return err;
 }
 
@@ -1264,6 +1322,8 @@ Socket sk_newlistener(const char *srcaddr, int port, Plug plug,
 	ret->error = winsock_error_string(err);
 	return (Socket) ret;
     }
+
+	SetHandleInformation((HANDLE)s, HANDLE_FLAG_INHERIT, 0);
 
     ret->oobinline = 0;
 
@@ -1615,9 +1675,11 @@ int select_result(WPARAM wParam, LPARAM lParam)
 	 * plug.
 	 */
 	if (s->addr) {
-	    plug_log(s->plug, 1, s->addr, s->port,
+            struct SockAddr_tag thisaddr = sk_extractaddr_tmp(
+                s->addr, &s->step);
+	    plug_log(s->plug, 1, &thisaddr, s->port,
 		     winsock_error_string(err), err);
-	    while (s->addr && sk_nextaddr(s->addr, &s->step)) {
+	    while (err && s->addr && sk_nextaddr(s->addr, &s->step)) {
 		err = try_connect(s);
 	    }
 	}

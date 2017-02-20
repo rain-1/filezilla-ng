@@ -114,6 +114,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
 	return 1;
 
     fzprintf_raw((ret == 1) ? sftpAskHostkey : sftpAskHostkeyChanged, "%s\n%d\n", host, port);
+    line[0] = '\0';         /* fail safe if ReadFile returns no data */
 
     hin = GetStdHandle(STD_INPUT_HANDLE);
     GetConsoleMode(hin, &savemode);
