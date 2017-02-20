@@ -100,10 +100,11 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, std::wstring const& ho
 		std::string host_raw = fz::to_utf8(host);
 		m_pSendBuffer = new char[70 + host_raw.size() * 2 + 2*5 + auth.size() + 23];
 
-		m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\n%sUser-Agent: FileZilla\r\n\r\n",
+		m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\n%sUser-Agent: %s\r\n\r\n",
 			host_raw.c_str(), port,
 			host_raw.c_str(), port,
-			auth.c_str());
+			auth.c_str(),
+			fz::replaced_substrings(PACKAGE_STRING, " ", "/"));
 
 		m_pRecvBuffer = new char[4096];
 		m_recvBufferLen = 4096;
