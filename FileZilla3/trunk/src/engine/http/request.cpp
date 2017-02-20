@@ -27,7 +27,7 @@ int CHttpRequestOpData::Send()
 			}
 			request_.headers_["Host"] = host_header;
 			request_.headers_["Connection"] = "close";
-			request_.headers_["User-Agent"] = PACKAGE_STRING;
+			request_.headers_["User-Agent"] = fz::replaced_substrings(PACKAGE_STRING, " ", "/");
 
 			opState = request_wait_connect;
 			controlSocket_.InternalConnect(fz::to_wstring_from_utf8(request_.uri_.host_), request_.uri_.port_, request_.uri_.scheme_ == "https");

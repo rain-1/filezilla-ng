@@ -91,7 +91,7 @@ void CExternalIPResolver::GetExternalIP(std::wstring const& address, CSocket::ad
 		return;
 	}
 
-	m_sendBuffer = fz::sprintf("GET %s HTTP/1.1\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n\r\n", fz::to_utf8(address), fz::to_utf8(hostWithPort), PACKAGE_STRING);
+	m_sendBuffer = fz::sprintf("GET %s HTTP/1.1\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n\r\n", fz::to_utf8(address), fz::to_utf8(hostWithPort), fz::replaced_substrings(PACKAGE_STRING, " ", "/"));
 }
 
 void CExternalIPResolver::operator()(fz::event_base const& ev)
