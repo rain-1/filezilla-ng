@@ -5,6 +5,15 @@
 
 class CServerPath;
 
+enum requestStates
+{
+	request_init = 0,
+	request_wait_connect,
+	request_send_header,
+	request_send,
+	request_read
+};
+
 class CHttpRequestOpData final : public COpData, public CHttpOpData
 {
 public:
@@ -51,7 +60,10 @@ private:
 		int64_t size{};
 	} chunk_data_;
 
-	int64_t contentLength_{-1};
+	int64_t requestContentLength_{-1};
+	uint64_t dataToSend_{};
+
+	int64_t responseContentLength_{-1};
 	int64_t receivedData_{};
 };
 

@@ -214,3 +214,15 @@ void CHttpControlSocket::Connect(CServer const& server)
 	currentServer_ = server;
 	Push(std::make_unique<CHttpConnectOpData>(*this));
 }
+
+
+int CHttpControlSocket::OnSend()
+{
+	int res = CRealControlSocket::OnSend();
+	if (res == FZ_REPLY_CONTINUE) {
+		if (!operations_.empty() && operations_.back()->opId == PrivCommand::http_request && operations_.back()->opState == request_send) {
+			return SendNextCommand();
+		}
+	}
+	return res;
+}

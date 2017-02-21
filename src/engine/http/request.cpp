@@ -4,15 +4,6 @@
 
 #include <string.h>
 
-enum requestStates
-{
-	request_init = 0,
-	request_wait_connect,
-	request_send_header,
-	request_send,
-	request_read
-};
-
 int CHttpRequestOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::Send");
@@ -29,6 +20,21 @@ int CHttpRequestOpData::Send()
 			request_.headers_["Connection"] = "close";
 			request_.headers_["User-Agent"] = fz::replaced_substrings(PACKAGE_STRING, " ", "/");
 
+			auto const cl = response_.get_header("Content-Length");
+			if (!cl.empty()) {
+				requestContentLength_ = fz::to_integral<int64_t>(cl, -1);
+				if (requestContentLength_ < 0) {
+					LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
+					return FZ_REPLY_ERROR;
+				}
+				dataToSend_ = static_cast<uint64_t>(requestContentLength_);
+			}
+
+			if ((requestContentLength_ != -1) != (request_._data_request_ != 0)) {
+				LogMessage(MessageType::Debug_Warning, L"requestContentLength_ != -1 does not match request_._data_request_ != 0");
+				FZ_REPLY_INTERNALERROR;
+			}
+
 			opState = request_wait_connect;
 			controlSocket_.InternalConnect(fz::to_wstring_from_utf8(request_.uri_.host_), request_.uri_.port_, request_.uri_.scheme_ == "https");
 			return FZ_REPLY_CONTINUE;
@@ -44,11 +50,60 @@ int CHttpRequestOpData::Send()
 
 			command += "\r\n";
 
-			// FIXME: Send body
-			opState = request_read;
+			if (request_._data_request_) {
+				opState = request_send;
+			}
+			else {
+				opState = request_read;
+			}
 
 			return controlSocket_.Send(command.c_str(), command.size());
 		}
+	case request_send:
+		{
+			int const chunkSize = 65536;
+
+			while (dataToSend_) {
+				controlSocket_.SendBufferReserve(chunkSize);
+
+				if (!controlSocket_.sendBufferSize_) {
+					unsigned int len = chunkSize;
+					if (chunkSize > dataToSend_) {
+						len = static_cast<unsigned int>(dataToSend_);
+					}
+					int res = request_._data_request_(controlSocket_.sendBuffer_ + controlSocket_.sendBufferSize_, len);
+					if (res != FZ_REPLY_CONTINUE) {
+						return res;
+					}
+					if (len > dataToSend_) {
+						LogMessage(MessageType::Debug_Warning, L"request_._data_request_ returned too much data");
+						return FZ_REPLY_INTERNALERROR;
+					}
+
+					controlSocket_.sendBufferSize_ = len;
+				}
+
+				int error;
+				int written = controlSocket_.m_pBackend->Write(controlSocket_.sendBuffer_ + controlSocket_.sendBufferPos_, controlSocket_.sendBufferSize_ - controlSocket_.sendBufferPos_, error);
+				if (written < 0) {
+					if (error != EAGAIN) {
+						LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
+						LogMessage(MessageType::Error, _("Disconnected from server"));
+						return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
+					}
+					written = 0;
+				}
+
+				dataToSend_ -= written;
+				if (written != controlSocket_.sendBufferSize_ - controlSocket_.sendBufferPos_) {
+					controlSocket_.sendBufferPos_ += written;
+					controlSocket_.sendBufferSize_ -= written;
+				}
+			}
+			opState = request_read;
+			return FZ_REPLY_WOULDBLOCK;
+		}
+		return FZ_REPLY_WOULDBLOCK;
 	case request_read:
 		return FZ_REPLY_WOULDBLOCK;
 	default:
@@ -266,8 +321,8 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 	
 	auto const cl = response_.get_header("Content-Length");
 	if (!cl.empty()) {
-		contentLength_ = fz::to_integral<int64_t>(cl, -1);
-		if (contentLength_ < 0) {
+		responseContentLength_ = fz::to_integral<int64_t>(cl, -1);
+		if (responseContentLength_ < 0) {
 			LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
 			return FZ_REPLY_ERROR;
 		}
@@ -392,7 +447,7 @@ int CHttpRequestOpData::ParseChunkedData()
 int CHttpRequestOpData::ProcessData(unsigned char* data, unsigned int len)
 {
 	receivedData_ += len;
-	if (contentLength_ != -1 && receivedData_ > contentLength_) {
+	if (responseContentLength_ != -1 && receivedData_ > responseContentLength_) {
 		LogMessage(MessageType::Error, _("Malformed response: Server sent too much data."));
 		return FZ_REPLY_ERROR;
 	}
@@ -409,6 +464,11 @@ int CHttpRequestOpData::OnClose()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::OnClose()");
 
+	if (dataToSend_) {
+		LogMessage(MessageType::Debug_Verbose, L"Socket closed before all data got sent");
+		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
+	}
+
 	if (!got_header_) {
 		LogMessage(MessageType::Debug_Verbose, L"Socket closed before headers got received");
 		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
@@ -421,7 +481,7 @@ int CHttpRequestOpData::OnClose()
 		}
 	}
 	else {
-		if (contentLength_ != -1 && receivedData_ != contentLength_) {
+		if (responseContentLength_ != -1 && receivedData_ != responseContentLength_) {
 			LogMessage(MessageType::Debug_Verbose, L"Socket closed, content length not reached");
 			return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 		}

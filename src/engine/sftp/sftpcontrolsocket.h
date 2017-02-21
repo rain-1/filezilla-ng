@@ -38,7 +38,7 @@ protected:
 	// "filename""with""quotes"
 	std::wstring QuoteFilename(std::wstring const& filename);
 
-	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED) override;
+	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR) override;
 
 	virtual int ResetOperation(int nErrorCode) override;
 
