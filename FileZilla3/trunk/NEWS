@@ -10,6 +10,12 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.24.1 (2017-02-21)
+
+- Fixed rendering icons in the remote directory tree when DPI scaling is enabled on Windows Vista and some Windows 7 machines
+- SFTP components have been updated and are now based on PuTTY 0.68
+- Updated builtin pugixml to version 1.8
+
 3.24.0 (2017-01-13)
 
 - Fixed a possible crash if sending FTP commands fails during a directory listing operation
