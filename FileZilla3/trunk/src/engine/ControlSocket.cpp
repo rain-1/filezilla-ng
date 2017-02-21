@@ -580,14 +580,16 @@ void CControlSocket::SetAlive()
 void CControlSocket::SetWait(bool wait)
 {
 	if (wait) {
-		if (m_timer)
+		if (m_timer) {
 			return;
+		}
 
 		m_lastActivity = fz::monotonic_clock::now();
 
 		int timeout = engine_.GetOptions().GetOptionVal(OPTION_TIMEOUT);
-		if (!timeout)
+		if (!timeout) {
 			return;
+		}
 
 		m_timer = add_timer(fz::duration::from_milliseconds(timeout * 1000 + 100), true); // Add a bit of slack
 	}
@@ -623,7 +625,7 @@ int CControlSocket::SendNextCommand()
 			if (res == FZ_REPLY_OK) {
 				return ResetOperation(res);
 			}
-			else if ((res & FZ_REPLY_DISCONNECTED) == FZ_REPLY_DISCONNECTED) {
+			else if (res & FZ_REPLY_DISCONNECTED) {
 				return DoClose(res);
 			}
 			else if (res & FZ_REPLY_ERROR) {
@@ -934,18 +936,61 @@ CRealControlSocket::~CRealControlSocket()
 	m_pBackend = 0;
 
 	delete m_pSocket;
+	delete[] sendBuffer_;
 }
 
-int CRealControlSocket::Send(const char *buffer, int len)
+void CRealControlSocket::AppendToSendBuffer(unsigned char const* data, unsigned int len)
+{
+	if (sendBufferSize_ + len > sendBufferCapacity_) {
+		if (sendBufferSize_ + len - sendBufferPos_ <= sendBufferCapacity_) {
+			memmove(sendBuffer_, sendBuffer_ + sendBufferPos_, sendBufferSize_ - sendBufferPos_);
+			sendBufferSize_ -= sendBufferPos_;
+			sendBufferPos_ = 0;
+		}
+		else if (!sendBuffer_) {
+			assert(!sendBufferSize_ && !sendBufferPos_);
+			sendBufferCapacity_ = len;
+			sendBuffer_ = new unsigned char[sendBufferCapacity_];
+		}
+		else {
+			unsigned char *old = sendBuffer_;
+			sendBufferCapacity_ += len;
+			sendBuffer_ = new unsigned char[sendBufferCapacity_];
+			memcpy(sendBuffer_, old + sendBufferPos_, sendBufferSize_ - sendBufferPos_);
+			sendBufferSize_ -= sendBufferPos_;
+			sendBufferPos_ = 0;
+			delete[] old;
+		}
+	}
+
+	memcpy(sendBuffer_ + sendBufferSize_, data, len);
+	sendBufferSize_ += len;
+}
+
+void CRealControlSocket::SendBufferReserve(unsigned int len)
+{
+	if (sendBufferCapacity_ < len) {
+		if (sendBuffer_) {
+			unsigned char *old = sendBuffer_;
+			sendBuffer_ = new unsigned char[sendBufferCapacity_ + len];
+			memcpy(sendBuffer_, old + sendBufferPos_, sendBufferSize_ - sendBufferPos_);
+			sendBufferSize_ -= sendBufferPos_;
+			sendBufferPos_ = 0;
+			sendBufferCapacity_ += len;
+			delete[] old;
+		}
+		else {
+			sendBufferCapacity_ = len;
+			sendBuffer_ = new unsigned char[sendBufferCapacity_];
+		}
+	}
+}
+
+int CRealControlSocket::Send(unsigned char const* buffer, unsigned int len)
 {
 	SetWait(true);
-	if (m_pSendBuffer) {
-		char *tmp = m_pSendBuffer;
-		m_pSendBuffer = new char[m_nSendBufferLen + len];
-		memcpy(m_pSendBuffer, tmp, m_nSendBufferLen);
-		memcpy(m_pSendBuffer + m_nSendBufferLen, buffer, len);
-		m_nSendBufferLen += len;
-		delete [] tmp;
+	if (sendBufferSize_) {
+		AppendToSendBuffer(buffer, len);
 	}
 	else {
 		int error;
@@ -954,7 +999,7 @@ int CRealControlSocket::Send(const char *buffer, int len)
 			if (error != EAGAIN) {
 				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
 				LogMessage(MessageType::Error, _("Disconnected from server"));
-				return FZ_REPLY_DISCONNECTED;
+				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 			}
 			written = 0;
 		}
@@ -963,10 +1008,8 @@ int CRealControlSocket::Send(const char *buffer, int len)
 			SetActive(CFileZillaEngine::send);
 		}
 
-		if (written < len) {
-			m_nSendBufferLen = len - written;
-			m_pSendBuffer = new char[m_nSendBufferLen];
-			memcpy(m_pSendBuffer, buffer, len - written);
+		if (static_cast<unsigned int>(written) < len) {
+			AppendToSendBuffer(buffer + written, len - written);
 		}
 	}
 
@@ -1040,17 +1083,14 @@ void CRealControlSocket::OnReceive()
 {
 }
 
-void CRealControlSocket::OnSend()
+int CRealControlSocket::OnSend()
 {
-	if (m_pSendBuffer) {
-		if (!m_nSendBufferLen) {
-			delete [] m_pSendBuffer;
-			m_pSendBuffer = 0;
-			return;
-		}
+	while (sendBufferSize_) {
+		assert(sendBufferPos_ < sendBufferSize_);
+		assert(sendBuffer_);
 
 		int error;
-		int written = m_pBackend->Write(m_pSendBuffer, m_nSendBufferLen, error);
+		int written = m_pBackend->Write(sendBuffer_ + sendBufferPos_, sendBufferSize_ - sendBufferPos_, error);
 		if (written < 0) {
 			if (error != EAGAIN) {
 				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
@@ -1058,24 +1098,23 @@ void CRealControlSocket::OnSend()
 					LogMessage(MessageType::Error, _("Disconnected from server"));
 				}
 				DoClose();
+				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 			}
-			return;
+			return FZ_REPLY_WOULDBLOCK;
 		}
 
 		if (written) {
 			SetActive(CFileZillaEngine::send);
 		}
 
-		if (written == m_nSendBufferLen) {
-			m_nSendBufferLen = 0;
-			delete [] m_pSendBuffer;
-			m_pSendBuffer = 0;
-		}
-		else {
-			memmove(m_pSendBuffer, m_pSendBuffer + written, m_nSendBufferLen - written);
-			m_nSendBufferLen -= written;
+		sendBufferPos_ += static_cast<int>(written);
+		if (sendBufferPos_ == sendBufferSize_) {
+			sendBufferSize_ = 0;
+			sendBufferPos_ = 0;
 		}
 	}
+
+	return FZ_REPLY_CONTINUE;
 }
 
 void CRealControlSocket::OnClose(int error)
@@ -1085,10 +1124,12 @@ void CRealControlSocket::OnClose(int error)
 	auto cmd = GetCurrentCommandId();
 	if (cmd != Command::connect) {
 		auto messageType = (cmd == Command::none) ? MessageType::Status : MessageType::Error;
-		if (!error)
+		if (!error) {
 			LogMessage(messageType, _("Connection closed by server"));
-		else
+		}
+		else {
 			LogMessage(messageType, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
+		}
 	}
 	DoClose();
 }
@@ -1168,11 +1209,8 @@ void CRealControlSocket::ResetSocket()
 {
 	m_pSocket->Close();
 
-	if (m_pSendBuffer) {
-		delete [] m_pSendBuffer;
-		m_pSendBuffer = 0;
-		m_nSendBufferLen = 0;
-	}
+	sendBufferSize_ = 0;
+	sendBufferPos_ = 0;
 
 	if (m_pProxyBackend) {
 		if (m_pProxyBackend != m_pBackend) {

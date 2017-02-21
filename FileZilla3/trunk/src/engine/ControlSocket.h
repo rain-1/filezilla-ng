@@ -234,7 +234,7 @@ protected:
 
 	fz::duration GetTimezoneOffset() const;
 
-	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
+	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR);
 	bool m_closed{};
 
 	virtual int ResetOperation(int nErrorCode);
@@ -335,7 +335,7 @@ public:
 	virtual bool Connected() const override { return m_pSocket->GetState() == CSocket::connected; }
 
 protected:
-	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
+	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR);
 	virtual void ResetSocket();
 
 	virtual void operator()(fz::event_base const& ev);
@@ -344,18 +344,25 @@ protected:
 
 	virtual void OnConnect();
 	virtual void OnReceive();
-	void OnSend();
+	virtual int OnSend();
 	virtual void OnClose(int error);
 
-	int Send(const char *buffer, int len);
+	int Send(unsigned char const* buffer, unsigned int len);
+	int Send(char const* buffer, unsigned int len) {
+		return Send(reinterpret_cast<unsigned char const*>(buffer), len);
+	}
 
 	CSocket* m_pSocket;
 
 	CBackend* m_pBackend;
 	CProxySocket* m_pProxyBackend{};
 
-	char *m_pSendBuffer{};
-	int m_nSendBufferLen{};
+	void SendBufferReserve(unsigned int len);
+	void AppendToSendBuffer(unsigned char const* data, unsigned int len);
+	unsigned char* sendBuffer_{};
+	unsigned int sendBufferCapacity_{};
+	unsigned int sendBufferPos_{};
+	unsigned int sendBufferSize_{};
 };
 
 #endif

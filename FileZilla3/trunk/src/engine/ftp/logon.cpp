@@ -211,7 +211,7 @@ int CFtpLogonOpData::ParseResponse()
 
 	if (opState == LOGON_WELCOME) {
 		if (code != 2 && code != 3) {
-			return FZ_REPLY_DISCONNECTED | (code == 5 ? FZ_REPLY_CRITICALERROR : 0);
+			return FZ_REPLY_DISCONNECTED | (code == 5 ? FZ_REPLY_CRITICALERROR : FZ_REPLY_ERROR);
 		}
 	}
 	else if (opState == LOGON_AUTH_TLS ||
@@ -230,7 +230,7 @@ int CFtpLogonOpData::ParseResponse()
 					return FZ_REPLY_CONTINUE;
 				}
 				else {
-					return FZ_REPLY_DISCONNECTED | (code == 5 ? FZ_REPLY_CRITICALERROR : 0);
+					return FZ_REPLY_DISCONNECTED | (code == 5 ? FZ_REPLY_CRITICALERROR : FZ_REPLY_ERROR);
 				}
 			}
 		}
@@ -292,7 +292,7 @@ int CFtpLogonOpData::ParseResponse()
 				if (!asciiOnly) {
 					if (ftp_proxy_type) {
 						LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Cannot fall back to local charset since using proxy."));
-						int error = FZ_REPLY_DISCONNECTED;
+						int error = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR;
 						if (cmd.type == loginCommandType::pass && code == 5) {
 							error |= FZ_REPLY_PASSWORDFAILED;
 						}
@@ -301,7 +301,7 @@ int CFtpLogonOpData::ParseResponse()
 					LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Trying local charset."));
 					controlSocket_.m_useUTF8 = false;
 					if (!GetLoginSequence()) {
-						int error = FZ_REPLY_DISCONNECTED;
+						int error = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR;
 						if (cmd.type == loginCommandType::pass && code == 5) {
 							error |= FZ_REPLY_PASSWORDFAILED;
 						}
@@ -311,7 +311,7 @@ int CFtpLogonOpData::ParseResponse()
 				}
 			}
 
-			int error = FZ_REPLY_DISCONNECTED;
+			int error = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR;
 			if (cmd.type == loginCommandType::pass && code == 5) {
 				error |= FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED;
 			}

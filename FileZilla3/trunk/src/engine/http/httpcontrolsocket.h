@@ -92,6 +92,7 @@ protected:
 	virtual void OnConnect();
 	virtual void OnClose(int error);
 	virtual void OnReceive();
+	virtual int OnSend() override;
 	
 	virtual int ResetOperation(int nErrorCode) override;
 
