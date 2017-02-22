@@ -1,5 +1,5 @@
-#ifndef __STATUSLINECTRL_H__
-#define __STATUSLINECTRL_H__
+#ifndef FILEZILLA_INTERFACE_STATUSLINECTRL_HEADER
+#define FILEZILLA_INTERFACE_STATUSLINECTRL_HEADER
 
 class CQueueView;
 class CStatusLineCtrl final : public wxWindow
@@ -36,6 +36,7 @@ protected:
 	wxTimer m_transferStatusTimer;
 
 	static int m_fieldOffsets[4];
+	static int m_barWidth;
 	static wxCoord m_textHeight;
 	static bool m_initialized;
 
@@ -75,4 +76,4 @@ protected:
 	void OnEraseBackground(wxEraseEvent& event);
 };
 
-#endif // __STATUSLINECTRL_H__
+#endif
