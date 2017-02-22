@@ -79,6 +79,9 @@ public:
 
 	static wxSize GetIconSize(iconSize size, bool userScaled = false);
 
+	// Note: Always 1 on OS X
+	static double GetUIScaleFactor();
+
 	static CThemeProvider* Get();
 
 	wxAnimation CreateAnimation(wxArtID const& id, wxSize const& size);

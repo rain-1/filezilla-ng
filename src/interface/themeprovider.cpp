@@ -518,3 +518,14 @@ wxSize CThemeProvider::GetIconSize(iconSize size, bool userScaled)
 
 	return ret;
 }
+
+double CThemeProvider::GetUIScaleFactor()
+{
+	int x = GetIconSize(iconSizeSmall).x;
+	if (!x) {
+		return 1.;
+	}
+	else {
+		return x / 16.;
+	}
+}

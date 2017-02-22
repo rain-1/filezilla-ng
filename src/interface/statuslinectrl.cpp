@@ -4,6 +4,7 @@
 #include <wx/dcbuffer.h>
 #include "Options.h"
 #include "sizeformatting.h"
+#include "themeprovider.h"
 
 #include <algorithm>
 
@@ -16,8 +17,7 @@ END_EVENT_TABLE()
 int CStatusLineCtrl::m_fieldOffsets[4];
 wxCoord CStatusLineCtrl::m_textHeight;
 bool CStatusLineCtrl::m_initialized = false;
-
-#define PROGRESSBAR_WIDTH 102
+int CStatusLineCtrl::m_barWidth = 102;
 
 CStatusLineCtrl::CStatusLineCtrl(CQueueView* pParent, const t_EngineData* const pEngineData, const wxRect& initialPosition)
 	: m_pParent(pParent)
@@ -41,36 +41,42 @@ CStatusLineCtrl::CStatusLineCtrl(CQueueView* pParent, const t_EngineData* const 
 
 void CStatusLineCtrl::InitFieldOffsets()
 {
-	if (m_initialized)
+	if (m_initialized) {
 		return;
+	}
 	m_initialized = true;
 
 	// Calculate field widths so that the contents fit under every language.
 	wxClientDC dc(this);
 	dc.SetFont(GetFont());
 
+	double scale = CThemeProvider::GetUIScaleFactor();
+	m_barWidth *= scale;
+
 	wxCoord w, h;
 	wxTimeSpan elapsed(100, 0, 0);
 	// @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 	dc.GetTextExtent(elapsed.Format(_("%H:%M:%S elapsed")), &w, &h);
 	m_textHeight = h;
-	m_fieldOffsets[0] = 50 + w;
+	m_fieldOffsets[0] = scale * 50 + w;
 
 	// @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 	dc.GetTextExtent(elapsed.Format(_("%H:%M:%S left")), &w, &h);
-	m_fieldOffsets[1] = m_fieldOffsets[0] + 20 + w;
+	m_fieldOffsets[1] = m_fieldOffsets[0] + scale * 20 + w;
 
-	m_fieldOffsets[2] = m_fieldOffsets[1] + 20;
-	m_fieldOffsets[3] = m_fieldOffsets[2] + PROGRESSBAR_WIDTH + 20;
+	m_fieldOffsets[2] = m_fieldOffsets[1] + scale * 20;
+	m_fieldOffsets[3] = m_fieldOffsets[2] + scale * 20 + m_barWidth;
 }
 
 CStatusLineCtrl::~CStatusLineCtrl()
 {
-	if (!status_.empty() && status_.totalSize >= 0)
+	if (!status_.empty() && status_.totalSize >= 0) {
 		m_pEngineData->pItem->SetSize(status_.totalSize);
+	}
 
-	if (m_transferStatusTimer.IsRunning())
+	if (m_transferStatusTimer.IsRunning()) {
 		m_transferStatusTimer.Stop();
+	}
 }
 
 void CStatusLineCtrl::OnPaint(wxPaintEvent&)
@@ -172,14 +178,17 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 		}
 
 		if (status_.totalSize > 0) {
-			bar_split = static_cast<int>(status_.currentOffset * (PROGRESSBAR_WIDTH - 2) / status_.totalSize);
-			if (bar_split > (PROGRESSBAR_WIDTH - 2))
-				bar_split = PROGRESSBAR_WIDTH - 2;
+			bar_split = static_cast<int>(status_.currentOffset * (m_barWidth - 2) / status_.totalSize);
+			if (bar_split > (m_barWidth - 2)) {
+				bar_split = m_barWidth - 2;
+			}
 
-			if (status_.currentOffset > status_.totalSize)
+			if (status_.currentOffset > status_.totalSize) {
 				permill = 1001;
-			else
+			}
+			else {
 				permill = static_cast<int>(status_.currentOffset * 1000 / status_.totalSize);
+			}
 		}
 
 		if (m_last_bar_split != bar_split || m_last_permill != permill) {
@@ -208,8 +217,9 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 				wxTimeSpan timeLeft(0, 0, left);
 				DrawRightAlignedText(*m_mdc, timeLeft.Format(_("%H:%M:%S left")), m_fieldOffsets[1], h);
 			}
-			else
+			else {
 				DrawRightAlignedText(*m_mdc, _("--:--:-- left"), m_fieldOffsets[1], h);
+			}
 		}
 		if (refresh & 8) {
 			m_mdc->DrawRectangle(m_fieldOffsets[3], 0, rect.GetWidth() - m_fieldOffsets[3], rect.GetHeight() + 1);
@@ -322,7 +332,7 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 	// Draw right part
 	dc.SetPen(*wxTRANSPARENT_PEN);
 	dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-	dc.DrawRectangle(x + 1 + bar_split, y + 1, PROGRESSBAR_WIDTH - bar_split - 1, height - 2);
+	dc.DrawRectangle(x + 1 + bar_split, y + 1, m_barWidth - bar_split - 1, height - 2);
 
 	if (bar_split && height > 2) {
 		// Draw pretty gradient
@@ -341,7 +351,7 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 
 	dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
-	dc.DrawRectangle(x, y, PROGRESSBAR_WIDTH, height);
+	dc.DrawRectangle(x, y, m_barWidth, height);
 
 	// Draw percentage-done text
 	wxString text;
@@ -354,13 +364,14 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 
 	wxCoord w, h;
 	dc.GetTextExtent(text, &w, &h);
-	dc.DrawText(text, x + PROGRESSBAR_WIDTH / 2 - w / 2, y + height / 2 - h / 2);
+	dc.DrawText(text, x + m_barWidth / 2 - w / 2, y + height / 2 - h / 2);
 }
 
 wxFileOffset CStatusLineCtrl::GetAverageSpeed(int elapsed_milli_seconds)
 {
-	if (status_.empty())
+	if (status_.empty()) {
 		return -1;
+	}
 
 	if (elapsed_milli_seconds <= 0) {
 		return -1;
@@ -426,8 +437,9 @@ bool CStatusLineCtrl::Show(bool show)
 			m_transferStatusTimer.Start(100);
 		}
 	}
-	else
+	else {
 		m_transferStatusTimer.Stop();
+	}
 
 	return wxWindow::Show(show);
 }
