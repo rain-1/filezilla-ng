@@ -2,6 +2,8 @@
 
 #include "internalconnect.h"
 
+#include "backend.h"
+
 int CHttpInternalConnectOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpInternalConnectOpData::Send");

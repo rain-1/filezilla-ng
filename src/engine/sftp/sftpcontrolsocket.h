@@ -3,6 +3,8 @@
 
 #include "ControlSocket.h"
 
+#include "backend.h"
+
 namespace fz {
 class process;
 }

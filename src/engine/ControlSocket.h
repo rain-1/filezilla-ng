@@ -3,7 +3,6 @@
 
 #include "socket.h"
 #include "logging_private.h"
-#include "backend.h"
 
 class COpData
 {
@@ -161,6 +160,7 @@ enum class TransferEndReason
 	failed_resumetest
 };
 
+class CBackend;
 class CTransferStatus;
 class CControlSocket: public CLogging, public fz::event_handler
 {
