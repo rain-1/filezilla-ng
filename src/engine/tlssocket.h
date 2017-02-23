@@ -48,6 +48,7 @@ public:
 
 	bool SetClientCertificate(fz::native_string const& keyfile, fz::native_string const& certs, fz::native_string const& password);
 
+	static std::wstring GetGnutlsVersion();
 private:
 	virtual void operator()(fz::event_base const& ev) override;
 	virtual void OnRateAvailable(CRateLimiter::rate_direction direction) override;

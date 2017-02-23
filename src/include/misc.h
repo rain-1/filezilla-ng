@@ -1,13 +1,11 @@
-#ifndef __MISC_H__
-#define __MISC_H__
+#ifndef FILEZILLA_ENGINE_MISC_HEADER
+#define FILEZILLA_ENGINE_MISC_HEADER
 
 #include "socket.h"
 
 enum class lib_dependency
 {
-	wxwidgets,
 	gnutls,
-	sqlite,
 	count
 };
 

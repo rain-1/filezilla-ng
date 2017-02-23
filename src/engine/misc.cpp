@@ -4,10 +4,6 @@
 #include <libfilezilla/format.hpp>
 #include <libfilezilla/time.hpp>
 
-#include <wx/utils.h>
-
-#include <gnutls/gnutls.h>
-#include <sqlite3.h>
 #include <random>
 #include <cstdint>
 #include <cwctype>
@@ -15,19 +11,8 @@
 std::wstring GetDependencyVersion(lib_dependency d)
 {
 	switch (d) {
-	case lib_dependency::wxwidgets:
-		return wxVERSION_NUM_DOT_STRING_T;
 	case lib_dependency::gnutls:
-		{
-			const char* v = gnutls_check_version(0);
-			if (!v || !*v) {
-				return L"unknown";
-			}
-
-			return fz::to_wstring(v);
-		}
-	case lib_dependency::sqlite:
-		return fz::to_wstring_from_utf8(sqlite3_libversion());
+		return CTlsSocket::GetGnutlsVersion();
 	default:
 		return std::wstring();
 	}
@@ -36,12 +21,8 @@ std::wstring GetDependencyVersion(lib_dependency d)
 std::wstring GetDependencyName(lib_dependency d)
 {
 	switch (d) {
-	case lib_dependency::wxwidgets:
-		return L"wxWidgets";
 	case lib_dependency::gnutls:
 		return L"GnuTLS";
-	case lib_dependency::sqlite:
-		return L"SQLite";
 	default:
 		return std::wstring();
 	}

@@ -110,3 +110,8 @@ void CTlsSocket::OnRateAvailable(CRateLimiter::rate_direction direction)
 {
 	return impl_->OnRateAvailable(direction);
 }
+
+std::wstring CTlsSocket::GetGnutlsVersion()
+{
+	return CTlsSocketImpl::GetGnutlsVersion();
+}

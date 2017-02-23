@@ -44,6 +44,8 @@ public:
 
 	bool SetClientCertificate(fz::native_string const& keyfile, fz::native_string const& certs, fz::native_string const& password);
 
+	static std::wstring GetGnutlsVersion();
+
 protected:
 
 	bool InitSession();
