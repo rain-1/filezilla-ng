@@ -71,31 +71,6 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 	xrc_call(*this, "ID_SUPPORT_FORUM", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("support_forum")));
 	xrc_call(*this, "ID_SUPPORT_MORE", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("support_more")));
 
-#ifdef FZ_WINDOWS
-	// Add phone support link in official Windows builds builds...
-	if (CBuildInfo::GetBuildType() == _T("official")) {
-		auto lang = wxGetLocale() ? wxGetLocale()->GetName() : wxString();
-		// but only in English...
-		if (lang.StartsWith(_T("en"))) {
-			auto const now = fz::datetime::now();
-			// while the build is fresh...
-			if ((now - CBuildInfo::GetBuildDate()).get_days() < 60) {
-				// and only for US and Canada, so limit by timezone
-				auto ref = fz::datetime(now.format("%Y%m%d%H%M%S", fz::datetime::utc), fz::datetime::utc);
-				auto offset = fz::datetime(ref.format("%Y%m%d%H%M%S", fz::datetime::utc), fz::datetime::local);
-				auto diff = (ref - offset).get_hours();
-				if (diff >= -9 && diff <= -3) {
-					auto sizer = xrc_call(*this, "ID_SUPPORT_MORE", &wxWindow::GetContainingSizer);
-					if (sizer) {
-						auto link = new wxHyperlinkCtrl(sizer->GetContainingWindow(), wxID_ANY, _T("Phone support"), _T("https://filezilla-project.org/phone_support.php"));
-						sizer->Insert(0, link);
-					}
-				}
-			}
-		}
-	}
-#endif
-
 	Layout();
 
 	GetSizer()->Fit(this);
