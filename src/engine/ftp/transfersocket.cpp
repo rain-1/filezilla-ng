@@ -459,7 +459,7 @@ void CTransferSocket::OnClose(int error)
 	int numread = m_pBackend->Peek(&buffer, 100, error);
 	if (numread > 0) {
 #ifndef FZ_WINDOWS
-		wxFAIL_MSG(L"Peek isn't supposed to return data after close notification");
+		controlSocket_.LogMessage(MessageType::Debug_Warning, L"Peek isn't supposed to return data after close notification");
 #endif
 
 		// MSDN says this:

@@ -293,7 +293,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 		}
 		break;
 	default:
-		wxFAIL_MSG(L"given notification codes not handled");
+		LogMessage(MessageType::Debug_Warning, L"Message type %d not handled", message.type);
 		break;
 	}
 }
