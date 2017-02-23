@@ -137,6 +137,7 @@
       <PrecompiledHeader />
     </ClCompile>
     <ClCompile Include="tlssocket.cpp" />
+    <ClCompile Include="tlssocket_impl.cpp" />
     <ClCompile Include="uri.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +202,7 @@
     <ClInclude Include="sftp\rmd.h" />
     <ClInclude Include="sftp\sftpcontrolsocket.h" />
     <ClInclude Include="tlssocket.h" />
+    <ClInclude Include="tlssocket_impl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
