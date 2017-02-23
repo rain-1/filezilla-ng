@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <vector>
 
+#include <string.h>
+
 std::map<std::wstring, int> CDirectoryListingParser::m_MonthNamesMap;
 
 //#define LISTDEBUG_MVS
