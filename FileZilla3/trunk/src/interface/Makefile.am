@@ -30,6 +30,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		dragdropmanager.cpp \
 		drop_target_ex.cpp \
 		edithandler.cpp \
+		encoding_converter.cpp \
 		export.cpp \
 		fileexistsdlg.cpp \
 		filelistctrl.cpp \
@@ -151,6 +152,7 @@ noinst_HEADERS = aboutdialog.h \
 		 dragdropmanager.h \
 		 drop_target_ex.h \
 		 edithandler.h \
+		 encoding_converter.h \
 		 export.h \
 		 fileexistsdlg.h \
 		 filelistctrl.h \
