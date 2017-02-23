@@ -63,6 +63,7 @@ libengine_a_SOURCES = \
 		sizeformatting_base.cpp \
 		socket.cpp \
 		tlssocket.cpp \
+		tlssocket_impl.cpp \
 		uri.cpp
 
 noinst_HEADERS = backend.h \
@@ -108,7 +109,8 @@ noinst_HEADERS = backend.h \
 		sftp/rename.h \
 		sftp/rmd.h \
 		sftp/sftpcontrolsocket.h \
-		tlssocket.h
+		tlssocket.h \
+		tlssocket_impl.h
 
 dist_noinst_DATA = engine.vcxproj
 
