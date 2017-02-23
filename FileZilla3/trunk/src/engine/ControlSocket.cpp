@@ -12,6 +12,8 @@
 #include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
+#include <string.h>
+
 #ifndef FZ_WINDOWS
 	#include <sys/stat.h>
 
@@ -439,7 +441,6 @@ std::wstring CControlSocket::ConvToLocal(char const* buffer, size_t len)
 		return ret;
 	}
 
-	size_t outLen{};
 	if (m_useUTF8) {
 		ret = fz::to_wstring_from_utf8(buffer, len);
 		if (!ret.empty()) {
