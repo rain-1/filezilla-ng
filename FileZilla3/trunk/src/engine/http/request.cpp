@@ -4,6 +4,8 @@
 
 #include <string.h>
 
+#include "backend.h"
+
 int CHttpRequestOpData::Send()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::Send");

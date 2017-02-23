@@ -4,8 +4,6 @@
 
 #include <libfilezilla/format.hpp>
 
-#include <wx/string.h>
-
 #include <algorithm>
 #include <vector>
 
@@ -93,23 +91,22 @@ public:
 		{
 		case decimal:
 		default:
-			if (m_numeric == Unknown)
-			{
+			if (m_numeric == Unknown) {
 				m_numeric = Yes;
-				for (unsigned int i = 0; i < m_len; ++i)
-					if (m_pToken[i] < '0' || m_pToken[i] > '9')
-					{
+				for (unsigned int i = 0; i < m_len; ++i) {
+					if (m_pToken[i] < '0' || m_pToken[i] > '9') {
 						m_numeric = No;
 						break;
 					}
+				}
 			}
 			return m_numeric == Yes;
 		case hex:
-			for (unsigned int i = 0; i < m_len; ++i)
-			{
-				const char c = m_pToken[i];
-				if ((c < '0' || c > '9') && (c < 'A' || c > 'F') && (c < 'a' || c > 'f'))
+			for (unsigned int i = 0; i < m_len; ++i) {
+				auto const c = m_pToken[i];
+				if ((c < '0' || c > '9') && (c < 'A' || c > 'F') && (c < 'a' || c > 'f')) {
 					return false;
+				}
 			}
 			return true;
 		}
@@ -117,21 +114,26 @@ public:
 
 	bool IsNumeric(unsigned int start, unsigned int len)
 	{
-		for (unsigned int i = start; i < std::min(start + len, m_len); ++i)
-			if (m_pToken[i] < '0' || m_pToken[i] > '9')
+		for (unsigned int i = start; i < std::min(start + len, m_len); ++i) {
+			if (m_pToken[i] < '0' || m_pToken[i] > '9') {
 				return false;
+			}
+		}
 		return true;
 	}
 
 	bool IsLeftNumeric()
 	{
 		if (m_leftNumeric == Unknown) {
-			if (m_len < 2)
+			if (m_len < 2) {
 				m_leftNumeric = No;
-			else if (m_pToken[0] < '0' || m_pToken[0] > '9')
+			}
+			else if (m_pToken[0] < '0' || m_pToken[0] > '9') {
 				m_leftNumeric = No;
-			else
+			}
+			else {
 				m_leftNumeric = Yes;
+			}
 		}
 		return m_leftNumeric == Yes;
 	}
@@ -139,25 +141,30 @@ public:
 	bool IsRightNumeric()
 	{
 		if (m_rightNumeric == Unknown) {
-			if (m_len < 2)
+			if (m_len < 2) {
 				m_rightNumeric = No;
-			else if (m_pToken[m_len - 1] < '0' || m_pToken[m_len - 1] > '9')
+			}
+			else if (m_pToken[m_len - 1] < '0' || m_pToken[m_len - 1] > '9') {
 				m_rightNumeric = No;
-			else
+			}
+			else {
 				m_rightNumeric = Yes;
+			}
 		}
 		return m_rightNumeric == Yes;
 	}
 
 	int Find(const wchar_t* chr, int start = 0) const
 	{
-		if (!chr)
+		if (!chr) {
 			return -1;
+		}
 
 		for (unsigned int i = start; i < m_len; ++i) {
 			for (int c = 0; chr[c]; ++c) {
-				if (m_pToken[i] == chr[c])
+				if (m_pToken[i] == chr[c]) {
 					return i;
+				}
 			}
 		}
 		return -1;
@@ -165,34 +172,41 @@ public:
 
 	int Find(wchar_t chr, int start = 0) const
 	{
-		if (!m_pToken)
+		if (!m_pToken) {
 			return -1;
+		}
 
-		for (unsigned int i = start; i < m_len; ++i)
-			if (m_pToken[i] == chr)
+		for (unsigned int i = start; i < m_len; ++i) {
+			if (m_pToken[i] == chr) {
 				return i;
+			}
+		}
 
 		return -1;
 	}
 
 	int64_t GetNumber(unsigned int start, int len)
 	{
-		if (len == -1)
+		if (len == -1) {
 			len = m_len - start;
-		if (len < 1)
+		}
+		if (len < 1) {
 			return -1;
+		}
 
-		if (start + static_cast<unsigned int>(len) > m_len)
+		if (start + static_cast<unsigned int>(len) > m_len) {
 			return -1;
+		}
 
-		if (m_pToken[start] < '0' || m_pToken[start] > '9')
+		if (m_pToken[start] < '0' || m_pToken[start] > '9') {
 			return -1;
+		}
 
 		int64_t number = 0;
-		for (unsigned int i = start; i < (start + len); ++i)
-		{
-			if (m_pToken[i] < '0' || m_pToken[i] > '9')
+		for (unsigned int i = start; i < (start + len); ++i) {
+			if (m_pToken[i] < '0' || m_pToken[i] > '9') {
 				break;
+			}
 			number *= 10;
 			number += m_pToken[i] - '0';
 		}
@@ -208,8 +222,9 @@ public:
 				if (IsNumeric() || IsLeftNumeric()) {
 					m_number = 0;
 					for (unsigned int i = 0; i < m_len; ++i) {
-						if (m_pToken[i] < '0' || m_pToken[i] > '9')
+						if (m_pToken[i] < '0' || m_pToken[i] > '9') {
 							break;
+						}
 						m_number *= 10;
 						m_number += m_pToken[i] - '0';
 					}
@@ -217,10 +232,10 @@ public:
 				else if (IsRightNumeric()) {
 					m_number = 0;
 					int start = m_len - 1;
-					while (m_pToken[start - 1] >= '0' && m_pToken[start - 1] <= '9')
+					while (m_pToken[start - 1] >= '0' && m_pToken[start - 1] <= '9') {
 						--start;
-					for (unsigned int i = start; i < m_len; ++i)
-					{
+					}
+					for (unsigned int i = start; i < m_len; ++i) {
 						m_number *= 10;
 						m_number += m_pToken[i] - '0';
 					}
@@ -244,8 +259,9 @@ public:
 						number *= 16;
 						number += c - 'A' + 10;
 					}
-					else
+					else {
 						return -1;
+					}
 				}
 				return number;
 			}
@@ -254,8 +270,9 @@ public:
 
 	wchar_t operator[](unsigned int n) const
 	{
-		if (n >= m_len)
+		if (n >= m_len) {
 			return 0;
+		}
 
 		return m_pToken[n];
 	}
@@ -987,8 +1004,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 
 	// Get the month date field
 	CToken dateMonth;
-	if (!line.GetToken(++index, token))
+	if (!line.GetToken(++index, token)) {
 		return false;
+	}
 
 	int year = -1;
 	int month = -1;
@@ -1006,21 +1024,26 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			if (token[pos] != '.') {
 				// something like 26-05 2002
 				day = token.GetNumber(pos + 1, token.GetLength() - pos - 1);
-				if (day < 1 || day > 31)
+				if (day < 1 || day > 31) {
 					return false;
+				}
 				dateMonth = CToken(token.GetToken(), pos);
 			}
-			else
+			else {
 				dateMonth = token;
+			}
 		}
-		else if (token[pos] != token[pos2])
+		else if (token[pos] != token[pos2]) {
 			return false;
+		}
 		else {
-			if (!ParseShortDate(token, entry))
+			if (!ParseShortDate(token, entry)) {
 				return false;
+			}
 
-			if (token[pos] == '.')
+			if (token[pos] == '.') {
 				return true;
+			}
 
 			tm t = entry.time.get_tm(fz::datetime::utc);
 			year = t.tm_year + 1900;
@@ -1035,12 +1058,14 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			// 2) 2005 13 3
 			// assume first one.
 			year = token.GetNumber();
-			if (!line.GetToken(++index, dateMonth))
+			if (!line.GetToken(++index, dateMonth)) {
 				return false;
+			}
 			mayHaveTime = false;
 		}
-		else
+		else {
 			dateMonth = token;
+		}
 	}
 	else {
 		if (token.IsLeftNumeric() && (unsigned int)token[token.GetLength() - 1] > 127 &&
@@ -1051,12 +1076,14 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 
 			// Asian date format: 2005xxx 5xx 20xxx with some non-ascii characters following
 			year = token.GetNumber();
-			if (!line.GetToken(++index, dateMonth))
+			if (!line.GetToken(++index, dateMonth)) {
 				return false;
+			}
 			mayHaveTime = false;
 		}
-		else
+		else {
 			dateMonth = token;
+		}
 	}
 
 	if (day < 1) {
@@ -1083,8 +1110,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		}
 		else {
 			dateDay = token.GetNumber();
-			if (token[token.GetLength() - 1] == ',')
+			if (token[token.GetLength() - 1] == ',') {
 				bHasYearAndTime = true;
+			}
 		}
 
 		if (dateDay < 1 || dateDay > 31) {
@@ -1100,21 +1128,25 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			// suffix at the end of the monthname. Filter it out.
 			int i;
 			for (i = strMonth.size() - 1; i > 0; --i) {
-				if (strMonth[i] >= '0' && strMonth[i] <= '9')
+				if (strMonth[i] >= '0' && strMonth[i] <= '9') {
 					break;
+				}
 			}
 			strMonth = strMonth.substr(0, i + 1);
 		}
 		// Check month name
-		while (!strMonth.empty() && (strMonth.back() == ',' || strMonth.back() == '.'))
+		while (!strMonth.empty() && (strMonth.back() == ',' || strMonth.back() == '.')) {
 			strMonth.pop_back();
-		if (!GetMonthFromName(strMonth, month))
+		}
+		if (!GetMonthFromName(strMonth, month)) {
 			return false;
+		}
 	}
 
 	// Get time/year field
-	if (!line.GetToken(++index, token))
+	if (!line.GetToken(++index, token)) {
 		return false;
+	}
 
 	pos = token.Find(L":.-");
 	if (pos != -1 && mayHaveTime) {
@@ -1203,8 +1235,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			}
 		}
 	}
-	else
+	else {
 		--index;
+	}
 
 	if (!entry.time.set(fz::datetime::utc, year, month, day, hour, minute)) {
 		return false;
@@ -1363,20 +1396,24 @@ bool CDirectoryListingParser::ParseAsDos(CLine &line, CDirentry &entry)
 	CToken token;
 
 	// Get first token, has to be a valid date
-	if (!line.GetToken(index, token))
+	if (!line.GetToken(index, token)) {
 		return false;
+	}
 
 	entry.flags = 0;
 
-	if (!ParseShortDate(token, entry))
+	if (!ParseShortDate(token, entry)) {
 		return false;
+	}
 
 	// Extract time
-	if (!line.GetToken(++index, token))
+	if (!line.GetToken(++index, token)) {
 		return false;
+	}
 
-	if (!ParseTime(token, entry))
+	if (!ParseTime(token, entry)) {
 		return false;
+	}
 
 	// If next token is <DIR>, entry is a directory
 	// else, it should be the filesize.
@@ -1392,23 +1429,27 @@ bool CDirectoryListingParser::ParseAsDos(CLine &line, CDirentry &entry)
 		int64_t size = 0;
 		int len = token.GetLength();
 		for (int i = 0; i < len; ++i) {
-			char chr = token[i];
-			if (chr == ',' || chr == '.')
+			auto const chr = token[i];
+			if (chr == ',' || chr == '.') {
 				continue;
-			if (chr < '0' || chr > '9')
+			}
+			if (chr < '0' || chr > '9') {
 				return false;
+			}
 
 			size *= 10;
 			size += chr - '0';
 		}
 		entry.size = size;
 	}
-	else
+	else {
 		return false;
+	}
 
 	// Extract filename
-	if (!line.GetToken(++index, token, true))
+	if (!line.GetToken(++index, token, true)) {
 		return false;
+	}
 	entry.name = token.GetString();
 
 	entry.target.clear();
@@ -1493,30 +1534,36 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 	while (fact < pos) {
 		int separator = token.Find(',', fact);
 		int len;
-		if (separator == -1)
+		if (separator == -1) {
 			len = pos - fact;
-		else
+		}
+		else {
 			len = separator - fact;
+		}
 
 		if (!len) {
 			++fact;
 			continue;
 		}
 
-		char type = token[fact];
+		auto const type = token[fact];
 
-		if (type == '/')
+		if (type == '/') {
 			entry.flags |= CDirentry::flag_dir;
-		else if (type == 's')
+		}
+		else if (type == 's') {
 			entry.size = token.GetNumber(fact + 1, len - 1);
+		}
 		else if (type == 'm') {
 			int64_t number = token.GetNumber(fact + 1, len - 1);
-			if (number < 0)
+			if (number < 0) {
 				return false;
+			}
 			entry.time = fz::datetime(static_cast<time_t>(number), fz::datetime::seconds);
 		}
-		else if (type == 'u' && len > 2 && token[fact + 1] == 'p')
+		else if (type == 'u' && len > 2 && token[fact + 1] == 'p') {
 			permissions = token.GetString().substr(fact + 2, len - 2);
+		}
 
 		fact += len + 1;
 	}
@@ -1751,54 +1798,64 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 	int index = 0;
 	CToken firstToken;
 
-	if (!line.GetToken(index, firstToken))
+	if (!line.GetToken(index, firstToken)) {
 		return false;
+	}
 
-	if (!firstToken.IsNumeric())
+	if (!firstToken.IsNumeric()) {
 		return false;
+	}
 
 	// Possible formats: Numerical unix, VShell or OS/2
 
 	CToken token;
-	if (!line.GetToken(++index, token))
+	if (!line.GetToken(++index, token)) {
 		return false;
+	}
 
 	entry.flags = 0;
 
 	// If token is a number, than it's the numerical Unix style format,
 	// else it's the VShell, OS/2 or nortel.VxWorks format
 	if (token.IsNumeric()) {
-		if (firstToken.GetLength() >= 2 && firstToken[1] == '4')
+		if (firstToken.GetLength() >= 2 && firstToken[1] == '4') {
 			entry.flags |= CDirentry::flag_dir;
+		}
 
 		std::wstring ownerGroup = token.GetString();
 
-		if (!line.GetToken(++index, token))
+		if (!line.GetToken(++index, token)) {
 			return false;
+		}
 
 		ownerGroup += L" " + token.GetString();
 
 		// Get size
-		if (!line.GetToken(++index, token))
+		if (!line.GetToken(++index, token)) {
 			return false;
+		}
 
-		if (!token.IsNumeric())
+		if (!token.IsNumeric()) {
 			return false;
+		}
 
 		entry.size = token.GetNumber();
 
 		// Get date/time
-		if (!line.GetToken(++index, token))
+		if (!line.GetToken(++index, token)) {
 			return false;
+		}
 
 		int64_t number = token.GetNumber();
-		if (number < 0)
+		if (number < 0) {
 			return false;
+		}
 		entry.time = fz::datetime(static_cast<time_t>(number), fz::datetime::seconds);
 
 		// Get filename
-		if (!line.GetToken(++index, token, true))
+		if (!line.GetToken(++index, token, true)) {
 			return false;
+		}
 
 		entry.name = token.GetString();
 		entry.target.clear();
@@ -1808,8 +1865,9 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 	}
 	else {
 		// Possible conflict with multiline VMS listings
-		if (m_maybeMultilineVms)
+		if (m_maybeMultilineVms) {
 			return false;
+		}
 
 		// VShell, OS/2 or nortel.VxWorks style format
 		entry.size = firstToken.GetNumber();
@@ -1821,30 +1879,37 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			// OS/2 or nortel.VxWorks
 			int skippedCount = 0;
 			do {
-				if (token.GetString() == L"DIR")
+				if (token.GetString() == L"DIR") {
 					entry.flags |= CDirentry::flag_dir;
-				else if (token.Find(L"-/.") != -1)
+				}
+				else if (token.Find(L"-/.") != -1) {
 					break;
+				}
 
 				++skippedCount;
 
-				if (!line.GetToken(++index, token))
+				if (!line.GetToken(++index, token)) {
 					return false;
+				}
 			} while (true);
 
-			if (!ParseShortDate(token, entry))
+			if (!ParseShortDate(token, entry)) {
 				return false;
+			}
 
 			// Get time
-			if (!line.GetToken(++index, token))
+			if (!line.GetToken(++index, token)) {
 				return false;
+			}
 
-			if (!ParseTime(token, entry))
+			if (!ParseTime(token, entry)) {
 				return false;
+			}
 
 			// Get filename
-			if (!line.GetToken(++index, token, true))
+			if (!line.GetToken(++index, token, true)) {
 				return false;
+			}
 
 			entry.name = token.GetString();
 			if (entry.name.size() >= 5) {
@@ -1852,53 +1917,64 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 				if (!skippedCount && type == L"<dir>") {
 					entry.flags |= CDirentry::flag_dir;
 					entry.name = entry.name.substr(0, entry.name.size() - 5);
-					while (!entry.name.empty() && entry.name.back() == ' ')
+					while (!entry.name.empty() && entry.name.back() == ' ') {
 						entry.name.pop_back();
+					}
 				}
 			}
 		}
 		else {
 			// Get day
-			if (!line.GetToken(++index, token))
+			if (!line.GetToken(++index, token)) {
 				return false;
+			}
 
-			if (!token.IsNumeric() && !token.IsLeftNumeric())
+			if (!token.IsNumeric() && !token.IsLeftNumeric()) {
 				return false;
+			}
 
 			int64_t day = token.GetNumber();
-			if (day < 0 || day > 31)
+			if (day < 0 || day > 31) {
 				return false;
+			}
 
 			// Get Year
-			if (!line.GetToken(++index, token))
+			if (!line.GetToken(++index, token)) {
 				return false;
+			}
 
-			if (!token.IsNumeric())
+			if (!token.IsNumeric()) {
 				return false;
+			}
 
 			int64_t year = token.GetNumber();
-			if (year < 50)
+			if (year < 50) {
 				year += 2000;
-			else if (year < 1000)
+			}
+			else if (year < 1000) {
 				year += 1900;
+			}
 
 			if (!entry.time.set(fz::datetime::utc, year, month, day)) {
 				return false;
 			}
 
 			// Get time
-			if (!line.GetToken(++index, token))
+			if (!line.GetToken(++index, token)) {
 				return false;
+			}
 
-			if (!ParseTime(token, entry))
+			if (!ParseTime(token, entry)) {
 				return false;
+			}
 
 			// Get filename
-			if (!line.GetToken(++index, token, 1))
+			if (!line.GetToken(++index, token, 1)) {
 				return false;
+			}
 
 			entry.name = token.GetString();
-			char chr = token[token.GetLength() - 1];
+			auto const chr = token[token.GetLength() - 1];
 			if (chr == '/' || chr == '\\') {
 				entry.flags |= CDirentry::flag_dir;
 				entry.name.pop_back();
@@ -2057,7 +2133,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 			if (buffer.empty()) {
 				buffer = fz::to_wstring(res);
 				if (buffer.empty()) {
-					buffer = wxString(res, wxConvISO8859_1).ToStdWstring();
+					buffer = std::wstring(res, res + strlen(res));
 				}
 			}
 		}
@@ -2420,56 +2496,57 @@ bool CDirectoryListingParser::ParseComplexFileSize(CToken& token, int64_t& size,
 {
 	if (token.IsNumeric()) {
 		size = token.GetNumber();
-		if (blocksize != -1)
+		if (blocksize != -1) {
 			size *= blocksize;
+		}
 
 		return true;
 	}
 
 	int len = token.GetLength();
 
-	char last = token[len - 1];
-	if (last == 'B' || last == 'b')
-	{
-		if (len == 1)
+	auto last = token[len - 1];
+	if (last == 'B' || last == 'b') {
+		if (len == 1) {
 			return false;
+		}
 
-		char c = token[--len - 1];
-		if (c < '0' || c > '9')
-		{
+		auto const c = token[--len - 1];
+		if (c < '0' || c > '9') {
 			--len;
 			last = c;
 		}
-		else
+		else {
 			last = 0;
+		}
 	}
-	else if (last >= '0' && last <= '9')
+	else if (last >= '0' && last <= '9') {
 		last = 0;
-	else
-	{
-		if (--len == 0)
+	}
+	else {
+		if (--len == 0) {
 			return false;
+		}
 	}
 
 	size = 0;
 
 	int dot = -1;
-	for (int i = 0; i < len; ++i)
-	{
-		char c = token[i];
-		if (c >= '0' && c <= '9')
-		{
+	for (int i = 0; i < len; ++i) {
+		auto const c = token[i];
+		if (c >= '0' && c <= '9') {
 			size *= 10;
 			size += c - '0';
 		}
-		else if (c == '.')
-		{
-			if (dot != -1)
+		else if (c == '.') {
+			if (dot != -1) {
 				return false;
+			}
 			dot = len - i - 1;
 		}
-		else
+		else {
 			return false;
+		}
 	}
 	switch (last)
 	{
@@ -2494,14 +2571,16 @@ bool CDirectoryListingParser::ParseComplexFileSize(CToken& token, int64_t& size,
 	case 'B':
 		break;
 	case 0:
-		if (blocksize != -1)
+		if (blocksize != -1) {
 			size *= blocksize;
+		}
 		break;
 	default:
 		return false;
 	}
-	while (dot-- > 0)
+	while (dot-- > 0) {
 		size /= 10;
+	}
 
 	return true;
 }
