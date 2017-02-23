@@ -58,15 +58,6 @@ protected:
 	int VerifyCertificate();
 	bool CertificateIsBlacklisted(std::vector<CCertificate> const& certificates);
 
-	CTlsSocket::TlsState m_tlsState{CTlsSocket::TlsState::noconn};
-
-	CControlSocket* m_pOwner{};
-
-	bool m_initialized{};
-	gnutls_session_t m_session{};
-
-	gnutls_certificate_credentials_t m_certCredentials{};
-
 	void LogError(int code, std::wstring const& function, MessageType logLegel = MessageType::Error);
 	void PrintAlert(MessageType logLevel);
 
@@ -94,6 +85,15 @@ protected:
 	std::vector<std::wstring> GetCertSubjectAltNames(gnutls_x509_crt_t cert);
 
 	CTlsSocket& tlsSocket_;
+
+	CTlsSocket::TlsState m_tlsState{ CTlsSocket::TlsState::noconn };
+
+	CControlSocket* m_pOwner{};
+
+	bool m_initialized{};
+	gnutls_session_t m_session{};
+
+	gnutls_certificate_credentials_t m_certCredentials{};
 
 	bool m_canReadFromSocket{true};
 	bool m_canWriteToSocket{true};
