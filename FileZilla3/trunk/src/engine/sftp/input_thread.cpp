@@ -60,9 +60,7 @@ std::wstring CSftpInputThread::ReadLine(std::wstring &error)
 		--len;
 	}
 
-	buffer[len] = 0;
-
-	std::wstring const line = owner_.ConvToLocal(buffer, len + 1);
+	std::wstring const line = owner_.ConvToLocal(buffer, len);
 	if (len && line.empty()) {
 		error = L"Failed to convert reply to local character set.";
 	}

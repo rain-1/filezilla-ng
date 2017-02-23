@@ -1,5 +1,5 @@
-#ifndef __FILEZILLAENGINE_H__
-#define __FILEZILLAENGINE_H__
+#ifndef FILEZILLA_ENGINE_ENGINE_HEADER
+#define FILEZILLA_ENGINE_ENGINE_HEADER
 
 #include "commands.h"
 
