@@ -29,10 +29,12 @@ bool CAboutDialog::Create(wxWindow* parent)
 	xrc_call(*this, "ID_COPYRIGHT", &wxStaticText::SetLabel, _T("Copyright (C) 2004-2016  Tim Kosse"));
 
 	wxString version = CBuildInfo::GetVersion();
-	if (CBuildInfo::GetBuildType() == _T("nightly"))
+	if (CBuildInfo::GetBuildType() == _T("nightly")) {
 		version += _T("-nightly");
-	if (!SetChildLabel(XRCID("ID_VERSION"), version))
+	}
+	if (!SetChildLabel(XRCID("ID_VERSION"), version)) {
 		return false;
+	}
 
 	wxString const host = CBuildInfo::GetHostname();
 	if (host.empty()) {
@@ -52,11 +54,13 @@ bool CAboutDialog::Create(wxWindow* parent)
 		xrc_call(*this, "ID_BUILD", &wxStaticText::SetLabel, build);
 	}
 
-	if (!SetChildLabel(XRCID("ID_BUILDDATE"), CBuildInfo::GetBuildDateString()))
+	if (!SetChildLabel(XRCID("ID_BUILDDATE"), CBuildInfo::GetBuildDateString())) {
 		return false;
+	}
 
-	if (!SetChildLabel(XRCID("ID_COMPILEDWITH"), CBuildInfo::GetCompiler(), 200))
+	if (!SetChildLabel(XRCID("ID_COMPILEDWITH"), CBuildInfo::GetCompiler(), 200)) {
 		return false;
+	}
 
 	wxString compilerFlags = CBuildInfo::GetCompilerFlags();
 	if (compilerFlags.empty()) {
@@ -68,9 +72,9 @@ bool CAboutDialog::Create(wxWindow* parent)
 		xrc_call(*this, "ID_CFLAGS", &wxStaticText::SetLabel, compilerFlags);
 	}
 
-	xrc_call(*this, "ID_VER_WX", &wxStaticText::SetLabel, GetDependencyVersion(lib_dependency::wxwidgets));
+	xrc_call(*this, "ID_VER_WX", &wxStaticText::SetLabel, GetDependencyVersion(gui_lib_dependency::wxwidgets));
 	xrc_call(*this, "ID_VER_GNUTLS", &wxStaticText::SetLabel, GetDependencyVersion(lib_dependency::gnutls));
-	xrc_call(*this, "ID_VER_SQLITE", &wxStaticText::SetLabel, GetDependencyVersion(lib_dependency::sqlite));
+	xrc_call(*this, "ID_VER_SQLITE", &wxStaticText::SetLabel, GetDependencyVersion(gui_lib_dependency::sqlite));
 
 	wxString const os = wxGetOsDescription();
 	if (os.empty()) {
@@ -97,10 +101,12 @@ bool CAboutDialog::Create(wxWindow* parent)
 	}
 
 #ifdef __WXMSW__
-	if (::wxIsPlatform64Bit())
+	if (::wxIsPlatform64Bit()) {
 		xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::SetLabel, _("64-bit system"));
-	else
+	}
+	else {
 		xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::SetLabel, _("32-bit system"));
+	}
 #else
 	xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::Hide);
 	xrc_call(*this, "ID_SYSTEM_PLATFORM_DESC", &wxStaticText::Hide);
@@ -135,29 +141,38 @@ void CAboutDialog::OnCopy(wxCommandEvent&)
 	text += _T("----------------\n\n");
 
 	text += _T("Version:          ") + CBuildInfo::GetVersion();
-	if (CBuildInfo::GetBuildType() == _T("nightly"))
+	if (CBuildInfo::GetBuildType() == _T("nightly")) {
 		text += _T("-nightly");
+	}
 	text += '\n';
 
 	text += _T("\nBuild information:\n");
 
 	wxString host = CBuildInfo::GetHostname();
-	if (!host.empty())
+	if (!host.empty()) {
 		text += _T("  Compiled for:   ") + host + _T("\n");
+	}
 
 	wxString build = CBuildInfo::GetBuildSystem();
-	if (!build.empty())
+	if (!build.empty()) {
 		text += _T("  Compiled on:    ") + build + _T("\n");
+	}
 
 	text += _T("  Build date:     ") + CBuildInfo::GetBuildDateString() + _T("\n");
 
 	text += _T("  Compiled with:  ") + CBuildInfo::GetCompiler() + _T("\n");
 
 	wxString compilerFlags = CBuildInfo::GetCompilerFlags();
-	if (!compilerFlags.empty())
+	if (!compilerFlags.empty()) {
 		text += _T("  Compiler flags: ") + compilerFlags + _T("\n");
+	}
 
 	text += _T("\nLinked against:\n");
+	for (int i = 0; i < static_cast<int>(gui_lib_dependency::count); ++i) {
+		text += wxString::Format(_T("  % -15s %s\n"),
+			GetDependencyName(gui_lib_dependency(i)) + _T(":"),
+			GetDependencyVersion(gui_lib_dependency(i)));
+	}
 	for (int i = 0; i < static_cast<int>(lib_dependency::count); ++i) {
 		text += wxString::Format(_T("  % -15s %s\n"),
 			GetDependencyName(lib_dependency(i)) + _T(":"),
@@ -166,15 +181,15 @@ void CAboutDialog::OnCopy(wxCommandEvent&)
 
 	text += _T("\nOperating system:\n");
 	wxString os = wxGetOsDescription();
-	if (!os.empty())
+	if (!os.empty()) {
 		text += _T("  Name:           ") + os + _T("\n");
+	}
 
 	int major, minor;
 	if (GetRealOsVersion(major, minor)) {
 		wxString version = wxString::Format(_T("%d.%d"), major, minor);
 		int fakeMajor, fakeMinor;
-		if (wxGetOsVersion(&fakeMajor, &fakeMinor) != wxOS_UNKNOWN && (fakeMajor != major || fakeMinor != minor))
-		{
+		if (wxGetOsVersion(&fakeMajor, &fakeMinor) != wxOS_UNKNOWN && (fakeMajor != major || fakeMinor != minor)) {
 			version += _T(" ");
 			version += wxString::Format(_("(app-compat is set to %d.%d)"), fakeMajor, fakeMinor);
 		}
@@ -182,10 +197,12 @@ void CAboutDialog::OnCopy(wxCommandEvent&)
 	}
 
 #ifdef __WXMSW__
-	if (::wxIsPlatform64Bit())
+	if (::wxIsPlatform64Bit()) {
 		text += _T("  Platform:       64-bit system\n");
-	else
+	}
+	else {
 		text += _T("  Platform:       32-bit system\n");
+	}
 #endif
 
 	wxString cpuCaps = CBuildInfo::GetCPUCaps(' ');

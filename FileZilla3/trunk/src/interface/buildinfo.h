@@ -3,6 +3,13 @@
 
 #include <string>
 
+enum class gui_lib_dependency
+{
+	wxwidgets,
+	sqlite,
+	count
+};
+
 class CBuildInfo final
 {
 public:
@@ -23,5 +30,8 @@ public:
 	static bool IsUnstable(); // Returns true on beta or rc releases.
 	static std::wstring GetCPUCaps(char separator = ',');
 };
+
+std::wstring GetDependencyName(gui_lib_dependency d);
+std::wstring GetDependencyVersion(gui_lib_dependency d);
 
 #endif

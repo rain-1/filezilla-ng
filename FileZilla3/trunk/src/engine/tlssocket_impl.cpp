@@ -1544,3 +1544,13 @@ int CTlsSocketImpl::DoCallGnutlsRecordRecv(void* data, size_t len)
 
 	return res;
 }
+
+std::wstring CTlsSocketImpl::GetGnutlsVersion()
+{
+	const char* v = gnutls_check_version(0);
+	if (!v || !*v) {
+		return L"unknown";
+	}
+
+	return fz::to_wstring(v);
+}
