@@ -89,9 +89,6 @@ public:
 	CServer server_;
 };
 
-class wxMBConv;
-class wxCSConv;
-
 class CFileTransferOpData : public COpData
 {
 public:
