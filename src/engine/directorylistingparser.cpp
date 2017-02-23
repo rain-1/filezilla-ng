@@ -2084,9 +2084,9 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 		m_currentOffset = currentOffset;
 
 		// Reslen is now the length of the line, including any terminating whitespace
-		int const buflen = reslen + 1;
-		char *res = new char[buflen];
-		res[reslen] = 0;
+		int const buflen = reslen;
+		char *res = new char[buflen + 1];
+		res[buflen] = 0;
 
 		int respos = 0;
 

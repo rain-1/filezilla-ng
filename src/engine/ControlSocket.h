@@ -204,9 +204,7 @@ public:
 	CServer const& GetCurrentServer() const;
 
 	// Conversion function which convert between local and server charset.
-	std::wstring ConvToLocal(const char* buffer, size_t len);
-	wchar_t* ConvToLocalBuffer(const char* buffer, size_t len, size_t& outlen);
-	wchar_t* ConvToLocalBuffer(const char* buffer, wxMBConv& conv, size_t len, size_t& outlen);
+	std::wstring ConvToLocal(char const* buffer, size_t len);
 	std::string ConvToServer(std::wstring const&, bool force_utf8 = false);
 
 	void SetActive(CFileZillaEngine::_direction direction);
@@ -260,7 +258,6 @@ protected:
 
 	CServerPath currentPath_;
 
-	wxCSConv *m_pCSConv{};
 	bool m_useUTF8{};
 
 	// Timeout data

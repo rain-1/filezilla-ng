@@ -104,6 +104,8 @@ public:
 	unsigned int GetEngineId() const {return m_engine_id; }
 
 	CTransferStatusManager transfer_status_;
+
+	CustomEncodingConverterBase const& GetEncodingConverter() const { return encoding_converter_; }
 protected:
 	virtual void OnOptionsChanged(changed_options_t const& options);
 
@@ -199,6 +201,8 @@ protected:
 	std::deque<CLogmsgNotification*> queued_logs_;
 
 	fz::thread_pool & thread_pool_;
+
+	CustomEncodingConverterBase const& encoding_converter_;
 };
 
 struct command_event_type{};

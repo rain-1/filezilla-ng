@@ -68,19 +68,15 @@ public:
 	CLoggingOptionsChanged optionChangeHandler_;
 };
 
-CFileZillaEngineContext::CFileZillaEngineContext(COptionsBase & options)
+CFileZillaEngineContext::CFileZillaEngineContext(COptionsBase & options, CustomEncodingConverterBase const& customEncodingConverter)
 : options_(options)
+, customEncodingConverter_(customEncodingConverter)
 , impl_(new Impl(options))
 {
 }
 
 CFileZillaEngineContext::~CFileZillaEngineContext()
 {
-}
-
-COptionsBase& CFileZillaEngineContext::GetOptions()
-{
-	return options_;
 }
 
 fz::thread_pool& CFileZillaEngineContext::GetThreadPool()

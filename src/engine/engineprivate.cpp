@@ -38,6 +38,7 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	, path_cache_(context.GetPathCache())
 	, parent_(parent)
 	, thread_pool_(context.GetThreadPool())
+	, encoding_converter_(context.GetCustomEncodingConverter())
 {
 	m_engineList.push_back(this);
 

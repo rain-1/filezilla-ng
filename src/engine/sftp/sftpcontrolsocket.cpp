@@ -23,8 +23,6 @@
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/process.hpp>
 
-#include <wx/string.h>
-
 #include <algorithm>
 #include <cwchar>
 
@@ -47,14 +45,11 @@ void CSftpControlSocket::Connect(CServer const& server)
 
 	m_sftpEncryptionDetails = CSftpEncryptionNotification();
 
-	delete m_pCSConv;
 	if (server.GetEncodingType() == ENCODING_CUSTOM) {
 		LogMessage(MessageType::Debug_Info, L"Using custom encoding: %s", server.GetCustomEncoding());
-		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 		m_useUTF8 = false;
 	}
 	else {
-		m_pCSConv = 0;
 		m_useUTF8 = true;
 	}
 

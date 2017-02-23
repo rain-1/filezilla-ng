@@ -83,7 +83,7 @@ void CFtpControlSocket::OnReceive()
 		m_bufferLen += read;
 
 		for (int i = start - m_receiveBuffer; i < m_bufferLen; ++i) {
-			char& p = m_receiveBuffer[i];
+			char const& p = m_receiveBuffer[i];
 			if (p == '\r' ||
 				p == '\n' ||
 				p == 0)
@@ -94,8 +94,7 @@ void CFtpControlSocket::OnReceive()
 					continue;
 				}
 
-				p = 0;
-				std::wstring line = ConvToLocal(start, i + 1 - (start - m_receiveBuffer));
+				std::wstring line = ConvToLocal(start, i - (start - m_receiveBuffer));
 				start = m_receiveBuffer + i + 1;
 
 				ParseLine(line);
