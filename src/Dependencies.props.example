@@ -18,8 +18,8 @@
 
   </PropertyGroup>
   <PropertyGroup>
-    <IncludePath>$(libfilezilla_include);$(wxwidgets_include);$(gnutls_include);$(sqlite3_include);$(IncludePath)</IncludePath>
-    <LibraryPath>$(libfilezilla_lib);$(wxwidgets_lib);$(gnutls_lib);$(sqlite3_lib);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(libfilezilla_include);$(gnutls_include);$(sqlite3_include);$(IncludePath)</IncludePath>
+    <LibraryPath>$(libfilezilla_lib);$(gnutls_lib);$(sqlite3_lib);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup>
