@@ -8,6 +8,8 @@
 #include <cstdint>
 #include <cwctype>
 
+#include <string.h>
+
 std::wstring GetDependencyVersion(lib_dependency d)
 {
 	switch (d) {
