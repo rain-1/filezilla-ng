@@ -4,7 +4,7 @@
 enum ServerProtocol
 {
 	// Never change any existing values or user's saved sites will become
-	// corruptedf
+	// corrupted
 	UNKNOWN = -1,
 	FTP, // FTP, attempts AUTH TLS
 	SFTP,
@@ -14,7 +14,9 @@ enum ServerProtocol
 	HTTPS,
 	INSECURE_FTP, // Insecure, as the name suggests
 
-	MAX_VALUE = INSECURE_FTP
+	S3, // Amazon S3 or compatible
+
+	MAX_VALUE = S3
 };
 
 enum ServerType
@@ -135,6 +137,7 @@ public:
 
 	static ServerProtocol GetProtocolFromPrefix(std::wstring const& prefix);
 	static std::wstring GetPrefixFromProtocol(ServerProtocol const protocol);
+	static std::vector<ServerProtocol> const& GetDefaultProtocols();
 
 	// Some protocol distinguish between ASCII and binary files for line-ending
 	// conversion.

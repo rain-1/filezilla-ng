@@ -1,5 +1,5 @@
-#ifndef __SITEMANAGER_DIALOG_H__
-#define __SITEMANAGER_DIALOG_H__
+#ifndef FILEZILLA_INTERFACE_SITEMANAGER_DIALOG_HEADER
+#define FILEZILLA_INTERFACE_SITEMANAGER_DIALOG_HEADER
 
 #include "dialogex.h"
 #include "sitemanager.h"
@@ -112,6 +112,8 @@ protected:
 	std::vector<_connected_site> *m_connected_sites{};
 
 	bool m_is_deleting{};
+
+	std::map<ServerProtocol, int> mainProtocolListIndex_;
 };
 
-#endif //__SITEMANAGER_DIALOG_H__
+#endif

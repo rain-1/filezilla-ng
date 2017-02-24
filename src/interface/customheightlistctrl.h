@@ -20,12 +20,14 @@ public:
 	void ClearSelection();
 
 	std::set<size_t> GetSelection() const;
+	size_t GetRowCount() const;
 	void SelectLine(size_t line);
 
 	void AllowSelection(bool allow_selection);
 
 	void InsertRow(wxSizer* sizer, size_t pos);
 	void DeleteRow(size_t pos);
+	void DeleteRow(wxSizer *sizer);
 	void ClearRows();
 
 protected:
