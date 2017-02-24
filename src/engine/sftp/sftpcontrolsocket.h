@@ -59,7 +59,7 @@ protected:
 	std::unique_ptr<fz::process> process_;
 	std::unique_ptr<CSftpInputThread> input_thread_;
 
-	virtual void operator()(fz::event_base const& ev);
+	virtual void operator()(fz::event_base const& ev) override;
 	void OnSftpEvent(sftp_message const& message);
 	void OnTerminate(std::wstring const& error);
 
