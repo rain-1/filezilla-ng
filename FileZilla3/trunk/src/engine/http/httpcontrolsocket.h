@@ -85,7 +85,7 @@ protected:
 	void InternalConnect(std::wstring const& host, unsigned short port, bool tls);
 	virtual int Disconnect() override;
 
-	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
+	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification) override;
 
 	CTlsSocket* m_pTlsSocket{};
 
