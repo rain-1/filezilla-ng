@@ -647,11 +647,11 @@ void CSftpControlSocket::OnQuotaRequest(CRateLimiter::rate_direction direction)
 	int64_t bytes = GetAvailableBytes(direction);
 	if (bytes > 0) {
 		int b;
-		if (bytes > INT_MAX) {
-			b = INT_MAX;
+		if (bytes > std::numeric_limits<int>::max()) {
+			b = std::numeric_limits<int>::max();
 		}
 		else {
-			b = bytes;
+			b = static_cast<int>(bytes);
 		}
 		AddToStream(fz::sprintf(L"-%d%d,%d\n", direction, b, engine_.GetOptions().GetOptionVal(OPTION_SPEEDLIMIT_INBOUND + static_cast<int>(direction))));
 		UpdateUsage(direction, b);
