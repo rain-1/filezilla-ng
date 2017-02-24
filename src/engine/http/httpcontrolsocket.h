@@ -89,14 +89,14 @@ protected:
 
 	CTlsSocket* m_pTlsSocket{};
 
-	virtual void OnConnect();
-	virtual void OnClose(int error);
-	virtual void OnReceive();
+	virtual void OnConnect() override;
+	virtual void OnClose(int error) override;
+	virtual void OnReceive() override;
 	virtual int OnSend() override;
 	
 	virtual int ResetOperation(int nErrorCode) override;
 
-	virtual void ResetSocket();
+	virtual void ResetSocket() override;
 	
 	friend class CProtocolOpData<CHttpControlSocket>;
 	friend class CHttpFileTransferOpData;

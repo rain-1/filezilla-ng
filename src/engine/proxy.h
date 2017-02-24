@@ -33,10 +33,10 @@ public:
 
 	// Past the initial handshake, proxies are transparent.
 	// Class users should detach socket and use a normal socket backend instead.
-	virtual void OnRateAvailable(CRateLimiter::rate_direction) {};
-	virtual int Read(void *buffer, unsigned int size, int& error);
-	virtual int Peek(void *buffer, unsigned int size, int& error);
-	virtual int Write(const void *buffer, unsigned int size, int& error);
+	virtual void OnRateAvailable(CRateLimiter::rate_direction) override {};
+	virtual int Read(void *buffer, unsigned int size, int& error) override;
+	virtual int Peek(void *buffer, unsigned int size, int& error) override;
+	virtual int Write(const void *buffer, unsigned int size, int& error) override;
 
 	void Detach();
 	bool Detached() const { return m_pSocket == 0; }
@@ -66,7 +66,7 @@ protected:
 	int m_recvBufferPos{};
 	int m_recvBufferLen{};
 
-	virtual void operator()(fz::event_base const& ev);
+	virtual void operator()(fz::event_base const& ev) override;
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
 	void OnHostAddress(CSocketEventSource* source, std::string const& address);
 

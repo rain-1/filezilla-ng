@@ -192,8 +192,6 @@ public:
 	// from the engine.
 	Command GetCurrentCommandId() const;
 
-	virtual void TransferEnd() {}
-
 	void SendAsyncRequest(CAsyncRequestNotification* pNotification);
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification) = 0;
 	bool SetFileExistsAction(CFileExistsNotification *pFileExistsNotification);
@@ -329,10 +327,10 @@ public:
 	virtual bool Connected() const override { return m_pSocket->GetState() == CSocket::connected; }
 
 protected:
-	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR);
+	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR) override;
 	virtual void ResetSocket();
 
-	virtual void operator()(fz::event_base const& ev);
+	virtual void operator()(fz::event_base const& ev) override;
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
 	void OnHostAddress(CSocketEventSource* source, std::string const& address);
 

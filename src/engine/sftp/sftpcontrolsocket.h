@@ -50,7 +50,7 @@ protected:
 	int AddToStream(std::wstring const& cmd);
 	int AddToStream(std::string const& cmd);
 
-	virtual void OnRateAvailable(CRateLimiter::rate_direction direction);
+	virtual void OnRateAvailable(CRateLimiter::rate_direction direction) override;
 	void OnQuotaRequest(CRateLimiter::rate_direction direction);
 
 	// see src/putty/wildcard.c

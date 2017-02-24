@@ -99,9 +99,6 @@ void CFileZillaEnginePrivate::OnEngineEvent(EngineNotificationType type)
 	case engineCancel:
 		DoCancel();
 		break;
-	case engineTransferEnd:
-		if (m_pControlSocket)
-			m_pControlSocket->TransferEnd();
 	default:
 		break;
 	}

@@ -19,7 +19,6 @@ class CRateLimiter;
 enum EngineNotificationType
 {
 	engineCancel,
-	engineTransferEnd
 };
 
 struct filezilla_engine_event_type;

@@ -589,7 +589,7 @@ void CTransferSocket::TransferEnd(TransferEndReason reason)
 
 	ResetSocket();
 
-	engine_.send_event<CFileZillaEngineEvent>(engineTransferEnd);
+	controlSocket_.send_event<TransferEndEvent>();
 }
 
 std::unique_ptr<CSocket> CTransferSocket::CreateSocketServer(int port)

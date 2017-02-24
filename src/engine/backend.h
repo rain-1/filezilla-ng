@@ -30,12 +30,12 @@ public:
 	CSocketBackend(fz::event_handler* pEvtHandler, CSocket & socket, CRateLimiter& rateLimiter);
 	virtual ~CSocketBackend();
 	// Backend definitions
-	virtual int Read(void *buffer, unsigned int size, int& error);
-	virtual int Peek(void *buffer, unsigned int size, int& error);
-	virtual int Write(const void *buffer, unsigned int size, int& error);
+	virtual int Read(void *buffer, unsigned int size, int& error) override;
+	virtual int Peek(void *buffer, unsigned int size, int& error) override;
+	virtual int Write(const void *buffer, unsigned int size, int& error) override;
 
 protected:
-	virtual void OnRateAvailable(CRateLimiter::rate_direction direction);
+	virtual void OnRateAvailable(CRateLimiter::rate_direction direction) override;
 
 	CSocket &socket_;
 	CRateLimiter& m_rateLimiter;

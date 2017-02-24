@@ -21,19 +21,21 @@ class CFtpTransferOpData;
 class CFtpRawTransferOpData;
 class CTlsSocket;
 
+struct filezilla_engine_ftp_transfer_end_event;
+typedef fz::simple_event<filezilla_engine_ftp_transfer_end_event> TransferEndEvent;
+
 class CFtpControlSocket final : public CRealControlSocket
 {
 	friend class CTransferSocket;
 public:
 	CFtpControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CFtpControlSocket();
-	virtual void TransferEnd();
-
-	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
+	
+	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification) override;
 
 protected:
 
-	virtual int ResetOperation(int nErrorCode);
+	virtual int ResetOperation(int nErrorCode) override;
 
 	// Implicit FZ_REPLY_CONTINUE
 	virtual void Connect(CServer const& server) override;
@@ -51,8 +53,10 @@ protected:
 	void Transfer(std::wstring const& cmd, CFtpTransferOpData* oldData);
 
 
-	virtual void OnConnect();
-	virtual void OnReceive();
+	void TransferEnd();
+
+	virtual void OnConnect() override;
+	virtual void OnReceive() override;
 
 	int SendCommand(std::wstring const& str, bool maskArgs = false, bool measureRTT = true);
 
@@ -102,7 +106,7 @@ protected:
 
 	CLatencyMeasurement m_rtt;
 
-	virtual void operator()(fz::event_base const& ev);
+	virtual void operator()(fz::event_base const& ev) override;
 
 	void OnExternalIPAddress();
 	void OnTimer(fz::timer_id id);
