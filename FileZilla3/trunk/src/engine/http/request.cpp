@@ -34,7 +34,7 @@ int CHttpRequestOpData::Send()
 
 			if ((requestContentLength_ != -1) != (request_._data_request_ != 0)) {
 				LogMessage(MessageType::Debug_Warning, L"requestContentLength_ != -1 does not match request_._data_request_ != 0");
-				FZ_REPLY_INTERNALERROR;
+				return FZ_REPLY_INTERNALERROR;
 			}
 
 			opState = request_wait_connect;
