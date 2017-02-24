@@ -21,6 +21,7 @@
 #include <wx/gbsizer.h>
 
 #include <algorithm>
+#include <array>
 
 #ifdef __WXMSW__
 #include "commctrl.h"
@@ -55,6 +56,8 @@ EVT_MENU(XRCID("ID_EXPORT"), CSiteManagerDialog::OnExportSelected)
 EVT_BUTTON(XRCID("ID_NEWBOOKMARK"), CSiteManagerDialog::OnNewBookmark)
 EVT_BUTTON(XRCID("ID_BOOKMARK_BROWSE"), CSiteManagerDialog::OnBookmarkBrowse)
 END_EVENT_TABLE()
+
+std::array<ServerProtocol, 4> const ftpSubOptions{ FTP, FTPES, FTPS, INSECURE_FTP };
 
 class CSiteManagerItemData : public wxTreeItemData
 {
@@ -501,8 +504,15 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 	}
 
 	wxChoice *pProtocol = XRCCTRL(*this, "ID_PROTOCOL", wxChoice);
-	pProtocol->Append(_("FTP - File Transfer Protocol"));
-	pProtocol->Append(CServer::GetProtocolName(SFTP));
+	mainProtocolListIndex_[FTP] = pProtocol->Append(_("FTP - File Transfer Protocol"));
+	for (auto const& proto : CServer::GetDefaultProtocols()) {
+		if (std::find(ftpSubOptions.cbegin(), ftpSubOptions.cend(), proto) == ftpSubOptions.cend()) {
+			mainProtocolListIndex_[proto] = pProtocol->Append(CServer::GetProtocolName(proto));
+		}
+		else {
+			mainProtocolListIndex_[proto] = mainProtocolListIndex_[FTP];
+		}
+	}
 
 	wxChoice *pChoice = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice);
 	wxASSERT(pChoice);
@@ -517,6 +527,8 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 	}
 
 	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
+
+	// Order must match ftpSubOptions
 	pEncryption->Append(_("Use explicit FTP over TLS if available"));
 	pEncryption->Append(_("Require explicit FTP over TLS"));
 	pEncryption->Append(_("Require implicit FTP over TLS"));
@@ -1291,36 +1303,44 @@ void CSiteManagerDialog::OnSelChanged(wxTreeEvent&)
 void CSiteManagerDialog::OnNewSite(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk() || IsPredefinedItem(item))
+	if (!item.IsOk() || IsPredefinedItem(item)) {
 		return;
+	}
 
-	while (pTree->GetItemData(item))
+	while (pTree->GetItemData(item)) {
 		item = pTree->GetItemParent(item);
+	}
 
-	if (!Verify())
+	if (!Verify()) {
 		return;
+	}
 
 	CServer server;
+	server.SetProtocol(ServerProtocol::FTP);
 	AddNewSite(item, server);
 }
 
 void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return;
+	}
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!data)
+	if (!data) {
 		return;
+	}
 
 	SetControlVisibility(GetProtocol(), GetLogonType());
 
@@ -1804,10 +1824,28 @@ void CSiteManagerDialog::OnProtocolSelChanged(wxCommandEvent&)
 	SetControlVisibility(GetProtocol(), GetLogonType());
 }
 
+namespace {
+void ShowItem(wxChoice & choice, LogonType logonType, bool show)
+{
+	auto const name = CServer::GetNameFromLogonType(logonType);
+	int item = choice.FindString(name);
+	if (item == -1 && show) {
+		if (show) {
+			choice.Append(name);
+		}
+	}
+	else if (item != -1 && !show) {
+		choice.Delete(item);
+	}
+}
+}
+
 void CSiteManagerDialog::SetControlVisibility(ServerProtocol protocol, LogonType type)
 {
-	xrc_call(*this, "ID_ENCRYPTION_DESC", &wxStaticText::Show, protocol != SFTP);
-	xrc_call(*this, "ID_ENCRYPTION", &wxChoice::Show, protocol != SFTP);
+	bool const isFtp = std::find(ftpSubOptions.cbegin(), ftpSubOptions.cend(), protocol) != ftpSubOptions.cend();
+
+	xrc_call(*this, "ID_ENCRYPTION_DESC", &wxStaticText::Show, isFtp);
+	xrc_call(*this, "ID_ENCRYPTION", &wxChoice::Show, isFtp);
 
 	auto choice = XRCCTRL(*this, "ID_LOGONTYPE", wxChoice);
 
@@ -1821,17 +1859,11 @@ void CSiteManagerDialog::SetControlVisibility(ServerProtocol protocol, LogonType
 		choice->Select(choice->FindString(CServer::GetNameFromLogonType(type)));
 	}
 
-	int toDelete = choice->FindString(CServer::GetNameFromLogonType(protocol == SFTP ? ACCOUNT : KEY));
-	int toAdd    = choice->FindString(CServer::GetNameFromLogonType(protocol != SFTP ? ACCOUNT : KEY));
-	if (toDelete != -1) {
-		choice->Delete(toDelete);
-	}
-	if (toAdd == -1) {
-		choice->Append(CServer::GetNameFromLogonType(protocol != SFTP ? ACCOUNT : KEY));
-	}
+	ShowItem(*choice, KEY, protocol == SFTP);
+	ShowItem(*choice, ACCOUNT, isFtp);
 
-	xrc_call(*this, "ID_ACCOUNT_DESC", &wxStaticText::Show, protocol != SFTP && type == ACCOUNT);
-	xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Show, protocol != SFTP && type == ACCOUNT);
+	xrc_call(*this, "ID_ACCOUNT_DESC", &wxStaticText::Show, isFtp && type == ACCOUNT);
+	xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Show, isFtp && type == ACCOUNT);
 	xrc_call(*this, "ID_PASS_DESC", &wxStaticText::Show, protocol != SFTP || type != KEY);
 	xrc_call(*this, "ID_PASS", &wxTextCtrl::Show, protocol != SFTP || type != KEY);
 	xrc_call(*this, "ID_KEYFILE_DESC", &wxStaticText::Show, protocol == SFTP && type == KEY);
@@ -1848,28 +1880,35 @@ void CSiteManagerDialog::SetControlVisibility(ServerProtocol protocol, LogonType
 void CSiteManagerDialog::OnCopySite(wxCommandEvent&)
 {
 	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return;
+	}
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!data)
+	if (!data) {
 		return;
+	}
 
-	if (!Verify())
+	if (!Verify()) {
 		return;
+	}
 
-	if (!UpdateItem())
+	if (!UpdateItem()) {
 		return;
+	}
 
 	wxTreeItemId parent;
-	if (IsPredefinedItem(item))
+	if (IsPredefinedItem(item)) {
 		parent = m_ownSites;
-	else
+	}
+	else {
 		parent = pTree->GetItemParent(item);
+	}
 
 	wxString const name = pTree->GetItemText(item);
 	wxString newName = wxString::Format(_("Copy of %s"), name);
@@ -1889,8 +1928,9 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent&)
 
 			child = pTree->GetNextChild(parent, cookie);
 		}
-		if (!found)
+		if (!found) {
 			break;
+		}
 
 		newName = wxString::Format(_("Copy (%d) of %s"), ++index, name);
 	}
@@ -1907,8 +1947,9 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent&)
 			pData->m_bookmark = std::make_unique<Bookmark>(*static_cast<CSiteManagerItemData*>(pTree->GetItemData(child))->m_bookmark);
 			pTree->AppendItem(newItem, pTree->GetItemText(child), 3, 3, pData);
 		}
-		if (pTree->IsExpanded(item))
+		if (pTree->IsExpanded(item)) {
 			pTree->Expand(newItem);
+		}
 	}
 	else {
 		CSiteManagerItemData* newData = new CSiteManagerItemData;
@@ -1924,22 +1965,26 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent&)
 bool CSiteManagerDialog::LoadDefaultSites()
 {
 	CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
-	if (defaultsDir.empty())
+	if (defaultsDir.empty()) {
 		return false;
+	}
 
 	CXmlFile file(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 
 	auto document = file.Load();
-	if (!document)
+	if (!document) {
 		return false;
+	}
 
 	auto element = document.child("Servers");
-	if (!element)
+	if (!element) {
 		return false;
+	}
 
 	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
-	if (!pTree)
+	if (!pTree) {
 		return false;
+	}
 
 	int style = pTree->GetWindowStyle();
 	pTree->SetWindowStyle(style | wxTR_HIDE_ROOT);
@@ -1951,13 +1996,16 @@ bool CSiteManagerDialog::LoadDefaultSites()
 
 	std::wstring lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED);
 	if (!lastSelection.empty() && lastSelection[0] == '1') {
-		if (lastSelection == _T("1"))
+		if (lastSelection == _T("1")) {
 			pTree->SafeSelectItem(m_predefinedSites);
-		else
+		}
+		else {
 			lastSelection = lastSelection.substr(1);
+		}
 	}
-	else
+	else {
 		lastSelection.clear();
+	}
 	CSiteManagerXmlHandler_Tree handler(pTree, m_predefinedSites, lastSelection, true);
 
 	CSiteManager::Load(element, handler);
@@ -1969,13 +2017,14 @@ bool CSiteManagerDialog::IsPredefinedItem(wxTreeItemId item)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	wxASSERT(pTree);
-	if (!pTree)
+	if (!pTree) {
 		return false;
+	}
 
-	while (item)
-	{
-		if (item == m_predefinedSites)
+	while (item) {
+		if (item == m_predefinedSites) {
 			return true;
+		}
 		item = pTree->GetItemParent(item);
 	}
 
@@ -2008,8 +2057,7 @@ void CSiteManagerDialog::OnBeginDrag(wxTreeEvent& event)
 
 	const bool predefined = IsPredefinedItem(item);
 	const bool root = item == pTree->GetRootItem() || item == m_ownSites;
-	if (root)
-	{
+	if (root) {
 		event.Veto();
 		return;
 	}
@@ -2036,14 +2084,17 @@ struct itempair
 
 bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, bool copy)
 {
-	if (source == target)
+	if (source == target) {
 		return false;
+	}
 
-	if (IsPredefinedItem(target))
+	if (IsPredefinedItem(target)) {
 		return false;
+	}
 
-	if (IsPredefinedItem(source) && !copy)
+	if (IsPredefinedItem(source) && !copy) {
 		return false;
+	}
 
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 
@@ -2063,13 +2114,15 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 
 	wxTreeItemId item = target;
 	while (item != pTree->GetRootItem()) {
-		if (item == source)
+		if (item == source) {
 			return false;
+		}
 		item = pTree->GetItemParent(item);
 	}
 
-	if (!copy && pTree->GetItemParent(source) == target)
+	if (!copy && pTree->GetItemParent(source) == target) {
 		return false;
+	}
 
 	wxString sourceName = pTree->GetItemText(source);
 
@@ -2135,14 +2188,16 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 
 	if (!copy) {
 		wxTreeItemId parent = pTree->GetItemParent(source);
-		if (pTree->GetChildrenCount(parent) == 1)
+		if (pTree->GetChildrenCount(parent) == 1) {
 			pTree->Collapse(parent);
+		}
 
 		pTree->Delete(source);
 	}
 
-	for (auto iter = expand.begin(); iter != expand.end(); ++iter)
+	for (auto iter = expand.begin(); iter != expand.end(); ++iter) {
 		pTree->Expand(*iter);
+	}
 
 	pTree->Expand(target);
 
@@ -2391,30 +2446,23 @@ void CSiteManagerDialog::SetProtocol(ServerProtocol protocol)
 	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
 	wxStaticText* pEncryptionDesc = XRCCTRL(*this, "ID_ENCRYPTION_DESC", wxStaticText);
 
-	if (protocol == SFTP) {
-		pEncryption->Hide();
-		pEncryptionDesc->Hide();
-		pProtocol->SetSelection(1);
-	}
-	else {
-		switch (protocol) {
-		default:
-		case FTP:
-			pEncryption->SetSelection(0);
-			break;
-		case FTPES:
-			pEncryption->SetSelection(1);
-			break;
-		case FTPS:
-			pEncryption->SetSelection(2);
-			break;
-		case INSECURE_FTP:
-			pEncryption->SetSelection(3);
-			break;
-		}
+	auto const it = std::find(ftpSubOptions.cbegin(), ftpSubOptions.cend(), protocol);
+
+	if (it != ftpSubOptions.cend()) {
+		pEncryption->SetSelection(it - ftpSubOptions.cend());
 		pEncryption->Show();
 		pEncryptionDesc->Show();
-		pProtocol->SetSelection(0);
+	}
+	else {
+		pEncryption->Hide();
+		pEncryptionDesc->Hide();
+	}
+	auto const protoIt = mainProtocolListIndex_.find(protocol);
+	if (protoIt != mainProtocolListIndex_.cend()) {
+		pProtocol->SetSelection(protoIt->second);
+	}
+	else {
+		pProtocol->SetSelection(mainProtocolListIndex_[FTP]);
 	}
 }
 
@@ -2424,21 +2472,24 @@ ServerProtocol CSiteManagerDialog::GetProtocol() const
 	wxChoice* pProtocol = XRCCTRL(*this, "ID_PROTOCOL", wxChoice);
 	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
 
-	if (pProtocol->GetSelection() == 1)
-		return SFTP;
+	int const sel = pProtocol->GetSelection();
+	if (sel == mainProtocolListIndex_.at(FTP)) {
+		XRCCTRL(*this, "ID_ENCRYPTION", wxChoice)->GetSelection();
+		if (sel >= 0 && sel <= static_cast<int>(ftpSubOptions.size())) {
+			return ftpSubOptions[pEncryption->GetSelection()];
+		}
 
-	switch (pEncryption->GetSelection())
-	{
-	default:
-	case 0:
 		return FTP;
-	case 1:
-		return FTPES;
-	case 2:
-		return FTPS;
-	case 3:
-		return INSECURE_FTP;
 	}
+	else {
+		for (auto const it : mainProtocolListIndex_) {
+			if (it.second == sel) {
+				return it.first;
+			}
+		}
+	}
+
+	return UNKNOWN;
 }
 
 LogonType CSiteManagerDialog::GetLogonType() const

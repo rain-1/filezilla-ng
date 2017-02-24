@@ -1,6 +1,8 @@
 #include <filezilla.h>
 #include "customheightlistctrl.h"
 
+#include <algorithm>
+
 IMPLEMENT_DYNAMIC_CLASS(wxCustomHeightListCtrl, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxCustomHeightListCtrl, wxScrolledWindow)
@@ -157,6 +159,11 @@ std::set<size_t> wxCustomHeightListCtrl::GetSelection() const
 	return m_selectedLines;
 }
 
+size_t wxCustomHeightListCtrl::GetRowCount() const
+{
+	return m_rows.size();
+}
+
 void wxCustomHeightListCtrl::SelectLine(size_t line)
 {
 	if (!m_allow_selection) {
@@ -208,6 +215,14 @@ void wxCustomHeightListCtrl::InsertRow(wxSizer* sizer, size_t pos)
 		OnSize(ev);
 	});
 #endif
+}
+
+void wxCustomHeightListCtrl::DeleteRow(wxSizer *row)
+{
+	auto it = std::find(m_rows.begin(), m_rows.end(), row);
+	if (it != m_rows.end()) {
+		DeleteRow(it - m_rows.begin());
+	}
 }
 
 void wxCustomHeightListCtrl::DeleteRow(size_t pos)

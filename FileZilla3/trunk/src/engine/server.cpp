@@ -25,8 +25,11 @@ static const t_protocolInfo protocolInfos[] = {
 	{ FTPS,         L"ftps",  true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true  },
 	{ FTPES,        L"ftpes", true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true  },
 	{ INSECURE_FTP, L"ftp",   false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true  },
+	{ S3,           L"s3",    true,  80,  false,  "S3 - Amazon Simple Storage Service",	                                    false },
 	{ UNKNOWN,      L"",      false, 21,  false, "", false }
 };
+
+static std::vector<ServerProtocol> const defaultProtocols = { FTP, SFTP, FTPS, FTPES, INSECURE_FTP };
 
 static char const* const typeNames[SERVERTYPE_MAX] = {
 	fztranslate_mark("Default (Autodetect)"),
@@ -887,6 +890,11 @@ std::wstring CServer::GetPrefixFromProtocol(ServerProtocol const protocol)
 	const t_protocolInfo& info = GetProtocolInfo(protocol);
 
 	return info.prefix;
+}
+
+std::vector<ServerProtocol> const& CServer::GetDefaultProtocols()
+{
+	return defaultProtocols;
 }
 
 void CServer::SetBypassProxy(bool val)
