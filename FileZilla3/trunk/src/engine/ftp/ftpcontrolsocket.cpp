@@ -846,5 +846,9 @@ void CFtpControlSocket::operator()(fz::event_base const& ev)
 		return;
 	}
 
+	if (fz::dispatch<TransferEndEvent>(ev, this, &CFtpControlSocket::TransferEnd)) {
+		return;
+	}
+
 	CRealControlSocket::operator()(ev);
 }
