@@ -97,7 +97,7 @@ int CHttpRequestOpData::Send()
 				}
 
 				dataToSend_ -= written;
-				if (written != controlSocket_.sendBufferSize_ - controlSocket_.sendBufferPos_) {
+				if (static_cast<unsigned int>(written) != controlSocket_.sendBufferSize_ - controlSocket_.sendBufferPos_) {
 					controlSocket_.sendBufferPos_ += written;
 					controlSocket_.sendBufferSize_ -= written;
 				}
