@@ -1,15 +1,12 @@
 #include <filezilla.h>
 #include "rtt.h"
 
-CLatencyMeasurement::CLatencyMeasurement()
-{
-}
-
 int CLatencyMeasurement::GetLatency() const
 {
 	fz::scoped_lock lock(m_sync);
-	if (!m_measurements)
+	if (!m_measurements) {
 		return -1;
+	}
 
 	return static_cast<int>(m_summed_latency / m_measurements);
 }
@@ -17,8 +14,9 @@ int CLatencyMeasurement::GetLatency() const
 bool CLatencyMeasurement::Start()
 {
 	fz::scoped_lock lock(m_sync);
-	if (m_start)
+	if (m_start) {
 		return false;
+	}
 
 	m_start = fz::monotonic_clock::now();
 
@@ -28,14 +26,16 @@ bool CLatencyMeasurement::Start()
 bool CLatencyMeasurement::Stop()
 {
 	fz::scoped_lock lock(m_sync);
-	if (!m_start)
+	if (!m_start) {
 		return false;
+	}
 
 	fz::duration const diff = fz::monotonic_clock::now() - m_start;
 	m_start = fz::monotonic_clock();
 
-	if (diff.get_milliseconds() < 0)
+	if (diff.get_milliseconds() < 0) {
 		return false;
+	}
 
 	m_summed_latency += diff.get_milliseconds();
 	++m_measurements;

@@ -874,7 +874,9 @@ CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate & engine)
 
 CRealControlSocket::~CRealControlSocket()
 {
-	m_pSocket->Close();
+	if (m_pSocket) {
+		m_pSocket->Close();
+	}
 	if (m_pProxyBackend && m_pProxyBackend != m_pBackend) {
 		delete m_pProxyBackend;
 	}
@@ -883,6 +885,11 @@ CRealControlSocket::~CRealControlSocket()
 
 	delete m_pSocket;
 	delete[] sendBuffer_;
+}
+
+bool CRealControlSocket::Connected() const
+{
+	return m_pSocket ? (m_pSocket->GetState() == CSocket::connected) : false;
 }
 
 void CRealControlSocket::AppendToSendBuffer(unsigned char const* data, unsigned int len)
@@ -974,8 +981,9 @@ void CRealControlSocket::operator()(fz::event_base const& ev)
 
 void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
 {
-	if (!m_pBackend)
+	if (!m_pBackend) {
 		return;
+	}
 
 	switch (t)
 	{
