@@ -324,7 +324,7 @@ public:
 	int DoConnect(CServer const& server);
 	virtual int ContinueConnect();
 
-	virtual bool Connected() const override { return m_pSocket->GetState() == CSocket::connected; }
+	virtual bool Connected() const override;
 
 protected:
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR) override;

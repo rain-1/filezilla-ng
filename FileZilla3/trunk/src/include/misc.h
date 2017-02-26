@@ -1,7 +1,7 @@
 #ifndef FILEZILLA_ENGINE_MISC_HEADER
 #define FILEZILLA_ENGINE_MISC_HEADER
 
-#include "socket.h"
+#include <libfilezilla/event_handler.hpp>
 
 enum class lib_dependency
 {

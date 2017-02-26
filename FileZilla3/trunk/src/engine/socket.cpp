@@ -857,8 +857,9 @@ CSocket::CSocket(fz::thread_pool & pool, fz::event_handler* pEvtHandler)
 
 CSocket::~CSocket()
 {
-	if (m_state != none)
+	if (m_state != none) {
 		Close();
+	}
 
 	if (m_pSocketThread) {
 		fz::scoped_lock l(m_pSocketThread->m_sync);
@@ -868,8 +869,9 @@ CSocket::~CSocket()
 
 void CSocket::DetachThread(fz::scoped_lock & l)
 {
-	if (!m_pSocketThread)
+	if (!m_pSocketThread) {
 		return;
+	}
 
 	m_pSocketThread->SetSocket(0, l);
 	if (m_pSocketThread->m_finished) {

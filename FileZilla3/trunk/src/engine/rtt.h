@@ -1,13 +1,12 @@
 #ifndef FZ_RTT_HEADER
 #define FZ_RTT_HEADER
 
-#include "socket.h"
+#include <libfilezilla/mutex.hpp>
+#include <libfilezilla/time.hpp>
 
 class CLatencyMeasurement final
 {
 public:
-	CLatencyMeasurement();
-
 	// Returns false if measurement cannot be started due to
 	// a measurement already running
 	bool Start();
