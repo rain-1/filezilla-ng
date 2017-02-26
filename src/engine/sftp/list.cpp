@@ -66,7 +66,7 @@ int CSftpListOpData::Send()
 
 int CSftpListOpData::ParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpListOpData::ParseResponse");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpListOpData::ParseResponse() in state %d", opState);
 
 	if (opState == list_list) {
 		if (controlSocket_.result_ != FZ_REPLY_OK) {

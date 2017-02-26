@@ -8,7 +8,7 @@
 
 int CHttpRequestOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::Send");
+	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::Send() in state %d", opState);
 
 	switch (opState) {
 	case request_init:
@@ -117,13 +117,13 @@ int CHttpRequestOpData::Send()
 
 int CHttpRequestOpData::ParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::ParseResponse");
+	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::ParseResponse() in state %d", opState);
 	return FZ_REPLY_INTERNALERROR;
 }
 
 int CHttpRequestOpData::SubcommandResult(int prevResult, COpData const& previousOperation)
 {
-	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::SubcommandResult");
+	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::SubcommandResult() in state %d", opState);
 
 	opState = request_send_header;
 	return FZ_REPLY_CONTINUE;

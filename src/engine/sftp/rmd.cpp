@@ -6,7 +6,7 @@
 
 int CSftpRemoveDirOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpRemoveDirOpData::Send");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpRemoveDirOpData::Send() in state %d", opState);
 	
 	CServerPath fullPath = engine_.GetPathCache().Lookup(currentServer_, path_, subDir_);
 	if (fullPath.empty()) {
@@ -29,7 +29,7 @@ int CSftpRemoveDirOpData::Send()
 
 int CSftpRemoveDirOpData::ParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpRemoveDirOpData::ParseResponse");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpRemoveDirOpData::ParseResponse() in state %d", opState);
 
 	if (controlSocket_.result_ != FZ_REPLY_OK) {
 		return controlSocket_.result_;
