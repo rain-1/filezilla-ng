@@ -6,7 +6,7 @@
 
 int CHttpInternalConnectOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CHttpInternalConnectOpData::Send");
+	LogMessage(MessageType::Debug_Verbose, L"CHttpInternalConnectOpData::Send() in state %d", opState);
 
 	if (!port_) {
 		port_ = tls_ ? 443 : 80;

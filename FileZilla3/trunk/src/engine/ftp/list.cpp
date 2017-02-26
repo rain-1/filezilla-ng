@@ -48,8 +48,7 @@ CFtpListOpData::CFtpListOpData(CFtpControlSocket & controlSocket, CServerPath co
 
 int CFtpListOpData::Send()
 {
-	controlSocket_.LogMessage(MessageType::Debug_Verbose, L"CFtpListOpData::ListSend()");
-	controlSocket_.LogMessage(MessageType::Debug_Debug, L"  state = %d", opState);
+	controlSocket_.LogMessage(MessageType::Debug_Verbose, L"CFtpListOpData::ListSend() in state %d", opState);
 
 	if (opState == list_init) {
 		controlSocket_.ChangeDir(path_, subDir_, (flags_ & LIST_FLAG_LINK));
@@ -133,7 +132,7 @@ int CFtpListOpData::Send()
 
 int CFtpListOpData::ParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpListOpData::ParseResponse()");
+	LogMessage(MessageType::Debug_Verbose, L"CFtpListOpData::ParseResponse() in state %d", opState);
 
 	if (opState != list_mdtm) {
 		LogMessage(MessageType::Debug_Warning, "CFtpListOpData::ParseResponse should never be called if opState != list_mdtm");

@@ -9,7 +9,7 @@
 
 int CSftpConnectOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpConnectOpData::Send");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpConnectOpData::Send() in state %d", opState);
 	
 	switch (opState)
 	{
@@ -88,7 +88,7 @@ int CSftpConnectOpData::Send()
 
 int CSftpConnectOpData::ParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpConnectOpData::ParseResponse");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpConnectOpData::ParseResponse() in state %d", opState);
 
 	if (controlSocket_.result_ != FZ_REPLY_OK) {
 		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;

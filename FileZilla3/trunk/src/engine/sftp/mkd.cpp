@@ -14,7 +14,7 @@ enum mkdStates
 
 int CSftpMkdirOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpMkdirOpData::Send");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpMkdirOpData::Send() in state %d", opState);
 	
 	if (!holdsLock_) {
 		if (!controlSocket_.TryLockCache(CSftpControlSocket::lock_mkdir, path_)) {

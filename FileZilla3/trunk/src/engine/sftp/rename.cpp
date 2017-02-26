@@ -13,7 +13,7 @@ enum renameStates
 
 int CSftpRenameOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpRenameOpData::Send");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpRenameOpData::Send() in state %d", opState);
 	
 	switch (opState)
 	{
@@ -55,7 +55,7 @@ int CSftpRenameOpData::Send()
 
 int CSftpRenameOpData::ParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpRenameOpData::ParseResponse");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpRenameOpData::ParseResponse() in state %d", opState);
 
 	if (controlSocket_.result_ != FZ_REPLY_OK) {
 		return controlSocket_.result_;
@@ -76,7 +76,7 @@ int CSftpRenameOpData::ParseResponse()
 
 int CSftpRenameOpData::SubcommandResult(int prevResult, COpData const&)
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpRenameOpData::SubcommandResult");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpRenameOpData::SubcommandResult() in state %d", opState);
 
 	if (prevResult != FZ_REPLY_OK) {
 		useAbsolute_ = true;

@@ -12,7 +12,7 @@ enum rmdStates
 
 int CFtpDeleteOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpDeleteOpData::Send");
+	LogMessage(MessageType::Debug_Verbose, L"CFtpDeleteOpData::Send() in state %d", opState);
 
 	if (opState == del_init) {
 		controlSocket_.ChangeDir(path_);
@@ -43,7 +43,7 @@ int CFtpDeleteOpData::Send()
 
 int CFtpDeleteOpData::ParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpDeleteOpData::ParseResponse()");
+	LogMessage(MessageType::Debug_Verbose, L"CFtpDeleteOpData::ParseResponse() in state %d", opState);
 
 	int code = controlSocket_.GetReplyCode();
 	if (code != 2 && code != 3) {
@@ -76,7 +76,7 @@ int CFtpDeleteOpData::ParseResponse()
 
 int CFtpDeleteOpData::SubcommandResult(int prevResult, COpData const&)
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpDeleteOpData::SubcommandResult()");
+	LogMessage(MessageType::Debug_Verbose, L"CFtpDeleteOpData::SubcommandResult() in state %d", opState);
 
 	if (opState == del_waitcwd) {
 		opState = del_del;

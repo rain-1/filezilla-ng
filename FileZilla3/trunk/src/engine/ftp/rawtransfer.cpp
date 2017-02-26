@@ -8,16 +8,13 @@
 
 int CFtpRawTransferOpData::ParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpRawTransferOpData::ParseResponse()");
+	LogMessage(MessageType::Debug_Verbose, L"CFtpRawTransferOpData::ParseResponse() in state %d", opState);
 
 	if (opState == rawtransfer_init) {
 		return FZ_REPLY_ERROR;
 	}
 
 	int const code = controlSocket_.GetReplyCode();
-
-	LogMessage(MessageType::Debug_Debug, L"  code = %d", code);
-	LogMessage(MessageType::Debug_Debug, L"  state = %d", opState);
 
 	bool error = false;
 	switch (opState)
@@ -171,14 +168,12 @@ int CFtpRawTransferOpData::ParseResponse()
 
 int CFtpRawTransferOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpRawTransferOpData::Send()");
+	LogMessage(MessageType::Debug_Verbose, L"CFtpRawTransferOpData::Send() in state %d", opState);
 
 	if (!controlSocket_.m_pTransferSocket) {
 		LogMessage(MessageType::Debug_Info, L"Empty m_pTransferSocket");
 		return FZ_REPLY_INTERNALERROR;
 	}
-
-	LogMessage(MessageType::Debug_Debug, L"  state = %d", opState);
 
 	std::wstring cmd;
 	bool measureRTT = false;

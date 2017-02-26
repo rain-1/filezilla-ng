@@ -14,9 +14,7 @@ enum mkdStates
 
 int CFtpMkdirOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CFtpMkdirOpData::Send()");
-
-	LogMessage(MessageType::Debug_Debug, L"  state = %d", opState);
+	LogMessage(MessageType::Debug_Verbose, L"CFtpMkdirOpData::Send() in state %d", opState);
 
 	if (!holdsLock_) {
 		if (!controlSocket_.TryLockCache(CFtpControlSocket::lock_mkdir, path_)) {

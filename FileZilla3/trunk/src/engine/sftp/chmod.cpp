@@ -12,7 +12,7 @@ enum chmodStates
 
 int CSftpChmodOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpChmodOpData::Send");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpChmodOpData::Send() in state %d", opState);
 	
 	if (opState == chmod_init) {
 		controlSocket_.ChangeDir(command_.GetPath());
@@ -33,14 +33,14 @@ int CSftpChmodOpData::Send()
 
 int CSftpChmodOpData::ParseResponse()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpChmodOpData::ParseResponse");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpChmodOpData::ParseResponse() in state %d", opState);
 
 	return controlSocket_.result_;
 }
 
 int CSftpChmodOpData::SubcommandResult(int prevResult, COpData const&)
 {
-	LogMessage(MessageType::Debug_Verbose, L"CSftpChmodOpData::SubcommandResult");
+	LogMessage(MessageType::Debug_Verbose, L"CSftpChmodOpData::SubcommandResult() in state %d", opState);
 
 	if (opState == chmod_waitcwd) {
 		if (prevResult != FZ_REPLY_OK) {

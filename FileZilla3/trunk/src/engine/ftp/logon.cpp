@@ -36,6 +36,8 @@ CFtpLogonOpData::CFtpLogonOpData(CFtpControlSocket& controlSocket, CServer const
 
 int CFtpLogonOpData::Send()
 {
+	LogMessage(MessageType::Debug_Verbose, L"CFtpLogonOpData::Send() in state %d", opState);
+
 	switch (opState)
 	{
 	case LOGON_CONNECT:
@@ -206,6 +208,8 @@ int CFtpLogonOpData::Send()
 
 int CFtpLogonOpData::ParseResponse()
 {
+	LogMessage(MessageType::Debug_Verbose, L"CFtpLogonOpData::ParseResponse() in state %d", opState);
+
 	int code = controlSocket_.GetReplyCode();
 	std::wstring const& response = controlSocket_.m_Response;
 
