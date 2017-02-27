@@ -61,8 +61,8 @@ int CFtpListOpData::Send()
 		// Check if we can use already existing listing
 		CDirectoryListing listing;
 		bool is_outdated = false;
-		bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, currentPath_, true, is_outdated);
-		if (found && !is_outdated && !listing.get_unsure_flags() &&
+		bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, currentPath_, false, is_outdated);
+		if (found && !is_outdated &&
 			(!refresh_ || (holdsLock_ && listing.m_firstListTime >= time_before_locking_)))
 		{
 			controlSocket_.SendDirectoryListingNotification(currentPath_, topLevel_, false);
