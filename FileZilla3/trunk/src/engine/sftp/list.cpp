@@ -37,8 +37,8 @@ int CSftpListOpData::Send()
 		// Check if we can use already existing listing
 		CDirectoryListing listing;
 		bool is_outdated = false;
-		bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, path_, true, is_outdated);
-		if (found && !is_outdated && !listing.get_unsure_flags() &&
+		bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, path_, false, is_outdated);
+		if (found && !is_outdated &&
 			(!refresh_ || (holdsLock_ && listing.m_firstListTime >= time_before_locking_)))
 		{
 			controlSocket_.SendDirectoryListingNotification(listing.path, topLevel_, false);
