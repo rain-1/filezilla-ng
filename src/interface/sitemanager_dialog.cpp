@@ -2472,7 +2472,7 @@ ServerProtocol CSiteManagerDialog::GetProtocol() const
 	int const sel = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetSelection);
 	if (sel == mainProtocolListIndex_.at(FTP)) {
 		int encSel = xrc_call(*this, "ID_ENCRYPTION", &wxChoice::GetSelection);
-		if (encSel >= 0 && encSel <= static_cast<int>(ftpSubOptions.size())) {
+		if (encSel >= 0 && encSel < static_cast<int>(ftpSubOptions.size())) {
 			return ftpSubOptions[encSel];
 		}
 
