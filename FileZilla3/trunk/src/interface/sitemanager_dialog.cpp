@@ -2469,14 +2469,11 @@ void CSiteManagerDialog::SetProtocol(ServerProtocol protocol)
 
 ServerProtocol CSiteManagerDialog::GetProtocol() const
 {
-	wxChoice* pProtocol = XRCCTRL(*this, "ID_PROTOCOL", wxChoice);
-	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
-
-	int const sel = pProtocol->GetSelection();
+	int const sel = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetSelection);
 	if (sel == mainProtocolListIndex_.at(FTP)) {
-		XRCCTRL(*this, "ID_ENCRYPTION", wxChoice)->GetSelection();
-		if (sel >= 0 && sel <= static_cast<int>(ftpSubOptions.size())) {
-			return ftpSubOptions[pEncryption->GetSelection()];
+		int encSel = xrc_call(*this, "ID_ENCRYPTION", &wxChoice::GetSelection);
+		if (encSel >= 0 && encSel <= static_cast<int>(ftpSubOptions.size())) {
+			return ftpSubOptions[encSel];
 		}
 
 		return FTP;
