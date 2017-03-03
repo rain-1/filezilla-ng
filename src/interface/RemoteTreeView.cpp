@@ -468,7 +468,7 @@ void CRemoteTreeView::CreateImageList()
 	int index = GetIconIndex(iconType::dir, _T("{78013B9C-3532-4fe1-A418-5CD1955127CC}"), false);
 	wxBitmap dirIcon = CreateIcon(index);
 
-	wxSize s = dirIcon.GetSize();
+	wxSize s = dirIcon.GetScaledSize();
 
 	// Must create image list only after we know actual icon size,
 	// wxSystemSettings cannot return the correct size due to a bug in
