@@ -26,7 +26,7 @@ int CHttpRequestOpData::Send()
 			if (!cl.empty()) {
 				requestContentLength_ = fz::to_integral<int64_t>(cl, -1);
 				if (requestContentLength_ < 0) {
-					LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
+					LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Invalid Content-Length"));
 					return FZ_REPLY_ERROR;
 				}
 				dataToSend_ = static_cast<uint64_t>(requestContentLength_);
@@ -212,7 +212,7 @@ int CHttpRequestOpData::ParseHeader()
 		for (i = 0; (i + 1) < m_recvBufferPos; ++i) {
 			if (recv_buffer_[i] == '\r') {
 				if (recv_buffer_[i + 1] != '\n') {
-					LogMessage(MessageType::Error, _("Malformed reply, server not sending proper line endings"));
+					LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Server not sending proper line endings"));
 					return FZ_REPLY_ERROR;
 				}
 				break;
@@ -287,7 +287,7 @@ int CHttpRequestOpData::ParseHeader()
 
 			auto pos = line.find(": ");
 			if (pos == std::string::npos || !pos) {
-				LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid line"));
+				LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Invalid line"));
 				return FZ_REPLY_ERROR;
 			}
 
@@ -317,7 +317,7 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 		transfer_encoding_ = identity;
 	}
 	else if (!te.empty()) {
-		LogMessage(MessageType::Error, _("Malformed header: %s"), _("Unknown transfer encoding"));
+		LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Unknown transfer encoding"));
 		return FZ_REPLY_ERROR;
 	}
 	
@@ -325,7 +325,7 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 	if (!cl.empty()) {
 		responseContentLength_ = fz::to_integral<int64_t>(cl, -1);
 		if (responseContentLength_ < 0) {
-			LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
+			LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Invalid Content-Length"));
 			return FZ_REPLY_ERROR;
 		}
 	}
@@ -450,7 +450,7 @@ int CHttpRequestOpData::ProcessData(unsigned char* data, unsigned int len)
 {
 	receivedData_ += len;
 	if (responseContentLength_ != -1 && receivedData_ > responseContentLength_) {
-		LogMessage(MessageType::Error, _("Malformed response: Server sent too much data."));
+		LogMessage(MessageType::Error, _("Malformed response body: %s", _("Server sent too much data.");
 		return FZ_REPLY_ERROR;
 	}
 

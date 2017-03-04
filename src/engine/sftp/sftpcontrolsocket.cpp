@@ -602,7 +602,7 @@ void CSftpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& 
 
 void CSftpControlSocket::Chmod(CChmodCommand const& command)
 {
-	LogMessage(MessageType::Status, _("Set permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()), command.GetPermission());
+	LogMessage(MessageType::Status, _("Setting permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()), command.GetPermission());
 	Push(std::make_unique<CSftpChmodOpData>(*this, command));
 }
 
