@@ -450,7 +450,7 @@ int CHttpRequestOpData::ProcessData(unsigned char* data, unsigned int len)
 {
 	receivedData_ += len;
 	if (responseContentLength_ != -1 && receivedData_ > responseContentLength_) {
-		LogMessage(MessageType::Error, _("Malformed response body: %s", _("Server sent too much data.");
+		LogMessage(MessageType::Error, _("Malformed response body: %s"), _("Server sent too much data.");
 		return FZ_REPLY_ERROR;
 	}
 
