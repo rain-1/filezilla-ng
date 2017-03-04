@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.25.0-rc1 (2017-03-04)
+
+- Fix encryption selection for FTP in the Site Manager which broke in 3.25.0-beta1
+- Small changes to error message texts
+
 3.25.0-beta1 (2017-02-24)
 
 + Major refactoring of the FileZilla internals.
