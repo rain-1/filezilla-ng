@@ -5,7 +5,7 @@
 
 #include <sqlite3.h>
 
-std::wstring GetDependencVersion(gui_lib_dependency d)
+std::wstring GetDependencyVersion(gui_lib_dependency d)
 {
 	switch (d) {
 	case gui_lib_dependency::wxwidgets:
