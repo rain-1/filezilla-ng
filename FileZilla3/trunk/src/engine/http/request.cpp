@@ -37,6 +37,9 @@ int CHttpRequestOpData::Send()
 				return FZ_REPLY_INTERNALERROR;
 			}
 
+			response_.code_ = 0;
+			response_.headers_.clear();
+
 			opState = request_wait_connect;
 			controlSocket_.InternalConnect(fz::to_wstring_from_utf8(request_.uri_.host_), request_.uri_.port_, request_.uri_.scheme_ == "https");
 			return FZ_REPLY_CONTINUE;
