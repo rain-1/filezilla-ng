@@ -17,6 +17,8 @@ CIOThread::CIOThread()
 
 CIOThread::~CIOThread()
 {
+	Destroy();
+
 	Close();
 
 	delete [] m_buffers[0];
@@ -27,8 +29,9 @@ void CIOThread::Close()
 	if (m_pFile) {
 		// The file might have been preallocated and the transfer stopped before being completed
 		// so always truncate the file to the actually written size before closing it.
-		if (!m_read)
+		if (!m_read) {
 			m_pFile->truncate();
+		}
 
 		m_pFile.reset();
 	}
@@ -152,8 +155,9 @@ void CIOThread::entry()
 				m_evtHandler->send_event<CIOThreadEvent>();
 			}
 
-			if (m_error)
+			if (m_error) {
 				break;
+			}
 
 			++m_curThreadBuf %= BUFFERCOUNT;
 		}
@@ -164,8 +168,9 @@ int CIOThread::GetNextWriteBuffer(char** pBuffer)
 {
 	fz::scoped_lock l(m_mutex);
 
-	if (m_error)
+	if (m_error) {
 		return IO_Error;
+	}
 
 	if (m_curAppBuf == -1) {
 		m_curAppBuf = 0;
@@ -196,23 +201,28 @@ bool CIOThread::Finalize(int len)
 
 	Destroy();
 
-	if (m_curAppBuf == -1)
+	if (m_curAppBuf == -1) {
 		return true;
+	}
 
-	if (m_error)
+	if (m_error) {
 		return false;
+	}
 
-	if (!len)
+	if (!len) {
 		return true;
+	}
 
-	if (!WriteToFile(m_buffers[m_curAppBuf], len))
+	if (!WriteToFile(m_buffers[m_curAppBuf], len)) {
 		return false;
+	}
 
 #ifndef FZ_WINDOWS
 	if (!m_binary && m_wasCarriageReturn) {
 		const char CR = '\r';
-		if (m_pFile->write(&CR, 1) != 1)
+		if (m_pFile->write(&CR, 1) != 1) {
 			return false;
+		}
 	}
 #endif
 
@@ -230,10 +240,12 @@ int CIOThread::GetNextReadBuffer(char** pBuffer)
 	fz::scoped_lock l(m_mutex);
 
 	if (newBuf == m_curThreadBuf) {
-		if (m_error)
+		if (m_error) {
 			return IO_Error;
-		else if (!m_running)
+		}
+		else if (!m_running) {
 			return IO_Success;
+		}
 		else {
 			m_appWaiting = true;
 			return IO_Again;
@@ -283,7 +295,9 @@ int64_t CIOThread::ReadFromFile(char* pBuffer, int64_t maxLen)
 #ifndef FZ_WINDOWS
 	if (m_binary)
 #endif
+	{
 		return m_pFile->read(pBuffer, maxLen);
+	}
 
 #ifndef FZ_WINDOWS
 
@@ -293,8 +307,9 @@ int64_t CIOThread::ReadFromFile(char* pBuffer, int64_t maxLen)
 
 	char* r = pBuffer + readLen;
 	auto len = m_pFile->read(r, readLen);
-	if (!len || len <= -1)
+	if (!len || len <= -1) {
 		return len;
+	}
 
 	const char* const end = r + len;
 	char* w = pBuffer;
@@ -303,14 +318,17 @@ int64_t CIOThread::ReadFromFile(char* pBuffer, int64_t maxLen)
 	while (r != end) {
 		char c = *r++;
 		if (c == '\n') {
-			if (!m_wasCarriageReturn)
-				*w++ = '\r';
+			if (!m_wasCarriageReturn) {
+				*w++ = '\r'
+			};
 			m_wasCarriageReturn = false;
 		}
-		else if (c == '\r')
+		else if (c == '\r') {
 			m_wasCarriageReturn = true;
-		else
+		}
+		else {
 			m_wasCarriageReturn = false;
+		}
 
 		*w++ = c;
 	}
@@ -341,8 +359,9 @@ bool CIOThread::WriteToFile(char* pBuffer, int64_t len)
 		if (m_wasCarriageReturn && len && *pBuffer != '\n' && *pBuffer != '\r') {
 			m_wasCarriageReturn = false;
 			const char CR = '\r';
-			if (!DoWrite(&CR, 1))
+			if (!DoWrite(&CR, 1)) {
 				return false;
+			}
 		}
 
 		// Skip forward to end of buffer or first CR

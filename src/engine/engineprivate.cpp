@@ -129,10 +129,12 @@ const CCommand *CFileZillaEnginePrivate::GetCurrentCommand() const
 Command CFileZillaEnginePrivate::GetCurrentCommandId() const
 {
 	fz::scoped_lock lock(mutex_);
-	if (!m_pCurrentCommand)
+	if (!m_pCurrentCommand) {
 		return Command::none;
-	else
+	}
+	else {
 		return GetCurrentCommand()->GetId();
+	}
 }
 
 void CFileZillaEnginePrivate::AddNotification(fz::scoped_lock& lock, CNotification *pNotification)
@@ -804,8 +806,9 @@ int CFileZillaEnginePrivate::CacheLookup(const CServerPath& path, CDirectoryList
 int CFileZillaEnginePrivate::Cancel()
 {
 	fz::scoped_lock lock(mutex_);
-	if (!IsBusy())
+	if (!IsBusy()) {
 		return FZ_REPLY_OK;
+	}
 
 	send_event<CFileZillaEngineEvent>(engineCancel);
 	return FZ_REPLY_WOULDBLOCK;
