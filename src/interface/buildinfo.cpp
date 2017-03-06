@@ -5,7 +5,7 @@
 
 #include <sqlite3.h>
 
-std::wstring GetDependencyName(gui_lib_dependency d)
+std::wstring GetDependencVersion(gui_lib_dependency d)
 {
 	switch (d) {
 	case gui_lib_dependency::wxwidgets:
@@ -17,7 +17,7 @@ std::wstring GetDependencyName(gui_lib_dependency d)
 	}
 }
 
-std::wstring GetDependencyVersion(gui_lib_dependency d)
+std::wstring GetDependencyName(gui_lib_dependency d)
 {
 	switch (d) {
 	case gui_lib_dependency::wxwidgets:
