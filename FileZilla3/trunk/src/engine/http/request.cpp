@@ -259,18 +259,22 @@ int CHttpRequestOpData::ParseHeader()
 		}
 		else {
 			if (!i) {
-				// End of header, data from now on
-				got_header_ = true;
+				memmove(recv_buffer_.get(), recv_buffer_.get() + 2, m_recvBufferPos - 2);
+				m_recvBufferPos -= 2;
+
+				// End of header
 				int res = ProcessCompleteHeader();
 				if (res != FZ_REPLY_CONTINUE) {
 					return res;
 				}
 
-				memmove(recv_buffer_.get(), recv_buffer_.get() + 2, m_recvBufferPos - 2);
-				m_recvBufferPos -= 2;
-
 				if (!m_recvBufferPos) {
 					return FZ_REPLY_WOULDBLOCK;
+				}
+
+				if (!got_header_) {
+					// In case we got 100 Continue
+					continue;
 				}
 
 				if (transfer_encoding_ == chunked) {
@@ -311,6 +315,15 @@ int CHttpRequestOpData::ParseHeader()
 int CHttpRequestOpData::ProcessCompleteHeader()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::ParseHeader()");
+
+	if (response_.code_ == 100) {
+		// 100 Continue header. Ignore it and start over.
+		response_.code_ = 0;
+		response_.headers_.clear();
+		return FZ_REPLY_CONTINUE;
+	}
+
+	got_header_ = true;
 
 	auto const te = fz::str_tolower_ascii(response_.get_header("Transfer-Encoding"));
 	if (te == "chunked") {
