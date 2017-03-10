@@ -1,5 +1,5 @@
-#ifndef __DIRECTORYLISTINGPARSER_H__
-#define __DIRECTORYLISTINGPARSER_H__
+#ifndef FILEZILLA_ENGINE_DIRECTORYLISTINGPARSER_HEADER
+#define FILEZILLA_ENGINE_DIRECTORYLISTINGPARSER_HEADER
 
 /* This class is responsible for parsing the directory listings returned by
  * the server.
