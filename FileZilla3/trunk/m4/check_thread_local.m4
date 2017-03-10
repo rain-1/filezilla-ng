@@ -16,8 +16,8 @@ AC_DEFUN([CHECK_THREAD_LOCAL], [
   ], [
     AC_MSG_RESULT([yes])
   ], [
-    AC_DEFINE([HAVE_NO_THREAD_LOCAL], [1], [Define if thread_local isn't supported])
     AC_MSG_RESULT([no])
+    AC_MSG_ERROR([Compiler support for the thread_local keyword is required.])
   ])
 
   AC_LANG_POP(C++)

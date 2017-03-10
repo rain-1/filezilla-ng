@@ -68,10 +68,6 @@ private:
 
 	static fz::mutex mutex_;
 
-#if HAVE_NO_THREAD_LOCAL
-	// Fixme: Get rid of this once OS X's clang supports it.
-	#define thread_local __thread
-#endif
 	static thread_local int debug_level_;
 	static thread_local int raw_listing_;
 };
