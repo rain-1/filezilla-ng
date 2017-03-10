@@ -407,9 +407,9 @@ public:
 	virtual void SetFocus();
 protected:
 
-	CQueueView* m_pQueueView;
-	CQueueViewFailed* m_pQueueView_Failed;
-	CQueueViewSuccessful* m_pQueueView_Successful;
+	CQueueView* m_pQueueView{};
+	CQueueViewFailed* m_pQueueView_Failed{};
+	CQueueViewSuccessful* m_pQueueView_Successful{};
 };
 
 #include "QueueView.h"
