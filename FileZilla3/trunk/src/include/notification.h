@@ -1,5 +1,5 @@
-#ifndef __NOTIFICATION_H__
-#define __NOTIFICATION_H__
+#ifndef FILEZILLA_ENGINE_NOTIFICATION_HEADER
+#define FILEZILLA_ENGINE_NOTIFICATION_HEADER
 
 // Notification overview
 // ---------------------

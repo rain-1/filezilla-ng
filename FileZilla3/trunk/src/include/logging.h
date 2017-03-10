@@ -1,5 +1,5 @@
-#ifndef __LOGGING_H__
-#define __LOGGING_H__
+#ifndef FILEZILLA_ENGINE_LOGGING_HEADER
+#define FILEZILLA_ENGINE_LOGGING_HEADER
 
 enum class MessageType
 {

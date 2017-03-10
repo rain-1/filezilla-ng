@@ -1,5 +1,5 @@
-#ifndef __OPTIONSBASE_H__
-#define __OPTIONSBASE_H__
+#ifndef FILEZILLA_ENGINE_OPTIONSBASE_HEADER
+#define FILEZILLA_ENGINE_OPTIONSBASE_HEADER
 
 // The engine of FileZilla 3 can be configured using a few settings.
 // In order to read and set the settings, the engine has to be passed
