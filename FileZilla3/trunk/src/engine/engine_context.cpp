@@ -5,7 +5,6 @@
 #include "logging_private.h"
 #include "pathcache.h"
 #include "ratelimiter.h"
-#include "socket.h"
 
 #include <libfilezilla/event_loop.hpp>
 #include <libfilezilla/thread_pool.hpp>
