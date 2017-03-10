@@ -33,7 +33,7 @@ public:
 	// Callback must write up to len bytes into the provided buffer,
 	// and update len with the amount written.
 	// Callback must return FZ_REPLY_CONTINUE or FZ_REPLY_ERROR
-	std::function<int(unsigned char* data, unsigned int &len)> _data_request_;
+	std::function<int(unsigned char* data, unsigned int &len)> data_request_;
 
 	std::string get_header(std::string const& key) const
 	{
