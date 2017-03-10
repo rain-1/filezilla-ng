@@ -1,5 +1,5 @@
-#ifndef __COMMANDS_H__
-#define __COMMANDS_H__
+#ifndef FILEZILLA_ENGINE_COMMANDS_HEADER
+#define FILEZILLA_ENGINE_COMMANDS_HEADER
 
 // See below for actual commands and their parameters
 

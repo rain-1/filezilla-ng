@@ -1,5 +1,5 @@
-#ifndef __DIRECTORYLISTING_H__
-#define __DIRECTORYLISTING_H__
+#ifndef FILEZILLA_ENGINE_DIRECTORYLISTING_HEADER
+#define FILEZILLA_ENGINE_DIRECTORYLISTING_HEADER
 
 #include <libfilezilla/optional.hpp>
 #include <libfilezilla/shared.hpp>
