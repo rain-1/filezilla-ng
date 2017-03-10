@@ -2449,7 +2449,7 @@ void CSiteManagerDialog::SetProtocol(ServerProtocol protocol)
 	auto const it = std::find(ftpSubOptions.cbegin(), ftpSubOptions.cend(), protocol);
 
 	if (it != ftpSubOptions.cend()) {
-		pEncryption->SetSelection(it - ftpSubOptions.cend());
+		pEncryption->SetSelection(it - ftpSubOptions.cbegin());
 		pEncryption->Show();
 		pEncryptionDesc->Show();
 	}
