@@ -32,8 +32,8 @@ int CHttpRequestOpData::Send()
 				dataToSend_ = static_cast<uint64_t>(requestContentLength_);
 			}
 
-			if ((requestContentLength_ != -1) != (request_._data_request_ != 0)) {
-				LogMessage(MessageType::Debug_Warning, L"requestContentLength_ != -1 does not match request_._data_request_ != 0");
+			if ((requestContentLength_ != -1) != (request_.data_request_ != 0)) {
+				LogMessage(MessageType::Debug_Warning, L"requestContentLength_ != -1 does not match request_.data_request_ != 0");
 				return FZ_REPLY_INTERNALERROR;
 			}
 
@@ -55,7 +55,7 @@ int CHttpRequestOpData::Send()
 
 			command += "\r\n";
 
-			if (request_._data_request_) {
+			if (request_.data_request_) {
 				opState = request_send;
 			}
 			else {
@@ -76,12 +76,12 @@ int CHttpRequestOpData::Send()
 					if (chunkSize > dataToSend_) {
 						len = static_cast<unsigned int>(dataToSend_);
 					}
-					int res = request_._data_request_(controlSocket_.sendBuffer_ + controlSocket_.sendBufferSize_, len);
+					int res = request_.data_request_(controlSocket_.sendBuffer_ + controlSocket_.sendBufferSize_, len);
 					if (res != FZ_REPLY_CONTINUE) {
 						return res;
 					}
 					if (len > dataToSend_) {
-						LogMessage(MessageType::Debug_Warning, L"request_._data_request_ returned too much data");
+						LogMessage(MessageType::Debug_Warning, L"request_.data_request_ returned too much data");
 						return FZ_REPLY_INTERNALERROR;
 					}
 
