@@ -78,16 +78,16 @@ int CFtpMkdirOpData::ParseResponse()
 	switch (opState) {
 	case mkd_findparent:
 		if (code == 2 || code == 3) {
-			currentPath_ = currentPath_;
+			currentPath_ = currentMkdPath_;
 			opState = mkd_mkdsub;
 		}
-		else if (currentPath_ == commonParent_) {
+		else if (currentMkdPath_ == commonParent_) {
 			opState = mkd_tryfull;
 		}
-		else if (currentPath_.HasParent()) {
-			CServerPath const parent = currentPath_.GetParent();
-			segments_.push_back(currentPath_.GetLastSegment());
-			currentPath_ = parent;
+		else if (currentMkdPath_.HasParent()) {
+			CServerPath const parent = currentMkdPath_.GetParent();
+			segments_.push_back(currentMkdPath_.GetLastSegment());
+			currentMkdPath_ = parent;
 		}
 		else {
 			opState = mkd_tryfull;
