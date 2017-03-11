@@ -319,8 +319,8 @@ int64_t CIOThread::ReadFromFile(char* pBuffer, int64_t maxLen)
 		char c = *r++;
 		if (c == '\n') {
 			if (!m_wasCarriageReturn) {
-				*w++ = '\r'
-			};
+				*w++ = '\r';
+			}
 			m_wasCarriageReturn = false;
 		}
 		else if (c == '\r') {
