@@ -393,9 +393,12 @@ if test "$buildmain" = "yes"; then
     [use_mac_sandbox="$enableval"], [use_mac_sandbox="no"])
   if test "$use_mac_sandbox" == "yes"; then
     AC_DEFINE([USE_MAC_SANDBOX], [1],
-       [Define to 1 if the App Sandbox on OS X should be used.])]
+       [Define to 1 if the App Sandbox on OS X should be used.])
   fi
 
+  if test "$macappbundle" = "yes"; then
+    AC_PROG_OBJC
+  fi
 
   # Installer creation under Windows
   # --------------------------------
