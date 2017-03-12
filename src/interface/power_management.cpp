@@ -11,8 +11,8 @@ CPowerManagement* CPowerManagement::m_pPowerManagement = 0;
 
 #ifdef __WXMAC__
 extern "C" {
-	void* PowerManagmentImpl_SetBusy();
-	void PowerManagmentImpl_SetIdle(void* activity);
+	void const* PowerManagmentImpl_SetBusy();
+	void PowerManagmentImpl_SetIdle(void const* activity);
 }
 #endif
 

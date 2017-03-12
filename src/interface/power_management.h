@@ -36,7 +36,7 @@ protected:
 #ifdef WITH_LIBDBUS
 	CPowerManagementInhibitor *m_inhibitor;
 #elif defined(__WXMAC__)
-	void* activity_{};
+	void const* activity_{};
 #endif
 };
 
