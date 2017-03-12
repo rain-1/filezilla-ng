@@ -13,6 +13,9 @@ AC_PROG_INSTALL
 LT_INIT
 LT_LANG([C++])
 
+# Todo: Use sub-configure for OSX specific code
+_AM_DEPENDENCIES(OBJC)
+
 AC_CACHE_SAVE
 
 AC_ARG_ENABLE(locales, AS_HELP_STRING([--enable-locales],[Build message catalogs]), \
