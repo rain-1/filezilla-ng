@@ -72,10 +72,12 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 	menubar->Check(XRCID("ID_MENU_SERVER_VIEWHIDDEN"), COptions::Get()->GetOptionVal(OPTION_VIEW_HIDDEN_FILES) ? true : false);
 
 	int mode = COptions::Get()->GetOptionVal(OPTION_COMPARISONMODE);
-	if (mode != 1)
+	if (mode != 1) {
 		menubar->Check(XRCID("ID_COMPARE_SIZE"), true);
-	else
+	}
+	else {
 		menubar->Check(XRCID("ID_COMPARE_DATE"), true);
+	}
 
 	menubar->Check(XRCID("ID_COMPARE_HIDEIDENTICAL"), COptions::Get()->GetOptionVal(OPTION_COMPARE_HIDEIDENTICAL) != 0);
 	menubar->Check(XRCID("ID_VIEW_QUICKCONNECT"), COptions::Get()->GetOptionVal(OPTION_SHOW_QUICKCONNECT) != 0);

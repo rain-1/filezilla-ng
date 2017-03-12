@@ -973,8 +973,9 @@ void CMainFrame::OnUpdateLedTooltip(wxCommandEvent&)
 	wxFileOffset uploadSpeed = m_pQueueView ? m_pQueueView->GetCurrentUploadSpeed() : 0;
 
 	CSizeFormat::_format format = static_cast<CSizeFormat::_format>(COptions::Get()->GetOptionVal(OPTION_SIZE_FORMAT));
-	if (format == CSizeFormat::bytes)
+	if (format == CSizeFormat::bytes) {
 		format = CSizeFormat::iec;
+	}
 
 	const wxString downloadSpeedStr = CSizeFormat::Format(downloadSpeed, true, format,
 														  COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
@@ -991,11 +992,11 @@ void CMainFrame::OnUpdateLedTooltip(wxCommandEvent&)
 bool CMainFrame::CreateMainToolBar()
 {
 	wxGetApp().AddStartupProfileRecord("CMainFrame::CreateMainToolBar");
-	if (m_pToolBar)
-	{
+	if (m_pToolBar) {
 #ifdef __WXMAC__
-		if (m_pToolBar)
+		if (m_pToolBar) {
 			COptions::Get()->SetOption(OPTION_TOOLBAR_HIDDEN, m_pToolBar->IsShown() ? 0 : 1);
+		}
 #endif
 		SetToolBar(0);
 		delete m_pToolBar;
@@ -1003,20 +1004,28 @@ bool CMainFrame::CreateMainToolBar()
 	}
 
 #ifndef __WXMAC__
-	if (COptions::Get()->GetOptionVal(OPTION_TOOLBAR_HIDDEN) != 0)
+	if (COptions::Get()->GetOptionVal(OPTION_TOOLBAR_HIDDEN) != 0) {
 		return true;
+	}
 #endif
 
 	m_pToolBar = CToolBar::Load(this);
-	if (!m_pToolBar)
-	{
+	if (!m_pToolBar) {
 		wxLogError(_("Cannot load toolbar from resource file"));
 		return false;
 	}
 	SetToolBar(m_pToolBar);
 
-	if (m_pQuickconnectBar)
+#ifdef __WXMAC__
+	if (COptions::Get()->GetOptionVal(OPTION_TOOLBAR_HIDDEN) != 0) {
+		m_pToolBar->Show(false);
+	}
+#endif
+
+
+	if (m_pQuickconnectBar) {
 		m_pQuickconnectBar->Refresh();
+	}
 
 	return true;
 }
@@ -1194,19 +1203,22 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 		RememberSplitterPositions();
 
 #ifdef __WXMAC__
-		if (m_pToolBar)
+		if (m_pToolBar) {
 			COptions::Get()->SetOption(OPTION_TOOLBAR_HIDDEN, m_pToolBar->IsShown() ? 0 : 1);
+		}
 #endif
 		m_bQuit = true;
 	}
 
 	Show(false);
-	if (!CloseDialogsAndQuit(event))
+	if (!CloseDialogsAndQuit(event)) {
 		return;
+	}
 
 	// Getting deleted by wxWidgets
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 2; ++i) {
 		m_pActivityLed[i] = 0;
+	}
 	m_pStatusBar = 0;
 	m_pMenuBar = 0;
 	m_pToolBar = 0;
@@ -1216,7 +1228,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	m_pStateEventHandler = 0;
 
 	if (m_pQueueView && !m_pQueueView->Quit()) {
-		if( event.CanVeto() ) {
+		if (event.CanVeto()) {
 			event.Veto();
 		}
 		return;
@@ -1245,7 +1257,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	}
 
 	if (!res) {
-		if( event.CanVeto() ) {
+		if (event.CanVeto()) {
 			event.Veto();
 		}
 		return;
@@ -2605,12 +2617,14 @@ void CMainFrame::OnToggleToolBar(wxCommandEvent& event)
 {
 	COptions::Get()->SetOption(OPTION_TOOLBAR_HIDDEN, event.IsChecked() ? 0 : 1);
 #ifdef __WXMAC__
-	if (m_pToolBar)
-		m_pToolBar->Show( event.IsChecked() );
+	if (m_pToolBar) {
+		m_pToolBar->Show(event.IsChecked());
+	}
 #else
 	CreateMainToolBar();
-	if (m_pToolBar)
+	if (m_pToolBar) {
 		m_pToolBar->UpdateToolbarState();
+	}
 	HandleResize();
 #endif
 }
