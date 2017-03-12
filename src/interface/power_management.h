@@ -1,16 +1,10 @@
-#ifndef __POWER_MANAGEMENT_H__
-#define __POWER_MANAGEMENT_H__
+#ifndef FILEZILLA_INTERFACE_POWER_MANAGEMENT_HEADER
+#define FILEZILLA_INTERFACE_POWER_MANAGEMENT_HEADER
 
 // This simple class prevents the system from entering idle sleep
 // while FileZilla is busy
 
 #include "state.h"
-#ifdef __WXMAC__
-	// >= 10.5 Required for Power Management
-	#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-		#include <IOKit/pwr_mgt/IOPMLib.h>
-	#endif
-#endif
 
 class CMainFrame;
 #ifdef WITH_LIBDBUS
@@ -42,11 +36,8 @@ protected:
 #ifdef WITH_LIBDBUS
 	CPowerManagementInhibitor *m_inhibitor;
 #elif defined(__WXMAC__)
-	#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-		// >= 10.5 Required for Power Management
-		IOPMAssertionID m_assertionID;
-	#endif
+	void* activity_{};
 #endif
 };
 
-#endif //__POWER_MANAGEMENT_H__
+#endif
