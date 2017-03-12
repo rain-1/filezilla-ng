@@ -1,14 +1,20 @@
 #include <Foundation/NSProcessInfo.h>
 
-void* PowerManagmentImpl_SetBusy()
+NSProcessInfo * processInfo;
+
+void const* PowerManagmentImpl_SetBusy()
 {
-	id activity = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated reason:@"Preventing idle sleep during transfers and other operations."];
-	return activity;
+	NSActivityOptions opt = NSActivityUserInitiated | NSActivityIdleSystemSleepDisabled;
+	id activity = [processInfo beginActivityWithOptions:NSActivityUserInitiated reason:@"Preventing idle sleep during transfers and other operations."];
+	return CFBridgingRetain(activity);
 }
 
 void PowerManagmentImpl_SetIdle(void* activity)
 {
-	[[NSProcessInfo processInfo] endActivity:activity];
+	if (activity) {
+		id activityId = CFBridgingRelease(activity);
+		[[NSProcessInfo processInfo] endActivity:activityId];
+	}
 }
 
 
