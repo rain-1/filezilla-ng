@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-03-04 12:02+0100\n"
-"PO-Revision-Date: 2017-02-24 00:00+0000\n"
+"POT-Creation-Date: 2017-03-13 14:01+0100\n"
+"PO-Revision-Date: 2017-03-04 21:00+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
 "Language: da\n"
@@ -229,6 +229,8 @@ msgstr "Akti&v"
 msgid "&Add bookmark..."
 msgstr "&Tilføj bogmærke..."
 
+# scootergrisen: tjek også andre strenge med "queue" og sørg for de er oversat i samme stil
+# scootergrisen: måske "Føj til"/"Sæt i"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:245
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:291
 msgid "&Add files to queue"
@@ -238,6 +240,8 @@ msgstr "&Tilføj filer i kø"
 msgid "&Add key file..."
 msgstr "&Tilføj nøglefil..."
 
+# scootergrisen: tjek også andre strenge med "queue" og sørg for de er oversat i samme stil
+# scootergrisen: måske "Føj til"/"Sæt i"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:498
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:561
 msgid "&Add to queue"
@@ -478,6 +482,7 @@ msgstr "&Rediger"
 msgid "&Edit filter rules..."
 msgstr "&Rediger filterregler..."
 
+# scootergrisen: kilde: foreslå "Limit speed" eller noget i den stil. Det giver ikke mening at kalde noget man kan slå til og fra for "Enable".
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:72
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:159
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:536
@@ -739,7 +744,7 @@ msgstr "&Ny"
 msgid "&New Site"
 msgstr "&Nyt sted"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1676
+#: ../../locales/../src/interface/Mainfrm.cpp:1688
 msgid "&New version available!"
 msgstr "&Der findes en ny version!"
 
@@ -1013,6 +1018,9 @@ msgstr "Start overførsel &med det samme"
 msgid "&Swap local and remote panes"
 msgstr "&Byt om på lokal- og fjernrude"
 
+# scootergrisen: mit bud er "&TLS-chiffre"
+# scootergrisen: sv bruger "&TLS-chiffer"
+# scootergrisen: nb_NO bruger "&TLS-krypteringsmetoder"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:443
 msgid "&TLS Ciphers"
 msgstr "&TLS-krypteringsalgoritmer"
@@ -1102,7 +1110,7 @@ msgstr "&Bruger:"
 msgid "&Username:"
 msgstr "Br&ugernavn:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1670
+#: ../../locales/../src/interface/Mainfrm.cpp:1682
 #, c-format
 msgid "&Version %s"
 msgstr "&Version %s"
@@ -1273,6 +1281,7 @@ msgstr "2 - info"
 msgid "3 - Verbose"
 msgstr "3 - detaljeret"
 
+# scootergrisen: skal være være "bit-system" på dansk eller hvad? Men i anden streng har vi "8 bit" uden bindestreg, måske opret bug
 #: ../../locales/../src/interface/aboutdialog.cpp:108
 msgid "32-bit system"
 msgstr "32-bit system"
@@ -1281,6 +1290,7 @@ msgstr "32-bit system"
 msgid "4 - Debug"
 msgstr "4 - fejlfinding"
 
+# scootergrisen: skal være være "bit-system" på dansk eller hvad? Men i anden streng har vi "8 bit" uden bindestreg, måske opret bug
 #: ../../locales/../src/interface/aboutdialog.cpp:105
 msgid "64-bit system"
 msgstr "64-bit system"
@@ -1502,11 +1512,13 @@ msgstr "&Tilføj kun filer i kø"
 msgid "Add selected directory to the transfer queue"
 msgstr "Tilføj den valgte mappe i overførselskøen"
 
+# scootergrisen: kilde: foreslå at ændre folder til directory som i andre strenge
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:247
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:293
 msgid "Add selected files and folders to the transfer queue"
 msgstr "Tilføj de valgte filer og mapper i overførselskøen"
 
+# scootergrisen: måske "Føj til"/"Sæt i"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1834
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1854
 msgid "Add to queue"
@@ -1705,6 +1717,7 @@ msgstr "Spørg styresystemet om en port."
 msgid "Ask your operating system for the external IP address"
 msgstr "Spørg dit styresystem om den eksterne IP-adresse"
 
+# scootergrisen: kilde: jeg har foreslået at rette til "Ask questions..." - https://trac.filezilla-project.org/ticket/10877
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3549
 msgid "Asking questions in the FileZilla forums"
 msgstr "Stil spørgsmål i FileZilla-foraene"
@@ -1741,6 +1754,7 @@ msgstr "Auto"
 msgid "Automatic file type classification"
 msgstr "Automatisk filtypeklassificering"
 
+# scootergrisen: jeg har foreslået at flytte " <Unit symbol for bytes. Only translate first letter>"-delen flyttes ud af strengen - https://trac.filezilla-project.org/ticket/11119
 #: ../../locales/../src/engine/sizeformatting_base.cpp:166
 #: ../../locales/../src/engine/sizeformatting_base.cpp:233
 msgid "B <Unit symbol for bytes. Only translate first letter>"
@@ -1784,7 +1798,7 @@ msgid "Blue"
 msgstr "Blå"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:271
-#: ../../locales/../src/interface/menu_bar.cpp:300
+#: ../../locales/../src/interface/menu_bar.cpp:302
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:384
 msgid "Bookmark"
 msgstr "Bogmærke"
@@ -1967,7 +1981,7 @@ msgstr ""
 msgid "Cannot load key file"
 msgstr "Kan ikke indlæse nøglefil"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1013
+#: ../../locales/../src/interface/Mainfrm.cpp:1014
 msgid "Cannot load toolbar from resource file"
 msgstr "Kan ikke indlæse værktøjslinje fra ressourcefilen"
 
@@ -2132,6 +2146,10 @@ msgstr "Tjeksum passer ikke for filen %s\n"
 msgid "Choose a key file"
 msgstr "Vælg en nøglefil"
 
+# scootergrisen: Niels skrev "HVAD ER STANDARD-LOKAL? MIN OMSKRIVNING ER BEDRE."
+# scootergrisen: jeg ved ikke hvad "STANDARD-LOKAL" er men der stod "standard-lokal mappe"
+# scootergrisen: mit bud er "Vælg lokal mappens standardplacering" eller "Vælg lokal mappens standardsti" eller "Vælg lokal mappens standardmappe"
+# scootergrisen: nb_NO bruger "Velg lokal standardmappe" så vi kunne bruge "Vælg lokal standardmappe"
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1576
 msgid "Choose the default local directory"
 msgstr "Vælg standardplacering af lokalmappe"
@@ -2142,10 +2160,11 @@ msgstr "Vælg standardplacering af lokalmappe"
 msgid "Choose the local directory"
 msgstr "Vælg den lokale mappe"
 
-#: ../../locales/../src/engine/http/request.cpp:396
+#: ../../locales/../src/engine/http/request.cpp:412
 msgid "Chunk data improperly terminated"
 msgstr "Chunk-data ikke afsluttet korrekt"
 
+# scootergrisen: mit bud er "Chiffer:"
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:210
 msgid "Cipher:"
 msgstr "Krypteringsalgoritme:"
@@ -2192,6 +2211,7 @@ msgstr "Klik på Udfør for at gemme konfigurationen."
 msgid "Client to server MAC:"
 msgstr "Klient-til-server-MAC:"
 
+# scootergrisen: mit bud er "Klient-til-server-chiffer:"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2103
 msgid "Client to server cipher:"
 msgstr "Klient-til-server-krypteringsalgoritme:"
@@ -2201,8 +2221,8 @@ msgid "Close &all other tabs"
 msgstr "Luk alle &andre faneblade"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1149
-#: ../../locales/../src/interface/Mainfrm.cpp:1170
+#: ../../locales/../src/interface/Mainfrm.cpp:1158
+#: ../../locales/../src/interface/Mainfrm.cpp:1179
 msgid "Close FileZilla"
 msgstr "Luk FileZilla"
 
@@ -2239,7 +2259,7 @@ msgstr "Kommando mislykkedes"
 msgid "Command not supported"
 msgstr "Kommando ikke understøttet"
 
-#: ../../locales/../src/engine/engineprivate.cpp:223
+#: ../../locales/../src/engine/engineprivate.cpp:225
 msgid "Command not supported by this protocol"
 msgstr "Kommando understøttes ikke af denne protokol"
 
@@ -2321,6 +2341,7 @@ msgstr "Konfigurer passiv tilstand"
 msgid "Configure port range"
 msgstr "Konfigurer portinterval"
 
+# scootergrisen: kilde: jeg har foreslået at rette til "Configure FileZilla..." - https://trac.filezilla-project.org/ticket/10877
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3592
 msgid "Configuring FileZilla and your network"
 msgstr "Konfiguration af FileZilla og dit netværk"
@@ -2410,7 +2431,7 @@ msgid "Connection attempt failed with \"%s\"."
 msgstr "Forbindelsesforsøg mislykkedes med \"%s\"."
 
 #: ../../locales/../src/engine/ControlSocket.cpp:173
-#: ../../locales/../src/engine/engineprivate.cpp:664
+#: ../../locales/../src/engine/engineprivate.cpp:677
 msgid "Connection attempt interrupted by user"
 msgstr "Forbindelsesforsøg blev afbrudt af brugeren"
 
@@ -2511,12 +2532,18 @@ msgstr "Kopiér (%d) af %s"
 msgid "Copy of %s"
 msgstr "Kopi af %s"
 
+# scootergrisen: jeg synes det er forkert at skrive "til de valgte emner", eftersom de ikke kopieres til de valgte emne men fra
+# scootergrisen: alternativt "Kopiér URL'erne fra de valgte emner til udklipsholder, inklusive adgangskode."
+# scootergrisen: sv bruger "Kopiera URL:erna för de markerade objekten till urklipp." så vi kunne også bruge "Kopiér URL'erne for de valgte emner til udklipsholder."
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:333
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:526
 msgid "Copy the URLs of the selected items to clipboard, including password."
 msgstr ""
 "Kopiér de valgte emners URL'er til udklipsholder, inklusive adgangskode."
 
+# scootergrisen: jeg synes det er forkert at skrive "til de valgte emner", eftersom de ikke kopieres til de valgte emne men fra
+# scootergrisen: alternativt "Kopiér URL'erne fra de valgte emner til udklipsholder."
+# scootergrisen: sv bruger "Kopiera URL:erna för de markerade objekten till urklipp." så vi kunne også bruge "Kopiér URL'erne for de valgte emner til udklipsholder."
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:329
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:522
 msgid "Copy the URLs of the selected items to clipboard."
@@ -2869,7 +2896,7 @@ msgstr "Kunne ikke skrive til logfil: %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:953
 #: ../../locales/../src/engine/ControlSocket.cpp:1050
-#: ../../locales/../src/engine/http/request.cpp:92
+#: ../../locales/../src/engine/http/request.cpp:95
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Kunne ikke skrive til sokkel: %s"
@@ -3076,6 +3103,8 @@ msgstr "Fejlfinding"
 msgid "Debugging settings"
 msgstr "Fejlfindingsindstillinger"
 
+# scootergrisen: mit bud er "&Lokal mappens standardplacering" eller "&Lokal mappens standardsti" eller "&Lokal mappens standardmappe"
+# scootergrisen: sv bruger "Standardkatalog (&lokal):" så vi kunne også bruge "Standardmappe (&lokal):"
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:346
 msgid "Default &local directory:"
 msgstr "Standardplacering af &lokalmappe:"
@@ -3094,6 +3123,8 @@ msgstr "Standardredigeringsprogram ikke sat korrekt i anførselstegn."
 msgid "Default file exists action"
 msgstr "Standardhandling når filen findes"
 
+# scootergrisen: mit bud er "&Fjernmappens standardplacering:" eller "&Fjernmappens standardsti:" eller "&Fjernmappens standardmappe:"
+# scootergrisen: sv bruger "Standardkatalog (&fjärr):" så vi kunne også bruge "Standardmappe (&fjern):"
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:371
 msgid "Default r&emote directory:"
 msgstr "Standardplacering af &fjernmappe:"
@@ -3130,7 +3161,7 @@ msgstr ""
 "Forsinkelse mellem mislykkede forbindelsesforsøg skal være mellem 1 og 999 "
 "sekunder."
 
-#: ../../locales/../src/engine/engineprivate.cpp:498
+#: ../../locales/../src/engine/engineprivate.cpp:510
 #, c-format
 msgid ""
 "Delaying connection for %d second due to previously failed connection "
@@ -3159,12 +3190,12 @@ msgstr "Slet den valgte mappe"
 msgid "Delete selected files and directories"
 msgstr "Slet de valgte filer og mapper"
 
-#: ../../locales/../src/engine/engineprivate.cpp:384
+#: ../../locales/../src/engine/engineprivate.cpp:386
 #, c-format
 msgid "Deleting \"%s\""
 msgstr "Sletter \"%s\""
 
-#: ../../locales/../src/engine/engineprivate.cpp:387
+#: ../../locales/../src/engine/engineprivate.cpp:389
 #, c-format
 msgid "Deleting %u files from \"%s\""
 msgstr "Sletter %u filer fra \"%s\""
@@ -3208,7 +3239,7 @@ msgstr "Mappe"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1781
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:390
 #: ../../locales/../src/interface/filelistctrl.cpp:469
-#: ../../locales/../src/interface/Mainfrm.cpp:2225
+#: ../../locales/../src/interface/Mainfrm.cpp:2237
 #: ../../locales/../src/interface/toolbar.cpp:51
 msgid "Directory comparison"
 msgstr "Mappesammenligning"
@@ -3274,7 +3305,7 @@ msgstr "Afbryd forbindelsen til serveren"
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:162
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:165
-#: ../../locales/../src/engine/http/request.cpp:93
+#: ../../locales/../src/engine/http/request.cpp:96
 #: ../../locales/../src/interface/queue.cpp:339
 msgid "Disconnected from server"
 msgstr "Forbindelsen til serveren blev afbrudt"
@@ -3309,8 +3340,8 @@ msgstr ""
 "Gør det samme med &alle de valgte filer, der allerede er ved at blive "
 "redigeret"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1152
-#: ../../locales/../src/interface/Mainfrm.cpp:1174
+#: ../../locales/../src/interface/Mainfrm.cpp:1161
+#: ../../locales/../src/interface/Mainfrm.cpp:1183
 msgid "Do you really want to close FileZilla?"
 msgstr "Vil du virkelig lukke FileZilla?"
 
@@ -3389,7 +3420,7 @@ msgstr "Download den valgte mappe"
 msgid "Download selected files and directories"
 msgstr "Download valgte filer og mapper"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:985
+#: ../../locales/../src/interface/Mainfrm.cpp:986
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -4082,7 +4113,7 @@ msgstr "Filoverførsel lykkedes"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Filoverførsel lykkedes, overført %s på %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1151
+#: ../../locales/../src/interface/Mainfrm.cpp:1160
 msgid "File transfers still in progress."
 msgstr "Filoverførsler stadig i gang."
 
@@ -4111,7 +4142,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla er allerede forbundet til en server."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1453
+#: ../../locales/../src/interface/Mainfrm.cpp:1465
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "FileZilla skal genstartes, før ændring af sproget træder i kraft."
 
@@ -4202,10 +4233,12 @@ msgstr "Filtrér ugyldige tegn i filnavne"
 msgid "Filter name already exists"
 msgstr "Filternavn findes allerede"
 
+# scootergrisen: mit bud er "Bortfiltrér emner, der matcher alle de følgende"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1303
 msgid "Filter out items matching all of the following"
 msgstr "Bortfiltrér emner, der matcher alt det følgende"
 
+# scootergrisen: mit bud er "Bortfiltrér emner, der matcher en af de følgende"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1304
 msgid "Filter out items matching any of the following"
 msgstr "Bortfiltrér emner, der matcher en af de følgende"
@@ -4214,6 +4247,7 @@ msgstr "Bortfiltrér emner, der matcher en af de følgende"
 msgid "Filter out items matching none of the following"
 msgstr "Bortfiltrér emner, der ikke matcher noget af det følgende"
 
+# scootergrisen: mit bud er "Bortfiltrér emner, der ikke matcher alle de følgende"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1306
 msgid "Filter out items matching not all of the following"
 msgstr "Bortfiltrér emner, der ikke matcher alt det følgende"
@@ -4450,6 +4484,8 @@ msgstr "Vært:"
 msgid "Hostkey algorithm:"
 msgstr "Algoritme for værtsnøgle:"
 
+# scootergrisen: kan ses i Stedhåndtering > fanebladet Avanceret > "0 timer, 0 minutter"
+# scootergrisen: jeg har foreslået at skrive det med småt - https://trac.filezilla-project.org/ticket/10859
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:424
 msgid "Hours,"
 msgstr "timer,"
@@ -4584,7 +4620,7 @@ msgstr ""
 "Hvis du klikker på Test, vil FileZilla oprette forbindelse til probe."
 "filezilla-project.org og udføre nogle enkle tests."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1173
+#: ../../locales/../src/interface/Mainfrm.cpp:1182
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Hvis du lukker FileZilla, vil du miste dine ændringer."
 
@@ -4747,11 +4783,11 @@ msgid "Interrupted by user"
 msgstr "Afbrudt af brugeren"
 
 #: ../../locales/../src/engine/http/request.cpp:29
-#: ../../locales/../src/engine/http/request.cpp:328
+#: ../../locales/../src/engine/http/request.cpp:344
 msgid "Invalid Content-Length"
 msgstr "Ugyldig Content-Length"
 
-#: ../../locales/../src/engine/http/request.cpp:242
+#: ../../locales/../src/engine/http/request.cpp:245
 msgid "Invalid HTTP Response"
 msgstr "Ugyldigt HTTP-svar"
 
@@ -4767,7 +4803,7 @@ msgstr ""
 "Ugyldig række af tegn modtaget; deaktiverer UTF-8. Vælg valgmuligheden UTF-8 "
 "i stedhåndtering for at gennemtvinge UTF-8."
 
-#: ../../locales/../src/engine/http/request.cpp:424
+#: ../../locales/../src/engine/http/request.cpp:440
 msgid "Invalid chunk size"
 msgstr "Ugyldig chunk-størrelse"
 
@@ -4801,7 +4837,7 @@ msgstr "Ugyldigt værtsnavn: %s"
 msgid "Invalid input"
 msgstr "Ugyldig indtastning"
 
-#: ../../locales/../src/engine/http/request.cpp:290
+#: ../../locales/../src/engine/http/request.cpp:297
 msgid "Invalid line"
 msgstr "Ugyldig linje"
 
@@ -4838,7 +4874,7 @@ msgstr "Ugyldigt regulært udtryk"
 msgid "Invalid regular expression in search conditions."
 msgstr "Ugyldigt regulært udtryk i søgebetingelser."
 
-#: ../../locales/../src/engine/http/request.cpp:251
+#: ../../locales/../src/engine/http/request.cpp:254
 msgid "Invalid response code"
 msgstr "Ugyldig svarkode"
 
@@ -4920,7 +4956,7 @@ msgstr "L&aveste"
 msgid "Language"
 msgstr "Sprog"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1453
+#: ../../locales/../src/interface/Mainfrm.cpp:1465
 msgid "Language changed"
 msgstr "Sprog ændret"
 
@@ -4954,7 +4990,7 @@ msgstr "Begræns størrelsen på logfil"
 msgid "Limit:"
 msgstr "Grænse:"
 
-#: ../../locales/../src/engine/http/request.cpp:384
+#: ../../locales/../src/engine/http/request.cpp:400
 msgid "Line length exceeded"
 msgstr "Linjelængde oversteget"
 
@@ -5111,27 +5147,31 @@ msgstr ""
 "Sørg for, at der er adgang til filen, og at det er et korrekt udformet XML-"
 "dokument."
 
-#: ../../locales/../src/engine/http/request.cpp:375
-#: ../../locales/../src/engine/http/request.cpp:384
-#: ../../locales/../src/engine/http/request.cpp:396
-#: ../../locales/../src/engine/http/request.cpp:424
+#: ../../locales/../src/engine/http/request.cpp:391
+#: ../../locales/../src/engine/http/request.cpp:400
+#: ../../locales/../src/engine/http/request.cpp:412
+#: ../../locales/../src/engine/http/request.cpp:440
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Forkert udformet chunk-data: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:453
-#, fuzzy, c-format
-msgid "Malformed response body: %s"
-msgstr "Forkert udformet header: %s"
-
 #: ../../locales/../src/engine/http/request.cpp:29
-#: ../../locales/../src/engine/http/request.cpp:215
-#: ../../locales/../src/engine/http/request.cpp:290
-#: ../../locales/../src/engine/http/request.cpp:320
-#: ../../locales/../src/engine/http/request.cpp:328
 #, fuzzy, c-format
+msgid "Malformed request header: %s"
+msgstr "Forkert udformet svar-header: %s"
+
+#: ../../locales/../src/engine/http/request.cpp:469
+#, c-format
+msgid "Malformed response body: %s"
+msgstr "Forkert udformet svar-krop: %s"
+
+#: ../../locales/../src/engine/http/request.cpp:218
+#: ../../locales/../src/engine/http/request.cpp:297
+#: ../../locales/../src/engine/http/request.cpp:336
+#: ../../locales/../src/engine/http/request.cpp:344
+#, c-format
 msgid "Malformed response header: %s"
-msgstr "Forkert udformet header: %s"
+msgstr "Forkert udformet svar-header: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2633
 #: ../../locales/../src/interface/manual_transfer.cpp:298
@@ -5145,6 +5185,7 @@ msgstr "Forkert udformet header: %s"
 msgid "Manual transfer"
 msgstr "Manuel overførsel"
 
+# scootergrisen: mit bud er "Match alle de følgende"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3108
 msgid "Match all of the following"
 msgstr "Match alt det følgende"
@@ -5157,6 +5198,7 @@ msgstr "Match en af de følgende"
 msgid "Match none of the following"
 msgstr "Match ikke nogen af de følgende"
 
+# scootergrisen: mit bud er "Match ikke alle de følgende"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3111
 msgid "Match not all of the following"
 msgstr "Match ikke alt det følgende"
@@ -5170,7 +5212,7 @@ msgid "Memory allocation failure"
 msgstr "Fejl ved tildeling af hukommelse"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:388
-#: ../../locales/../src/interface/Mainfrm.cpp:1767
+#: ../../locales/../src/interface/Mainfrm.cpp:1779
 msgid "Message log"
 msgstr "Meddelelseslog"
 
@@ -5186,6 +5228,8 @@ msgstr "Meddelelse er for stor"
 msgid "MiB"
 msgstr "MiB"
 
+# scootergrisen: kan ses i Stedhåndtering > fanebladet Avanceret > "0 timer, 0 minutter"
+# scootergrisen: jeg har foreslået at skrive det med småt - https://trac.filezilla-project.org/ticket/10859
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:440
 msgid "Minutes"
 msgstr "minutter"
@@ -5255,6 +5299,7 @@ msgstr "Du skal indtaste en gyldig fjernsti"
 msgid "Need to specify a character encoding"
 msgstr "Du skal angive en tegnkodning"
 
+# scootergrisen: nodename og servname er måske parametre og skal formodentligt ikke oversættes men jeg har ikke undersøgt det nærmere
 #: ../../locales/../src/engine/socket.cpp:1063
 msgid "Neither nodename nor servname provided, or not known"
 msgstr "Hverken nodename eller servname er angivet, eller er ikke kendt"
@@ -5275,6 +5320,7 @@ msgstr "Netværk kan ikke tilgås"
 msgid "Never"
 msgstr "Aldrig"
 
+# scootergrisen: kilde: foreslå at ændre folder til directory som i andre strenge
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:41
 msgid "New &Folder"
 msgstr "Ny &mappe"
@@ -5322,6 +5368,7 @@ msgstr "Nye funktioner og forbedringer i %s"
 msgid "New filter"
 msgstr "Nyt filter"
 
+# scootergrisen: kilde: foreslå at ændre folder til directory som i andre strenge
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:950
 msgid "New folder"
 msgstr "Ny mappe"
@@ -5340,6 +5387,7 @@ msgstr "Ved siden af overførselskøen"
 msgid "No"
 msgstr "Nej"
 
+# scootergrisen: nodename og servname er måske parametre og skal formodentligt ikke oversættes men jeg har ikke undersøgt det nærmere
 #: ../../locales/../src/engine/socket.cpp:1061
 msgid "No address associated with nodename"
 msgstr "Ingen adresse tilknyttet med nodename"
@@ -5356,6 +5404,8 @@ msgstr "Ingen kommando angivet. Afbryder."
 msgid "No external IP address set, trying default."
 msgstr "Ingen ekstern IP-adresse angivet - forsøger standard."
 
+# scootergrisen: skal vel passe med de andre strenge som har "currently being edited"
+# scootergrisen: mit bud er "Ingen filer som redigeres." eller "Ingen filer som redigeres i øjeblikket."
 #: ../../locales/../src/interface/edithandler.cpp:1085
 msgid "No files are currently being edited."
 msgstr "Ingen filer redigeres i øjeblikket."
@@ -5677,6 +5727,8 @@ msgstr "Overskriv fil, hvis kildefilen er nyere"
 msgid "Overwrite if &different size"
 msgstr "Overskriv hvis &forskellig størrelse"
 
+# scootergrisen: måske "Overskriv hvis forskellig &størrelse eller kilden er nyere"
+# scootergrisen: måske "Overskriv hvis &forskellig størrelse eller kilden er nyere"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:149
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Overskriv hvis forskellig størrelse eller kilden &er nyere"
@@ -5715,7 +5767,7 @@ msgstr "PORT-kommando forstyrret af router eller firewall."
 msgid "Pa&ssive (recommended)"
 msgstr "&Passiv (anbefalet)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2386
+#: ../../locales/../src/interface/Mainfrm.cpp:2398
 msgid "Parameter not a valid URL"
 msgstr "Parameteren er ikke en gyldig URL"
 
@@ -5760,7 +5812,7 @@ msgstr "Sti"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Sti kan ikke dannes for mappen %s og undermappen %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2341
+#: ../../locales/../src/interface/Mainfrm.cpp:2353
 msgid "Path not found:"
 msgstr "Sti ikke fundet:"
 
@@ -5793,6 +5845,8 @@ msgstr "Tilladelser"
 msgid "Platform:"
 msgstr "Platform:"
 
+# scootergrisen: kilde: jeg har foreslået at erstatte link med pladsholder - https://trac.filezilla-project.org/ticket/10879
+# scootergrisen: jeg foreslår at "again" oversættes til "igen" ligesom i andre strenge i stedet for "en gang til"
 #: ../../locales/../src/interface/netconfwizard.cpp:574
 msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
@@ -5979,6 +6033,15 @@ msgstr ""
 msgid "Please make sure the requested locale is installed on your system."
 msgstr "Sørg for, at det anmodede sprog er installeret på dit system."
 
+# scootergrisen: microsoft har både oversat til videresendelse og omdirigering
+# scootergrisen: TDC ser ud til at have oversat til "port omdirigering"
+# scootergrisen: hvis du har en router kunne du eventuel logge på den og tjekke hvad det er oversat til eller kan vi undersøge diverse router-hjemmesider/manualer
+# scootergrisen: hvis nu de fleste routere har software som ikke er oversat til dansk så gavner det måske ikke brugeren at oversætte det, samme med DMZ mode og game mode.
+# scootergrisen: vi kunne også skrive "'port forwarding'" ligesom med DMZ mode og game mode hvis det er bedst at beholde det på engelsk.
+# scootergrisen: jeg synes "Du skal ikke køre" lyder så kommanderne. Mit bud er "Kør ikke din router i"
+# scootergrisen: sv bruger "\"port forwarding\""
+# scootergrisen: nn_NO bruger "port forwarding"
+# scootergrisen: nb_NO bruger "videresending av porter"
 #: ../../locales/../src/interface/netconfwizard.cpp:616
 msgid ""
 "Please make sure your router is using the latest available firmware. "
@@ -6266,6 +6329,8 @@ msgstr "Filer i kø"
 msgid "Queueing:"
 msgstr "Sætter i kø:"
 
+# scootergrisen: jeg har foreslået at forbedre reboot/shutdown/suspend-strengene - https://trac.filezilla-project.org/ticket/10882
+# scootergrisen: i mellemtiden synes jeg det er bedre at "once" oversættes til "(en gang)"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:406
 msgid "R&eboot system once"
 msgstr "&Genstart systemet én gang"
@@ -6296,6 +6361,7 @@ msgstr "&Opdatér"
 msgid "Re&name"
 msgstr "Om&døb"
 
+# scootergrisen: prøv og find noget bedre til "accordingly" end "i overensstemmelse hermed"
 #: ../../locales/../src/interface/netconfwizard.cpp:598
 msgid ""
 "Re-run the wizard and carefully check your settings and configure all "
@@ -6312,7 +6378,7 @@ msgstr "Læ&s"
 msgid "Read-only"
 msgstr "Skrivebeskyttet"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1042
+#: ../../locales/../src/interface/Mainfrm.cpp:1051
 msgid "Really cancel current operation?"
 msgstr "Vil du virkelig annullere den igangværende handling?"
 
@@ -6442,6 +6508,7 @@ msgstr "Omdirigering til ugyldig eller ikke-understøttet URI: %s"
 msgid "Redirection to invalid or unsupported address: %s"
 msgstr "Omdirigering til ugyldig eller ikke-understøttet adresse: %s"
 
+# scootergrisen: kilde: foreslå at ændre folder til directory som i andre strenge
 #: ../../locales/../src/interface/toolbar.cpp:43
 msgid "Refresh the file and folder lists"
 msgstr "Opdatér fil- og mappelisterne"
@@ -6552,10 +6619,12 @@ msgstr "Omdøb de valgte filer og mapper"
 msgid "Renaming '%s' to '%s'"
 msgstr "Omdøber '%s' til '%s'"
 
+# scootergrisen: kilde: jeg har foreslået at rette til "Report bugs..." - https://trac.filezilla-project.org/ticket/10877
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3555
 msgid "Reporting bugs and feature requests"
 msgstr "Rapportér fejl og ønsker om nye funktioner"
 
+# scootergrisen: Ask forslår "–"
 #: ../../locales/../src/engine/proxy.cpp:369
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
@@ -6650,6 +6719,8 @@ msgstr "&Vis filer som redigeres i øjeblikket..."
 msgid "S&how the Site Manager on startup"
 msgstr "Vis &stedhåndtering ved start"
 
+# scootergrisen: jeg har foreslået at forbedre reboot/shutdown/suspend-strengene - https://trac.filezilla-project.org/ticket/10882
+# scootergrisen: i mellemtiden synes jeg det er bedre at "once" oversættes til "(en gang)"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:410
 msgid "S&hutdown system once"
 msgstr "L&uk systemet én gang"
@@ -6658,6 +6729,8 @@ msgstr "L&uk systemet én gang"
 msgid "S&top"
 msgstr "S&top"
 
+# scootergrisen: jeg har foreslået at forbedre reboot/shutdown/suspend-strengene - https://trac.filezilla-project.org/ticket/10882
+# scootergrisen: i mellemtiden synes jeg det er bedre at "once" oversættes til "(en gang)"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:414
 msgid "S&uspend system once"
 msgstr "S&top systemet midlertidigt én gang"
@@ -6911,7 +6984,7 @@ msgstr "Den valgte fil redigeres stadig"
 msgid "Selected filter only works for local files."
 msgstr "Det valgte filter fungerer kun for lokale filer."
 
-#: ../../locales/../src/interface/menu_bar.cpp:300
+#: ../../locales/../src/interface/menu_bar.cpp:302
 msgid ""
 "Selected global bookmark and current server use a different server type.\n"
 "Use site-specific bookmarks for this server."
@@ -6920,7 +6993,7 @@ msgstr ""
 "servertyper.\n"
 "Anvend sted-specifikke bogmærker for denne server."
 
-#: ../../locales/../src/engine/engineprivate.cpp:305
+#: ../../locales/../src/engine/engineprivate.cpp:307
 msgid "Selected port usually in use by a different protocol."
 msgstr "Den valgte port er som regel brugt af anden protokol."
 
@@ -7001,10 +7074,9 @@ msgstr ""
 "Serveren kræver muligvis en konto. Prøv at angiv en konto med "
 "stedhåndteringen"
 
-#: ../../locales/../src/engine/http/request.cpp:215
-#, fuzzy
+#: ../../locales/../src/engine/http/request.cpp:218
 msgid "Server not sending proper line endings"
-msgstr "Forkert udformet svar: serveren sender ikke korrekte linjeskift"
+msgstr "Serveren sender ikke korrekte linjeskift"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:340
 msgid "Server returned empty path."
@@ -7031,10 +7103,9 @@ msgstr ""
 "Serveren sendte passivt svar med en adresse, der ikke kan omdirigeres. "
 "Anvender i stedet serveradressen."
 
-#: ../../locales/../src/engine/http/request.cpp:453
-#, fuzzy
+#: ../../locales/../src/engine/http/request.cpp:469
 msgid "Server sent too much data."
-msgstr "Forkert udformet svar: serveren sendte for meget data."
+msgstr "Serveren sendte for meget data."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:428
 #: ../../locales/../src/interface/netconfwizard.cpp:434
@@ -7058,6 +7129,7 @@ msgstr ""
 msgid "Server to client MAC:"
 msgstr "Server-til-klient-MAC:"
 
+# scootergrisen: mit bud er "Server-til-klient-chiffer:"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2123
 msgid "Server to client cipher:"
 msgstr "Server-til-klient-krypteringsalgoritme:"
@@ -7109,7 +7181,7 @@ msgstr "Vis &rå mappevisning"
 msgid "Show &welcome dialog..."
 msgstr "&Vis velkomstdialog..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2228
+#: ../../locales/../src/interface/Mainfrm.cpp:2240
 msgid "Show both directory trees and continue comparing?"
 msgstr "Vis begge mappetræer, og fortsæt med at sammenligne?"
 
@@ -7122,6 +7194,7 @@ msgstr "Vis detaljer"
 msgid "Show details about custom date and time formats"
 msgstr "Vis detaljer om brugerdefineret format for dato og klokkeslæt"
 
+# scootergrisen: mit bud er "Viser tilgængelige TLS-chiffre"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:444
 msgid "Shows available TLS ciphers"
 msgstr "Viser tilgængelige TLS-krypteringsalgoritmer"
@@ -7263,7 +7336,7 @@ msgstr "Sokkel ikke tilsluttet"
 msgid "Socket type not supported for address family"
 msgstr "Sokkeltypen understøttes ikke for denne adressefamilie"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1172
+#: ../../locales/../src/interface/Mainfrm.cpp:1181
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Nogle filer redigeres stadig, eller skal uploades."
 
@@ -7276,6 +7349,7 @@ msgstr ""
 "Servere, som står bag en router, kan være fejlkonfigurerede til at svare med "
 "deres lokale IP-adresser."
 
+# scootergrisen: kan ses i Indstillinger > Fillister
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1746
 msgid "Sort directories inline"
 msgstr "Sortér alfabetisk"
@@ -7292,6 +7366,7 @@ msgstr "Sortering"
 msgid "Sorting &mode:"
 msgstr "Sorterings&tilstand:"
 
+# scootergrisen: jeg synes det er bedre at oversætte "identical" til "identiske" også "the same" til "ens" i næste streng men ikke vigtigt
 #: ../../locales/../src/interface/RemoteTreeView.cpp:107
 msgid "Source and path of the drop operation are identical"
 msgstr "Kilde og sti er ens ved slip-handlingen"
@@ -7300,6 +7375,7 @@ msgstr "Kilde og sti er ens ved slip-handlingen"
 msgid "Source and target file may not be the same"
 msgstr "Kilde- og destinationsfil må ikke være ens"
 
+# scootergrisen: jeg synes det er bedre at oversætte "identical" til "identiske" også "the same" til "ens" i forrige streng men ikke vigtigt
 #: ../../locales/../src/interface/RemoteListView.cpp:150
 msgid "Source and target of the drop operation are identical"
 msgstr "Kilde og destination er ens ved slip-handlingen"
@@ -7406,6 +7482,7 @@ msgstr "Gennemførte overførsler"
 msgid "Summary of test results:"
 msgstr "Opsummering af testresultater:"
 
+# scootergrisen: se om "gå i hviletilstand" er bedre
 #: ../../locales/../src/interface/QueueView.cpp:2705
 msgid "Suspend now"
 msgstr "Hviletilstand nu"
@@ -7453,8 +7530,8 @@ msgstr "Syntaksfejl"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2343
-#: ../../locales/../src/interface/Mainfrm.cpp:2388
+#: ../../locales/../src/interface/Mainfrm.cpp:2355
+#: ../../locales/../src/interface/Mainfrm.cpp:2400
 msgid "Syntax error in command line"
 msgstr "Syntaksfejl på kommandolinje"
 
@@ -7890,6 +7967,7 @@ msgstr ""
 msgid "The server's hostname does not match the certificate's hostname"
 msgstr "Serverens værtsnavn er ikke magen til certifikatets værtsnavn"
 
+# scootergrisen: nodename og servname er måske parametre og skal formodentligt ikke oversættes men jeg har ikke undersøgt det nærmere
 #: ../../locales/../src/engine/socket.cpp:1070
 msgid "The servname parameter is not supported for ai_socktype"
 msgstr "Parameteren servname understøttes ikke for ai_socktype"
@@ -7991,11 +8069,11 @@ msgstr "Timeout"
 msgid "Title:"
 msgstr "Titel:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2226
+#: ../../locales/../src/interface/Mainfrm.cpp:2238
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "For at sammenligne mapper skal begge fillister stemme overens."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2227
+#: ../../locales/../src/interface/Mainfrm.cpp:2239
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "For at gøre dette skal begge mappetræer være vist eller begge være skjult."
@@ -8055,7 +8133,7 @@ msgstr "Slår visning af fjernstedets mappetræ til/fra"
 msgid "Toggles the display of the transfer queue"
 msgstr "Slår visning af overførselskøen til/fra"
 
-#: ../../locales/../src/engine/http/request.cpp:224
+#: ../../locales/../src/engine/http/request.cpp:227
 msgid "Too long header line"
 msgstr "Header-linjen er for lang"
 
@@ -8249,7 +8327,7 @@ msgid ""
 msgstr ""
 "Ukendt rodelement - filen ser ikke ud til at være genereret af FileZilla."
 
-#: ../../locales/../src/engine/http/request.cpp:320
+#: ../../locales/../src/engine/http/request.cpp:336
 msgid "Unknown transfer encoding"
 msgstr "Ukendt overførselskodning"
 
@@ -8476,7 +8554,7 @@ msgstr "Venter på adgangskode"
 msgid "Waiting for transfer to be cancelled"
 msgstr "Venter på at annullere overførsel"
 
-#: ../../locales/../src/engine/engineprivate.cpp:241
+#: ../../locales/../src/engine/engineprivate.cpp:243
 msgid "Waiting to retry..."
 msgstr "Venter på at prøve igen..."
 
@@ -8537,6 +8615,7 @@ msgid "When st&arting a new connection while already connected:"
 msgstr ""
 "Ved st&art af en ny forbindelse, når forbindelsen allerede er oprettet:"
 
+# scootergrisen: kan ses i Indstillinger > Brugerflade
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1287
 msgid "Widescreen"
 msgstr "Widescreen"
@@ -8554,7 +8633,7 @@ msgstr "Skr&iv"
 msgid "Wrong external IP address"
 msgstr "Forkert ekstern IP-adresse"
 
-#: ../../locales/../src/engine/http/request.cpp:375
+#: ../../locales/../src/engine/http/request.cpp:391
 msgid "Wrong line endings"
 msgstr "Forkerte linjeskift"
 
@@ -8855,6 +8934,11 @@ msgstr "skrivbar af gruppe"
 msgid "https://wiki.filezilla-project.org/Date_and_Time_formatting"
 msgstr "https://wiki.filezilla-project.org/Date_and_Time_formatting"
 
+# scootergrisen: måske bare "er" ligesom equals
+# scootergrisen: bruges muligvis ved:
+# scootergrisen: Sti ... er ... /home/
+# scootergrisen: Sti ... er lig med ... /home/
+# scootergrisen: kilde: der er både en streng som hedder "is equal to" og "equals", måske de begge kunne hedde det samme
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:63
 msgid "is equal to"
 msgstr "er lig med"
@@ -8915,6 +8999,3 @@ msgstr "globalt skrivbar"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:699
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
-
-#~ msgid "Set permissions of '%s' to '%s'"
-#~ msgstr "Sæt tilladelser for '%s' til '%s'"

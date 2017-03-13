@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-03-04 12:02+0100\n"
-"PO-Revision-Date: 2017-02-28 20:12+0100\n"
+"POT-Creation-Date: 2017-03-13 14:01+0100\n"
+"PO-Revision-Date: 2017-03-07 21:02+0100\n"
 "Last-Translator: Peter Körner <18427@gmx.net>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -747,7 +747,7 @@ msgstr "&Neu"
 msgid "&New Site"
 msgstr "&Neuer Server"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1676
+#: ../../locales/../src/interface/Mainfrm.cpp:1688
 msgid "&New version available!"
 msgstr "&Neue Version verfügbar!"
 
@@ -1110,7 +1110,7 @@ msgstr "&Benutzer:"
 msgid "&Username:"
 msgstr "Ben&utzername:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1670
+#: ../../locales/../src/interface/Mainfrm.cpp:1682
 #, c-format
 msgid "&Version %s"
 msgstr "&Version %s"
@@ -1819,7 +1819,7 @@ msgid "Blue"
 msgstr "Blau"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:271
-#: ../../locales/../src/interface/menu_bar.cpp:300
+#: ../../locales/../src/interface/menu_bar.cpp:302
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:384
 msgid "Bookmark"
 msgstr "Lesezeichen"
@@ -2004,7 +2004,7 @@ msgstr ""
 msgid "Cannot load key file"
 msgstr "Kann Schlüsseldatei nicht laden"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1013
+#: ../../locales/../src/interface/Mainfrm.cpp:1014
 msgid "Cannot load toolbar from resource file"
 msgstr "Werkzeugleiste kann nicht aus Ressourcendatei geladen werden"
 
@@ -2180,7 +2180,7 @@ msgstr "Lokales Standard-Verzeichnis auswählen"
 msgid "Choose the local directory"
 msgstr "Lokales Verzeichnis auswählen"
 
-#: ../../locales/../src/engine/http/request.cpp:396
+#: ../../locales/../src/engine/http/request.cpp:412
 msgid "Chunk data improperly terminated"
 msgstr "HTTP-Datenblock nicht ordnungsgemäß terminiert"
 
@@ -2239,8 +2239,8 @@ msgid "Close &all other tabs"
 msgstr "Andere Tabs &schließen"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1149
-#: ../../locales/../src/interface/Mainfrm.cpp:1170
+#: ../../locales/../src/interface/Mainfrm.cpp:1158
+#: ../../locales/../src/interface/Mainfrm.cpp:1179
 msgid "Close FileZilla"
 msgstr "FileZilla beenden"
 
@@ -2279,7 +2279,7 @@ msgstr "Befehl fehlgeschlagen"
 msgid "Command not supported"
 msgstr "Befehl nicht unterstützt"
 
-#: ../../locales/../src/engine/engineprivate.cpp:223
+#: ../../locales/../src/engine/engineprivate.cpp:225
 msgid "Command not supported by this protocol"
 msgstr "Der Befehl wird von diesem Protokoll nicht unterstützt"
 
@@ -2451,7 +2451,7 @@ msgid "Connection attempt failed with \"%s\"."
 msgstr "Verbindungsversuch fehlgeschlagen mit \"%s\"."
 
 #: ../../locales/../src/engine/ControlSocket.cpp:173
-#: ../../locales/../src/engine/engineprivate.cpp:664
+#: ../../locales/../src/engine/engineprivate.cpp:677
 msgid "Connection attempt interrupted by user"
 msgstr "Verbindungsversuch durch Benutzer unterbrochen"
 
@@ -2925,7 +2925,7 @@ msgstr "Konnte nicht in Logdatei schreiben: %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:953
 #: ../../locales/../src/engine/ControlSocket.cpp:1050
-#: ../../locales/../src/engine/http/request.cpp:92
+#: ../../locales/../src/engine/http/request.cpp:95
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Konnte nicht in Socket schreiben: %s"
@@ -3190,7 +3190,7 @@ msgstr ""
 "Die Verzögerung nach fehlerhaften Verbindungsversuchen muss zwischen 1 und "
 "999 Sekunden liegen."
 
-#: ../../locales/../src/engine/engineprivate.cpp:498
+#: ../../locales/../src/engine/engineprivate.cpp:510
 #, c-format
 msgid ""
 "Delaying connection for %d second due to previously failed connection "
@@ -3219,12 +3219,12 @@ msgstr "Markiertes Verzeichnis löschen"
 msgid "Delete selected files and directories"
 msgstr "Ausgewählte Dateien und Verzeichnisse löschen"
 
-#: ../../locales/../src/engine/engineprivate.cpp:384
+#: ../../locales/../src/engine/engineprivate.cpp:386
 #, c-format
 msgid "Deleting \"%s\""
 msgstr "Lösche \"%s\""
 
-#: ../../locales/../src/engine/engineprivate.cpp:387
+#: ../../locales/../src/engine/engineprivate.cpp:389
 #, c-format
 msgid "Deleting %u files from \"%s\""
 msgstr "Lösche %u Dateien aus \"%s\""
@@ -3268,7 +3268,7 @@ msgstr "Verzeichnis"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1781
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:390
 #: ../../locales/../src/interface/filelistctrl.cpp:469
-#: ../../locales/../src/interface/Mainfrm.cpp:2225
+#: ../../locales/../src/interface/Mainfrm.cpp:2237
 #: ../../locales/../src/interface/toolbar.cpp:51
 msgid "Directory comparison"
 msgstr "Verzeichnisvergleich"
@@ -3337,7 +3337,7 @@ msgstr "Verbindung zum Server trennen"
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:162
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:165
-#: ../../locales/../src/engine/http/request.cpp:93
+#: ../../locales/../src/engine/http/request.cpp:96
 #: ../../locales/../src/interface/queue.cpp:339
 msgid "Disconnected from server"
 msgstr "Verbindung zum Server getrennt"
@@ -3370,8 +3370,8 @@ msgstr "&Keinen Standardeditor verwenden"
 msgid "Do the same with &all selected files already being edited"
 msgstr "Für alle ausgewählten &momentan bearbeiteten Dateien anwenden"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1152
-#: ../../locales/../src/interface/Mainfrm.cpp:1174
+#: ../../locales/../src/interface/Mainfrm.cpp:1161
+#: ../../locales/../src/interface/Mainfrm.cpp:1183
 msgid "Do you really want to close FileZilla?"
 msgstr "Wollen Sie FileZilla wirklich beenden?"
 
@@ -3453,7 +3453,7 @@ msgstr "Ausgewähltes Verzeichnis herunterladen"
 msgid "Download selected files and directories"
 msgstr "Ausgewählte Dateien und Verzeichnisse herunterladen"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:985
+#: ../../locales/../src/interface/Mainfrm.cpp:986
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -4164,7 +4164,7 @@ msgstr "Dateiübertragung erfolgreich"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Dateiübertragung erfolgreich, %s in %s übertragen"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1151
+#: ../../locales/../src/interface/Mainfrm.cpp:1160
 msgid "File transfers still in progress."
 msgstr "Dateiübertragungen dauern noch an."
 
@@ -4193,7 +4193,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla ist schon mit einem Server verbunden."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1453
+#: ../../locales/../src/interface/Mainfrm.cpp:1465
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "FileZilla muss neu gestartet werden, damit das Ändern der Sprache wirksam "
@@ -4679,7 +4679,7 @@ msgstr ""
 "Wenn Sie auf \"Test\" klicken, wird sich FileZilla mit probe.filezilla-"
 "project.org verbinden und einige einfache Tests ausführen."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1173
+#: ../../locales/../src/interface/Mainfrm.cpp:1182
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Wenn Sie FileZilla schließen, werden Ihre Änderungen verloren gehen."
 
@@ -4846,11 +4846,11 @@ msgid "Interrupted by user"
 msgstr "Unterbrochen durch Benutzer"
 
 #: ../../locales/../src/engine/http/request.cpp:29
-#: ../../locales/../src/engine/http/request.cpp:328
+#: ../../locales/../src/engine/http/request.cpp:344
 msgid "Invalid Content-Length"
 msgstr "Content-Length ungültig"
 
-#: ../../locales/../src/engine/http/request.cpp:242
+#: ../../locales/../src/engine/http/request.cpp:245
 msgid "Invalid HTTP Response"
 msgstr "Ungültige HTTP-Rückmeldung"
 
@@ -4866,7 +4866,7 @@ msgstr ""
 "Ungültige Zeichenfolge empfangen, UTF-8 wird deaktiviert. Wählen Sie UTF-8 "
 "im Servermanager, um UTF-8 zu erzwingen."
 
-#: ../../locales/../src/engine/http/request.cpp:424
+#: ../../locales/../src/engine/http/request.cpp:440
 msgid "Invalid chunk size"
 msgstr "Ungültige Datenpaketgröße."
 
@@ -4902,7 +4902,7 @@ msgstr "Ungültiger Hostname: %s"
 msgid "Invalid input"
 msgstr "Ungültige Eingabe"
 
-#: ../../locales/../src/engine/http/request.cpp:290
+#: ../../locales/../src/engine/http/request.cpp:297
 msgid "Invalid line"
 msgstr "Ungültige Zeile"
 
@@ -4941,7 +4941,7 @@ msgstr "Ungültiger regulärer Ausdruck"
 msgid "Invalid regular expression in search conditions."
 msgstr "Ungültiger regulärer Ausdruck in Suchbedingungen."
 
-#: ../../locales/../src/engine/http/request.cpp:251
+#: ../../locales/../src/engine/http/request.cpp:254
 msgid "Invalid response code"
 msgstr "Ungültiger Antwortcode"
 
@@ -5024,7 +5024,7 @@ msgstr "Niedri&gste"
 msgid "Language"
 msgstr "Sprache"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1453
+#: ../../locales/../src/interface/Mainfrm.cpp:1465
 msgid "Language changed"
 msgstr "Sprache gewechselt"
 
@@ -5058,7 +5058,7 @@ msgstr "Größe der Logdatei beschränken"
 msgid "Limit:"
 msgstr "Limit:"
 
-#: ../../locales/../src/engine/http/request.cpp:384
+#: ../../locales/../src/engine/http/request.cpp:400
 msgid "Line length exceeded"
 msgstr "Maximale Zeilenlänge überschritten"
 
@@ -5215,27 +5215,31 @@ msgstr ""
 "Stellen Sie sicher, dass auf die Datei zugegriffen werden kann und dass sie "
 "ein wohlgeformtes XML-Dokument ist."
 
-#: ../../locales/../src/engine/http/request.cpp:375
-#: ../../locales/../src/engine/http/request.cpp:384
-#: ../../locales/../src/engine/http/request.cpp:396
-#: ../../locales/../src/engine/http/request.cpp:424
+#: ../../locales/../src/engine/http/request.cpp:391
+#: ../../locales/../src/engine/http/request.cpp:400
+#: ../../locales/../src/engine/http/request.cpp:412
+#: ../../locales/../src/engine/http/request.cpp:440
 #, c-format
 msgid "Malformed chunk data: %s"
-msgstr "Falsches Datenpaketformat: %s"
-
-#: ../../locales/../src/engine/http/request.cpp:453
-#, fuzzy, c-format
-msgid "Malformed response body: %s"
-msgstr "Falscher Header: %s"
+msgstr "Fehlerhaftes Datenpaketformat: %s"
 
 #: ../../locales/../src/engine/http/request.cpp:29
-#: ../../locales/../src/engine/http/request.cpp:215
-#: ../../locales/../src/engine/http/request.cpp:290
-#: ../../locales/../src/engine/http/request.cpp:320
-#: ../../locales/../src/engine/http/request.cpp:328
 #, fuzzy, c-format
+msgid "Malformed request header: %s"
+msgstr "Antwort enthält fehlerhafte Kopfdaten: %s"
+
+#: ../../locales/../src/engine/http/request.cpp:469
+#, c-format
+msgid "Malformed response body: %s"
+msgstr "Antwort enthält fehlerhafte Nutzdaten: %s"
+
+#: ../../locales/../src/engine/http/request.cpp:218
+#: ../../locales/../src/engine/http/request.cpp:297
+#: ../../locales/../src/engine/http/request.cpp:336
+#: ../../locales/../src/engine/http/request.cpp:344
+#, c-format
 msgid "Malformed response header: %s"
-msgstr "Falscher Header: %s"
+msgstr "Antwort enthält fehlerhafte Kopfdaten: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2633
 #: ../../locales/../src/interface/manual_transfer.cpp:298
@@ -5274,7 +5278,7 @@ msgid "Memory allocation failure"
 msgstr "Speicherzuweisungsfehlschlag"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:388
-#: ../../locales/../src/interface/Mainfrm.cpp:1767
+#: ../../locales/../src/interface/Mainfrm.cpp:1779
 msgid "Message log"
 msgstr "Nachrichtenprotokoll"
 
@@ -5830,7 +5834,7 @@ msgstr "PORT-Befehl wurde vom Router oder der Firewall beeinträchtigt."
 msgid "Pa&ssive (recommended)"
 msgstr "&Passiv (empfohlen)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2386
+#: ../../locales/../src/interface/Mainfrm.cpp:2398
 msgid "Parameter not a valid URL"
 msgstr "Parameter keine gültige URL"
 
@@ -5876,7 +5880,7 @@ msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr ""
 "Pfad kann für Verzeichnis %s und Unterverzeichnis %s nicht erstellt werden"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2341
+#: ../../locales/../src/interface/Mainfrm.cpp:2353
 msgid "Path not found:"
 msgstr "Pfad nicht gefunden:"
 
@@ -6465,7 +6469,7 @@ msgstr "Lese&n"
 msgid "Read-only"
 msgstr "Schreibgeschützt"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1042
+#: ../../locales/../src/interface/Mainfrm.cpp:1051
 msgid "Really cancel current operation?"
 msgstr "Aktuelle Operation wirklich abbrechen?"
 
@@ -7076,7 +7080,7 @@ msgstr "Gewählte Datei wird immer noch bearbeitet"
 msgid "Selected filter only works for local files."
 msgstr "Der ausgewählte Filter funktioniert nur bei lokalen Dateien."
 
-#: ../../locales/../src/interface/menu_bar.cpp:300
+#: ../../locales/../src/interface/menu_bar.cpp:302
 msgid ""
 "Selected global bookmark and current server use a different server type.\n"
 "Use site-specific bookmarks for this server."
@@ -7085,7 +7089,7 @@ msgstr ""
 "unterschiedlichen Servertyp.\n"
 "Verwenden Sie serverspezifische Lesezeichen für diesen Server."
 
-#: ../../locales/../src/engine/engineprivate.cpp:305
+#: ../../locales/../src/engine/engineprivate.cpp:307
 msgid "Selected port usually in use by a different protocol."
 msgstr ""
 "Warnung: Der gewählte Port wird üblicherweise von einem anderen Protokoll "
@@ -7173,10 +7177,9 @@ msgstr ""
 "Der Server benötigt möglicherweise ein Konto. Bitte geben Sie ein Konto im "
 "Servermanager an."
 
-#: ../../locales/../src/engine/http/request.cpp:215
-#, fuzzy
+#: ../../locales/../src/engine/http/request.cpp:218
 msgid "Server not sending proper line endings"
-msgstr "Falsche Rückmeldung, der Server schickt keine gültigen Zeilenenden"
+msgstr "Server schickt keine gültigen Zeilenenden"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:340
 msgid "Server returned empty path."
@@ -7204,10 +7207,9 @@ msgstr ""
 "Vom Server gesendete Adresse für den Passiv-Modus ist nicht routingfähig. "
 "Benutze stattdessen die Serveradresse."
 
-#: ../../locales/../src/engine/http/request.cpp:453
-#, fuzzy
+#: ../../locales/../src/engine/http/request.cpp:469
 msgid "Server sent too much data."
-msgstr "Falsche Rückmeldung: Server sendete zu viele Daten."
+msgstr "Server sendete zu viele Daten."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:428
 #: ../../locales/../src/interface/netconfwizard.cpp:434
@@ -7283,7 +7285,7 @@ msgstr "&Unverarbeiteten Verzeichnisinhalt anzeigen"
 msgid "Show &welcome dialog..."
 msgstr "&Begrüßungsdialog anzeigen..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2228
+#: ../../locales/../src/interface/Mainfrm.cpp:2240
 msgid "Show both directory trees and continue comparing?"
 msgstr "Beide Verzeichnisbäume anzeigen und Vergleich fortsetzen?"
 
@@ -7438,7 +7440,7 @@ msgstr "Socket nicht verbunden"
 msgid "Socket type not supported for address family"
 msgstr "Sockettyp für Adressfamilie nicht unterstützt"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1172
+#: ../../locales/../src/interface/Mainfrm.cpp:1181
 msgid "Some files are still being edited or need to be uploaded."
 msgstr ""
 "Einige Dateien werden immer noch bearbeitet oder müssen hochgeladen werden."
@@ -7634,8 +7636,8 @@ msgstr "Syntaxfehler"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2343
-#: ../../locales/../src/interface/Mainfrm.cpp:2388
+#: ../../locales/../src/interface/Mainfrm.cpp:2355
+#: ../../locales/../src/interface/Mainfrm.cpp:2400
 msgid "Syntax error in command line"
 msgstr "Syntaxfehler in der Kommandozeile"
 
@@ -8198,13 +8200,13 @@ msgstr "Zeitüberschreitung"
 msgid "Title:"
 msgstr "Titel:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2226
+#: ../../locales/../src/interface/Mainfrm.cpp:2238
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Um die Verzeichnisse vergleichen zu können, ist es notwendig, dass die "
 "Dateilisten entsprechend angeordnet sind."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2227
+#: ../../locales/../src/interface/Mainfrm.cpp:2239
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Zu diesem Zweck müssen beide Verzeichnisbäume angezeigt oder versteckt sein."
@@ -8264,7 +8266,7 @@ msgstr "Anzeige des Server-Verzeichnisbaums an-/ausschalten"
 msgid "Toggles the display of the transfer queue"
 msgstr "Anzeige der Übertragungs-Warteschlange an-/ausschalten"
 
-#: ../../locales/../src/engine/http/request.cpp:224
+#: ../../locales/../src/engine/http/request.cpp:227
 msgid "Too long header line"
 msgstr "Header zu lang"
 
@@ -8459,7 +8461,7 @@ msgstr ""
 "Unbekanntes Wurzelelement; die Datei scheint nicht von FileZilla erzeugt "
 "worden zu sein."
 
-#: ../../locales/../src/engine/http/request.cpp:320
+#: ../../locales/../src/engine/http/request.cpp:336
 msgid "Unknown transfer encoding"
 msgstr "Unbekannte Übertragungscodierung"
 
@@ -8691,7 +8693,7 @@ msgstr "Warten auf Passworteingabe"
 msgid "Waiting for transfer to be cancelled"
 msgstr "Warte auf Abbruch der Übertragung"
 
-#: ../../locales/../src/engine/engineprivate.cpp:241
+#: ../../locales/../src/engine/engineprivate.cpp:243
 msgid "Waiting to retry..."
 msgstr "Nächsten Versuch abwarten..."
 
@@ -8768,7 +8770,7 @@ msgstr "Sc&hreiben"
 msgid "Wrong external IP address"
 msgstr "Falsche externe IP-Adresse"
 
-#: ../../locales/../src/engine/http/request.cpp:375
+#: ../../locales/../src/engine/http/request.cpp:391
 msgid "Wrong line endings"
 msgstr "Falsche Zeilenenden"
 
@@ -9138,6 +9140,3 @@ msgstr "'Andere: beschreibbar'"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:699
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
-
-#~ msgid "Set permissions of '%s' to '%s'"
-#~ msgstr "Berechtigungen für '%s' werden auf '%s' gesetzt"
