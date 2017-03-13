@@ -322,6 +322,8 @@ bool RenameFile(wxWindow* parent, wxString dir, wxString from, wxString to)
 
 #ifdef __WXMSW__
 extern "C" typedef HRESULT (WINAPI *tSHGetKnownFolderPath)(const GUID& rfid, DWORD dwFlags, HANDLE hToken, PWSTR *ppszPath);
+#elif defined __WXMAC__
+extern "C" char const* GetDownloadDirImpl();
 #else
 wxString ShellUnescape( wxString const& path )
 {
@@ -356,7 +358,12 @@ CLocalPath GetDownloadDir()
 			return CLocalPath(dir);
 		}
 	}
-#elif !defined(__WXMAC__)
+#elif defined(__WXMAC__)
+	CLocalPath ret;
+	char const* url = GetDownloadDirImpl();
+	ret.SetPath(fz::to_wstring_from_utf8(url));
+	return ret;
+#else
 	// Code copied from wx, but for downloads directory.
 	// Also, directory is now unescaped.
 	{

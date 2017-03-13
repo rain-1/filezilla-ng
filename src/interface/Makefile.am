@@ -308,7 +308,7 @@ filezilla_SOURCES += osx_sandbox_userdirs.cpp
 noinst_HEADERS += osx_sandbox_userdirs.h
 endif
 
-filezilla_SOURCES += power_management_osx.m
+filezilla_SOURCES += file_utils_osx.m power_management_osx.m
 
 endif
 
