@@ -481,7 +481,17 @@ void CFileZillaEnginePrivate::OnTimer(fz::timer_id)
 
 	m_pControlSocket.reset();
 
-	ContinueConnect();
+	int res = ContinueConnect();
+	res |= m_nControlSocketError;
+	m_nControlSocketError = 0;
+
+	if (res == FZ_REPLY_CONTINUE) {
+		assert(m_pControlSocket);
+		m_pControlSocket->SendNextCommand();
+	}
+	else if (res != FZ_REPLY_WOULDBLOCK) {
+		ResetOperation(res);
+	}
 }
 
 int CFileZillaEnginePrivate::ContinueConnect()
@@ -650,8 +660,9 @@ void CFileZillaEnginePrivate::OnCommandEvent()
 void CFileZillaEnginePrivate::DoCancel()
 {
 	fz::scoped_lock lock(mutex_);
-	if (!IsBusy())
+	if (!IsBusy()) {
 		return;
+	}
 
 	if (m_retryTimer) {
 		assert(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
@@ -672,19 +683,23 @@ void CFileZillaEnginePrivate::DoCancel()
 		ClearQueuedLogs(true);
 	}
 	else {
-		if (m_pControlSocket)
+		if (m_pControlSocket) {
 			m_pControlSocket->Cancel();
-		else
+		}
+		else {
 			ResetOperation(FZ_REPLY_CANCELED);
+		}
 	}
 }
 
 bool CFileZillaEnginePrivate::CheckAsyncRequestReplyPreconditions(std::unique_ptr<CAsyncRequestNotification> const& reply)
 {
-	if (!reply)
+	if (!reply) {
 		return false;
-	if (!IsBusy())
+	}
+	if (!IsBusy()) {
 		return false;
+	}
 
 	bool match;
 	{
@@ -749,11 +764,13 @@ bool CFileZillaEnginePrivate::SetAsyncRequestReply(std::unique_ptr<CAsyncRequest
 
 bool CFileZillaEnginePrivate::IsPendingAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> const& pNotification)
 {
-	if (!pNotification)
+	if (!pNotification) {
 		return false;
+	}
 
-	if (!IsBusy())
+	if (!IsBusy()) {
 		return false;
+	}
 
 	fz::scoped_lock lock(notification_mutex_);
 	return pNotification->requestNumber == m_asyncRequestCounter;
