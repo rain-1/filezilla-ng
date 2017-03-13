@@ -3,7 +3,7 @@
 void const* PowerManagmentImpl_SetBusy()
 {
 	NSActivityOptions opt = NSActivityUserInitiated | NSActivityIdleSystemSleepDisabled;
-	id activity = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated reason:@"Preventing idle sleep during transfers and other operations."];
+	id activity = [[NSProcessInfo processInfo] beginActivityWithOptions:opt reason:@"Preventing idle sleep during transfers and other operations."];
 	return CFBridgingRetain(activity);
 }
 
