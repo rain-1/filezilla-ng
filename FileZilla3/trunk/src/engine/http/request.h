@@ -60,7 +60,6 @@ private:
 		int64_t size{};
 	} chunk_data_;
 
-	int64_t requestContentLength_{-1};
 	uint64_t dataToSend_{};
 
 	int64_t responseContentLength_{-1};
