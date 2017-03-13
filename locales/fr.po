@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-02-24 16:16+0100\n"
+"POT-Creation-Date: 2017-03-13 14:01+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pgase <pgase.filezilla@free.fr>\n"
 "Language-Team: Pgase, William GATHOYE <pgase.filezilla@free.fr, "
@@ -750,7 +750,7 @@ msgstr "&Nouveau"
 msgid "&New Site"
 msgstr "&Nouveau Site"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1676
+#: ../../locales/../src/interface/Mainfrm.cpp:1688
 msgid "&New version available!"
 msgstr "&Nouvelle version disponible !"
 
@@ -1115,7 +1115,7 @@ msgstr "&Identifiant :"
 msgid "&Username:"
 msgstr "&Identifiant :"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1670
+#: ../../locales/../src/interface/Mainfrm.cpp:1682
 #, c-format
 msgid "&Version %s"
 msgstr "&Version %s"
@@ -1708,7 +1708,7 @@ msgstr "Appliquer uniquement aux &fichiers"
 msgid "Archive"
 msgstr "Archive"
 
-#: ../../locales/../src/engine/socket.cpp:1063
+#: ../../locales/../src/engine/socket.cpp:1065
 msgid "Argument buffer overflow"
 msgstr "Débordement de tampon de l'argument"
 
@@ -1784,7 +1784,7 @@ msgstr ""
 msgid "B&ypass proxy"
 msgstr "Ignorer le Prox&y"
 
-#: ../../locales/../src/engine/socket.cpp:1027
+#: ../../locales/../src/engine/socket.cpp:1029
 msgid "Bad file descriptor"
 msgstr "Descripteur de fichier incorrect"
 
@@ -1818,7 +1818,7 @@ msgid "Blue"
 msgstr "Bleu"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:271
-#: ../../locales/../src/interface/menu_bar.cpp:300
+#: ../../locales/../src/interface/menu_bar.cpp:302
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:384
 msgid "Bookmark"
 msgstr "Favori"
@@ -1890,7 +1890,7 @@ msgstr "Associations par t&ype de fichier personnalisées :"
 msgid "CPU features:"
 msgstr "Caractéristiques du CPU :"
 
-#: ../../locales/../src/engine/ftp/list.cpp:124
+#: ../../locales/../src/engine/ftp/list.cpp:123
 msgid "Calculating timezone offset of server..."
 msgstr "Calcul du décalage horaire du serveur..."
 
@@ -1951,7 +1951,7 @@ msgstr "Impossible d'accéder à '%s', aucun média inséré ou lecteur non prê
 msgid "Cannot add server to Site Manager"
 msgstr "Impossible d'ajouter le serveur au Gestionnaire de Sites"
 
-#: ../../locales/../src/engine/socket.cpp:1080
+#: ../../locales/../src/engine/socket.cpp:1082
 msgid "Cannot assign requested address"
 msgstr "Impossible d'assigner la requête d'adresse"
 
@@ -2002,7 +2002,7 @@ msgstr ""
 msgid "Cannot load key file"
 msgstr "Impossible de charger le fichier de clé"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1013
+#: ../../locales/../src/interface/Mainfrm.cpp:1014
 msgid "Cannot load toolbar from resource file"
 msgstr ""
 "Impossible de charger la barre d'outils depuis le fichier de ressources"
@@ -2133,7 +2133,7 @@ msgstr "Recherche des nouvelles versions de FileZilla"
 msgid "Check for updates failed"
 msgstr "Échec de la recherche des mises à jour"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:275
+#: ../../locales/../src/engine/ftp/logon.cpp:279
 msgid ""
 "Check your login credentials. The entered password starts or ends with a "
 "space character."
@@ -2141,7 +2141,7 @@ msgstr ""
 "Vérifiez vos informations de connexion. Le mot de passe saisi commence ou se "
 "termine par un espace."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:271
+#: ../../locales/../src/engine/ftp/logon.cpp:275
 msgid ""
 "Check your login credentials. The entered username starts or ends with a "
 "space character."
@@ -2181,7 +2181,7 @@ msgstr "Sélectionnez le dossier local par défaut"
 msgid "Choose the local directory"
 msgstr "Sélectionnez le dossier local"
 
-#: ../../locales/../src/engine/http/request.cpp:396
+#: ../../locales/../src/engine/http/request.cpp:412
 msgid "Chunk data improperly terminated"
 msgstr "Paquet de données interrompu incorrectement"
 
@@ -2240,8 +2240,8 @@ msgid "Close &all other tabs"
 msgstr "Fermer tous les &autres onglets"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1149
-#: ../../locales/../src/interface/Mainfrm.cpp:1170
+#: ../../locales/../src/interface/Mainfrm.cpp:1158
+#: ../../locales/../src/interface/Mainfrm.cpp:1179
 msgid "Close FileZilla"
 msgstr "Quitter FileZilla"
 
@@ -2278,7 +2278,7 @@ msgstr "Échec de la commande"
 msgid "Command not supported"
 msgstr "Commande non supportée"
 
-#: ../../locales/../src/engine/engineprivate.cpp:226
+#: ../../locales/../src/engine/engineprivate.cpp:225
 msgid "Command not supported by this protocol"
 msgstr "Commande non supportée par ce protocole"
 
@@ -2412,13 +2412,13 @@ msgstr "Connexion en cours"
 msgid "Connecting to %s"
 msgstr "Connexion à %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1101
-#: ../../locales/../src/engine/ftp/logon.cpp:90
+#: ../../locales/../src/engine/ControlSocket.cpp:1109
+#: ../../locales/../src/engine/ftp/logon.cpp:92
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Connexion à %s via %s Proxy"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1021
+#: ../../locales/../src/engine/ControlSocket.cpp:1029
 #: ../../locales/../src/engine/proxy.cpp:237
 #: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:43
 #, c-format
@@ -2429,7 +2429,7 @@ msgstr "Connexion à %s..."
 msgid "Connection"
 msgstr "Connexion"
 
-#: ../../locales/../src/engine/socket.cpp:1041
+#: ../../locales/../src/engine/socket.cpp:1043
 msgid "Connection aborted"
 msgstr "Connexion annulée"
 
@@ -2437,24 +2437,24 @@ msgstr "Connexion annulée"
 msgid "Connection attempt failed"
 msgstr "Échec de la tentative de connexion"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:984
+#: ../../locales/../src/engine/ControlSocket.cpp:992
 #: ../../locales/../src/engine/proxy.cpp:211
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr ""
 "Échec de la tentative de connexion avec \"%s\", essai de l'adresse suivante."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:989
+#: ../../locales/../src/engine/ControlSocket.cpp:997
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Échec de la tentative de connexion avec \"%s\"."
 
 #: ../../locales/../src/engine/ControlSocket.cpp:173
-#: ../../locales/../src/engine/engineprivate.cpp:667
+#: ../../locales/../src/engine/engineprivate.cpp:677
 msgid "Connection attempt interrupted by user"
 msgstr "Tentative de connexion interrompue par l'utilisateur"
 
-#: ../../locales/../src/engine/socket.cpp:1034
+#: ../../locales/../src/engine/socket.cpp:1036
 msgid "Connection attempt timed out"
 msgstr "Tentative de connexion expirée"
 
@@ -2462,7 +2462,7 @@ msgstr "Tentative de connexion expirée"
 msgid "Connection closed"
 msgstr "Connexion interrompue"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1074
+#: ../../locales/../src/engine/ControlSocket.cpp:1082
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:75
 msgid "Connection closed by server"
 msgstr "Connexion interrompue par le serveur"
@@ -2496,15 +2496,15 @@ msgstr "Connexion non permise par les règles en vigueur"
 msgid "Connection refused"
 msgstr "Connexion refusée"
 
-#: ../../locales/../src/engine/socket.cpp:1028
+#: ../../locales/../src/engine/socket.cpp:1030
 msgid "Connection refused by server"
 msgstr "Connexion refusée par le serveur"
 
-#: ../../locales/../src/engine/socket.cpp:1037
+#: ../../locales/../src/engine/socket.cpp:1039
 msgid "Connection reset by network"
 msgstr "Connexion réinitialisée par le serveur"
 
-#: ../../locales/../src/engine/socket.cpp:1042
+#: ../../locales/../src/engine/socket.cpp:1044
 msgid "Connection reset by peer"
 msgstr "Connexion réinitialisée par un pair"
 
@@ -2590,7 +2590,7 @@ msgstr "Impossible de terminer l'opération"
 msgid "Could not connect to server"
 msgstr "Impossible d'établir une connexion au serveur"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1139
+#: ../../locales/../src/engine/ControlSocket.cpp:1147
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Impossible d'établir une connexion au serveur : %s"
@@ -2654,7 +2654,7 @@ msgstr ""
 "L'extension du shell n'est pas correctement installée ou vous n'avez pas "
 "déposé les fichiers dans une fenêtre de l'explorateur de fichier."
 
-#: ../../locales/../src/engine/ftp/rawtransfer.cpp:241
+#: ../../locales/../src/engine/ftp/rawtransfer.cpp:236
 msgid "Could not establish connection to server"
 msgstr "Impossible d'établir une connexion au serveur"
 
@@ -2671,7 +2671,7 @@ msgstr ""
 "utilisant l'option de la ligne de commande '--datadir <custompath>' ou en "
 "paramétrant la variable d'environnement FZ_DATADIR."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:740
+#: ../../locales/../src/engine/ftp/logon.cpp:744
 msgid "Could not generate custom login sequence."
 msgstr "Impossible de générer une séquence d'identification personnalisée."
 
@@ -2850,7 +2850,7 @@ msgstr "Impossible de trier les certificats homologues"
 msgid "Could not spawn IO thread"
 msgstr "Impossible de générer un processus d'entrée/sortie"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1115
+#: ../../locales/../src/engine/ControlSocket.cpp:1123
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Impossible d'établir une liaison avec le serveur Proxy : %s"
@@ -2919,9 +2919,9 @@ msgstr "Impossible d'écrire vers le fichier local"
 msgid "Could not write to log file: %s"
 msgstr "Impossible d'écrire dans le fichier journal : %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:946
-#: ../../locales/../src/engine/ControlSocket.cpp:1042
-#: ../../locales/../src/engine/http/request.cpp:92
+#: ../../locales/../src/engine/ControlSocket.cpp:953
+#: ../../locales/../src/engine/ControlSocket.cpp:1050
+#: ../../locales/../src/engine/http/request.cpp:95
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Impossible d'écrire vers le socket : %s"
@@ -3185,7 +3185,7 @@ msgstr ""
 "Le délai entre chaque échec de connexion doit être compris entre 1 et 999 "
 "secondes."
 
-#: ../../locales/../src/engine/engineprivate.cpp:501
+#: ../../locales/../src/engine/engineprivate.cpp:510
 #, c-format
 msgid ""
 "Delaying connection for %d second due to previously failed connection "
@@ -3214,12 +3214,12 @@ msgstr "Supprimer le dossier sélectionné"
 msgid "Delete selected files and directories"
 msgstr "Supprimer les fichiers et dossiers sélectionnés"
 
-#: ../../locales/../src/engine/engineprivate.cpp:387
+#: ../../locales/../src/engine/engineprivate.cpp:386
 #, c-format
 msgid "Deleting \"%s\""
 msgstr "Suppression de \"%s\""
 
-#: ../../locales/../src/engine/engineprivate.cpp:390
+#: ../../locales/../src/engine/engineprivate.cpp:389
 #, c-format
 msgid "Deleting %u files from \"%s\""
 msgstr "Suppression de %u fichiers à partir de \"%s\""
@@ -3263,7 +3263,7 @@ msgstr "Dossier"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1781
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:390
 #: ../../locales/../src/interface/filelistctrl.cpp:469
-#: ../../locales/../src/interface/Mainfrm.cpp:2225
+#: ../../locales/../src/interface/Mainfrm.cpp:2237
 #: ../../locales/../src/interface/toolbar.cpp:51
 msgid "Directory comparison"
 msgstr "Comparaison de dossier"
@@ -3327,17 +3327,17 @@ msgid "Disconnect from server"
 msgstr "Déconnecter du serveur actuel"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:52
-#: ../../locales/../src/engine/ControlSocket.cpp:947
-#: ../../locales/../src/engine/ControlSocket.cpp:1044
+#: ../../locales/../src/engine/ControlSocket.cpp:954
+#: ../../locales/../src/engine/ControlSocket.cpp:1052
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:162
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:165
-#: ../../locales/../src/engine/http/request.cpp:93
+#: ../../locales/../src/engine/http/request.cpp:96
 #: ../../locales/../src/interface/queue.cpp:339
 msgid "Disconnected from server"
 msgstr "Déconnecté du serveur"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1077
+#: ../../locales/../src/engine/ControlSocket.cpp:1085
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:179
 #, c-format
 msgid "Disconnected from server: %s"
@@ -3366,8 +3366,8 @@ msgid "Do the same with &all selected files already being edited"
 msgstr ""
 "Faire de même avec tous les fichiers sélectionnés déjà en cours d'édition"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1152
-#: ../../locales/../src/interface/Mainfrm.cpp:1174
+#: ../../locales/../src/interface/Mainfrm.cpp:1161
+#: ../../locales/../src/interface/Mainfrm.cpp:1183
 msgid "Do you really want to close FileZilla?"
 msgstr "Souhaitez-vous vraiment quitter FileZilla ?"
 
@@ -3452,7 +3452,7 @@ msgstr "Télécharger le dossier sélectionné"
 msgid "Download selected files and directories"
 msgstr "Télécharger les fichiers et dossiers sélectionnés"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:985
+#: ../../locales/../src/interface/Mainfrm.cpp:986
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3900,8 +3900,8 @@ msgstr "Impossible de créer la copie de sauvegarde du fichier xml"
 msgid "Failed to create listen socket, aborting."
 msgstr "Impossible de créer le socket d'écoute, abandon."
 
-#: ../../locales/../src/engine/ftp/rawtransfer.cpp:222
-#: ../../locales/../src/engine/ftp/rawtransfer.cpp:225
+#: ../../locales/../src/engine/ftp/rawtransfer.cpp:217
+#: ../../locales/../src/engine/ftp/rawtransfer.cpp:220
 msgid "Failed to create listening socket for active mode transfer"
 msgstr "Impossible de créer le socket d'écoute pour le mode de transfert actif"
 
@@ -3930,7 +3930,7 @@ msgid "Failed to initialize FTP engine"
 msgstr "Impossible d'initialiser le moteur FTP"
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:193
-#: ../../locales/../src/engine/ftp/logon.cpp:249
+#: ../../locales/../src/engine/ftp/logon.cpp:253
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:104
 msgid "Failed to initialize TLS."
 msgstr "Impossible d'initialiser le protocole TLS."
@@ -4087,7 +4087,7 @@ msgstr "Fichier"
 msgid "File Types"
 msgstr "Types de fichiers"
 
-#: ../../locales/../src/engine/socket.cpp:1033
+#: ../../locales/../src/engine/socket.cpp:1035
 msgid "File descriptor not a socket"
 msgstr "Le descripteur de fichier n'est pas un socket"
 
@@ -4162,7 +4162,7 @@ msgstr "Transfert de fichier réussi"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Transfert de fichier réussi, %s transférés en %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1151
+#: ../../locales/../src/interface/Mainfrm.cpp:1160
 msgid "File transfers still in progress."
 msgstr "Transfert de fichier en cours de progression."
 
@@ -4191,7 +4191,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla est déjà connecté à un serveur."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1453
+#: ../../locales/../src/interface/Mainfrm.cpp:1465
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "FileZilla doit être redémarré pour que le changement de langue prenne effet."
@@ -4511,7 +4511,7 @@ msgstr ""
 msgid "Homepage:"
 msgstr "Site web :"
 
-#: ../../locales/../src/engine/socket.cpp:1044
+#: ../../locales/../src/engine/socket.cpp:1046
 msgid "Host is down"
 msgstr "L'hôte est hors service"
 
@@ -4674,7 +4674,7 @@ msgstr ""
 "Si vous cliquez sur Tester, FileZilla se connectera sur probe.filezilla-"
 "project.org et exécutera quelques tests simples."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1173
+#: ../../locales/../src/interface/Mainfrm.cpp:1182
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Si vous quittez FileZilla, vos modifications seront perdues."
 
@@ -4810,7 +4810,7 @@ msgstr ""
 "Les informations à propos de la dernière version de FileZilla n'ont pas pu "
 "être trouvées. Réessayer plus tard."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:240
+#: ../../locales/../src/engine/ftp/logon.cpp:244
 msgid "Initializing TLS..."
 msgstr "Initialisation de TLS..."
 
@@ -4818,7 +4818,7 @@ msgstr "Initialisation de TLS..."
 msgid "Insecure algorithm!"
 msgstr "Algorithme non sécurisé !"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:225
+#: ../../locales/../src/engine/ftp/logon.cpp:229
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "Serveur non sécurisé, celui-ci ne supporte pas FTP sur TLS."
 
@@ -4832,7 +4832,7 @@ msgstr "Interactif"
 msgid "Interface"
 msgstr "Interface"
 
-#: ../../locales/../src/engine/socket.cpp:1030
+#: ../../locales/../src/engine/socket.cpp:1032
 msgid "Interrupted by signal"
 msgstr "Interrompu par le signal"
 
@@ -4842,15 +4842,15 @@ msgid "Interrupted by user"
 msgstr "Interrompu par l'utilisateur"
 
 #: ../../locales/../src/engine/http/request.cpp:29
-#: ../../locales/../src/engine/http/request.cpp:328
+#: ../../locales/../src/engine/http/request.cpp:344
 msgid "Invalid Content-Length"
 msgstr "Longueur du contenu invalide"
 
-#: ../../locales/../src/engine/http/request.cpp:242
+#: ../../locales/../src/engine/http/request.cpp:245
 msgid "Invalid HTTP Response"
 msgstr "Réponse HTTP invalide"
 
-#: ../../locales/../src/engine/socket.cpp:1018
+#: ../../locales/../src/engine/socket.cpp:1020
 msgid "Invalid argument passed"
 msgstr "Argument invalide passé"
 
@@ -4863,7 +4863,7 @@ msgstr ""
 "l'option UTF-8 dans le Gestionnaire de Sites pour forcer l'utilisation de "
 "l'UTF-8."
 
-#: ../../locales/../src/engine/http/request.cpp:424
+#: ../../locales/../src/engine/http/request.cpp:440
 msgid "Invalid chunk size"
 msgstr "Taille du paquet invalide"
 
@@ -4899,7 +4899,7 @@ msgstr "Nom d'hôte invalide : %s"
 msgid "Invalid input"
 msgstr "Entrée invalide"
 
-#: ../../locales/../src/engine/http/request.cpp:290
+#: ../../locales/../src/engine/http/request.cpp:297
 msgid "Invalid line"
 msgstr "Ligne invalide"
 
@@ -4923,7 +4923,7 @@ msgstr ""
 "ftps:// pour le FTP sur TLS (implicite) et\n"
 "ftpes:// pour le FTP sur TLS (explicite)."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:64
+#: ../../locales/../src/engine/ftp/logon.cpp:66
 msgid ""
 "Invalid proxy host, after closing bracket only colon and port may follow."
 msgstr ""
@@ -4938,7 +4938,7 @@ msgstr "Expression régulière invalide"
 msgid "Invalid regular expression in search conditions."
 msgstr "Expression invalide dans les conditions de recherche."
 
-#: ../../locales/../src/engine/http/request.cpp:251
+#: ../../locales/../src/engine/http/request.cpp:254
 msgid "Invalid response code"
 msgstr "Code de réponse invalide"
 
@@ -4962,11 +4962,11 @@ msgstr "Taille invalide dans cette condition"
 msgid "Invalid username given."
 msgstr "Identifiant spécifié invalide."
 
-#: ../../locales/../src/engine/socket.cpp:1051
+#: ../../locales/../src/engine/socket.cpp:1053
 msgid "Invalid value for ai_flags"
 msgstr "Valeur invalide pour ai_flags"
 
-#: ../../locales/../src/engine/socket.cpp:1053
+#: ../../locales/../src/engine/socket.cpp:1055
 msgid "Invalid value for hints"
 msgstr "Valeur invalide pour les conseils"
 
@@ -5021,7 +5021,7 @@ msgstr "La &plus basse"
 msgid "Language"
 msgstr "Langue"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1453
+#: ../../locales/../src/interface/Mainfrm.cpp:1465
 msgid "Language changed"
 msgstr "Langue modifiée"
 
@@ -5055,7 +5055,7 @@ msgstr "Taille limite du fichier journal"
 msgid "Limit:"
 msgstr "Limite :"
 
-#: ../../locales/../src/engine/http/request.cpp:384
+#: ../../locales/../src/engine/http/request.cpp:400
 msgid "Line length exceeded"
 msgstr "Longueur de ligne dépassée"
 
@@ -5083,11 +5083,11 @@ msgstr "P&ort le plus bas disponible :"
 msgid "Local"
 msgstr "Local"
 
-#: ../../locales/../src/engine/socket.cpp:1015
+#: ../../locales/../src/engine/socket.cpp:1017
 msgid "Local address in use"
 msgstr "Adresse locale en usage"
 
-#: ../../locales/../src/engine/socket.cpp:1043
+#: ../../locales/../src/engine/socket.cpp:1045
 msgid "Local endpoint has been closed"
 msgstr "Le point de terminaison local a été fermé"
 
@@ -5138,7 +5138,7 @@ msgstr "Localité :"
 msgid "Log file"
 msgstr "Fichier journal"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:408
+#: ../../locales/../src/engine/ftp/logon.cpp:412
 msgid "Logged in"
 msgstr "Connecté"
 
@@ -5147,7 +5147,7 @@ msgstr "Connecté"
 msgid "Logging"
 msgstr "Journalisation"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:294
+#: ../../locales/../src/engine/ftp/logon.cpp:298
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Cannot fall back to local charset since using proxy."
@@ -5156,7 +5156,7 @@ msgstr ""
 "se peut que le serveur ne gère pas l'UTF-8. Impossible de rebasculer vers le "
 "jeu de caractères local à cause de l'utilisation d'un Proxy."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:301
+#: ../../locales/../src/engine/ftp/logon.cpp:305
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Trying local charset."
@@ -5165,7 +5165,7 @@ msgstr ""
 "se peut que le serveur ne gère pas l'UTF-8. Utilisation du jeu de caractères "
 "local."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:328
+#: ../../locales/../src/engine/ftp/logon.cpp:332
 msgid "Login sequence fully executed yet not logged in, aborting."
 msgstr ""
 "La séquence d'identification a entièrement été exécutée et vous n'êtes "
@@ -5216,29 +5216,31 @@ msgstr ""
 "Assurez-vous que le fichier est accessible et qu'il est bien un document XML "
 "correctement mis en forme."
 
-#: ../../locales/../src/engine/http/request.cpp:375
-#: ../../locales/../src/engine/http/request.cpp:384
-#: ../../locales/../src/engine/http/request.cpp:396
-#: ../../locales/../src/engine/http/request.cpp:424
+#: ../../locales/../src/engine/http/request.cpp:391
+#: ../../locales/../src/engine/http/request.cpp:400
+#: ../../locales/../src/engine/http/request.cpp:412
+#: ../../locales/../src/engine/http/request.cpp:440
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Paquet de données non conforme : %s"
 
 #: ../../locales/../src/engine/http/request.cpp:29
-#: ../../locales/../src/engine/http/request.cpp:290
-#: ../../locales/../src/engine/http/request.cpp:320
-#: ../../locales/../src/engine/http/request.cpp:328
+#, fuzzy, c-format
+msgid "Malformed request header: %s"
+msgstr "En-tête de réponse non conforme : %s"
+
+#: ../../locales/../src/engine/http/request.cpp:469
 #, c-format
-msgid "Malformed header: %s"
-msgstr "Entête non conforme : %s"
+msgid "Malformed response body: %s"
+msgstr "Corps de réponse non conforme : %s"
 
-#: ../../locales/../src/engine/http/request.cpp:215
-msgid "Malformed reply, server not sending proper line endings"
-msgstr "Réponse non conforme, le serveur envoie des fins de ligne incorrectes"
-
-#: ../../locales/../src/engine/http/request.cpp:453
-msgid "Malformed response: Server sent too much data."
-msgstr "Réponse mal formée : Le serveur envoie trop de données"
+#: ../../locales/../src/engine/http/request.cpp:218
+#: ../../locales/../src/engine/http/request.cpp:297
+#: ../../locales/../src/engine/http/request.cpp:336
+#: ../../locales/../src/engine/http/request.cpp:344
+#, c-format
+msgid "Malformed response header: %s"
+msgstr "En-tête de réponse non conforme : %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2633
 #: ../../locales/../src/interface/manual_transfer.cpp:298
@@ -5272,12 +5274,12 @@ msgstr "Correspondances à aucune de toutes les conditions suivantes"
 msgid "Maximum simultaneous &transfers:"
 msgstr "Nombre maximum de &transferts simultanés :"
 
-#: ../../locales/../src/engine/socket.cpp:1057
+#: ../../locales/../src/engine/socket.cpp:1059
 msgid "Memory allocation failure"
 msgstr "Échec de l'allocation de mémoire"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:388
-#: ../../locales/../src/interface/Mainfrm.cpp:1767
+#: ../../locales/../src/interface/Mainfrm.cpp:1779
 msgid "Message log"
 msgstr "Journal des événements"
 
@@ -5285,7 +5287,7 @@ msgstr "Journal des événements"
 msgid "Message log position"
 msgstr "Journal des événements"
 
-#: ../../locales/../src/engine/socket.cpp:1040
+#: ../../locales/../src/engine/socket.cpp:1042
 msgid "Message too large"
 msgstr "Message trop volumineux"
 
@@ -5362,11 +5364,11 @@ msgstr "Saisissez un chemin distant valide"
 msgid "Need to specify a character encoding"
 msgstr "Veuillez spécifier l'encodage des caractères"
 
-#: ../../locales/../src/engine/socket.cpp:1061
+#: ../../locales/../src/engine/socket.cpp:1063
 msgid "Neither nodename nor servname provided, or not known"
 msgstr "Aucun nom de nœud ou de nom de serveur fourni, ou inconnu"
 
-#: ../../locales/../src/engine/socket.cpp:1048
+#: ../../locales/../src/engine/socket.cpp:1050
 msgid ""
 "Network host does not have any network addresses in the requested address "
 "family"
@@ -5375,7 +5377,7 @@ msgstr ""
 "requise"
 
 #: ../../locales/../src/engine/proxy.cpp:483
-#: ../../locales/../src/engine/socket.cpp:1032
+#: ../../locales/../src/engine/socket.cpp:1034
 msgid "Network unreachable"
 msgstr "Réseau inaccessible"
 
@@ -5448,7 +5450,7 @@ msgstr "À côté de la file d'attente"
 msgid "No"
 msgstr "Non"
 
-#: ../../locales/../src/engine/socket.cpp:1059
+#: ../../locales/../src/engine/socket.cpp:1061
 msgid "No address associated with nodename"
 msgstr "Aucune adresse associée à ce nom de nœud"
 
@@ -5499,7 +5501,7 @@ msgstr ""
 "Aucun programme n'a été associé pour éditer les fichiers portant l'extension "
 "'%s'."
 
-#: ../../locales/../src/engine/socket.cpp:1035
+#: ../../locales/../src/engine/socket.cpp:1037
 msgid "No route to host"
 msgstr "Aucun routage vers l'hôte"
 
@@ -5530,7 +5532,7 @@ msgstr "Aucune"
 msgid "None selected yet"
 msgstr "Pas encore sélectionné"
 
-#: ../../locales/../src/engine/socket.cpp:1055
+#: ../../locales/../src/engine/socket.cpp:1057
 msgid "Nonrecoverable failure in name resolution"
 msgstr "Échec non récupérable dans la résolution du nom"
 
@@ -5570,7 +5572,7 @@ msgstr "Absence de connexion à un serveur."
 msgid "Not connected."
 msgstr "Déconnecté."
 
-#: ../../locales/../src/engine/socket.cpp:1076
+#: ../../locales/../src/engine/socket.cpp:1078
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Non initialisé, vous devez appeler WSAStartup"
 
@@ -5718,15 +5720,15 @@ msgstr ""
 msgid "Operating System:"
 msgstr "Système d'exploitation :"
 
-#: ../../locales/../src/engine/socket.cpp:1026
+#: ../../locales/../src/engine/socket.cpp:1028
 msgid "Operation already in progress"
 msgstr "Opération déjà en cours"
 
-#: ../../locales/../src/engine/socket.cpp:1017
+#: ../../locales/../src/engine/socket.cpp:1019
 msgid "Operation in progress"
 msgstr "Opération en cours"
 
-#: ../../locales/../src/engine/socket.cpp:1038
+#: ../../locales/../src/engine/socket.cpp:1040
 msgid "Operation not supported"
 msgstr "Opération non supportée"
 
@@ -5742,7 +5744,7 @@ msgstr "Organisation :"
 msgid "Other SFTP options"
 msgstr "Autres options SFTP"
 
-#: ../../locales/../src/engine/socket.cpp:1071
+#: ../../locales/../src/engine/socket.cpp:1073
 msgid "Other system error"
 msgstr "Autre erreur du système"
 
@@ -5750,8 +5752,8 @@ msgstr "Autre erreur du système"
 msgid "Other:"
 msgstr "Autre :"
 
-#: ../../locales/../src/engine/socket.cpp:1021
-#: ../../locales/../src/engine/socket.cpp:1022
+#: ../../locales/../src/engine/socket.cpp:1023
+#: ../../locales/../src/engine/socket.cpp:1024
 msgid "Out of memory"
 msgstr "Mémoire insuffisante"
 
@@ -5837,7 +5839,7 @@ msgstr "La commande PORT a été corrompue par le routeur ou le pare-feu."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&ssif (recommandé)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2386
+#: ../../locales/../src/interface/Mainfrm.cpp:2398
 msgid "Parameter not a valid URL"
 msgstr "Le paramètre n'est pas une URL invalide"
 
@@ -5883,7 +5885,7 @@ msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr ""
 "Le chemin ne peut pas être créé pour le dossier %s et le sous-dossier %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2341
+#: ../../locales/../src/interface/Mainfrm.cpp:2353
 msgid "Path not found:"
 msgstr "Chemin introuvable :"
 
@@ -5902,8 +5904,8 @@ msgstr "En attente de retrait"
 msgid "Permission"
 msgstr "Droit d'accès"
 
-#: ../../locales/../src/engine/socket.cpp:1014
-#: ../../locales/../src/engine/socket.cpp:1023
+#: ../../locales/../src/engine/socket.cpp:1016
+#: ../../locales/../src/engine/socket.cpp:1025
 msgid "Permission denied"
 msgstr "Autorisation refusée"
 
@@ -6303,7 +6305,7 @@ msgstr "Mot de passe Pro&xy :"
 msgid "Process &Queue"
 msgstr "Traiter la fi&le d'attente"
 
-#: ../../locales/../src/engine/socket.cpp:1019
+#: ../../locales/../src/engine/socket.cpp:1021
 msgid "Process file table overflow"
 msgstr "Débordement de la table de fichiers du processus"
 
@@ -6313,11 +6315,11 @@ msgstr "Débordement de la table de fichiers du processus"
 msgid "Processed %s in %s."
 msgstr "Traitement de %s dans %s."
 
-#: ../../locales/../src/engine/socket.cpp:1024
+#: ../../locales/../src/engine/socket.cpp:1026
 msgid "Protocol not supported"
 msgstr "Protocole non supporté"
 
-#: ../../locales/../src/engine/socket.cpp:1078
+#: ../../locales/../src/engine/socket.cpp:1080
 msgid "Protocol not supported on given socket type"
 msgstr "Protocole non supporté étant donné le type de socket"
 
@@ -6344,7 +6346,7 @@ msgstr "Échec de l'authentification au Proxy"
 msgid "Proxy handshake failed: %s"
 msgstr "Échec de la négociation avec le Proxy : %s"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:59
+#: ../../locales/../src/engine/ftp/logon.cpp:61
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr ""
 "L'hôte proxy commence avec '[,' mais aucun crochet fermant n'a été trouvé."
@@ -6370,7 +6372,7 @@ msgstr ""
 "Échec de la requête au Proxy : Type d'adresse incluse dans la réponse "
 "CONNECT inconnue"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:86
+#: ../../locales/../src/engine/ftp/logon.cpp:88
 msgid "Proxy set but proxy host or port invalid"
 msgstr "Proxy spécifié mais le Proxy hôte ou le port sont invalides"
 
@@ -6461,7 +6463,7 @@ msgstr "Li&re"
 msgid "Read-only"
 msgstr "Lecture seule"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1042
+#: ../../locales/../src/interface/Mainfrm.cpp:1051
 msgid "Really cancel current operation?"
 msgstr "Souhaitez-vous vraiment annuler l'opération en cours ?"
 
@@ -6742,17 +6744,17 @@ msgstr "Connexion FTP implicite sur TLS"
 msgid "Reset and requeue &all"
 msgstr "Réiniti&aliser et replacer tous les fichiers dans la file d'attente"
 
-#: ../../locales/../src/engine/socket.cpp:1066
+#: ../../locales/../src/engine/socket.cpp:1068
 msgid "Resolved protocol is unknown"
 msgstr "Le protocole résolu est inconnu"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1131
+#: ../../locales/../src/engine/ControlSocket.cpp:1139
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:149
 #, c-format
 msgid "Resolving address of %s"
 msgstr "Résolution de l'adresse de %s"
 
-#: ../../locales/../src/engine/socket.cpp:1025
+#: ../../locales/../src/engine/socket.cpp:1027
 msgid "Resource temporarily unavailable"
 msgstr "Ressources temporairement indisponibles"
 
@@ -7070,7 +7072,7 @@ msgstr "Le fichier sélectionné est encore en cours d'édition"
 msgid "Selected filter only works for local files."
 msgstr "Le filtre sélectionné fonctionne uniquement pour les fichiers locaux."
 
-#: ../../locales/../src/interface/menu_bar.cpp:300
+#: ../../locales/../src/interface/menu_bar.cpp:302
 msgid ""
 "Selected global bookmark and current server use a different server type.\n"
 "Use site-specific bookmarks for this server."
@@ -7079,7 +7081,7 @@ msgstr ""
 "serveur différent.\n"
 "Utilisez un favori spécifique au site pour ce serveur."
 
-#: ../../locales/../src/engine/engineprivate.cpp:308
+#: ../../locales/../src/engine/engineprivate.cpp:307
 msgid "Selected port usually in use by a different protocol."
 msgstr "Le port sélectionné est habituellement utilisé par un autre protocole."
 
@@ -7109,8 +7111,8 @@ msgstr "&Type de serveur :"
 msgid "Server did not properly shut down TLS connection"
 msgstr "Le serveur n'a pas correctement fermé la connexion TLS"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:388
-#: ../../locales/../src/engine/ftp/logon.cpp:448
+#: ../../locales/../src/engine/ftp/logon.cpp:392
+#: ../../locales/../src/engine/ftp/logon.cpp:452
 msgid "Server does not support non-ASCII characters."
 msgstr "Le serveur ne supporte pas les caractères non-ASCII."
 
@@ -7155,13 +7157,17 @@ msgstr ""
 "> %d Gio.Fin du transfert dès que la taille des fichiers en local et sur le "
 "serveur sont identiques."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:330
+#: ../../locales/../src/engine/ftp/logon.cpp:334
 msgid ""
 "Server might require an account. Try specifying an account using the Site "
 "Manager"
 msgstr ""
 "Le serveur requiert un compte. Essayez de spécifier un compte en utilisant "
 "le Gestionnaire de Sites"
+
+#: ../../locales/../src/engine/http/request.cpp:218
+msgid "Server not sending proper line endings"
+msgstr "Le serveur n'envoie pas des fins de ligne correctes"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:340
 msgid "Server returned empty path."
@@ -7175,19 +7181,23 @@ msgstr ""
 "Le serveur a envoyé une requête d'identification additionnelle. Vous devez "
 "utiliser un type d'identification interactif."
 
-#: ../../locales/../src/engine/ftp/rawtransfer.cpp:352
+#: ../../locales/../src/engine/ftp/rawtransfer.cpp:347
 msgid "Server sent passive reply with unroutable address. Passive mode failed."
 msgstr ""
 "Le serveur a envoyé une réponse passive avec une adresse non routable. Échec "
 "du mode passif."
 
-#: ../../locales/../src/engine/ftp/rawtransfer.cpp:347
+#: ../../locales/../src/engine/ftp/rawtransfer.cpp:342
 msgid ""
 "Server sent passive reply with unroutable address. Using server address "
 "instead."
 msgstr ""
 "Le serveur a envoyé une réponse passive avec une adresse non routable. "
 "Adresse remplacée par celle du serveur."
+
+#: ../../locales/../src/engine/http/request.cpp:469
+msgid "Server sent too much data."
+msgstr "Le serveur a envoyé trop de données."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:428
 #: ../../locales/../src/interface/netconfwizard.cpp:434
@@ -7237,12 +7247,8 @@ msgstr "Détails de session"
 msgid "Set &Priority"
 msgstr "Définir la &priorité"
 
-#: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:605
-#, c-format
-msgid "Set permissions of '%s' to '%s'"
-msgstr "Définir les permissions de '%s' à '%s'"
-
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:625
+#: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:605
 #, c-format
 msgid "Setting permissions of '%s' to '%s'"
 msgstr "Définition des permissions de '%s' à '%s'"
@@ -7267,7 +7273,7 @@ msgstr "Afficher le contenu b&rut du dossier"
 msgid "Show &welcome dialog..."
 msgstr "Afficher le dialogue de &bienvenue..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2228
+#: ../../locales/../src/interface/Mainfrm.cpp:2240
 msgid "Show both directory trees and continue comparing?"
 msgstr "Afficher les arborescences des 2 côtés et continuer la comparaison ?"
 
@@ -7383,10 +7389,10 @@ msgstr "Taille inconnue"
 msgid "Skip file"
 msgstr "Ignorer le fichier"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1199
-#: ../../locales/../src/engine/ControlSocket.cpp:1216
-#: ../../locales/../src/engine/ControlSocket.cpp:1242
-#: ../../locales/../src/engine/ControlSocket.cpp:1320
+#: ../../locales/../src/engine/ControlSocket.cpp:1207
+#: ../../locales/../src/engine/ControlSocket.cpp:1224
+#: ../../locales/../src/engine/ControlSocket.cpp:1250
+#: ../../locales/../src/engine/ControlSocket.cpp:1328
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Ignorer le téléchargement de %s"
@@ -7396,35 +7402,35 @@ msgstr "Ignorer le téléchargement de %s"
 msgid "Skipping non-existing key file \"%s\""
 msgstr "Ignorer le fichier de clé non-existant \"%s\""
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1202
-#: ../../locales/../src/engine/ControlSocket.cpp:1219
-#: ../../locales/../src/engine/ControlSocket.cpp:1245
-#: ../../locales/../src/engine/ControlSocket.cpp:1323
+#: ../../locales/../src/engine/ControlSocket.cpp:1210
+#: ../../locales/../src/engine/ControlSocket.cpp:1227
+#: ../../locales/../src/engine/ControlSocket.cpp:1253
+#: ../../locales/../src/engine/ControlSocket.cpp:1331
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Ignorer l'envoi de %s"
 
-#: ../../locales/../src/engine/socket.cpp:1029
+#: ../../locales/../src/engine/socket.cpp:1031
 msgid "Socket address outside address space"
 msgstr "L'adresse du socket est extérieure à l'espace d'adressage"
 
-#: ../../locales/../src/engine/socket.cpp:1031
+#: ../../locales/../src/engine/socket.cpp:1033
 msgid "Socket already connected"
 msgstr "Socket déjà connecté"
 
-#: ../../locales/../src/engine/socket.cpp:1039
+#: ../../locales/../src/engine/socket.cpp:1041
 msgid "Socket has been shut down"
 msgstr "Le socket a été fermé"
 
-#: ../../locales/../src/engine/socket.cpp:1036
+#: ../../locales/../src/engine/socket.cpp:1038
 msgid "Socket not connected"
 msgstr "Socket déconnecté"
 
-#: ../../locales/../src/engine/socket.cpp:1079
+#: ../../locales/../src/engine/socket.cpp:1081
 msgid "Socket type not supported for address family"
 msgstr "Type de socket non supporté pour la famille d'adresses"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1172
+#: ../../locales/../src/interface/Mainfrm.cpp:1181
 msgid "Some files are still being edited or need to be uploaded."
 msgstr ""
 "Certains fichiers sont encore en cours d'édition ou nécessitent d'être "
@@ -7621,8 +7627,8 @@ msgstr "Erreur de syntaxe"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2343
-#: ../../locales/../src/interface/Mainfrm.cpp:2388
+#: ../../locales/../src/interface/Mainfrm.cpp:2355
+#: ../../locales/../src/interface/Mainfrm.cpp:2400
 msgid "Syntax error in command line"
 msgstr "Erreur de syntaxe dans la ligne de commande"
 
@@ -7634,11 +7640,11 @@ msgstr "Système"
 msgid "System details"
 msgstr "Détails du système"
 
-#: ../../locales/../src/engine/socket.cpp:1020
+#: ../../locales/../src/engine/socket.cpp:1022
 msgid "System limit of open files exceeded"
 msgstr "La limite d'ouverture des fichiers du système a été dépassée"
 
-#: ../../locales/../src/engine/socket.cpp:1077
+#: ../../locales/../src/engine/socket.cpp:1079
 msgid "System's network subsystem has failed"
 msgstr "Le sous-système réseau du système a échoué"
 
@@ -7678,7 +7684,7 @@ msgstr "Le fichier cible existe déjà !"
 msgid "Target filename already exists, really continue?"
 msgstr "Le fichier cible existe déjà, souhaitez-vous vraiment continuer ?"
 
-#: ../../locales/../src/engine/socket.cpp:1050
+#: ../../locales/../src/engine/socket.cpp:1052
 msgid "Temporary failure in name resolution"
 msgstr "Échec temporaire dans la résolution du nom"
 
@@ -7727,11 +7733,11 @@ msgstr ""
 msgid "The address you entered was: %s"
 msgstr "L'adresse que vous avez saisie est : %s"
 
-#: ../../locales/../src/engine/socket.cpp:1056
+#: ../../locales/../src/engine/socket.cpp:1058
 msgid "The ai_family member is not supported"
 msgstr "Le membre de l'ai_family n'est pas pas supporté"
 
-#: ../../locales/../src/engine/socket.cpp:1069
+#: ../../locales/../src/engine/socket.cpp:1071
 msgid "The ai_socktype member is not supported"
 msgstr "Le membre ai_socktype n'est pas supporté"
 
@@ -8068,7 +8074,7 @@ msgstr ""
 msgid "The server's hostname does not match the certificate's hostname"
 msgstr "Le nom d'hôte du serveur ne correspond pas au nom d'hôte du certificat"
 
-#: ../../locales/../src/engine/socket.cpp:1068
+#: ../../locales/../src/engine/socket.cpp:1070
 msgid "The servname parameter is not supported for ai_socktype"
 msgstr "Le paramètre nom du serveur n'est pas supporté pour ai_socktype"
 
@@ -8080,11 +8086,11 @@ msgstr ""
 "Les paramètres ont été importé. Vous devez redémarrer FileZilla pour que "
 "ceux-ci prennent effet."
 
-#: ../../locales/../src/engine/socket.cpp:1016
+#: ../../locales/../src/engine/socket.cpp:1018
 msgid "The specified address family is not supported"
 msgstr "La famille d'adresses spécifiée n'est pas supportée"
 
-#: ../../locales/../src/engine/socket.cpp:1081
+#: ../../locales/../src/engine/socket.cpp:1083
 msgid "The specified network name is no longer available"
 msgstr "Le nom du réseau spécifié n'est plus disponible"
 
@@ -8171,13 +8177,13 @@ msgstr "Délai d'attente"
 msgid "Title:"
 msgstr "Titre :"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2226
+#: ../../locales/../src/interface/Mainfrm.cpp:2238
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Pour comparer des dossiers, les listes de fichiers doivent être alignées des "
 "deux côtés."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2227
+#: ../../locales/../src/interface/Mainfrm.cpp:2239
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Pour ce faire, les arborescences doivent être toutes deux visibles ou "
@@ -8238,7 +8244,7 @@ msgstr "Afficher ou masquer l'arborescence des dossiers distants"
 msgid "Toggles the display of the transfer queue"
 msgstr "Afficher ou masquer la file d'attente"
 
-#: ../../locales/../src/engine/http/request.cpp:224
+#: ../../locales/../src/engine/http/request.cpp:227
 msgid "Too long header line"
 msgstr "Ligne d'en-tête trop longue"
 
@@ -8388,7 +8394,7 @@ msgstr "Unité :"
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:745
+#: ../../locales/../src/engine/ftp/logon.cpp:749
 msgid "Unknown FTP proxy type, cannot generate login sequence."
 msgstr ""
 "Type de Proxy FTP inconnu, impossible de générer une séquence "
@@ -8434,7 +8440,7 @@ msgstr ""
 "Élément inconnu à la racine, il semblerait que ce fichier n'ait pas été "
 "généré par FileZilla."
 
-#: ../../locales/../src/engine/http/request.cpp:320
+#: ../../locales/../src/engine/http/request.cpp:336
 msgid "Unknown transfer encoding"
 msgstr "Encodage de transfert inconnu"
 
@@ -8637,7 +8643,7 @@ msgstr "Vérification du certificat..."
 msgid "Very high"
 msgstr "Très haute"
 
-#: ../../locales/../src/engine/ftp/list.cpp:110
+#: ../../locales/../src/engine/ftp/list.cpp:109
 msgid "View hidden option set, but unsupported by server"
 msgstr ""
 "L'option d'affichage des fichiers cachés est activée, mais n'est pas "
@@ -8667,7 +8673,7 @@ msgstr "Attente du mot de passe"
 msgid "Waiting for transfer to be cancelled"
 msgstr "Attente d'annulation du transfert"
 
-#: ../../locales/../src/engine/engineprivate.cpp:244
+#: ../../locales/../src/engine/engineprivate.cpp:243
 msgid "Waiting to retry..."
 msgstr "Attente avant nouvel essai..."
 
@@ -8748,7 +8754,7 @@ msgstr "Écr&ire"
 msgid "Wrong external IP address"
 msgstr "Adresse IP externe incorrecte"
 
-#: ../../locales/../src/engine/http/request.cpp:375
+#: ../../locales/../src/engine/http/request.cpp:391
 msgid "Wrong line endings"
 msgstr "Fins de ligne incorrectes"
 
@@ -9118,6 +9124,9 @@ msgstr "écriture par tous"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:699
 msgid "wxWidgets:"
 msgstr "wxWidgets :"
+
+#~ msgid "Set permissions of '%s' to '%s'"
+#~ msgstr "Définir les permissions de '%s' à '%s'"
 
 #~ msgid "Timezone offset of server is %d seconds."
 #~ msgstr "Le décalage du fuseau horaire du serveur est de %d secondes."
