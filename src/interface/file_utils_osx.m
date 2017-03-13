@@ -1,5 +1,7 @@
 #include <Foundation/NSFileManager.h>
 
+#include <string.h>
+
 char const* GetDownloadDirImpl()
 {
 	static char const* path = 0;
