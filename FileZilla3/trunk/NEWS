@@ -10,6 +10,15 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.25.0 (2017-03-13)
+
++ OS X: The minimum required OS X version is now 10.9
+- OS X: Disable App Nap during transfers and other operations
+- OS X: Downloaded updates are now stored in the Downloads directory
+- OS X: Fix initial toolbar state on startup if it was hidden when FileZilla was last closed
+- Fix reconnect delay logic which broke in 3.25.0-beta1
+- Fix piecewise creation of remote paths using FTP which broke in 3.25.0-beta1
+
 3.25.0-rc1 (2017-03-04)
 
 - Fix encryption selection for FTP in the Site Manager which broke in 3.25.0-beta1
