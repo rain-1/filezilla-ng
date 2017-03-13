@@ -22,18 +22,18 @@ int CHttpRequestOpData::Send()
 			request_.headers_["Connection"] = "close";
 			request_.headers_["User-Agent"] = fz::replaced_substrings(PACKAGE_STRING, " ", "/");
 
-			auto const cl = response_.get_header("Content-Length");
+			auto const cl = request_.get_header("Content-Length");
 			if (!cl.empty()) {
-				requestContentLength_ = fz::to_integral<int64_t>(cl, -1);
-				if (requestContentLength_ < 0) {
-					LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Invalid Content-Length"));
+				int64_t requestContentLength = fz::to_integral<int64_t>(cl, -1);
+				if (requestContentLength < 0) {
+					LogMessage(MessageType::Error, _("Malformed request header: %s"), _("Invalid Content-Length"));
 					return FZ_REPLY_ERROR;
 				}
-				dataToSend_ = static_cast<uint64_t>(requestContentLength_);
+				dataToSend_ = static_cast<uint64_t>(requestContentLength);
 			}
 
-			if ((requestContentLength_ != -1) != (request_.data_request_ != 0)) {
-				LogMessage(MessageType::Debug_Warning, L"requestContentLength_ != -1 does not match request_.data_request_ != 0");
+			if ((dataToSend_ > 0) != (request_.data_request_ != 0)) {
+				LogMessage(MessageType::Debug_Warning, L"dataToSend_ > 0 does not match request_.data_request_ != 0");
 				return FZ_REPLY_INTERNALERROR;
 			}
 
