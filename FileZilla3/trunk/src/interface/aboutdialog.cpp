@@ -68,7 +68,7 @@ bool CAboutDialog::Create(wxWindow* parent)
 		xrc_call(*this, "ID_CFLAGS_DESC", &wxStaticText::Hide);
 	}
 	else {
-		WrapText(this, compilerFlags, 250);
+		WrapText(this, compilerFlags, 300);
 		xrc_call(*this, "ID_CFLAGS", &wxStaticText::SetLabel, compilerFlags);
 	}
 
@@ -114,7 +114,7 @@ bool CAboutDialog::Create(wxWindow* parent)
 
 	wxString cpuCaps = CBuildInfo::GetCPUCaps(' ');
 	if (!cpuCaps.empty()) {
-		WrapText(this, cpuCaps, 250);
+		WrapText(this, cpuCaps, 300);
 		xrc_call(*this, "ID_SYSTEM_CPU", &wxStaticText::SetLabel, cpuCaps);
 	}
 	else {
