@@ -60,7 +60,7 @@ int CSftpDeleteOpData::ParseResponse()
 	return deleteFailed_ ? FZ_REPLY_ERROR : FZ_REPLY_OK;
 }
 
-int CSftpDeleteOpData::SubcommandResult(int prevResult, COpData const&)
+int CSftpDeleteOpData::SubcommandResult(int, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CSftpDeleteOpData::SubcommandResult() in state %d", opState);
 	return FZ_REPLY_INTERNALERROR;

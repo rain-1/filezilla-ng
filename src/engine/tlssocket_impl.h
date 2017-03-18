@@ -14,7 +14,7 @@ class CTlsSocket;
 class CTlsSocketImpl final
 {
 public:
-	CTlsSocketImpl(CTlsSocket& tlsSocket, fz::event_handler* pEvtHandler, CSocket& pSocket, CControlSocket* pOwner);
+	CTlsSocketImpl(CTlsSocket& tlsSocket, CSocket& pSocket, CControlSocket* pOwner);
 	~CTlsSocketImpl();
 
 	bool Init();

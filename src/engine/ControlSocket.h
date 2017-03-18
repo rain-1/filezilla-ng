@@ -25,7 +25,7 @@ public:
 	virtual int Send() = 0;
 	virtual int ParseResponse() = 0;
 
-	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) { return FZ_REPLY_INTERNALERROR; }
+	virtual int SubcommandResult(int, COpData const&) { return FZ_REPLY_INTERNALERROR; }
 
 	int opState{};
 	Command const opId;

@@ -20,13 +20,13 @@ int CSftpListOpData::Send()
 			LogMessage(MessageType::Debug_Warning, L"currenServer_ is empty");
 			return FZ_REPLY_INTERNALERROR;
 		}
-		
+
 		if (path_.GetType() == DEFAULT) {
 			path_.SetType(currentServer_.GetType());
 		}
 		refresh_ = (flags_ & LIST_FLAG_REFRESH) != 0;
 		fallback_to_current_ = !path_.empty() && (flags_ & LIST_FLAG_FALLBACK_CURRENT) != 0;
-		
+
 		controlSocket_.ChangeDir(path_, subDir_, (flags_ & LIST_FLAG_LINK) != 0);
 		opState = list_waitcwd;
 		return FZ_REPLY_CONTINUE;
@@ -89,7 +89,7 @@ int CSftpListOpData::ParseResponse()
 	return FZ_REPLY_INTERNALERROR;
 }
 
-int CSftpListOpData::SubcommandResult(int prevResult, COpData const& previousOperation)
+int CSftpListOpData::SubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CSftpListOpData::SubcommandResult() in state %d", opState);
 
