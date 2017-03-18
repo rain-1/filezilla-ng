@@ -190,7 +190,7 @@ int CFtpListOpData::ParseResponse()
 }
 
 
-int CFtpListOpData::SubcommandResult(int prevResult, COpData const& previousOperation)
+int CFtpListOpData::SubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpListOpData::SubcommandResult() in state %d", opState);
 

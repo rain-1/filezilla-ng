@@ -218,7 +218,7 @@ int CHttpFileTransferOpData::OnData(unsigned char const* data, unsigned int len)
 	return FZ_REPLY_CONTINUE;
 }
 
-int CHttpFileTransferOpData::SubcommandResult(int prevResult, COpData const& previousOperation)
+int CHttpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpFileTransferOpData::SubcommandResult() in state %d", opState);
 

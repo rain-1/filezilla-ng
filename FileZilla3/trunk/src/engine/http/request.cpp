@@ -124,7 +124,7 @@ int CHttpRequestOpData::ParseResponse()
 	return FZ_REPLY_INTERNALERROR;
 }
 
-int CHttpRequestOpData::SubcommandResult(int prevResult, COpData const& previousOperation)
+int CHttpRequestOpData::SubcommandResult(int, COpData const&)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::SubcommandResult() in state %d", opState);
 

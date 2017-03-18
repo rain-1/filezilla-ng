@@ -8,7 +8,7 @@ CTlsSocket::CTlsSocket(fz::event_handler* pEvtHandler, CSocket& pSocket, CContro
 	: event_handler(pOwner->event_loop_)
 	, CBackend(pEvtHandler)
 {
-	impl_ = std::make_unique<CTlsSocketImpl>(*this, pEvtHandler, pSocket, pOwner);
+	impl_ = std::make_unique<CTlsSocketImpl>(*this, pSocket, pOwner);
 }
 
 CTlsSocket::~CTlsSocket()

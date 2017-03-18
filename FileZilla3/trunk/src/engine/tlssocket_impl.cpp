@@ -128,7 +128,7 @@ void clone_cert(gnutls_x509_crt_t in, gnutls_x509_crt_t &out)
 }
 }
 
-CTlsSocketImpl::CTlsSocketImpl(CTlsSocket& tlsSocket, fz::event_handler* pEvtHandler, CSocket& socket, CControlSocket* pOwner)
+CTlsSocketImpl::CTlsSocketImpl(CTlsSocket& tlsSocket, CSocket& socket, CControlSocket* pOwner)
 	: tlsSocket_(tlsSocket)
 	, m_pOwner(pOwner)
 	, m_socket(socket)
