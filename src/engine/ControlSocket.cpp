@@ -469,7 +469,7 @@ std::wstring CControlSocket::ConvToLocal(char const* buffer, size_t len)
 #endif
 
 	// Treat it as ISO8859-1
-	ret.assign(buffer, buffer + len);
+	ret.assign(reinterpret_cast<unsigned char const*>(buffer), reinterpret_cast<unsigned char const*>(buffer + len));
 
 	return ret;
 }
