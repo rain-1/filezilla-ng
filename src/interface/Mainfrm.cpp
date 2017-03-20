@@ -906,12 +906,17 @@ void CMainFrame::DoOnEngineEvent(CFileZillaEngine* engine)
 		switch (pNotification->GetID())
 		{
 		case nId_logmsg:
-			m_pStatusView->AddToLog(static_cast<CLogmsgNotification&>(*pNotification.get()));
-			if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2)
+			if (m_pStatusView) {
+				m_pStatusView->AddToLog(static_cast<CLogmsgNotification&>(*pNotification.get()));
+			}
+			if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2) {
 				m_pQueuePane->Highlight(3);
+			}
 			break;
 		case nId_operation:
-			pState->m_pCommandQueue->Finish(unique_static_cast<COperationNotification>(std::move(pNotification)));
+			if (pState->m_pCommandQueue) {
+				pState->m_pCommandQueue->Finish(unique_static_cast<COperationNotification>(std::move(pNotification)));
+			}
 			if (m_bQuit) {
 				Close();
 				return;
@@ -926,12 +931,18 @@ void CMainFrame::DoOnEngineEvent(CFileZillaEngine* engine)
 		case nId_asyncrequest:
 			{
 				auto pAsyncRequest = unique_static_cast<CAsyncRequestNotification>(std::move(pNotification));
-				if (pAsyncRequest->GetRequestID() == reqId_fileexists)
-					m_pQueueView->ProcessNotification(pState->m_pEngine, std::move(pAsyncRequest));
+				if (pAsyncRequest->GetRequestID() == reqId_fileexists) {
+					if (m_pQueueView) {
+						m_pQueueView->ProcessNotification(pState->m_pEngine, std::move(pAsyncRequest));
+					}
+				}
 				else {
-					if (pAsyncRequest->GetRequestID() == reqId_certificate)
+					if (pAsyncRequest->GetRequestID() == reqId_certificate) {
 						pState->SetSecurityInfo(static_cast<CCertificateNotification&>(*pAsyncRequest));
-					m_pAsyncRequestQueue->AddRequest(pState->m_pEngine, std::move(pAsyncRequest));
+					}
+					if (m_pAsyncRequestQueue) {
+						m_pAsyncRequestQueue->AddRequest(pState->m_pEngine, std::move(pAsyncRequest));
+					}
 				}
 			}
 			break;
