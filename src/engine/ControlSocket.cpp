@@ -503,7 +503,7 @@ void CControlSocket::OnTimer(fz::timer_id)
 	if (timeout > 0) {
 		fz::duration elapsed = fz::monotonic_clock::now() - m_lastActivity;
 
-		if ((operations_.empty() || operations_.back()->waitForAsyncRequest) && !IsWaitingForLock()) {
+		if ((operations_.empty() || !operations_.back()->waitForAsyncRequest) && !IsWaitingForLock()) {
 			if (elapsed > fz::duration::from_seconds(timeout)) {
 				LogMessage(MessageType::Error, fztranslate("Connection timed out after %d second of inactivity", "Connection timed out after %d seconds of inactivity", timeout), timeout);
 				DoClose(FZ_REPLY_TIMEOUT);
