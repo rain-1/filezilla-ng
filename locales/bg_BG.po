@@ -24,7 +24,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0beta3\n"
 
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:114
 msgid ""
@@ -3137,7 +3136,7 @@ msgstr "Стандартен режим на прехвърляне:"
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:233
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:380
 msgid "Default: http://ip.filezilla-project.org/ip.php"
-msgstr "Стандартно : http://ip.filezilla-project.org/ip.php"
+msgstr "Стандартно: http://ip.filezilla-project.org/ip.php"
 
 #: ../../locales/../src/interface/settings/optionspage_connection.cpp:41
 msgid ""
@@ -3168,12 +3167,12 @@ msgstr "Изтриване"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:514
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:582
 msgid "Delete selected directory"
-msgstr "Изтриване избраната папка"
+msgstr "Изтриване на избраната папка"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:277
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:321
 msgid "Delete selected files and directories"
-msgstr "Изтриване избраните папки и файлове"
+msgstr "Изтриване на избраните папки и файлове"
 
 #: ../../locales/../src/engine/engineprivate.cpp:386
 #, c-format
@@ -3191,7 +3190,7 @@ msgstr "Изтриване на символична връзка"
 
 #: ../../locales/../src/interface/LocalTreeView.cpp:968
 msgid "Desktop"
-msgstr "Работен плот"
+msgstr "Плот"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:42
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:842
@@ -3205,7 +3204,7 @@ msgstr "Подробности за нов ключ:"
 #: ../../locales/../src/interface/import.cpp:66
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:769
 msgid "Detected newer version of FileZilla"
-msgstr "Намерена е нова версия на FileZilla"
+msgstr "Налична е нова версия на FileZilla"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1348
 msgid "Dire&ctories"
@@ -4364,7 +4363,7 @@ msgstr "Глобални отметки"
 #: ../../locales/../src/engine/tlssocket_impl.cpp:316
 #, c-format
 msgid "GnuTLS error %d"
-msgstr "GnuTLS грешка %d"
+msgstr "Грешка в GnuTLS %d"
 
 #: ../../locales/../src/engine/tlssocket_impl.cpp:319
 #, c-format
@@ -5141,9 +5140,9 @@ msgid "Malformed chunk data: %s"
 msgstr "Деформирани пакетни данни: %s"
 
 #: ../../locales/../src/engine/http/request.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Malformed request header: %s"
-msgstr "Деформирана заглавка на отговора: %s"
+msgstr "Деформирана заглавка на заявката: %s"
 
 #: ../../locales/../src/engine/http/request.cpp:469
 #, c-format
@@ -8896,7 +8895,7 @@ msgstr "писане от групата"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1601
 msgid "https://wiki.filezilla-project.org/Date_and_Time_formatting"
-msgstr "http://wiki.filezilla-project.org/Date_and_Time_formatting"
+msgstr "https://wiki.filezilla-project.org/Date_and_Time_formatting"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:63
 msgid "is equal to"

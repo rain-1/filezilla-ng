@@ -5225,9 +5225,9 @@ msgid "Malformed chunk data: %s"
 msgstr "Paquet de données non conforme : %s"
 
 #: ../../locales/../src/engine/http/request.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Malformed request header: %s"
-msgstr "En-tête de réponse non conforme : %s"
+msgstr "En-tête de la requête non conforme : %s"
 
 #: ../../locales/../src/engine/http/request.cpp:469
 #, c-format
