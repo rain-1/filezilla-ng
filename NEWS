@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.25.1 (2017-03-20)
+
+- OS X: Fixed a crash if connecting to old servers not supporting UTF-8
+- Fixed timeout detection
+
 3.25.0 (2017-03-13)
 
 + OS X: The minimum required OS X version is now 10.9
