@@ -42,15 +42,17 @@ int CFtpLogonOpData::Send()
 	{
 	case LOGON_CONNECT:
 	    {
-		    if (!GetLoginSequence()) {
+			// Do not use FTP proxy if generic proxy is set
+			int const generic_proxy_type = engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
+			if ((generic_proxy_type <= CProxySocket::unknown || generic_proxy_type >= CProxySocket::proxytype_count) && !server_.GetBypassProxy()) {
+				ftp_proxy_type_ = engine_.GetOptions().GetOptionVal(OPTION_FTP_PROXY_TYPE);
+			}
+		
+			if (!PrepareLoginSequence()) {
 				return FZ_REPLY_INTERNALERROR;
 			}
-
-			// Do not use FTP proxy if generic proxy is set
-			int generic_proxy_type = engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
-			if ((generic_proxy_type <= CProxySocket::unknown || generic_proxy_type >= CProxySocket::proxytype_count) &&
-			    (ftp_proxy_type = engine_.GetOptions().GetOptionVal(OPTION_FTP_PROXY_TYPE)) && !server_.GetBypassProxy())
-			{
+			
+			if (ftp_proxy_type_) {
 				host_ = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_HOST);
 
 				size_t pos = -1;
@@ -92,7 +94,6 @@ int CFtpLogonOpData::Send()
 				LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server_.Format(ServerFormat::with_optional_port), L"FTP"); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
 			}
 			else {
-				ftp_proxy_type = 0;
 				host_ = server_.GetHost();
 				port_ = server_.GetPort();
 			}
@@ -294,7 +295,7 @@ int CFtpLogonOpData::ParseResponse()
 					asciiOnly = false;
 				}
 				if (!asciiOnly) {
-					if (ftp_proxy_type) {
+					if (ftp_proxy_type_) {
 						LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Cannot fall back to local charset since using proxy."));
 						int error = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR;
 						if (cmd.type == loginCommandType::pass && code == 5) {
@@ -304,7 +305,7 @@ int CFtpLogonOpData::ParseResponse()
 					}
 					LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Trying local charset."));
 					controlSocket_.m_useUTF8 = false;
-					if (!GetLoginSequence()) {
+					if (!PrepareLoginSequence()) {
 						int error = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR;
 						if (cmd.type == loginCommandType::pass && code == 5) {
 							error |= FZ_REPLY_PASSWORDFAILED;
@@ -553,11 +554,11 @@ int CFtpLogonOpData::ParseResponse()
 	return FZ_REPLY_CONTINUE;
 }
 
-bool CFtpLogonOpData::GetLoginSequence()
+bool CFtpLogonOpData::PrepareLoginSequence()
 {
 	loginSequence.clear();
 
-	if (!ftp_proxy_type) {
+	if (!ftp_proxy_type_) {
 		// User
 		t_loginCommand cmd = {false, false, loginCommandType::user, L""};
 		loginSequence.push_back(cmd);
@@ -575,7 +576,7 @@ bool CFtpLogonOpData::GetLoginSequence()
 			loginSequence.push_back(cmd);
 		}
 	}
-	else if (ftp_proxy_type == 1) {
+	else if (ftp_proxy_type_ == 1) {
 		std::wstring const proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		if (!proxyUser.empty()) {
 			// Proxy logon (if credendials are set)
@@ -604,7 +605,7 @@ bool CFtpLogonOpData::GetLoginSequence()
 			loginSequence.push_back(cmd);
 		}
 	}
-	else if (ftp_proxy_type == 2 || ftp_proxy_type == 3) {
+	else if (ftp_proxy_type_ == 2 || ftp_proxy_type_ == 3) {
 		std::wstring const proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		if (!proxyUser.empty()) {
 			// Proxy logon (if credendials are set)
@@ -618,7 +619,7 @@ bool CFtpLogonOpData::GetLoginSequence()
 
 		// Site or Open
 		t_loginCommand cmd = {false, false, loginCommandType::user, L""};
-		if (ftp_proxy_type == 2) {
+		if (ftp_proxy_type_ == 2) {
 			cmd.command = L"SITE " + server_.Format(ServerFormat::with_optional_port);
 		}
 		else {
@@ -644,7 +645,7 @@ bool CFtpLogonOpData::GetLoginSequence()
 			loginSequence.push_back(cmd);
 		}
 	}
-	else if (ftp_proxy_type == 4) {
+	else if (ftp_proxy_type_ == 4) {
 		std::wstring proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		std::wstring proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
 		std::wstring host = server_.Format(ServerFormat::with_optional_port);

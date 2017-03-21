@@ -49,8 +49,6 @@ public:
 	virtual int Send() override;
 	virtual int ParseResponse() override;
 
-	bool GetLoginSequence();
-
 	void ParseFeat(std::wstring line);
 
 	std::wstring challenge; // Used for interactive logons
@@ -59,13 +57,16 @@ public:
 	bool gotPassword{};
 	bool gotFirstWelcomeLine{};
 
+private:
+	bool PrepareLoginSequence();
+
 	unsigned int customCommandIndex{};
 
 	int neededCommands[LOGON_DONE];
 
 	std::deque<t_loginCommand> loginSequence;
 
-	int ftp_proxy_type{};
+	int ftp_proxy_type_{};
 };
 
 #endif
