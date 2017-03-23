@@ -96,7 +96,7 @@ int CHttpRequestOpData::Send()
 						LogMessage(MessageType::Error, _("Disconnected from server"));
 						return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 					}
-					written = 0;
+					return FZ_REPLY_WOULDBLOCK;
 				}
 
 				if (written) {
