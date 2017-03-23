@@ -988,8 +988,9 @@ void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, i
 	switch (t)
 	{
 	case SocketEventType::connection_next:
-		if (error)
+		if (error) {
 			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(error));
+		}
 		SetAlive();
 		break;
 	case SocketEventType::connection:
@@ -1059,12 +1060,12 @@ int CRealControlSocket::OnSend()
 
 		if (written) {
 			SetActive(CFileZillaEngine::send);
-		}
 
-		sendBufferPos_ += static_cast<int>(written);
-		if (sendBufferPos_ == sendBufferSize_) {
-			sendBufferSize_ = 0;
-			sendBufferPos_ = 0;
+			sendBufferPos_ += static_cast<unsigned int>(written);
+			if (sendBufferPos_ == sendBufferSize_) {
+				sendBufferSize_ = 0;
+				sendBufferPos_ = 0;
+			}
 		}
 	}
 
