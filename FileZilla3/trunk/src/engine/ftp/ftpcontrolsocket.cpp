@@ -777,7 +777,7 @@ void CFtpControlSocket::OnTimer(fz::timer_id id)
 		return;
 	}
 
-	if (operations_.empty()) {
+	if (!operations_.empty()) {
 		return;
 	}
 
