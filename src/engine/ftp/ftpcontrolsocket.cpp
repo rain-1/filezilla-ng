@@ -675,7 +675,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 			if (!m_pIPResolver->Successful()) {
 				m_pIPResolver.reset();
 
-				LogMessage(MessageType::Debug_Warning, _("Failed to retrieve external ip address, using local address"));
+				LogMessage(MessageType::Debug_Warning, _("Failed to retrieve external IP address, using local address"));
 			}
 			else {
 				LogMessage(MessageType::Debug_Info, L"Got external IP address");
@@ -693,7 +693,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 getLocalIP:
 	address = m_pSocket->GetLocalIP(true);
 	if (address.empty()) {
-		LogMessage(MessageType::Error, _("Failed to retrieve local ip address."), 1);
+		LogMessage(MessageType::Error, _("Failed to retrieve local IP address."), 1);
 		return FZ_REPLY_ERROR;
 	}
 
