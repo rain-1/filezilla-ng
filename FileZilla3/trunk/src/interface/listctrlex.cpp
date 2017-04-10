@@ -810,12 +810,14 @@ void wxListCtrlEx::ShowColumnEditor()
 
 int wxListCtrlEx::GetColumnVisibleIndex(int col)
 {
-	if (!m_pVisibleColumnMapping)
+	if (!m_pVisibleColumnMapping) {
 		return -1;
+	}
 
 	for (int i = 0; i < GetColumnCount(); ++i) {
-		if (m_pVisibleColumnMapping[i] == (unsigned int)col)
+		if (m_pVisibleColumnMapping[i] == (unsigned int)col) {
 			return i;
+		}
 	}
 
 	return -1;
@@ -823,8 +825,9 @@ int wxListCtrlEx::GetColumnVisibleIndex(int col)
 
 int wxListCtrlEx::GetHeaderSortIconIndex(int col)
 {
-	if (col < 0 || col >= GetColumnCount())
+	if (col < 0 || col >= GetColumnCount()) {
 		return -1;
+	}
 
 #ifdef __WXMSW__
 	HWND hWnd = (HWND)GetHandle();
@@ -834,14 +837,16 @@ int wxListCtrlEx::GetHeaderSortIconIndex(int col)
 	item.mask = HDI_IMAGE | HDI_FORMAT;
 	SendMessage(header, HDM_GETITEM, col, (LPARAM)&item);
 
-	if (!(item.fmt & HDF_IMAGE))
+	if (!(item.fmt & HDF_IMAGE)) {
 		return -1;
+	}
 
 	return item.iImage;
 #else
 	wxListItem item;
-	if (!GetColumn(col, item))
+	if (!GetColumn(col, item)) {
 		return -1;
+	}
 
 	return item.GetImage();
 #endif
@@ -853,24 +858,30 @@ void wxListCtrlEx::InitHeaderSortImageList()
 	wxColour colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
 	wxString lightness;
-	if (colour.Red() + colour.Green() + colour.Blue() > 3 * 128)
+	if (colour.Red() + colour.Green() + colour.Blue() > 3 * 128) {
 		lightness = _T("DARK");
-	else
+	}
+	else {
 		lightness = _T("LIGHT");
+	}
 
-	wxBitmap bmp;
+	auto * imageList = GetSystemImageList();
+	if (imageList) {
+		wxBitmap bmp;
 
-	bmp = wxArtProvider::GetBitmap(_T("ART_SORT_UP_") + lightness, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
-	m_header_icon_index.up = GetSystemImageList()->Add(bmp);
-	bmp = wxArtProvider::GetBitmap(_T("ART_SORT_DOWN_") + lightness, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
-	m_header_icon_index.down = GetSystemImageList()->Add(bmp);
+		bmp = wxArtProvider::GetBitmap(_T("ART_SORT_UP_") + lightness, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
+		m_header_icon_index.up = imageList->Add(bmp);
+		bmp = wxArtProvider::GetBitmap(_T("ART_SORT_DOWN_") + lightness, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
+		m_header_icon_index.down = imageList->Add(bmp);
+	}
 #endif
 }
 
 void wxListCtrlEx::SetHeaderSortIconIndex(int col, int icon)
 {
-	if (col < 0 || col >= GetColumnCount())
+	if (col < 0 || col >= GetColumnCount()) {
 		return;
+	}
 
 #ifdef __WXMSW__
 	HWND hWnd = (HWND)GetHandle();
@@ -882,10 +893,12 @@ void wxListCtrlEx::SetHeaderSortIconIndex(int col, int icon)
 	if (icon != -1) {
 		item.fmt &= ~(HDF_IMAGE | HDF_BITMAP_ON_RIGHT | HDF_SORTUP | HDF_SORTDOWN);
 		item.iImage = -1;
-		if (icon)
+		if (icon) {
 			item.fmt |= HDF_SORTDOWN;
-		else
+		}
+		else {
 			item.fmt |= HDF_SORTUP;
+		}
 	}
 	else {
 		item.fmt &= ~(HDF_IMAGE | HDF_BITMAP_ON_RIGHT | HDF_SORTUP | HDF_SORTDOWN);

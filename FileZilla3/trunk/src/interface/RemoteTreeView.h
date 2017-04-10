@@ -41,7 +41,7 @@ protected:
 
 	void CreateImageList();
 	wxBitmap CreateIcon(int index, const wxString& overlay = _T(""));
-	wxImageList* m_pImageList;
+	wxImageList* m_pImageList{};
 
 	// Set to true in SetDirectoryListing.
 	// Used to suspends event processing in OnItemExpanding for example

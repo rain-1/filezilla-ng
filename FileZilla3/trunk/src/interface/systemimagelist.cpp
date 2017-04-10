@@ -1,20 +1,10 @@
 #include <filezilla.h>
 #include "systemimagelist.h"
+
+#include "themeprovider.h"
 #ifdef __WXMSW__
 #include "shlobj.h"
-
-	// Once again lots of the shell stuff is missing in MinGW's headers
-	#ifndef IDO_SHGIOI_LINK
-		#define IDO_SHGIOI_LINK 0x0FFFFFFE
-	#endif
-	#ifndef SHGetIconOverlayIndex
-		extern "C" int WINAPI SHGetIconOverlayIndexW(LPCWSTR pszIconPath, int iIconIndex);
-		extern "C" int WINAPI SHGetIconOverlayIndexA(LPCSTR pszIconPath, int iIconIndex);
-		#define SHGetIconOverlayIndex SHGetIconOverlayIndexW
-	#endif
-#endif
-#include "themeprovider.h"
-#ifndef __WXMSW__
+#else
 #include "graphics.h"
 #endif
 
@@ -46,7 +36,6 @@ static void OverlaySymlink(wxBitmap& bmp)
 #endif
 
 CSystemImageList::CSystemImageList(int size)
-	: m_pImageList()
 {
 	if (size != -1) {
 		CreateSystemImageList(size);
@@ -55,25 +44,38 @@ CSystemImageList::CSystemImageList(int size)
 
 bool CSystemImageList::CreateSystemImageList(int size)
 {
-	if (m_pImageList)
+	if (m_pImageList) {
 		return true;
+	}
 
 #ifdef __WXMSW__
-	SHFILEINFO shFinfo{};
-	wxChar buffer[MAX_PATH + 10];
-	if (!GetWindowsDirectory(buffer, MAX_PATH))
-#ifdef _tcscpy
-		_tcscpy(buffer, _T("C:\\"));
-#else
-		strcpy(buffer, _T("C:\\"));
-#endif
+	auto const getImageList = [&size](wchar_t const* buffer) {
+		SHFILEINFO shFinfo{};
+		return reinterpret_cast<HIMAGELIST>(SHGetFileInfo(buffer,
+			0,
+			&shFinfo,
+			sizeof(shFinfo),
+			SHGFI_SYSICONINDEX |
+			((size != CThemeProvider::GetIconSize(iconSizeSmall).x) ? SHGFI_ICON : SHGFI_SMALLICON)));
+	};
 
-	m_pImageList = new wxImageListEx((WXHIMAGELIST)SHGetFileInfo(buffer,
-							  0,
-							  &shFinfo,
-							  sizeof( shFinfo ),
-							  SHGFI_SYSICONINDEX |
-							  ((size != CThemeProvider::GetIconSize(iconSizeSmall).x) ? SHGFI_ICON : SHGFI_SMALLICON) ));
+	HIMAGELIST imageList{};
+	wchar_t buffer[MAX_PATH + 10];
+	if (SHGetFolderPath(0, CSIDL_WINDOWS, 0, SHGFP_TYPE_CURRENT, buffer) == S_OK) {
+		imageList = getImageList(buffer);
+	}
+	if (!imageList && SHGetFolderPath(0, CSIDL_PROFILE, 0, SHGFP_TYPE_CURRENT, buffer) == S_OK) {
+		imageList = getImageList(buffer);
+	}
+	if (!imageList) {
+		imageList = getImageList(L"C:\\");
+	}
+
+	if (!imageList) {
+		return false;
+	}
+
+	m_pImageList = new wxImageListEx(reinterpret_cast<WXHIMAGELIST>(imageList));
 #else
 	m_pImageList = new wxImageListEx(size, size);
 
@@ -96,8 +98,9 @@ bool CSystemImageList::CreateSystemImageList(int size)
 
 CSystemImageList::~CSystemImageList()
 {
-	if (!m_pImageList)
+	if (!m_pImageList) {
 		return;
+	}
 
 #ifdef __WXMSW__
 	m_pImageList->Detach();
@@ -123,12 +126,14 @@ wxBitmap PrepareIcon(wxIcon icon, wxSize size)
 
 int CSystemImageList::GetIconIndex(iconType type, const wxString& fileName /*=_T("")*/, bool physical /*=true*/, bool symlink /*=false*/)
 {
-	if (!m_pImageList)
+	if (!m_pImageList) {
 		return -1;
+	}
 
 #ifdef __WXMSW__
-	if (fileName.empty())
+	if (fileName.empty()) {
 		physical = false;
+	}
 
 	SHFILEINFO shFinfo;
 	memset(&shFinfo, 0, sizeof(SHFILEINFO));
@@ -161,51 +166,53 @@ int CSystemImageList::GetIconIndex(iconType type, const wxString& fileName /*=_T
 
 	wxFileName fn(fileName);
 	wxString ext = fn.GetExt();
-	if (ext.empty())
+	if (ext.empty()) {
 		return icon;
-
-	if (symlink)
-	{
-		auto cacheIter = m_iconCache.find(ext);
-		if (cacheIter != m_iconCache.end())
-			return cacheIter->second;
 	}
-	else
-	{
-		auto cacheIter = m_iconSymlinkCache.find(ext);
-		if (cacheIter != m_iconSymlinkCache.end())
+
+	if (symlink) {
+		auto cacheIter = m_iconCache.find(ext);
+		if (cacheIter != m_iconCache.end()) {
 			return cacheIter->second;
+		}
+	}
+	else {
+		auto cacheIter = m_iconSymlinkCache.find(ext);
+		if (cacheIter != m_iconSymlinkCache.end()) {
+			return cacheIter->second;
+		}
 	}
 
 	wxFileType *pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
-	if (!pType)
-	{
+	if (!pType) {
 		m_iconCache[ext] = icon;
 		return icon;
 	}
 
 	wxIconLocation loc;
-	if (pType->GetIcon(&loc) && loc.IsOk())
-	{
+	if (pType->GetIcon(&loc) && loc.IsOk()) {
 		wxLogNull nul;
 		wxIcon newIcon(loc);
 
-		if (newIcon.Ok())
-		{
+		if (newIcon.Ok()) {
 			wxBitmap bmp = PrepareIcon(newIcon, CThemeProvider::GetIconSize(iconSizeSmall));
-			if (symlink)
+			if (symlink) {
 				OverlaySymlink(bmp);
+			}
 			int index = m_pImageList->Add(bmp);
-			if (index > 0)
+			if (index > 0) {
 				icon = index;
+			}
 		}
 	}
 	delete pType;
 
-	if (symlink)
+	if (symlink) {
 		m_iconCache[ext] = icon;
-	else
+	}
+	else {
 		m_iconSymlinkCache[ext] = icon;
+	}
 	return icon;
 #endif
 	return -1;
@@ -215,11 +222,11 @@ int CSystemImageList::GetIconIndex(iconType type, const wxString& fileName /*=_T
 int CSystemImageList::GetLinkOverlayIndex()
 {
 	static int overlay = -1;
-	if (overlay == -1)
-	{
+	if (overlay == -1) {
 		overlay = SHGetIconOverlayIndex(0, IDO_SHGIOI_LINK);
-		if (overlay < 0)
+		if (overlay < 0) {
 			overlay = 0;
+		}
 	}
 
 	return overlay;

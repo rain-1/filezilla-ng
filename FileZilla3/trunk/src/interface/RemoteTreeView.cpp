@@ -444,11 +444,12 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 
 wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay)
 {
+	auto * imageList = GetSystemImageList();
 #ifdef __WXMSW__
 	// Need to use wxImageList::GetIcon, wxImageList::GetBitmap kills the alpha channel on MSW...
-	wxBitmap bmp = GetSystemImageList()->GetIcon(index);
+	wxBitmap bmp = imageList ? imageList->GetIcon(index) : wxBitmap();
 #else
-	wxBitmap bmp = GetSystemImageList()->GetBitmap(index);
+	wxBitmap bmp = imageList ? imageList->GetBitmap(index) : wxBitmap();
 #endif
 	if (!overlay.empty()) {
 		wxBitmap unknown = CThemeProvider::Get()->CreateBitmap(overlay, wxART_OTHER, bmp.GetScaledSize());
@@ -464,6 +465,10 @@ wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay)
 
 void CRemoteTreeView::CreateImageList()
 {
+	if (!GetSystemImageList()) {
+		return;
+	}
+
 	// Normal directory
 	int index = GetIconIndex(iconType::dir, _T("{78013B9C-3532-4fe1-A418-5CD1955127CC}"), false);
 	wxBitmap dirIcon = CreateIcon(index);
