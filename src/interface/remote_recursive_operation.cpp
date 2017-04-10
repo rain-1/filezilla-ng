@@ -111,8 +111,9 @@ void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, Acti
 
 bool CRemoteRecursiveOperation::NextOperation()
 {
-	if (m_operationMode == recursive_none)
+	if (m_operationMode == recursive_none) {
 		return false;
+	}
 
 	while (!recursion_roots_.empty()) {
 		auto & root = recursion_roots_.front();
@@ -150,20 +151,24 @@ bool CRemoteRecursiveOperation::NextOperation()
 bool CRemoteRecursiveOperation::BelowRecursionRoot(const CServerPath& path, recursion_root::new_dir &dir)
 {
 	if (!dir.start_dir.empty()) {
-		if (path.IsSubdirOf(dir.start_dir, false))
+		if (path.IsSubdirOf(dir.start_dir, false)) {
 			return true;
-		else
+		}
+		else {
 			return false;
+		}
 	}
 
 	auto & root = recursion_roots_.front();
-	if (path.IsSubdirOf(root.m_remoteStartDir, false))
+	if (path.IsSubdirOf(root.m_remoteStartDir, false)) {
 		return true;
+	}
 
 	// In some cases (chmod from tree for example) it is neccessary to list the
 	// parent first
-	if (path == root.m_remoteStartDir && root.m_allowParent)
+	if (path == root.m_remoteStartDir && root.m_allowParent) {
 		return true;
+	}
 
 	if (dir.link == 2) {
 		dir.start_dir = path;
@@ -412,10 +417,11 @@ void CRemoteRecursiveOperation::StopRecursiveOperation()
 
 void CRemoteRecursiveOperation::ListingFailed(int error)
 {
-	if (m_operationMode == recursive_none || recursion_roots_.empty())
+	if (m_operationMode == recursive_none || recursion_roots_.empty()) {
 		return;
+	}
 
-	if( (error & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
+	if ((error & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 		// User has cancelled operation
 		StopRecursiveOperation();
 		return;
@@ -431,6 +437,15 @@ void CRemoteRecursiveOperation::ListingFailed(int error)
 		// (e.g. hitting a blocked port) or a disconnect (e.g. no-filetransfer-timeout)
 		dir.second_try = true;
 		root.m_dirsToVisit.push_front(dir);
+	}
+	else {
+		if (m_operationMode == recursive_delete && dir.doVisit && !dir.subdir.empty()) {
+			// After recursing into directory to delete its contents, delete directory itself
+			// Gets handled in NextOperation
+			recursion_root::new_dir dir2 = dir;
+			dir2.doVisit = false;
+			root.m_dirsToVisit.push_front(dir2);
+		}
 	}
 
 	NextOperation();
