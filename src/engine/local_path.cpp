@@ -70,7 +70,7 @@ bool CLocalPath::SetPath(std::wstring const& path, std::wstring* file)
 					return false;
 				}
 				in++;
-				if (((*in >= 'a' && *in <= 'z') || (*in >= 'A' || *in <= 'Z')) && *(in+1) == ':') {
+				if (((*in >= 'a' && *in <= 'z') || (*in >= 'A' && *in <= 'Z')) && *(in+1) == ':') {
 					// It's \\?\c:\foo\bar
 					goto parse_regular;
 				}
@@ -104,7 +104,7 @@ bool CLocalPath::SetPath(std::wstring const& path, std::wstring* file)
 
 			segments.push_back(out);
 		}
-		else if ((*in >= 'a' && *in <= 'z') || (*in >= 'A' || *in <= 'Z')) {
+		else if ((*in >= 'a' && *in <= 'z') || (*in >= 'A' && *in <= 'Z')) {
 parse_regular:
 			// Regular path
 			*out++ = *in++;
