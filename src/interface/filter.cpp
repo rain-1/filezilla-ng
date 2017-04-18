@@ -897,18 +897,20 @@ void CFilterManager::LoadFilters()
 
 	CXmlFile xml(file);
 	auto element = xml.Load();
+	LoadFilters(element);
+
 	if (!element) {
 		wxString msg = xml.GetError() + _T("\n\n") + _("Any changes made to the filters will not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
-
-		return;
 	}
-
-	LoadFilters(element);
 }
 
 void CFilterManager::Import(pugi::xml_node& element)
 {
+	if (!element) {
+		return;
+	}
+
 	m_globalFilters.clear();
 	m_globalFilterSets.clear();
 	m_globalCurrentFilterSet = 0;
@@ -925,55 +927,55 @@ void CFilterManager::Import(pugi::xml_node& element)
 void CFilterManager::LoadFilters(pugi::xml_node& element)
 {
 	auto xFilters = element.child("Filters");
-	if (!xFilters) {
-		return;
-	}
+	if (xFilters) {
 
-	auto xFilter = xFilters.child("Filter");
-	while (xFilter) {
-		CFilter filter;
+		auto xFilter = xFilters.child("Filter");
+		while (xFilter) {
+			CFilter filter;
 
-		bool loaded = LoadFilter(xFilter, filter);
+			bool loaded = LoadFilter(xFilter, filter);
 
-		if (loaded && !filter.name.empty() && !filter.filters.empty()) {
-			m_globalFilters.push_back(filter);
-		}
-
-		xFilter = xFilter.next_sibling("Filter");
-	}
-
-	CompileRegexes();
-	auto xSets = element.child("Sets");
-	if (xSets) {
-		for (auto xSet = xSets.child("Set"); xSet; xSet = xSet.next_sibling("Set")) {
-			CFilterSet set;
-			auto xItem = xSet.child("Item");
-			while (xItem) {
-				wxString local = GetTextElement(xItem, "Local");
-				wxString remote = GetTextElement(xItem, "Remote");
-				set.local.push_back(local == _T("1") ? true : false);
-				set.remote.push_back(remote == _T("1") ? true : false);
-
-				xItem = xItem.next_sibling("Item");
+			if (loaded && !filter.name.empty() && !filter.filters.empty()) {
+				m_globalFilters.push_back(filter);
 			}
 
-			if (!m_globalFilterSets.empty()) {
-				set.name = GetTextElement(xSet, "Name");
-				if (set.name.empty()) {
-					continue;
+			xFilter = xFilter.next_sibling("Filter");
+		}
+
+		CompileRegexes();
+		auto xSets = element.child("Sets");
+		if (xSets) {
+			for (auto xSet = xSets.child("Set"); xSet; xSet = xSet.next_sibling("Set")) {
+				CFilterSet set;
+				auto xItem = xSet.child("Item");
+				while (xItem) {
+					wxString local = GetTextElement(xItem, "Local");
+					wxString remote = GetTextElement(xItem, "Remote");
+					set.local.push_back(local == _T("1") ? true : false);
+					set.remote.push_back(remote == _T("1") ? true : false);
+
+					xItem = xItem.next_sibling("Item");
+				}
+
+				if (!m_globalFilterSets.empty()) {
+					set.name = GetTextElement(xSet, "Name");
+					if (set.name.empty()) {
+						continue;
+					}
+				}
+
+				if (set.local.size() == m_globalFilters.size()) {
+					m_globalFilterSets.push_back(set);
 				}
 			}
 
-			if (set.local.size() == m_globalFilters.size()) {
-				m_globalFilterSets.push_back(set);
+			int value = GetAttributeInt(xSets, "Current");
+			if (value >= 0 && static_cast<size_t>(value) < m_globalFilterSets.size()) {
+				m_globalCurrentFilterSet = value;
 			}
 		}
-
-		int value = GetAttributeInt(xSets, "Current");
-		if (value >= 0 && static_cast<size_t>(value) < m_globalFilterSets.size()) {
-			m_globalCurrentFilterSet = value;
-		}
 	}
+
 	if (m_globalFilterSets.empty()) {
 		CFilterSet set;
 		set.local.resize(m_globalFilters.size(), false);
