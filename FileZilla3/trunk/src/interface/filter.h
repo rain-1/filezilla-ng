@@ -1,5 +1,5 @@
-#ifndef __FILTER_H__
-#define __FILTER_H__
+#ifndef FILEZILLA_INTERFACE_FILTER_HEADER
+#define FILEZILLA_INTERFACE_FILTER_HEADER
 
 #include "dialogex.h"
 
@@ -84,7 +84,7 @@ class CFilterManager
 {
 public:
 	CFilterManager();
-	virtual ~CFilterManager() {}
+	virtual ~CFilterManager() = default;
 
 	// Note: Under non-windows, attributes are permissions
 	bool FilenameFiltered(std::wstring const& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const;
@@ -127,7 +127,6 @@ class CFilterDialog final : public wxDialogEx, public CFilterManager
 {
 public:
 	CFilterDialog();
-	virtual ~CFilterDialog() {}
 
 	bool Create(CMainFrame* parent);
 
@@ -150,13 +149,13 @@ protected:
 
 	void OnChangeAll(wxCommandEvent& event);
 
-	bool m_shiftClick;
+	bool m_shiftClick{};
 
-	CMainFrame* m_pMainFrame;
+	CMainFrame* m_pMainFrame{};
 
 	std::vector<CFilter> m_filters;
 	std::vector<CFilterSet> m_filterSets;
 	unsigned int m_currentFilterSet;
 };
 
-#endif //__FILTER_H__
+#endif

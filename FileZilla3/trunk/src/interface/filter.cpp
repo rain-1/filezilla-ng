@@ -51,10 +51,10 @@ CFilterCondition::CFilterCondition()
 
 bool CFilter::HasConditionOfType(t_filterType type) const
 {
-	for (std::vector<CFilterCondition>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter)
-	{
-		if (iter->type == type)
+	for (std::vector<CFilterCondition>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter) {
+		if (iter->type == type) {
 			return true;
+		}
 	}
 
 	return false;
@@ -66,9 +66,7 @@ bool CFilter::IsLocalFilter() const
 }
 
 CFilterDialog::CFilterDialog()
-	: m_shiftClick()
-	, m_pMainFrame()
-	, m_filters(m_globalFilters)
+	: m_filters(m_globalFilters)
 	, m_filterSets(m_globalFilterSets)
 	, m_currentFilterSet(m_globalCurrentFilterSet)
 {
@@ -78,8 +76,9 @@ bool CFilterDialog::Create(CMainFrame* parent)
 {
 	m_pMainFrame = parent;
 
-	if (!Load(parent, _T("ID_FILTER")))
+	if (!Load(parent, _T("ID_FILTER"))) {
 		return false;
+	}
 
 	XRCCTRL(*this, "ID_LOCALFILTERS", wxCheckListBox)->Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(CFilterDialog::OnMouseEvent), 0, this);
 	XRCCTRL(*this, "ID_LOCALFILTERS", wxCheckListBox)->Connect(wxID_ANY, wxEVT_KEY_DOWN, wxKeyEventHandler(CFilterDialog::OnKeyEvent), 0, this);
@@ -91,8 +90,9 @@ bool CFilterDialog::Create(CMainFrame* parent)
 	wxChoice* pChoice = XRCCTRL(*this, "ID_SETS", wxChoice);
 	wxString name = _("Custom filter set");
 	pChoice->Append(_T("<") + name + _T(">"));
-	for (unsigned int i = 1; i < m_filterSets.size(); i++)
+	for (size_t i = 1; i < m_filterSets.size(); ++i) {
 		pChoice->Append(m_filterSets[i].name);
+	}
 	pChoice->SetSelection(m_currentFilterSet);
 	SetCtrlState();
 
@@ -126,11 +126,13 @@ void CFilterDialog::OnCancel(wxCommandEvent&)
 void CFilterDialog::OnEdit(wxCommandEvent&)
 {
 	CFilterEditDialog dlg;
-	if (!dlg.Create(this, m_filters, m_filterSets))
+	if (!dlg.Create(this, m_filters, m_filterSets)) {
 		return;
+	}
 
-	if (dlg.ShowModal() != wxID_OK)
+	if (dlg.ShowModal() != wxID_OK) {
 		return;
+	}
 
 	m_filters = dlg.GetFilters();
 	m_filterSets = dlg.GetFilterSets();
@@ -190,11 +192,13 @@ void CFilterDialog::OnFilterSelect(wxCommandEvent& event)
 
 	if (m_shiftClick) {
 		if (event.GetEventObject() == pLocal) {
-			if (!localOnly)
+			if (!localOnly) {
 				pRemote->Check(item, pLocal->IsChecked(event.GetSelection()));
+			}
 		}
-		else
+		else {
 			pLocal->Check(item, pRemote->IsChecked(event.GetSelection()));
+		}
 	}
 
 	if (m_currentFilterSet) {
@@ -214,8 +218,9 @@ void CFilterDialog::OnSaveAs(wxCommandEvent&)
 {
 	CInputDialog dlg;
 	dlg.Create(this, _("Enter name for filterset"), _("Please enter a unique name for this filter set"));
-	if (dlg.ShowModal() != wxID_OK)
+	if (dlg.ShowModal() != wxID_OK) {
 		return;
+	}
 
 	wxString name = dlg.GetValue();
 	if (name.empty()) {
@@ -226,15 +231,18 @@ void CFilterDialog::OnSaveAs(wxCommandEvent&)
 
 	CFilterSet set;
 	int old_pos = pChoice->GetSelection();
-	if (old_pos > 0)
+	if (old_pos > 0) {
 		set = m_filterSets[old_pos];
-	else
+	}
+	else {
 		set = m_filterSets[0];
+	}
 
 	int pos = pChoice->FindString(name);
 	if (pos != wxNOT_FOUND) {
-		if (wxMessageBoxEx(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
+		if (wxMessageBoxEx(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES) {
 			return;
+		}
 	}
 
 	if (pos == wxNOT_FOUND) {
@@ -242,8 +250,9 @@ void CFilterDialog::OnSaveAs(wxCommandEvent&)
 		m_filterSets.push_back(set);
 		pChoice->Append(name);
 	}
-	else
+	else {
 		m_filterSets[pos] = set;
+	}
 
 	m_filterSets[pos].name = name;
 
@@ -259,8 +268,9 @@ void CFilterDialog::OnRename(wxCommandEvent&)
 {
 	wxChoice* pChoice = XRCCTRL(*this, "ID_SETS", wxChoice);
 	int old_pos = pChoice->GetSelection();
-	if (old_pos == -1)
+	if (old_pos == -1) {
 		return;
+	}
 
 	if (!old_pos) {
 		wxMessageBoxEx(_("This filter set cannot be renamed."));
@@ -272,8 +282,9 @@ void CFilterDialog::OnRename(wxCommandEvent&)
 	wxString msg = wxString::Format(_("Please enter a new name for the filter set \"%s\""), pChoice->GetStringSelection());
 
 	dlg.Create(this, _("Enter new name for filterset"), msg);
-	if (dlg.ShowModal() != wxID_OK)
+	if (dlg.ShowModal() != wxID_OK) {
 		return;
+	}
 
 	wxString name = dlg.GetValue();
 
@@ -289,8 +300,9 @@ void CFilterDialog::OnRename(wxCommandEvent&)
 
 	int pos = pChoice->FindString(name);
 	if (pos != wxNOT_FOUND) {
-		if (wxMessageBoxEx(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
+		if (wxMessageBoxEx(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES) {
 			return;
+		}
 	}
 
 	// Remove old entry
@@ -304,8 +316,9 @@ void CFilterDialog::OnRename(wxCommandEvent&)
 		m_filterSets.push_back(set);
 		pChoice->Append(name);
 	}
-	else
+	else {
 		m_filterSets[pos] = set;
+	}
 
 	m_filterSets[pos].name = name;
 
@@ -319,8 +332,9 @@ void CFilterDialog::OnDeleteSet(wxCommandEvent&)
 {
 	wxChoice* pChoice = XRCCTRL(*this, "ID_SETS", wxChoice);
 	int pos = pChoice->GetSelection();
-	if (pos == -1)
+	if (pos == -1) {
 		return;
+	}
 
 	if (!pos) {
 		wxMessageBoxEx(_("This filter set cannot be removed."));
@@ -349,8 +363,9 @@ void CFilterDialog::OnSetSelect(wxCommandEvent& event)
 void CFilterDialog::OnChangeAll(wxCommandEvent& event)
 {
 	bool check = true;
-	if (event.GetId() == XRCID("ID_LOCAL_DISABLEALL") || event.GetId() == XRCID("ID_REMOTE_DISABLEALL"))
+	if (event.GetId() == XRCID("ID_LOCAL_DISABLEALL") || event.GetId() == XRCID("ID_REMOTE_DISABLEALL")) {
 		check = false;
+	}
 
 	bool local;
 	std::vector<bool>* pValues;
@@ -479,34 +494,40 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 	{
 	case 0:
 		if (matchCase) {
-			if (subject.Contains(filter))
+			if (subject.Contains(filter)) {
 				match = true;
+			}
 		}
 		else {
-			if (subject.Lower().Contains(filter.Lower()))
+			if (subject.Lower().Contains(filter.Lower())) {
 				match = true;
+			}
 		}
 		break;
 	case 1:
 		if (matchCase) {
-			if (subject == filter)
+			if (subject == filter) {
 				match = true;
+			}
 		}
 		else {
-			if (!subject.CmpNoCase(filter))
+			if (!subject.CmpNoCase(filter)) {
 				match = true;
+			}
 		}
 		break;
 	case 2:
 		{
 			const wxString& left = subject.Left(filter.Len());
 			if (matchCase) {
-				if (left == filter)
+				if (left == filter) {
 					match = true;
+				}
 			}
 			else {
-				if (!left.CmpNoCase(filter))
+				if (!left.CmpNoCase(filter)) {
 					match = true;
+				}
 			}
 		}
 		break;
@@ -514,12 +535,14 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 		{
 			const wxString& right = subject.Right(filter.Len());
 			if (matchCase) {
-				if (right == filter)
+				if (right == filter) {
 					match = true;
+				}
 			}
 			else {
-				if (!right.CmpNoCase(filter))
+				if (!right.CmpNoCase(filter)) {
 					match = true;
+				}
 			}
 		}
 		break;
@@ -531,12 +554,14 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 		break;
 	case 5:
 		if (matchCase) {
-			if (!subject.Contains(filter))
+			if (!subject.Contains(filter)) {
 				match = true;
+			}
 		}
 		else {
-			if (!subject.Lower().Contains(filter.Lower()))
+			if (!subject.Lower().Contains(filter.Lower())) {
 				match = true;
+			}
 		}
 		break;
 	}
@@ -571,20 +596,24 @@ bool CFilterManager::FilenameFilteredByFilter(CFilter const& filter, std::wstrin
 			switch (condition.condition)
 			{
 			case 0:
-				if (size > condition.value)
+				if (size > condition.value) {
 					match = true;
+				}
 				break;
 			case 1:
-				if (size == condition.value)
+				if (size == condition.value) {
 					match = true;
+				}
 				break;
 			case 2:
-				if (size != condition.value)
+				if (size != condition.value) {
 					match = true;
+				}
 				break;
 			case 3:
-				if (size < condition.value)
+				if (size < condition.value) {
 					match = true;
+				}
 				break;
 			}
 			break;
@@ -592,8 +621,9 @@ bool CFilterManager::FilenameFilteredByFilter(CFilter const& filter, std::wstrin
 #ifndef __WXMSW__
 			continue;
 #else
-			if (!attributes)
+			if (!attributes) {
 				continue;
+			}
 
 			{
 				int flag = 0;
@@ -629,8 +659,9 @@ bool CFilterManager::FilenameFilteredByFilter(CFilter const& filter, std::wstrin
 #ifdef __WXMSW__
 			continue;
 #else
-			if (attributes == -1)
+			if (attributes == -1) {
 				continue;
+			}
 
 			{
 				int flag = 0;
@@ -666,8 +697,9 @@ bool CFilterManager::FilenameFilteredByFilter(CFilter const& filter, std::wstrin
 				}
 
 				int set = (flag & attributes) ? 1 : 0;
-				if (set == condition.value)
+				if (set == condition.value) {
 					match = true;
+				}
 			}
 #endif //__WXMSW__
 			break;
@@ -778,8 +810,9 @@ bool CFilterManager::LoadFilter(pugi::xml_node& element, CFilter& filter)
 	filter.matchCase = GetTextElement(element, "MatchCase") == _T("1");
 
 	auto xConditions = element.child("Conditions");
-	if (!xConditions)
+	if (!xConditions) {
 		return false;
+	}
 
 	for (auto xCondition = xConditions.child("Condition"); xCondition; xCondition = xCondition.next_sibling("Condition")) {
 		CFilterCondition condition;
@@ -808,15 +841,18 @@ bool CFilterManager::LoadFilter(pugi::xml_node& element, CFilter& filter)
 		}
 		condition.condition = GetTextElementInt(xCondition, "Condition", 0);
 		if (condition.type == filter_size) {
-			if (condition.value == 3)
+			if (condition.value == 3) {
 				condition.value = 2;
-			else if (condition.value >= 2)
+			}
+			else if (condition.value >= 2) {
 				++condition.value;
+			}
 		}
 		condition.strValue = GetTextElement(xCondition, "Value");
 		condition.matchCase = filter.matchCase;
-		if (condition.strValue.empty())
+		if (condition.strValue.empty()) {
 			continue;
+		}
 
 		if (condition.type == filter_size) {
 			unsigned long long tmp;
@@ -824,10 +860,12 @@ bool CFilterManager::LoadFilter(pugi::xml_node& element, CFilter& filter)
 			condition.value = tmp;
 		}
 		else if (condition.type == filter_attributes || condition.type == filter_permissions) {
-			if (condition.strValue == _T("0"))
+			if (condition.strValue == _T("0")) {
 				condition.value = 0;
-			else
+			}
+			else {
 				condition.value = 1;
+			}
 		}
 		else if (condition.type == filter_date) {
 			condition.date = fz::datetime(condition.strValue.ToStdWstring(), fz::datetime::local);
