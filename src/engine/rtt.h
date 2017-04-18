@@ -11,7 +11,7 @@ public:
 	// a measurement already running
 	bool Start();
 
-	// Returns fals if there was no measurement running
+	// Returns false if there was no measurement running
 	bool Stop();
 
 	// In ms, returns -1 if no data is available.
