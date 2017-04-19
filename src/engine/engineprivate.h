@@ -161,7 +161,7 @@ protected:
 	std::unique_ptr<CCommand> m_pCurrentCommand;
 
 	// Protect access to these three with notification_mutex_
-	std::list<CNotification*> m_NotificationList;
+	std::deque<CNotification*> m_NotificationList;
 	bool m_maySendNotificationEvent{true};
 	unsigned int m_asyncRequestCounter{};
 
@@ -197,7 +197,7 @@ protected:
 	CFileZillaEngine& parent_;
 
 	bool queue_logs_{true};
-	std::deque<CLogmsgNotification*> queued_logs_;
+	std::vector<CLogmsgNotification*> queued_logs_;
 
 	fz::thread_pool & thread_pool_;
 
