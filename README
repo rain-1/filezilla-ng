@@ -41,7 +41,7 @@ Supported systems
 -----------------
 
 FileZilla has been tested on the following platforms:
-- Windows Vista, 7, 8.1 and 10 (9x/ME/NT4/2000/XP are not supported)
+- Windows 7, 8.1 and 10 (9x/ME/NT4/2000/XP are not supported)
 - Several major Linux distributions
 - FreeBSD and other BSD variants
 - Mac OS X
