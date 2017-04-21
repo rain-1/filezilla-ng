@@ -1089,34 +1089,29 @@ void CRealControlSocket::OnClose(int error)
 	DoClose();
 }
 
-int CRealControlSocket::DoConnect(CServer const& server)
+int CRealControlSocket::DoConnect(std::wstring const& host, unsigned int port)
 {
 	SetWait(true);
 
-	if (server.GetEncodingType() == ENCODING_CUSTOM) {
-		LogMessage(MessageType::Debug_Info, L"Using custom encoding: %s", server.GetCustomEncoding());
+	if (currentServer_.GetEncodingType() == ENCODING_CUSTOM) {
+		LogMessage(MessageType::Debug_Info, L"Using custom encoding: %s", currentServer_.GetCustomEncoding());
 	}
 
-	return ContinueConnect();
-}
-
-int CRealControlSocket::ContinueConnect()
-{
-	std::wstring host;
-	unsigned int port = 0;
+	std::wstring real_host;
+	unsigned int real_port = 0;
 
 	const int proxy_type = engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
 	if (proxy_type > CProxySocket::unknown && proxy_type < CProxySocket::proxytype_count && !currentServer_.GetBypassProxy()) {
 		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), currentServer_.Format(ServerFormat::with_optional_port), CProxySocket::Name(static_cast<CProxySocket::ProxyType>(proxy_type)));
 
-		host = engine_.GetOptions().GetOption(OPTION_PROXY_HOST);
-		port = engine_.GetOptions().GetOptionVal(OPTION_PROXY_PORT);
+		real_host = engine_.GetOptions().GetOption(OPTION_PROXY_HOST);
+		real_port = engine_.GetOptions().GetOptionVal(OPTION_PROXY_PORT);
 
 		delete m_pBackend;
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, this);
 		m_pBackend = m_pProxyBackend;
 		int res = m_pProxyBackend->Handshake(static_cast<CProxySocket::ProxyType>(proxy_type),
-											ConvertDomainName(currentServer_.GetHost()), currentServer_.GetPort(),
+											ConvertDomainName(host), port,
 											engine_.GetOptions().GetOption(OPTION_PROXY_USER),
 											engine_.GetOptions().GetOption(OPTION_PROXY_PASS));
 
@@ -1126,22 +1121,15 @@ int CRealControlSocket::ContinueConnect()
 		}
 	}
 	else {
-		if (!operations_.empty() && operations_.back()->opId == Command::connect) {
-			auto & data = static_cast<CConnectOpData&>(*operations_.back());
-			host = data.host_;
-			port = data.port_;
-		}
-		if (host.empty()) {
-			host = currentServer_.GetHost();
-			port = currentServer_.GetPort();
-		}
+		real_host = host;
+		real_port = port;
 	}
 	if (fz::get_address_type(host) == fz::address_type::unknown) {
-		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
+		LogMessage(MessageType::Status, _("Resolving address of %s"), real_host);
 	}
 
-	host = ConvertDomainName(host);
-	int res = m_pSocket->Connect(fz::to_native(host), port);
+	real_host = ConvertDomainName(real_host);
+	int res = m_pSocket->Connect(fz::to_native(real_host), real_port);
 
 	// Treat success same as EINPROGRESS, we wait for connect notification in any case
 	if (res && res != EINPROGRESS) {
