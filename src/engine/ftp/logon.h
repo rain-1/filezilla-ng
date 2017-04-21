@@ -41,10 +41,10 @@ struct t_loginCommand
 };
 
 
-class CFtpLogonOpData final : public CConnectOpData, public CFtpOpData
+class CFtpLogonOpData final : public COpData, public CFtpOpData
 {
 public:
-	CFtpLogonOpData(CFtpControlSocket& controlSocket, CServer const& server);
+	CFtpLogonOpData(CFtpControlSocket& controlSocket);
 
 	virtual int Send() override;
 	virtual int ParseResponse() override;
@@ -59,6 +59,9 @@ public:
 
 private:
 	bool PrepareLoginSequence();
+
+	std::wstring host_;
+	unsigned int port_;
 
 	unsigned int customCommandIndex{};
 
