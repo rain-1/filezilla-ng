@@ -321,8 +321,7 @@ public:
 	CRealControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CRealControlSocket();
 
-	int DoConnect(CServer const& server);
-	virtual int ContinueConnect();
+	int DoConnect(std::wstring const& host, unsigned int port);
 
 	virtual bool Connected() const override;
 
