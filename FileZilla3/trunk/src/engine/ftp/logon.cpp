@@ -5,28 +5,29 @@
 #include "../servercapabilities.h"
 #include "../tlssocket.h"
 
-CFtpLogonOpData::CFtpLogonOpData(CFtpControlSocket& controlSocket, CServer const& server)
-    : CConnectOpData(server), CFtpOpData(controlSocket)
+CFtpLogonOpData::CFtpLogonOpData(CFtpControlSocket& controlSocket)
+    : COpData(Command::connect)
+	, CFtpOpData(controlSocket)
 {
 	for (int i = 0; i < LOGON_DONE; ++i) {
 		neededCommands[i] = 1;
 	}
 
-	if (server.GetProtocol() != FTPES && server.GetProtocol() != FTP) {
+	if (currentServer_.GetProtocol() != FTPES && currentServer_.GetProtocol() != FTP) {
 		neededCommands[LOGON_AUTH_TLS] = 0;
 		neededCommands[LOGON_AUTH_SSL] = 0;
 		neededCommands[LOGON_AUTH_WAIT] = 0;
-		if (server.GetProtocol() != FTPS) {
+		if (currentServer_.GetProtocol() != FTPS) {
 			neededCommands[LOGON_PBSZ] = 0;
 			neededCommands[LOGON_PROT] = 0;
 		}
 	}
-	if (server.GetPostLoginCommands().empty()) {
+	if (currentServer_.GetPostLoginCommands().empty()) {
 		neededCommands[LOGON_CUSTOMCOMMANDS] = 0;
 	}
 
-	const CharsetEncoding encoding = server.GetEncodingType();
-	if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(server, utf8_command) != no) {
+	const CharsetEncoding encoding = currentServer_.GetEncodingType();
+	if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(currentServer_, utf8_command) != no) {
 		controlSocket_.m_useUTF8 = true;
 	}
 	else if (encoding == ENCODING_UTF8) {
@@ -44,7 +45,7 @@ int CFtpLogonOpData::Send()
 	    {
 			// Do not use FTP proxy if generic proxy is set
 			int const generic_proxy_type = engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
-			if ((generic_proxy_type <= CProxySocket::unknown || generic_proxy_type >= CProxySocket::proxytype_count) && !server_.GetBypassProxy()) {
+			if ((generic_proxy_type <= CProxySocket::unknown || generic_proxy_type >= CProxySocket::proxytype_count) && !currentServer_.GetBypassProxy()) {
 				ftp_proxy_type_ = engine_.GetOptions().GetOptionVal(OPTION_FTP_PROXY_TYPE);
 			}
 		
@@ -91,11 +92,11 @@ int CFtpLogonOpData::Send()
 					return FZ_REPLY_DISCONNECTED | FZ_REPLY_CRITICALERROR;
 				}
 
-				LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server_.Format(ServerFormat::with_optional_port), L"FTP"); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
+				LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), currentServer_.Format(ServerFormat::with_optional_port), L"FTP"); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
 			}
 			else {
-				host_ = server_.GetHost();
-				port_ = server_.GetPort();
+				host_ = currentServer_.GetHost();
+				port_ = currentServer_.GetPort();
 			}
 
 			opState = LOGON_WELCOME;
@@ -570,7 +571,7 @@ bool CFtpLogonOpData::PrepareLoginSequence()
 		loginSequence.push_back(cmd);
 
 		// Optional account
-		if (!server_.GetAccount().empty()) {
+		if (!currentServer_.GetAccount().empty()) {
 			cmd.hide_arguments = false;
 			cmd.type = loginCommandType::account;
 			loginSequence.push_back(cmd);
@@ -588,7 +589,7 @@ bool CFtpLogonOpData::PrepareLoginSequence()
 			loginSequence.push_back(cmd);
 		}
 		// User@host
-		t_loginCommand cmd = {false, false, loginCommandType::user, fz::sprintf(L"USER %s@%s", server_.GetUser(), server_.Format(ServerFormat::with_optional_port))};
+		t_loginCommand cmd = {false, false, loginCommandType::user, fz::sprintf(L"USER %s@%s", currentServer_.GetUser(), currentServer_.Format(ServerFormat::with_optional_port))};
 		loginSequence.push_back(cmd);
 
 		// Password
@@ -599,7 +600,7 @@ bool CFtpLogonOpData::PrepareLoginSequence()
 		loginSequence.push_back(cmd);
 
 		// Optional account
-		if (!server_.GetAccount().empty()) {
+		if (!currentServer_.GetAccount().empty()) {
 			cmd.hide_arguments = false;
 			cmd.type = loginCommandType::account;
 			loginSequence.push_back(cmd);
@@ -620,10 +621,10 @@ bool CFtpLogonOpData::PrepareLoginSequence()
 		// Site or Open
 		t_loginCommand cmd = {false, false, loginCommandType::user, L""};
 		if (ftp_proxy_type_ == 2) {
-			cmd.command = L"SITE " + server_.Format(ServerFormat::with_optional_port);
+			cmd.command = L"SITE " + currentServer_.Format(ServerFormat::with_optional_port);
 		}
 		else {
-			cmd.command = L"OPEN " + server_.Format(ServerFormat::with_optional_port);
+			cmd.command = L"OPEN " + currentServer_.Format(ServerFormat::with_optional_port);
 		}
 		loginSequence.push_back(cmd);
 
@@ -639,7 +640,7 @@ bool CFtpLogonOpData::PrepareLoginSequence()
 		loginSequence.push_back(cmd);
 
 		// Optional account
-		if (!server_.GetAccount().empty()) {
+		if (!currentServer_.GetAccount().empty()) {
 			cmd.hide_arguments = false;
 			cmd.type = loginCommandType::account;
 			loginSequence.push_back(cmd);
@@ -648,9 +649,9 @@ bool CFtpLogonOpData::PrepareLoginSequence()
 	else if (ftp_proxy_type_ == 4) {
 		std::wstring proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		std::wstring proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
-		std::wstring host = server_.Format(ServerFormat::with_optional_port);
-		std::wstring user = server_.GetUser();
-		std::wstring account = server_.GetAccount();
+		std::wstring host = currentServer_.Format(ServerFormat::with_optional_port);
+		std::wstring user = currentServer_.GetUser();
+		std::wstring account = currentServer_.GetAccount();
 		fz::replace_substrings(proxyUser, L"%", L"%%");
 		fz::replace_substrings(proxyPass, L"%", L"%%");
 		fz::replace_substrings(host, L"%", L"%%");

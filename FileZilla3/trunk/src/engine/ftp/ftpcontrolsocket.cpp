@@ -767,7 +767,7 @@ void CFtpControlSocket::Connect(CServer const& server)
 
 	currentServer_ = server;
 
-	Push(std::make_unique<CFtpLogonOpData>(*this, server));
+	Push(std::make_unique<CFtpLogonOpData>(*this));
 }
 
 void CFtpControlSocket::OnTimer(fz::timer_id id)
@@ -788,7 +788,7 @@ void CFtpControlSocket::OnTimer(fz::timer_id id)
 	LogMessage(MessageType::Status, _("Sending keep-alive command"));
 
 	std::wstring cmd;
-	int i = fz::random_number(0, 2);
+	auto i = fz::random_number(0, 2);
 	if (!i) {
 		cmd = L"NOOP";
 	}
