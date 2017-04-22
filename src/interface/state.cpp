@@ -568,8 +568,9 @@ bool CState::Disconnect()
 bool CState::CreateEngine()
 {
 	wxASSERT(!m_pEngine);
-	if (m_pEngine)
+	if (m_pEngine) {
 		return true;
+	}
 
 	m_pEngine = new CFileZillaEngine(m_mainFrame.GetEngineContext(), m_mainFrame);
 
@@ -590,8 +591,9 @@ void CState::RegisterHandler(CStateEventHandler* pHandler, t_statechange_notific
 {
 	wxASSERT(pHandler);
 	wxASSERT(&pHandler->m_state == this);
-	if (!pHandler || &pHandler->m_state != this)
+	if (!pHandler || &pHandler->m_state != this) {
 		return;
+	}
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
 	wxASSERT(pHandler != insertBefore);
 

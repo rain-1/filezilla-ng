@@ -2593,12 +2593,14 @@ void CQueueView::ActionAfter(bool warned)
 				wxString fmt = wxPLURAL("All transfers have finished. %d file could not be transferred.", "All transfers have finished. %d files could not be transferred.", failed_count);
 				msg = wxString::Format(fmt, failed_count);
 			}
-			else
+			else {
 				msg = _("All files have been successfully transferred");
+			}
 
 #if WITH_LIBDBUS
-			if (!m_desktop_notification)
+			if (!m_desktop_notification) {
 				m_desktop_notification = std::make_unique<CDesktopNotification>();
+			}
 			m_desktop_notification->Notify(title, msg, (failed_count > 0) ? _T("transfer.error") : _T("transfer.complete"));
 #elif defined(__WXGTK__) || defined(__WXMSW__)
 			m_desktop_notification = std::make_unique<wxNotificationMessage>();
@@ -2665,18 +2667,25 @@ void CQueueView::ActionAfter(bool warned)
 			}
 			else {
 				wxString action;
-				if( m_actionAfterState == ActionAfterState::Reboot )
+				if (m_actionAfterState == ActionAfterState::Reboot) {
 					action = _T("restart");
-				else if( m_actionAfterState == ActionAfterState::Shutdown )
+				}
+				else if (m_actionAfterState == ActionAfterState::Shutdown) {
 					action = _T("shut down");
-				else
+				}
+				else {
 					action = _T("sleep");
+				}
 				wxExecute(_T("osascript -e 'tell application \"System Events\" to ") + action + _T("'"));
 				m_actionAfterState = ActionAfterState::None;
 			}
 			break;
 #else
-		(void)warned;
+		case ActionAfterState::Reboot:
+		case ActionAfterState::Shutdown:
+		case ActionAfterState::Sleep:
+			(void)warned;
+			break;
 #endif
 		default:
 			break;
