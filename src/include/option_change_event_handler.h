@@ -2,7 +2,6 @@
 #define FILEZILLA_ENGINE_OPTION_CHANGE_EVENT_HANDLER_HEADER
 
 #include <bitset>
-#include <set>
 #include <vector>
 
 class COptions;

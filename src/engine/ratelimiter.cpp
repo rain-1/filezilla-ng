@@ -59,8 +59,9 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 
 			pObject->m_bytesAvailable[i] = tokens;
 
-			if (!m_timer)
+			if (!m_timer) {
 				m_timer = add_timer(fz::duration::from_milliseconds(tickDelay), false);
+			}
 		}
 		else {
 			pObject->m_bytesAvailable[i] = -1;
@@ -81,8 +82,9 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 				int64_t limit = GetLimit(static_cast<rate_direction>(i));
 				int64_t tokens = limit / (1000 / tickDelay);
 				tokens /= m_objectList.size();
-				if ((*iter)->m_bytesAvailable[i] < tokens)
+				if ((*iter)->m_bytesAvailable[i] < tokens) {
 					m_tokenDebt[i] += tokens - (*iter)->m_bytesAvailable[i];
+				}
 			}
 			m_objectList.erase(iter);
 			break;
@@ -108,14 +110,16 @@ void CRateLimiter::OnTimer(fz::timer_id)
 	for (int i = 0; i < 2; ++i) {
 		m_tokenDebt[i] = 0;
 
-		if (m_objectList.empty())
+		if (m_objectList.empty()) {
 			continue;
+		}
 
 		if (limits[i] == 0) {
 			for (auto iter = m_objectList.begin(); iter != m_objectList.end(); ++iter) {
 				(*iter)->m_bytesAvailable[i] = -1;
-				if ((*iter)->m_waiting[i])
+				if ((*iter)->m_waiting[i]) {
 					m_wakeupList[i].push_back(*iter);
+				}
 			}
 			continue;
 		}
@@ -126,8 +130,9 @@ void CRateLimiter::OnTimer(fz::timer_id)
 		// Get amount of tokens for each object
 		int64_t tokensPerObject = tokens / m_objectList.size();
 
-		if (tokensPerObject == 0)
+		if (tokensPerObject == 0) {
 			tokensPerObject = 1;
+		}
 		tokens = 0;
 
 		// This list will hold all objects which didn't reach maxTokens
@@ -146,11 +151,13 @@ void CRateLimiter::OnTimer(fz::timer_id)
 					tokens += (*iter)->m_bytesAvailable[i] - maxTokens;
 					(*iter)->m_bytesAvailable[i] = maxTokens;
 				}
-				else
+				else {
 					unsaturatedObjects.push_back(*iter);
+				}
 
-				if ((*iter)->m_waiting[i])
+				if ((*iter)->m_waiting[i]) {
 					m_wakeupList[i].push_back(*iter);
+				}
 			}
 		}
 
@@ -158,8 +165,9 @@ void CRateLimiter::OnTimer(fz::timer_id)
 		// assign to the unsaturated sources
 		while (tokens != 0 && !unsaturatedObjects.empty()) {
 			tokensPerObject = tokens / unsaturatedObjects.size();
-			if (tokensPerObject == 0)
+			if (tokensPerObject == 0) {
 				break;
+			}
 			tokens = 0;
 
 			std::list<CRateLimiterObject*> objects;
@@ -171,8 +179,9 @@ void CRateLimiter::OnTimer(fz::timer_id)
 					tokens += (*iter)->m_bytesAvailable[i] - maxTokens;
 					(*iter)->m_bytesAvailable[i] = maxTokens;
 				}
-				else
+				else {
 					unsaturatedObjects.push_back(*iter);
+				}
 			}
 		}
 	}
@@ -193,8 +202,9 @@ void CRateLimiter::WakeupWaitingObjects(fz::scoped_lock & l)
 		while (!m_wakeupList[i].empty()) {
 			CRateLimiterObject* pObject = m_wakeupList[i].front();
 			m_wakeupList[i].pop_front();
-			if (!pObject->m_waiting[i])
+			if (!pObject->m_waiting[i]) {
 				continue;
+			}
 
 			assert(pObject->m_bytesAvailable[i] != 0);
 			pObject->m_waiting[i] = false;
@@ -237,8 +247,9 @@ void CRateLimiter::OnRateChanged()
 {
 	fz::scoped_lock lock(sync_);
 	if (GetLimit(inbound) > 0 || GetLimit(outbound) > 0) {
-		if (!m_timer)
+		if (!m_timer) {
 			m_timer = add_timer(fz::duration::from_milliseconds(tickDelay), false);
+		}
 	}
 }
 
@@ -258,10 +269,12 @@ CRateLimiterObject::CRateLimiterObject()
 void CRateLimiterObject::UpdateUsage(CRateLimiter::rate_direction direction, int usedBytes)
 {
 	assert(usedBytes <= m_bytesAvailable[direction]);
-	if (usedBytes > m_bytesAvailable[direction])
+	if (usedBytes > m_bytesAvailable[direction]) {
 		m_bytesAvailable[direction] = 0;
-	else
+	}
+	else {
 		m_bytesAvailable[direction] -= usedBytes;
+	}
 }
 
 void CRateLimiterObject::Wait(CRateLimiter::rate_direction direction)
