@@ -44,8 +44,9 @@ CProxySocket::~CProxySocket()
 {
 	remove_handler();
 
-	if (m_pSocket)
+	if (m_pSocket) {
 		m_pSocket->SetEventHandler(0);
+	}
 	delete [] m_pSendBuffer;
 	delete [] m_pRecvBuffer;
 }
@@ -207,13 +208,15 @@ void CProxySocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int err
 {
 	switch (t) {
 	case SocketEventType::connection_next:
-		if (error)
+		if (error) {
 			m_pOwner->LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(error));
+		}
 		break;
 	case SocketEventType::connection:
 		if (error) {
-			if (m_proxyState == handshake)
+			if (m_proxyState == handshake) {
 				m_proxyState = noconn;
+			}
 			m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::connection, error);
 		}
 		else {
@@ -239,8 +242,9 @@ void CProxySocket::OnHostAddress(CSocketEventSource*, std::string const& address
 
 void CProxySocket::Detach()
 {
-	if (!m_pSocket)
+	if (!m_pSocket) {
 		return;
+	}
 
 	m_pSocket->SetEventHandler(0);
 	m_pSocket = 0;
@@ -250,8 +254,9 @@ void CProxySocket::OnReceive()
 {
 	m_can_read = true;
 
-	if (m_proxyState != handshake)
+	if (m_proxyState != handshake) {
 		return;
+	}
 
 	switch (m_handshakeState)
 	{
@@ -262,17 +267,20 @@ void CProxySocket::OnReceive()
 			char* end = 0;
 			for (int i = 0; i < 2; ++i) {
 				int read;
-				if (!i)
+				if (!i) {
 					read = m_pSocket->Peek(m_pRecvBuffer + m_recvBufferPos, do_read, error);
-				else
+				}
+				else {
 					read = m_pSocket->Read(m_pRecvBuffer + m_recvBufferPos, do_read, error);
+				}
 				if (read == -1) {
 					if (error != EAGAIN) {
 						m_proxyState = noconn;
 						m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, error);
 					}
-					else
+					else {
 						m_can_read = false;
+					}
 					return;
 				}
 				if (!read) {
@@ -300,8 +308,9 @@ void CProxySocket::OnReceive()
 						}
 						do_read = read;
 					}
-					else
+					else {
 						do_read = end - m_pRecvBuffer + 4 - m_recvBufferPos;
+					}
 				}
 				else {
 					if (read != do_read) {
@@ -314,8 +323,9 @@ void CProxySocket::OnReceive()
 				}
 			}
 
-			if (!end)
+			if (!end) {
 				continue;
+			}
 
 			end = strchr(m_pRecvBuffer, '\r'); // Never fails as old value of end exists and starts with CR, we just look for an earlier case.
 			*end = 0;
@@ -341,8 +351,9 @@ void CProxySocket::OnReceive()
 					m_proxyState = noconn;
 					m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, read_error);
 				}
-				else
+				else {
 					m_can_read = false;
+				}
 				return;
 			}
 
@@ -354,8 +365,9 @@ void CProxySocket::OnReceive()
 			m_recvBufferPos += read;
 			m_recvBufferLen -= read;
 
-			if (m_recvBufferLen)
+			if (m_recvBufferLen) {
 				continue;
+			}
 
 			m_recvBufferPos = 0;
 
@@ -389,8 +401,9 @@ void CProxySocket::OnReceive()
 	case socks5_request:
 	case socks5_request_addrtype:
 	case socks5_request_address:
-		if (m_pSendBuffer)
+		if (m_pSendBuffer) {
 			return;
+		}
 		while (m_recvBufferLen && m_can_read && m_proxyState == handshake) {
 			int error;
 			int read = m_pSocket->Read(m_pRecvBuffer + m_recvBufferPos, m_recvBufferLen, error);
@@ -399,8 +412,9 @@ void CProxySocket::OnReceive()
 					m_proxyState = noconn;
 					m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, error);
 				}
-				else
+				else {
 					m_can_read = false;
+				}
 				return;
 			}
 			if (!read) {
@@ -411,8 +425,9 @@ void CProxySocket::OnReceive()
 			m_recvBufferPos += read;
 			m_recvBufferLen -= read;
 
-			if (m_recvBufferLen)
+			if (m_recvBufferLen) {
 				continue;
+			}
 
 			m_recvBufferPos = 0;
 
@@ -623,8 +638,9 @@ void CProxySocket::OnReceive()
 				assert(false);
 				break;
 			}
-			if (m_pSendBuffer && m_can_write)
+			if (m_pSendBuffer && m_can_write) {
 				OnSend();
+			}
 		}
 		break;
 	default:
@@ -638,8 +654,9 @@ void CProxySocket::OnReceive()
 void CProxySocket::OnSend()
 {
 	m_can_write = true;
-	if (m_proxyState != handshake || !m_pSendBuffer)
+	if (m_proxyState != handshake || !m_pSendBuffer) {
 		return;
+	}
 
 	for (;;) {
 		int error;
@@ -649,8 +666,9 @@ void CProxySocket::OnSend()
 				m_proxyState = noconn;
 				m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, error);
 			}
-			else
+			else {
 				m_can_write = false;
+			}
 
 			return;
 		}
@@ -659,8 +677,9 @@ void CProxySocket::OnSend()
 			delete [] m_pSendBuffer;
 			m_pSendBuffer = 0;
 
-			if (m_can_read)
+			if (m_can_read) {
 				OnReceive();
+			}
 			return;
 		}
 		memmove(m_pSendBuffer, m_pSendBuffer + written, m_sendBufferLen - written);
