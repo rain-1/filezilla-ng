@@ -925,7 +925,9 @@ void CMainFrame::DoOnEngineEvent(CFileZillaEngine* engine)
 		case nId_listing:
 			{
 				auto const& listingNotification = static_cast<CDirectoryListingNotification const&>(*pNotification.get());
-				pState->m_pCommandQueue->ProcessDirectoryListing(listingNotification);
+				if (pState->m_pCommandQueue) {
+					pState->m_pCommandQueue->ProcessDirectoryListing(listingNotification);
+				}
 			}
 			break;
 		case nId_asyncrequest:
@@ -1451,8 +1453,9 @@ void CMainFrame::OnProcessQueue(wxCommandEvent& event)
 void CMainFrame::OnMenuEditSettings(wxCommandEvent&)
 {
 	CSettingsDialog dlg(m_engineContext);
-	if (!dlg.Create(this))
+	if (!dlg.Create(this)) {
 		return;
+	}
 
 	COptions* pOptions = COptions::Get();
 

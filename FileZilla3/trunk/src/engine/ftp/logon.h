@@ -61,7 +61,7 @@ private:
 	bool PrepareLoginSequence();
 
 	std::wstring host_;
-	unsigned int port_;
+	unsigned int port_{};
 
 	unsigned int customCommandIndex{};
 
