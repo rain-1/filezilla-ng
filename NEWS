@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.25.2-rc1 (2017-04-23)
+
+- Fix crash if filters.xml has become corrupted
+- Fix FTP proxy support
+- Fix sending of FTP keep-alive commands
+- MSW: Windows Vista is no longer supported
+- MSW: File and directory icons now also appear on systems that have no Windows directory
+
 3.25.1 (2017-03-20)
 
 - OS X: Fixed a crash if connecting to old servers not supporting UTF-8
