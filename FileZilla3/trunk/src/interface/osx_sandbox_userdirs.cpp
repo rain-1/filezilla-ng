@@ -91,7 +91,7 @@ void OSXSandboxUserdirs::Load()
 
 		auto path = GetPath(url);
 		if (path.empty()) {
-			error += "\n";
+			error += L"\n";
 			error += _("Could not get native path from CFURL");
 			continue;
 		}
@@ -111,7 +111,7 @@ void OSXSandboxUserdirs::Load()
 
 	if (!error.empty()) {
 		error = _("Access to some local directories could not be restored:") + _T("\n") + error;
-		error += _("\n\n");
+		error += L"\n\n";
 		error += _("Please re-add local data directories in the settings dialog.");
 		wxMessageBox(error, _("Could not restore directory access"), wxICON_EXCLAMATION);
 	}
