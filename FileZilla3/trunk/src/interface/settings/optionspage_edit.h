@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_EDIT_H__
-#define __OPTIONSPAGE_EDIT_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_EDIT_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_EDIT_HEADER
 
-class COptionsPageEdit : public COptionsPage
+class COptionsPageEdit final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_EDIT"); }
@@ -18,4 +18,4 @@ protected:
 	void OnRadioButton(wxCommandEvent& event);
 };
 
-#endif //__OPTIONSPAGE_EDIT_H__
+#endif

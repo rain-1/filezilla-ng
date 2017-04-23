@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_TRANSFER_H__
-#define __OPTIONSPAGE_TRANSFER_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_TRANSFER_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_TRANSFER_HEADER
 
-class COptionsPageTransfer : public COptionsPage
+class COptionsPageTransfer final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_TRANSFER"); }
@@ -14,4 +14,4 @@ protected:
 	void OnToggleSpeedLimitEnable(wxCommandEvent& event);
 };
 
-#endif //__OPTIONSPAGE_TRANSFER_H__
+#endif

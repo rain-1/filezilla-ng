@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_LOGGING_H__
-#define __OPTIONSPAGE_LOGGING_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_LOGGING_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_LOGGING_HEADER
 
-class COptionsPageLogging : public COptionsPage
+class COptionsPageLogging final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_LOGGING"); }
@@ -17,4 +17,4 @@ protected:
 	void OnCheck(wxCommandEvent& event);
 };
 
-#endif //__OPTIONSPAGE_LOGGING_H__
+#endif

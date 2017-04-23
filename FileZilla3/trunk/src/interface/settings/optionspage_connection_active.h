@@ -1,5 +1,5 @@
-#ifndef __OPTIONSPAGE_CONNECTION_ACTIVE_H__
-#define __OPTIONSPAGE_CONNECTION_ACTIVE_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_ACTIVE_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_ACTIVE_HEADER
 
 class COptionsPageConnectionActive final : public COptionsPage
 {
@@ -16,4 +16,4 @@ protected:
 	void OnRadioOrCheckEvent(wxCommandEvent& event);
 };
 
-#endif //__OPTIONSPAGE_CONNECTION_ACTIVE_H__
+#endif

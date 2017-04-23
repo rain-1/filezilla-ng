@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_INTERFACE_H__
-#define __OPTIONSPAGE_INTERFACE_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_INTERFACE_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_INTERFACE_HEADER
 
-class COptionsPageInterface : public COptionsPage
+class COptionsPageInterface final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_INTERFACE"); }
@@ -13,4 +13,4 @@ public:
 	void OnLayoutChange(wxCommandEvent& event);
 };
 
-#endif //__OPTIONSPAGE_INTERFACE_H__
+#endif

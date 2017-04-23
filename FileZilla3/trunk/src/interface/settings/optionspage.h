@@ -1,10 +1,5 @@
-#ifndef __OPTIONSPAGE_H__
-#define __OPTIONSPAGE_H__
-
-#define SAFE_XRCCTRL(id, type) \
-	if (!XRCCTRL(*this, id, type)) \
-		return false; \
-	XRCCTRL(*this, id, type)
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_HEADER
 
 class COptions;
 class CSettingsDialog;
@@ -51,10 +46,10 @@ public:
 	virtual bool OnDisplayedFirstTime();
 
 protected:
-	COptions* m_pOptions;
-	CSettingsDialog* m_pOwner;
+	COptions* m_pOptions{};
+	CSettingsDialog* m_pOwner{};
 
-	bool m_was_selected;
+	bool m_was_selected{};
 };
 
-#endif //__OPTIONSPAGE_H__
+#endif

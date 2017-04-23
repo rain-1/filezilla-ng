@@ -1,10 +1,12 @@
-#ifndef __OPTIONSPAGE_CONNECTION_SFTP_H__
-#define __OPTIONSPAGE_CONNECTION_SFTP_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_SFTP_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_SFTP_HEADER
 
 #include <wx/process.h>
-#include "../fzputtygen_interface.h"
 
-class COptionsPageConnectionSFTP : public COptionsPage
+#include <memory>
+
+class CFZPuttyGenInterface;
+class COptionsPageConnectionSFTP final : public COptionsPage
 {
 public:
 	COptionsPageConnectionSFTP();
@@ -14,7 +16,7 @@ public:
 	virtual bool SavePage();
 
 protected:
-	CFZPuttyGenInterface* m_pFzpg;
+	std::unique_ptr<CFZPuttyGenInterface> m_pFzpg;
 
 	bool AddKey(std::wstring keyFile, bool silent);
 	bool KeyFileExists(std::wstring const& keyFile);
@@ -27,4 +29,4 @@ protected:
 	void OnSelChanged(wxListEvent& event);
 };
 
-#endif //__OPTIONSPAGE_CONNECTION_SFTP_H__
+#endif

@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_FTPPROXY_H__
-#define __OPTIONSPAGE_FTPPROXY_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_FTPPROXY_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_FTPPROXY_HEADER
 
-class COptionsPageFtpProxy : public COptionsPage
+class COptionsPageFtpProxy final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_CONNECTION_FTP_PROXY"); }
@@ -18,4 +18,4 @@ protected:
 	void OnLoginSequenceChanged(wxCommandEvent& event);
 };
 
-#endif //__OPTIONSPAGE_FTPPROXY_H__
+#endif

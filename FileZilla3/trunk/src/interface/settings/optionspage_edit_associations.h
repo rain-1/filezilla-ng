@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_EDIT_ASSOCIATIONS_H__
-#define __OPTIONSPAGE_EDIT_ASSOCIATIONS_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_EDIT_ASSOCIATIONS_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_EDIT_ASSOCIATIONS_HEADER
 
-class COptionsPageEditAssociations : public COptionsPage
+class COptionsPageEditAssociations final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_EDIT_ASSOCIATIONS"); }
@@ -10,4 +10,4 @@ public:
 	virtual bool Validate();
 };
 
-#endif //__OPTIONSPAGE_EDIT_ASSOCIATIONS_H__
+#endif

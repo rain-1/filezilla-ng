@@ -12,8 +12,6 @@ bool COptionsPage::CreatePage(COptions* pOptions, CSettingsDialog* pOwner, wxWin
 		return false;
 	}
 
-	m_was_selected = false;
-
 	UpdateMaxPageSize(maxSize);
 
 	return true;

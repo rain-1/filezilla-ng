@@ -125,10 +125,6 @@ BEGIN_EVENT_TABLE(CIconPreview, wxScrolledWindow)
 EVT_PAINT(CIconPreview::OnPaint)
 END_EVENT_TABLE()
 
-COptionsPageThemes::~COptionsPageThemes()
-{
-}
-
 bool COptionsPageThemes::CreatePage(COptions* pOptions, CSettingsDialog* pOwner, wxWindow* parent, wxSize& maxSize)
 {
 	bool success = COptionsPage::CreatePage(pOptions, pOwner, parent, maxSize);

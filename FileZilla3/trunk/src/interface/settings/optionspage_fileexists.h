@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_FILEEXISTS_H__
-#define __OPTIONSPAGE_FILEEXISTS_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_FILEEXISTS_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_FILEEXISTS_HEADER
 
-class COptionsPageFileExists : public COptionsPage
+class COptionsPageFileExists final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_FILEEXISTS"); }
@@ -10,4 +10,4 @@ public:
 	virtual bool Validate();
 };
 
-#endif //__OPTIONSPAGE_FILEEXISTS_H__
+#endif

@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_CONNECTION_PASSIVE_H__
-#define __OPTIONSPAGE_CONNECTION_PASSIVE_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_PASSIVE_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_PASSIVE_HEADER
 
-class COptionsPageConnectionPassive : public COptionsPage
+class COptionsPageConnectionPassive final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_CONNECTION_PASSIVE"); }
@@ -10,4 +10,4 @@ public:
 	virtual bool Validate();
 };
 
-#endif //__OPTIONSPAGE_CONNECTION_PASSIVE_H__
+#endif

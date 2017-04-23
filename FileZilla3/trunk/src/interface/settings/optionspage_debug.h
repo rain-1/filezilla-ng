@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_DEBUG_H__
-#define __OPTIONSPAGE_DEBUG_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_DEBUG_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_DEBUG_HEADER
 
-class COptionsPageDebug : public COptionsPage
+class COptionsPageDebug final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_DEBUG"); }
@@ -10,4 +10,4 @@ public:
 	virtual bool Validate();
 };
 
-#endif //__OPTIONSPAGE_DEBUG_H__
+#endif
