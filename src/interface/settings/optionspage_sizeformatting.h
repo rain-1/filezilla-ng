@@ -1,5 +1,5 @@
-#ifndef __OPTIONSPAGE_SIZEFORMATTING_H__
-#define __OPTIONSPAGE_SIZEFORMATTING_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_SIZEFORMATTING_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_SIZEFORMATTING_HEADER
 
 #include "../sizeformatting.h"
 
@@ -24,4 +24,4 @@ public:
 	wxString FormatSize(int64_t size);
 };
 
-#endif //__OPTIONSPAGE_SIZEFORMATTING_H__
+#endif

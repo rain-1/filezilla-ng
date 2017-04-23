@@ -1,10 +1,9 @@
-#ifndef __OPTIONSPAGE_THEMES_H__
-#define __OPTIONSPAGE_THEMES_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_THEMES_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_THEMES_HEADER
 
-class COptionsPageThemes : public COptionsPage
+class COptionsPageThemes final : public COptionsPage
 {
 public:
-	virtual ~COptionsPageThemes();
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_THEMES"); }
 	virtual bool LoadPage();
 	virtual bool SavePage();
@@ -21,4 +20,4 @@ protected:
 	void OnThemeChange(wxCommandEvent& event);
 };
 
-#endif //__OPTIONSPAGE_THEMES_H__
+#endif

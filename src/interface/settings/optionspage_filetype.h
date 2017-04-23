@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_FILETYPE_H__
-#define __OPTIONSPAGE_FILETYPE_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_FILETYPE_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_FILETYPE_HEADER
 
-class COptionsPageFiletype : public COptionsPage
+class COptionsPageFiletype final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_FILETYPE"); }
@@ -19,4 +19,4 @@ protected:
 	void OnTextChanged(wxCommandEvent& event);
 };
 
-#endif //__OPTIONSPAGE_FILETYPE_H__
+#endif

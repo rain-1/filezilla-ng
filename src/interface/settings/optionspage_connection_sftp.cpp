@@ -4,6 +4,7 @@
 #include "optionspage.h"
 #include "optionspage_connection_sftp.h"
 #include "../filezillaapp.h"
+#include "../fzputtygen_interface.h"
 #include "../inputdialog.h"
 
 BEGIN_EVENT_TABLE(COptionsPageConnectionSFTP, COptionsPage)
@@ -15,12 +16,11 @@ END_EVENT_TABLE()
 
 COptionsPageConnectionSFTP::COptionsPageConnectionSFTP()
 {
-	m_pFzpg = new CFZPuttyGenInterface(this);
+	m_pFzpg = std::make_unique<CFZPuttyGenInterface>(this);
 }
 
 COptionsPageConnectionSFTP::~COptionsPageConnectionSFTP()
 {
-	delete m_pFzpg;
 }
 
 bool COptionsPageConnectionSFTP::LoadPage()

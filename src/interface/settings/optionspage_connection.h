@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_CONNECTION_H__
-#define __OPTIONSPAGE_CONNECTION_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_HEADER
 
-class COptionsPageConnection : public COptionsPage
+class COptionsPageConnection final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_CONNECTION"); }
@@ -14,4 +14,4 @@ protected:
 	void OnWizard(wxCommandEvent& event);
 };
 
-#endif //__OPTIONSPAGE_CONNECTION_H__
+#endif

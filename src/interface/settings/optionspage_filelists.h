@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_FILELISTS_H__
-#define __OPTIONSPAGE_FILELISTS_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_FILELISTS_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_FILELISTS_HEADER
 
-class COptionsPageFilelists : public COptionsPage
+class COptionsPageFilelists final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_FILELISTS"); }
@@ -10,4 +10,4 @@ public:
 	virtual bool Validate();
 };
 
-#endif //__OPTIONSPAGE_FILELISTS_H__
+#endif

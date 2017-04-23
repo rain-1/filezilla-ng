@@ -1,5 +1,5 @@
-#ifndef __OPTIONS_H__
-#define __OPTIONS_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONS_HEADER
+#define FILEZILLA_INTERFACE_OPTIONS_HEADER
 
 #include "local_path.h"
 
@@ -195,4 +195,4 @@ protected:
 	changed_options_t changedOptions_;
 };
 
-#endif //__OPTIONS_H__
+#endif

@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_CONNECTION_FTP_H__
-#define __OPTIONSPAGE_CONNECTION_FTP_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_FTP_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_CONNECTION_FTP_HEADER
 
-class COptionsPageConnectionFTP : public COptionsPage
+class COptionsPageConnectionFTP final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_CONNECTION_FTP"); }
@@ -9,4 +9,4 @@ public:
 	virtual bool SavePage();
 };
 
-#endif //__OPTIONSPAGE_CONNECTION_FTP_H__
+#endif

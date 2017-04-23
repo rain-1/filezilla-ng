@@ -1,7 +1,7 @@
-#ifndef __OPTIONSPAGE_LANGUAGE_H__
-#define __OPTIONSPAGE_LANGUAGE_H__
+#ifndef FILEZILLA_INTERFACE_OPTIONSPAGE_LANGUAGE_HEADER
+#define FILEZILLA_INTERFACE_OPTIONSPAGE_LANGUAGE_HEADER
 
-class COptionsPageLanguage : public COptionsPage
+class COptionsPageLanguage final : public COptionsPage
 {
 public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_LANGUAGE"); }
@@ -21,4 +21,4 @@ protected:
 	std::vector<_locale_info> m_locale;
 };
 
-#endif //__OPTIONSPAGE_LANGUAGE_H__
+#endif
