@@ -2,10 +2,10 @@
 # Milen A. Radev <milen@radev.net>, 2005
 # Асен Генов, 07.2008
 # Стоян Димитров <stoyanster от гмейл> 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
-# 
+#
 # Remove source code references (before deployment)
 #   (^#:(.+)\n)+ -> ''
-# 
+#
 # Cleanup for spellcheck
 #   ^[a-zA-Z0-9'\.\\ \(\)\?%:\/,\<\>@\-_!"\+;=\s&\[\*\|#]+\n -> '' - remove headers, source strings, translator comments etc.
 #   ^msgstr(?:\[\d\])?\s"(.+?)"$ -> $1 - remove poedit translation metadata
@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-03-13 14:01+0100\n"
+"POT-Creation-Date: 2017-04-23 12:52+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Стоян <stoyanster от gmail>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -24,14 +24,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:114
-msgid ""
-"\n"
-"\n"
-msgstr ""
-"\n"
-"\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:59
@@ -178,8 +170,7 @@ msgid ""
 "Please download FileZilla again. If this problem persists, please submit a "
 "bug report."
 msgstr ""
-"%s не можа да бъде намерен. Без този компонент на FileZilla, SFTP няма да "
-"работи.\n"
+"%s не e намерен. Без този компонент на FileZilla, SFTP няма да работи.\n"
 "\n"
 "Моля, изтеглете FileZilla отново. Ако проблемът остане, моля, напишете "
 "доклад за дефект."
@@ -194,12 +185,11 @@ msgid ""
 "- Make sure %s is in a directory listed in your PATH environment variable.\n"
 "- Set the full path to %s in the FZ_FZSFTP environment variable."
 msgstr ""
-"%s не можа да бъде намерен. Без този компонент на FileZilla, SFTP няма да "
-"работи.\n"
+"%s не е намерен. Без този компонент на FileZilla, SFTP няма да работи.\n"
 "\n"
 "Възможни решения на проблема:\n"
 "- Уверете се, че %s е в папка от променливата на средата PATH.\n"
-"- Укажете пълният път до %s в променливата на средата FZ_FZSFTP."
+"- Укажете пълния път до %s в променливата на средата FZ_FZSFTP."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:59
 #, c-format
@@ -213,7 +203,7 @@ msgstr "%u - Потребител"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:540
 msgid "%w - Proxy password"
-msgstr "%w - Прокси парола"
+msgstr "%w - Парола за прокси"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3678
 msgid "&Abort previous connection and connect in current tab"
@@ -245,7 +235,7 @@ msgstr "&Добавяне в опашката"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:645
 msgid "&Add key file..."
-msgstr "&Добавяне файл-ключ…"
+msgstr "&Добавяне на файл-ключ…"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:498
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:561
@@ -292,7 +282,7 @@ msgstr "&Автоматично"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:273
 msgid "&Background color:"
-msgstr "&Цвят на фона"
+msgstr "&Цвят на фона:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:148
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:604
@@ -414,13 +404,13 @@ msgstr "Изтрива&не на символна връзка"
 msgid "&Directory comparison"
 msgstr "&Сравняване на папки"
 
-#: ../../locales/../src/interface/state.cpp:975
+#: ../../locales/../src/interface/state.cpp:977
 msgid ""
 "&Disable synchronized browsing and continue changing the local directory"
 msgstr ""
 "&Изключване на синхронизираното разлистване и смяна само на местната папка"
 
-#: ../../locales/../src/interface/state.cpp:1053
+#: ../../locales/../src/interface/state.cpp:1055
 msgid ""
 "&Disable synchronized browsing and continue changing the remote directory"
 msgstr ""
@@ -449,7 +439,7 @@ msgstr "Да &не бъдат запазвани пароли (препоръч�
 
 #: ../../locales/../src/interface/conditionaldialog.cpp:25
 msgid "&Don't show this dialog again."
-msgstr "&Да не се показва повече този диалог"
+msgstr "&Да не се показва повече този диалог."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:389
 msgid "&Don't use external IP address on local connections."
@@ -744,7 +734,7 @@ msgstr "Но&в"
 msgid "&New Site"
 msgstr "Нова &връзка"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1688
+#: ../../locales/../src/interface/Mainfrm.cpp:1702
 msgid "&New version available!"
 msgstr "&Налична е нова версия!"
 
@@ -1107,7 +1097,7 @@ msgstr "&Потребител:"
 msgid "&Username:"
 msgstr "&Потребител:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1682
+#: ../../locales/../src/interface/Mainfrm.cpp:1696
 #, c-format
 msgid "&Version %s"
 msgstr "&Версия %s"
@@ -1127,7 +1117,7 @@ msgstr "&Следене за локално редактирани файлов�
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2071
 msgid "&When checking for updates, check for:"
-msgstr "При проверка за &актуализация, да се проверява за"
+msgstr "При проверка за &актуализация, да се проверява за:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:409
 msgid "&Write"
@@ -1314,7 +1304,7 @@ msgstr "Необходим е стандартен редактор."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:166
 #: ../../locales/../src/interface/RemoteTreeView.cpp:120
-#: ../../locales/../src/interface/state.cpp:800
+#: ../../locales/../src/interface/state.cpp:802
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "Папка не може да бъде влачена в нейна подпапка."
 
@@ -1515,7 +1505,7 @@ msgstr "Добавяне избраните файлове и папки в оп
 msgid "Add to queue"
 msgstr "Добавяне в опашката"
 
-#: ../../locales/../src/engine/proxy.cpp:498
+#: ../../locales/../src/engine/proxy.cpp:513
 msgid "Address type not supported"
 msgstr "Неподдържан вид на адрес"
 
@@ -1641,7 +1631,7 @@ msgstr "Елемент със същото име като влачения ве
 msgid "Anonymous"
 msgstr "Анонимно"
 
-#: ../../locales/../src/interface/state.cpp:1029
+#: ../../locales/../src/interface/state.cpp:1031
 msgid ""
 "Another remote operation is already in progress, cannot change directory now."
 msgstr ""
@@ -1653,13 +1643,13 @@ msgstr ""
 "Никакви промени, направени в Управление на връзки няма да могат да бъдат "
 "запазени."
 
-#: ../../locales/../src/interface/filter.cpp:955
+#: ../../locales/../src/interface/filter.cpp:995
 msgid "Any changes made to the filters could not be saved."
 msgstr ""
 "Никакви промени, направени в Управление на връзки няма да могат да бъдат "
 "запазени."
 
-#: ../../locales/../src/interface/filter.cpp:863
+#: ../../locales/../src/interface/filter.cpp:903
 msgid "Any changes made to the filters will not be saved."
 msgstr "Никакви промени, направени във филтрите няма да бъдат запазени."
 
@@ -1719,7 +1709,7 @@ msgstr "Задаване на въпроси във форумите на FileZi
 
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:63
 msgid "Associated program not found:"
-msgstr "Асоциираната програма не е намерена"
+msgstr "Асоциираната програма не е намерена:"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:511
 msgid "At least one filter condition is incomplete"
@@ -1976,7 +1966,7 @@ msgstr ""
 msgid "Cannot load key file"
 msgstr "Неуспешно зареждане на файл-ключ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1014
+#: ../../locales/../src/interface/Mainfrm.cpp:1027
 msgid "Cannot load toolbar from resource file"
 msgstr "Грешка при зареждане на лента с инструменти от ресурсен файл"
 
@@ -1993,16 +1983,16 @@ msgstr "Грешка при преименуване на запис"
 msgid "Cannot rename file"
 msgstr "Грешка при преименуване на файл"
 
-#: ../../locales/../src/engine/proxy.cpp:138
+#: ../../locales/../src/engine/proxy.cpp:139
 msgid "Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."
 msgstr "IPv4 адреси не могат да бъдат разпознавани през SOCKS4 прокси."
 
-#: ../../locales/../src/interface/filter.cpp:222
-#: ../../locales/../src/interface/filter.cpp:286
+#: ../../locales/../src/interface/filter.cpp:227
+#: ../../locales/../src/interface/filter.cpp:297
 msgid "Cannot save filterset"
 msgstr "Неуспешен запис на набора филтри"
 
-#: ../../locales/../src/interface/filter.cpp:186
+#: ../../locales/../src/interface/filter.cpp:188
 msgid "Cannot select filter"
 msgstr "Неуспешен избор на филтър"
 
@@ -2102,13 +2092,13 @@ msgstr "Проверка за по-нова версия на FileZilla"
 msgid "Check for updates failed"
 msgstr "Проверката за актуализация беше неуспешна"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:279
+#: ../../locales/../src/engine/ftp/logon.cpp:281
 msgid ""
 "Check your login credentials. The entered password starts or ends with a "
 "space character."
 msgstr "Въведената парола започва или завършва с интервал."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:275
+#: ../../locales/../src/engine/ftp/logon.cpp:277
 msgid ""
 "Check your login credentials. The entered username starts or ends with a "
 "space character."
@@ -2146,7 +2136,7 @@ msgstr "Избиране на стандартна местна папка"
 msgid "Choose the local directory"
 msgstr "Избор на местна папка"
 
-#: ../../locales/../src/engine/http/request.cpp:412
+#: ../../locales/../src/engine/http/request.cpp:419
 msgid "Chunk data improperly terminated"
 msgstr "Неправилно завършени данни в пакета"
 
@@ -2205,8 +2195,8 @@ msgid "Close &all other tabs"
 msgstr "Затваряне на &другите раздели"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1158
-#: ../../locales/../src/interface/Mainfrm.cpp:1179
+#: ../../locales/../src/interface/Mainfrm.cpp:1171
+#: ../../locales/../src/interface/Mainfrm.cpp:1192
 msgid "Close FileZilla"
 msgstr "Затваряне на FileZilla"
 
@@ -2239,7 +2229,7 @@ msgstr "Командата и аргументите трябва да бъда�
 msgid "Command failed"
 msgstr "Командата неуспешна"
 
-#: ../../locales/../src/engine/proxy.cpp:495
+#: ../../locales/../src/engine/proxy.cpp:510
 msgid "Command not supported"
 msgstr "Неподдържана команда"
 
@@ -2264,7 +2254,7 @@ msgstr "Общо име:"
 #: ../../locales/../src/interface/netconfwizard.cpp:449
 #: ../../locales/../src/interface/netconfwizard.cpp:462
 msgid "Communication tainted by router or firewall"
-msgstr "Комуникацията се влошава от защитна стена или маршрутизатор."
+msgstr "Комуникацията се влошава от защитна стена или маршрутизатор"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:82
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:545
@@ -2337,7 +2327,7 @@ msgstr "Нужно е потвърждение"
 #: ../../locales/../src/interface/file_utils.h:45
 #: ../../locales/../src/interface/LocalListView.cpp:1704
 #: ../../locales/../src/interface/RemoteListView.cpp:1423
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1058
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1063
 #: ../../locales/../src/interface/search.cpp:1158
 msgid "Confirmation needed"
 msgstr "Нужно е потвърждение"
@@ -2377,14 +2367,14 @@ msgstr "Свързване"
 msgid "Connecting to %s"
 msgstr "Свързване към %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1109
-#: ../../locales/../src/engine/ftp/logon.cpp:92
+#: ../../locales/../src/engine/ControlSocket.cpp:1105
+#: ../../locales/../src/engine/ftp/logon.cpp:95
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Свързване с %s през прокси %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1029
-#: ../../locales/../src/engine/proxy.cpp:237
+#: ../../locales/../src/engine/ControlSocket.cpp:1030
+#: ../../locales/../src/engine/proxy.cpp:240
 #: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:43
 #, c-format
 msgid "Connecting to %s..."
@@ -2403,12 +2393,12 @@ msgid "Connection attempt failed"
 msgstr "Опитът за връзка неуспешен"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:992
-#: ../../locales/../src/engine/proxy.cpp:211
+#: ../../locales/../src/engine/proxy.cpp:212
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "Неуспешен опит за връзка с „%s“, пробване на следващ адрес."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:997
+#: ../../locales/../src/engine/ControlSocket.cpp:998
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Неуспешен опит за връзка с „%s“."
@@ -2426,17 +2416,17 @@ msgstr "Времето за изчакване при свързване изт�
 msgid "Connection closed"
 msgstr "Връзката прекъсната"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1082
+#: ../../locales/../src/engine/ControlSocket.cpp:1083
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:75
 msgid "Connection closed by server"
 msgstr "Връзката прекъсната от сървъра"
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:185
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:97
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:96
 msgid "Connection established, initializing TLS..."
 msgstr "Установена е връзка, инициализира се TLS…"
 
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:120
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:119
 msgid "Connection established, sending HTTP request"
 msgstr "Установена е връзка, изпраща се заявка от вид HTTP"
 
@@ -2452,11 +2442,11 @@ msgstr "Връзка установена, очаква се приветств�
 msgid "Connection lost"
 msgstr "Връзката е загубена"
 
-#: ../../locales/../src/engine/proxy.cpp:480
+#: ../../locales/../src/engine/proxy.cpp:495
 msgid "Connection not allowed by ruleset"
 msgstr "Непозволена от правилата връзка"
 
-#: ../../locales/../src/engine/proxy.cpp:489
+#: ../../locales/../src/engine/proxy.cpp:504
 msgid "Connection refused"
 msgstr "Връзката отказана"
 
@@ -2476,8 +2466,8 @@ msgstr "Връзката прекъсната от отсрещната стра
 #, c-format
 msgid "Connection timed out after %d second of inactivity"
 msgid_plural "Connection timed out after %d seconds of inactivity"
-msgstr[0] "Времето за свързване изтече след %d секунда бездействие."
-msgstr[1] "Времето за свързване изтече след %d секунди бездействие."
+msgstr[0] "Времето за свързване изтече след %d секунда бездействие"
+msgstr[1] "Времето за свързване изтече след %d секунди бездействие"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:1071
 msgid "Connection timed out."
@@ -2487,7 +2477,7 @@ msgstr "Времето за свързване изтече."
 msgid "Connection to server lost."
 msgstr "Връзката със сървъра загубена."
 
-#: ../../locales/../src/engine/proxy.cpp:220
+#: ../../locales/../src/engine/proxy.cpp:223
 msgid "Connection with proxy established, performing handshake..."
 msgstr "Връзка с прокси установена, очаква се приветствие…"
 
@@ -2546,7 +2536,7 @@ msgstr ""
 msgid "Could not add connection to Site Manager"
 msgstr "Невъзможно добавянето на връзката към Управление на връзки"
 
-#: ../../locales/../src/interface/state.cpp:814
+#: ../../locales/../src/interface/state.cpp:816
 msgid "Could not complete operation"
 msgstr "Невъзможно завършването на действието"
 
@@ -2554,7 +2544,7 @@ msgstr "Невъзможно завършването на действието"
 msgid "Could not connect to server"
 msgstr "Невъзможно свързване със сървър"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1147
+#: ../../locales/../src/engine/ControlSocket.cpp:1136
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Невъзможно свързване със сървър: %s"
@@ -2571,7 +2561,7 @@ msgid "Could not convert private key"
 msgstr "Невъзможно преобразуване на частния ключ"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2543
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1400
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1405
 #: ../../locales/../src/interface/search.cpp:1329
 msgid "Could not copy URLs"
 msgstr "Невъзможно копирането на URL"
@@ -2608,7 +2598,7 @@ msgid "Could not create security-scoped bookmark from URL:"
 msgstr "Не може да бъде създадена защитена отметка за адрес:"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2209
-#: ../../locales/../src/interface/RemoteTreeView.cpp:855
+#: ../../locales/../src/interface/RemoteTreeView.cpp:860
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
 "Either the shell extension is not installed properly or you didn't drop the "
@@ -2635,7 +2625,7 @@ msgstr ""
 "командния ред „--datadir <път>“ или чрез установяване на променливата на "
 "обкръжението FZ_DATADIR."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:744
+#: ../../locales/../src/engine/ftp/logon.cpp:746
 msgid "Could not generate custom login sequence."
 msgstr "Невъзможно съставянето на специална входна последователност."
 
@@ -2655,7 +2645,7 @@ msgstr ""
 "Не може да бъде взето името на обекта на сертификата, gnutls_x509_get_dn се "
 "провали"
 
-#: ../../locales/../src/interface/state.cpp:1014
+#: ../../locales/../src/interface/state.cpp:1016
 msgid "Could not get full remote path."
 msgstr "Не може да бъде получен пълен отдалечен път."
 
@@ -2709,7 +2699,7 @@ msgstr "Невъзможно зареждане на файл-ключ"
 msgid "Could not load private key"
 msgstr "Невъзможно зареждане на частен ключ"
 
-#: ../../locales/../src/interface/state.cpp:1037
+#: ../../locales/../src/interface/state.cpp:1039
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2745,7 +2735,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/aboutdialog.cpp:220
 #: ../../locales/../src/interface/RemoteListView.cpp:2543
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1400
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1405
 #: ../../locales/../src/interface/search.cpp:1329
 msgid "Could not open clipboard"
 msgstr "Системният буфер не може да бъде отворен"
@@ -2815,7 +2805,7 @@ msgstr "Сортирането на партньорските сертифик�
 msgid "Could not spawn IO thread"
 msgstr "Невъзможно стартирането на входно-изходна нишка"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1123
+#: ../../locales/../src/engine/ControlSocket.cpp:1119
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Невъзможно започване на прокси приветствие: %s"
@@ -2883,7 +2873,7 @@ msgid "Could not write to log file: %s"
 msgstr "Невъзможно писането във файл-дневник: %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:953
-#: ../../locales/../src/engine/ControlSocket.cpp:1050
+#: ../../locales/../src/engine/ControlSocket.cpp:1051
 #: ../../locales/../src/engine/http/request.cpp:95
 #, c-format
 msgid "Could not write to socket: %s"
@@ -2897,11 +2887,11 @@ msgstr "Страна:"
 msgid "Crea&te new file"
 msgstr "Нов &файл"
 
-#: ../../locales/../src/interface/state.cpp:1052
+#: ../../locales/../src/interface/state.cpp:1054
 msgid "Create &missing local directory and enter it"
 msgstr "Създаване на липсваща местна п&апка и влизане вътре"
 
-#: ../../locales/../src/interface/state.cpp:974
+#: ../../locales/../src/interface/state.cpp:976
 msgid "Create &missing remote directory and enter it"
 msgstr "Създаване на липсваща отдалечена п&апка и влизане вътре"
 
@@ -2933,7 +2923,7 @@ msgstr "Нова п&апка и влизане вътре"
 #: ../../locales/../src/interface/LocalListView.cpp:927
 #: ../../locales/../src/interface/LocalTreeView.cpp:1159
 #: ../../locales/../src/interface/RemoteListView.cpp:1321
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1240
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1245
 msgid "Create directory"
 msgstr "Нова &папка"
 
@@ -2998,7 +2988,7 @@ msgstr "Крива:"
 msgid "Cus&tom"
 msgstr "&Потребителски"
 
-#: ../../locales/../src/interface/filter.cpp:92
+#: ../../locales/../src/interface/filter.cpp:91
 msgid "Custom filter set"
 msgstr "Потребителски набор"
 
@@ -3223,7 +3213,7 @@ msgstr "Папка"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1781
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:390
 #: ../../locales/../src/interface/filelistctrl.cpp:469
-#: ../../locales/../src/interface/Mainfrm.cpp:2237
+#: ../../locales/../src/interface/Mainfrm.cpp:2251
 #: ../../locales/../src/interface/toolbar.cpp:51
 msgid "Directory comparison"
 msgstr "Сравняване на папки"
@@ -3266,7 +3256,7 @@ msgstr "Успешно разлистване на папка"
 msgid "Disa&ble all"
 msgstr "Изключ&ване всички"
 
-#: ../../locales/../src/interface/state.cpp:1045
+#: ../../locales/../src/interface/state.cpp:1047
 msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr ""
@@ -3285,17 +3275,17 @@ msgstr "Прекъсване връзката със сървър"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:52
 #: ../../locales/../src/engine/ControlSocket.cpp:954
-#: ../../locales/../src/engine/ControlSocket.cpp:1052
+#: ../../locales/../src/engine/ControlSocket.cpp:1053
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:162
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:165
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:161
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:164
 #: ../../locales/../src/engine/http/request.cpp:96
 #: ../../locales/../src/interface/queue.cpp:339
 msgid "Disconnected from server"
 msgstr "Връзката със сървъра е прекъсната"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1085
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:179
+#: ../../locales/../src/engine/ControlSocket.cpp:1086
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:178
 #, c-format
 msgid "Disconnected from server: %s"
 msgstr "Прекъсната връзка със сървър: %s"
@@ -3322,8 +3312,8 @@ msgstr "&Да не бъде използван стандартният реда
 msgid "Do the same with &all selected files already being edited"
 msgstr "Същото действие за &всички отворени за редактиране файлове"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1161
-#: ../../locales/../src/interface/Mainfrm.cpp:1183
+#: ../../locales/../src/interface/Mainfrm.cpp:1174
+#: ../../locales/../src/interface/Mainfrm.cpp:1196
 msgid "Do you really want to close FileZilla?"
 msgstr "Наистина ли желаете да затворите FileZilla?"
 
@@ -3401,7 +3391,7 @@ msgstr "Изтегляне избраната папка"
 msgid "Download selected files and directories"
 msgstr "Изтегляне избраните файлове и папки"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:986
+#: ../../locales/../src/interface/Mainfrm.cpp:999
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3414,7 +3404,7 @@ msgstr ""
 msgid "Downloading"
 msgstr "Изтегляне"
 
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:132
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:131
 #, c-format
 msgid "Downloading %s"
 msgstr "Изтегляне на %s"
@@ -3590,11 +3580,11 @@ msgstr "Разлистване на папка"
 msgid "Enter filter name"
 msgstr "Име на филтър"
 
-#: ../../locales/../src/interface/filter.cpp:216
+#: ../../locales/../src/interface/filter.cpp:220
 msgid "Enter name for filterset"
 msgstr "Име набор филтри"
 
-#: ../../locales/../src/interface/filter.cpp:274
+#: ../../locales/../src/interface/filter.cpp:284
 msgid "Enter new name for filterset"
 msgstr "Въвеждане на ново име за набор филтри"
 
@@ -3676,8 +3666,8 @@ msgstr "Грешка при зареждане на опашката"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:748
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:788
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:841
-#: ../../locales/../src/interface/filter.cpp:864
-#: ../../locales/../src/interface/filter.cpp:956
+#: ../../locales/../src/interface/filter.cpp:904
+#: ../../locales/../src/interface/filter.cpp:996
 #: ../../locales/../src/interface/import.cpp:118
 #: ../../locales/../src/interface/import.cpp:309
 #: ../../locales/../src/interface/Options.cpp:246
@@ -3854,11 +3844,11 @@ msgstr "Неуспешно създаване сокет за слушане в 
 
 #: ../../locales/../src/interface/LocalTreeView.cpp:633
 msgid "Failed to get 'My Documents' path"
-msgstr "Неуспешно търсене пътя до „Моите документи“"
+msgstr "Неуспешно търсене на пътя до „Моите документи“"
 
 #: ../../locales/../src/interface/LocalTreeView.cpp:621
 msgid "Failed to get desktop path"
-msgstr "Неуспешно търсене пътя до роботния плот"
+msgstr "Неуспешно търсене на пътя до работния плот"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:961
 msgid "Failed to get peer address of control connection, connection closed."
@@ -3875,8 +3865,8 @@ msgid "Failed to initialize FTP engine"
 msgstr "Неуспешна инициализация на FTP машината"
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:193
-#: ../../locales/../src/engine/ftp/logon.cpp:253
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:104
+#: ../../locales/../src/engine/ftp/logon.cpp:255
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:103
 msgid "Failed to initialize TLS."
 msgstr "Неуспешна инициализация на TLS."
 
@@ -3922,19 +3912,19 @@ msgid "Failed to retrieve directory listing"
 msgstr "Неуспешно разлистване на папка"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:737
-msgid "Failed to retrieve external ip address, aborting."
+msgid "Failed to retrieve external IP address, aborting."
 msgstr "Неуспешно получаване външния IP адрес, прекратяване."
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:678
-msgid "Failed to retrieve external ip address, using local address"
+msgid "Failed to retrieve external IP address, using local address"
 msgstr "Неуспешно получаване външния IP адрес, използва се вътрешния адрес"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:712
-msgid "Failed to retrieve local ip address, aborting."
+msgid "Failed to retrieve local IP address, aborting."
 msgstr "Неуспешно получаване вътрешния IP адрес, прекратяване."
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:696
-msgid "Failed to retrieve local ip address."
+msgid "Failed to retrieve local IP address."
 msgstr "Неуспешно получаване вътрешния IP адрес."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:638
@@ -3984,7 +3974,7 @@ msgid "Failed to set language to %s, using default system language."
 msgstr ""
 "Неуспешно установяване езика на %s, използване стандартния системен език."
 
-#: ../../locales/../src/interface/settings/optionspage.cpp:214
+#: ../../locales/../src/interface/settings/optionspage.cpp:212
 msgid "Failed to validate settings"
 msgstr "Неуспешна проверка настройки"
 
@@ -4098,7 +4088,7 @@ msgstr "Успешно прехвърляне на файл"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Успешно прехвърляне на файл, прехвърлени %s за %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1160
+#: ../../locales/../src/interface/Mainfrm.cpp:1173
 msgid "File transfers still in progress."
 msgstr "Все още се прехвърлят файлове."
 
@@ -4123,9 +4113,9 @@ msgstr "Сега FileZilla ще провери настройките за гр�
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3666
 msgid "FileZilla is already connected to a server."
-msgstr "FileZilla е вече свързана към сървър. Установяване на новата връзка в:"
+msgstr "FileZilla е вече свързана към сървър."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1465
+#: ../../locales/../src/interface/Mainfrm.cpp:1479
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "За да влезе в сила промяната на езика е нужен е рестарт на FileZilla."
 
@@ -4232,8 +4222,8 @@ msgstr "Филтрира елементите, отговарящи на нит�
 msgid "Filter out items matching not all of the following"
 msgstr "Филтрира елементите, отговарящи на не всички критерии"
 
-#: ../../locales/../src/interface/filter.cpp:236
-#: ../../locales/../src/interface/filter.cpp:292
+#: ../../locales/../src/interface/filter.cpp:243
+#: ../../locales/../src/interface/filter.cpp:303
 msgid "Filter set already exists"
 msgstr "Съществуващ набор филтри"
 
@@ -4334,7 +4324,7 @@ msgstr "Още документация"
 msgid "General"
 msgstr "Общи"
 
-#: ../../locales/../src/engine/proxy.cpp:477
+#: ../../locales/../src/engine/proxy.cpp:492
 msgid "General SOCKS server failure"
 msgstr "Грешка от общ тип на SOCKS сървъра"
 
@@ -4351,8 +4341,8 @@ msgstr "&Получаване на външния IP адрес от URL:"
 msgid "Getting help"
 msgstr "Получаване помощ"
 
-#: ../../locales/../src/interface/filter.cpp:236
-#: ../../locales/../src/interface/filter.cpp:292
+#: ../../locales/../src/interface/filter.cpp:243
+#: ../../locales/../src/interface/filter.cpp:303
 msgid "Given filterset name already exists, overwrite filter set?"
 msgstr "Вече съществува набор филтри с това име. Искате ли да бъде презаписан?"
 
@@ -4446,7 +4436,7 @@ msgstr "Несъответствие на хост-ключа"
 msgid "Host starts with '[' but no closing bracket found."
 msgstr "Хостът започва с „[“, но липсва затварящата скоба."
 
-#: ../../locales/../src/engine/proxy.cpp:486
+#: ../../locales/../src/engine/proxy.cpp:501
 msgid "Host unreachable"
 msgstr "Хостът недостъпен"
 
@@ -4470,7 +4460,7 @@ msgstr "часове,"
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (пример: 15:47)"
 
-#: ../../locales/../src/engine/proxy.cpp:117
+#: ../../locales/../src/engine/proxy.cpp:118
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
 msgstr "IPv6 адреси не се поддържат от SOCKS4 прокси"
 
@@ -4597,7 +4587,7 @@ msgstr ""
 "Като натиснете „Проверка“, FileZilla ще се свърже с probe.filezilla-project."
 "org и ще направи няколко теста."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1182
+#: ../../locales/../src/interface/Mainfrm.cpp:1195
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "При затваряне на FileZilla промените ще бъдат загубени."
 
@@ -4729,7 +4719,7 @@ msgstr ""
 "Информация за последната версия на FileZilla не може да бъде взета. Опитайте "
 "отново по-късно."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:244
+#: ../../locales/../src/engine/ftp/logon.cpp:246
 msgid "Initializing TLS..."
 msgstr "Инициализация на TLS…"
 
@@ -4737,7 +4727,7 @@ msgstr "Инициализация на TLS…"
 msgid "Insecure algorithm!"
 msgstr "Незащитен алгоритъм!"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:229
+#: ../../locales/../src/engine/ftp/logon.cpp:231
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "Незащитен сървър, който не поддържа FTP през TLS."
 
@@ -4758,14 +4748,14 @@ msgstr "Прекъснато със сигнал"
 #: ../../locales/../src/engine/ControlSocket.cpp:214
 #: ../../locales/../src/interface/queue.cpp:342
 msgid "Interrupted by user"
-msgstr "Прекъснато от потребителя."
+msgstr "Прекъснато от потребителя"
 
 #: ../../locales/../src/engine/http/request.cpp:29
-#: ../../locales/../src/engine/http/request.cpp:344
+#: ../../locales/../src/engine/http/request.cpp:351
 msgid "Invalid Content-Length"
 msgstr "Невалидна заглавка „Content-Length“"
 
-#: ../../locales/../src/engine/http/request.cpp:245
+#: ../../locales/../src/engine/http/request.cpp:252
 msgid "Invalid HTTP Response"
 msgstr "Невалиден отговор за HTTP"
 
@@ -4782,7 +4772,7 @@ msgstr ""
 "Изберете опцията за UTF-8 в Управление на връзки, за да наложите "
 "използването на UTF-8."
 
-#: ../../locales/../src/engine/http/request.cpp:440
+#: ../../locales/../src/engine/http/request.cpp:447
 msgid "Invalid chunk size"
 msgstr "Невалидна дължина на парче"
 
@@ -4818,7 +4808,7 @@ msgstr "Невалидно име на хост: %s"
 msgid "Invalid input"
 msgstr "Невалидни данни"
 
-#: ../../locales/../src/engine/http/request.cpp:297
+#: ../../locales/../src/engine/http/request.cpp:304
 msgid "Invalid line"
 msgstr "Невалиден ред"
 
@@ -4842,7 +4832,7 @@ msgstr ""
 "ftps:// FTP през скрит TLS и\n"
 "ftpes:// FTP през явен TLS."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:66
+#: ../../locales/../src/engine/ftp/logon.cpp:69
 msgid ""
 "Invalid proxy host, after closing bracket only colon and port may follow."
 msgstr ""
@@ -4857,7 +4847,7 @@ msgstr "Невалиден регулярен израз"
 msgid "Invalid regular expression in search conditions."
 msgstr "Невалиден регулярен израз в условието на търсенето."
 
-#: ../../locales/../src/engine/http/request.cpp:254
+#: ../../locales/../src/engine/http/request.cpp:261
 msgid "Invalid response code"
 msgstr "Невалиден код на отговор"
 
@@ -4940,7 +4930,7 @@ msgstr "Най-н&исък"
 msgid "Language"
 msgstr "Език"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1465
+#: ../../locales/../src/interface/Mainfrm.cpp:1479
 msgid "Language changed"
 msgstr "Езикът променен"
 
@@ -4974,7 +4964,7 @@ msgstr "Ограничаване размера на файла-дневник"
 msgid "Limit:"
 msgstr "Лимит:"
 
-#: ../../locales/../src/engine/http/request.cpp:400
+#: ../../locales/../src/engine/http/request.cpp:407
 msgid "Line length exceeded"
 msgstr "Надвишена дължина на ред"
 
@@ -5057,7 +5047,7 @@ msgstr "Населено място:"
 msgid "Log file"
 msgstr "Файл-дневник"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:412
+#: ../../locales/../src/engine/ftp/logon.cpp:414
 msgid "Logged in"
 msgstr "Вписан"
 
@@ -5066,7 +5056,7 @@ msgstr "Вписан"
 msgid "Logging"
 msgstr "Дневник"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:298
+#: ../../locales/../src/engine/ftp/logon.cpp:300
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Cannot fall back to local charset since using proxy."
@@ -5075,7 +5065,7 @@ msgstr ""
 "разбира UTF-8. Невъзможност за отстъпване до местния знаков набор, поради "
 "използването на прокси."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:305
+#: ../../locales/../src/engine/ftp/logon.cpp:307
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Trying local charset."
@@ -5083,7 +5073,7 @@ msgstr ""
 "Данните за удостоверяване съдържат не-ASCII знаци, а сървъра може да не "
 "разбира UTF-8. Проба с местния знаков набор."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:332
+#: ../../locales/../src/engine/ftp/logon.cpp:334
 msgid "Login sequence fully executed yet not logged in, aborting."
 msgstr ""
 "Входната последователност е изцяло изпълнена, но въпреки това липсва "
@@ -5131,10 +5121,10 @@ msgstr ""
 "Уверете се, че файлът може да бъде достъпен и е добре форматиран XML "
 "документ."
 
-#: ../../locales/../src/engine/http/request.cpp:391
-#: ../../locales/../src/engine/http/request.cpp:400
-#: ../../locales/../src/engine/http/request.cpp:412
-#: ../../locales/../src/engine/http/request.cpp:440
+#: ../../locales/../src/engine/http/request.cpp:398
+#: ../../locales/../src/engine/http/request.cpp:407
+#: ../../locales/../src/engine/http/request.cpp:419
+#: ../../locales/../src/engine/http/request.cpp:447
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Деформирани пакетни данни: %s"
@@ -5144,15 +5134,15 @@ msgstr "Деформирани пакетни данни: %s"
 msgid "Malformed request header: %s"
 msgstr "Деформирана заглавка на заявката: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:469
+#: ../../locales/../src/engine/http/request.cpp:476
 #, c-format
 msgid "Malformed response body: %s"
 msgstr "Деформирано съдържание на отговора: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:218
-#: ../../locales/../src/engine/http/request.cpp:297
-#: ../../locales/../src/engine/http/request.cpp:336
-#: ../../locales/../src/engine/http/request.cpp:344
+#: ../../locales/../src/engine/http/request.cpp:225
+#: ../../locales/../src/engine/http/request.cpp:304
+#: ../../locales/../src/engine/http/request.cpp:343
+#: ../../locales/../src/engine/http/request.cpp:351
 #, c-format
 msgid "Malformed response header: %s"
 msgstr "Деформирана заглавка на отговора: %s"
@@ -5194,7 +5184,7 @@ msgid "Memory allocation failure"
 msgstr "Невъзможност за заделяне на памет"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:388
-#: ../../locales/../src/interface/Mainfrm.cpp:1779
+#: ../../locales/../src/interface/Mainfrm.cpp:1793
 msgid "Message log"
 msgstr "Дневник"
 
@@ -5236,8 +5226,8 @@ msgstr "Моите документи"
 msgid "My Sites"
 msgstr "Моите връзки"
 
-#: ../../locales/../src/interface/settings/optionspage_themes.cpp:201
-#: ../../locales/../src/interface/settings/optionspage_themes.cpp:204
+#: ../../locales/../src/interface/settings/optionspage_themes.cpp:197
+#: ../../locales/../src/interface/settings/optionspage_themes.cpp:200
 msgid "N/a"
 msgstr "Няма"
 
@@ -5290,7 +5280,7 @@ msgid ""
 msgstr ""
 "Хостът няма адрес в мрежовото пространство в необходимото адресно семейство"
 
-#: ../../locales/../src/engine/proxy.cpp:483
+#: ../../locales/../src/engine/proxy.cpp:498
 #: ../../locales/../src/engine/socket.cpp:1034
 msgid "Network unreachable"
 msgstr "Мрежата недостъпна"
@@ -5333,7 +5323,7 @@ msgstr "Нова отметка"
 
 #: ../../locales/../src/interface/LocalTreeView.cpp:1163
 #: ../../locales/../src/interface/RemoteListView.cpp:1334
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1253
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1258
 msgid "New directory"
 msgstr "Нова папка"
 
@@ -5398,8 +5388,8 @@ msgstr "Не е указан хост. Моля, укажете хост."
 msgid "No images available"
 msgstr "Няма налични изображения"
 
-#: ../../locales/../src/interface/filter.cpp:222
-#: ../../locales/../src/interface/filter.cpp:286
+#: ../../locales/../src/interface/filter.cpp:227
+#: ../../locales/../src/interface/filter.cpp:297
 msgid "No name for the filterset given."
 msgstr "Въведете име за набора филтри."
 
@@ -5424,7 +5414,7 @@ msgstr "Няма намерени резултати"
 msgid "No sites available"
 msgstr "Няма налични връзки"
 
-#: ../../locales/../src/engine/proxy.cpp:455
+#: ../../locales/../src/engine/proxy.cpp:470
 msgid "No supported SOCKS5 auth method"
 msgstr "Не поддържан SOCKS5 метод за удостоверяване"
 
@@ -5465,7 +5455,7 @@ msgid "Not all items could be requeued for transfer."
 msgstr "Не всичко може да бъде върнато в опашката за прехвърляне."
 
 #: ../../locales/../src/interface/state.cpp:193
-#: ../../locales/../src/interface/state.cpp:1256
+#: ../../locales/../src/interface/state.cpp:1258
 msgid "Not connected"
 msgstr "Без осъществена връзка"
 
@@ -5741,7 +5731,7 @@ msgstr "Командата „PORT“ е променена от маршрут�
 msgid "Pa&ssive (recommended)"
 msgstr "&Пасивен (препоръчително)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2398
+#: ../../locales/../src/interface/Mainfrm.cpp:2412
 msgid "Parameter not a valid URL"
 msgstr "Параметърът е невалиден URL"
 
@@ -5786,7 +5776,7 @@ msgstr "Пътека"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Път име не може да бъде съставено от папката %s и подпапката %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2353
+#: ../../locales/../src/interface/Mainfrm.cpp:2367
 msgid "Path not found:"
 msgstr "Пътят не е намерен:"
 
@@ -5872,13 +5862,13 @@ msgstr ""
 
 #: ../../locales/../src/interface/filteredit.cpp:136
 msgid "Please enter a name for the new filter."
-msgstr "Моля, въведете името на новия филтър:"
+msgstr "Моля, въведете името на новия филтър."
 
 #: ../../locales/../src/interface/filteredit.cpp:242
 msgid "Please enter a new name for the copied filter."
 msgstr "Моля, въведете ново име на копирания филтър."
 
-#: ../../locales/../src/interface/filter.cpp:272
+#: ../../locales/../src/interface/filter.cpp:282
 #, c-format
 msgid "Please enter a new name for the filter set \"%s\""
 msgstr "Моля, въведете ново име за набора от филтри „%s“"
@@ -5918,7 +5908,7 @@ msgstr ""
 "Моля, въведете продължителност на изчакване между 10 и 9999 секунди или 0 за "
 "неограничено изчакване."
 
-#: ../../locales/../src/interface/filter.cpp:216
+#: ../../locales/../src/interface/filter.cpp:220
 msgid "Please enter a unique name for this filter set"
 msgstr "Моля, въведете уникално име за този набор от филтри"
 
@@ -5967,7 +5957,7 @@ msgstr ""
 #: ../../locales/../src/interface/LocalListView.cpp:927
 #: ../../locales/../src/interface/LocalTreeView.cpp:1159
 #: ../../locales/../src/interface/RemoteListView.cpp:1321
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1240
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1245
 msgid "Please enter the name of the directory which should be created:"
 msgstr "Въведете име на папката:"
 
@@ -6122,7 +6112,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1318
 msgid "Positio&n of the message log:"
-msgstr "&Разположение"
+msgstr "&Разположение:"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:249
 #: ../../locales/../src/interface/verifycertdialog.cpp:250
@@ -6228,9 +6218,9 @@ msgstr "&Прокси порт:"
 msgid "Proxy &user:"
 msgstr "По&требител:"
 
-#: ../../locales/../src/engine/proxy.cpp:464
+#: ../../locales/../src/engine/proxy.cpp:479
 msgid "Proxy authentication failed"
-msgstr "Неуспешно удостоверяване пред прокси."
+msgstr "Неуспешно удостоверяване пред прокси"
 
 #: ../../locales/../src/engine/ftp/transfersocket.cpp:103
 #: ../../locales/../src/engine/ftp/transfersocket.cpp:115
@@ -6238,31 +6228,31 @@ msgstr "Неуспешно удостоверяване пред прокси."
 msgid "Proxy handshake failed: %s"
 msgstr "Неуспешно приветствие от прокси: %s"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:61
+#: ../../locales/../src/engine/ftp/logon.cpp:64
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr "Хостът на проксито започва с „[“, но липсва затварящата скоба."
 
-#: ../../locales/../src/engine/proxy.cpp:323
+#: ../../locales/../src/engine/proxy.cpp:333
 #, c-format
 msgid "Proxy reply: %s"
 msgstr "Прокси отговор: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:505
+#: ../../locales/../src/engine/proxy.cpp:520
 #, c-format
 msgid "Proxy request failed. Reply from proxy: %s"
 msgstr "Неуспешно запитване към прокси. Отговорът е: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:378
+#: ../../locales/../src/engine/proxy.cpp:390
 #, c-format
 msgid "Proxy request failed: %s"
 msgstr "Неуспешно запитване към прокси: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:529
+#: ../../locales/../src/engine/proxy.cpp:544
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr ""
 "Запитване на прокси неуспешно: Неизвестен вид на адрес в CONNECT отговор"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:88
+#: ../../locales/../src/engine/ftp/logon.cpp:91
 msgid "Proxy set but proxy host or port invalid"
 msgstr "Има определено прокси, но хоста или порта са невалидни"
 
@@ -6278,7 +6268,7 @@ msgstr "Алгоритъм на публичния ключ:"
 msgid "Public permissions"
 msgstr "Публични права"
 
-#: ../../locales/../src/interface/QueueView.cpp:2708
+#: ../../locales/../src/interface/QueueView.cpp:2717
 msgid "Queue has been fully processed"
 msgstr "Опашката обработена"
 
@@ -6352,7 +6342,7 @@ msgstr "Че&тене"
 msgid "Read-only"
 msgstr "Само четим"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1051
+#: ../../locales/../src/interface/Mainfrm.cpp:1064
 msgid "Really cancel current operation?"
 msgstr "Наистина ли желаете да прекъснете текущата операция?"
 
@@ -6381,7 +6371,7 @@ msgstr[1] "Наистина ли да бъдат изтрити %d файла о
 msgid "Really delete %s and %s from the server?"
 msgstr "Наистина ли да бъдат изтрити %s и %s от сървъра?"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1058
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1063
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr ""
 "Наистина ли желаете да изтриете всички избрани файлове и/или папки от "
@@ -6397,7 +6387,7 @@ msgstr ""
 msgid "Reason"
 msgstr "Причина"
 
-#: ../../locales/../src/interface/QueueView.cpp:2701
+#: ../../locales/../src/interface/QueueView.cpp:2710
 msgid "Reboot now"
 msgstr "Рестартиране"
 
@@ -6604,19 +6594,19 @@ msgstr "Преименуване от „%s“ на „%s“"
 msgid "Reporting bugs and feature requests"
 msgstr "Докладване на дефект или искане за функционалност"
 
-#: ../../locales/../src/engine/proxy.cpp:369
+#: ../../locales/../src/engine/proxy.cpp:381
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
 "Заявката е отхвърлена - клиента няма работещ identd (или е недостъпен от "
 "сървъра)"
 
-#: ../../locales/../src/engine/proxy.cpp:372
+#: ../../locales/../src/engine/proxy.cpp:384
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr ""
 "Заявката е отхвърлена - identd на клиента не може да потвърди идентификацията"
 
-#: ../../locales/../src/engine/proxy.cpp:366
+#: ../../locales/../src/engine/proxy.cpp:378
 msgid "Request rejected or failed"
 msgstr "Заявката е отхвърлена или провалена"
 
@@ -6636,8 +6626,8 @@ msgstr "Анулиране и &връщане в опашката на всич�
 msgid "Resolved protocol is unknown"
 msgstr "Полученият протокол е неизвестен"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1139
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:149
+#: ../../locales/../src/engine/ControlSocket.cpp:1128
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:148
 #, c-format
 msgid "Resolving address of %s"
 msgstr "Запитване за адреса на %s"
@@ -6721,12 +6711,12 @@ msgstr "SFTP"
 msgid "SOC&KS 4"
 msgstr "SOC&KS 4"
 
-#: ../../locales/../src/engine/proxy.cpp:143
+#: ../../locales/../src/engine/proxy.cpp:144
 #, c-format
 msgid "SOCKS4 proxy will connect to: %s"
 msgstr "SOCKS4 проксито ще се свързва към: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:171
+#: ../../locales/../src/engine/proxy.cpp:172
 msgid ""
 "SOCKS5 does not support usernames or passwords longer than 255 characters."
 msgstr "SOCKS5 не поддържа потребителски имена и пароли по-дълги от 255 знака."
@@ -6763,11 +6753,11 @@ msgstr "Търсене в &папка:"
 
 #: ../../locales/../src/interface/toolbar.cpp:53
 msgid "Search for files recursively."
-msgstr "Рекурсивно търсене на файлове"
+msgstr "Рекурсивно търсене на файлове."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:191
 msgid "Search server for files"
-msgstr "Претърсване на сървър за файлове, които удовлетворяват:"
+msgstr "Претърсване на сървър за файлове, които удовлетворяват"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3052
 msgid "Search type:"
@@ -6879,7 +6869,7 @@ msgstr "Изберете категориите, които да бъдат ек
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1506
 msgid "Select the private data you would like to delete."
-msgstr "Изберете данните, които искате да заличите"
+msgstr "Изберете данните, които искате да бъдат изчистени."
 
 #: ../../locales/../src/interface/search.cpp:815
 #, c-format
@@ -6935,7 +6925,7 @@ msgstr "Избрани %s и %s. Обща дължина: най-малко %s"
 #: ../../locales/../src/interface/edithandler.cpp:1562
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
-msgstr "Избраният редактор не съществува"
+msgstr "Избраният редактор не съществува."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1800
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1867
@@ -6954,7 +6944,7 @@ msgstr "Избраният файл е вече отворен"
 msgid "Selected file is still being edited"
 msgstr "Избраният файл се редактира все още"
 
-#: ../../locales/../src/interface/filter.cpp:186
+#: ../../locales/../src/interface/filter.cpp:188
 msgid "Selected filter only works for local files."
 msgstr "Избраният филтър работи само върху местните файлове."
 
@@ -6977,7 +6967,7 @@ msgstr "&Изпращане на keep-alive команди"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:196
 msgid "Send custom command to the server otherwise not available"
-msgstr "Изпращане на специална команда към сървъра, достъпна по друг начин."
+msgstr "Изпращане на специална команда към сървъра, недостъпна по друг начин"
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:788
 msgid "Sending keep-alive command"
@@ -6996,8 +6986,8 @@ msgstr "&Вид на сървъра:"
 msgid "Server did not properly shut down TLS connection"
 msgstr "Сървърът неправилно прекъсна TLS връзка"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:392
-#: ../../locales/../src/engine/ftp/logon.cpp:452
+#: ../../locales/../src/engine/ftp/logon.cpp:394
+#: ../../locales/../src/engine/ftp/logon.cpp:454
 msgid "Server does not support non-ASCII characters."
 msgstr "Сървърът не поддържа не-ASCII символи."
 
@@ -7036,14 +7026,14 @@ msgstr ""
 "Сървърът вероятно не поддържа подновяване на файлове по-дълги от %d GB. Край "
 "на прехвърлянето - дължината на файловете съвпада."
 
-#: ../../locales/../src/engine/ftp/logon.cpp:334
+#: ../../locales/../src/engine/ftp/logon.cpp:336
 msgid ""
 "Server might require an account. Try specifying an account using the Site "
 "Manager"
 msgstr ""
 "Сървърът изисква регистрация. Моля, укажете своята в Управление на връзки"
 
-#: ../../locales/../src/engine/http/request.cpp:218
+#: ../../locales/../src/engine/http/request.cpp:225
 msgid "Server not sending proper line endings"
 msgstr "Сървърът не изпраща правилни знаци за край на ред"
 
@@ -7073,7 +7063,7 @@ msgstr ""
 "Сървърът изпрати пасивен отговор с немаршрутируем адрес. Използване адреса "
 "на сървъра."
 
-#: ../../locales/../src/engine/http/request.cpp:469
+#: ../../locales/../src/engine/http/request.cpp:476
 msgid "Server sent too much data."
 msgstr "Сървърът изпрати твърде много данни."
 
@@ -7151,7 +7141,7 @@ msgstr "&Включително необработеното съдържани�
 msgid "Show &welcome dialog..."
 msgstr "Показване &начален диалог…"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2240
+#: ../../locales/../src/interface/Mainfrm.cpp:2254
 msgid "Show both directory trees and continue comparing?"
 msgstr ""
 "Показване на местните и отдалечени папки и продължаване на сравнението?"
@@ -7173,7 +7163,7 @@ msgstr "Показване на наличните TLS шифри"
 msgid "Shows this help dialog"
 msgstr "Показване този помощен диалог"
 
-#: ../../locales/../src/interface/QueueView.cpp:2697
+#: ../../locales/../src/interface/QueueView.cpp:2706
 msgid "Shutdown now"
 msgstr "Изключване"
 
@@ -7266,10 +7256,10 @@ msgstr "Неизвестна дължина"
 msgid "Skip file"
 msgstr "Пропускане"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1207
-#: ../../locales/../src/engine/ControlSocket.cpp:1224
-#: ../../locales/../src/engine/ControlSocket.cpp:1250
-#: ../../locales/../src/engine/ControlSocket.cpp:1328
+#: ../../locales/../src/engine/ControlSocket.cpp:1196
+#: ../../locales/../src/engine/ControlSocket.cpp:1213
+#: ../../locales/../src/engine/ControlSocket.cpp:1239
+#: ../../locales/../src/engine/ControlSocket.cpp:1317
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Прескачане на изтеглянето на %s"
@@ -7279,10 +7269,10 @@ msgstr "Прескачане на изтеглянето на %s"
 msgid "Skipping non-existing key file \"%s\""
 msgstr "Прескачане на несъществуващият файл-ключ „%s“"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1210
-#: ../../locales/../src/engine/ControlSocket.cpp:1227
-#: ../../locales/../src/engine/ControlSocket.cpp:1253
-#: ../../locales/../src/engine/ControlSocket.cpp:1331
+#: ../../locales/../src/engine/ControlSocket.cpp:1199
+#: ../../locales/../src/engine/ControlSocket.cpp:1216
+#: ../../locales/../src/engine/ControlSocket.cpp:1242
+#: ../../locales/../src/engine/ControlSocket.cpp:1320
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Прескачане на качването на %s"
@@ -7307,7 +7297,7 @@ msgstr "Сокет без осъществена връзка"
 msgid "Socket type not supported for address family"
 msgstr "Адресното семейство не поддържа този вид сокети"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1181
+#: ../../locales/../src/interface/Mainfrm.cpp:1194
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Има файлове, които биват редактирани или чакат качване."
 
@@ -7450,7 +7440,7 @@ msgstr "Успешни прехвърляния"
 msgid "Summary of test results:"
 msgstr "Резюме на резултатите от проверката:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2705
+#: ../../locales/../src/interface/QueueView.cpp:2714
 msgid "Suspend now"
 msgstr "Изключване"
 
@@ -7470,11 +7460,11 @@ msgstr ""
 #: ../../locales/../src/interface/state.cpp:377
 #: ../../locales/../src/interface/state.cpp:385
 #: ../../locales/../src/interface/state.cpp:393
-#: ../../locales/../src/interface/state.cpp:1015
-#: ../../locales/../src/interface/state.cpp:1023
-#: ../../locales/../src/interface/state.cpp:1030
-#: ../../locales/../src/interface/state.cpp:1039
-#: ../../locales/../src/interface/state.cpp:1066
+#: ../../locales/../src/interface/state.cpp:1017
+#: ../../locales/../src/interface/state.cpp:1025
+#: ../../locales/../src/interface/state.cpp:1032
+#: ../../locales/../src/interface/state.cpp:1041
+#: ../../locales/../src/interface/state.cpp:1068
 #: ../../locales/../src/interface/toolbar.cpp:52
 msgid "Synchronized browsing"
 msgstr "Синхронизирано разлистване"
@@ -7497,8 +7487,8 @@ msgstr "Синтактична грешка"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2355
-#: ../../locales/../src/interface/Mainfrm.cpp:2400
+#: ../../locales/../src/interface/Mainfrm.cpp:2369
+#: ../../locales/../src/interface/Mainfrm.cpp:2414
 msgid "Syntax error in command line"
 msgstr "Синтактична грешка в командната линия"
 
@@ -7522,7 +7512,7 @@ msgstr "Мрежовата подсистема пропадна"
 msgid "T&oolbar"
 msgstr "Лента за инструм&енти"
 
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:115
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:114
 msgid "TLS connection established, sending HTTP request"
 msgstr "Установена е TLS връзка, изпраща се HTTP заявка"
 
@@ -7534,7 +7524,7 @@ msgstr "Установена е връзка от вид TLS, очаква се 
 msgid "TLS connection established."
 msgstr "Установена е връзка от вид TLS."
 
-#: ../../locales/../src/engine/proxy.cpp:492
+#: ../../locales/../src/engine/proxy.cpp:507
 msgid "TTL expired"
 msgstr "TTL изтече"
 
@@ -7544,7 +7534,7 @@ msgstr "Целевият файл вече съществува"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:65
 msgid "Target file:"
-msgstr "Целеви файл"
+msgstr "Целеви файл:"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2645
 msgid "Target filename already exists!"
@@ -7568,7 +7558,7 @@ msgstr "Резултат"
 
 #: ../../locales/../src/engine/ftp/filetransfer.cpp:281
 msgid "Testing resume capabilities of server"
-msgstr "Проверка на способността на сървъра за подновяване на прехвърляния."
+msgstr "Проверка на способността на сървъра за подновяване на прехвърляния"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1928
 msgid "The &following files are currently being edited:"
@@ -7662,7 +7652,7 @@ msgstr "Въведеното име за филтър вече съществу�
 #: ../../locales/../src/interface/settings/optionspage_filetype.cpp:153
 #, c-format
 msgid "The extension '%s' does already exist in the list"
-msgstr "Разширението „%s“ вече съществува в списъка."
+msgstr "Разширението „%s“ вече съществува в списъка"
 
 #: ../../locales/../src/interface/asyncrequestqueue.cpp:290
 #: ../../locales/../src/interface/asyncrequestqueue.cpp:298
@@ -7805,12 +7795,12 @@ msgstr ""
 msgid "The limit needs to be between 1 and 2000 MiB"
 msgstr "Ограничението трябва да бъде между 1 и 2000 MiB"
 
-#: ../../locales/../src/interface/state.cpp:1066
+#: ../../locales/../src/interface/state.cpp:1068
 #, c-format
 msgid "The local directory '%s' could not be created."
 msgstr "Местната папка „%s“ не може да бъде създадена."
 
-#: ../../locales/../src/interface/state.cpp:1051
+#: ../../locales/../src/interface/state.cpp:1053
 #, c-format
 msgid "The local directory '%s' does not exist."
 msgstr "Местната папка „%s“ не съществува."
@@ -7844,12 +7834,12 @@ msgstr "Новата версия е запазена в папката с из�
 msgid "The queue will not be saved."
 msgstr "Опашката няма да бъде запазена."
 
-#: ../../locales/../src/interface/state.cpp:973
+#: ../../locales/../src/interface/state.cpp:975
 #, c-format
 msgid "The remote directory '%s' does not exist."
 msgstr "Отдалечената папка „%s“ не съществува."
 
-#: ../../locales/../src/interface/state.cpp:1020
+#: ../../locales/../src/interface/state.cpp:1022
 #, c-format
 msgid ""
 "The remote directory '%s' is not below the synchronization root (%s).\n"
@@ -7950,11 +7940,11 @@ msgstr "Посоченото адресно семейство не се под�
 msgid "The specified network name is no longer available"
 msgstr "Указаното име на мрежа е вече недостъпно"
 
-#: ../../locales/../src/interface/QueueView.cpp:2700
+#: ../../locales/../src/interface/QueueView.cpp:2709
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "Системата ще бъде рестартирана освен ако не натиснете Отказ."
 
-#: ../../locales/../src/interface/QueueView.cpp:2696
+#: ../../locales/../src/interface/QueueView.cpp:2705
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Системата ще се изключи, освен ако не изберете Отказ."
 
@@ -7979,11 +7969,11 @@ msgstr "Валидният архив %s не може да бъде възст�
 msgid "Themes"
 msgstr "Теми"
 
-#: ../../locales/../src/interface/filter.cpp:326
+#: ../../locales/../src/interface/filter.cpp:340
 msgid "This filter set cannot be removed."
 msgstr "Този набор филтри не може да бъде изтрит."
 
-#: ../../locales/../src/interface/filter.cpp:266
+#: ../../locales/../src/interface/filter.cpp:276
 msgid "This filter set cannot be renamed."
 msgstr "Този набор филтри не може да бъде преименуван."
 
@@ -8032,11 +8022,11 @@ msgstr "Време за изчакване"
 msgid "Title:"
 msgstr "Заглавие:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2238
+#: ../../locales/../src/interface/Mainfrm.cpp:2252
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "За да сравнявате папки двата списъка трябва да са подравнени."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2239
+#: ../../locales/../src/interface/Mainfrm.cpp:2253
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "За да направите това, местните и отдалечени папки трябва да бъдат и двете "
@@ -8097,7 +8087,7 @@ msgstr "Превключва показването на отдалеченот�
 msgid "Toggles the display of the transfer queue"
 msgstr "Превключва показването на опашката"
 
-#: ../../locales/../src/engine/http/request.cpp:227
+#: ../../locales/../src/engine/http/request.cpp:234
 msgid "Too long header line"
 msgstr "Твърде дълъг заглавен ред"
 
@@ -8181,7 +8171,7 @@ msgstr "Доверяване на новия ключ и продължаван�
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:237
 msgid "Trust this certificate and carry on connecting?"
-msgstr "Доверяване на сертификата и продължаване със свързването"
+msgstr "Доверяване на сертификата и продължаване осъществяването на връзка?"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:889
 msgid "Trust this host and carry on connecting?"
@@ -8226,8 +8216,8 @@ msgstr "Използване на &системните настройки за 
 msgid "USER@&HOST"
 msgstr "&ИМЕ@ХОСТ"
 
-#: ../../locales/../src/engine/proxy.cpp:375
-#: ../../locales/../src/engine/proxy.cpp:501
+#: ../../locales/../src/engine/proxy.cpp:387
+#: ../../locales/../src/engine/proxy.cpp:516
 #, c-format
 msgid "Unassigned error code %d"
 msgstr "Неизползван код за грешка %d"
@@ -8247,12 +8237,12 @@ msgstr "Поделение:"
 msgid "Unknown"
 msgstr "неизвестен"
 
-#: ../../locales/../src/engine/ftp/logon.cpp:749
+#: ../../locales/../src/engine/ftp/logon.cpp:751
 msgid "Unknown FTP proxy type, cannot generate login sequence."
 msgstr ""
 "Непознат вид FTP прокси, невъзможно създаване на входна последователност."
 
-#: ../../locales/../src/engine/proxy.cpp:423
+#: ../../locales/../src/engine/proxy.cpp:438
 #, c-format
 msgid "Unknown SOCKS protocol version: %d"
 msgstr "Неизвестна версия на SOCKS протокола: %d"
@@ -8276,7 +8266,7 @@ msgstr "Неизвестна грешка %u"
 msgid "Unknown host key"
 msgstr "Неизвестен хост-ключ"
 
-#: ../../locales/../src/engine/proxy.cpp:431
+#: ../../locales/../src/engine/proxy.cpp:446
 #, c-format
 msgid ""
 "Unknown protocol version of SOCKS Username/Password Authentication "
@@ -8291,7 +8281,7 @@ msgid ""
 msgstr ""
 "Непознат коренов елемент. Файлът не изглежда да е генериран от FileZilla."
 
-#: ../../locales/../src/engine/http/request.cpp:336
+#: ../../locales/../src/engine/http/request.cpp:343
 msgid "Unknown transfer encoding"
 msgstr "Неизвестен"
 
@@ -8596,7 +8586,7 @@ msgstr "Запи&с"
 msgid "Wrong external IP address"
 msgstr "Грешен външен IP адрес"
 
-#: ../../locales/../src/engine/http/request.cpp:391
+#: ../../locales/../src/engine/http/request.cpp:398
 msgid "Wrong line endings"
 msgstr "Грешни символи за край на ред"
 
@@ -8793,7 +8783,7 @@ msgstr ""
 "Не би трябвало да имате проблеми при свързване с други сървъри, "
 "прехвърлянията би трябвало да работят."
 
-#: ../../locales/../src/interface/QueueView.cpp:2704
+#: ../../locales/../src/interface/QueueView.cpp:2713
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "Системата ще се изключи освен ако не натиснете Отказ."
 
@@ -8933,7 +8923,7 @@ msgstr "четене от собственика"
 msgid "owner writeable"
 msgstr "писане от собственика"
 
-#: ../../locales/../src/engine/proxy.cpp:63
+#: ../../locales/../src/engine/proxy.cpp:64
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1433
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1449
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1465
@@ -8957,3 +8947,77 @@ msgstr "писане от всички"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:699
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+
+#~ msgid "Bucket not found"
+#~ msgstr "Кофата не е намерена"
+
+#~ msgid "Could not send command to fzstorj."
+#~ msgstr "Не може да бъде изпратена команда към fzstorj."
+
+#~ msgid "Encryption &Key:"
+#~ msgstr "&Ключ за шифроване:"
+
+#~ msgid "Files not found"
+#~ msgstr "Файловете не са намерени"
+
+#~ msgid "Generate..."
+#~ msgstr "Генериране…"
+
+#~ msgid "Invalid path"
+#~ msgstr "Невалиден път"
+
+#~ msgid ""
+#~ "Note: Please save this key in a secure location. A lost key cannot be "
+#~ "recovered and you won't be able to access your files anymore."
+#~ msgstr ""
+#~ "Забележка: Моля, запазете този ключ на сигурно място. Загубен ключ не "
+#~ "може да бъде възстановен и няма да имате достъп до вашите файлове."
+
+#~ msgid "Password or encryption key are not set"
+#~ msgstr "Няма избрана парола или ключ за шифроване"
+
+#~ msgid "SFTP support"
+#~ msgstr "Поддръжка на SFTP"
+
+#~ msgid "Signup"
+#~ msgstr "Регистрация"
+
+#~ msgid "Site Manager - Generated key"
+#~ msgstr "Управление на връзки - генерирани ключове"
+
+#~ msgid "Storj Decentralized Cloud Storage"
+#~ msgstr "Storj децентрализирано облачно хранилище"
+
+#~ msgid "Storj support"
+#~ msgstr "Поддръжка на Storj"
+
+#~ msgid "The generated encryption key is:"
+#~ msgstr "Генерираният ключ за шифроване е:"
+
+#~ msgid "You cannot upload files into the root directory."
+#~ msgstr "Файлове в кореновата папка не могат да бъдат качвани."
+
+#~ msgid "You have to enter a valid encryption key"
+#~ msgstr "Трябва да въведете валиден ключ за шифроване"
+
+#~ msgid "fzstorj belongs to a different version of FileZilla"
+#~ msgstr "fzstorj е от друга версия на FileZilla"
+
+#~ msgid "fzstorj could not be started"
+#~ msgstr "fzstorj не може да бъде стартиран"
+
+#~ msgid ""
+#~ "fzstorj could not be started.\n"
+#~ "Please make sure this executable exists in the same directory as the main "
+#~ "FileZilla executable."
+#~ msgstr ""
+#~ "fzstorj не може да бъде стартиран.\n"
+#~ "Уверете се, че той е в същата папка, където е и изпълнимия файл на "
+#~ "FileZilla."
