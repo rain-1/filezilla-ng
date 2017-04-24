@@ -402,42 +402,48 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<
 		ProcessReply(pEngineData, static_cast<COperationNotification&>(*pNotification.get()));
 		break;
 	case nId_asyncrequest:
-		if (pEngineData->pItem) {
+		{
 			auto asyncRequestNotification = unique_static_cast<CAsyncRequestNotification>(std::move(pNotification));
-			switch (asyncRequestNotification->GetRequestID()) {
-				case reqId_fileexists:
-				{
-					CFileExistsNotification& fileExistsNotification = static_cast<CFileExistsNotification&>(*asyncRequestNotification.get());
-					fileExistsNotification.overwriteAction = pEngineData->pItem->m_defaultFileExistsAction;
-
-					if (pEngineData->pItem->GetType() == QueueItemType::File) {
-						CFileItem* pFileItem = (CFileItem*)pEngineData->pItem;
-
-						switch (pFileItem->m_onetime_action)
+			if (pEngineData->pItem) {
+				switch (asyncRequestNotification->GetRequestID()) {
+					case reqId_fileexists:
 						{
-						case CFileExistsNotification::resume:
-							if (fileExistsNotification.canResume &&
-								!pFileItem->Ascii())
-							{
-								fileExistsNotification.overwriteAction = CFileExistsNotification::resume;
-							}
-							break;
-						case CFileExistsNotification::overwrite:
-							fileExistsNotification.overwriteAction = CFileExistsNotification::overwrite;
-							break;
-						default:
-							// Others are unused
-							break;
-						}
-						pFileItem->m_onetime_action = CFileExistsNotification::unknown;
-					}
-				}
-				break;
-			default:
-				break;
-			}
+							CFileExistsNotification& fileExistsNotification = static_cast<CFileExistsNotification&>(*asyncRequestNotification.get());
+							fileExistsNotification.overwriteAction = pEngineData->pItem->m_defaultFileExistsAction;
 
-			m_pAsyncRequestQueue->AddRequest(pEngineData->pEngine, std::move(asyncRequestNotification));
+							if (pEngineData->pItem->GetType() == QueueItemType::File) {
+								CFileItem* pFileItem = (CFileItem*)pEngineData->pItem;
+
+								switch (pFileItem->m_onetime_action)
+								{
+								case CFileExistsNotification::resume:
+									if (fileExistsNotification.canResume &&
+										!pFileItem->Ascii())
+									{
+										fileExistsNotification.overwriteAction = CFileExistsNotification::resume;
+									}
+									break;
+								case CFileExistsNotification::overwrite:
+									fileExistsNotification.overwriteAction = CFileExistsNotification::overwrite;
+									break;
+								default:
+									// Others are unused
+									break;
+								}
+								pFileItem->m_onetime_action = CFileExistsNotification::unknown;
+							}
+						}
+						break;
+					default:
+						break;
+				}
+				m_pAsyncRequestQueue->AddRequest(pEngineData->pEngine, std::move(asyncRequestNotification));
+			}
+			else {
+				if (pEngineData->active && asyncRequestNotification->GetRequestID() != reqId_fileexists) {
+					m_pAsyncRequestQueue->AddRequest(pEngineData->pEngine, std::move(asyncRequestNotification));
+				}
+			}			
 		}
 		break;
 	case nId_active:
