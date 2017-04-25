@@ -248,7 +248,7 @@ int CFtpLogonOpData::ParseResponse()
 			assert(!controlSocket_.m_pTlsSocket);
 			delete controlSocket_.m_pBackend;
 
-			controlSocket_.m_pTlsSocket = new CTlsSocket(&controlSocket_, *controlSocket_.m_pSocket, &controlSocket_);
+			controlSocket_.m_pTlsSocket = new CTlsSocket(&controlSocket_, *controlSocket_.socket_, &controlSocket_);
 			controlSocket_.m_pBackend = controlSocket_.m_pTlsSocket;
 
 			if (!controlSocket_.m_pTlsSocket->Init()) {

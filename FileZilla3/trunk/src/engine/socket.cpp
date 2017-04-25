@@ -57,11 +57,11 @@ union sockaddr_u
 	struct sockaddr_in6 in6;
 };
 
-static std::vector<CSocketThread*> waiting_socket_threads;
+static std::vector<socket_thread*> waiting_socket_threads;
 static fz::mutex waiting_socket_threads_mutex{ false };
 }
 
-void RemoveSocketEvents(fz::event_handler * handler, CSocketEventSource const* const source)
+void RemoveSocketEvents(fz::event_handler * handler, socket_event_source const* const source)
 {
 	auto socketEventFilter = [&](fz::event_loop::Events::value_type const& ev) -> bool {
 		if (ev.first != handler) {
@@ -79,7 +79,7 @@ void RemoveSocketEvents(fz::event_handler * handler, CSocketEventSource const* c
 	handler->event_loop_.filter_events(socketEventFilter);
 }
 
-void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler * newHandler, CSocketEventSource const* const source)
+void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler * newHandler, socket_event_source const* const source)
 {
 	if (!oldHandler)
 		return;
@@ -171,11 +171,11 @@ inline int GetLastSocketError() { return errno; }
 #endif
 }
 
-class CSocketThread final
+class socket_thread final
 {
-	friend class CSocket;
+	friend class socket;
 public:
-	CSocketThread()
+	socket_thread()
 		: m_sync(false)
 	{
 #ifdef FZ_WINDOWS
@@ -189,7 +189,7 @@ public:
 		}
 	}
 
-	~CSocketThread()
+	~socket_thread()
 	{
 		thread_.join();
 #ifdef FZ_WINDOWS
@@ -203,15 +203,15 @@ public:
 #endif
 	}
 
-	void SetSocket(CSocket* pSocket)
+	void SetSocket(socket* pSocket)
 	{
 		fz::scoped_lock l(m_sync);
 		SetSocket(pSocket, l);
 	}
 
-	void SetSocket(CSocket* pSocket, fz::scoped_lock const&)
+	void SetSocket(socket* pSocket, fz::scoped_lock const&)
 	{
-		m_pSocket = pSocket;
+		socket_ = pSocket;
 
 		m_host.clear();
 		m_port.clear();
@@ -221,21 +221,21 @@ public:
 
 	int Connect(std::string const& bind)
 	{
-		assert(m_pSocket);
-		if (!m_pSocket) {
+		assert(socket_);
+		if (!socket_) {
 			return EINVAL;
 		}
 
-		m_host = fz::to_utf8(m_pSocket->m_host);
+		m_host = fz::to_utf8(socket_->m_host);
 		if (m_host.empty()) {
 			return EINVAL;
 		}
 
 		m_bind = bind;
 
-		// Connect method of CSocket ensures port is in range
+		// Connect method of socket ensures port is in range
 		char tmp[7];
-		sprintf(tmp, "%u", m_pSocket->m_port);
+		sprintf(tmp, "%u", socket_->m_port);
 		tmp[5] = 0;
 		m_port = tmp;
 
@@ -266,7 +266,7 @@ public:
 		}
 #endif
 
-		thread_ = m_pSocket->thread_pool_.spawn([this]() { entry(); });
+		thread_ = socket_->thread_pool_.spawn([this]() { entry(); });
 
 		return thread_ ? 0 : 1;
 	}
@@ -311,7 +311,7 @@ protected:
 		if (fd == -1 && errno == EINVAL)
 #endif
 		{
-			fd = socket(addr.ai_family, addr.ai_socktype, addr.ai_protocol);
+			fd = ::socket(addr.ai_family, addr.ai_socktype, addr.ai_protocol);
 		}
 
 		if (fd != -1) {
@@ -320,7 +320,7 @@ protected:
 			const int value = 1;
 			setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &value, sizeof(int));
 #endif
-			CSocket::SetNonblocking(fd);
+			socket::SetNonblocking(fd);
 		}
 
 		return fd;
@@ -340,14 +340,14 @@ protected:
 
 	int TryConnectHost(addrinfo & addr, sockaddr_u const& bindAddr, fz::scoped_lock & l)
 	{
-		if (m_pSocket->m_pEvtHandler) {
-			m_pSocket->m_pEvtHandler->send_event<CHostAddressEvent>(m_pSocket, CSocket::AddressToString(addr.ai_addr, addr.ai_addrlen));
+		if (socket_->evt_handler_) {
+			socket_->evt_handler_->send_event<CHostAddressEvent>(socket_, socket::AddressToString(addr.ai_addr, addr.ai_addrlen));
 		}
 
 		int fd = CreateSocketFd(addr);
 		if (fd == -1) {
-			if (m_pSocket->m_pEvtHandler) {
-				m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, addr.ai_next ? SocketEventType::connection_next : SocketEventType::connection, GetLastSocketError());
+			if (socket_->evt_handler_) {
+				socket_->evt_handler_->send_event<CSocketEvent>(socket_, addr.ai_next ? SocketEventType::connection_next : SocketEventType::connection, GetLastSocketError());
 			}
 
 			return 0;
@@ -357,18 +357,20 @@ protected:
 			(void)bind(fd, &bindAddr.sockaddr, sizeof(bindAddr));
 		}
 
-		CSocket::DoSetFlags(fd, m_pSocket->m_flags, m_pSocket->m_flags, m_pSocket->m_keepalive_interval);
-		CSocket::DoSetBufferSizes(fd, m_pSocket->m_buffer_sizes[0], m_pSocket->m_buffer_sizes[1]);
+		socket::DoSetFlags(fd, socket_->flags_, socket_->flags_, socket_->m_keepalive_interval);
+		socket::DoSetBufferSizes(fd, socket_->m_buffer_sizes[0], socket_->m_buffer_sizes[1]);
 
 		int res = connect(fd, addr.ai_addr, addr.ai_addrlen);
 		if (res == -1) {
 #ifdef FZ_WINDOWS
 			// Map to POSIX error codes
 			int error = WSAGetLastError();
-			if (error == WSAEWOULDBLOCK)
+			if (error == WSAEWOULDBLOCK) {
 				res = EINPROGRESS;
-			else
+			}
+			else {
 				res = GetLastSocketError();
+			}
 #else
 			res = errno;
 #endif
@@ -376,7 +378,7 @@ protected:
 
 		if (res == EINPROGRESS) {
 
-			m_pSocket->m_fd = fd;
+			socket_->m_fd = fd;
 
 			bool wait_successful;
 			do {
@@ -387,8 +389,8 @@ protected:
 
 			if (!wait_successful) {
 				CloseSocketFd(fd);
-				if (m_pSocket)
-					m_pSocket->m_fd = -1;
+				if (socket_)
+					socket_->m_fd = -1;
 				return -1;
 			}
 			m_triggered &= ~WAIT_CONNECT;
@@ -397,19 +399,19 @@ protected:
 		}
 
 		if (res) {
-			if (m_pSocket->m_pEvtHandler) {
-				m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, addr.ai_next ? SocketEventType::connection_next : SocketEventType::connection, res);
+			if (socket_->evt_handler_) {
+				socket_->evt_handler_->send_event<CSocketEvent>(socket_, addr.ai_next ? SocketEventType::connection_next : SocketEventType::connection, res);
 			}
 
 			CloseSocketFd(fd);
-			m_pSocket->m_fd = -1;
+			socket_->m_fd = -1;
 		}
 		else {
-			m_pSocket->m_fd = fd;
-			m_pSocket->m_state = CSocket::connected;
+			socket_->m_fd = fd;
+			socket_->m_state = socket::connected;
 
-			if (m_pSocket->m_pEvtHandler) {
-				m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, SocketEventType::connection, 0);
+			if (socket_->evt_handler_) {
+				socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::connection, 0);
 			}
 
 			// We're now interested in all the other nice events
@@ -425,7 +427,7 @@ protected:
 	bool DoConnect(fz::scoped_lock & l)
 	{
 		if (m_host.empty() || m_port.empty()) {
-			m_pSocket->m_state = CSocket::closed;
+			socket_->m_state = socket::closed;
 			return false;
 		}
 
@@ -452,7 +454,7 @@ protected:
 		}
 
 		addrinfo hints{};
-		hints.ai_family = m_pSocket->m_family;
+		hints.ai_family = socket_->m_family;
 
 		l.unlock();
 
@@ -469,8 +471,8 @@ protected:
 		if (ShouldQuit()) {
 			if (!res && addressList)
 				freeaddrinfo(addressList);
-			if (m_pSocket)
-				m_pSocket->m_state = CSocket::closed;
+			if (socket_)
+				socket_->m_state = socket::closed;
 			return false;
 		}
 
@@ -478,7 +480,7 @@ protected:
 		// If m_pHost is set, Close() was called and Connect()
 		// afterwards, state is back at connecting.
 		// In either case, we need to abort this connection attempt.
-		if (m_pSocket->m_state != CSocket::connecting || !m_host.empty()) {
+		if (socket_->m_state != socket::connecting || !m_host.empty()) {
 			if (!res && addressList)
 				freeaddrinfo(addressList);
 			return false;
@@ -489,10 +491,10 @@ protected:
 			res = ConvertMSWErrorCode(res);
 #endif
 
-			if (m_pSocket->m_pEvtHandler) {
-				m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, SocketEventType::connection, res);
+			if (socket_->evt_handler_) {
+				socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::connection, res);
 			}
-			m_pSocket->m_state = CSocket::closed;
+			socket_->m_state = socket::closed;
 
 			return false;
 		}
@@ -501,8 +503,8 @@ protected:
 			res = TryConnectHost(*addr, bindAddr, l);
 			if (res == -1) {
 				freeaddrinfo(addressList);
-				if (m_pSocket)
-					m_pSocket->m_state = CSocket::closed;
+				if (socket_)
+					socket_->m_state = socket::closed;
 				return false;
 			}
 			else if (res) {
@@ -512,17 +514,17 @@ protected:
 		}
 		freeaddrinfo(addressList);
 
-		if (m_pSocket->m_pEvtHandler) {
-			m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, SocketEventType::connection, ECONNABORTED);
+		if (socket_->evt_handler_) {
+			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::connection, ECONNABORTED);
 		}
-		m_pSocket->m_state = CSocket::closed;
+		socket_->m_state = socket::closed;
 
 		return false;
 	}
 
 	bool ShouldQuit() const
 	{
-		return m_quit || !m_pSocket;
+		return m_quit || !socket_;
 	}
 
 	// Call only while locked
@@ -548,7 +550,7 @@ protected:
 			if (m_waiting & WAIT_CLOSE) {
 				wait_events |= FD_CLOSE;
 			}
-			WSAEventSelect(m_pSocket->m_fd, m_sync_event, wait_events);
+			WSAEventSelect(socket_->m_fd, m_sync_event, wait_events);
 			l.unlock();
 			WSAWaitForMultipleEvents(1, &m_sync_event, false, WSA_INFINITE, false);
 
@@ -558,7 +560,7 @@ protected:
 			}
 
 			WSANETWORKEVENTS events;
-			int res = WSAEnumNetworkEvents(m_pSocket->m_fd, m_sync_event, &events);
+			int res = WSAEnumNetworkEvents(socket_->m_fd, m_sync_event, &events);
 			if (res) {
 				res = GetLastSocketError();
 				return false;
@@ -610,14 +612,14 @@ protected:
 
 			FD_SET(m_pipe[0], &readfds);
 			if (!(m_waiting & WAIT_CONNECT)) {
-				FD_SET(m_pSocket->m_fd, &readfds);
+				FD_SET(socket_->m_fd, &readfds);
 			}
 
 			if (m_waiting & (WAIT_WRITE | WAIT_CONNECT)) {
-				FD_SET(m_pSocket->m_fd, &writefds);
+				FD_SET(socket_->m_fd, &writefds);
 			}
 
-			int maxfd = std::max(m_pipe[0], m_pSocket->m_fd) + 1;
+			int maxfd = std::max(m_pipe[0], socket_->m_fd) + 1;
 
 			l.unlock();
 
@@ -631,7 +633,7 @@ protected:
 				(void)damn_spurious_warning; // We do not care about return value and this is definitely correct!
 			}
 
-			if (m_quit || !m_pSocket || m_pSocket->m_fd == -1) {
+			if (m_quit || !socket_ || socket_->m_fd == -1) {
 				return false;
 			}
 
@@ -649,10 +651,10 @@ protected:
 			}
 
 			if (m_waiting & WAIT_CONNECT) {
-				if (FD_ISSET(m_pSocket->m_fd, &writefds)) {
+				if (FD_ISSET(socket_->m_fd, &writefds)) {
 					int error;
 					socklen_t len = sizeof(error);
-					int getsockopt_res = getsockopt(m_pSocket->m_fd, SOL_SOCKET, SO_ERROR, &error, &len);
+					int getsockopt_res = getsockopt(socket_->m_fd, SOL_SOCKET, SO_ERROR, &error, &len);
 					if (getsockopt_res) {
 						error = errno;
 					}
@@ -662,19 +664,19 @@ protected:
 				}
 			}
 			else if (m_waiting & WAIT_ACCEPT) {
-				if (FD_ISSET(m_pSocket->m_fd, &readfds)) {
+				if (FD_ISSET(socket_->m_fd, &readfds)) {
 					m_triggered |= WAIT_ACCEPT;
 					m_waiting &= ~WAIT_ACCEPT;
 				}
 			}
 			else if (m_waiting & WAIT_READ) {
-				if (FD_ISSET(m_pSocket->m_fd, &readfds)) {
+				if (FD_ISSET(socket_->m_fd, &readfds)) {
 					m_triggered |= WAIT_READ;
 					m_waiting &= ~WAIT_READ;
 				}
 			}
 			if (m_waiting & WAIT_WRITE) {
-				if (FD_ISSET(m_pSocket->m_fd, &writefds)) {
+				if (FD_ISSET(socket_->m_fd, &writefds)) {
 					m_triggered |= WAIT_WRITE;
 					m_waiting &= ~WAIT_WRITE;
 				}
@@ -689,18 +691,18 @@ protected:
 
 	void SendEvents()
 	{
-		if (!m_pSocket || !m_pSocket->m_pEvtHandler)
+		if (!socket_ || !socket_->evt_handler_)
 			return;
 		if (m_triggered & WAIT_READ) {
-			m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, SocketEventType::read, m_triggered_errors[1]);
+			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::read, m_triggered_errors[1]);
 			m_triggered &= ~WAIT_READ;
 		}
 		if (m_triggered & WAIT_WRITE) {
-			m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, SocketEventType::write, m_triggered_errors[2]);
+			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::write, m_triggered_errors[2]);
 			m_triggered &= ~WAIT_WRITE;
 		}
 		if (m_triggered & WAIT_ACCEPT) {
-			m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, SocketEventType::connection, m_triggered_errors[3]);
+			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::connection, m_triggered_errors[3]);
 			m_triggered &= ~WAIT_ACCEPT;
 		}
 		if (m_triggered & WAIT_CLOSE) {
@@ -710,7 +712,7 @@ protected:
 
 	void SendCloseEvent()
 	{
-		if( !m_pSocket || !m_pSocket->m_pEvtHandler ) {
+		if( !socket_ || !socket_->evt_handler_ ) {
 			return;
 		}
 
@@ -721,16 +723,16 @@ protected:
 		//   of FD_CLOSE to avoid any possibility of losing data.
 		// First half is actually plain wrong.
 		char buf;
-		if( !m_triggered_errors[4] && recv( m_pSocket->m_fd, &buf, 1, MSG_PEEK ) > 0) {
+		if( !m_triggered_errors[4] && recv( socket_->m_fd, &buf, 1, MSG_PEEK ) > 0) {
 			if( !(m_waiting & WAIT_READ) ) {
 				return;
 			}
-			m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, SocketEventType::read, 0);
+			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::read, 0);
 		}
 		else
 #endif
 		{
-			m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, SocketEventType::close, m_triggered_errors[4]);
+			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::close, m_triggered_errors[4]);
 			m_triggered &= ~WAIT_CLOSE;
 		}
 	}
@@ -740,7 +742,7 @@ protected:
 	{
 		if (m_quit)
 			return false;
-		while (!m_pSocket || (!m_waiting && m_host.empty())) {
+		while (!socket_ || (!m_waiting && m_host.empty())) {
 			m_threadwait = true;
 			m_condition.wait(l);
 
@@ -760,9 +762,9 @@ protected:
 				return;
 			}
 
-			if (m_pSocket->m_state == CSocket::listening) {
+			if (socket_->m_state == socket::listening) {
 				while (IdleLoop(l)) {
-					if (m_pSocket->m_fd == -1) {
+					if (socket_->m_fd == -1) {
 						m_waiting = 0;
 						break;
 					}
@@ -772,7 +774,7 @@ protected:
 				}
 			}
 			else {
-				if (m_pSocket->m_state == CSocket::connecting) {
+				if (socket_->m_state == socket::connecting) {
 					if (!DoConnect(l))
 						continue;
 				}
@@ -782,14 +784,14 @@ protected:
 				int wait_close = WAIT_CLOSE;
 #endif
 				while (IdleLoop(l)) {
-					if (m_pSocket->m_fd == -1) {
+					if (socket_->m_fd == -1) {
 						m_waiting = 0;
 						break;
 					}
 					bool res = DoWait(0, l);
 
-					if (m_triggered & WAIT_CLOSE && m_pSocket) {
-						m_pSocket->m_state = CSocket::closing;
+					if (m_triggered & WAIT_CLOSE && socket_) {
+						socket_->m_state = socket::closing;
 #ifdef FZ_WINDOWS
 						wait_close = 0;
 #endif
@@ -810,7 +812,7 @@ protected:
 		return;
 	}
 
-	CSocket* m_pSocket{};
+	socket* socket_{};
 
 	std::string m_host;
 	std::string m_port;
@@ -844,9 +846,9 @@ protected:
 	fz::async_task thread_;
 };
 
-CSocket::CSocket(fz::thread_pool & pool, fz::event_handler* pEvtHandler)
+socket::socket(fz::thread_pool & pool, fz::event_handler* pEvtHandler)
 	: thread_pool_(pool)
-	, m_pEvtHandler(pEvtHandler)
+	, evt_handler_(pEvtHandler)
 	, m_keepalive_interval(fz::duration::from_hours(2))
 {
 	m_family = AF_UNSPEC;
@@ -855,50 +857,50 @@ CSocket::CSocket(fz::thread_pool & pool, fz::event_handler* pEvtHandler)
 	m_buffer_sizes[1] = -1;
 }
 
-CSocket::~CSocket()
+socket::~socket()
 {
 	if (m_state != none) {
 		Close();
 	}
 
-	if (m_pSocketThread) {
-		fz::scoped_lock l(m_pSocketThread->m_sync);
+	if (socket_thread_) {
+		fz::scoped_lock l(socket_thread_->m_sync);
 		DetachThread(l);
 	}
 }
 
-void CSocket::DetachThread(fz::scoped_lock & l)
+void socket::DetachThread(fz::scoped_lock & l)
 {
-	if (!m_pSocketThread) {
+	if (!socket_thread_) {
 		return;
 	}
 
-	m_pSocketThread->SetSocket(0, l);
-	if (m_pSocketThread->m_finished) {
-		m_pSocketThread->WakeupThread(l);
+	socket_thread_->SetSocket(0, l);
+	if (socket_thread_->m_finished) {
+		socket_thread_->WakeupThread(l);
 		l.unlock();
-		delete m_pSocketThread;
+		delete socket_thread_;
 	}
 	else {
-		if (!m_pSocketThread->m_started) {
+		if (!socket_thread_->m_started) {
 			l.unlock();
-			delete m_pSocketThread;
+			delete socket_thread_;
 		}
 		else {
-			m_pSocketThread->m_quit = true;
-			m_pSocketThread->WakeupThread(l);
+			socket_thread_->m_quit = true;
+			socket_thread_->WakeupThread(l);
 			l.unlock();
 
 			fz::scoped_lock wl(waiting_socket_threads_mutex);
-			waiting_socket_threads.push_back(m_pSocketThread);
+			waiting_socket_threads.push_back(socket_thread_);
 		}
 	}
-	m_pSocketThread = 0;
+	socket_thread_ = 0;
 
-	Cleanup(false);
+	cleanup(false);
 }
 
-int CSocket::Connect(fz::native_string const& host, unsigned int port, address_family family, std::string const& bind)
+int socket::Connect(fz::native_string const& host, unsigned int port, address_family family, std::string const& bind)
 {
 	if (m_state != none)
 		return EISCONN;
@@ -927,17 +929,17 @@ int CSocket::Connect(fz::native_string const& host, unsigned int port, address_f
 		return EINVAL;
 	}
 
-	if (m_pSocketThread && m_pSocketThread->m_started) {
-		fz::scoped_lock l(m_pSocketThread->m_sync);
-		if (!m_pSocketThread->m_threadwait) {
+	if (socket_thread_ && socket_thread_->m_started) {
+		fz::scoped_lock l(socket_thread_->m_sync);
+		if (!socket_thread_->m_threadwait) {
 			// Possibly inside a blocking call, e.g. getaddrinfo.
 			// Detach the thread so that we can continue.
 			DetachThread(l);
 		}
 	}
-	if (!m_pSocketThread) {
-		m_pSocketThread = new CSocketThread();
-		m_pSocketThread->SetSocket(this);
+	if (!socket_thread_) {
+		socket_thread_ = new socket_thread();
+		socket_thread_->SetSocket(this);
 	}
 
 	m_family = af;
@@ -945,29 +947,29 @@ int CSocket::Connect(fz::native_string const& host, unsigned int port, address_f
 
 	m_host = host;
 	m_port = port;
-	int res = m_pSocketThread->Connect(bind);
+	int res = socket_thread_->Connect(bind);
 	if (res) {
 		m_state = none;
-		delete m_pSocketThread;
-		m_pSocketThread = 0;
+		delete socket_thread_;
+		socket_thread_ = 0;
 		return res;
 	}
 
 	return EINPROGRESS;
 }
 
-void CSocket::SetEventHandler(fz::event_handler* pEvtHandler)
+void socket::set_event_handler(fz::event_handler* pEvtHandler)
 {
-	if (m_pSocketThread) {
-		fz::scoped_lock l(m_pSocketThread->m_sync);
+	if (socket_thread_) {
+		fz::scoped_lock l(socket_thread_->m_sync);
 
-		if (m_pEvtHandler == pEvtHandler) {
+		if (evt_handler_ == pEvtHandler) {
 			return;
 		}
 
-		ChangeSocketEventHandler(m_pEvtHandler, pEvtHandler, this);
+		ChangeSocketEventHandler(evt_handler_, pEvtHandler, this);
 
-		m_pEvtHandler = pEvtHandler;
+		evt_handler_ = pEvtHandler;
 
 		if (pEvtHandler && m_state == connected) {
 #ifdef FZ_WINDOWS
@@ -975,30 +977,30 @@ void CSocket::SetEventHandler(fz::event_handler* pEvtHandler)
 			// no further events are recorded. Send out events we're not
 			// waiting for (i.e. they got triggered already) manually.
 
-			if (!(m_pSocketThread->m_waiting & WAIT_WRITE)) {
+			if (!(socket_thread_->m_waiting & WAIT_WRITE)) {
 				pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::write, 0);
 			}
 
 			pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::read, 0);
-			if (m_pSocketThread->m_waiting & WAIT_READ) {
-				m_pSocketThread->m_waiting &= ~WAIT_READ;
-				m_pSocketThread->WakeupThread(l);
+			if (socket_thread_->m_waiting & WAIT_READ) {
+				socket_thread_->m_waiting &= ~WAIT_READ;
+				socket_thread_->WakeupThread(l);
 			}
 #else
-			m_pSocketThread->m_waiting |= WAIT_READ | WAIT_WRITE;
-			m_pSocketThread->WakeupThread(l);
+			socket_thread_->m_waiting |= WAIT_READ | WAIT_WRITE;
+			socket_thread_->WakeupThread(l);
 #endif
 		}
 		else if (pEvtHandler && m_state == closing) {
-			if (!(m_pSocketThread->m_triggered & WAIT_READ)) {
-				m_pSocketThread->m_waiting |= WAIT_READ;
+			if (!(socket_thread_->m_triggered & WAIT_READ)) {
+				socket_thread_->m_waiting |= WAIT_READ;
 			}
-			m_pSocketThread->SendEvents();
+			socket_thread_->SendEvents();
 		}
 	}
 	else {
-		ChangeSocketEventHandler(m_pEvtHandler, pEvtHandler, this);
-		m_pEvtHandler = pEvtHandler;
+		ChangeSocketEventHandler(evt_handler_, pEvtHandler, this);
+		evt_handler_ = pEvtHandler;
 	}
 }
 
@@ -1085,7 +1087,7 @@ static Error_table const error_table[] =
 	{ 0, 0, 0 }
 };
 
-std::string CSocket::GetErrorString(int error)
+std::string socket::GetErrorString(int error)
 {
 	for (int i = 0; error_table[i].code; ++i) {
 		if (error != error_table[i].code) {
@@ -1098,7 +1100,7 @@ std::string CSocket::GetErrorString(int error)
 	return fz::sprintf("%d", error);
 }
 
-fz::native_string CSocket::GetErrorDescription(int error)
+fz::native_string socket::GetErrorDescription(int error)
 {
 	for (int i = 0; error_table[i].code; ++i) {
 		if (error != error_table[i].code) {
@@ -1111,64 +1113,66 @@ fz::native_string CSocket::GetErrorDescription(int error)
 	return fz::sprintf(fzT("%d"), error);
 }
 
-int CSocket::Close()
+int socket::Close()
 {
-	if (m_pSocketThread) {
-		fz::scoped_lock l(m_pSocketThread->m_sync);
+	if (socket_thread_) {
+		fz::scoped_lock l(socket_thread_->m_sync);
 		int fd = m_fd;
 		m_fd = -1;
 
-		m_pSocketThread->m_host.clear();
-		m_pSocketThread->m_port.clear();
+		socket_thread_->m_host.clear();
+		socket_thread_->m_port.clear();
 
-		m_pSocketThread->WakeupThread(l);
+		socket_thread_->WakeupThread(l);
 
-		CSocketThread::CloseSocketFd(fd);
+		socket_thread::CloseSocketFd(fd);
 		m_state = none;
 
-		m_pSocketThread->m_triggered = 0;
+		socket_thread_->m_triggered = 0;
 		for (int i = 0; i < WAIT_EVENTCOUNT; ++i) {
-			m_pSocketThread->m_triggered_errors[i] = 0;
+			socket_thread_->m_triggered_errors[i] = 0;
 		}
 
-		if (m_pEvtHandler) {
-			RemoveSocketEvents(m_pEvtHandler, this);
-			m_pEvtHandler = 0;
+		if (evt_handler_) {
+			RemoveSocketEvents(evt_handler_, this);
+			evt_handler_ = 0;
 		}
 	}
 	else {
 		int fd = m_fd;
 		m_fd = -1;
-		CSocketThread::CloseSocketFd(fd);
+		socket_thread::CloseSocketFd(fd);
 		m_state = none;
 
-		if (m_pEvtHandler) {
-			RemoveSocketEvents(m_pEvtHandler, this);
-			m_pEvtHandler = 0;
+		if (evt_handler_) {
+			RemoveSocketEvents(evt_handler_, this);
+			evt_handler_ = 0;
 		}
 	}
 
 	return 0;
 }
 
-CSocket::SocketState CSocket::GetState()
+socket::socket_state socket::get_state()
 {
-	SocketState state;
-	if (m_pSocketThread)
-		m_pSocketThread->m_sync.lock();
+	socket_state state;
+	if (socket_thread_) {
+		socket_thread_->m_sync.lock();
+	}
 	state = m_state;
-	if (m_pSocketThread)
-		m_pSocketThread->m_sync.unlock();
+	if (socket_thread_) {
+		socket_thread_->m_sync.unlock();
+	}
 
 	return state;
 }
 
-void CSocket::Cleanup(bool force)
+void socket::cleanup(bool force)
 {
 	fz::scoped_lock wl(waiting_socket_threads_mutex);
 	auto iter = waiting_socket_threads.begin();
 	for (; iter != waiting_socket_threads.end(); ++iter) {
-		CSocketThread *const pThread = *iter;
+		socket_thread *const pThread = *iter;
 
 		if (!force) {
 			fz::scoped_lock l(pThread->m_sync);
@@ -1182,42 +1186,44 @@ void CSocket::Cleanup(bool force)
 	waiting_socket_threads.erase(waiting_socket_threads.begin(), iter);
 }
 
-int CSocket::Read(void* buffer, unsigned int size, int& error)
+int socket::Read(void* buffer, unsigned int size, int& error)
 {
 	int res = recv(m_fd, (char*)buffer, size, 0);
 
 	if (res == -1) {
 		error = GetLastSocketError();
 		if (error == EAGAIN) {
-			if (m_pSocketThread) {
-				fz::scoped_lock l(m_pSocketThread->m_sync);
-				if (!(m_pSocketThread->m_waiting & WAIT_READ)) {
-					m_pSocketThread->m_waiting |= WAIT_READ;
-					m_pSocketThread->WakeupThread(l);
+			if (socket_thread_) {
+				fz::scoped_lock l(socket_thread_->m_sync);
+				if (!(socket_thread_->m_waiting & WAIT_READ)) {
+					socket_thread_->m_waiting |= WAIT_READ;
+					socket_thread_->WakeupThread(l);
 				}
 			}
 		}
 	}
-	else
+	else {
 		error = 0;
+	}
 
 	return res;
 }
 
-int CSocket::Peek(void* buffer, unsigned int size, int& error)
+int socket::Peek(void* buffer, unsigned int size, int& error)
 {
 	int res = recv(m_fd, (char*)buffer, size, MSG_PEEK);
 
 	if (res == -1) {
 		error = GetLastSocketError();
 	}
-	else
+	else {
 		error = 0;
+	}
 
 	return res;
 }
 
-int CSocket::Write(const void* buffer, unsigned int size, int& error)
+int socket::Write(const void* buffer, unsigned int size, int& error)
 {
 #ifdef MSG_NOSIGNAL
 	const int flags = MSG_NOSIGNAL;
@@ -1245,11 +1251,11 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 	if (res == -1) {
 		error = GetLastSocketError();
 		if (error == EAGAIN) {
-			if (m_pSocketThread) {
-				fz::scoped_lock l (m_pSocketThread->m_sync);
-				if (!(m_pSocketThread->m_waiting & WAIT_WRITE)) {
-					m_pSocketThread->m_waiting |= WAIT_WRITE;
-					m_pSocketThread->WakeupThread(l);
+			if (socket_thread_) {
+				fz::scoped_lock l (socket_thread_->m_sync);
+				if (!(socket_thread_->m_waiting & WAIT_WRITE)) {
+					socket_thread_->m_waiting |= WAIT_WRITE;
+					socket_thread_->WakeupThread(l);
 				}
 			}
 		}
@@ -1260,7 +1266,7 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 	return res;
 }
 
-std::string CSocket::AddressToString(const struct sockaddr* addr, int addr_len, bool with_port, bool strip_zone_index)
+std::string socket::AddressToString(const struct sockaddr* addr, int addr_len, bool with_port, bool strip_zone_index)
 {
 	char hostbuf[NI_MAXHOST];
 	char portbuf[NI_MAXSERV];
@@ -1291,7 +1297,7 @@ std::string CSocket::AddressToString(const struct sockaddr* addr, int addr_len, 
 		return host;
 }
 
-std::string CSocket::AddressToString(char const* buf, int buf_len)
+std::string socket::AddressToString(char const* buf, int buf_len)
 {
 	if (buf_len != 4 && buf_len != 16) {
 		return std::string();
@@ -1310,7 +1316,7 @@ std::string CSocket::AddressToString(char const* buf, int buf_len)
 	return AddressToString(&addr.sockaddr, sizeof(addr), false, true);
 }
 
-std::string CSocket::GetLocalIP(bool strip_zone_index) const
+std::string socket::GetLocalIP(bool strip_zone_index) const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
@@ -1322,7 +1328,7 @@ std::string CSocket::GetLocalIP(bool strip_zone_index) const
 	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
 }
 
-std::string CSocket::GetPeerIP(bool strip_zone_index) const
+std::string socket::GetPeerIP(bool strip_zone_index) const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
@@ -1334,7 +1340,7 @@ std::string CSocket::GetPeerIP(bool strip_zone_index) const
 	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
 }
 
-CSocket::address_family CSocket::GetAddressFamily() const
+socket::address_family socket::GetAddressFamily() const
 {
 	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
@@ -1354,13 +1360,15 @@ CSocket::address_family CSocket::GetAddressFamily() const
 	}
 }
 
-int CSocket::Listen(address_family family, int port)
+int socket::listen(address_family family, int port)
 {
-	if (m_state != none)
+	if (m_state != none) {
 		return EALREADY;
+	}
 
-	if (port < 0 || port > 65535)
+	if (port < 0 || port > 65535) {
 		return EINVAL;
+	}
 
 	switch (family)
 	{
@@ -1402,7 +1410,7 @@ int CSocket::Listen(address_family family, int port)
 		}
 
 		for (struct addrinfo* addr = addressList; addr; addr = addr->ai_next) {
-			m_fd = CSocketThread::CreateSocketFd(*addr);
+			m_fd = socket_thread::CreateSocketFd(*addr);
 			res = GetLastSocketError();
 
 			if (m_fd == -1)
@@ -1413,34 +1421,35 @@ int CSocket::Listen(address_family family, int port)
 				break;
 
 			res = GetLastSocketError();
-			CSocketThread::CloseSocketFd(m_fd);
+			socket_thread::CloseSocketFd(m_fd);
 		}
 		freeaddrinfo(addressList);
-		if (m_fd == -1)
+		if (m_fd == -1) {
 			return res;
+		}
 	}
 
-	int res = listen(m_fd, 1);
+	int res = ::listen(m_fd, 1);
 	if (res) {
 		res = GetLastSocketError();
-		CSocketThread::CloseSocketFd(m_fd);
+		socket_thread::CloseSocketFd(m_fd);
 		m_fd = -1;
 		return res;
 	}
 
 	m_state = listening;
 
-	m_pSocketThread = new CSocketThread();
-	m_pSocketThread->SetSocket(this);
+	socket_thread_ = new socket_thread();
+	socket_thread_->SetSocket(this);
 
-	m_pSocketThread->m_waiting = WAIT_ACCEPT;
+	socket_thread_->m_waiting = WAIT_ACCEPT;
 
-	m_pSocketThread->Start();
+	socket_thread_->Start();
 
 	return 0;
 }
 
-int CSocket::GetLocalPort(int& error)
+int socket::GetLocalPort(int& error)
 {
 	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
@@ -1452,16 +1461,18 @@ int CSocket::GetLocalPort(int& error)
 		return -1;
 	}
 
-	if (addr.storage.ss_family == AF_INET)
+	if (addr.storage.ss_family == AF_INET) {
 		return ntohs(addr.in4.sin_port);
-	else if (addr.storage.ss_family == AF_INET6)
+	}
+	else if (addr.storage.ss_family == AF_INET6) {
 		return ntohs(addr.in6.sin6_port);
+	}
 
 	error = EINVAL;
 	return -1;
 }
 
-int CSocket::GetRemotePort(int& error)
+int socket::GetRemotePort(int& error)
 {
 	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
@@ -1483,14 +1494,14 @@ int CSocket::GetRemotePort(int& error)
 	return -1;
 }
 
-CSocket* CSocket::Accept(int &error)
+socket* socket::accept(int &error)
 {
-	if (m_pSocketThread) {
-		fz::scoped_lock l(m_pSocketThread->m_sync);
-		m_pSocketThread->m_waiting |= WAIT_ACCEPT;
-		m_pSocketThread->WakeupThread(l);
+	if (socket_thread_) {
+		fz::scoped_lock l(socket_thread_->m_sync);
+		socket_thread_->m_waiting |= WAIT_ACCEPT;
+		socket_thread_->WakeupThread(l);
 	}
-	int fd = accept(m_fd, 0, 0);
+	int fd = ::accept(m_fd, 0, 0);
 	if (fd == -1) {
 		error = GetLastSocketError();
 		return 0;
@@ -1506,18 +1517,18 @@ CSocket* CSocket::Accept(int &error)
 
 	DoSetBufferSizes(fd, m_buffer_sizes[0], m_buffer_sizes[1]);
 
-	CSocket* pSocket = new CSocket(thread_pool_, 0);
+	socket* pSocket = new socket(thread_pool_, 0);
 	pSocket->m_state = connected;
 	pSocket->m_fd = fd;
-	pSocket->m_pSocketThread = new CSocketThread();
-	pSocket->m_pSocketThread->SetSocket(pSocket);
-	pSocket->m_pSocketThread->m_waiting = WAIT_READ | WAIT_WRITE;
-	pSocket->m_pSocketThread->Start();
+	pSocket->socket_thread_ = new socket_thread();
+	pSocket->socket_thread_->SetSocket(pSocket);
+	pSocket->socket_thread_->m_waiting = WAIT_READ | WAIT_WRITE;
+	pSocket->socket_thread_->Start();
 
 	return pSocket;
 }
 
-int CSocket::SetNonblocking(int fd)
+int socket::SetNonblocking(int fd)
 {
 	// Set socket to non-blocking.
 #ifdef FZ_WINDOWS
@@ -1538,23 +1549,23 @@ int CSocket::SetNonblocking(int fd)
 #endif
 }
 
-void CSocket::SetFlags(int flags)
+void socket::SetFlags(int flags)
 {
-	if (m_pSocketThread) {
-		m_pSocketThread->m_sync.lock();
+	if (socket_thread_) {
+		socket_thread_->m_sync.lock();
 	}
 
 	if (m_fd != -1) {
-		DoSetFlags(m_fd, flags, flags ^ m_flags, m_keepalive_interval);
+		DoSetFlags(m_fd, flags, flags ^ flags_, m_keepalive_interval);
 	}
-	m_flags = flags;
+	flags_ = flags;
 
-	if (m_pSocketThread) {
-		m_pSocketThread->m_sync.unlock();
+	if (socket_thread_) {
+		socket_thread_->m_sync.unlock();
 	}
 }
 
-int CSocket::DoSetFlags(int fd, int flags, int flags_mask, fz::duration const& keepalive_interval)
+int socket::DoSetFlags(int fd, int flags, int flags_mask, fz::duration const& keepalive_interval)
 {
 	if (flags_mask & flag_nodelay) {
 		const int value = (flags & flag_nodelay) ? 1 : 0;
@@ -1593,12 +1604,12 @@ int CSocket::DoSetFlags(int fd, int flags, int flags_mask, fz::duration const& k
 	return 0;
 }
 
-int CSocket::SetBufferSizes(int size_receive, int size_send)
+int socket::SetBufferSizes(int size_receive, int size_send)
 {
 	int ret = 0;
 
-	if (m_pSocketThread)
-		m_pSocketThread->m_sync.lock();
+	if (socket_thread_)
+		socket_thread_->m_sync.lock();
 
 	m_buffer_sizes[0] = size_receive;
 	m_buffer_sizes[1] = size_send;
@@ -1606,19 +1617,19 @@ int CSocket::SetBufferSizes(int size_receive, int size_send)
 	if (m_fd != -1)
 		ret = DoSetBufferSizes(m_fd, size_receive, size_send);
 
-	if (m_pSocketThread)
-		m_pSocketThread->m_sync.unlock();
+	if (socket_thread_)
+		socket_thread_->m_sync.unlock();
 
 	return ret;
 }
 
-int CSocket::GetIdealSendBufferSize()
+int socket::GetIdealSendBufferSize()
 {
 	int size = -1;
 
 #ifdef FZ_WINDOWS
-	if (m_pSocketThread)
-		m_pSocketThread->m_sync.lock();
+	if (socket_thread_)
+		socket_thread_->m_sync.lock();
 
 	if (m_fd != -1) {
 		// MSDN says this:
@@ -1640,15 +1651,15 @@ int CSocket::GetIdealSendBufferSize()
 		}
 	}
 
-	if (m_pSocketThread)
-		m_pSocketThread->m_sync.unlock();
+	if (socket_thread_)
+		socket_thread_->m_sync.unlock();
 #endif
 
 	return size;
 }
 
 
-int CSocket::DoSetBufferSizes(int fd, int size_read, int size_write)
+int socket::DoSetBufferSizes(int fd, int size_read, int size_write)
 {
 	int ret = 0;
 	if (size_read != -1) {
@@ -1668,28 +1679,28 @@ int CSocket::DoSetBufferSizes(int fd, int size_read, int size_write)
 	return ret;
 }
 
-fz::native_string CSocket::GetPeerHost() const
+fz::native_string socket::GetPeerHost() const
 {
 	return m_host;
 }
 
-void CSocket::SetKeepaliveInterval(fz::duration const& d)
+void socket::SetKeepaliveInterval(fz::duration const& d)
 {
 	if (d < fz::duration::from_minutes(1)) {
 		return;
 	}
 
-	if (m_pSocketThread) {
-		m_pSocketThread->m_sync.lock();
+	if (socket_thread_) {
+		socket_thread_->m_sync.lock();
 	}
 
 	m_keepalive_interval = d;
 	if (m_fd != -1) {
-		DoSetFlags(m_fd, m_flags, flag_keepalive, m_keepalive_interval);
+		DoSetFlags(m_fd, flags_, flag_keepalive, m_keepalive_interval);
 	}
 
-	if (m_pSocketThread) {
-		m_pSocketThread->m_sync.unlock();
+	if (socket_thread_) {
+		socket_thread_->m_sync.unlock();
 	}
 }
 

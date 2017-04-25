@@ -8,7 +8,7 @@ class CControlSocket;
 class CProxySocket final : protected fz::event_handler, public CBackend
 {
 public:
-	CProxySocket(event_handler* pEvtHandler, fz::CSocket* pSocket, CControlSocket* pOwner);
+	CProxySocket(event_handler* pEvtHandler, fz::socket* pSocket, CControlSocket* pOwner);
 	virtual ~CProxySocket();
 
 	enum ProxyState {
@@ -39,14 +39,14 @@ public:
 	virtual int Write(const void *buffer, unsigned int size, int& error) override;
 
 	void Detach();
-	bool Detached() const { return m_pSocket == 0; }
+	bool Detached() const { return socket_ == 0; }
 
 	ProxyType GetProxyType() const { return m_proxyType; }
 	std::wstring GetUser() const;
 	std::wstring GetPass() const;
 
 protected:
-	fz::CSocket* m_pSocket;
+	fz::socket* socket_;
 	CControlSocket* m_pOwner;
 
 	ProxyType m_proxyType{unknown};
@@ -67,8 +67,8 @@ protected:
 	int m_recvBufferLen{};
 
 	virtual void operator()(fz::event_base const& ev) override;
-	void OnSocketEvent(CSocketEventSource* source, fz::SocketEventType t, int error);
-	void OnHostAddress(CSocketEventSource* source, std::string const& address);
+	void OnSocketEvent(socket_event_source* source, fz::SocketEventType t, int error);
+	void OnHostAddress(socket_event_source* source, std::string const& address);
 
 	void OnReceive();
 	void OnSend();

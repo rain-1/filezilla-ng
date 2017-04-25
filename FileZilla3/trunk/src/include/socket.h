@@ -28,10 +28,10 @@ enum class SocketEventType
  * \sa fz::RemoveSocketEvents
  * \sa fz::ChangeSocketEventHandler
  */
-class CSocketEventSource
+class socket_event_source
 {
 public:
-	virtual ~CSocketEventSource() = default;
+	virtual ~socket_event_source() = default;
 };
 
 /// \private
@@ -40,7 +40,7 @@ struct socket_event_type;
 /**
  * All socket events are sent through this. See \ref fz::SocketEventType
  */
-typedef fz::simple_event<socket_event_type, CSocketEventSource*, SocketEventType, int> CSocketEvent;
+typedef fz::simple_event<socket_event_type, socket_event_source*, SocketEventType, int> CSocketEvent;
 
 /// \private
 struct hostaddress_event_type;
@@ -48,29 +48,30 @@ struct hostaddress_event_type;
 /**
 * Whenever a hostname has been resolved to an IP address, this event is sent with the resolved IP address literal .
 */
-typedef fz::simple_event<hostaddress_event_type, CSocketEventSource*, std::string> CHostAddressEvent;
+typedef fz::simple_event<hostaddress_event_type, socket_event_source*, std::string> CHostAddressEvent;
 
 /**
  * \brief Remove all pendinmg socket events from source sent to handler.
  *
  * Useful e.g. if you want to destroy the handler but keep the source.
- * This function is called, through ChangeSocketEventHandler, by Socket::SetEventHandler(0)
+ * This function is called, through ChangeSocketEventHandler, by socket::set_event_handler(0)
  */
-void RemoveSocketEvents(fz::event_handler * handler, CSocketEventSource const* const source);
+void RemoveSocketEvents(fz::event_handler * handler, socket_event_source const* const source);
 
 /**
  * \brief Changes all pending socket events from source
  *
  * If newHandler is null, RemoveSocketEvents is called.
  *
- * This function is called by CSocket::SetEvtHandler().
+ * This function is called by socket::set_event_handler().
  *
  * \example Possible use-cases: Handoff after proxy handshakes, or handoff to TLS classes in
 			case of STARTTLS mechanism
  */
-void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler * newHandler, CSocketEventSource const* const source);
+void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler * newHandler, socket_event_source const* const source);
 
-class CSocketThread;
+/// \private
+class socket_thread;
 
 /**
  * \brief IPv6 capable, non-blocking socket class
@@ -80,17 +81,17 @@ class CSocketThread;
  * Error codes are the same as used by the POSIX socket functions,
  * see 'man 2 socket', 'man 2 connect', ...
  */
-class CSocket final : public CSocketEventSource
+class socket final : public socket_event_source
 {
-	friend class CSocketThread;
+	friend class socket_thread;
 public:
-	CSocket(fz::thread_pool& pool, fz::event_handler* pEvtHandler);
-	virtual ~CSocket();
+	socket(fz::thread_pool& pool, fz::event_handler* pEvtHandler);
+	virtual ~socket();
 
-	CSocket(CSocket const&) = delete;
-	CSocket& operator=(CSocket const&) = delete;
+	socket(socket const&) = delete;
+	socket& operator=(socket const&) = delete;
 
-	enum SocketState
+	enum socket_state
 	{
 		// How the socket is initially
 		none,
@@ -107,7 +108,7 @@ public:
 		closing,
 		closed
 	};
-	SocketState GetState();
+	socket_state get_state();
 
 	enum address_family
 	{
@@ -150,25 +151,23 @@ public:
 	static std::string GetErrorString(int error);
 	static fz::native_string GetErrorDescription(int error);
 
-	// Due to asynchronicity it is possible that the old handler receives one last
-	// socket event when changing handlers.
-	void SetEventHandler(fz::event_handler* pEvtHandler);
+	void set_event_handler(fz::event_handler* pEvtHandler);
 
-	static void Cleanup(bool force);
+	static void cleanup(bool force);
 
 	static std::string AddressToString(const struct sockaddr* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
 	static std::string AddressToString(char const* buf, int buf_len);
 
-	int Listen(address_family family, int port = 0);
-	CSocket* Accept(int& error);
+	int listen(address_family family, int port = 0);
+	socket* accept(int& error);
 
-	enum Flags
+	enum
 	{
 		flag_nodelay = 0x01,
 		flag_keepalive = 0x02
 	};
 
-	int GetFlags() const { return m_flags; }
+	int GetFlags() const { return flags_; }
 	void SetFlags(int flags);
 
 	// If called on listen socket, sizes will be inherited by
@@ -185,7 +184,7 @@ public:
 	// Currently only implemented for Windows.
 	int GetIdealSendBufferSize();
 
-protected:
+private:
 	static int DoSetFlags(int fd, int flags, int flags_mask, fz::duration const&);
 	static int DoSetBufferSizes(int fd, int size_read, int size_write);
 	static int SetNonblocking(int fd);
@@ -194,19 +193,19 @@ protected:
 	void DetachThread(fz::scoped_lock & l);
 
 	fz::thread_pool & thread_pool_;
-	fz::event_handler* m_pEvtHandler;
+	fz::event_handler* evt_handler_;
 
 	int m_fd{ -1 };
 
-	SocketState m_state{ none };
+	socket_state m_state{ none };
 
-	CSocketThread* m_pSocketThread{};
+	socket_thread* socket_thread_{};
 
 	fz::native_string m_host;
 	unsigned int m_port{};
 	int m_family;
 
-	int m_flags{};
+	int flags_{};
 	fz::duration m_keepalive_interval;
 
 	int m_buffer_sizes[2];

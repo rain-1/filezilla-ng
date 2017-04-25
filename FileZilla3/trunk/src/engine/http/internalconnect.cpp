@@ -13,7 +13,7 @@ int CHttpInternalConnectOpData::Send()
 	}
 
 	delete controlSocket_.m_pBackend;
-	controlSocket_.m_pBackend = new CSocketBackend(&controlSocket_, *controlSocket_.m_pSocket, engine_.GetRateLimiter());
+	controlSocket_.m_pBackend = new CSocketBackend(&controlSocket_, *controlSocket_.socket_, engine_.GetRateLimiter());
 
 	return controlSocket_.DoConnect(host_, port_);
 }

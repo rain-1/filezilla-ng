@@ -867,15 +867,15 @@ void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate & engine)
 	: CControlSocket(engine)
 {
-	m_pSocket = new fz::CSocket(engine.GetThreadPool(), this);
+	socket_ = new fz::socket(engine.GetThreadPool(), this);
 
-	m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
+	m_pBackend = new CSocketBackend(this, *socket_, engine_.GetRateLimiter());
 }
 
 CRealControlSocket::~CRealControlSocket()
 {
-	if (m_pSocket) {
-		m_pSocket->Close();
+	if (socket_) {
+		socket_->Close();
 	}
 	if (m_pProxyBackend && m_pProxyBackend != m_pBackend) {
 		delete m_pProxyBackend;
@@ -883,13 +883,13 @@ CRealControlSocket::~CRealControlSocket()
 	delete m_pBackend;
 	m_pBackend = 0;
 
-	delete m_pSocket;
+	delete socket_;
 	delete[] sendBuffer_;
 }
 
 bool CRealControlSocket::Connected() const
 {
-	return m_pSocket ? (m_pSocket->GetState() == fz::CSocket::connected) : false;
+	return socket_ ? (socket_->get_state() == fz::socket::connected) : false;
 }
 
 void CRealControlSocket::AppendToSendBuffer(unsigned char const* data, unsigned int len)
@@ -950,7 +950,7 @@ int CRealControlSocket::Send(unsigned char const* buffer, unsigned int len)
 		int written = m_pBackend->Write(buffer, len, error);
 		if (written < 0) {
 			if (error != EAGAIN) {
-				LogMessage(MessageType::Error, _("Could not write to socket: %s"), fz::CSocket::GetErrorDescription(error));
+				LogMessage(MessageType::Error, _("Could not write to socket: %s"), fz::socket::GetErrorDescription(error));
 				LogMessage(MessageType::Error, _("Disconnected from server"));
 				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 			}
@@ -979,7 +979,7 @@ void CRealControlSocket::operator()(fz::event_base const& ev)
 	}
 }
 
-void CRealControlSocket::OnSocketEvent(fz::CSocketEventSource*, fz::SocketEventType t, int error)
+void CRealControlSocket::OnSocketEvent(fz::socket_event_source*, fz::SocketEventType t, int error)
 {
 	if (!m_pBackend) {
 		return;
@@ -989,19 +989,19 @@ void CRealControlSocket::OnSocketEvent(fz::CSocketEventSource*, fz::SocketEventT
 	{
 	case fz::SocketEventType::connection_next:
 		if (error) {
-			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), fz::CSocket::GetErrorDescription(error));
+			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), fz::socket::GetErrorDescription(error));
 		}
 		SetAlive();
 		break;
 	case fz::SocketEventType::connection:
 		if (error) {
-			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), fz::CSocket::GetErrorDescription(error));
+			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), fz::socket::GetErrorDescription(error));
 			OnClose(error);
 		}
 		else {
 			if (m_pProxyBackend && !m_pProxyBackend->Detached()) {
 				m_pProxyBackend->Detach();
-				m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
+				m_pBackend = new CSocketBackend(this, *socket_, engine_.GetRateLimiter());
 			}
 			OnConnect();
 		}
@@ -1021,7 +1021,7 @@ void CRealControlSocket::OnSocketEvent(fz::CSocketEventSource*, fz::SocketEventT
 	}
 }
 
-void CRealControlSocket::OnHostAddress(fz::CSocketEventSource*, std::string const& address)
+void CRealControlSocket::OnHostAddress(fz::socket_event_source*, std::string const& address)
 {
 	if (!m_pBackend) {
 		return;
@@ -1048,7 +1048,7 @@ int CRealControlSocket::OnSend()
 		int written = m_pBackend->Write(sendBuffer_ + sendBufferPos_, sendBufferSize_ - sendBufferPos_, error);
 		if (written < 0) {
 			if (error != EAGAIN) {
-				LogMessage(MessageType::Error, _("Could not write to socket: %s"), fz::CSocket::GetErrorDescription(error));
+				LogMessage(MessageType::Error, _("Could not write to socket: %s"), fz::socket::GetErrorDescription(error));
 				if (GetCurrentCommandId() != Command::connect) {
 					LogMessage(MessageType::Error, _("Disconnected from server"));
 				}
@@ -1083,7 +1083,7 @@ void CRealControlSocket::OnClose(int error)
 			LogMessage(messageType, _("Connection closed by server"));
 		}
 		else {
-			LogMessage(messageType, _("Disconnected from server: %s"), fz::CSocket::GetErrorDescription(error));
+			LogMessage(messageType, _("Disconnected from server: %s"), fz::socket::GetErrorDescription(error));
 		}
 	}
 	DoClose();
@@ -1108,7 +1108,7 @@ int CRealControlSocket::DoConnect(std::wstring const& host, unsigned int port)
 		real_port = engine_.GetOptions().GetOptionVal(OPTION_PROXY_PORT);
 
 		delete m_pBackend;
-		m_pProxyBackend = new CProxySocket(this, m_pSocket, this);
+		m_pProxyBackend = new CProxySocket(this, socket_, this);
 		m_pBackend = m_pProxyBackend;
 		int res = m_pProxyBackend->Handshake(static_cast<CProxySocket::ProxyType>(proxy_type),
 											ConvertDomainName(host), port,
@@ -1116,7 +1116,7 @@ int CRealControlSocket::DoConnect(std::wstring const& host, unsigned int port)
 											engine_.GetOptions().GetOption(OPTION_PROXY_PASS));
 
 		if (res != EINPROGRESS) {
-			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), fz::CSocket::GetErrorDescription(res));
+			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), fz::socket::GetErrorDescription(res));
 			return FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR;
 		}
 	}
@@ -1129,11 +1129,11 @@ int CRealControlSocket::DoConnect(std::wstring const& host, unsigned int port)
 	}
 
 	real_host = ConvertDomainName(real_host);
-	int res = m_pSocket->Connect(fz::to_native(real_host), real_port);
+	int res = socket_->Connect(fz::to_native(real_host), real_port);
 
 	// Treat success same as EINPROGRESS, we wait for connect notification in any case
 	if (res && res != EINPROGRESS) {
-		LogMessage(MessageType::Error, _("Could not connect to server: %s"), fz::CSocket::GetErrorDescription(res));
+		LogMessage(MessageType::Error, _("Could not connect to server: %s"), fz::socket::GetErrorDescription(res));
 		return FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR; 
 	}
 
@@ -1149,7 +1149,7 @@ int CRealControlSocket::DoClose(int nErrorCode)
 
 void CRealControlSocket::ResetSocket()
 {
-	m_pSocket->Close();
+	socket_->Close();
 
 	sendBufferSize_ = 0;
 	sendBufferPos_ = 0;
