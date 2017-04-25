@@ -67,7 +67,7 @@ std::wstring CTransferSocket::SetupActiveTransfer(std::string const& ip)
 	if (port == -1)	{
 		ResetSocket();
 
-		controlSocket_.LogMessage(MessageType::Debug_Warning, L"GetLocalPort failed: %s", CSocket::GetErrorDescription(error));
+		controlSocket_.LogMessage(MessageType::Debug_Warning, L"GetLocalPort failed: %s", fz::CSocket::GetErrorDescription(error));
 		return std::wstring();
 	}
 
@@ -80,7 +80,7 @@ std::wstring CTransferSocket::SetupActiveTransfer(std::string const& ip)
 	}
 
 	std::wstring portArguments;
-	if (socketServer_->GetAddressFamily() == CSocket::ipv6) {
+	if (socketServer_->GetAddressFamily() == fz::CSocket::ipv6) {
 		portArguments = fz::sprintf(L"|2|%s|%d|", ip, port);
 	}
 	else {
@@ -92,15 +92,15 @@ std::wstring CTransferSocket::SetupActiveTransfer(std::string const& ip)
 	return portArguments;
 }
 
-void CTransferSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
+void CTransferSocket::OnSocketEvent(fz::CSocketEventSource*, fz::SocketEventType t, int error)
 {
 	if (m_pProxyBackend) {
 		switch (t)
 		{
-		case SocketEventType::connection:
+		case fz::SocketEventType::connection:
 			{
 				if (error) {
-					controlSocket_.LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), CSocket::GetErrorDescription(error));
+					controlSocket_.LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), fz::CSocket::GetErrorDescription(error));
 					TransferEnd(TransferEndReason::failure);
 				}
 				else {
@@ -110,9 +110,9 @@ void CTransferSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int 
 				}
 			}
 			return;
-		case SocketEventType::close:
+		case fz::SocketEventType::close:
 			{
-				controlSocket_.LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), CSocket::GetErrorDescription(error));
+				controlSocket_.LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), fz::CSocket::GetErrorDescription(error));
 				TransferEnd(TransferEndReason::failure);
 			}
 			return;
@@ -124,7 +124,7 @@ void CTransferSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int 
 	}
 
 	if (socketServer_) {
-		if (t == SocketEventType::connection) {
+		if (t == fz::SocketEventType::connection) {
 			OnAccept(error);
 		}
 		else {
@@ -135,23 +135,23 @@ void CTransferSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int 
 
 	switch (t)
 	{
-	case SocketEventType::connection:
+	case fz::SocketEventType::connection:
 		if (error) {
 			if (m_transferEndReason == TransferEndReason::none) {
-				controlSocket_.LogMessage(MessageType::Error, _("The data connection could not be established: %s"), CSocket::GetErrorDescription(error));
+				controlSocket_.LogMessage(MessageType::Error, _("The data connection could not be established: %s"), fz::CSocket::GetErrorDescription(error));
 				TransferEnd(TransferEndReason::transfer_failure);
 			}
 		}
 		else
 			OnConnect();
 		break;
-	case SocketEventType::read:
+	case fz::SocketEventType::read:
 		OnReceive();
 		break;
-	case SocketEventType::write:
+	case fz::SocketEventType::write:
 		OnSend();
 		break;
-	case SocketEventType::close:
+	case fz::SocketEventType::close:
 		OnClose(error);
 		break;
 	default:
@@ -176,7 +176,7 @@ void CTransferSocket::OnAccept(int error)
 			controlSocket_.LogMessage(MessageType::Debug_Verbose, L"No pending connection");
 		}
 		else {
-			controlSocket_.LogMessage(MessageType::Status, _("Could not accept connection: %s"), CSocket::GetErrorDescription(error));
+			controlSocket_.LogMessage(MessageType::Status, _("Could not accept connection: %s"), fz::CSocket::GetErrorDescription(error));
 			TransferEnd(TransferEndReason::transfer_failure);
 		}
 		return;
@@ -204,7 +204,7 @@ void CTransferSocket::OnConnect()
 	}
 	else if (m_pTlsSocket) {
 		// Re-enable Nagle algorithm
-		socket_->SetFlags(socket_->GetFlags() & (~CSocket::flag_nodelay));
+		socket_->SetFlags(socket_->GetFlags() & (~fz::CSocket::flag_nodelay));
 		if (CServerCapabilities::GetCapability(controlSocket_.currentServer_, tls_resume) == unknown)	{
 			CServerCapabilities::SetCapability(controlSocket_.currentServer_, tls_resume, m_pTlsSocket->ResumedSession() ? yes : no);
 		}
@@ -239,7 +239,7 @@ void CTransferSocket::OnReceive()
 			if (numread < 0) {
 				delete [] pBuffer;
 				if (error != EAGAIN) {
-					controlSocket_.LogMessage(MessageType::Error, L"Could not read from transfer socket: %s", CSocket::GetErrorDescription(error));
+					controlSocket_.LogMessage(MessageType::Error, L"Could not read from transfer socket: %s", fz::CSocket::GetErrorDescription(error));
 					TransferEnd(TransferEndReason::transfer_failure);
 				}
 				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound)) {
@@ -298,7 +298,7 @@ void CTransferSocket::OnReceive()
 
 		if (numread < 0) {
 			if (error != EAGAIN) {
-				controlSocket_.LogMessage(MessageType::Error, L"Could not read from transfer socket: %s", CSocket::GetErrorDescription(error));
+				controlSocket_.LogMessage(MessageType::Error, L"Could not read from transfer socket: %s", fz::CSocket::GetErrorDescription(error));
 				TransferEnd(TransferEndReason::transfer_failure);
 			}
 			else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound)) {
@@ -309,7 +309,7 @@ void CTransferSocket::OnReceive()
 			FinalizeWrite();
 		}
 		else {
-			send_event<CSocketEvent>(m_pBackend, SocketEventType::read, 0);
+			send_event<fz::CSocketEvent>(m_pBackend, fz::SocketEventType::read, 0);
 		}
 	}
 	else if (m_transferMode == TransferMode::resumetest) {
@@ -319,7 +319,7 @@ void CTransferSocket::OnReceive()
 			int numread = m_pBackend->Read(buffer, 2, error);
 			if (numread < 0) {
 				if (error != EAGAIN) {
-					controlSocket_.LogMessage(MessageType::Error, L"Could not read from transfer socket: %s", CSocket::GetErrorDescription(error));
+					controlSocket_.LogMessage(MessageType::Error, L"Could not read from transfer socket: %s", fz::CSocket::GetErrorDescription(error));
 					TransferEnd(TransferEndReason::transfer_failure);
 				}
 				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound)) {
@@ -409,12 +409,12 @@ void CTransferSocket::OnSend()
 			}
 		}
 		else {
-			controlSocket_.LogMessage(MessageType::Error, L"Could not write to transfer socket: %s", CSocket::GetErrorDescription(error));
+			controlSocket_.LogMessage(MessageType::Error, L"Could not write to transfer socket: %s", fz::CSocket::GetErrorDescription(error));
 			TransferEnd(TransferEndReason::transfer_failure);
 		}
 	}
 	else if (written > 0) {
-		send_event<CSocketEvent>(m_pBackend, SocketEventType::write, 0);
+		send_event<fz::CSocketEvent>(m_pBackend, fz::SocketEventType::write, 0);
 	}
 }
 
@@ -450,7 +450,7 @@ void CTransferSocket::OnClose(int error)
 	}
 
 	if (error) {
-		controlSocket_.LogMessage(MessageType::Error, _("Transfer connection interrupted: %s"), CSocket::GetErrorDescription(error));
+		controlSocket_.LogMessage(MessageType::Error, _("Transfer connection interrupted: %s"), fz::CSocket::GetErrorDescription(error));
 		TransferEnd(TransferEndReason::transfer_failure);
 		return;
 	}
@@ -472,7 +472,7 @@ void CTransferSocket::OnClose(int error)
 		return;
 	}
 	else if (numread < 0 && error != EAGAIN) {
-		controlSocket_.LogMessage(MessageType::Error, _("Transfer connection interrupted: %s"), CSocket::GetErrorDescription(error));
+		controlSocket_.LogMessage(MessageType::Error, _("Transfer connection interrupted: %s"), fz::CSocket::GetErrorDescription(error));
 		TransferEnd(TransferEndReason::transfer_failure);
 		return;
 	}
@@ -497,7 +497,7 @@ bool CTransferSocket::SetupPassiveTransfer(std::wstring const& host, int port)
 
 	ResetSocket();
 
-	socket_ = std::make_unique<CSocket>(engine_.GetThreadPool(), this);
+	socket_ = std::make_unique<fz::CSocket>(engine_.GetThreadPool(), this);
 
 	if (controlSocket_.m_pProxyBackend) {
 		m_pProxyBackend = new CProxySocket(this, socket_.get(), &controlSocket_);
@@ -548,7 +548,7 @@ bool CTransferSocket::SetupPassiveTransfer(std::wstring const& host, int port)
 		}
 	}
 
-	int res = socket_->Connect(fz::to_native(ip), port, CSocket::unspec, bindAddress);
+	int res = socket_->Connect(fz::to_native(ip), port, fz::CSocket::unspec, bindAddress);
 	if (res && res != EINPROGRESS) {
 		ResetSocket();
 		return false;
@@ -573,7 +573,7 @@ void CTransferSocket::SetActive()
 		return;
 	}
 
-	if (socket_->GetState() == CSocket::connected || socket_->GetState() == CSocket::closing) {
+	if (socket_->GetState() == fz::CSocket::connected || socket_->GetState() == fz::CSocket::closing) {
 		TriggerPostponedEvents();
 	}
 }
@@ -592,12 +592,12 @@ void CTransferSocket::TransferEnd(TransferEndReason reason)
 	controlSocket_.send_event<TransferEndEvent>();
 }
 
-std::unique_ptr<CSocket> CTransferSocket::CreateSocketServer(int port)
+std::unique_ptr<fz::CSocket> CTransferSocket::CreateSocketServer(int port)
 {
-	auto socket = std::make_unique<CSocket>(engine_.GetThreadPool(), this);
+	auto socket = std::make_unique<fz::CSocket>(engine_.GetThreadPool(), this);
 	int res = socket->Listen(controlSocket_.m_pSocket->GetAddressFamily(), port);
 	if (res) {
-		controlSocket_.LogMessage(MessageType::Debug_Verbose, L"Could not listen on port %d: %s", port, CSocket::GetErrorDescription(res));
+		controlSocket_.LogMessage(MessageType::Debug_Verbose, L"Could not listen on port %d: %s", port, fz::CSocket::GetErrorDescription(res));
 		socket.reset();
 	}
 	else {
@@ -607,7 +607,7 @@ std::unique_ptr<CSocket> CTransferSocket::CreateSocketServer(int port)
 	return socket;
 }
 
-std::unique_ptr<CSocket> CTransferSocket::CreateSocketServer()
+std::unique_ptr<fz::CSocket> CTransferSocket::CreateSocketServer()
 {
 	if (!engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS)) {
 		// Ask the systen for a port
@@ -637,7 +637,7 @@ std::unique_ptr<CSocket> CTransferSocket::CreateSocketServer()
 		assert(start >= low && start <= high);
 	}
 
-	std::unique_ptr<CSocket> server;
+	std::unique_ptr<fz::CSocket> server;
 
 	int count = high - low + 1;
 	while (count--) {
@@ -753,7 +753,7 @@ void CTransferSocket::FinalizeWrite()
 bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 {
 	// Disable Nagle algorithm during TlS handshake
-	socket_->SetFlags(socket_->GetFlags() | CSocket::flag_nodelay);
+	socket_->SetFlags(socket_->GetFlags() | fz::CSocket::flag_nodelay);
 
 	assert(!m_pBackend);
 	m_pTlsSocket = new CTlsSocket(this, *socket_, &controlSocket_);
@@ -826,7 +826,7 @@ bool CTransferSocket::InitBackend()
 	return true;
 }
 
-void CTransferSocket::SetSocketBufferSizes(CSocket& socket)
+void CTransferSocket::SetSocketBufferSizes(fz::CSocket& socket)
 {
 	const int size_read = engine_.GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_RECV);
 #if FZ_WINDOWS
@@ -839,7 +839,7 @@ void CTransferSocket::SetSocketBufferSizes(CSocket& socket)
 
 void CTransferSocket::operator()(fz::event_base const& ev)
 {
-	fz::dispatch<CSocketEvent, CIOThreadEvent, fz::timer_event>(ev, this,
+	fz::dispatch<fz::CSocketEvent, CIOThreadEvent, fz::timer_event>(ev, this,
 		&CTransferSocket::OnSocketEvent,
 		&CTransferSocket::OnIOThreadEvent,
 		&CTransferSocket::OnTimer);
@@ -847,7 +847,7 @@ void CTransferSocket::operator()(fz::event_base const& ev)
 
 void CTransferSocket::OnTimer(fz::timer_id)
 {
-	if (socket_ && socket_->GetState() == CSocket::connected) {
+	if (socket_ && socket_->GetState() == fz::CSocket::connected) {
 		int const ideal_send_buffer = socket_->GetIdealSendBufferSize();
 		if (ideal_send_buffer != -1) {
 			socket_->SetBufferSizes(-1, ideal_send_buffer);

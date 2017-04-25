@@ -88,7 +88,7 @@ CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 	delete m_pLogging;
 
 	if (m_engineList.empty()) {
-		CSocket::Cleanup(true);
+		fz::CSocket::Cleanup(true);
 	}
 }
 

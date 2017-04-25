@@ -212,12 +212,12 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 		event.Veto();
 
 		PrintMessage(wxString::Format(_("Connecting to %s"), _T("probe.filezilla-project.org")), 0);
-		m_socket = new CSocket(engine_context_.GetThreadPool(), this);
+		m_socket = new fz::CSocket(engine_context_.GetThreadPool(), this);
 		m_recvBufferPos = 0;
 
 		int res = m_socket->Connect(fzT("probe.filezilla-project.org"), 21);
 		if (res && res != EINPROGRESS) {
-			PrintMessage(wxString::Format(_("Connect failed: %s"), CSocket::GetErrorDescription(res)), 1);
+			PrintMessage(wxString::Format(_("Connect failed: %s"), fz::CSocket::GetErrorDescription(res)), 1);
 			CloseSocket();
 		}
 	}
@@ -244,7 +244,7 @@ void CNetConfWizard::OnPageChanged(wxWizardEvent& event)
 	}
 }
 
-void CNetConfWizard::DoOnSocketEvent(CSocketEventSource* s, SocketEventType t, int error)
+void CNetConfWizard::DoOnSocketEvent(fz::CSocketEventSource* s, fz::SocketEventType t, int error)
 {
 	if (s == m_socket) {
 		if (error) {
@@ -253,16 +253,16 @@ void CNetConfWizard::DoOnSocketEvent(CSocketEventSource* s, SocketEventType t, i
 		}
 		switch (t)
 		{
-		case SocketEventType::read:
+		case fz::SocketEventType::read:
 			OnReceive();
 			break;
-		case SocketEventType::write:
+		case fz::SocketEventType::write:
 			OnSend();
 			break;
-		case SocketEventType::close:
+		case fz::SocketEventType::close:
 			OnClose();
 			break;
-		case SocketEventType::connection:
+		case fz::SocketEventType::connection:
 			OnConnect();
 			break;
 		default:
@@ -276,11 +276,11 @@ void CNetConfWizard::DoOnSocketEvent(CSocketEventSource* s, SocketEventType t, i
 			return;
 		}
 		switch (t) {
-		case SocketEventType::close:
+		case fz::SocketEventType::close:
 			PrintMessage(_("Listen socket closed"), 1);
 			CloseSocket();
 			break;
-		case SocketEventType::connection:
+		case fz::SocketEventType::connection:
 			OnAccept();
 			break;
 		default:
@@ -294,10 +294,10 @@ void CNetConfWizard::DoOnSocketEvent(CSocketEventSource* s, SocketEventType t, i
 		}
 		switch (t)
 		{
-		case SocketEventType::close:
+		case fz::SocketEventType::close:
 			OnDataClose();
 			break;
-		case SocketEventType::read:
+		case fz::SocketEventType::read:
 			OnDataReceive();
 			break;
 		default:
@@ -725,7 +725,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address), 0);
 
 			m_pIPResolver = new CExternalIPResolver(engine_context_.GetThreadPool(), *this);
-			m_pIPResolver->GetExternalIP(address, CSocket::ipv4, true);
+			m_pIPResolver->GetExternalIP(address, fz::CSocket::ipv4, true);
 			if (!m_pIPResolver->Done()) {
 				return wxString();
 			}
@@ -916,8 +916,8 @@ int CNetConfWizard::CreateListenSocket()
 
 int CNetConfWizard::CreateListenSocket(unsigned int port)
 {
-	m_pSocketServer = new CSocket(engine_context_.GetThreadPool(), this);
-	int res = m_pSocketServer->Listen(m_socket ? m_socket->GetAddressFamily() : CSocket::unspec, port);
+	m_pSocketServer = new fz::CSocket(engine_context_.GetThreadPool(), this);
+	int res = m_pSocketServer->Listen(m_socket ? m_socket->GetAddressFamily() : fz::CSocket::unspec, port);
 
 	if (res < 0) {
 		delete m_pSocketServer;
@@ -1074,7 +1074,7 @@ void CNetConfWizard::OnTimer(wxTimerEvent& event)
 
 void CNetConfWizard::operator()(fz::event_base const& ev)
 {
-	fz::dispatch<CSocketEvent, CExternalIPResolveEvent>(ev, this
+	fz::dispatch<fz::CSocketEvent, CExternalIPResolveEvent>(ev, this
 		, &CNetConfWizard::OnSocketEvent
 		, &CNetConfWizard::OnExternalIPAddress);
 }
@@ -1084,7 +1084,7 @@ void CNetConfWizard::OnExternalIPAddress()
 	QueueEvent(new wxCommandEvent(fzEVT_ON_EXTERNAL_IP_ADDRESS));
 }
 
-void CNetConfWizard::OnSocketEvent(CSocketEventSource* s, SocketEventType t, int error)
+void CNetConfWizard::OnSocketEvent(fz::CSocketEventSource* s, fz::SocketEventType t, int error)
 {
 	if (!s) {
 		return;

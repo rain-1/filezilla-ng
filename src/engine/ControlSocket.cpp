@@ -867,7 +867,7 @@ void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate & engine)
 	: CControlSocket(engine)
 {
-	m_pSocket = new CSocket(engine.GetThreadPool(), this);
+	m_pSocket = new fz::CSocket(engine.GetThreadPool(), this);
 
 	m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
 }
@@ -889,7 +889,7 @@ CRealControlSocket::~CRealControlSocket()
 
 bool CRealControlSocket::Connected() const
 {
-	return m_pSocket ? (m_pSocket->GetState() == CSocket::connected) : false;
+	return m_pSocket ? (m_pSocket->GetState() == fz::CSocket::connected) : false;
 }
 
 void CRealControlSocket::AppendToSendBuffer(unsigned char const* data, unsigned int len)
@@ -950,7 +950,7 @@ int CRealControlSocket::Send(unsigned char const* buffer, unsigned int len)
 		int written = m_pBackend->Write(buffer, len, error);
 		if (written < 0) {
 			if (error != EAGAIN) {
-				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
+				LogMessage(MessageType::Error, _("Could not write to socket: %s"), fz::CSocket::GetErrorDescription(error));
 				LogMessage(MessageType::Error, _("Disconnected from server"));
 				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 			}
@@ -971,7 +971,7 @@ int CRealControlSocket::Send(unsigned char const* buffer, unsigned int len)
 
 void CRealControlSocket::operator()(fz::event_base const& ev)
 {
-	if (!fz::dispatch<CSocketEvent, CHostAddressEvent>(ev, this,
+	if (!fz::dispatch<fz::CSocketEvent, fz::CHostAddressEvent>(ev, this,
 		&CRealControlSocket::OnSocketEvent,
 		&CRealControlSocket::OnHostAddress))
 	{
@@ -979,7 +979,7 @@ void CRealControlSocket::operator()(fz::event_base const& ev)
 	}
 }
 
-void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
+void CRealControlSocket::OnSocketEvent(fz::CSocketEventSource*, fz::SocketEventType t, int error)
 {
 	if (!m_pBackend) {
 		return;
@@ -987,15 +987,15 @@ void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, i
 
 	switch (t)
 	{
-	case SocketEventType::connection_next:
+	case fz::SocketEventType::connection_next:
 		if (error) {
-			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(error));
+			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), fz::CSocket::GetErrorDescription(error));
 		}
 		SetAlive();
 		break;
-	case SocketEventType::connection:
+	case fz::SocketEventType::connection:
 		if (error) {
-			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(error));
+			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), fz::CSocket::GetErrorDescription(error));
 			OnClose(error);
 		}
 		else {
@@ -1006,13 +1006,13 @@ void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, i
 			OnConnect();
 		}
 		break;
-	case SocketEventType::read:
+	case fz::SocketEventType::read:
 		OnReceive();
 		break;
-	case SocketEventType::write:
+	case fz::SocketEventType::write:
 		OnSend();
 		break;
-	case SocketEventType::close:
+	case fz::SocketEventType::close:
 		OnClose(error);
 		break;
 	default:
@@ -1021,7 +1021,7 @@ void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, i
 	}
 }
 
-void CRealControlSocket::OnHostAddress(CSocketEventSource*, std::string const& address)
+void CRealControlSocket::OnHostAddress(fz::CSocketEventSource*, std::string const& address)
 {
 	if (!m_pBackend) {
 		return;
@@ -1048,7 +1048,7 @@ int CRealControlSocket::OnSend()
 		int written = m_pBackend->Write(sendBuffer_ + sendBufferPos_, sendBufferSize_ - sendBufferPos_, error);
 		if (written < 0) {
 			if (error != EAGAIN) {
-				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
+				LogMessage(MessageType::Error, _("Could not write to socket: %s"), fz::CSocket::GetErrorDescription(error));
 				if (GetCurrentCommandId() != Command::connect) {
 					LogMessage(MessageType::Error, _("Disconnected from server"));
 				}
@@ -1083,7 +1083,7 @@ void CRealControlSocket::OnClose(int error)
 			LogMessage(messageType, _("Connection closed by server"));
 		}
 		else {
-			LogMessage(messageType, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
+			LogMessage(messageType, _("Disconnected from server: %s"), fz::CSocket::GetErrorDescription(error));
 		}
 	}
 	DoClose();
@@ -1116,7 +1116,7 @@ int CRealControlSocket::DoConnect(std::wstring const& host, unsigned int port)
 											engine_.GetOptions().GetOption(OPTION_PROXY_PASS));
 
 		if (res != EINPROGRESS) {
-			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), CSocket::GetErrorDescription(res));
+			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), fz::CSocket::GetErrorDescription(res));
 			return FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR;
 		}
 	}
@@ -1133,7 +1133,7 @@ int CRealControlSocket::DoConnect(std::wstring const& host, unsigned int port)
 
 	// Treat success same as EINPROGRESS, we wait for connect notification in any case
 	if (res && res != EINPROGRESS) {
-		LogMessage(MessageType::Error, _("Could not connect to server: %s"), CSocket::GetErrorDescription(res));
+		LogMessage(MessageType::Error, _("Could not connect to server: %s"), fz::CSocket::GetErrorDescription(res));
 		return FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR; 
 	}
 

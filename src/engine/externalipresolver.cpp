@@ -33,7 +33,7 @@ CExternalIPResolver::~CExternalIPResolver()
 	m_pSocket = 0;
 }
 
-void CExternalIPResolver::GetExternalIP(std::wstring const& address, CSocket::address_family protocol, bool force)
+void CExternalIPResolver::GetExternalIP(std::wstring const& address, fz::CSocket::address_family protocol, bool force)
 {
 	{
 		fz::scoped_lock l(s_sync);
@@ -83,7 +83,7 @@ void CExternalIPResolver::GetExternalIP(std::wstring const& address, CSocket::ad
 		return;
 	}
 
-	m_pSocket = new CSocket(thread_pool_, this);
+	m_pSocket = new fz::CSocket(thread_pool_, this);
 
 	int res = m_pSocket->Connect(fz::to_native(host), m_port, protocol);
 	if (res && res != EINPROGRESS) {
@@ -96,10 +96,10 @@ void CExternalIPResolver::GetExternalIP(std::wstring const& address, CSocket::ad
 
 void CExternalIPResolver::operator()(fz::event_base const& ev)
 {
-	fz::dispatch<CSocketEvent>(ev, this, &CExternalIPResolver::OnSocketEvent);
+	fz::dispatch<fz::CSocketEvent>(ev, this, &CExternalIPResolver::OnSocketEvent);
 }
 
-void CExternalIPResolver::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
+void CExternalIPResolver::OnSocketEvent(fz::CSocketEventSource*, fz::SocketEventType t, int error)
 {
 	if (!m_pSocket) {
 		return;
@@ -107,16 +107,16 @@ void CExternalIPResolver::OnSocketEvent(CSocketEventSource*, SocketEventType t, 
 
 	switch (t)
 	{
-	case SocketEventType::read:
+	case fz::SocketEventType::read:
 		OnReceive();
 		break;
-	case SocketEventType::connection:
+	case fz::SocketEventType::connection:
 		OnConnect(error);
 		break;
-	case SocketEventType::close:
+	case fz::SocketEventType::close:
 		OnClose();
 		break;
-	case SocketEventType::write:
+	case fz::SocketEventType::write:
 		OnSend();
 		break;
 	default:
@@ -375,7 +375,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 		}
 	}
 
-	if (m_protocol == CSocket::ipv6) {
+	if (m_protocol == fz::CSocket::ipv6) {
 		if (!m_data.empty() && m_data[0] == '[') {
 			if (m_data.back() != ']') {
 				Close(false);

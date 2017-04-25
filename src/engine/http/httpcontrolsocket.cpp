@@ -175,7 +175,7 @@ void CHttpControlSocket::OnClose(int error)
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::OnClose(%d)", error);
 
 	if (error) {
-		LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
+		LogMessage(MessageType::Error, _("Disconnected from server: %s"), fz::CSocket::GetErrorDescription(error));
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
 	}

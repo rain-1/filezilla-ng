@@ -34,7 +34,7 @@ CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
 	: CRealControlSocket(engine)
 {
 	// Enable TCP_NODELAY, speeds things up a bit.
-	m_pSocket->SetFlags(CSocket::flag_nodelay | CSocket::flag_keepalive);
+	m_pSocket->SetFlags(fz::CSocket::flag_nodelay | fz::CSocket::flag_keepalive);
 
 	// Enable SO_KEEPALIVE, lots of clueless users have broken routers and
 	// firewalls which terminate the control connection on long transfers.
@@ -61,7 +61,7 @@ void CFtpControlSocket::OnReceive()
 
 		if (read < 0) {
 			if (error != EAGAIN) {
-				LogMessage(MessageType::Error, _("Could not read from socket: %s"), CSocket::GetErrorDescription(error));
+				LogMessage(MessageType::Error, _("Could not read from socket: %s"), fz::CSocket::GetErrorDescription(error));
 				if (GetCurrentCommandId() != Command::connect) {
 					LogMessage(MessageType::Error, _("Disconnected from server"));
 				}
@@ -631,7 +631,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 {
 	// Local IP should work. Only a complete moron would use IPv6
 	// and NAT at the same time.
-	if (m_pSocket->GetAddressFamily() != CSocket::ipv6) {
+	if (m_pSocket->GetAddressFamily() != fz::CSocket::ipv6) {
 		int mode = engine_.GetOptions().GetOptionVal(OPTION_EXTERNALIPMODE);
 
 		if (mode) {
@@ -666,7 +666,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 				LogMessage(MessageType::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress);
 
 				m_pIPResolver = std::make_unique<CExternalIPResolver>(engine_.GetThreadPool(), *this);
-				m_pIPResolver->GetExternalIP(resolverAddress, CSocket::ipv4);
+				m_pIPResolver->GetExternalIP(resolverAddress, fz::CSocket::ipv4);
 				if (!m_pIPResolver->Done()) {
 					LogMessage(MessageType::Debug_Verbose, L"Waiting for resolver thread");
 					return FZ_REPLY_WOULDBLOCK;
