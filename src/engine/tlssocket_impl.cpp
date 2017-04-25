@@ -128,7 +128,7 @@ void clone_cert(gnutls_x509_crt_t in, gnutls_x509_crt_t &out)
 }
 }
 
-CTlsSocketImpl::CTlsSocketImpl(CTlsSocket& tlsSocket, fz::CSocket& socket, CControlSocket* pOwner)
+CTlsSocketImpl::CTlsSocketImpl(CTlsSocket& tlsSocket, fz::socket& socket, CControlSocket* pOwner)
 	: tlsSocket_(tlsSocket)
 	, m_pOwner(pOwner)
 	, m_socket(socket)
@@ -287,18 +287,18 @@ void CTlsSocketImpl::LogError(int code, std::wstring const& function, MessageTyp
 	}
 	else if (code == GNUTLS_E_PULL_ERROR) {
 		if (function.empty()) {
-			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not read from socket: %s", fz::CSocket::GetErrorDescription(m_socket_error));
+			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not read from socket: %s", fz::socket::GetErrorDescription(m_socket_error));
 		}
 		else {
-			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not read from socket in %s: %s", function, fz::CSocket::GetErrorDescription(m_socket_error));
+			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not read from socket in %s: %s", function, fz::socket::GetErrorDescription(m_socket_error));
 		}
 	}
 	else if (code == GNUTLS_E_PUSH_ERROR) {
 		if (function.empty()) {
-			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not write to socket: %s", fz::CSocket::GetErrorDescription(m_socket_error));
+			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not write to socket: %s", fz::socket::GetErrorDescription(m_socket_error));
 		}
 		else {
-			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not write to socket in %s: %s", function, fz::CSocket::GetErrorDescription(m_socket_error));
+			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not write to socket in %s: %s", function, fz::socket::GetErrorDescription(m_socket_error));
 		}
 	}
 	else {
@@ -429,7 +429,7 @@ void CTlsSocketImpl::operator()(fz::event_base const& ev)
 	fz::dispatch<fz::CSocketEvent>(ev, this, &CTlsSocketImpl::OnSocketEvent);
 }
 
-void CTlsSocketImpl::OnSocketEvent(fz::CSocketEventSource*, fz::SocketEventType t, int error)
+void CTlsSocketImpl::OnSocketEvent(fz::socket_event_source*, fz::SocketEventType t, int error)
 {
 	if (!m_session) {
 		return;
@@ -1146,7 +1146,7 @@ std::vector<std::wstring> CTlsSocketImpl::GetCertSubjectAltNames(gnutls_x509_crt
 			}
 		}
 		else if (type_or_error == GNUTLS_SAN_IPADDRESS) {
-			std::wstring ip = fz::to_wstring(fz::CSocket::AddressToString(san, san_size));
+			std::wstring ip = fz::to_wstring(fz::socket::AddressToString(san, san_size));
 			if (!ip.empty()) {
 				ret.emplace_back(std::move(ip));
 			}

@@ -18,7 +18,7 @@ public:
 		closed
 	};
 
-	CTlsSocket(fz::event_handler* pEvtHandler, fz::CSocket& pSocket, CControlSocket* pOwner);
+	CTlsSocket(fz::event_handler* pEvtHandler, fz::socket& pSocket, CControlSocket* pOwner);
 	virtual ~CTlsSocket();
 
 	bool Init();

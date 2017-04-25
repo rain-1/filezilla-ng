@@ -31,21 +31,21 @@ enum handshake_state
 	socks4_handshake
 };
 
-CProxySocket::CProxySocket(fz::event_handler* pEvtHandler, fz::CSocket* pSocket, CControlSocket* pOwner)
+CProxySocket::CProxySocket(fz::event_handler* pEvtHandler, fz::socket* pSocket, CControlSocket* pOwner)
 	: fz::event_handler(pOwner->event_loop_)
 	, CBackend(pEvtHandler)
-	, m_pSocket(pSocket)
+	, socket_(pSocket)
 	, m_pOwner(pOwner)
 {
-	m_pSocket->SetEventHandler(this);
+	socket_->set_event_handler(this);
 }
 
 CProxySocket::~CProxySocket()
 {
 	remove_handler();
 
-	if (m_pSocket) {
-		m_pSocket->SetEventHandler(0);
+	if (socket_) {
+		socket_->set_event_handler(0);
 	}
 	delete [] m_pSendBuffer;
 	delete [] m_pRecvBuffer;
@@ -130,7 +130,7 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, std::wstring const& ho
 			int res = getaddrinfo(fz::to_string(m_host).c_str(), 0, &hints, &result);
 			if (!res && result) {
 				if (result->ai_family == AF_INET) {
-					ip = fz::CSocket::AddressToString(result->ai_addr, result->ai_addrlen, false);
+					ip = fz::socket::AddressToString(result->ai_addr, result->ai_addrlen, false);
 				}
 				freeaddrinfo(result);
 			}
@@ -204,12 +204,12 @@ void CProxySocket::operator()(fz::event_base const& ev)
 		&CProxySocket::OnHostAddress);
 }
 
-void CProxySocket::OnSocketEvent(CSocketEventSource*, fz::SocketEventType t, int error)
+void CProxySocket::OnSocketEvent(socket_event_source*, fz::SocketEventType t, int error)
 {
 	switch (t) {
 	case fz::SocketEventType::connection_next:
 		if (error) {
-			m_pOwner->LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), fz::CSocket::GetErrorDescription(error));
+			m_pOwner->LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), fz::socket::GetErrorDescription(error));
 		}
 		break;
 	case fz::SocketEventType::connection:
@@ -235,19 +235,19 @@ void CProxySocket::OnSocketEvent(CSocketEventSource*, fz::SocketEventType t, int
 	}
 }
 
-void CProxySocket::OnHostAddress(CSocketEventSource*, std::string const& address)
+void CProxySocket::OnHostAddress(socket_event_source*, std::string const& address)
 {
 	m_pOwner->LogMessage(MessageType::Status, _("Connecting to %s..."), address);
 }
 
 void CProxySocket::Detach()
 {
-	if (!m_pSocket) {
+	if (!socket_) {
 		return;
 	}
 
-	m_pSocket->SetEventHandler(0);
-	m_pSocket = 0;
+	socket_->set_event_handler(0);
+	socket_ = 0;
 }
 
 void CProxySocket::OnReceive()
@@ -268,10 +268,10 @@ void CProxySocket::OnReceive()
 			for (int i = 0; i < 2; ++i) {
 				int read;
 				if (!i) {
-					read = m_pSocket->Peek(m_pRecvBuffer + m_recvBufferPos, do_read, error);
+					read = socket_->Peek(m_pRecvBuffer + m_recvBufferPos, do_read, error);
 				}
 				else {
-					read = m_pSocket->Read(m_pRecvBuffer + m_recvBufferPos, do_read, error);
+					read = socket_->Read(m_pRecvBuffer + m_recvBufferPos, do_read, error);
 				}
 				if (read == -1) {
 					if (error != EAGAIN) {
@@ -345,7 +345,7 @@ void CProxySocket::OnReceive()
 	case socks4_handshake:
 		while (m_recvBufferLen && m_can_read && m_proxyState == handshake) {
 			int read_error;
-			int read = m_pSocket->Read(m_pRecvBuffer + m_recvBufferPos, m_recvBufferLen, read_error);
+			int read = socket_->Read(m_pRecvBuffer + m_recvBufferPos, m_recvBufferLen, read_error);
 			if (read == -1) {
 				if (read_error != EAGAIN) {
 					m_proxyState = noconn;
@@ -406,7 +406,7 @@ void CProxySocket::OnReceive()
 		}
 		while (m_recvBufferLen && m_can_read && m_proxyState == handshake) {
 			int error;
-			int read = m_pSocket->Read(m_pRecvBuffer + m_recvBufferPos, m_recvBufferLen, error);
+			int read = socket_->Read(m_pRecvBuffer + m_recvBufferPos, m_recvBufferLen, error);
 			if (read == -1) {
 				if (error != EAGAIN) {
 					m_proxyState = noconn;
@@ -660,7 +660,7 @@ void CProxySocket::OnSend()
 
 	for (;;) {
 		int error;
-		int written = m_pSocket->Write(m_pSendBuffer, m_sendBufferLen, error);
+		int written = socket_->Write(m_pSendBuffer, m_sendBufferLen, error);
 		if (written == -1) {
 			if (error != EAGAIN) {
 				m_proxyState = noconn;

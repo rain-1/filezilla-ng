@@ -14,18 +14,18 @@ CBackend::~CBackend()
 	RemoveSocketEvents(m_pEvtHandler, this);
 }
 
-CSocketBackend::CSocketBackend(fz::event_handler* pEvtHandler, fz::CSocket & socket, CRateLimiter& rateLimiter)
+CSocketBackend::CSocketBackend(fz::event_handler* pEvtHandler, fz::socket & socket, CRateLimiter& rateLimiter)
 	: CBackend(pEvtHandler)
 	, socket_(socket)
 	, m_rateLimiter(rateLimiter)
 {
-	socket_.SetEventHandler(pEvtHandler);
+	socket_.set_event_handler(pEvtHandler);
 	m_rateLimiter.AddObject(this);
 }
 
 CSocketBackend::~CSocketBackend()
 {
-	socket_.SetEventHandler(0);
+	socket_.set_event_handler(0);
 	m_rateLimiter.RemoveObject(this);
 }
 

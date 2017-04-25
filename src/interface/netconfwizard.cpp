@@ -212,12 +212,12 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 		event.Veto();
 
 		PrintMessage(wxString::Format(_("Connecting to %s"), _T("probe.filezilla-project.org")), 0);
-		m_socket = new fz::CSocket(engine_context_.GetThreadPool(), this);
+		m_socket = new fz::socket(engine_context_.GetThreadPool(), this);
 		m_recvBufferPos = 0;
 
 		int res = m_socket->Connect(fzT("probe.filezilla-project.org"), 21);
 		if (res && res != EINPROGRESS) {
-			PrintMessage(wxString::Format(_("Connect failed: %s"), fz::CSocket::GetErrorDescription(res)), 1);
+			PrintMessage(wxString::Format(_("Connect failed: %s"), fz::socket::GetErrorDescription(res)), 1);
 			CloseSocket();
 		}
 	}
@@ -244,7 +244,7 @@ void CNetConfWizard::OnPageChanged(wxWizardEvent& event)
 	}
 }
 
-void CNetConfWizard::DoOnSocketEvent(fz::CSocketEventSource* s, fz::SocketEventType t, int error)
+void CNetConfWizard::DoOnSocketEvent(fz::socket_event_source* s, fz::SocketEventType t, int error)
 {
 	if (s == m_socket) {
 		if (error) {
@@ -725,7 +725,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address), 0);
 
 			m_pIPResolver = new CExternalIPResolver(engine_context_.GetThreadPool(), *this);
-			m_pIPResolver->GetExternalIP(address, fz::CSocket::ipv4, true);
+			m_pIPResolver->GetExternalIP(address, fz::socket::ipv4, true);
 			if (!m_pIPResolver->Done()) {
 				return wxString();
 			}
@@ -916,8 +916,8 @@ int CNetConfWizard::CreateListenSocket()
 
 int CNetConfWizard::CreateListenSocket(unsigned int port)
 {
-	m_pSocketServer = new fz::CSocket(engine_context_.GetThreadPool(), this);
-	int res = m_pSocketServer->Listen(m_socket ? m_socket->GetAddressFamily() : fz::CSocket::unspec, port);
+	m_pSocketServer = new fz::socket(engine_context_.GetThreadPool(), this);
+	int res = m_pSocketServer->listen(m_socket ? m_socket->GetAddressFamily() : fz::socket::unspec, port);
 
 	if (res < 0) {
 		delete m_pSocketServer;
@@ -944,14 +944,16 @@ void CNetConfWizard::OnAccept()
 	if (!m_socket || !m_pSocketServer) {
 		return;
 	}
-	if (m_pDataSocket)
+	if (m_pDataSocket) {
 		return;
+	}
 
 	int error;
-	m_pDataSocket = m_pSocketServer->Accept(error);
-	if (!m_pDataSocket)
+	m_pDataSocket = m_pSocketServer->accept(error);
+	if (!m_pDataSocket) {
 		return;
-	m_pDataSocket->SetEventHandler(this);
+	}
+	m_pDataSocket->set_event_handler(this);
 
 	std::string peerAddr = m_socket->GetPeerIP();
 	std::string dataPeerAddr = m_pDataSocket->GetPeerIP();
@@ -1084,7 +1086,7 @@ void CNetConfWizard::OnExternalIPAddress()
 	QueueEvent(new wxCommandEvent(fzEVT_ON_EXTERNAL_IP_ADDRESS));
 }
 
-void CNetConfWizard::OnSocketEvent(fz::CSocketEventSource* s, fz::SocketEventType t, int error)
+void CNetConfWizard::OnSocketEvent(fz::socket_event_source* s, fz::SocketEventType t, int error)
 {
 	if (!s) {
 		return;

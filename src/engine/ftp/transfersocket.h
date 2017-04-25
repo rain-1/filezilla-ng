@@ -50,7 +50,7 @@ protected:
 
 	void ResetSocket();
 
-	void OnSocketEvent(fz::CSocketEventSource* source, fz::SocketEventType t, int error);
+	void OnSocketEvent(fz::socket_event_source* source, fz::SocketEventType t, int error);
 	void OnConnect();
 	void OnAccept(int error);
 	void OnReceive();
@@ -59,18 +59,18 @@ protected:
 	void OnTimer(fz::timer_id);
 
 	// Create a socket server
-	std::unique_ptr<fz::CSocket> CreateSocketServer();
-	std::unique_ptr<fz::CSocket> CreateSocketServer(int port);
+	std::unique_ptr<fz::socket> CreateSocketServer();
+	std::unique_ptr<fz::socket> CreateSocketServer(int port);
 
-	void SetSocketBufferSizes(fz::CSocket & socket);
+	void SetSocketBufferSizes(fz::socket & socket);
 
 	virtual void operator()(fz::event_base const& ev);
 	void OnIOThreadEvent();
 
-	std::unique_ptr<fz::CSocket> socket_{};
+	std::unique_ptr<fz::socket> socket_{};
 
 	// Will be set only while creating active mode connections
-	std::unique_ptr<fz::CSocket> socketServer_;
+	std::unique_ptr<fz::socket> socketServer_;
 
 	CFileZillaEnginePrivate & engine_;
 	CFtpControlSocket & controlSocket_;

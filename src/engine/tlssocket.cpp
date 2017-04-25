@@ -4,7 +4,7 @@
 #include "tlssocket.h"
 #include "tlssocket_impl.h"
 
-CTlsSocket::CTlsSocket(fz::event_handler* pEvtHandler, fz::CSocket& pSocket, CControlSocket* pOwner)
+CTlsSocket::CTlsSocket(fz::event_handler* pEvtHandler, fz::socket& pSocket, CControlSocket* pOwner)
 	: event_handler(pOwner->event_loop_)
 	, CBackend(pEvtHandler)
 {

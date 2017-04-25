@@ -29,11 +29,11 @@ CExternalIPResolver::~CExternalIPResolver()
 	delete [] m_pRecvBuffer;
 	m_pRecvBuffer = 0;
 
-	delete m_pSocket;
-	m_pSocket = 0;
+	delete socket_;
+	socket_ = 0;
 }
 
-void CExternalIPResolver::GetExternalIP(std::wstring const& address, fz::CSocket::address_family protocol, bool force)
+void CExternalIPResolver::GetExternalIP(std::wstring const& address, fz::socket::address_family protocol, bool force)
 {
 	{
 		fz::scoped_lock l(s_sync);
@@ -83,9 +83,9 @@ void CExternalIPResolver::GetExternalIP(std::wstring const& address, fz::CSocket
 		return;
 	}
 
-	m_pSocket = new fz::CSocket(thread_pool_, this);
+	socket_ = new fz::socket(thread_pool_, this);
 
-	int res = m_pSocket->Connect(fz::to_native(host), m_port, protocol);
+	int res = socket_->Connect(fz::to_native(host), m_port, protocol);
 	if (res && res != EINPROGRESS) {
 		Close(false);
 		return;
@@ -99,9 +99,9 @@ void CExternalIPResolver::operator()(fz::event_base const& ev)
 	fz::dispatch<fz::CSocketEvent>(ev, this, &CExternalIPResolver::OnSocketEvent);
 }
 
-void CExternalIPResolver::OnSocketEvent(fz::CSocketEventSource*, fz::SocketEventType t, int error)
+void CExternalIPResolver::OnSocketEvent(fz::socket_event_source*, fz::SocketEventType t, int error)
 {
-	if (!m_pSocket) {
+	if (!socket_) {
 		return;
 	}
 
@@ -150,10 +150,10 @@ void CExternalIPResolver::OnReceive()
 		return;
 	}
 
-	while (m_pSocket) {
+	while (socket_) {
 		unsigned int len = m_recvBufferLen - m_recvBufferPos;
 		int error;
-		int read = m_pSocket->Read(m_pRecvBuffer + m_recvBufferPos, len, error);
+		int read = socket_->Read(m_pRecvBuffer + m_recvBufferPos, len, error);
 		if (read == -1) {
 			if (error != EAGAIN)
 				Close(false);
@@ -188,7 +188,7 @@ void CExternalIPResolver::OnSend()
 {
 	while (!m_sendBuffer.empty()) {
 		int error;
-		int written = m_pSocket->Write(m_sendBuffer.c_str(), m_sendBuffer.size(), error);
+		int written = socket_->Write(m_sendBuffer.c_str(), m_sendBuffer.size(), error);
 		if (written == -1) {
 			if (error != EAGAIN) {
 				Close(false);
@@ -215,8 +215,8 @@ void CExternalIPResolver::Close(bool successful)
 	delete [] m_pRecvBuffer;
 	m_pRecvBuffer = 0;
 
-	delete m_pSocket;
-	m_pSocket = 0;
+	delete socket_;
+	socket_ = 0;
 
 	if (m_done) {
 		return;
@@ -304,8 +304,8 @@ void CExternalIPResolver::OnHeader()
 
 				// Redirect if neccessary
 				if (m_responseCode >= 300) {
-					delete m_pSocket;
-					m_pSocket = 0;
+					delete socket_;
+					socket_ = 0;
 
 					delete [] m_pRecvBuffer;
 					m_pRecvBuffer = 0;
@@ -375,7 +375,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 		}
 	}
 
-	if (m_protocol == fz::CSocket::ipv6) {
+	if (m_protocol == fz::socket::ipv6) {
 		if (!m_data.empty() && m_data[0] == '[') {
 			if (m_data.back() != ']') {
 				Close(false);
