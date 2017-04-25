@@ -7,11 +7,6 @@
 
 namespace fz {
 class thread_pool;
-}
-
-// IPv6 capable, non-blocking socket class for use with wxWidgets.
-// Error codes are the same as used by the POSIX socket functions,
-// see 'man 2 socket', 'man 2 connect', ...
 
 enum class SocketEventType
 {
@@ -25,22 +20,66 @@ enum class SocketEventType
 	close
 };
 
+/**
+ * \brief All classes sending socket events should derive from this.
+ *
+ * Allows implementing socket layers, e.g. for TLS.
+ *
+ * \sa fz::RemoveSocketEvents
+ * \sa fz::ChangeSocketEventHandler
+ */
 class CSocketEventSource
 {
 public:
 	virtual ~CSocketEventSource() = default;
 };
 
+/// \private
 struct socket_event_type;
+
+/**
+ * All socket events are sent through this. See \ref fz::SocketEventType
+ */
 typedef fz::simple_event<socket_event_type, CSocketEventSource*, SocketEventType, int> CSocketEvent;
 
+/// \private
 struct hostaddress_event_type;
+
+/**
+* Whenever a hostname has been resolved to an IP address, this event is sent with the resolved IP address literal .
+*/
 typedef fz::simple_event<hostaddress_event_type, CSocketEventSource*, std::string> CHostAddressEvent;
 
+/**
+ * \brief Remove all pendinmg socket events from source sent to handler.
+ *
+ * Useful e.g. if you want to destroy the handler but keep the source.
+ * This function is called, through ChangeSocketEventHandler, by Socket::SetEventHandler(0)
+ */
 void RemoveSocketEvents(fz::event_handler * handler, CSocketEventSource const* const source);
+
+/**
+ * \brief Changes all pending socket events from source
+ *
+ * If newHandler is null, RemoveSocketEvents is called.
+ *
+ * This function is called by CSocket::SetEvtHandler().
+ *
+ * \example Possible use-cases: Handoff after proxy handshakes, or handoff to TLS classes in
+			case of STARTTLS mechanism
+ */
 void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler * newHandler, CSocketEventSource const* const source);
 
 class CSocketThread;
+
+/**
+ * \brief IPv6 capable, non-blocking socket class
+ *
+ * Uses and edge-triggered socket events.
+ *
+ * Error codes are the same as used by the POSIX socket functions,
+ * see 'man 2 socket', 'man 2 connect', ...
+ */
 class CSocket final : public CSocketEventSource
 {
 	friend class CSocketThread;
@@ -157,9 +196,9 @@ protected:
 	fz::thread_pool & thread_pool_;
 	fz::event_handler* m_pEvtHandler;
 
-	int m_fd{-1};
+	int m_fd{ -1 };
 
-	SocketState m_state{none};
+	SocketState m_state{ none };
 
 	CSocketThread* m_pSocketThread{};
 
@@ -239,5 +278,7 @@ protected:
 // For the future:
 // Handle ERROR_NETNAME_DELETED=64
 #endif //FZ_WINDOWS
+
+}
 
 #endif

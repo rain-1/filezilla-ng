@@ -203,7 +203,7 @@ int CFtpRawTransferOpData::Send()
 				std::wstring portArgument = controlSocket_.m_pTransferSocket->SetupActiveTransfer(address);
 				if (!portArgument.empty()) {
 					bTriedActive = true;
-					if (controlSocket_.m_pSocket->GetAddressFamily() == CSocket::ipv6) {
+					if (controlSocket_.m_pSocket->GetAddressFamily() == fz::CSocket::ipv6) {
 						cmd = L"EPRT " + portArgument;
 					}
 					else {
@@ -371,7 +371,7 @@ std::wstring CFtpRawTransferOpData::GetPassiveCommand()
 			ret = L"EPSV";
 		}
 	}
-	else if (controlSocket_.m_pSocket->GetAddressFamily() == CSocket::ipv6) {
+	else if (controlSocket_.m_pSocket->GetAddressFamily() == fz::CSocket::ipv6) {
 		// EPSV is mandatory for IPv6, don't check capabilities
 		ret = L"EPSV";
 	}

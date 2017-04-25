@@ -14,7 +14,7 @@ class CTlsSocket;
 class CTlsSocketImpl final
 {
 public:
-	CTlsSocketImpl(CTlsSocket& tlsSocket, CSocket& pSocket, CControlSocket* pOwner);
+	CTlsSocketImpl(CTlsSocket& tlsSocket, fz::CSocket& pSocket, CControlSocket* pOwner);
 	~CTlsSocketImpl();
 
 	bool Init();
@@ -76,7 +76,7 @@ protected:
 	void TriggerEvents();
 
 	void operator()(fz::event_base const& ev);
-	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
+	void OnSocketEvent(fz::CSocketEventSource* source, fz::SocketEventType t, int error);
 
 	void OnRead();
 	void OnSend();
@@ -106,7 +106,7 @@ protected:
 
 	bool m_socketClosed{};
 
-	CSocket& m_socket;
+	fz::CSocket& m_socket;
 	std::unique_ptr<CSocketBackend> socketBackend_;
 
 	bool m_shutdown_requested{};

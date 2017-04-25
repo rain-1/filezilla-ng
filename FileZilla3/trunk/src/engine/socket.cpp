@@ -37,6 +37,16 @@
 #define AI_NUMERICSERV 0
 #endif
 
+#define WAIT_CONNECT 0x01
+#define WAIT_READ	 0x02
+#define WAIT_WRITE	 0x04
+#define WAIT_ACCEPT  0x08
+#define WAIT_CLOSE	 0x10
+#define WAIT_EVENTCOUNT 5
+
+namespace fz {
+
+namespace {
 // Union for strict aliasing-safe casting between
 // the different address types
 union sockaddr_u
@@ -47,16 +57,6 @@ union sockaddr_u
 	struct sockaddr_in6 in6;
 };
 
-#define WAIT_CONNECT 0x01
-#define WAIT_READ	 0x02
-#define WAIT_WRITE	 0x04
-#define WAIT_ACCEPT  0x08
-#define WAIT_CLOSE	 0x10
-#define WAIT_EVENTCOUNT 5
-
-class CSocketThread;
-
-namespace {
 static std::vector<CSocketThread*> waiting_socket_threads;
 static fz::mutex waiting_socket_threads_mutex{ false };
 }
@@ -1691,4 +1691,6 @@ void CSocket::SetKeepaliveInterval(fz::duration const& d)
 	if (m_pSocketThread) {
 		m_pSocketThread->m_sync.unlock();
 	}
+}
+
 }

@@ -92,7 +92,7 @@ int CHttpRequestOpData::Send()
 				int written = controlSocket_.m_pBackend->Write(controlSocket_.sendBuffer_ + controlSocket_.sendBufferPos_, controlSocket_.sendBufferSize_ - controlSocket_.sendBufferPos_, error);
 				if (written < 0) {
 					if (error != EAGAIN) {
-						LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
+						LogMessage(MessageType::Error, _("Could not write to socket: %s"), fz::CSocket::GetErrorDescription(error));
 						LogMessage(MessageType::Error, _("Disconnected from server"));
 						return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 					}
@@ -142,8 +142,8 @@ int CHttpRequestOpData::SubcommandResult(int, COpData const&)
 int CHttpRequestOpData::OnReceive()
 {
 	while (true) {
-		const CSocket::SocketState state = controlSocket_.m_pSocket->GetState();
-		if (state != CSocket::connected && state != CSocket::closing) {
+		const fz::CSocket::SocketState state = controlSocket_.m_pSocket->GetState();
+		if (state != fz::CSocket::connected && state != fz::CSocket::closing) {
 			return FZ_REPLY_WOULDBLOCK;
 		}
 
