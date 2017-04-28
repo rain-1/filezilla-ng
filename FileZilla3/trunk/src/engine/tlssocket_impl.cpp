@@ -570,7 +570,7 @@ int CTlsSocketImpl::Handshake(const CTlsSocketImpl* pPrimarySocket, bool try_res
 
 	fz::native_string hostname;
 
-	if (0) {//rimarySocket) {
+	if (primarySocket) {
 		if (!pPrimarySocket->m_session) {
 			m_pOwner->LogMessage(MessageType::Debug_Warning, L"Primary socket has no session");
 			return FZ_REPLY_ERROR;
