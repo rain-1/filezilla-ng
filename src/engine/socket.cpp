@@ -52,7 +52,7 @@ namespace {
 union sockaddr_u
 {
 	struct sockaddr_storage storage;
-	struct sockaddr sockaddr;
+	struct sockaddr sockaddr_;
 	struct sockaddr_in in4;
 	struct sockaddr_in6 in6;
 };
@@ -61,60 +61,63 @@ static std::vector<socket_thread*> waiting_socket_threads;
 static fz::mutex waiting_socket_threads_mutex{ false };
 }
 
-void RemoveSocketEvents(fz::event_handler * handler, socket_event_source const* const source)
+void remove_socket_events(fz::event_handler * handler, socket_event_source const* const source)
 {
-	auto socketEventFilter = [&](fz::event_loop::Events::value_type const& ev) -> bool {
+	auto socket_event_filter = [&](fz::event_loop::Events::value_type const& ev) -> bool {
 		if (ev.first != handler) {
 			return false;
 		}
-		else if (ev.second->derived_type() == CSocketEvent::type()) {
-			return std::get<0>(static_cast<CSocketEvent const&>(*ev.second).v_) == source;
+		else if (ev.second->derived_type() == socket_event::type()) {
+			return std::get<0>(static_cast<socket_event const&>(*ev.second).v_) == source;
 		}
-		else if (ev.second->derived_type() == CHostAddressEvent::type()) {
-			return std::get<0>(static_cast<CHostAddressEvent const&>(*ev.second).v_) == source;
+		else if (ev.second->derived_type() == hostaddress_event::type()) {
+			return std::get<0>(static_cast<hostaddress_event const&>(*ev.second).v_) == source;
 		}
 		return false;
 	};
 
-	handler->event_loop_.filter_events(socketEventFilter);
+	handler->event_loop_.filter_events(socket_event_filter);
 }
 
-void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler * newHandler, socket_event_source const* const source)
+void change_socket_event_handler(fz::event_handler * old_handler, fz::event_handler * new_handler, socket_event_source const* const source)
 {
-	if (!oldHandler)
-		return;
-	if (oldHandler == newHandler) {
+	if (!old_handler) {
 		return;
 	}
 
-	if (!newHandler) {
-		RemoveSocketEvents(oldHandler, source);
+	if (old_handler == new_handler) {
+		return;
+	}
+
+	if (!new_handler) {
+		remove_socket_events(old_handler, source);
 	}
 	else {
-		auto socketEventFilter = [&](fz::event_loop::Events::value_type & ev) -> bool {
-			if (ev.first == oldHandler) {
-				if (ev.second->derived_type() == CSocketEvent::type()) {
-					if (std::get<0>(static_cast<CSocketEvent const&>(*ev.second).v_) == source) {
-						ev.first = newHandler;
+		auto socket_event_filter = [&](fz::event_loop::Events::value_type & ev) -> bool {
+			if (ev.first == old_handler) {
+				if (ev.second->derived_type() == socket_event::type()) {
+					if (std::get<0>(static_cast<socket_event const&>(*ev.second).v_) == source) {
+						ev.first = new_handler;
 					}
 				}
-				else if (ev.second->derived_type() == CHostAddressEvent::type()) {
-					if (std::get<0>(static_cast<CHostAddressEvent const&>(*ev.second).v_) == source) {
-						ev.first = newHandler;
+				else if (ev.second->derived_type() == hostaddress_event::type()) {
+					if (std::get<0>(static_cast<hostaddress_event const&>(*ev.second).v_) == source) {
+						ev.first = new_handler;
 					}
 				}
 			}
 			return false;
 		};
 
-		oldHandler->event_loop_.filter_events(socketEventFilter);
+		old_handler->event_loop_.filter_events(socket_event_filter);
 	}
 }
 
 namespace {
 #ifdef FZ_WINDOWS
-static int ConvertMSWErrorCode(int error)
+static int convert_msw_error_code(int error)
 {
+	// Takes an MSW socket error and converts it into an equivalent POSIX error code.
 	switch (error)
 	{
 	case WSAECONNREFUSED:
@@ -162,12 +165,12 @@ static int ConvertMSWErrorCode(int error)
 	}
 }
 
-int GetLastSocketError()
+int last_socket_error()
 {
-	return ConvertMSWErrorCode(WSAGetLastError());
+	return convert_msw_error_code(WSAGetLastError());
 }
 #else
-inline int GetLastSocketError() { return errno; }
+inline int last_socket_error() { return errno; }
 #endif
 }
 
@@ -176,7 +179,7 @@ class socket_thread final
 	friend class socket;
 public:
 	socket_thread()
-		: m_sync(false)
+		: mutex_(false)
 	{
 #ifdef FZ_WINDOWS
 		m_sync_event = WSA_INVALID_EVENT;
@@ -193,19 +196,22 @@ public:
 	{
 		thread_.join();
 #ifdef FZ_WINDOWS
-		if (m_sync_event != WSA_INVALID_EVENT)
+		if (m_sync_event != WSA_INVALID_EVENT) {
 			WSACloseEvent(m_sync_event);
+		}
 #else
-		if (m_pipe[0] != -1)
+		if (m_pipe[0] != -1) {
 			close(m_pipe[0]);
-		if (m_pipe[1] != -1)
+		}
+		if (m_pipe[1] != -1) {
 			close(m_pipe[1]);
+		}
 #endif
 	}
 
 	void SetSocket(socket* pSocket)
 	{
-		fz::scoped_lock l(m_sync);
+		fz::scoped_lock l(mutex_);
 		SetSocket(pSocket, l);
 	}
 
@@ -213,8 +219,8 @@ public:
 	{
 		socket_ = pSocket;
 
-		m_host.clear();
-		m_port.clear();
+		host_.clear();
+		port_.clear();
 
 		m_waiting = 0;
 	}
@@ -226,8 +232,8 @@ public:
 			return EINVAL;
 		}
 
-		m_host = fz::to_utf8(socket_->m_host);
-		if (m_host.empty()) {
+		host_ = fz::to_utf8(socket_->host_);
+		if (host_.empty()) {
 			return EINVAL;
 		}
 
@@ -235,9 +241,9 @@ public:
 
 		// Connect method of socket ensures port is in range
 		char tmp[7];
-		sprintf(tmp, "%u", socket_->m_port);
+		sprintf(tmp, "%u", socket_->port_);
 		tmp[5] = 0;
-		m_port = tmp;
+		port_ = tmp;
 
 		Start();
 
@@ -247,7 +253,7 @@ public:
 	int Start()
 	{
 		if (m_started) {
-			fz::scoped_lock l(m_sync);
+			fz::scoped_lock l(mutex_);
 			assert(m_threadwait);
 			m_waiting = 0;
 			WakeupThread(l);
@@ -255,14 +261,17 @@ public:
 		}
 		m_started = true;
 #ifdef FZ_WINDOWS
-		if (m_sync_event == WSA_INVALID_EVENT)
+		if (m_sync_event == WSA_INVALID_EVENT) {
 			m_sync_event = WSACreateEvent();
-		if (m_sync_event == WSA_INVALID_EVENT)
+		}
+		if (m_sync_event == WSA_INVALID_EVENT) {
 			return 1;
+		}
 #else
 		if (m_pipe[0] == -1) {
-			if (pipe(m_pipe))
+			if (pipe(m_pipe)) {
 				return errno;
+			}
 		}
 #endif
 
@@ -274,7 +283,7 @@ public:
 	// Cancels select or idle wait
 	void WakeupThread()
 	{
-		fz::scoped_lock l(m_sync);
+		fz::scoped_lock l(mutex_);
 		WakeupThread(l);
 	}
 
@@ -286,7 +295,7 @@ public:
 
 		if (m_threadwait) {
 			m_threadwait = false;
-			m_condition.signal(l);
+			condition_.signal(l);
 			return;
 		}
 
@@ -307,7 +316,7 @@ protected:
 	{
 		int fd;
 #if defined(SOCK_CLOEXEC) && !defined(FZ_WINDOWS)
-		fd = socket(addr.ai_family, addr.ai_socktype | SOCK_CLOEXEC, addr.ai_protocol);
+		fd = ::socket(addr.ai_family, addr.ai_socktype | SOCK_CLOEXEC, addr.ai_protocol);
 		if (fd == -1 && errno == EINVAL)
 #endif
 		{
@@ -320,7 +329,7 @@ protected:
 			const int value = 1;
 			setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &value, sizeof(int));
 #endif
-			socket::SetNonblocking(fd);
+			socket::set_nonblocking(fd);
 		}
 
 		return fd;
@@ -341,24 +350,24 @@ protected:
 	int TryConnectHost(addrinfo & addr, sockaddr_u const& bindAddr, fz::scoped_lock & l)
 	{
 		if (socket_->evt_handler_) {
-			socket_->evt_handler_->send_event<CHostAddressEvent>(socket_, socket::AddressToString(addr.ai_addr, addr.ai_addrlen));
+			socket_->evt_handler_->send_event<hostaddress_event>(socket_, socket::address_to_string(addr.ai_addr, addr.ai_addrlen));
 		}
 
 		int fd = CreateSocketFd(addr);
 		if (fd == -1) {
 			if (socket_->evt_handler_) {
-				socket_->evt_handler_->send_event<CSocketEvent>(socket_, addr.ai_next ? SocketEventType::connection_next : SocketEventType::connection, GetLastSocketError());
+				socket_->evt_handler_->send_event<socket_event>(socket_, addr.ai_next ? socket_event_flag::connection_next : socket_event_flag::connection, last_socket_error());
 			}
 
 			return 0;
 		}
 
-		if (bindAddr.sockaddr.sa_family != AF_UNSPEC && bindAddr.sockaddr.sa_family == addr.ai_family) {
-			(void)bind(fd, &bindAddr.sockaddr, sizeof(bindAddr));
+		if (bindAddr.sockaddr_.sa_family != AF_UNSPEC && bindAddr.sockaddr_.sa_family == addr.ai_family) {
+			(void)bind(fd, &bindAddr.sockaddr_, sizeof(bindAddr));
 		}
 
-		socket::DoSetFlags(fd, socket_->flags_, socket_->flags_, socket_->m_keepalive_interval);
-		socket::DoSetBufferSizes(fd, socket_->m_buffer_sizes[0], socket_->m_buffer_sizes[1]);
+		socket::do_set_flags(fd, socket_->flags_, socket_->flags_, socket_->keepalive_interval_);
+		socket::do_set_buffer_sizes(fd, socket_->buffer_sizes_[0], socket_->buffer_sizes_[1]);
 
 		int res = connect(fd, addr.ai_addr, addr.ai_addrlen);
 		if (res == -1) {
@@ -369,7 +378,7 @@ protected:
 				res = EINPROGRESS;
 			}
 			else {
-				res = GetLastSocketError();
+				res = last_socket_error();
 			}
 #else
 			res = errno;
@@ -378,19 +387,21 @@ protected:
 
 		if (res == EINPROGRESS) {
 
-			socket_->m_fd = fd;
+			socket_->fd_ = fd;
 
 			bool wait_successful;
 			do {
 				wait_successful = DoWait(WAIT_CONNECT, l);
-				if ((m_triggered & WAIT_CONNECT))
+				if ((m_triggered & WAIT_CONNECT)) {
 					break;
+				}
 			} while (wait_successful);
 
 			if (!wait_successful) {
 				CloseSocketFd(fd);
-				if (socket_)
-					socket_->m_fd = -1;
+				if (socket_) {
+					socket_->fd_ = -1;
+				}
 				return -1;
 			}
 			m_triggered &= ~WAIT_CONNECT;
@@ -400,18 +411,18 @@ protected:
 
 		if (res) {
 			if (socket_->evt_handler_) {
-				socket_->evt_handler_->send_event<CSocketEvent>(socket_, addr.ai_next ? SocketEventType::connection_next : SocketEventType::connection, res);
+				socket_->evt_handler_->send_event<socket_event>(socket_, addr.ai_next ? socket_event_flag::connection_next : socket_event_flag::connection, res);
 			}
 
 			CloseSocketFd(fd);
-			socket_->m_fd = -1;
+			socket_->fd_ = -1;
 		}
 		else {
-			socket_->m_fd = fd;
-			socket_->m_state = socket::connected;
+			socket_->fd_ = fd;
+			socket_->state_ = socket::connected;
 
 			if (socket_->evt_handler_) {
-				socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::connection, 0);
+				socket_->evt_handler_->send_event<socket_event>(socket_, socket_event_flag::connection, 0);
 			}
 
 			// We're now interested in all the other nice events
@@ -426,14 +437,14 @@ protected:
 	// Only call while locked
 	bool DoConnect(fz::scoped_lock & l)
 	{
-		if (m_host.empty() || m_port.empty()) {
-			socket_->m_state = socket::closed;
+		if (host_.empty() || port_.empty()) {
+			socket_->state_ = socket::closed;
 			return false;
 		}
 
 		std::string host, port, bind;
-		std::swap(host, m_host);
-		std::swap(port, m_port);
+		std::swap(host, host_);
+		std::swap(port, port_);
 		std::swap(bind, m_bind);
 
 		sockaddr_u bindAddr{};
@@ -454,7 +465,7 @@ protected:
 		}
 
 		addrinfo hints{};
-		hints.ai_family = socket_->m_family;
+		hints.ai_family = socket_->family_;
 
 		l.unlock();
 
@@ -469,10 +480,12 @@ protected:
 		l.lock();
 
 		if (ShouldQuit()) {
-			if (!res && addressList)
+			if (!res && addressList) {
 				freeaddrinfo(addressList);
-			if (socket_)
-				socket_->m_state = socket::closed;
+			}
+			if (socket_) {
+				socket_->state_ = socket::closed;
+			}
 			return false;
 		}
 
@@ -480,21 +493,22 @@ protected:
 		// If m_pHost is set, Close() was called and Connect()
 		// afterwards, state is back at connecting.
 		// In either case, we need to abort this connection attempt.
-		if (socket_->m_state != socket::connecting || !m_host.empty()) {
-			if (!res && addressList)
+		if (socket_->state_ != socket::connecting || !host_.empty()) {
+			if (!res && addressList) {
 				freeaddrinfo(addressList);
+			}
 			return false;
 		}
 
 		if (res) {
 #ifdef FZ_WINDOWS
-			res = ConvertMSWErrorCode(res);
+			res = convert_msw_error_code(res);
 #endif
 
 			if (socket_->evt_handler_) {
-				socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::connection, res);
+				socket_->evt_handler_->send_event<socket_event>(socket_, socket_event_flag::connection, res);
 			}
-			socket_->m_state = socket::closed;
+			socket_->state_ = socket::closed;
 
 			return false;
 		}
@@ -503,8 +517,9 @@ protected:
 			res = TryConnectHost(*addr, bindAddr, l);
 			if (res == -1) {
 				freeaddrinfo(addressList);
-				if (socket_)
-					socket_->m_state = socket::closed;
+				if (socket_) {
+					socket_->state_ = socket::closed;
+				}
 				return false;
 			}
 			else if (res) {
@@ -515,9 +530,9 @@ protected:
 		freeaddrinfo(addressList);
 
 		if (socket_->evt_handler_) {
-			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::connection, ECONNABORTED);
+			socket_->evt_handler_->send_event<socket_event>(socket_, socket_event_flag::connection, ECONNABORTED);
 		}
-		socket_->m_state = socket::closed;
+		socket_->state_ = socket::closed;
 
 		return false;
 	}
@@ -550,7 +565,7 @@ protected:
 			if (m_waiting & WAIT_CLOSE) {
 				wait_events |= FD_CLOSE;
 			}
-			WSAEventSelect(socket_->m_fd, m_sync_event, wait_events);
+			WSAEventSelect(socket_->fd_, m_sync_event, wait_events);
 			l.unlock();
 			WSAWaitForMultipleEvents(1, &m_sync_event, false, WSA_INFINITE, false);
 
@@ -560,50 +575,51 @@ protected:
 			}
 
 			WSANETWORKEVENTS events;
-			int res = WSAEnumNetworkEvents(socket_->m_fd, m_sync_event, &events);
+			int res = WSAEnumNetworkEvents(socket_->fd_, m_sync_event, &events);
 			if (res) {
-				res = GetLastSocketError();
+				res = last_socket_error();
 				return false;
 			}
 
 			if (m_waiting & WAIT_CONNECT) {
 				if (events.lNetworkEvents & FD_CONNECT) {
 					m_triggered |= WAIT_CONNECT;
-					m_triggered_errors[0] = ConvertMSWErrorCode(events.iErrorCode[FD_CONNECT_BIT]);
+					m_triggered_errors[0] = convert_msw_error_code(events.iErrorCode[FD_CONNECT_BIT]);
 					m_waiting &= ~WAIT_CONNECT;
 				}
 			}
 			if (m_waiting & WAIT_READ) {
 				if (events.lNetworkEvents & FD_READ) {
 					m_triggered |= WAIT_READ;
-					m_triggered_errors[1] = ConvertMSWErrorCode(events.iErrorCode[FD_READ_BIT]);
+					m_triggered_errors[1] = convert_msw_error_code(events.iErrorCode[FD_READ_BIT]);
 					m_waiting &= ~WAIT_READ;
 				}
 			}
 			if (m_waiting & WAIT_WRITE) {
 				if (events.lNetworkEvents & FD_WRITE) {
 					m_triggered |= WAIT_WRITE;
-					m_triggered_errors[2] = ConvertMSWErrorCode(events.iErrorCode[FD_WRITE_BIT]);
+					m_triggered_errors[2] = convert_msw_error_code(events.iErrorCode[FD_WRITE_BIT]);
 					m_waiting &= ~WAIT_WRITE;
 				}
 			}
 			if (m_waiting & WAIT_ACCEPT) {
 				if (events.lNetworkEvents & FD_ACCEPT) {
 					m_triggered |= WAIT_ACCEPT;
-					m_triggered_errors[3] = ConvertMSWErrorCode(events.iErrorCode[FD_ACCEPT_BIT]);
+					m_triggered_errors[3] = convert_msw_error_code(events.iErrorCode[FD_ACCEPT_BIT]);
 					m_waiting &= ~WAIT_ACCEPT;
 				}
 			}
 			if (m_waiting & WAIT_CLOSE) {
 				if (events.lNetworkEvents & FD_CLOSE) {
 					m_triggered |= WAIT_CLOSE;
-					m_triggered_errors[4] = ConvertMSWErrorCode(events.iErrorCode[FD_CLOSE_BIT]);
+					m_triggered_errors[4] = convert_msw_error_code(events.iErrorCode[FD_CLOSE_BIT]);
 					m_waiting &= ~WAIT_CLOSE;
 				}
 			}
 
-			if (m_triggered || !m_waiting)
+			if (m_triggered || !m_waiting) {
 				return true;
+			}
 #else
 			fd_set readfds;
 			fd_set writefds;
@@ -612,14 +628,14 @@ protected:
 
 			FD_SET(m_pipe[0], &readfds);
 			if (!(m_waiting & WAIT_CONNECT)) {
-				FD_SET(socket_->m_fd, &readfds);
+				FD_SET(socket_->fd_, &readfds);
 			}
 
 			if (m_waiting & (WAIT_WRITE | WAIT_CONNECT)) {
-				FD_SET(socket_->m_fd, &writefds);
+				FD_SET(socket_->fd_, &writefds);
 			}
 
-			int maxfd = std::max(m_pipe[0], socket_->m_fd) + 1;
+			int maxfd = std::max(m_pipe[0], socket_->fd_) + 1;
 
 			l.unlock();
 
@@ -633,7 +649,7 @@ protected:
 				(void)damn_spurious_warning; // We do not care about return value and this is definitely correct!
 			}
 
-			if (m_quit || !socket_ || socket_->m_fd == -1) {
+			if (m_quit || !socket_ || socket_->fd_ == -1) {
 				return false;
 			}
 
@@ -651,10 +667,10 @@ protected:
 			}
 
 			if (m_waiting & WAIT_CONNECT) {
-				if (FD_ISSET(socket_->m_fd, &writefds)) {
+				if (FD_ISSET(socket_->fd_, &writefds)) {
 					int error;
 					socklen_t len = sizeof(error);
-					int getsockopt_res = getsockopt(socket_->m_fd, SOL_SOCKET, SO_ERROR, &error, &len);
+					int getsockopt_res = getsockopt(socket_->fd_, SOL_SOCKET, SO_ERROR, &error, &len);
 					if (getsockopt_res) {
 						error = errno;
 					}
@@ -664,19 +680,19 @@ protected:
 				}
 			}
 			else if (m_waiting & WAIT_ACCEPT) {
-				if (FD_ISSET(socket_->m_fd, &readfds)) {
+				if (FD_ISSET(socket_->fd_, &readfds)) {
 					m_triggered |= WAIT_ACCEPT;
 					m_waiting &= ~WAIT_ACCEPT;
 				}
 			}
 			else if (m_waiting & WAIT_READ) {
-				if (FD_ISSET(socket_->m_fd, &readfds)) {
+				if (FD_ISSET(socket_->fd_, &readfds)) {
 					m_triggered |= WAIT_READ;
 					m_waiting &= ~WAIT_READ;
 				}
 			}
 			if (m_waiting & WAIT_WRITE) {
-				if (FD_ISSET(socket_->m_fd, &writefds)) {
+				if (FD_ISSET(socket_->fd_, &writefds)) {
 					m_triggered |= WAIT_WRITE;
 					m_waiting &= ~WAIT_WRITE;
 				}
@@ -691,18 +707,19 @@ protected:
 
 	void SendEvents()
 	{
-		if (!socket_ || !socket_->evt_handler_)
+		if (!socket_ || !socket_->evt_handler_) {
 			return;
+		}
 		if (m_triggered & WAIT_READ) {
-			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::read, m_triggered_errors[1]);
+			socket_->evt_handler_->send_event<socket_event>(socket_, socket_event_flag::read, m_triggered_errors[1]);
 			m_triggered &= ~WAIT_READ;
 		}
 		if (m_triggered & WAIT_WRITE) {
-			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::write, m_triggered_errors[2]);
+			socket_->evt_handler_->send_event<socket_event>(socket_, socket_event_flag::write, m_triggered_errors[2]);
 			m_triggered &= ~WAIT_WRITE;
 		}
 		if (m_triggered & WAIT_ACCEPT) {
-			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::connection, m_triggered_errors[3]);
+			socket_->evt_handler_->send_event<socket_event>(socket_, socket_event_flag::connection, m_triggered_errors[3]);
 			m_triggered &= ~WAIT_ACCEPT;
 		}
 		if (m_triggered & WAIT_CLOSE) {
@@ -712,7 +729,7 @@ protected:
 
 	void SendCloseEvent()
 	{
-		if( !socket_ || !socket_->evt_handler_ ) {
+		if (!socket_ || !socket_->evt_handler_) {
 			return;
 		}
 
@@ -723,16 +740,16 @@ protected:
 		//   of FD_CLOSE to avoid any possibility of losing data.
 		// First half is actually plain wrong.
 		char buf;
-		if( !m_triggered_errors[4] && recv( socket_->m_fd, &buf, 1, MSG_PEEK ) > 0) {
-			if( !(m_waiting & WAIT_READ) ) {
+		if (!m_triggered_errors[4] && recv( socket_->fd_, &buf, 1, MSG_PEEK ) > 0) {
+			if (!(m_waiting & WAIT_READ)) {
 				return;
 			}
-			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::read, 0);
+			socket_->evt_handler_->send_event<socket_event>(socket_, socket_event_flag::read, 0);
 		}
 		else
 #endif
 		{
-			socket_->evt_handler_->send_event<CSocketEvent>(socket_, SocketEventType::close, m_triggered_errors[4]);
+			socket_->evt_handler_->send_event<socket_event>(socket_, socket_event_flag::close, m_triggered_errors[4]);
 			m_triggered &= ~WAIT_CLOSE;
 		}
 	}
@@ -740,14 +757,16 @@ protected:
 	// Call only while locked
 	bool IdleLoop(fz::scoped_lock & l)
 	{
-		if (m_quit)
+		if (m_quit) {
 			return false;
-		while (!socket_ || (!m_waiting && m_host.empty())) {
+		}
+		while (!socket_ || (!m_waiting && host_.empty())) {
 			m_threadwait = true;
-			m_condition.wait(l);
+			condition_.wait(l);
 
-			if (m_quit)
+			if (m_quit) {
 				return false;
+			}
 		}
 
 		return true;
@@ -755,28 +774,30 @@ protected:
 
 	void entry()
 	{
-		fz::scoped_lock l(m_sync);
+		fz::scoped_lock l(mutex_);
 		for (;;) {
 			if (!IdleLoop(l)) {
 				m_finished = true;
 				return;
 			}
 
-			if (socket_->m_state == socket::listening) {
+			if (socket_->state_ == socket::listening) {
 				while (IdleLoop(l)) {
-					if (socket_->m_fd == -1) {
+					if (socket_->fd_ == -1) {
 						m_waiting = 0;
 						break;
 					}
-					if (!DoWait(0, l))
+					if (!DoWait(0, l)) {
 						break;
+					}
 					SendEvents();
 				}
 			}
 			else {
-				if (socket_->m_state == socket::connecting) {
-					if (!DoConnect(l))
+				if (socket_->state_ == socket::connecting) {
+					if (!DoConnect(l)) {
 						continue;
+					}
 				}
 
 #ifdef FZ_WINDOWS
@@ -784,21 +805,22 @@ protected:
 				int wait_close = WAIT_CLOSE;
 #endif
 				while (IdleLoop(l)) {
-					if (socket_->m_fd == -1) {
+					if (socket_->fd_ == -1) {
 						m_waiting = 0;
 						break;
 					}
 					bool res = DoWait(0, l);
 
 					if (m_triggered & WAIT_CLOSE && socket_) {
-						socket_->m_state = socket::closing;
+						socket_->state_ = socket::closing;
 #ifdef FZ_WINDOWS
 						wait_close = 0;
 #endif
 					}
 
-					if (!res)
+					if (!res) {
 						break;
+					}
 
 					SendEvents();
 #ifdef FZ_WINDOWS
@@ -814,8 +836,8 @@ protected:
 
 	socket* socket_{};
 
-	std::string m_host;
-	std::string m_port;
+	std::string host_;
+	std::string port_;
 	std::string m_bind;
 
 #ifdef FZ_WINDOWS
@@ -826,8 +848,8 @@ protected:
 	int m_pipe[2];
 #endif
 
-	fz::mutex m_sync;
-	fz::condition m_condition;
+	fz::mutex mutex_;
+	fz::condition condition_;
 
 	bool m_started{};
 	bool m_quit{};
@@ -846,30 +868,30 @@ protected:
 	fz::async_task thread_;
 };
 
-socket::socket(fz::thread_pool & pool, fz::event_handler* pEvtHandler)
+socket::socket(fz::thread_pool & pool, fz::event_handler* evt_handler)
 	: thread_pool_(pool)
-	, evt_handler_(pEvtHandler)
-	, m_keepalive_interval(fz::duration::from_hours(2))
+	, evt_handler_(evt_handler)
+	, keepalive_interval_(fz::duration::from_hours(2))
 {
-	m_family = AF_UNSPEC;
+	family_ = AF_UNSPEC;
 
-	m_buffer_sizes[0] = -1;
-	m_buffer_sizes[1] = -1;
+	buffer_sizes_[0] = -1;
+	buffer_sizes_[1] = -1;
 }
 
 socket::~socket()
 {
-	if (m_state != none) {
-		Close();
+	if (state_ != none) {
+		close();
 	}
 
 	if (socket_thread_) {
-		fz::scoped_lock l(socket_thread_->m_sync);
-		DetachThread(l);
+		fz::scoped_lock l(socket_thread_->mutex_);
+		detach_thread(l);
 	}
 }
 
-void socket::DetachThread(fz::scoped_lock & l)
+void socket::detach_thread(fz::scoped_lock & l)
 {
 	if (!socket_thread_) {
 		return;
@@ -900,13 +922,15 @@ void socket::DetachThread(fz::scoped_lock & l)
 	cleanup(false);
 }
 
-int socket::Connect(fz::native_string const& host, unsigned int port, address_family family, std::string const& bind)
+int socket::connect(fz::native_string const& host, unsigned int port, address_type family, std::string const& bind)
 {
-	if (m_state != none)
+	if (state_ != none) {
 		return EISCONN;
+	}
 
-	if (port < 1 || port > 65535)
+	if (port < 1 || port > 65535) {
 		return EINVAL;
+	}
 
 	if (host.empty()) {
 		return EINVAL;
@@ -916,13 +940,13 @@ int socket::Connect(fz::native_string const& host, unsigned int port, address_fa
 
 	switch (family)
 	{
-	case unspec:
+	case address_type::unknown:
 		af = AF_UNSPEC;
 		break;
-	case ipv4:
+	case address_type::ipv4:
 		af = AF_INET;
 		break;
-	case ipv6:
+	case address_type::ipv6:
 		af = AF_INET6;
 		break;
 	default:
@@ -930,11 +954,11 @@ int socket::Connect(fz::native_string const& host, unsigned int port, address_fa
 	}
 
 	if (socket_thread_ && socket_thread_->m_started) {
-		fz::scoped_lock l(socket_thread_->m_sync);
+		fz::scoped_lock l(socket_thread_->mutex_);
 		if (!socket_thread_->m_threadwait) {
 			// Possibly inside a blocking call, e.g. getaddrinfo.
 			// Detach the thread so that we can continue.
-			DetachThread(l);
+			detach_thread(l);
 		}
 	}
 	if (!socket_thread_) {
@@ -942,14 +966,14 @@ int socket::Connect(fz::native_string const& host, unsigned int port, address_fa
 		socket_thread_->SetSocket(this);
 	}
 
-	m_family = af;
-	m_state = connecting;
+	family_ = af;
+	state_ = connecting;
 
-	m_host = host;
-	m_port = port;
+	host_ = host;
+	port_ = port;
 	int res = socket_thread_->Connect(bind);
 	if (res) {
-		m_state = none;
+		state_ = none;
 		delete socket_thread_;
 		socket_thread_ = 0;
 		return res;
@@ -961,27 +985,27 @@ int socket::Connect(fz::native_string const& host, unsigned int port, address_fa
 void socket::set_event_handler(fz::event_handler* pEvtHandler)
 {
 	if (socket_thread_) {
-		fz::scoped_lock l(socket_thread_->m_sync);
+		fz::scoped_lock l(socket_thread_->mutex_);
 
 		if (evt_handler_ == pEvtHandler) {
 			return;
 		}
 
-		ChangeSocketEventHandler(evt_handler_, pEvtHandler, this);
+		change_socket_event_handler(evt_handler_, pEvtHandler, this);
 
 		evt_handler_ = pEvtHandler;
 
-		if (pEvtHandler && m_state == connected) {
+		if (pEvtHandler && state_ == connected) {
 #ifdef FZ_WINDOWS
 			// If a graceful shutdown is going on in background already,
 			// no further events are recorded. Send out events we're not
 			// waiting for (i.e. they got triggered already) manually.
 
 			if (!(socket_thread_->m_waiting & WAIT_WRITE)) {
-				pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::write, 0);
+				pEvtHandler->send_event<socket_event>(this, socket_event_flag::write, 0);
 			}
 
-			pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::read, 0);
+			pEvtHandler->send_event<socket_event>(this, socket_event_flag::read, 0);
 			if (socket_thread_->m_waiting & WAIT_READ) {
 				socket_thread_->m_waiting &= ~WAIT_READ;
 				socket_thread_->WakeupThread(l);
@@ -991,7 +1015,7 @@ void socket::set_event_handler(fz::event_handler* pEvtHandler)
 			socket_thread_->WakeupThread(l);
 #endif
 		}
-		else if (pEvtHandler && m_state == closing) {
+		else if (pEvtHandler && state_ == closing) {
 			if (!(socket_thread_->m_triggered & WAIT_READ)) {
 				socket_thread_->m_waiting |= WAIT_READ;
 			}
@@ -999,7 +1023,7 @@ void socket::set_event_handler(fz::event_handler* pEvtHandler)
 		}
 	}
 	else {
-		ChangeSocketEventHandler(evt_handler_, pEvtHandler, this);
+		change_socket_event_handler(evt_handler_, pEvtHandler, this);
 		evt_handler_ = pEvtHandler;
 	}
 }
@@ -1087,7 +1111,7 @@ static Error_table const error_table[] =
 	{ 0, 0, 0 }
 };
 
-std::string socket::GetErrorString(int error)
+std::string socket::error_string(int error)
 {
 	for (int i = 0; error_table[i].code; ++i) {
 		if (error != error_table[i].code) {
@@ -1100,7 +1124,7 @@ std::string socket::GetErrorString(int error)
 	return fz::sprintf("%d", error);
 }
 
-fz::native_string socket::GetErrorDescription(int error)
+fz::native_string socket::error_description(int error)
 {
 	for (int i = 0; error_table[i].code; ++i) {
 		if (error != error_table[i].code) {
@@ -1113,20 +1137,20 @@ fz::native_string socket::GetErrorDescription(int error)
 	return fz::sprintf(fzT("%d"), error);
 }
 
-int socket::Close()
+int socket::close()
 {
 	if (socket_thread_) {
-		fz::scoped_lock l(socket_thread_->m_sync);
-		int fd = m_fd;
-		m_fd = -1;
+		fz::scoped_lock l(socket_thread_->mutex_);
+		int fd = fd_;
+		fd_ = -1;
 
-		socket_thread_->m_host.clear();
-		socket_thread_->m_port.clear();
+		socket_thread_->host_.clear();
+		socket_thread_->port_.clear();
 
 		socket_thread_->WakeupThread(l);
 
 		socket_thread::CloseSocketFd(fd);
-		m_state = none;
+		state_ = none;
 
 		socket_thread_->m_triggered = 0;
 		for (int i = 0; i < WAIT_EVENTCOUNT; ++i) {
@@ -1134,18 +1158,18 @@ int socket::Close()
 		}
 
 		if (evt_handler_) {
-			RemoveSocketEvents(evt_handler_, this);
+			remove_socket_events(evt_handler_, this);
 			evt_handler_ = 0;
 		}
 	}
 	else {
-		int fd = m_fd;
-		m_fd = -1;
+		int fd = fd_;
+		fd_ = -1;
 		socket_thread::CloseSocketFd(fd);
-		m_state = none;
+		state_ = none;
 
 		if (evt_handler_) {
-			RemoveSocketEvents(evt_handler_, this);
+			remove_socket_events(evt_handler_, this);
 			evt_handler_ = 0;
 		}
 	}
@@ -1157,11 +1181,11 @@ socket::socket_state socket::get_state()
 {
 	socket_state state;
 	if (socket_thread_) {
-		socket_thread_->m_sync.lock();
+		socket_thread_->mutex_.lock();
 	}
-	state = m_state;
+	state = state_;
 	if (socket_thread_) {
-		socket_thread_->m_sync.unlock();
+		socket_thread_->mutex_.unlock();
 	}
 
 	return state;
@@ -1175,7 +1199,7 @@ void socket::cleanup(bool force)
 		socket_thread *const pThread = *iter;
 
 		if (!force) {
-			fz::scoped_lock l(pThread->m_sync);
+			fz::scoped_lock l(pThread->mutex_);
 			if (!pThread->m_finished) {
 				break;
 			}
@@ -1186,15 +1210,15 @@ void socket::cleanup(bool force)
 	waiting_socket_threads.erase(waiting_socket_threads.begin(), iter);
 }
 
-int socket::Read(void* buffer, unsigned int size, int& error)
+int socket::read(void* buffer, unsigned int size, int& error)
 {
-	int res = recv(m_fd, (char*)buffer, size, 0);
+	int res = recv(fd_, (char*)buffer, size, 0);
 
 	if (res == -1) {
-		error = GetLastSocketError();
+		error = last_socket_error();
 		if (error == EAGAIN) {
 			if (socket_thread_) {
-				fz::scoped_lock l(socket_thread_->m_sync);
+				fz::scoped_lock l(socket_thread_->mutex_);
 				if (!(socket_thread_->m_waiting & WAIT_READ)) {
 					socket_thread_->m_waiting |= WAIT_READ;
 					socket_thread_->WakeupThread(l);
@@ -1209,12 +1233,12 @@ int socket::Read(void* buffer, unsigned int size, int& error)
 	return res;
 }
 
-int socket::Peek(void* buffer, unsigned int size, int& error)
+int socket::peek(void* buffer, unsigned int size, int& error)
 {
-	int res = recv(m_fd, (char*)buffer, size, MSG_PEEK);
+	int res = recv(fd_, (char*)buffer, size, MSG_PEEK);
 
 	if (res == -1) {
-		error = GetLastSocketError();
+		error = last_socket_error();
 	}
 	else {
 		error = 0;
@@ -1223,7 +1247,7 @@ int socket::Peek(void* buffer, unsigned int size, int& error)
 	return res;
 }
 
-int socket::Write(const void* buffer, unsigned int size, int& error)
+int socket::write(const void* buffer, unsigned int size, int& error)
 {
 #ifdef MSG_NOSIGNAL
 	const int flags = MSG_NOSIGNAL;
@@ -1240,7 +1264,7 @@ int socket::Write(const void* buffer, unsigned int size, int& error)
 
 #endif
 
-	int res = send(m_fd, (const char*)buffer, size, flags);
+	int res = send(fd_, (const char*)buffer, size, flags);
 
 #if !defined(MSG_NOSIGNAL) && !defined(SO_NOSIGPIPE) && !defined(FZ_WINDOWS)
 	// Restore previous signal handler
@@ -1249,10 +1273,10 @@ int socket::Write(const void* buffer, unsigned int size, int& error)
 #endif
 
 	if (res == -1) {
-		error = GetLastSocketError();
+		error = last_socket_error();
 		if (error == EAGAIN) {
 			if (socket_thread_) {
-				fz::scoped_lock l (socket_thread_->m_sync);
+				fz::scoped_lock l (socket_thread_->mutex_);
 				if (!(socket_thread_->m_waiting & WAIT_WRITE)) {
 					socket_thread_->m_waiting |= WAIT_WRITE;
 					socket_thread_->WakeupThread(l);
@@ -1266,14 +1290,15 @@ int socket::Write(const void* buffer, unsigned int size, int& error)
 	return res;
 }
 
-std::string socket::AddressToString(const struct sockaddr* addr, int addr_len, bool with_port, bool strip_zone_index)
+std::string socket::address_to_string(const struct sockaddr* addr, int addr_len, bool with_port, bool strip_zone_index)
 {
 	char hostbuf[NI_MAXHOST];
 	char portbuf[NI_MAXSERV];
 
 	int res = getnameinfo(addr, addr_len, hostbuf, NI_MAXHOST, portbuf, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
-	if (res) // Should never fail
+	if (res) { // Should never fail
 		return std::string();
+	}
 
 	std::string host = hostbuf;
 	std::string port = portbuf;
@@ -1287,17 +1312,20 @@ std::string socket::AddressToString(const struct sockaddr* addr, int addr_len, b
 				host = host.substr(0, pos);
 			}
 		}
-		if (with_port)
+		if (with_port) {
 			host = "[" + host + "]";
+		}
 	}
 
-	if (with_port)
+	if (with_port) {
 		return host + ":" + port;
-	else
+	}
+	else {
 		return host;
+	}
 }
 
-std::string socket::AddressToString(char const* buf, int buf_len)
+std::string socket::address_to_string(char const* buf, int buf_len)
 {
 	if (buf_len != 4 && buf_len != 16) {
 		return std::string();
@@ -1313,56 +1341,56 @@ std::string socket::AddressToString(char const* buf, int buf_len)
 		addr.in4.sin_family = AF_INET;
 	}
 
-	return AddressToString(&addr.sockaddr, sizeof(addr), false, true);
+	return address_to_string(&addr.sockaddr_, sizeof(addr), false, true);
 }
 
-std::string socket::GetLocalIP(bool strip_zone_index) const
+std::string socket::local_ip(bool strip_zone_index) const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
-	int res = getsockname(m_fd, (sockaddr*)&addr, &addr_len);
+	int res = getsockname(fd_, (sockaddr*)&addr, &addr_len);
 	if (res) {
 		return std::string();
 	}
 
-	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
+	return address_to_string((sockaddr *)&addr, addr_len, false, strip_zone_index);
 }
 
-std::string socket::GetPeerIP(bool strip_zone_index) const
+std::string socket::peer_ip(bool strip_zone_index) const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
-	int res = getpeername(m_fd, (sockaddr*)&addr, &addr_len);
+	int res = getpeername(fd_, (sockaddr*)&addr, &addr_len);
 	if (res) {
 		return std::string();
 	}
 
-	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
+	return address_to_string((sockaddr *)&addr, addr_len, false, strip_zone_index);
 }
 
-socket::address_family socket::GetAddressFamily() const
+address_type socket::address_family() const
 {
 	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
-	int res = getsockname(m_fd, &addr.sockaddr, &addr_len);
+	int res = getsockname(fd_, &addr.sockaddr_, &addr_len);
 	if (res) {
-		return unspec;
+		return address_type::unknown;
 	}
 
-	switch (addr.sockaddr.sa_family)
+	switch (addr.sockaddr_.sa_family)
 	{
 	case AF_INET:
-		return ipv4;
+		return address_type::ipv4;
 	case AF_INET6:
-		return ipv6;
+		return address_type::ipv6;
 	default:
-		return unspec;
+		return address_type::unknown;
 	}
 }
 
-int socket::listen(address_family family, int port)
+int socket::listen(address_type family, int port)
 {
-	if (m_state != none) {
+	if (state_ != none) {
 		return EALREADY;
 	}
 
@@ -1372,14 +1400,14 @@ int socket::listen(address_family family, int port)
 
 	switch (family)
 	{
-	case unspec:
-		m_family = AF_UNSPEC;
+	case address_type::unknown:
+		family_ = AF_UNSPEC;
 		break;
-	case ipv4:
-		m_family = AF_INET;
+	case address_type::ipv4:
+		family_ = AF_INET;
 		break;
-	case ipv6:
-		m_family = AF_INET6;
+	case address_type::ipv6:
+		family_ = AF_INET6;
 		break;
 	default:
 		return EINVAL;
@@ -1387,7 +1415,7 @@ int socket::listen(address_family family, int port)
 
 	{
 		struct addrinfo hints = {};
-		hints.ai_family = m_family;
+		hints.ai_family = family_;
 		hints.ai_socktype = SOCK_STREAM;
 		hints.ai_flags = AI_PASSIVE;
 #ifdef AI_NUMERICSERV
@@ -1403,41 +1431,43 @@ int socket::listen(address_family family, int port)
 
 		if (res) {
 #ifdef FZ_WINDOWS
-			return ConvertMSWErrorCode(res);
+			return convert_msw_error_code(res);
 #else
 			return res;
 #endif
 		}
 
 		for (struct addrinfo* addr = addressList; addr; addr = addr->ai_next) {
-			m_fd = socket_thread::CreateSocketFd(*addr);
-			res = GetLastSocketError();
+			fd_ = socket_thread::CreateSocketFd(*addr);
+			res = last_socket_error();
 
-			if (m_fd == -1)
+			if (fd_ == -1) {
 				continue;
+			}
 
-			res = bind(m_fd, addr->ai_addr, addr->ai_addrlen);
-			if (!res)
+			res = bind(fd_, addr->ai_addr, addr->ai_addrlen);
+			if (!res) {
 				break;
+			}
 
-			res = GetLastSocketError();
-			socket_thread::CloseSocketFd(m_fd);
+			res = last_socket_error();
+			socket_thread::CloseSocketFd(fd_);
 		}
 		freeaddrinfo(addressList);
-		if (m_fd == -1) {
+		if (fd_ == -1) {
 			return res;
 		}
 	}
 
-	int res = ::listen(m_fd, 1);
+	int res = ::listen(fd_, 1);
 	if (res) {
-		res = GetLastSocketError();
-		socket_thread::CloseSocketFd(m_fd);
-		m_fd = -1;
+		res = last_socket_error();
+		socket_thread::CloseSocketFd(fd_);
+		fd_ = -1;
 		return res;
 	}
 
-	m_state = listening;
+	state_ = listening;
 
 	socket_thread_ = new socket_thread();
 	socket_thread_->SetSocket(this);
@@ -1449,14 +1479,14 @@ int socket::listen(address_family family, int port)
 	return 0;
 }
 
-int socket::GetLocalPort(int& error)
+int socket::local_port(int& error)
 {
 	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
-	error = getsockname(m_fd, &addr.sockaddr, &addr_len);
+	error = getsockname(fd_, &addr.sockaddr_, &addr_len);
 	if (error) {
 #ifdef FZ_WINDOWS
-		error = ConvertMSWErrorCode(error);
+		error = convert_msw_error_code(error);
 #endif
 		return -1;
 	}
@@ -1472,23 +1502,24 @@ int socket::GetLocalPort(int& error)
 	return -1;
 }
 
-int socket::GetRemotePort(int& error)
+int socket::remote_port(int& error)
 {
 	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
-	error = getpeername(m_fd, &addr.sockaddr, &addr_len);
-	if (error)
-	{
+	error = getpeername(fd_, &addr.sockaddr_, &addr_len);
+	if (error) {
 #ifdef FZ_WINDOWS
-		error = ConvertMSWErrorCode(error);
+		error = convert_msw_error_code(error);
 #endif
 		return -1;
 	}
 
-	if (addr.storage.ss_family == AF_INET)
+	if (addr.storage.ss_family == AF_INET) {
 		return ntohs(addr.in4.sin_port);
-	else if (addr.storage.ss_family == AF_INET6)
+	}
+	else if (addr.storage.ss_family == AF_INET6) {
 		return ntohs(addr.in6.sin6_port);
+	}
 
 	error = EINVAL;
 	return -1;
@@ -1497,13 +1528,13 @@ int socket::GetRemotePort(int& error)
 socket* socket::accept(int &error)
 {
 	if (socket_thread_) {
-		fz::scoped_lock l(socket_thread_->m_sync);
+		fz::scoped_lock l(socket_thread_->mutex_);
 		socket_thread_->m_waiting |= WAIT_ACCEPT;
 		socket_thread_->WakeupThread(l);
 	}
-	int fd = ::accept(m_fd, 0, 0);
+	int fd = ::accept(fd_, 0, 0);
 	if (fd == -1) {
-		error = GetLastSocketError();
+		error = last_socket_error();
 		return 0;
 	}
 
@@ -1513,13 +1544,13 @@ socket* socket::accept(int &error)
 	setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &value, sizeof(int));
 #endif
 
-	SetNonblocking(fd);
+	set_nonblocking(fd);
 
-	DoSetBufferSizes(fd, m_buffer_sizes[0], m_buffer_sizes[1]);
+	do_set_buffer_sizes(fd, buffer_sizes_[0], buffer_sizes_[1]);
 
 	socket* pSocket = new socket(thread_pool_, 0);
-	pSocket->m_state = connected;
-	pSocket->m_fd = fd;
+	pSocket->state_ = connected;
+	pSocket->fd_ = fd;
 	pSocket->socket_thread_ = new socket_thread();
 	pSocket->socket_thread_->SetSocket(pSocket);
 	pSocket->socket_thread_->m_waiting = WAIT_READ | WAIT_WRITE;
@@ -1528,50 +1559,54 @@ socket* socket::accept(int &error)
 	return pSocket;
 }
 
-int socket::SetNonblocking(int fd)
+int socket::set_nonblocking(int fd)
 {
 	// Set socket to non-blocking.
 #ifdef FZ_WINDOWS
 	unsigned long nonblock = 1;
 	int res = ioctlsocket(fd, FIONBIO, &nonblock);
-	if (!res)
+	if (!res) {
 		return 0;
-	else
-		return ConvertMSWErrorCode(WSAGetLastError());
+	}
+	else {
+		return convert_msw_error_code(WSAGetLastError());
+	}
 #else
 	int flags = fcntl(fd, F_GETFL);
-	if (flags == -1)
+	if (flags == -1) {
 		return errno;
+	}
 	int res = fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-	if (res == -1)
+	if (res == -1) {
 		return errno;
+	}
 	return 0;
 #endif
 }
 
-void socket::SetFlags(int flags)
+void socket::set_flags(int flags)
 {
 	if (socket_thread_) {
-		socket_thread_->m_sync.lock();
+		socket_thread_->mutex_.lock();
 	}
 
-	if (m_fd != -1) {
-		DoSetFlags(m_fd, flags, flags ^ flags_, m_keepalive_interval);
+	if (fd_ != -1) {
+		do_set_flags(fd_, flags, flags ^ flags_, keepalive_interval_);
 	}
 	flags_ = flags;
 
 	if (socket_thread_) {
-		socket_thread_->m_sync.unlock();
+		socket_thread_->mutex_.unlock();
 	}
 }
 
-int socket::DoSetFlags(int fd, int flags, int flags_mask, fz::duration const& keepalive_interval)
+int socket::do_set_flags(int fd, int flags, int flags_mask, fz::duration const& keepalive_interval)
 {
 	if (flags_mask & flag_nodelay) {
 		const int value = (flags & flag_nodelay) ? 1 : 0;
 		int res = setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (const char*)&value, sizeof(value));
 		if (res != 0) {
-			return GetLastSocketError();
+			return last_socket_error();
 		}
 	}
 	if (flags_mask & flag_keepalive) {
@@ -1583,19 +1618,19 @@ int socket::DoSetFlags(int fd, int flags, int flags_mask, fz::duration const& ke
 		DWORD tmp{};
 		int res = WSAIoctl(fd, SIO_KEEPALIVE_VALS, &v, sizeof(v), 0, 0, &tmp, 0, 0);
 		if (res != 0) {
-			return GetLastSocketError();
+			return last_socket_error();
 		}
 #else
 		const int value = (flags & flag_keepalive) ? 1 : 0;
 		int res = setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (const char*)&value, sizeof(value));
 		if (res != 0) {
-			return GetLastSocketError();
+			return last_socket_error();
 		}
 #ifdef TCP_KEEPIDLE
 		int const idle = keepalive_interval.get_seconds();
 		res = setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, (const char*)&idle, sizeof(idle));
 		if (res != 0) {
-			return GetLastSocketError();
+			return last_socket_error();
 		}
 #endif
 #endif
@@ -1604,34 +1639,38 @@ int socket::DoSetFlags(int fd, int flags, int flags_mask, fz::duration const& ke
 	return 0;
 }
 
-int socket::SetBufferSizes(int size_receive, int size_send)
+int socket::set_buffer_sizes(int size_receive, int size_send)
 {
 	int ret = 0;
 
-	if (socket_thread_)
-		socket_thread_->m_sync.lock();
+	if (socket_thread_) {
+		socket_thread_->mutex_.lock();
+	}
 
-	m_buffer_sizes[0] = size_receive;
-	m_buffer_sizes[1] = size_send;
+	buffer_sizes_[0] = size_receive;
+	buffer_sizes_[1] = size_send;
 
-	if (m_fd != -1)
-		ret = DoSetBufferSizes(m_fd, size_receive, size_send);
+	if (fd_ != -1) {
+		ret = do_set_buffer_sizes(fd_, size_receive, size_send);
+	}
 
-	if (socket_thread_)
-		socket_thread_->m_sync.unlock();
+	if (socket_thread_) {
+		socket_thread_->mutex_.unlock();
+	}
 
 	return ret;
 }
 
-int socket::GetIdealSendBufferSize()
+int socket::ideal_send_buffer_size()
 {
 	int size = -1;
 
 #ifdef FZ_WINDOWS
-	if (socket_thread_)
-		socket_thread_->m_sync.lock();
+	if (socket_thread_) {
+		socket_thread_->mutex_.lock();
+	}
 
-	if (m_fd != -1) {
+	if (fd_ != -1) {
 		// MSDN says this:
 		// "Dynamic send buffering for TCP was added on Windows 7 and Windows
 		// Server 2008 R2.By default, dynamic send buffering for TCP is
@@ -1646,61 +1685,62 @@ int socket::GetIdealSendBufferSize()
 #endif
 		ULONG v{};
 		DWORD outlen{};
-		if (!WSAIoctl(m_fd, SIO_IDEAL_SEND_BACKLOG_QUERY, 0, 0, &v, sizeof(v), &outlen, 0, 0)) {
+		if (!WSAIoctl(fd_, SIO_IDEAL_SEND_BACKLOG_QUERY, 0, 0, &v, sizeof(v), &outlen, 0, 0)) {
 			size = v;
 		}
 	}
 
-	if (socket_thread_)
-		socket_thread_->m_sync.unlock();
+	if (socket_thread_) {
+		socket_thread_->mutex_.unlock();
+	}
 #endif
 
 	return size;
 }
 
 
-int socket::DoSetBufferSizes(int fd, int size_read, int size_write)
+int socket::do_set_buffer_sizes(int fd, int size_read, int size_write)
 {
 	int ret = 0;
 	if (size_read != -1) {
 		int res = setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (const char*)&size_read, sizeof(size_read));
 		if (res != 0) {
-			ret = GetLastSocketError();
+			ret = last_socket_error();
 		}
 	}
 
 	if (size_write != -1) {
 		int res = setsockopt(fd, SOL_SOCKET, SO_SNDBUF, (const char*)&size_write, sizeof(size_write));
 		if (res != 0) {
-			ret = GetLastSocketError();
+			ret = last_socket_error();
 		}
 	}
 
 	return ret;
 }
 
-fz::native_string socket::GetPeerHost() const
+fz::native_string socket::peer_host() const
 {
-	return m_host;
+	return host_;
 }
 
-void socket::SetKeepaliveInterval(fz::duration const& d)
+void socket::set_keepalive_interval(fz::duration const& d)
 {
 	if (d < fz::duration::from_minutes(1)) {
 		return;
 	}
 
 	if (socket_thread_) {
-		socket_thread_->m_sync.lock();
+		socket_thread_->mutex_.lock();
 	}
 
-	m_keepalive_interval = d;
-	if (m_fd != -1) {
-		DoSetFlags(m_fd, flags_, flag_keepalive, m_keepalive_interval);
+	keepalive_interval_ = d;
+	if (fd_ != -1) {
+		do_set_flags(fd_, flags_, flag_keepalive, keepalive_interval_);
 	}
 
 	if (socket_thread_) {
-		socket_thread_->m_sync.unlock();
+		socket_thread_->mutex_.unlock();
 	}
 }
 

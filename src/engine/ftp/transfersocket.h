@@ -50,7 +50,7 @@ protected:
 
 	void ResetSocket();
 
-	void OnSocketEvent(fz::socket_event_source* source, fz::SocketEventType t, int error);
+	void OnSocketEvent(fz::socket_event_source* source, fz::socket_event_flag t, int error);
 	void OnConnect();
 	void OnAccept(int error);
 	void OnReceive();

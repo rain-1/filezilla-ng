@@ -11,7 +11,7 @@ CBackend::CBackend(fz::event_handler* pEvtHandler)
 
 CBackend::~CBackend()
 {
-	RemoveSocketEvents(m_pEvtHandler, this);
+	remove_socket_events(m_pEvtHandler, this);
 }
 
 CSocketBackend::CSocketBackend(fz::event_handler* pEvtHandler, fz::socket & socket, CRateLimiter& rateLimiter)
@@ -41,7 +41,7 @@ int CSocketBackend::Write(const void *buffer, unsigned int len, int& error)
 		len = static_cast<unsigned int>(max);
 	}
 
-	int written = socket_.Write(buffer, len, error);
+	int written = socket_.write(buffer, len, error);
 
 	if (written > 0 && max != -1) {
 		UpdateUsage(CRateLimiter::outbound, written);
@@ -62,7 +62,7 @@ int CSocketBackend::Read(void *buffer, unsigned int len, int& error)
 		len = static_cast<unsigned int>(max);
 	}
 
-	int read = socket_.Read(buffer, len, error);
+	int read = socket_.read(buffer, len, error);
 
 	if (read > 0 && max != -1) {
 		UpdateUsage(CRateLimiter::inbound, read);
@@ -73,15 +73,15 @@ int CSocketBackend::Read(void *buffer, unsigned int len, int& error)
 
 int CSocketBackend::Peek(void *buffer, unsigned int len, int& error)
 {
-	return socket_.Peek(buffer, len, error);
+	return socket_.peek(buffer, len, error);
 }
 
 void CSocketBackend::OnRateAvailable(CRateLimiter::rate_direction direction)
 {
 	if (direction == CRateLimiter::outbound) {
-		m_pEvtHandler->send_event<fz::CSocketEvent>(this, fz::SocketEventType::write, 0);
+		m_pEvtHandler->send_event<fz::socket_event>(this, fz::socket_event_flag::write, 0);
 	}
 	else {
-		m_pEvtHandler->send_event<fz::CSocketEvent>(this, fz::SocketEventType::read, 0);
+		m_pEvtHandler->send_event<fz::socket_event>(this, fz::socket_event_flag::read, 0);
 	}
 }

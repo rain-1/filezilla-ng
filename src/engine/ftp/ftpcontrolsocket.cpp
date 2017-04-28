@@ -34,13 +34,13 @@ CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
 	: CRealControlSocket(engine)
 {
 	// Enable TCP_NODELAY, speeds things up a bit.
-	socket_->SetFlags(fz::socket::flag_nodelay | fz::socket::flag_keepalive);
+	socket_->set_flags(fz::socket::flag_nodelay | fz::socket::flag_keepalive);
 
 	// Enable SO_KEEPALIVE, lots of clueless users have broken routers and
 	// firewalls which terminate the control connection on long transfers.
 	int v = engine_.GetOptions().GetOptionVal(OPTION_TCP_KEEPALIVE_INTERVAL);
 	if (v >= 1 && v < 10000) {
-		socket_->SetKeepaliveInterval(fz::duration::from_minutes(v));
+		socket_->set_keepalive_interval(fz::duration::from_minutes(v));
 	}
 }
 
@@ -61,7 +61,7 @@ void CFtpControlSocket::OnReceive()
 
 		if (read < 0) {
 			if (error != EAGAIN) {
-				LogMessage(MessageType::Error, _("Could not read from socket: %s"), fz::socket::GetErrorDescription(error));
+				LogMessage(MessageType::Error, _("Could not read from socket: %s"), fz::socket::error_description(error));
 				if (GetCurrentCommandId() != Command::connect) {
 					LogMessage(MessageType::Error, _("Disconnected from server"));
 				}
@@ -631,12 +631,12 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 {
 	// Local IP should work. Only a complete moron would use IPv6
 	// and NAT at the same time.
-	if (socket_->GetAddressFamily() != fz::socket::ipv6) {
+	if (socket_->address_family() != fz::address_type::ipv6) {
 		int mode = engine_.GetOptions().GetOptionVal(OPTION_EXTERNALIPMODE);
 
 		if (mode) {
 			if (engine_.GetOptions().GetOptionVal(OPTION_NOEXTERNALONLOCAL) &&
-				!fz::is_routable_address(socket_->GetPeerIP()))
+				!fz::is_routable_address(socket_->peer_ip()))
 				// Skip next block, use local address
 				goto getLocalIP;
 		}
@@ -652,7 +652,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 		}
 		else if (mode == 2) {
 			if (!m_pIPResolver) {
-				std::string localAddress = socket_->GetLocalIP(true);
+				std::string localAddress = socket_->local_ip(true);
 
 				if (!localAddress.empty() && localAddress == fz::to_string(engine_.GetOptions().GetOption(OPTION_LASTRESOLVEDIP))) {
 					LogMessage(MessageType::Debug_Verbose, L"Using cached external IP address");
@@ -666,7 +666,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 				LogMessage(MessageType::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress);
 
 				m_pIPResolver = std::make_unique<CExternalIPResolver>(engine_.GetThreadPool(), *this);
-				m_pIPResolver->GetExternalIP(resolverAddress, fz::socket::ipv4);
+				m_pIPResolver->GetExternalIP(resolverAddress, fz::address_type::ipv4);
 				if (!m_pIPResolver->Done()) {
 					LogMessage(MessageType::Debug_Verbose, L"Waiting for resolver thread");
 					return FZ_REPLY_WOULDBLOCK;
@@ -691,7 +691,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 	}
 
 getLocalIP:
-	address = socket_->GetLocalIP(true);
+	address = socket_->local_ip(true);
 	if (address.empty()) {
 		LogMessage(MessageType::Error, _("Failed to retrieve local IP address."), 1);
 		return FZ_REPLY_ERROR;

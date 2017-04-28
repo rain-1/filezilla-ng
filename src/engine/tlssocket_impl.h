@@ -76,7 +76,7 @@ protected:
 	void TriggerEvents();
 
 	void operator()(fz::event_base const& ev);
-	void OnSocketEvent(fz::socket_event_source* source, fz::SocketEventType t, int error);
+	void OnSocketEvent(fz::socket_event_source* source, fz::socket_event_flag t, int error);
 
 	void OnRead();
 	void OnSend();
