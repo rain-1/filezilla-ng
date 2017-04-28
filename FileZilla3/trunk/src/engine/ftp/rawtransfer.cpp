@@ -203,7 +203,7 @@ int CFtpRawTransferOpData::Send()
 				std::wstring portArgument = controlSocket_.m_pTransferSocket->SetupActiveTransfer(address);
 				if (!portArgument.empty()) {
 					bTriedActive = true;
-					if (controlSocket_.socket_->GetAddressFamily() == fz::socket::ipv6) {
+					if (controlSocket_.socket_->address_family() == fz::address_type::ipv6) {
 						cmd = L"EPRT " + portArgument;
 					}
 					else {
@@ -285,7 +285,7 @@ bool CFtpRawTransferOpData::ParseEpsvResponse()
 		host_ = currentServer_.GetHost();
 	}
 	else {
-		host_ = fz::to_wstring(controlSocket_.socket_->GetPeerIP());
+		host_ = fz::to_wstring(controlSocket_.socket_->peer_ip());
 	}
 	return true;
 }
@@ -336,7 +336,7 @@ bool CFtpRawTransferOpData::ParsePasvResponse()
 		return true;
 	}
 
-	std::wstring const peerIP = fz::to_wstring(controlSocket_.socket_->GetPeerIP());
+	std::wstring const peerIP = fz::to_wstring(controlSocket_.socket_->peer_ip());
 	if (!fz::is_routable_address(host_) && fz::is_routable_address(peerIP)) {
 		if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || bTriedActive) {
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Using server address instead."));
@@ -371,7 +371,7 @@ std::wstring CFtpRawTransferOpData::GetPassiveCommand()
 			ret = L"EPSV";
 		}
 	}
-	else if (controlSocket_.socket_->GetAddressFamily() == fz::socket::ipv6) {
+	else if (controlSocket_.socket_->address_family() == fz::address_type::ipv6) {
 		// EPSV is mandatory for IPv6, don't check capabilities
 		ret = L"EPSV";
 	}

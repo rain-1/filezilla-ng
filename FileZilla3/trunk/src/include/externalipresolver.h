@@ -19,14 +19,14 @@ public:
 	bool Successful() const;
 	std::string GetIP() const;
 
-	void GetExternalIP(std::wstring const& resolver, fz::socket::address_family protocol, bool force = false);
+	void GetExternalIP(std::wstring const& resolver, fz::address_type protocol, bool force = false);
 
 protected:
 
 	void Close(bool successful);
 
 	std::wstring m_address;
-	fz::socket::address_family m_protocol{};
+	fz::address_type m_protocol{};
 	unsigned long m_port{80};
 	fz::thread_pool & thread_pool_;
 	fz::event_handler * m_handler{};
@@ -38,7 +38,7 @@ protected:
 	fz::socket *socket_{};
 
 	virtual void operator()(fz::event_base const& ev);
-	void OnSocketEvent(fz::socket_event_source* source, fz::SocketEventType t, int error);
+	void OnSocketEvent(fz::socket_event_source* source, fz::socket_event_flag t, int error);
 
 	void OnConnect(int error);
 	void OnClose();

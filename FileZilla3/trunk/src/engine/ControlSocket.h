@@ -330,7 +330,7 @@ protected:
 	virtual void ResetSocket();
 
 	virtual void operator()(fz::event_base const& ev) override;
-	void OnSocketEvent(fz::socket_event_source* source, fz::SocketEventType t, int error);
+	void OnSocketEvent(fz::socket_event_source* source, fz::socket_event_flag t, int error);
 	void OnHostAddress(fz::socket_event_source* source, std::string const& address);
 
 	virtual void OnConnect();

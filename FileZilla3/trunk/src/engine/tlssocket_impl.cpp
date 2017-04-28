@@ -287,18 +287,18 @@ void CTlsSocketImpl::LogError(int code, std::wstring const& function, MessageTyp
 	}
 	else if (code == GNUTLS_E_PULL_ERROR) {
 		if (function.empty()) {
-			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not read from socket: %s", fz::socket::GetErrorDescription(m_socket_error));
+			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not read from socket: %s", fz::socket::error_description(m_socket_error));
 		}
 		else {
-			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not read from socket in %s: %s", function, fz::socket::GetErrorDescription(m_socket_error));
+			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not read from socket in %s: %s", function, fz::socket::error_description(m_socket_error));
 		}
 	}
 	else if (code == GNUTLS_E_PUSH_ERROR) {
 		if (function.empty()) {
-			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not write to socket: %s", fz::socket::GetErrorDescription(m_socket_error));
+			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not write to socket: %s", fz::socket::error_description(m_socket_error));
 		}
 		else {
-			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not write to socket in %s: %s", function, fz::socket::GetErrorDescription(m_socket_error));
+			m_pOwner->LogMessage(MessageType::Debug_Warning, L"GnuTLS could not write to socket in %s: %s", function, fz::socket::error_description(m_socket_error));
 		}
 	}
 	else {
@@ -396,7 +396,7 @@ ssize_t CTlsSocketImpl::PullFunction(void* data, size_t len)
 		m_canReadFromSocket = false;
 		if (error == EAGAIN) {
 			if (m_canCheckCloseSocket && !socketBackend_->IsWaiting(CRateLimiter::inbound)) {
-				tlsSocket_.send_event<fz::CSocketEvent>(socketBackend_.get(), fz::SocketEventType::close, 0);
+				tlsSocket_.send_event<fz::socket_event>(socketBackend_.get(), fz::socket_event_flag::close, 0);
 			}
 		}
 		else {
@@ -410,7 +410,7 @@ ssize_t CTlsSocketImpl::PullFunction(void* data, size_t len)
 	}
 
 	if (m_canCheckCloseSocket) {
-		tlsSocket_.send_event<fz::CSocketEvent>(socketBackend_.get(), fz::SocketEventType::close, 0);
+		tlsSocket_.send_event<fz::socket_event>(socketBackend_.get(), fz::socket_event_flag::close, 0);
 	}
 
 	if (!read) {
@@ -426,10 +426,10 @@ ssize_t CTlsSocketImpl::PullFunction(void* data, size_t len)
 
 void CTlsSocketImpl::operator()(fz::event_base const& ev)
 {
-	fz::dispatch<fz::CSocketEvent>(ev, this, &CTlsSocketImpl::OnSocketEvent);
+	fz::dispatch<fz::socket_event>(ev, this, &CTlsSocketImpl::OnSocketEvent);
 }
 
-void CTlsSocketImpl::OnSocketEvent(fz::socket_event_source*, fz::SocketEventType t, int error)
+void CTlsSocketImpl::OnSocketEvent(fz::socket_event_source*, fz::socket_event_flag t, int error)
 {
 	if (!m_session) {
 		return;
@@ -437,13 +437,13 @@ void CTlsSocketImpl::OnSocketEvent(fz::socket_event_source*, fz::SocketEventType
 
 	switch (t)
 	{
-	case fz::SocketEventType::read:
+	case fz::socket_event_flag::read:
 		OnRead();
 		break;
-	case fz::SocketEventType::write:
+	case fz::socket_event_flag::write:
 		OnSend();
 		break;
-	case fz::SocketEventType::close:
+	case fz::socket_event_flag::close:
 		{
 			m_canCheckCloseSocket = true;
 			char tmp[100];
@@ -465,7 +465,7 @@ void CTlsSocketImpl::OnSocketEvent(fz::socket_event_source*, fz::SocketEventType
 
 			m_pOwner->LogMessage(MessageType::Debug_Info, L"CTlsSocketImpl::OnSocketEvent(): close event received");
 
-			tlsSocket_.m_pEvtHandler->send_event<fz::CSocketEvent>(&tlsSocket_, fz::SocketEventType::close, 0);
+			tlsSocket_.m_pEvtHandler->send_event<fz::socket_event>(&tlsSocket_, fz::socket_event_flag::close, 0);
 		}
 		break;
 	default:
@@ -592,10 +592,10 @@ int CTlsSocketImpl::Handshake(const CTlsSocketImpl* pPrimarySocket, bool try_res
 			}
 		}
 
-		hostname = pPrimarySocket->m_socket.GetPeerHost();
+		hostname = pPrimarySocket->m_socket.peer_host();
 	}
 	else {
-		hostname = m_socket.GetPeerHost();
+		hostname = m_socket.peer_host();
 	}
 
 	if (!hostname.empty() && fz::get_address_type(hostname) == fz::address_type::unknown) {
@@ -650,7 +650,7 @@ int CTlsSocketImpl::ContinueHandshake()
 		if (m_shutdown_requested) {
 			int error = Shutdown();
 			if (!error || error != EAGAIN) {
-				tlsSocket_.m_pEvtHandler->send_event<fz::CSocketEvent>(&tlsSocket_, fz::SocketEventType::close, 0);
+				tlsSocket_.m_pEvtHandler->send_event<fz::socket_event>(&tlsSocket_, fz::socket_event_flag::close, 0);
 			}
 		}
 
@@ -794,12 +794,12 @@ void CTlsSocketImpl::TriggerEvents()
 		return;
 
 	if (m_canTriggerRead) {
-		tlsSocket_.m_pEvtHandler->send_event<fz::CSocketEvent>(&tlsSocket_, fz::SocketEventType::read, 0);
+		tlsSocket_.m_pEvtHandler->send_event<fz::socket_event>(&tlsSocket_, fz::socket_event_flag::read, 0);
 		m_canTriggerRead = false;
 	}
 
 	if (m_canTriggerWrite) {
-		tlsSocket_.m_pEvtHandler->send_event<fz::CSocketEvent>(&tlsSocket_, fz::SocketEventType::write, 0);
+		tlsSocket_.m_pEvtHandler->send_event<fz::socket_event>(&tlsSocket_, fz::socket_event_flag::write, 0);
 		m_canTriggerWrite = false;
 	}
 }
@@ -875,7 +875,7 @@ void CTlsSocketImpl::Failure(int code, bool send_close, std::wstring const& func
 	Uninit();
 
 	if (send_close) {
-		tlsSocket_.m_pEvtHandler->send_event<fz::CSocketEvent>(&tlsSocket_, fz::SocketEventType::close, m_socket_error);
+		tlsSocket_.m_pEvtHandler->send_event<fz::socket_event>(&tlsSocket_, fz::socket_event_flag::close, m_socket_error);
 	}
 }
 
@@ -951,7 +951,7 @@ void CTlsSocketImpl::ContinueShutdown()
 	if (!res) {
 		m_tlsState = CTlsSocket::TlsState::closed;
 
-		tlsSocket_.m_pEvtHandler->send_event<fz::CSocketEvent>(&tlsSocket_, fz::SocketEventType::close, 0);
+		tlsSocket_.m_pEvtHandler->send_event<fz::socket_event>(&tlsSocket_, fz::socket_event_flag::close, 0);
 
 		return;
 	}
@@ -976,7 +976,7 @@ void CTlsSocketImpl::TrustCurrentCert(bool trusted)
 		CheckResumeFailedReadWrite();
 
 		if (m_tlsState == CTlsSocket::TlsState::conn) {
-			tlsSocket_.m_pEvtHandler->send_event<fz::CSocketEvent>(&tlsSocket_, fz::SocketEventType::connection, 0);
+			tlsSocket_.m_pEvtHandler->send_event<fz::socket_event>(&tlsSocket_, fz::socket_event_flag::connection, 0);
 		}
 
 		TriggerEvents();
@@ -1146,7 +1146,7 @@ std::vector<std::wstring> CTlsSocketImpl::GetCertSubjectAltNames(gnutls_x509_crt
 			}
 		}
 		else if (type_or_error == GNUTLS_SAN_IPADDRESS) {
-			std::wstring ip = fz::to_wstring(fz::socket::AddressToString(san, san_size));
+			std::wstring ip = fz::to_wstring(fz::socket::address_to_string(san, san_size));
 			if (!ip.empty()) {
 				ret.emplace_back(std::move(ip));
 			}
