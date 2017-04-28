@@ -6,6 +6,9 @@
 
 #include <errno.h>
 
+/// \private
+struct sockaddr;
+
 namespace fz {
 class thread_pool;
 
@@ -183,7 +186,7 @@ public:
 
 	static void cleanup(bool force);
 
-	static std::string address_to_string(const struct sockaddr* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
+	static std::string address_to_string(sockaddr const* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
 	static std::string address_to_string(char const* buf, int buf_len);
 
 	int listen(address_type family, int port = 0);
