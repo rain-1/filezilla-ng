@@ -46,7 +46,7 @@ struct socket_event_type;
  *
  * \sa \ref fz::socket_event_flag
  */
-typedef fz::simple_event<socket_event_type, socket_event_source*, socket_event_flag, int> socket_event;
+typedef simple_event<socket_event_type, socket_event_source*, socket_event_flag, int> socket_event;
 
 /// \private
 struct hostaddress_event_type;
@@ -54,7 +54,7 @@ struct hostaddress_event_type;
 /**
 * Whenever a hostname has been resolved to an IP address, this event is sent with the resolved IP address literal .
 */
-typedef fz::simple_event<hostaddress_event_type, socket_event_source*, std::string> hostaddress_event;
+typedef simple_event<hostaddress_event_type, socket_event_source*, std::string> hostaddress_event;
 
 /**
  * \brief Remove all pendinmg socket events from source sent to handler.
@@ -62,7 +62,7 @@ typedef fz::simple_event<hostaddress_event_type, socket_event_source*, std::stri
  * Useful e.g. if you want to destroy the handler but keep the source.
  * This function is called, through change_socket_event_handler, by socket::set_event_handler(0)
  */
-void remove_socket_events(fz::event_handler * handler, socket_event_source const* const source);
+void remove_socket_events(event_handler * handler, socket_event_source const* const source);
 
 /**
  * \brief Changes all pending socket events from source
@@ -74,7 +74,7 @@ void remove_socket_events(fz::event_handler * handler, socket_event_source const
  * \example Possible use-cases: Handoff after proxy handshakes, or handoff to TLS classes in
 			case of STARTTLS mechanism
  */
-void change_socket_event_handler(fz::event_handler * old_handler, fz::event_handler * new_handler, socket_event_source const* const source);
+void change_socket_event_handler(event_handler * old_handler, event_handler * new_handler, socket_event_source const* const source);
 
 /// \private
 class socket_thread;
@@ -91,7 +91,7 @@ class socket final : public socket_event_source
 {
 	friend class socket_thread;
 public:
-	socket(fz::thread_pool& pool, fz::event_handler* evt_handler);
+	socket(thread_pool& pool, event_handler* evt_handler);
 	virtual ~socket();
 
 	socket(socket const&) = delete;
@@ -123,7 +123,7 @@ public:
 	// If host is a name that can be resolved, a hostaddress socket event gets sent.
 	// Once connections got established, a connection event gets sent. If
 	// connection could not be established, a close event gets sent.
-	int connect(fz::native_string const& host, unsigned int port, address_type family = address_type::unknown, std::string const& bind = std::string());
+	int connect(native_string const& host, unsigned int port, address_type family = address_type::unknown, std::string const& bind = std::string());
 
 	// After receiving a send or receive event, you can call these functions
 	// as long as their return value is positive.
@@ -148,7 +148,7 @@ public:
 	std::string peer_ip(bool strip_zone_index = false) const;
 
 	/// Returns the hostname passed to Connect()
-	fz::native_string peer_host() const;
+	native_string peer_host() const;
 
 	/**
 	* \brief Returns local port of a connected socket
@@ -180,9 +180,9 @@ public:
 	/**
 	 * \brief Gets a human-readable, translated description of the error
 	 */
-	static fz::native_string error_description(int error);
+	static native_string error_description(int error);
 
-	void set_event_handler(fz::event_handler* pEvtHandler);
+	void set_event_handler(event_handler* pEvtHandler);
 
 	static void cleanup(bool force);
 
@@ -207,7 +207,7 @@ public:
 
 	// Duration must not be smaller than 5 minutes.
 	// Default interval if 2 hours.
-	void set_keepalive_interval(fz::duration const& d);
+	void set_keepalive_interval(duration const& d);
 
 	/**
 	 * On a connected socket, gets the ideal send buffer size or
@@ -218,15 +218,15 @@ public:
 	int ideal_send_buffer_size();
 
 private:
-	static int do_set_flags(int fd, int flags, int flags_mask, fz::duration const& keepalive_interval);
+	static int do_set_flags(int fd, int flags, int flags_mask, duration const& keepalive_interval);
 	static int do_set_buffer_sizes(int fd, int size_read, int size_write);
 	static int set_nonblocking(int fd);
 
 	// Note: Unlocks the lock.
-	void detach_thread(fz::scoped_lock & l);
+	void detach_thread(scoped_lock & l);
 
-	fz::thread_pool & thread_pool_;
-	fz::event_handler* evt_handler_;
+	thread_pool & thread_pool_;
+	event_handler* evt_handler_;
 
 	int fd_{-1};
 
@@ -234,12 +234,12 @@ private:
 
 	socket_thread* socket_thread_{};
 
-	fz::native_string host_;
+	native_string host_;
 	unsigned int port_{};
 	int family_;
 
 	int flags_{};
-	fz::duration keepalive_interval_;
+	duration keepalive_interval_;
 
 	int buffer_sizes_[2];
 };

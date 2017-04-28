@@ -58,12 +58,12 @@ union sockaddr_u
 };
 
 static std::vector<socket_thread*> waiting_socket_threads;
-static fz::mutex waiting_socket_threads_mutex{ false };
+static mutex waiting_socket_threads_mutex{ false };
 }
 
-void remove_socket_events(fz::event_handler * handler, socket_event_source const* const source)
+void remove_socket_events(event_handler * handler, socket_event_source const* const source)
 {
-	auto socket_event_filter = [&](fz::event_loop::Events::value_type const& ev) -> bool {
+	auto socket_event_filter = [&](event_loop::Events::value_type const& ev) -> bool {
 		if (ev.first != handler) {
 			return false;
 		}
@@ -79,7 +79,7 @@ void remove_socket_events(fz::event_handler * handler, socket_event_source const
 	handler->event_loop_.filter_events(socket_event_filter);
 }
 
-void change_socket_event_handler(fz::event_handler * old_handler, fz::event_handler * new_handler, socket_event_source const* const source)
+void change_socket_event_handler(event_handler * old_handler, event_handler * new_handler, socket_event_source const* const source)
 {
 	if (!old_handler) {
 		return;
@@ -93,7 +93,7 @@ void change_socket_event_handler(fz::event_handler * old_handler, fz::event_hand
 		remove_socket_events(old_handler, source);
 	}
 	else {
-		auto socket_event_filter = [&](fz::event_loop::Events::value_type & ev) -> bool {
+		auto socket_event_filter = [&](event_loop::Events::value_type & ev) -> bool {
 			if (ev.first == old_handler) {
 				if (ev.second->derived_type() == socket_event::type()) {
 					if (std::get<0>(static_cast<socket_event const&>(*ev.second).v_) == source) {
@@ -211,11 +211,11 @@ public:
 
 	void SetSocket(socket* pSocket)
 	{
-		fz::scoped_lock l(mutex_);
+		scoped_lock l(mutex_);
 		SetSocket(pSocket, l);
 	}
 
-	void SetSocket(socket* pSocket, fz::scoped_lock const&)
+	void SetSocket(socket* pSocket, scoped_lock const&)
 	{
 		socket_ = pSocket;
 
@@ -232,7 +232,7 @@ public:
 			return EINVAL;
 		}
 
-		host_ = fz::to_utf8(socket_->host_);
+		host_ = to_utf8(socket_->host_);
 		if (host_.empty()) {
 			return EINVAL;
 		}
@@ -250,7 +250,7 @@ public:
 	int Start()
 	{
 		if (m_started) {
-			fz::scoped_lock l(mutex_);
+			scoped_lock l(mutex_);
 			assert(m_threadwait);
 			m_waiting = 0;
 			WakeupThread(l);
@@ -280,11 +280,11 @@ public:
 	// Cancels select or idle wait
 	void WakeupThread()
 	{
-		fz::scoped_lock l(mutex_);
+		scoped_lock l(mutex_);
 		WakeupThread(l);
 	}
 
-	void WakeupThread(fz::scoped_lock & l)
+	void WakeupThread(scoped_lock & l)
 	{
 		if (!m_started || m_finished) {
 			return;
@@ -344,7 +344,7 @@ protected:
 		}
 	}
 
-	int TryConnectHost(addrinfo & addr, sockaddr_u const& bindAddr, fz::scoped_lock & l)
+	int TryConnectHost(addrinfo & addr, sockaddr_u const& bindAddr, scoped_lock & l)
 	{
 		if (socket_->evt_handler_) {
 			socket_->evt_handler_->send_event<hostaddress_event>(socket_, socket::address_to_string(addr.ai_addr, addr.ai_addrlen));
@@ -432,7 +432,7 @@ protected:
 	}
 
 	// Only call while locked
-	bool DoConnect(fz::scoped_lock & l)
+	bool DoConnect(scoped_lock & l)
 	{
 		if (host_.empty() || port_.empty()) {
 			socket_->state_ = socket::closed;
@@ -540,7 +540,7 @@ protected:
 	}
 
 	// Call only while locked
-	bool DoWait(int wait, fz::scoped_lock & l)
+	bool DoWait(int wait, scoped_lock & l)
 	{
 		m_waiting |= wait;
 
@@ -752,7 +752,7 @@ protected:
 	}
 
 	// Call only while locked
-	bool IdleLoop(fz::scoped_lock & l)
+	bool IdleLoop(scoped_lock & l)
 	{
 		if (m_quit) {
 			return false;
@@ -771,7 +771,7 @@ protected:
 
 	void entry()
 	{
-		fz::scoped_lock l(mutex_);
+		scoped_lock l(mutex_);
 		for (;;) {
 			if (!IdleLoop(l)) {
 				m_finished = true;
@@ -845,8 +845,8 @@ protected:
 	int m_pipe[2];
 #endif
 
-	fz::mutex mutex_;
-	fz::condition condition_;
+	mutex mutex_;
+	condition condition_;
 
 	bool m_started{};
 	bool m_quit{};
@@ -862,13 +862,13 @@ protected:
 	// Thread waits for instructions
 	bool m_threadwait{};
 
-	fz::async_task thread_;
+	async_task thread_;
 };
 
-socket::socket(fz::thread_pool & pool, fz::event_handler* evt_handler)
+socket::socket(thread_pool & pool, event_handler* evt_handler)
 	: thread_pool_(pool)
 	, evt_handler_(evt_handler)
-	, keepalive_interval_(fz::duration::from_hours(2))
+	, keepalive_interval_(duration::from_hours(2))
 {
 	family_ = AF_UNSPEC;
 
@@ -883,12 +883,12 @@ socket::~socket()
 	}
 
 	if (socket_thread_) {
-		fz::scoped_lock l(socket_thread_->mutex_);
+		scoped_lock l(socket_thread_->mutex_);
 		detach_thread(l);
 	}
 }
 
-void socket::detach_thread(fz::scoped_lock & l)
+void socket::detach_thread(scoped_lock & l)
 {
 	if (!socket_thread_) {
 		return;
@@ -910,7 +910,7 @@ void socket::detach_thread(fz::scoped_lock & l)
 			socket_thread_->WakeupThread(l);
 			l.unlock();
 
-			fz::scoped_lock wl(waiting_socket_threads_mutex);
+			scoped_lock wl(waiting_socket_threads_mutex);
 			waiting_socket_threads.push_back(socket_thread_);
 		}
 	}
@@ -919,7 +919,7 @@ void socket::detach_thread(fz::scoped_lock & l)
 	cleanup(false);
 }
 
-int socket::connect(fz::native_string const& host, unsigned int port, address_type family, std::string const& bind)
+int socket::connect(native_string const& host, unsigned int port, address_type family, std::string const& bind)
 {
 	if (state_ != none) {
 		return EISCONN;
@@ -951,7 +951,7 @@ int socket::connect(fz::native_string const& host, unsigned int port, address_ty
 	}
 
 	if (socket_thread_ && socket_thread_->m_started) {
-		fz::scoped_lock l(socket_thread_->mutex_);
+		scoped_lock l(socket_thread_->mutex_);
 		if (!socket_thread_->m_threadwait) {
 			// Possibly inside a blocking call, e.g. getaddrinfo.
 			// Detach the thread so that we can continue.
@@ -979,10 +979,10 @@ int socket::connect(fz::native_string const& host, unsigned int port, address_ty
 	return EINPROGRESS;
 }
 
-void socket::set_event_handler(fz::event_handler* pEvtHandler)
+void socket::set_event_handler(event_handler* pEvtHandler)
 {
 	if (socket_thread_) {
-		fz::scoped_lock l(socket_thread_->mutex_);
+		scoped_lock l(socket_thread_->mutex_);
 
 		if (evt_handler_ == pEvtHandler) {
 			return;
@@ -1118,26 +1118,26 @@ std::string socket::error_string(int error)
 		return error_table[i].name;
 	}
 
-	return fz::sprintf("%d", error);
+	return sprintf("%d", error);
 }
 
-fz::native_string socket::error_description(int error)
+native_string socket::error_description(int error)
 {
 	for (int i = 0; error_table[i].code; ++i) {
 		if (error != error_table[i].code) {
 			continue;
 		}
 
-		return fz::to_native(fz::to_native(std::string(error_table[i].name)) + fzT(" - ") + fz::to_native(fz::translate(error_table[i].description)));
+		return to_native(to_native(std::string(error_table[i].name)) + fzT(" - ") + to_native(translate(error_table[i].description)));
 	}
 
-	return fz::sprintf(fzT("%d"), error);
+	return sprintf(fzT("%d"), error);
 }
 
 int socket::close()
 {
 	if (socket_thread_) {
-		fz::scoped_lock l(socket_thread_->mutex_);
+		scoped_lock l(socket_thread_->mutex_);
 		int fd = fd_;
 		fd_ = -1;
 
@@ -1190,13 +1190,13 @@ socket::socket_state socket::get_state()
 
 void socket::cleanup(bool force)
 {
-	fz::scoped_lock wl(waiting_socket_threads_mutex);
+	scoped_lock wl(waiting_socket_threads_mutex);
 	auto iter = waiting_socket_threads.begin();
 	for (; iter != waiting_socket_threads.end(); ++iter) {
 		socket_thread *const pThread = *iter;
 
 		if (!force) {
-			fz::scoped_lock l(pThread->mutex_);
+			scoped_lock l(pThread->mutex_);
 			if (!pThread->m_finished) {
 				break;
 			}
@@ -1215,7 +1215,7 @@ int socket::read(void* buffer, unsigned int size, int& error)
 		error = last_socket_error();
 		if (error == EAGAIN) {
 			if (socket_thread_) {
-				fz::scoped_lock l(socket_thread_->mutex_);
+				scoped_lock l(socket_thread_->mutex_);
 				if (!(socket_thread_->m_waiting & WAIT_READ)) {
 					socket_thread_->m_waiting |= WAIT_READ;
 					socket_thread_->WakeupThread(l);
@@ -1273,7 +1273,7 @@ int socket::write(const void* buffer, unsigned int size, int& error)
 		error = last_socket_error();
 		if (error == EAGAIN) {
 			if (socket_thread_) {
-				fz::scoped_lock l (socket_thread_->mutex_);
+				scoped_lock l (socket_thread_->mutex_);
 				if (!(socket_thread_->m_waiting & WAIT_WRITE)) {
 					socket_thread_->m_waiting |= WAIT_WRITE;
 					socket_thread_->WakeupThread(l);
@@ -1420,11 +1420,10 @@ int socket::listen(address_type family, int port)
 		hints.ai_flags |= AI_NUMERICSERV;
 #endif
 
-		char portstring[6];
-		sprintf(portstring, "%d", port);
+		std::string portstring = sprintf("%d", port);
 
 		addrinfo* addressList = 0;
-		int res = getaddrinfo(0, portstring, &hints, &addressList);
+		int res = getaddrinfo(0, portstring.c_str(), &hints, &addressList);
 
 		if (res) {
 #ifdef FZ_WINDOWS
@@ -1525,7 +1524,7 @@ int socket::remote_port(int& error)
 socket* socket::accept(int &error)
 {
 	if (socket_thread_) {
-		fz::scoped_lock l(socket_thread_->mutex_);
+		scoped_lock l(socket_thread_->mutex_);
 		socket_thread_->m_waiting |= WAIT_ACCEPT;
 		socket_thread_->WakeupThread(l);
 	}
@@ -1597,7 +1596,7 @@ void socket::set_flags(int flags)
 	}
 }
 
-int socket::do_set_flags(int fd, int flags, int flags_mask, fz::duration const& keepalive_interval)
+int socket::do_set_flags(int fd, int flags, int flags_mask, duration const& keepalive_interval)
 {
 	if (flags_mask & flag_nodelay) {
 		const int value = (flags & flag_nodelay) ? 1 : 0;
@@ -1716,14 +1715,14 @@ int socket::do_set_buffer_sizes(int fd, int size_read, int size_write)
 	return ret;
 }
 
-fz::native_string socket::peer_host() const
+native_string socket::peer_host() const
 {
 	return host_;
 }
 
-void socket::set_keepalive_interval(fz::duration const& d)
+void socket::set_keepalive_interval(duration const& d)
 {
-	if (d < fz::duration::from_minutes(1)) {
+	if (d < duration::from_minutes(1)) {
 		return;
 	}
 
