@@ -51,10 +51,10 @@ namespace {
 // the different address types
 union sockaddr_u
 {
-	struct sockaddr_storage storage;
-	struct sockaddr sockaddr_;
-	struct sockaddr_in in4;
-	struct sockaddr_in6 in6;
+	sockaddr_storage storage;
+	sockaddr sockaddr_;
+	sockaddr_in in4;
+	sockaddr_in6 in6;
 };
 
 static std::vector<socket_thread*> waiting_socket_threads;
@@ -240,10 +240,7 @@ public:
 		m_bind = bind;
 
 		// Connect method of socket ensures port is in range
-		char tmp[7];
-		sprintf(tmp, "%u", socket_->port_);
-		tmp[5] = 0;
-		port_ = tmp;
+		port_ = sprintf("%u", socket_->port_);
 
 		Start();
 
@@ -1256,8 +1253,8 @@ int socket::write(const void* buffer, unsigned int size, int& error)
 
 #if !defined(SO_NOSIGPIPE) && !defined(FZ_WINDOWS)
 	// Some systems have neither. Need to block signal
-	struct sigaction old_action;
-	struct sigaction action = {};
+	sigaction old_action;
+	sigaction action = {};
 	action.sa_handler = SIG_IGN;
 	int signal_set = sigaction(SIGPIPE, &action, &old_action);
 #endif
@@ -1290,7 +1287,7 @@ int socket::write(const void* buffer, unsigned int size, int& error)
 	return res;
 }
 
-std::string socket::address_to_string(const struct sockaddr* addr, int addr_len, bool with_port, bool strip_zone_index)
+std::string socket::address_to_string(sockaddr const* addr, int addr_len, bool with_port, bool strip_zone_index)
 {
 	char hostbuf[NI_MAXHOST];
 	char portbuf[NI_MAXSERV];
@@ -1346,7 +1343,7 @@ std::string socket::address_to_string(char const* buf, int buf_len)
 
 std::string socket::local_ip(bool strip_zone_index) const
 {
-	struct sockaddr_storage addr;
+	sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
 	int res = getsockname(fd_, (sockaddr*)&addr, &addr_len);
 	if (res) {
@@ -1358,7 +1355,7 @@ std::string socket::local_ip(bool strip_zone_index) const
 
 std::string socket::peer_ip(bool strip_zone_index) const
 {
-	struct sockaddr_storage addr;
+	sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
 	int res = getpeername(fd_, (sockaddr*)&addr, &addr_len);
 	if (res) {
@@ -1414,7 +1411,7 @@ int socket::listen(address_type family, int port)
 	}
 
 	{
-		struct addrinfo hints = {};
+		addrinfo hints = {};
 		hints.ai_family = family_;
 		hints.ai_socktype = SOCK_STREAM;
 		hints.ai_flags = AI_PASSIVE;
@@ -1426,7 +1423,7 @@ int socket::listen(address_type family, int port)
 		char portstring[6];
 		sprintf(portstring, "%d", port);
 
-		struct addrinfo* addressList = 0;
+		addrinfo* addressList = 0;
 		int res = getaddrinfo(0, portstring, &hints, &addressList);
 
 		if (res) {
@@ -1437,7 +1434,7 @@ int socket::listen(address_type family, int port)
 #endif
 		}
 
-		for (struct addrinfo* addr = addressList; addr; addr = addr->ai_next) {
+		for (addrinfo* addr = addressList; addr; addr = addr->ai_next) {
 			fd_ = socket_thread::CreateSocketFd(*addr);
 			res = last_socket_error();
 
