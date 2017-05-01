@@ -9,6 +9,8 @@
 #include <libfilezilla/format.hpp>
 #include <libfilezilla/mutex.hpp>
 #include <libfilezilla/thread_pool.hpp>
+
+#include <libfilezilla/util.hpp>
 #include "socket.h"
 #ifndef FZ_WINDOWS
   #define mutex mutex_override // Sadly on some platforms system headers include conflicting names
@@ -56,9 +58,6 @@ union sockaddr_u
 	sockaddr_in in4;
 	sockaddr_in6 in6;
 };
-
-static std::vector<socket_thread*> waiting_socket_threads;
-static mutex waiting_socket_threads_mutex{ false };
 }
 
 void remove_socket_events(event_handler * handler, socket_event_source const* const source)
@@ -472,6 +471,7 @@ protected:
 #endif
 
 		addrinfo *addressList{};
+		sleep(duration::from_seconds(5));
 		int res = getaddrinfo(host.c_str(), port.c_str(), &hints, &addressList);
 
 		l.lock();
@@ -774,8 +774,7 @@ protected:
 		scoped_lock l(mutex_);
 		for (;;) {
 			if (!idle_loop(l)) {
-				finished_ = true;
-				return;
+				break;
 			}
 
 			if (socket_->state_ == socket::listening) {
@@ -827,7 +826,13 @@ protected:
 			}
 		}
 
-		finished_ = true;
+		if (thread_) {
+			finished_ = true;
+		}
+		else {
+			l.unlock();
+			delete this;
+		}
 		return;
 	}
 
@@ -899,24 +904,22 @@ void socket::detach_thread(scoped_lock & l)
 		socket_thread_->wakeup_thread(l);
 		l.unlock();
 		delete socket_thread_;
+		socket_thread_ = 0;
 	}
 	else {
 		if (!socket_thread_->started_) {
+			auto thread = socket_thread_;
+			socket_thread_ = 0;
 			l.unlock();
-			delete socket_thread_;
+			delete thread;
 		}
 		else {
 			socket_thread_->quit_ = true;
+			socket_thread_->thread_.detach();
 			socket_thread_->wakeup_thread(l);
-			l.unlock();
-
-			scoped_lock wl(waiting_socket_threads_mutex);
-			waiting_socket_threads.push_back(socket_thread_);
+			socket_thread_ = 0;
 		}
 	}
-	socket_thread_ = 0;
-
-	cleanup(false);
 }
 
 int socket::connect(native_string const& host, unsigned int port, address_type family, std::string const& bind)
@@ -1186,25 +1189,6 @@ socket::socket_state socket::get_state()
 	}
 
 	return state;
-}
-
-void socket::cleanup(bool force)
-{
-	scoped_lock wl(waiting_socket_threads_mutex);
-	auto iter = waiting_socket_threads.begin();
-	for (; iter != waiting_socket_threads.end(); ++iter) {
-		socket_thread *const pThread = *iter;
-
-		if (!force) {
-			scoped_lock l(pThread->mutex_);
-			if (!pThread->finished_) {
-				break;
-			}
-		}
-
-		delete pThread;
-	}
-	waiting_socket_threads.erase(waiting_socket_threads.begin(), iter);
 }
 
 int socket::read(void* buffer, unsigned int size, int& error)

@@ -184,8 +184,6 @@ public:
 
 	void set_event_handler(event_handler* pEvtHandler);
 
-	static void cleanup(bool force);
-
 	static std::string address_to_string(sockaddr const* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
 	static std::string address_to_string(char const* buf, int buf_len);
 
