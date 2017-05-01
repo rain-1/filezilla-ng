@@ -86,10 +86,6 @@ CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 	}
 
 	delete m_pLogging;
-
-	if (m_engineList.empty()) {
-		fz::socket::cleanup(true);
-	}
 }
 
 void CFileZillaEnginePrivate::OnEngineEvent(EngineNotificationType type)
