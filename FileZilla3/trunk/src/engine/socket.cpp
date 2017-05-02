@@ -9,8 +9,6 @@
 #include <libfilezilla/format.hpp>
 #include <libfilezilla/mutex.hpp>
 #include <libfilezilla/thread_pool.hpp>
-
-#include <libfilezilla/util.hpp>
 #include "socket.h"
 #ifndef FZ_WINDOWS
   #define mutex mutex_override // Sadly on some platforms system headers include conflicting names
@@ -471,7 +469,6 @@ protected:
 #endif
 
 		addrinfo *addressList{};
-		sleep(duration::from_seconds(5));
 		int res = getaddrinfo(host.c_str(), port.c_str(), &hints, &addressList);
 
 		l.lock();
