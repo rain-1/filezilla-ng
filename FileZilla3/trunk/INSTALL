@@ -7,7 +7,7 @@ Installation instructions
 
 FileZilla depends on the following libraries:
 - libfilezilla 0.9.1 or greater
-- wxWidgets 3.0.2 or greater
+- wxWidgets 3.0.3 or greater
 - libidn (only if not on Windows and not having gettaddrinfo with AI_IDN support)
 - Nettle 3.1 or greater
 - GnuTLS 3.4.15 or greater
