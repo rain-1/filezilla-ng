@@ -941,6 +941,11 @@ void CRealControlSocket::SendBufferReserve(unsigned int len)
 
 int CRealControlSocket::Send(unsigned char const* buffer, unsigned int len)
 {
+	if (!m_pBackend) {
+		LogMessage(MessageType::Debug_Warning, L"Called internal CRealControlSocket::Send without m_pBackend");
+		return FZ_REPLY_INTERNALERROR;
+	}
+
 	SetWait(true);
 	if (sendBufferSize_) {
 		AppendToSendBuffer(buffer, len);
