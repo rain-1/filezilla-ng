@@ -111,6 +111,25 @@ void change_socket_event_handler(event_handler * old_handler, event_handler * ne
 }
 
 namespace {
+bool has_pending_event(event_handler * handler, socket_event_source const* const source, socket_event_flag event)
+{
+	bool ret = false;
+
+	auto socket_event_filter = [&](event_loop::Events::value_type const& ev) -> bool {
+		if (ev.first == handler && ev.second->derived_type() == socket_event::type()) {
+			auto const& socket_ev = static_cast<socket_event const&>(*ev.second).v_;
+			if (std::get<0>(socket_ev) == source && std::get<1>(socket_ev) == event) {
+				ret = true;
+			}
+		}
+		return false;
+	};
+
+	handler->event_loop_.filter_events(socket_event_filter);
+
+	return ret;
+}
+
 #ifdef FZ_WINDOWS
 static int convert_msw_error_code(int error)
 {
@@ -1718,6 +1737,29 @@ void socket::set_keepalive_interval(duration const& d)
 
 	if (socket_thread_) {
 		socket_thread_->mutex_.unlock();
+	}
+}
+
+void socket::retrigger(socket_event_flag event)
+{
+	if (!socket_thread_) {
+		return;
+	}
+
+	if (event != socket_event_flag::read && event != socket_event_flag::write) {
+		return;
+	}
+	
+	fz::scoped_lock l(socket_thread_->mutex_);
+
+	if (has_pending_event(evt_handler_, this, event)) {
+		return;
+	}
+
+	int const wait_flag = (event == socket_event_flag::read) ? WAIT_READ : WAIT_WRITE;
+	if (!(socket_thread_->waiting_ & wait_flag)) {
+		socket_thread_->waiting_ |= wait_flag;
+		socket_thread_->wakeup_thread(l);
 	}
 }
 

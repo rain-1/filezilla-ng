@@ -192,19 +192,30 @@ public:
 
 	enum
 	{
+		/// flag_nodelay disables Nagle's algorithm
 		flag_nodelay = 0x01,
+
+		/// flag_keepalive enables TCP keepalive.
 		flag_keepalive = 0x02
 	};
 
 	int flags() const { return flags_; }
 	void set_flags(int flags);
 
-	// If called on listen socket, sizes will be inherited by
-	// accepted sockets
+	/**
+	 * \brief Sets socket buffer sizes.
+	 *
+	 * Internally this sets SO_RCVBUF and SO_SNDBUF on the socket.
+	 * 
+	 * If called on listen socket, sizes will be inherited by accepted sockets.
+	 */
 	int set_buffer_sizes(int size_receive, int size_send);
 
-	// Duration must not be smaller than 5 minutes.
-	// Default interval if 2 hours.
+	/**
+	 * Sets the interval between TCP keepalive packets.
+	 *
+	 * Duration must not be smaller than 5 minutes. The default interval is 2 hours.
+	 */
 	void set_keepalive_interval(duration const& d);
 
 	/**
@@ -214,6 +225,12 @@ public:
 	 * Currently only implemented for Windows.
 	 */
 	int ideal_send_buffer_size();
+
+	/**
+	 * Allows re-triggering the read and write events.
+	 * Slow and cumbersome, use sparingly.
+	 */
+	void retrigger(socket_event_flag event);
 
 private:
 	static int do_set_flags(int fd, int flags, int flags_mask, duration const& keepalive_interval);
