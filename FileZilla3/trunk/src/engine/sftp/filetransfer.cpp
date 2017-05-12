@@ -280,7 +280,7 @@ int CSftpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 			else {
 				if (matchedCase && !entry.is_unsure()) {
 					remoteFileSize_ = entry.size;
-					if (!entry.has_date()) {
+					if (entry.has_date()) {
 						fileTime_ = entry.time;
 					}
 
