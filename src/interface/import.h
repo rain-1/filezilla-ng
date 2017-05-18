@@ -1,5 +1,5 @@
-#ifndef __IMPORT_H__
-#define __IMPORT_H__
+#ifndef FILEZILLA_INTERFACE_IMPORT_HEADER
+#define FILEZILLA_INTERFACE_IMPORT_HEADER
 
 #include "dialogex.h"
 
@@ -28,4 +28,4 @@ protected:
 	CQueueView* m_pQueueView;
 };
 
-#endif //__IMPORT_H__
+#endif

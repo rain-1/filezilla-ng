@@ -181,7 +181,7 @@ void CContextManager::ProcessDirectoryListing(CServer const& server, std::shared
 		if (state == exempt) {
 			continue;
 		}
-		if (state->GetServer() && *state->GetServer() == server) {
+		if (state->GetServer() && state->GetServer().server == server) {
 			state->SetRemoteDir(listing, true);
 		}
 	}
@@ -251,7 +251,7 @@ bool CState::SetLocalDir(CLocalPath const& dir, std::wstring *error, bool rememb
 	}
 
 	if (!m_sync_browse.local_root.empty()) {
-		wxASSERT(m_site.m_server);
+		wxASSERT(m_site.server_);
 
 		if (dir != m_sync_browse.local_root && !dir.IsSubdirOf(m_sync_browse.local_root)) {
 			wxString msg = wxString::Format(_("The local directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the local directory?"),
@@ -474,10 +474,10 @@ void CState::LocalDirCreated(const CLocalPath& path)
 
 void CState::SetSite(Site const& site, CServerPath const& path)
 {
-	if (m_site.m_server) {
-		if (site.m_server && site.m_server == m_site.m_server &&
-			site.m_server.GetName() == m_site.m_server.GetName() &&
-			site.m_server.MaximumMultipleConnections() == m_site.m_server.MaximumMultipleConnections())
+	if (m_site.server_) {
+		if (site.server_ && site.server_ == m_site.server_ &&
+			site.server_.server.GetName() == m_site.server_.server.GetName() &&
+			site.server_.server.MaximumMultipleConnections() == m_site.server_.server.MaximumMultipleConnections())
 		{
 			// Nothing changes
 			return;
@@ -487,11 +487,11 @@ void CState::SetSite(Site const& site, CServerPath const& path)
 		m_pCertificate.reset();
 		m_pSftpEncryptionInfo.reset();
 	}
-	if (site.m_server) {
+	if (site.server_) {
 		if (!path.empty()) {
 			m_last_path = path;
 		}
-		else if (m_last_site.m_server != site.m_server) {
+		else if (m_last_site.server_ != site.server_) {
 			m_last_path.clear();
 		}
 		m_last_site = site;
@@ -511,9 +511,9 @@ Site const& CState::GetSite() const
 	return m_site;
 }
 
-CServer const* CState::GetServer() const
+ServerWithCredentials const& CState::GetServer() const
 {
-	return m_site.m_server ? &m_site.m_server : 0;
+	return m_site.server_;
 }
 
 wxString CState::GetTitle() const
@@ -523,7 +523,7 @@ wxString CState::GetTitle() const
 
 bool CState::Connect(Site const& site, CServerPath const& path, bool compare)
 {
-	if (!site.m_server) {
+	if (!site.server_) {
 		return false;
 	}
 	if (!m_pEngine) {
@@ -535,7 +535,7 @@ bool CState::Connect(Site const& site, CServerPath const& path, bool compare)
 	m_pRemoteRecursiveOperation->StopRecursiveOperation();
 	SetSyncBrowse(false);
 
-	m_pCommandQueue->ProcessCommand(new CConnectCommand(site.m_server));
+	m_pCommandQueue->ProcessCommand(new CConnectCommand(site.server_.server, site.server_.credentials));
 	m_pCommandQueue->ProcessCommand(new CListCommand(path, _T(""), LIST_FLAG_FALLBACK_CURRENT));
 
 	SetSite(site, path);
@@ -672,7 +672,7 @@ CGlobalStateEventHandler::~CGlobalStateEventHandler()
 
 void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const wxString& subdir, bool queueOnly)
 {
-	if (!m_site.m_server || !m_pDirectoryListing) {
+	if (!m_site.server_ || !m_pDirectoryListing) {
 		return;
 	}
 
@@ -689,7 +689,7 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const w
 
 void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const CServerPath& path, bool queueOnly)
 {
-	if (!m_site.m_server) {
+	if (!m_site.server_) {
 		return;
 	}
 
@@ -712,7 +712,7 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 		if (type == fz::local_filesys::file) {
 			std::wstring localFile;
 			const CLocalPath localPath(files[i].ToStdWstring(), &localFile);
-			m_mainFrame.GetQueue()->QueueFile(queueOnly, false, localFile, wxEmptyString, localPath, path, m_site.m_server, size);
+			m_mainFrame.GetQueue()->QueueFile(queueOnly, false, localFile, wxEmptyString, localPath, path, m_site.server_, size);
 			m_mainFrame.GetQueue()->QueueFile_Finish(!queueOnly);
 		}
 		else if (type == fz::local_filesys::dir) {
@@ -938,7 +938,7 @@ bool CState::IsRemoteConnected() const
 		return false;
 	}
 
-	return static_cast<bool>(m_site.m_server);
+	return static_cast<bool>(m_site.server_);
 }
 
 bool CState::IsRemoteIdle(bool ignore_recursive) const
@@ -1006,7 +1006,7 @@ void CState::LinkIsNotDir(const CServerPath& path, const wxString& subdir)
 
 bool CState::ChangeRemoteDir(CServerPath const& path, std::wstring const& subdir, int flags, bool ignore_busy, bool compare)
 {
-	if (!m_site.m_server || !m_pCommandQueue) {
+	if (!m_site.server_ || !m_pCommandQueue) {
 		return false;
 	}
 
@@ -1218,21 +1218,21 @@ void CState::SetSecurityInfo(CSftpEncryptionNotification const& info)
 
 void CState::UpdateSite(wxString const& oldPath, Site const& newSite)
 {
-	if (newSite.m_path.empty() || !newSite.m_server) {
+	if (newSite.m_path.empty() || !newSite.server_) {
 		return;
 	}
 
 	bool changed = false;
-	if (m_site.m_server && m_site != newSite) {
-		if (m_site.m_path == oldPath && m_site.m_server.EqualsNoPass(newSite.m_server)) {
+	if (m_site.server_ && m_site != newSite) {
+		if (m_site.m_path == oldPath && m_site.server_ == newSite.server_) {
 			m_site = newSite;
 			changed = true;
 		}
 	}
-	if (m_last_site.m_server && m_last_site != newSite) {
-		if (m_last_site.m_path == oldPath && m_last_site.m_server.EqualsNoPass(newSite.m_server)) {
+	if (m_last_site.server_ && m_last_site != newSite) {
+		if (m_last_site.m_path == oldPath && m_last_site.server_ == newSite.server_) {
 			m_last_site = newSite;
-			if (!m_site.m_server) {
+			if (!m_site.server_) {
 				// Active site has precedence over historic data
 				changed = true;
 			}
@@ -1246,13 +1246,13 @@ void CState::UpdateSite(wxString const& oldPath, Site const& newSite)
 
 void CState::UpdateTitle()
 {
-	if (m_site.m_server) {
-		wxString const& name = m_site.m_server.GetName();
+	if (m_site.server_) {
+		wxString const& name = m_site.server_.server.GetName();
 		m_title.clear();
 		if (!name.empty()) {
 			m_title = name + _T(" - ");
 		}
-		m_title += m_site.m_server.Format(ServerFormat::with_user_and_optional_port);
+		m_title += m_site.server_.Format(ServerFormat::with_user_and_optional_port);
 	}
 	else {
 		m_title = _("Not connected");

@@ -91,7 +91,7 @@ protected:
 	// already.
 	struct t_linkResolveState
 	{
-		CServer server;
+		ServerWithCredentials server;
 		CServerPath remote_path;
 		wxString link;
 		CLocalPath local_path;

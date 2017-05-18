@@ -234,8 +234,8 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 
 	++m_processedDirectories;
 
-	const CServer* pServer = m_state.GetServer();
-	wxASSERT(pServer);
+	ServerWithCredentials const& server = m_state.GetServer();
+	wxASSERT(server);
 
 	if (!pDirectoryListing->GetCount() && m_operationMode == recursive_transfer) {
 		if (m_immediate) {
@@ -243,7 +243,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 			m_state.RefreshLocalFile(dir.localDir.GetPath());
 		}
 		else {
-			m_pQueue->QueueFile(true, true, _T(""), _T(""), dir.localDir, CServerPath(), *pServer, -1);
+			m_pQueue->QueueFile(true, true, _T(""), _T(""), dir.localDir, CServerPath(), server, -1);
 			m_pQueue->QueueFile_Finish(false);
 		}
 	}
@@ -350,7 +350,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 					}
 					m_pQueue->QueueFile(!m_immediate, true,
 						entry.name, (entry.name == localFile) ? std::wstring() : localFile,
-						dir.localDir, pDirectoryListing->path, *pServer, entry.size);
+						dir.localDir, pDirectoryListing->path, server, entry.size);
 					added = true;
 				}
 				break;
@@ -463,8 +463,8 @@ void CRemoteRecursiveOperation::LinkIsNotDir()
 	recursion_root::new_dir dir = root.m_dirsToVisit.front();
 	root.m_dirsToVisit.pop_front();
 
-	const CServer* pServer = m_state.GetServer();
-	if (!pServer) {
+	ServerWithCredentials const& server = m_state.GetServer();
+	if (!server) {
 		NextOperation();
 		return;
 	}
@@ -484,7 +484,7 @@ void CRemoteRecursiveOperation::LinkIsNotDir()
 		if (m_operationMode != recursive_transfer_flatten) {
 			localPath.MakeParent();
 		}
-		m_pQueue->QueueFile(!m_immediate, true, dir.subdir, (dir.subdir == localFile) ? std::wstring() : localFile, localPath, dir.parent, *pServer, -1);
+		m_pQueue->QueueFile(!m_immediate, true, dir.subdir, (dir.subdir == localFile) ? std::wstring() : localFile, localPath, dir.parent, server, -1);
 		m_pQueue->QueueFile_Finish(m_immediate);
 	}
 

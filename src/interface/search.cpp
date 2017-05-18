@@ -667,12 +667,12 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 
 		CServerPath path;
 
-		const CServer* pServer = m_state.GetServer();
-		if (!pServer) {
+		ServerWithCredentials const& server = m_state.GetServer();
+		if (!server) {
 			wxMessageBoxEx(_("Connection to server lost."), _("Remote file search"), wxICON_EXCLAMATION);
 			return;
 		}
-		path.SetType(pServer->GetType());
+		path.SetType(server.server.GetType());
 		if (!path.SetPath(xrc_call(*this, "ID_PATH", &wxTextCtrl::GetValue).ToStdWstring()) || path.empty()) {
 			wxMessageBoxEx(_("Need to enter valid remote path"), _("Remote file search"), wxICON_EXCLAMATION);
 			return;
@@ -981,8 +981,8 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		return;
 	}
 
-	CServer const* pServer = m_state.GetServer();
-	if (!pServer) {
+	ServerWithCredentials const& server = m_state.GetServer();
+	if (!server) {
 		wxBell();
 		return;
 	}
@@ -1014,7 +1014,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 		m_pQueue->QueueFile(!start, true,
 			entry.name, (localName != entry.name) ? localName : std::wstring(),
-			target_path, remote_path, *pServer, entry.size);
+			target_path, remote_path, server, entry.size);
 	}
 	m_pQueue->QueueFile_Finish(start);
 
@@ -1050,8 +1050,9 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 	}
 
 	CSearchTransferDialog dlg;
-	if (!dlg.Run(this, false, m_state.GetRemotePath().GetPath(), selected_files.size(), selected_dirs.size()))
+	if (!dlg.Run(this, false, m_state.GetRemotePath().GetPath(), selected_files.size(), selected_dirs.size())) {
 		return;
+	}
 
 	wxTextCtrl *pText = XRCCTRL(dlg, "ID_REMOTEPATH", wxTextCtrl);
 
@@ -1061,8 +1062,8 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 		return;
 	}
 
-	CServer const* pServer = m_state.GetServer();
-	if (!pServer) {
+	ServerWithCredentials const& server = m_state.GetServer();
+	if (server) {
 		wxBell();
 		return;
 	}
@@ -1092,7 +1093,7 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 
 		m_pQueue->QueueFile(!start, false,
 			entry.name, (localName != entry.name) ? localName : std::wstring(),
-			local_path, target_path, *pServer, entry.size);
+			local_path, target_path, server, entry.size);
 	}
 	m_pQueue->QueueFile_Finish(start);
 
@@ -1127,8 +1128,9 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 	std::list<int> selected_files;
 	ProcessSelection(selected_files, selected_dirs, m_results->remoteFileData_, m_results);
 
-	if (selected_files.empty() && selected_dirs.empty())
+	if (selected_files.empty() && selected_dirs.empty()) {
 		return;
+	}
 
 	if (!selected_dirs.empty()) {
 		wxMessageBoxEx(_("Editing directories is not supported"), _("Editing search results"), wxICON_EXCLAMATION);
@@ -1147,8 +1149,8 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 		return;
 	}
 
-	const CServer* pServer = m_state.GetServer();
-	if (!pServer) {
+	ServerWithCredentials const& server = m_state.GetServer();
+	if (!server) {
 		wxBell();
 		return;
 	}
@@ -1166,7 +1168,7 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 		const CDirentry& entry = m_results->remoteFileData_[item];
 		const CServerPath path = m_results->remoteFileData_[item].path;
 
-		pEditHandler->Edit(CEditHandler::remote, entry.name, path, *pServer, entry.size, this);
+		pEditHandler->Edit(CEditHandler::remote, entry.name, path, server, entry.size, this);
 	}
 }
 
@@ -1185,22 +1187,26 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	std::list<int> selected_files;
 	ProcessSelection(selected_files, selected_dirs, m_results->remoteFileData_, m_results);
 
-	if (selected_files.empty() && selected_dirs.empty())
+	if (selected_files.empty() && selected_dirs.empty()) {
 		return;
+	}
 
 	wxString question;
-	if (selected_dirs.empty())
+	if (selected_dirs.empty()) {
 		question.Printf(wxPLURAL("Really delete %d file from the server?", "Really delete %d files from the server?", selected_files.size()), selected_files.size());
-	else if (selected_files.empty())
+	}
+	else if (selected_files.empty()) {
 		question.Printf(wxPLURAL("Really delete %d directory with its contents from the server?", "Really delete %d directories with their contents from the server?", selected_dirs.size()), selected_dirs.size());
+	}
 	else {
 		wxString files = wxString::Format(wxPLURAL("%d file", "%d files", selected_files.size()), selected_files.size());
 		wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", selected_dirs.size()), selected_dirs.size());
 		question.Printf(_("Really delete %s and %s from the server?"), files, dirs);
 	}
 
-	if (wxMessageBoxEx(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES)
+	if (wxMessageBoxEx(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES) {
 		return;
+	}
 
 	for (auto const& file : selected_files) {
 		CDirentry const& entry = m_results->remoteFileData_[file];
@@ -1283,8 +1289,9 @@ void CSearchDialog::SaveConditions()
 	}
 
 	pugi::xml_node filter;
-	while ((filter = document.child("Filter")))
+	while ((filter = document.child("Filter"))) {
 		document.remove_child(filter);
+	}
 	filter = document.append_child("Filter");
 
 	CFilterManager::SaveFilter(filter, m_search_filter);
@@ -1319,8 +1326,8 @@ void CSearchDialog::OnGetUrl(wxCommandEvent& event)
 		return;
 	}
 
-	CServer const* pServer = m_state.GetServer();
-	if (!pServer) {
+	ServerWithCredentials const& server = m_state.GetServer();
+	if (!server) {
 		wxBell();
 		return;
 	}
@@ -1330,7 +1337,7 @@ void CSearchDialog::OnGetUrl(wxCommandEvent& event)
 		return;
 	}
 
-	wxString const server = pServer->Format((event.GetId() == XRCID("ID_MENU_SEARCH_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
+	wxString const url = server.Format((event.GetId() == XRCID("ID_MENU_SEARCH_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
 
 	auto getUrl = [](wxString const& serverPart, CServerPath const& path, std::wstring const& name) {
 		wxString url = serverPart;
@@ -1354,7 +1361,7 @@ void CSearchDialog::OnGetUrl(wxCommandEvent& event)
 		int index = m_results->m_indexMapping[sel];
 
 		auto const& entry = m_results->remoteFileData_[index];
-		urls += getUrl(server, entry.path, entry.name);
+		urls += getUrl(url, entry.path, entry.name);
 #ifdef __WXMSW__
 		urls += _T("\r\n");
 #else

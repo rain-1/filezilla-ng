@@ -94,13 +94,15 @@ class CBasicCommand final : public CCommandHelper<CBasicCommand<id>, id>
 class CConnectCommand final : public CCommandHelper<CConnectCommand, Command::connect>
 {
 public:
-	explicit CConnectCommand(CServer const& server, bool retry_conncting = true);
+	explicit CConnectCommand(CServer const& server, Credentials const& credentials, bool retry_conncting = true);
 
-	CServer const& GetServer() const;
-	bool RetryConnecting() const { return m_retry_connecting; }
+	CServer const& GetServer() const { return server_; }
+	Credentials const& GetCredentials() const { return credentials_; }
+	bool RetryConnecting() const { return retry_connecting_; }
 protected:
-	CServer const m_Server;
-	bool const m_retry_connecting;
+	CServer const server_;
+	Credentials const credentials_;
+	bool const retry_connecting_;
 };
 
 typedef CBasicCommand<Command::disconnect> CDisconnectCommand;

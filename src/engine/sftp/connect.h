@@ -14,9 +14,10 @@ enum connectStates
 class CSftpConnectOpData final : public COpData, public CSftpOpData
 {
 public:
-	CSftpConnectOpData(CSftpControlSocket & controlSocket)
+	CSftpConnectOpData(CSftpControlSocket & controlSocket, Credentials const& credentials)
 		: COpData(Command::connect)
 		, CSftpOpData(controlSocket)
+		, credentials_(credentials)
 		, keyfile_(keyfiles_.cend())
 	{}
 
@@ -26,6 +27,8 @@ public:
 	std::wstring lastChallenge;
 	CInteractiveLoginNotification::type lastChallengeType{ CInteractiveLoginNotification::interactive };
 	bool criticalFailure{};
+
+	Credentials credentials_;
 
 	std::vector<std::wstring> keyfiles_;
 	std::vector<std::wstring>::const_iterator keyfile_;

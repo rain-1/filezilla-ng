@@ -17,24 +17,25 @@ std::list<CLoginManager::t_passwordcache>::iterator CLoginManager::FindItem(CSer
 	);
 }
 
-bool CLoginManager::GetPassword(CServer &server, bool silent, std::wstring const& name, std::wstring const& challenge, bool canRemember)
+bool CLoginManager::GetPassword(ServerWithCredentials &server, bool silent, std::wstring const& name, std::wstring const& challenge, bool canRemember)
 {
-	wxASSERT(server.GetLogonType() != ANONYMOUS);
+	wxASSERT(server.credentials.logonType_ != LogonType::anonymous);
 
 	if (canRemember) {
-		auto it = FindItem(server, challenge);
+		auto it = FindItem(server.server, challenge);
 		if (it != m_passwordCache.end()) {
-			server.SetUser(server.GetUser(), it->password);
+			server.credentials.password_ = it->password;
 			return true;
 		}
 	}
-	if (silent)
+	if (silent) {
 		return false;
+	}
 
 	return DisplayDialog(server, name, challenge, canRemember);
 }
 
-bool CLoginManager::DisplayDialog(CServer &server, std::wstring const& name, std::wstring const& challenge, bool canRemember)
+bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring const& name, std::wstring const& challenge, bool canRemember)
 {
 	wxDialogEx pwdDlg;
 	if (!pwdDlg.Load(wxGetApp().GetTopWindow(), _T("ID_ENTERPASSWORD"))) {
@@ -45,8 +46,9 @@ bool CLoginManager::DisplayDialog(CServer &server, std::wstring const& name, std
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_NAMELABEL", wxStaticText), false, true);
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_NAME", wxStaticText), false, true);
 	}
-	else
+	else {
 		XRCCTRL(pwdDlg, "ID_NAME", wxStaticText)->SetLabel(name);
+	}
 	if (challenge.empty()) {
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_CHALLENGELABEL", wxStaticText), false, true);
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_CHALLENGE", wxTextCtrl), false, true);
@@ -64,12 +66,12 @@ bool CLoginManager::DisplayDialog(CServer &server, std::wstring const& name, std
 	}
 	XRCCTRL(pwdDlg, "ID_HOST", wxStaticText)->SetLabel(server.Format(ServerFormat::with_optional_port));
 
-	if (server.GetUser().empty()) {
+	if (server.server.GetUser().empty()) {
 		XRCCTRL(pwdDlg, "ID_OLD_USER_LABEL", wxStaticText)->Hide();
 		XRCCTRL(pwdDlg, "ID_OLD_USER", wxStaticText)->Hide();
 
 		XRCCTRL(pwdDlg, "ID_HEADER_PASS", wxStaticText)->Hide();
-		if (server.GetLogonType() == INTERACTIVE) {
+		if (server.credentials .logonType_ == LogonType::interactive) {
 			pwdDlg.SetTitle(_("Enter username"));
 			XRCCTRL(pwdDlg, "ID_PASSWORD_LABEL", wxStaticText)->Hide();
 			XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->Hide();
@@ -84,7 +86,7 @@ bool CLoginManager::DisplayDialog(CServer &server, std::wstring const& name, std
 		XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->SetFocus();
 	}
 	else {
-		XRCCTRL(pwdDlg, "ID_OLD_USER", wxStaticText)->SetLabel(server.GetUser());
+		XRCCTRL(pwdDlg, "ID_OLD_USER", wxStaticText)->SetLabel(server.server.GetUser());
 		XRCCTRL(pwdDlg, "ID_NEW_USER_LABEL", wxStaticText)->Hide();
 		XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->Hide();
 		XRCCTRL(pwdDlg, "ID_HEADER_USER", wxStaticText)->Hide();
@@ -101,7 +103,7 @@ bool CLoginManager::DisplayDialog(CServer &server, std::wstring const& name, std
 			return false;
 		}
 
-		if (server.GetUser().empty()) {
+		if (server.server.GetUser().empty()) {
 			user = XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->GetValue().ToStdWstring();
 			if (user.empty()) {
 				wxMessageBoxEx(_("No username given."), _("Invalid input"), wxICON_EXCLAMATION);
@@ -109,11 +111,12 @@ bool CLoginManager::DisplayDialog(CServer &server, std::wstring const& name, std
 			}
 		}
 		else {
-			user = server.GetUser();
+			user = server.server.GetUser();
 		}
 	}
-
-	server.SetUser(user, XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->GetValue().ToStdWstring());
+	
+	server.server.SetUser(user);
+	server.credentials.password_ = XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->GetValue().ToStdWstring();
 
 	if (canRemember) {
 		RememberPassword(server, challenge);
@@ -122,7 +125,7 @@ bool CLoginManager::DisplayDialog(CServer &server, std::wstring const& name, std
 	return true;
 }
 
-void CLoginManager::CachedPasswordFailed(const CServer& server, std::wstring const& challenge)
+void CLoginManager::CachedPasswordFailed(CServer const& server, std::wstring const& challenge)
 {
 	auto it = FindItem(server, challenge);
 	if (it != m_passwordCache.end()) {
@@ -130,22 +133,22 @@ void CLoginManager::CachedPasswordFailed(const CServer& server, std::wstring con
 	}
 }
 
-void CLoginManager::RememberPassword(CServer & server, std::wstring const& challenge)
+void CLoginManager::RememberPassword(ServerWithCredentials & server, std::wstring const& challenge)
 {
-	if (server.GetLogonType() == ANONYMOUS) {
+	if (server.credentials.logonType_ == LogonType::anonymous) {
 		return;
 	}
 
-	auto it = FindItem(server, challenge);
+	auto it = FindItem(server.server, challenge);
 	if (it != m_passwordCache.end()) {
-		it->password = server.GetPass();
+		it->password = server.credentials.password_;
 	}
 	else {
 		t_passwordcache entry;
-		entry.host = server.GetHost();
-		entry.port = server.GetPort();
-		entry.user = server.GetUser();
-		entry.password = server.GetPass();
+		entry.host = server.server.GetHost();
+		entry.port = server.server.GetPort();
+		entry.user = server.server.GetUser();
+		entry.password = server.credentials.password_;
 		entry.challenge = challenge;
 		m_passwordCache.push_back(entry);
 	}

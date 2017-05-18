@@ -5,23 +5,25 @@
 #include "Options.h"
 #include "xmlfunctions.h"
 
-const std::list<CServer> CRecentServerList::GetMostRecentServers(bool lockMutex /*=true*/)
+const std::deque<ServerWithCredentials> CRecentServerList::GetMostRecentServers(bool lockMutex)
 {
-	std::list<CServer> mostRecentServers;
+	std::deque<ServerWithCredentials> mostRecentServers;
 
 	CInterProcessMutex mutex(MUTEX_MOSTRECENTSERVERS, false);
-	if (lockMutex)
+	if (lockMutex) {
 		mutex.Lock();
+	}
 
 	CXmlFile xmlFile(wxGetApp().GetSettingsFile(_T("recentservers")));
 	auto element = xmlFile.Load();
-	if (!element || !(element = element.child("RecentServers")))
+	if (!element || !(element = element.child("RecentServers"))) {
 		return mostRecentServers;
+	}
 
 	bool modified = false;
 	auto xServer = element.child("Server");
 	while (xServer) {
-		CServer server;
+		ServerWithCredentials server;
 		if (!GetServer(xServer, server) || mostRecentServers.size() >= 10) {
 			auto xRemove = xServer;
 			xServer = xServer.next_sibling("Server");
@@ -29,13 +31,15 @@ const std::list<CServer> CRecentServerList::GetMostRecentServers(bool lockMutex 
 			modified = true;
 		}
 		else {
-			std::list<CServer>::const_iterator iter;
+			std::deque<ServerWithCredentials>::const_iterator iter;
 			for (iter = mostRecentServers.begin(); iter != mostRecentServers.end(); ++iter) {
-				if (*iter == server)
+				if (*iter == server) {
 					break;
+				}
 			}
-			if (iter == mostRecentServers.end())
+			if (iter == mostRecentServers.end()) {
 				mostRecentServers.push_back(server);
+			}
 			xServer = xServer.next_sibling("Server");
 		}
 	}
@@ -47,7 +51,7 @@ const std::list<CServer> CRecentServerList::GetMostRecentServers(bool lockMutex 
 	return mostRecentServers;
 }
 
-void CRecentServerList::SetMostRecentServer(const CServer& server)
+void CRecentServerList::SetMostRecentServer(ServerWithCredentials const& server)
 {
 	CInterProcessMutex mutex(MUTEX_MOSTRECENTSERVERS);
 
@@ -56,7 +60,7 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 
 	bool relocated = false;
 	for (auto iter = mostRecentServers.begin(); iter != mostRecentServers.end(); ++iter) {
-		if (iter->EqualsNoPass(server)) {
+		if (iter->server == server.server) {
 			mostRecentServers.erase(iter);
 			mostRecentServers.push_front(server);
 			relocated = true;
@@ -65,12 +69,14 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 	}
 	if (!relocated) {
 		mostRecentServers.push_front(server);
-		if (mostRecentServers.size() > 10)
+		if (mostRecentServers.size() > 10) {
 			mostRecentServers.pop_back();
+		}
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		return;
+	}
 
 	CXmlFile xmlFile(wxGetApp().GetSettingsFile(_T("recentservers")));
 	auto element = xmlFile.CreateEmpty();
@@ -82,9 +88,9 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 		servers = element.append_child("RecentServers");
 	}
 
-	for (std::list<CServer>::const_iterator iter = mostRecentServers.begin(); iter != mostRecentServers.end(); ++iter) {
-		auto server = servers.append_child("Server");
-		SetServer(server, *iter);
+	for (auto const& server : mostRecentServers) {
+		auto node = servers.append_child("Server");
+		SetServer(node, server.server, server.credentials);
 	}
 
 	xmlFile.Save(true);

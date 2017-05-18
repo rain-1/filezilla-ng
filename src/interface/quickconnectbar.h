@@ -14,7 +14,7 @@ public:
 
 protected:
 	// Only valid while menu is being displayed
-	std::list<CServer> m_recentServers;
+	std::deque<ServerWithCredentials> m_recentServers;
 
 	DECLARE_EVENT_TABLE()
 	void OnQuickconnect(wxCommandEvent& event);

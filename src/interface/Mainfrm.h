@@ -75,7 +75,7 @@ private:
 	bool CreateMenus();
 	bool CreateQuickconnectBar();
 	bool CreateMainToolBar();
-	void OpenSiteManager(const CServer* pServer = 0);
+	void OpenSiteManager(ServerWithCredentials const* pServer = 0);
 
 	void FocusNextEnabled(std::list<wxWindow*>& windowOrder, std::list<wxWindow*>::iterator iter, bool skipFirst, bool forward);
 

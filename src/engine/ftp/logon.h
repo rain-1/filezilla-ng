@@ -44,7 +44,7 @@ struct t_loginCommand
 class CFtpLogonOpData final : public COpData, public CFtpOpData
 {
 public:
-	CFtpLogonOpData(CFtpControlSocket& controlSocket);
+	CFtpLogonOpData(CFtpControlSocket& controlSocket, Credentials const& credentials);
 
 	virtual int Send() override;
 	virtual int ParseResponse() override;
@@ -54,10 +54,11 @@ public:
 	std::wstring challenge; // Used for interactive logons
 	bool waitChallenge{};
 	bool waitForAsyncRequest{};
-	bool gotPassword{};
 	bool gotFirstWelcomeLine{};
+	Credentials credentials_;
 
 private:
+
 	bool PrepareLoginSequence();
 
 	std::wstring host_;

@@ -25,7 +25,7 @@ public:
 class CRemoteDataObject : public wxDataObjectSimple
 {
 public:
-	CRemoteDataObject(const CServer& server, const CServerPath& path);
+	CRemoteDataObject(ServerWithCredentials const& server, const CServerPath& path);
 	CRemoteDataObject();
 
 	virtual size_t GetDataSize() const;
@@ -38,7 +38,7 @@ public:
 
 	bool DidSendData() const { return m_didSendData; }
 
-	const CServer& GetServer() const { return m_server; }
+	ServerWithCredentials const& GetServer() const { return server_; }
 	const CServerPath& GetServerPath() const { return m_path; }
 	int GetProcessId() const { return m_processId; }
 
@@ -55,7 +55,7 @@ public:
 	void AddFile(const wxString& name, bool dir, int64_t size, bool link);
 
 protected:
-	CServer m_server;
+	ServerWithCredentials server_;
 	CServerPath m_path;
 
 	mutable CXmlFile m_xmlFile;

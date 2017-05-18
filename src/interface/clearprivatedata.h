@@ -1,5 +1,5 @@
-#ifndef __CLEARPRIVATEDATA_H__
-#define __CLEARPRIVATEDATA_H__
+#ifndef FILEZILLA_INTERFACE_CLEARPRIVATEDATA_HEADER
+#define FILEZILLA_INTERFACE_CLEARPRIVATEDATA_HEADER
 
 #include "dialogex.h"
 
@@ -17,7 +17,7 @@ public:
 
 protected:
 	CClearPrivateDataDialog(CMainFrame* pMainFrame);
-	~CClearPrivateDataDialog() {}
+	virtual ~CClearPrivateDataDialog() = default;
 
 	bool ClearReconnect();
 
@@ -31,5 +31,4 @@ protected:
 	void OnTimer(wxTimerEvent& event);
 };
 
-#endif //__CLEARPRIVATEDATA_H__
-
+#endif

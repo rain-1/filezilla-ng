@@ -91,38 +91,41 @@ public:
 		}
 
 		wxTreeItemId hit = GetHit(wxPoint(x, y));
-		if (!hit)
+		if (!hit) {
 			return wxDragNone;
+		}
 
 		const CLocalPath path(GetDirFromItem(hit).ToStdWstring());
-		if (path.empty() || !path.IsWriteable())
+		if (path.empty() || !path.IsWriteable()) {
 			return wxDragNone;
+		}
 
-		if (!GetData())
+		if (!GetData()) {
 			return wxDragError;
+		}
 
 		CDragDropManager* pDragDropManager = CDragDropManager::Get();
-		if (pDragDropManager)
+		if (pDragDropManager) {
 			pDragDropManager->pDropTarget = m_pLocalTreeView;
+		}
 
-		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat())
+		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat()) {
 			m_pLocalTreeView->m_state.HandleDroppedFiles(m_pFileDataObject, path, def == wxDragCopy);
-		else
-		{
-			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
-			{
+		}
+		else {
+			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId()) {
 				wxMessageBoxEx(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
 				return wxDragNone;
 			}
 
-			if (!m_pLocalTreeView->m_state.GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pLocalTreeView->m_state.GetServer()))
-			{
+			if (!m_pLocalTreeView->m_state.GetServer() || m_pRemoteDataObject->GetServer().server != m_pLocalTreeView->m_state.GetServer().server) {
 				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
 
-			if (!m_pLocalTreeView->m_state.DownloadDroppedFiles(m_pRemoteDataObject, path))
+			if (!m_pLocalTreeView->m_state.DownloadDroppedFiles(m_pRemoteDataObject, path)) {
 				return wxDragNone;
+			}
 		}
 
 		return def;
@@ -1087,7 +1090,11 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 		return;
 	}
 
-	const CServer server = *m_state.GetServer();
+	ServerWithCredentials const& server = m_state.GetServer();
+	if (!server) {
+		return;
+	}
+
 	CServerPath remotePath = m_state.GetRemotePath();
 	if (remotePath.empty()) {
 		return;

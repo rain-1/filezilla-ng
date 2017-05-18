@@ -74,7 +74,7 @@ struct t_EngineData final
 	} state;
 
 	CFileItem* pItem;
-	CServer lastServer;
+	ServerWithCredentials lastServer;
 	CStatusLineCtrl* pStatusLineCtrl;
 	wxTimer* m_idleDisconnectTimer;
 };
@@ -118,12 +118,12 @@ public:
 	bool QueueFile(const bool queueOnly, const bool download,
 		std::wstring const& localFile, std::wstring const& remoteFile,
 		const CLocalPath& localPath, const CServerPath& remotePath,
-		const CServer& server, int64_t size, CEditHandler::fileType edit = CEditHandler::none,
+		ServerWithCredentials const& server, int64_t size, CEditHandler::fileType edit = CEditHandler::none,
 		QueuePriority priority = QueuePriority::normal);
 
 	void QueueFile_Finish(const bool start); // Need to be called after QueueFile
 	bool QueueFiles(const bool queueOnly, CLocalPath const& localPath, const CRemoteDataObject& dataObject);
-	bool QueueFiles(const bool queueOnly, CServer const& server, CLocalRecursiveOperation::listing const& listing);
+	bool QueueFiles(const bool queueOnly, ServerWithCredentials const& server, CLocalRecursiveOperation::listing const& listing);
 
 	bool empty() const;
 	int IsActive() const { return m_activeMode; }
@@ -228,7 +228,7 @@ protected:
 
 	bool IsOtherEngineConnected(t_EngineData* pEngineData);
 
-	t_EngineData* GetIdleEngine(const CServer* pServer = 0, bool allowTransient = false);
+	t_EngineData* GetIdleEngine(ServerWithCredentials const& server = ServerWithCredentials(), bool allowTransient = false);
 	t_EngineData* GetEngineData(const CFileZillaEngine* pEngine);
 
 	std::vector<t_EngineData*> m_engineData;

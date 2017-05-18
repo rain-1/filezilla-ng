@@ -534,8 +534,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				ResetOperation(FZ_REPLY_CANCELED);
 				return false;
 			}
-			currentServer_.SetUser(currentServer_.GetUser(), pInteractiveLoginNotification->server.GetPass());
-			data.gotPassword = true;
+			data.credentials_.password_ = pInteractiveLoginNotification->credentials.password_;
 			SendNextCommand();
 		}
 		break;
@@ -758,7 +757,7 @@ void CFtpControlSocket::Transfer(std::wstring const& cmd, CFtpTransferOpData* ol
 	Push(std::move(pData));
 }
 
-void CFtpControlSocket::Connect(CServer const& server)
+void CFtpControlSocket::Connect(CServer const& server, Credentials const& credentials)
 {
 	if (!operations_.empty()) {
 		LogMessage(MessageType::Debug_Warning, L"CFtpControlSocket::Connect(): deleting stale operations");
@@ -767,7 +766,7 @@ void CFtpControlSocket::Connect(CServer const& server)
 
 	currentServer_ = server;
 
-	Push(std::make_unique<CFtpLogonOpData>(*this));
+	Push(std::make_unique<CFtpLogonOpData>(*this, credentials));
 }
 
 void CFtpControlSocket::OnTimer(fz::timer_id id)

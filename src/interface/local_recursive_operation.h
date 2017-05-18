@@ -74,7 +74,7 @@ protected:
 
 	std::deque<listing> m_listedDirectories;
 
-	CServer server_;
+	ServerWithCredentials server_;
 
 	void OnListedDirectory();
 

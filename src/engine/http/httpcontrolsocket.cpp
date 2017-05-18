@@ -208,7 +208,7 @@ int CHttpControlSocket::Disconnect()
 	return FZ_REPLY_OK;
 }
 
-void CHttpControlSocket::Connect(CServer const& server)
+void CHttpControlSocket::Connect(CServer const& server, Credentials const&)
 {
 	currentServer_ = server;
 	Push(std::make_unique<CHttpConnectOpData>(*this));

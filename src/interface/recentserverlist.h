@@ -1,14 +1,16 @@
-#ifndef __RECENTSERVERLIST_H__
-#define __RECENTSERVERLIST_H__
+#ifndef FILEZILLA_INTERFACE_RECENTSERVERLIST_HEADER
+#define FILEZILLA_INTERFACE_RECENTSERVERLIST_HEADER
 
 #include "xmlfunctions.h"
+
+#include <deque>
 
 class CRecentServerList
 {
 public:
-	static void SetMostRecentServer(const CServer& server);
-	static const std::list<CServer> GetMostRecentServers(bool lockMutex = true);
+	static void SetMostRecentServer(ServerWithCredentials const& server);
+	static const std::deque<ServerWithCredentials> GetMostRecentServers(bool lockMutex = true);
 	static void Clear();
 };
 
-#endif //__RECENTSERVERLIST_H__
+#endif

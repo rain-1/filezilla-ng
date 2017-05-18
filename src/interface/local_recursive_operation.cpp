@@ -48,16 +48,16 @@ bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, Act
 		return false;
 	}
 
-	auto const server = m_state.GetServer();
+	ServerWithCredentials const& server = m_state.GetServer();
 	if (server) {
-		server_ = *server;
+		server_ = server;
 	}
 	else {
 		if (mode != OperationMode::recursive_list) {
 			return false;
 		}
 
-		server_ = CServer();
+		server_ = ServerWithCredentials();
 	}
 
 	{
