@@ -349,7 +349,7 @@ std::wstring CServer::Format(ServerFormat formatType, Credentials const& credent
 		}
 		if (!user.empty()) {
 			if (formatType == ServerFormat::url_with_password) {
-				auto pass = credentials.password_;
+				auto pass = credentials.GetPass();
 				if (!pass.empty()) {
 					if (formatType == ServerFormat::url || formatType == ServerFormat::url_with_password) {
 						pass = fz::percent_encode_w(pass);
@@ -677,7 +677,7 @@ bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::
 		// Remove leading and trailing whitespace
 		fz::trim(user);
 
-		if (user.empty() && credentials.logonType_ == LogonType::ask && credentials.logonType_ != LogonType::interactive) {
+		if (user.empty() && credentials.logonType_ != LogonType::ask && credentials.logonType_ != LogonType::interactive) {
 			user = L"anonymous";
 			pass = L"anonymous@example.com";
 		}
@@ -743,15 +743,14 @@ bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::
 
 	server.SetHost(host, port);
 
-	server.SetUser(user);
-	credentials.password_ = pass;
 	credentials.account_.clear();
+
 	if (credentials.logonType_ != LogonType::ask && credentials.logonType_ != LogonType::interactive) {
-		if (server.GetUser().empty()) {
+		if (user.empty()) {
 			credentials.logonType_ = LogonType::anonymous;
 		}
-		else if (server.GetUser() == L"anonymous") {
-			if (credentials.password_.empty() || credentials.password_ == L"anonymous@example.com") {
+		else if (user == L"anonymous") {
+			if (pass.empty() || pass == L"anonymous@example.com") {
 				credentials.logonType_ = LogonType::anonymous;
 			}
 			else {
@@ -762,10 +761,50 @@ bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::
 			credentials.logonType_ = LogonType::normal;
 		}
 	}
+	server.SetUser(user);
+	credentials.SetPass(pass);
 
 	if (server.GetProtocol() == UNKNOWN) {
 		server.SetProtocol(CServer::GetProtocolFromPort(port));
 	}
 
 	return true;
+}
+
+void ServerWithCredentials::SetLogonType(LogonType logonType)
+{
+	credentials.logonType_ = logonType;
+	if (logonType == LogonType::anonymous) {
+		server.SetUser(L"anonymous");
+	}
+	if (server.GetUser().empty() && logonType != LogonType::ask && logonType != LogonType::interactive) {
+		server.SetUser(L"anonymous");
+	}
+}
+
+void ServerWithCredentials::SetUser(std::wstring const& user)
+{
+	if (credentials.logonType_ == LogonType::anonymous) {
+		server.SetUser(L"anonymous");
+	}
+	else {
+		server.SetUser(user);
+	}
+}
+
+void Credentials::SetPass(std::wstring const& password)
+{
+	if (logonType_ != LogonType::anonymous) {
+		password_ = password;
+	}
+}
+
+std::wstring Credentials::GetPass() const
+{
+	if (logonType_ == LogonType::anonymous) {
+		return L"anonymous@example.com";
+	}
+	else {
+		return password_;
+	}
 }

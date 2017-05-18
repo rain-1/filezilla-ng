@@ -181,10 +181,15 @@ public:
 			keyFile_ == rhs.keyFile_;
 	}
 
+	void SetPass(std::wstring const& password);
+	std::wstring GetPass() const;
+
 	LogonType logonType_{LogonType::anonymous};
-	std::wstring password_;
 	std::wstring account_;
 	std::wstring keyFile_;
+
+private:
+	std::wstring password_;
 };
 
 class ServerWithCredentials final
@@ -205,6 +210,10 @@ public:
 	std::wstring Format(ServerFormat formatType) const {
 		return server.Format(formatType, credentials);
 	}
+	
+	void SetLogonType(LogonType logonType);
+
+	void SetUser(std::wstring const& user);
 
 	explicit operator bool() const {
 		return static_cast<bool>(server);

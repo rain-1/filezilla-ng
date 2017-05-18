@@ -195,7 +195,7 @@ void CManualTransfer::DisplayServer()
 
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->ChangeValue(server_.server.GetUser());
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->ChangeValue(server_.credentials.account_);
-		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(server_.credentials.password_);
+		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(server_.credentials.GetPass());
 	}
 	else {
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(_T(""));
@@ -395,10 +395,9 @@ bool CManualTransfer::UpdateServer()
 		server_.server.SetProtocol(FTP);
 	}
 
-	server_.credentials.logonType_ = GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection).ToStdWstring());
-
-	server_.server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue).ToStdWstring());
-	server_.credentials.password_ = xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring();
+	server_.SetLogonType(GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection).ToStdWstring()));
+	server_.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue).ToStdWstring());
+	server_.credentials.SetPass(xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring());
 	server_.credentials.account_ = xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue).ToStdWstring();
 
 	return true;
@@ -447,7 +446,7 @@ bool CManualTransfer::VerifyServer()
 	ServerWithCredentials server;
 
 	// Set selected type
-	server.credentials.logonType_ = logon_type;
+	server.SetLogonType(logon_type);
 
 	if (protocol != UNKNOWN) {
 		server.server.SetProtocol(protocol);

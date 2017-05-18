@@ -99,6 +99,8 @@ public:
 	CServer const& GetServer() const { return server_; }
 	Credentials const& GetCredentials() const { return credentials_; }
 	bool RetryConnecting() const { return retry_connecting_; }
+
+	virtual bool valid() const override;
 protected:
 	CServer const server_;
 	Credentials const credentials_;

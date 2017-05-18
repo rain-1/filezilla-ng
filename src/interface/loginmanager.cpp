@@ -24,7 +24,7 @@ bool CLoginManager::GetPassword(ServerWithCredentials &server, bool silent, std:
 	if (canRemember) {
 		auto it = FindItem(server.server, challenge);
 		if (it != m_passwordCache.end()) {
-			server.credentials.password_ = it->password;
+			server.credentials.SetPass(it->password);
 			return true;
 		}
 	}
@@ -115,8 +115,8 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 		}
 	}
 	
-	server.server.SetUser(user);
-	server.credentials.password_ = XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->GetValue().ToStdWstring();
+	server.SetUser(user);
+	server.credentials.SetPass(XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->GetValue().ToStdWstring());
 
 	if (canRemember) {
 		RememberPassword(server, challenge);
@@ -141,14 +141,14 @@ void CLoginManager::RememberPassword(ServerWithCredentials & server, std::wstrin
 
 	auto it = FindItem(server.server, challenge);
 	if (it != m_passwordCache.end()) {
-		it->password = server.credentials.password_;
+		it->password = server.credentials.GetPass();
 	}
 	else {
 		t_passwordcache entry;
 		entry.host = server.server.GetHost();
 		entry.port = server.server.GetPort();
 		entry.user = server.server.GetUser();
-		entry.password = server.credentials.password_;
+		entry.password = server.credentials.GetPass();
 		entry.challenge = challenge;
 		m_passwordCache.push_back(entry);
 	}

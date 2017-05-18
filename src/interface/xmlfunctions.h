@@ -111,9 +111,6 @@ inline void SetServer(pugi::xml_node node, ServerWithCredentials const& server) 
 	SetServer(node, server.server, server.credentials);
 }
 
-bool GetServer(pugi::xml_node node, CServer& server, Credentials& credentials);
-inline bool GetServer(pugi::xml_node node, ServerWithCredentials& server) {
-	return GetServer(node, server.server, server.credentials);
-}
+bool GetServer(pugi::xml_node node, ServerWithCredentials& server);
 
 #endif

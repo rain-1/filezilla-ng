@@ -611,7 +611,7 @@ bool CQueueStorage::Impl::SaveServer(CServerItem const& item)
 				BindNull(insertServerQuery_, server_table_column_names::account);
 			}
 			else {
-				Bind(insertServerQuery_, server_table_column_names::password, server.credentials.password_);
+				Bind(insertServerQuery_, server_table_column_names::password, server.credentials.GetPass());
 
 				if (server.credentials.account_.empty()) {
 					BindNull(insertServerQuery_, server_table_column_names::account);
@@ -905,14 +905,14 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(ServerWithCredentials& server)
 		return INVALID_DATA;
 	}
 
-	server.credentials.logonType_ = static_cast<LogonType>(logonType);
+	server.SetLogonType(static_cast<LogonType>(logonType));
 
 	if (server.credentials.logonType_ != LogonType::anonymous) {
 		std::wstring user = GetColumnText(selectServersQuery_, server_table_column_names::user);
 		std::wstring pass = GetColumnText(selectServersQuery_, server_table_column_names::password);
 
-		server.server.SetUser(user);
-		server.credentials.password_ = pass;
+		server.SetUser(user);
+		server.credentials.SetPass(pass);
 
 		server.credentials.account_ = GetColumnText(selectServersQuery_, server_table_column_names::account);
 		if (server.credentials.account_.empty() && server.credentials.logonType_ == LogonType::account) {

@@ -2410,10 +2410,10 @@ void CMainFrame::ProcessCommandLine()
 
 		wxString logontype = pCommandLine->GetOption(CCommandLine::logontype);
 		if (logontype == _T("ask")) {
-			server.credentials.logonType_ = LogonType::ask;
+			server.SetLogonType(LogonType::ask);
 		}
 		else if (logontype == _T("interactive")) {
-			server.credentials.logonType_ = LogonType::interactive;
+			server.SetLogonType(LogonType::interactive);
 		}
 
 		CServerPath path;
@@ -2424,7 +2424,7 @@ void CMainFrame::ProcessCommandLine()
 		}
 
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) && server.credentials.logonType_ == LogonType::normal) {
-			server.credentials.logonType_ = LogonType::ask;
+			server.SetLogonType(LogonType::ask);
 			CLoginManager::Get().RememberPassword(server);
 		}
 		else if (server.credentials.logonType_ == LogonType::ask ||

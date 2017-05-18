@@ -534,7 +534,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				ResetOperation(FZ_REPLY_CANCELED);
 				return false;
 			}
-			data.credentials_.password_ = pInteractiveLoginNotification->credentials.password_;
+			data.credentials_.SetPass(pInteractiveLoginNotification->credentials.GetPass());
 			SendNextCommand();
 		}
 		break;
