@@ -133,6 +133,7 @@ int CFtpLogonOpData::Send()
 				if (!challenge.empty()) {
 					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(CInteractiveLoginNotification::interactive, challenge, false);
 					pNotification->server = currentServer_;
+					pNotification->credentials = credentials_;
 					challenge.clear();
 
 					controlSocket_.SendAsyncRequest(pNotification);
@@ -141,11 +142,11 @@ int CFtpLogonOpData::Send()
 				}
 
 				if (cmd.command.empty()) {
-					return controlSocket_.SendCommand(L"PASS " + credentials_.password_, true);
+					return controlSocket_.SendCommand(L"PASS " + credentials_.GetPass(), true);
 				}
 				else {
 					std::wstring c = cmd.command;
-					std::wstring pass = credentials_.password_;
+					std::wstring pass = credentials_.GetPass();
 					fz::replace_substrings(pass, L"%", L"%%");
 					fz::replace_substrings(c, L"%p", pass);
 					fz::replace_substrings(c, L"%%", L"%");
@@ -277,7 +278,7 @@ int CFtpLogonOpData::ParseResponse()
 				if (!user.empty() && (user.front() == ' ' || user.back() == ' ')) {
 					LogMessage(MessageType::Status, _("Check your login credentials. The entered username starts or ends with a space character."));
 				}
-				auto const pw = credentials_.password_;
+				auto const pw = credentials_.GetPass();
 				if (!pw.empty() && (pw.front() == ' ' || pw.back() == ' ')) {
 					LogMessage(MessageType::Status, _("Check your login credentials. The entered password starts or ends with a space character."));
 				}
@@ -290,7 +291,7 @@ int CFtpLogonOpData::ParseResponse()
 				if (!fz::str_is_ascii(currentServer_.GetUser())) {
 					asciiOnly = false;
 				}
-				if (!fz::str_is_ascii(credentials_.password_)) {
+				if (!fz::str_is_ascii(credentials_.GetPass())) {
 					asciiOnly = false;
 				}
 				if (!fz::str_is_ascii(credentials_.account_)) {

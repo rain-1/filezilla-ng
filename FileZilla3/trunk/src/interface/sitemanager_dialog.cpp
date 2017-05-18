@@ -651,8 +651,8 @@ public:
 			data->server_.credentials.logonType_ == LogonType::normal)
 		{
 			// Clear saved password
-			data->server_.credentials.logonType_ = LogonType::ask;
-			data->server_.credentials.password_.clear();
+			data->server_.SetLogonType(LogonType::ask);
+			data->server_.credentials.SetPass(std::wstring());
 		}
 
 		const wxString name(data->server_.server.GetName());
@@ -1027,7 +1027,7 @@ bool CSiteManagerDialog::Verify()
 
 		// Set selected type
 		ServerWithCredentials server;
-		server.credentials.logonType_ = logon_type;
+		server.SetLogonType(logon_type);
 		server.server.SetProtocol(protocol);
 
 		std::wstring port = xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue).ToStdWstring();
@@ -1431,10 +1431,10 @@ bool CSiteManagerDialog::UpdateServer(Site &server, const wxString &name)
 	server.server_.server.SetHost(host, port);
 
 	auto logon_type = GetLogonType();
-	server.server_.credentials.logonType_ = logon_type;
+	server.server_.SetLogonType(logon_type);
 
-	server.server_.server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue).ToStdWstring());
-	server.server_.credentials.password_ = xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring();
+	server.server_.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue).ToStdWstring());
+	server.server_.credentials.SetPass(xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring());
 	server.server_.credentials.account_ = xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue).ToStdWstring();
 
 	server.server_.credentials.keyFile_ = xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue).ToStdWstring();
@@ -1731,7 +1731,7 @@ void CSiteManagerDialog::SetCtrlState()
 
 		xrc_call(*this, "ID_USER", &wxTextCtrl::ChangeValue, data->m_site->server_.server.GetUser());
 		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.account_);
-		xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.password_);
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.GetPass());
 		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.keyFile_);
 		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, data->m_site->m_comments);
 		xrc_call(*this, "ID_COMMENTS", &wxWindow::Enable, !predefined);

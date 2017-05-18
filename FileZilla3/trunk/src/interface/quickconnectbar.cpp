@@ -154,7 +154,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 
 	m_pUser->SetValue(server.server.GetUser());
 	if (server.credentials.logonType_ != LogonType::anonymous) {
-		m_pPass->SetValue(server.credentials.password_);
+		m_pPass->SetValue(server.credentials.GetPass());
 	}
 	else {
 		m_pPass->ChangeValue(wxString());
@@ -175,7 +175,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	}
 
 	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) && server.credentials.logonType_ == LogonType::normal) {
-		server.credentials.logonType_ = LogonType::ask;
+		server.SetLogonType(LogonType::ask);
 		CLoginManager::Get().RememberPassword(server);
 	}
 	Site site;

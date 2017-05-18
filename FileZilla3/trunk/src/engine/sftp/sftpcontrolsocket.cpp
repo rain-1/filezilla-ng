@@ -210,6 +210,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 				}
 				CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(t, challenge, data.lastChallenge == challengeIdentifier);
 				pNotification->server = currentServer_;
+				pNotification->credentials = data.credentials_;
 
 				SendAsyncRequest(pNotification);
 			}
@@ -226,7 +227,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 					return;
 				}
 
-				std::wstring const pass = data.credentials_.password_;
+				std::wstring const pass = data.credentials_.GetPass();
 				std::wstring show = L"Pass: ";
 				show.append(pass.size(), '*');
 				SendCommand(pass, show);
@@ -414,8 +415,8 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 				DoClose(FZ_REPLY_CANCELED);
 				return false;
 			}
-			std::wstring const& pass = pInteractiveLoginNotification->credentials.password_;
-			data.credentials_.password_ = pass;
+			std::wstring const& pass = pInteractiveLoginNotification->credentials.GetPass();
+			data.credentials_.SetPass(pass);
 			std::wstring show = L"Pass: ";
 			show.append(pass.size(), '*');
 			SendCommand(pass, show);

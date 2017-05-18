@@ -272,8 +272,8 @@ bool CRemoteDataObject::SetData(size_t len, const void* buf)
 		return false;
 	}
 
-	auto server = element.child("Server");
-	if (!server || !::GetServer(server, server_.server, server_.credentials)) {
+	auto serverElement = element.child("Server");
+	if (!serverElement || !::GetServer(serverElement, server_)) {
 		return false;
 	}
 
