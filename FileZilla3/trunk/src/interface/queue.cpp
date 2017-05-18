@@ -385,9 +385,9 @@ void CFolderItem::SetActive(const bool active)
 	}
 }
 
-CServerItem::CServerItem(const CServer& server)
+CServerItem::CServerItem(ServerWithCredentials const& server)
 	: m_activeCount(0)
-	, m_server(server)
+	, server_(server)
 {
 }
 
@@ -395,14 +395,14 @@ CServerItem::~CServerItem()
 {
 }
 
-const CServer& CServerItem::GetServer() const
+ServerWithCredentials const& CServerItem::GetServer() const
 {
-	return m_server;
+	return server_;
 }
 
 wxString CServerItem::GetName() const
 {
-	return m_server.Format(ServerFormat::with_user_and_optional_port);
+	return server_.Format(ServerFormat::with_user_and_optional_port);
 }
 
 void CServerItem::AddChild(CQueueItem* pItem)
@@ -626,10 +626,11 @@ void CServerItem::QueueImmediateFile(CFileItem* pItem)
 void CServerItem::SaveItem(pugi::xml_node& element) const
 {
 	auto server = element.append_child("Server");
-	SetServer(server, m_server);
+	SetServer(server, server_.server, server_.credentials);
 
-	for (auto iter = m_children.cbegin() + m_removed_at_front; iter != m_children.cend(); ++iter)
+	for (auto iter = m_children.cbegin() + m_removed_at_front; iter != m_children.cend(); ++iter) {
 		(*iter)->SaveItem(server);
+	}
 }
 
 int64_t CServerItem::GetTotalSize(int& filesWithUnknownSize, int& queuedFiles) const
@@ -640,10 +641,12 @@ int64_t CServerItem::GetTotalSize(int& filesWithUnknownSize, int& queuedFiles) c
 			const std::deque<CFileItem*>& fileList = m_fileList[j][i];
 			for (auto const& item : fileList) {
 				int64_t size = item->GetSize();
-				if (size >= 0)
+				if (size >= 0) {
 					totalSize += size;
-				else
+				}
+				else {
 					filesWithUnknownSize++;
+				}
 			}
 		}
 	}
@@ -1176,17 +1179,17 @@ void CQueueViewBase::CreateColumns(std::list<ColumnId> const& extraColumns)
 	LoadColumnSettings(OPTION_QUEUE_COLUMN_WIDTHS, -1, -1);
 }
 
-CServerItem* CQueueViewBase::GetServerItem(const CServer& server)
+CServerItem* CQueueViewBase::GetServerItem(ServerWithCredentials const& server)
 {
-	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-	{
-		if ((*iter)->GetServer() == server)
+	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
+		if ((*iter)->GetServer() == server) {
 			return *iter;
+		}
 	}
 	return NULL;
 }
 
-CServerItem* CQueueViewBase::CreateServerItem(const CServer& server)
+CServerItem* CQueueViewBase::CreateServerItem(ServerWithCredentials const& server)
 {
 	CServerItem* pItem = GetServerItem(server);
 

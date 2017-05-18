@@ -1,5 +1,5 @@
-#ifndef __EDITHANDLER_H__
-#define __EDITHANDLER_H__
+#ifndef FILEZILLA_INTERFACE_EDITHANDLER_HEADER
+#define FILEZILLA_INTERFACE_EDITHANDLER_HEADER
 
 #include "dialogex.h"
 
@@ -46,16 +46,16 @@ public:
 	// If files are locked, they won't be removed though
 	void Release();
 
-	fileState GetFileState(const wxString& fileName) const; // Local files
-	fileState GetFileState(const wxString& fileName, const CServerPath& remotePath, const CServer& server) const; // Remote files
+	fileState GetFileState(wxString const& fileName) const; // Local files
+	fileState GetFileState(wxString const& fileName, CServerPath const& remotePath, ServerWithCredentials const& server) const; // Remote files
 
 	// Returns the number of files in given state
 	// pServer may be set only if state isn't unknown
-	int GetFileCount(fileType type, fileState state, const CServer* pServer = 0) const;
+	int GetFileCount(fileType type, fileState state, ServerWithCredentials const& server = ServerWithCredentials()) const;
 
 	// Starts editing the given file, queues it if needed. For local files, fileName must include local path.
 	// Can be used to edit files already being added, user is prompted for action.
-	bool Edit(CEditHandler::fileType type, std::wstring const& fileName, CServerPath const& path, CServer const& server, int64_t size, wxWindow* parent);
+	bool Edit(CEditHandler::fileType type, std::wstring const& fileName, CServerPath const& path, ServerWithCredentials const& server, int64_t size, wxWindow* parent);
 
 	class FileData final {
 	public:
@@ -66,20 +66,20 @@ public:
 		std::wstring name;
 		int64_t size{};
 	};
-	bool Edit(CEditHandler::fileType type, std::vector<FileData> const& data, CServerPath const& path, CServer const& server, wxWindow* parent);
+	bool Edit(CEditHandler::fileType type, std::vector<FileData> const& data, CServerPath const& path, ServerWithCredentials const& server, wxWindow* parent);
 
 	// Adds the file that doesn't exist yet. (Has to be in unknown state)
 	// The initial state will be download
-	bool AddFile(fileType type, std::wstring& fileName, CServerPath const& remotePath, CServer const& server);
+	bool AddFile(fileType type, std::wstring& fileName, CServerPath const& remotePath, ServerWithCredentials const& server);
 
 	// Tries to unedit and remove file
-	bool Remove(const wxString& fileName); // Local files
-	bool Remove(const wxString& fileName, const CServerPath& remotePath, const CServer& server); // Remote files
+	bool Remove(wxString const& fileName); // Local files
+	bool Remove(wxString const& fileName, CServerPath const& remotePath, ServerWithCredentials const& server); // Remote files
 	bool RemoveAll(bool force);
-	bool RemoveAll(fileState state, const CServer* pServer = 0);
+	bool RemoveAll(fileState state, ServerWithCredentials const& server = ServerWithCredentials());
 
-	void FinishTransfer(bool successful, const wxString& fileName);
-	void FinishTransfer(bool successful, const wxString& fileName, const CServerPath& remotePath, const CServer& server);
+	void FinishTransfer(bool successful, wxString const& fileName);
+	void FinishTransfer(bool successful, wxString const& fileName, CServerPath const& remotePath, ServerWithCredentials const& server);
 
 	void CheckForModifications(bool emitEvent = false);
 
@@ -93,9 +93,9 @@ public:
 	 * The dangerous argument will be set to true on some filetypes,
 	 * e.g. executables.
 	 */
-	wxString CanOpen(fileType type, const wxString& fileName, bool &dangerous, bool& program_exists);
-	bool StartEditing(const wxString& file);
-	bool StartEditing(const wxString& file, const CServerPath& remotePath, const CServer& server);
+	wxString CanOpen(fileType type, wxString const& fileName, bool &dangerous, bool& program_exists);
+	bool StartEditing(wxString const& file);
+	bool StartEditing(wxString const& file, CServerPath const& remotePath, ServerWithCredentials const& server);
 
 	struct t_fileData
 	{
@@ -104,23 +104,22 @@ public:
 		fileState state;
 		fz::datetime modificationTime;
 		CServerPath remotePath;
-		CServer server;
+		ServerWithCredentials server;
 	};
 
 	const std::list<t_fileData>& GetFiles(fileType type) const { wxASSERT(type != none); return m_fileDataList[(type == local) ? 0 : 1]; }
 
-	bool UploadFile(const wxString& file, bool unedit);
-	bool UploadFile(const wxString& file, const CServerPath& remotePath, const CServer& server, bool unedit);
+	bool UploadFile(wxString const& file, bool unedit);
+	bool UploadFile(wxString const& file, CServerPath const& remotePath, ServerWithCredentials const& server, bool unedit);
 
 	// Returns command to open the file. If association is set but
 	// program does not exist, program_exists is set to false.
-	wxString GetOpenCommand(const wxString& file, bool& program_exists);
+	wxString GetOpenCommand(wxString const& file, bool& program_exists);
 
 protected:
-	bool DoEdit(CEditHandler::fileType type, FileData const& file, CServerPath const& path, CServer const& server, wxWindow* parent, size_t fileCount, int & already_editing_action);
+	bool DoEdit(CEditHandler::fileType type, FileData const& file, CServerPath const& path, ServerWithCredentials const& server, wxWindow* parent, size_t fileCount, int & already_editing_action);
 
 	CEditHandler();
-	virtual ~CEditHandler() {}
 
 	static CEditHandler* m_pEditHandler;
 
@@ -128,7 +127,7 @@ protected:
 
 	bool StartEditing(fileType type, t_fileData &data);
 
-	wxString GetCustomOpenCommand(const wxString& file, bool& program_exists);
+	wxString GetCustomOpenCommand(wxString const& file, bool& program_exists);
 
 	void SetTimerState();
 
@@ -136,10 +135,10 @@ protected:
 
 	std::list<t_fileData> m_fileDataList[2];
 
-	std::list<t_fileData>::iterator GetFile(const wxString& fileName);
-	std::list<t_fileData>::const_iterator GetFile(const wxString& fileName) const;
-	std::list<t_fileData>::iterator GetFile(const wxString& fileName, const CServerPath& remotePath, const CServer& server);
-	std::list<t_fileData>::const_iterator GetFile(const wxString& fileName, const CServerPath& remotePath, const CServer& server) const;
+	std::list<t_fileData>::iterator GetFile(wxString const& fileName);
+	std::list<t_fileData>::const_iterator GetFile(wxString const& fileName) const;
+	std::list<t_fileData>::iterator GetFile(wxString const& fileName, CServerPath const& remotePath, ServerWithCredentials const& server);
+	std::list<t_fileData>::const_iterator GetFile(wxString const& fileName, CServerPath const& remotePath, ServerWithCredentials const& server) const;
 
 	CQueueView* m_pQueue;
 
@@ -150,8 +149,8 @@ protected:
 	void RemoveTemporaryFilesInSpecificDir(wxString const& temp);
 
 	std::wstring GetTemporaryFile(std::wstring name);
-	wxString TruncateFilename(const wxString path, const wxString& name, int max);
-	bool FilenameExists(const wxString& file);
+	wxString TruncateFilename(wxString const path, wxString const& name, int max);
+	bool FilenameExists(wxString const& file);
 
 	int DisplayChangeNotification(fileType type, std::list<t_fileData>::const_iterator iter, bool& remove);
 
@@ -209,4 +208,4 @@ protected:
 	void OnBrowseEditor(wxCommandEvent& event);
 };
 
-#endif //__EDITHANDLER_H__
+#endif

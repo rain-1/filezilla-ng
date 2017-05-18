@@ -196,8 +196,8 @@ public:
 	// Set to true if you have set a password
 	bool passwordSet{};
 
-	// Set password by calling server.SetUser
 	CServer server;
+	Credentials credentials;
 
 	std::wstring const& GetChallenge() const { return m_challenge; }
 

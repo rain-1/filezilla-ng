@@ -93,7 +93,7 @@ void CContextControl::CreateTab()
 			pState->SetLastSite(current->pState->GetLastSite(), current->pState->GetLastServerPath());
 		}
 		else {
-			CServer last_server;
+			ServerWithCredentials last_server;
 			CServerPath last_path;
 			if (COptions::Get()->GetLastServer(last_server) && last_path.SetSafePath(COptions::Get()->GetOption(OPTION_LASTSERVERPATH))) {
 				std::wstring last_site_path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
@@ -102,9 +102,9 @@ void CContextControl::CreateTab()
 				if (!last_site_path.empty()) {
 					site = CSiteManager::GetSiteByPath(last_site_path, false).first;
 				}
-				if (!site || site->m_server != last_server) {
+				if (!site || site->server_ != last_server) {
 					site.reset(new Site);
-					site->m_server = last_server;
+					site->server_ = last_server;
 				}
 				pState->SetLastSite(*site, last_path);
 			}

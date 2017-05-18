@@ -147,7 +147,9 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 		}
 		bool canRemember = notification.GetType() == CInteractiveLoginNotification::keyfile;
 
-		if (CLoginManager::Get().GetPassword(notification.server, true, std::wstring(), notification.GetChallenge(), canRemember)) {
+		ServerWithCredentials server(notification.server, notification.credentials);
+		if (CLoginManager::Get().GetPassword(server, true, std::wstring(), notification.GetChallenge(), canRemember)) {
+			notification.credentials = server.credentials;
 			notification.passwordSet = true;
 		}
 		else {
@@ -157,7 +159,8 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 				return false;
 			}
 
-			if (CLoginManager::Get().GetPassword(notification.server, false, std::wstring(), notification.GetChallenge(), canRemember)) {
+			if (CLoginManager::Get().GetPassword(server, false, std::wstring(), notification.GetChallenge(), canRemember)) {
+				notification.credentials = server.credentials;
 				notification.passwordSet = true;
 			}
 		}

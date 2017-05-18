@@ -286,14 +286,14 @@ int CUpdater::ContinueDownload()
 
 bool CUpdater::CreateConnectCommand(wxString const& url)
 {
-	CServer s;
+	ServerWithCredentials s;
 	CServerPath path;
 	std::wstring error;
-	if (!s.ParseUrl(url.ToStdWstring(), 0, std::wstring(), std::wstring(), error, path) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS)) {
+	if (!s.ParseUrl(url.ToStdWstring(), 0, std::wstring(), std::wstring(), error, path) || (s.server.GetProtocol() != HTTP && s.server.GetProtocol() != HTTPS)) {
 		return false;
 	}
 
-	pending_commands_.emplace_back(new CConnectCommand(s));
+	pending_commands_.emplace_back(new CConnectCommand(s.server, s.credentials));
 	return true;
 }
 
@@ -301,10 +301,10 @@ bool CUpdater::CreateTransferCommand(wxString const& url, std::wstring const& lo
 {
 	CFileTransferCommand::t_transferSettings transferSettings;
 
-	CServer s;
+	ServerWithCredentials s;
 	CServerPath path;
 	std::wstring error;
-	if (!s.ParseUrl(url.ToStdWstring(), 0, std::wstring(), std::wstring(), error, path) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS)) {
+	if (!s.ParseUrl(url.ToStdWstring(), 0, std::wstring(), std::wstring(), error, path) || (s.server.GetProtocol() != HTTP && s.server.GetProtocol() != HTTPS)) {
 		return false;
 	}
 	std::wstring file = path.GetLastSegment();
@@ -321,8 +321,9 @@ void CUpdater::OnEngineEvent(CFileZillaEngine* engine)
 
 void CUpdater::DoOnEngineEvent(CFileZillaEngine* engine)
 {
-	if (!engine_ || engine_ != engine)
+	if (!engine_ || engine_ != engine) {
 		return;
+	}
 
 	std::unique_ptr<CNotification> notification;
 	while( (notification = engine_->GetNextNotification()) ) {

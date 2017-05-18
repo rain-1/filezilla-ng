@@ -1,20 +1,19 @@
-#ifndef __BOOKMARKS_DIALOG_H__
-#define __BOOKMARKS_DIALOG_H__
+#ifndef FILEZILLA_INTERFACE_BOOKMARKS_DIALOG_HEADER
+#define FILEZILLA_INTERFACE_BOOKMARKS_DIALOG_HEADER
 
 #include "dialogex.h"
 
 class CNewBookmarkDialog final : public wxDialogEx
 {
 public:
-	CNewBookmarkDialog(wxWindow* parent, std::wstring& site_path, const CServer* server);
-	virtual ~CNewBookmarkDialog() {}
+	CNewBookmarkDialog(wxWindow* parent, std::wstring& site_path, ServerWithCredentials const* server);
 
 	int Run(const wxString &local_path, const CServerPath &remote_path);
 
 protected:
 	wxWindow* m_parent;
 	std::wstring &m_site_path;
-	const CServer* m_server;
+	ServerWithCredentials const* m_server;
 
 	DECLARE_EVENT_TABLE()
 	void OnOK(wxCommandEvent&);
@@ -24,8 +23,7 @@ protected:
 class CBookmarksDialog final : public wxDialogEx
 {
 public:
-	CBookmarksDialog(wxWindow* parent, std::wstring& site_path, const CServer* server);
-	virtual ~CBookmarksDialog() {}
+	CBookmarksDialog(wxWindow* parent, std::wstring& site_path, ServerWithCredentials const* server);
 
 	int Run();
 
@@ -46,7 +44,7 @@ protected:
 
 	wxWindow* m_parent;
 	std::wstring &m_site_path;
-	CServer const* m_server;
+	ServerWithCredentials const* m_server;
 
 	wxTreeCtrl *m_pTree{};
 	wxTreeItemId m_bookmarks_global;
@@ -67,4 +65,4 @@ protected:
 	void OnEndLabelEdit(wxTreeEvent& event);
 };
 
-#endif //__BOOKMARKS_DIALOG_H__
+#endif

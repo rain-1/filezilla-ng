@@ -56,178 +56,6 @@ static const t_protocolInfo& GetProtocolInfo(ServerProtocol protocol)
 	return protocolInfos[i];
 }
 
-bool CServer::ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path)
-{
-	unsigned int nPort = 0;
-	if (!port.empty()) {
-		nPort = fz::to_integral<unsigned int>(fz::trimmed(port));
-		if (port.size() > 5 || !nPort || nPort > 65535) {
-			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
-			error += L"\n";
-			error += _("You can leave the port field empty to use the default port.");
-			return false;
-		}
-	}
-	return ParseUrl(host, nPort, user, pass, error, path);
-}
-
-bool CServer::ParseUrl(std::wstring host, unsigned int port, std::wstring user, std::wstring pass, std::wstring &error, CServerPath &path)
-{
-	m_type = DEFAULT;
-
-	if (host.empty()) {
-		error = _("No host given, please enter a host.");
-		return false;
-	}
-
-	size_t pos = host.find(L"://");
-	if (pos != std::wstring::npos) {
-		std::wstring protocol = fz::str_tolower_ascii(host.substr(0, pos));
-		host = host.substr(pos + 3);
-		if (protocol.substr(0, 3) == L"fz_") {
-			protocol = protocol.substr(3);
-		}
-		m_protocol = GetProtocolFromPrefix(protocol);
-		if (m_protocol == UNKNOWN) {
-			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
-			return false;
-		}
-	}
-
-	pos = host.find('@');
-	if (pos != std::wstring::npos) {
-		// Check if it's something like
-		//   user@name:password@host:port/path
-		// => If there are multiple at signs, username/port ends at last at before
-		// the first slash. (Since host and port never contain any at sign)
-
-		size_t slash = host.find('/', pos + 1);
-
-		size_t next_at = host.find('@', pos + 1);
-		while (next_at != std::wstring::npos) {
-			if (slash != std::wstring::npos  && next_at > slash) {
-				break;
-			}
-
-			pos = next_at;
-			next_at = host.find('@', next_at + 1);
-		}
-
-		user = host.substr(0, pos);
-		host = host.substr(pos + 1);
-
-		// Extract password (if any) from username
-		pos = user.find(':');
-		if (pos != std::wstring::npos) {
-			pass = user.substr(pos + 1);
-			user = user.substr(0, pos);
-		}
-
-		// Remove leading and trailing whitespace
-		fz::trim(user);
-
-		if (user.empty()) {
-			error = _("Invalid username given.");
-			return false;
-		}
-	}
-	else {
-		// Remove leading and trailing whitespace
-		fz::trim(user);
-
-		if (user.empty() && m_logonType != ASK && m_logonType != INTERACTIVE) {
-			user = L"anonymous";
-			pass = L"anonymous@example.com";
-		}
-	}
-
-	pos = host.find('/');
-	if (pos != std::wstring::npos) {
-		path = CServerPath(host.substr(pos));
-		host = host.substr(0, pos);
-	}
-
-	if (!host.empty() && host[0] == '[') {
-		// Probably IPv6 address
-		pos = host.find(']');
-		if (pos == std::wstring::npos) {
-			error = _("Host starts with '[' but no closing bracket found.");
-			return false;
-		}
-		if (pos < host.size() - 1 ) {
-			if (host[pos + 1] != ':') {
-				error = _("Invalid host, after closing bracket only colon and port may follow.");
-				return false;
-			}
-			++pos;
-		}
-		else
-			pos = std::wstring::npos;
-	}
-	else {
-		pos = host.find(':');
-	}
-	if (pos != std::wstring::npos) {
-		if (!pos) {
-			error = _("No host given, please enter a host.");
-			return false;
-		}
-
-		port = fz::to_integral<unsigned int>(host.substr(pos + 1));
-		host = host.substr(0, pos);
-	}
-	else {
-		if (!port) {
-			port = GetDefaultPort(m_protocol);
-		}
-	}
-
-	if (port < 1 || port > 65535) {
-		error = _("Invalid port given. The port has to be a value from 1 to 65535.");
-		return false;
-	}
-
-	fz::trim(host);
-
-	if (host.empty()) {
-		error = _("No host given, please enter a host.");
-		return false;
-	}
-
-	m_host = host;
-
-	if (m_host[0] == '[') {
-		m_host = m_host.substr(1, m_host.size() - 2);
-	}
-
-	m_port = port;
-	m_user = user;
-	m_pass = pass;
-	m_account.clear();
-	if (m_logonType != ASK && m_logonType != INTERACTIVE) {
-		if (m_user.empty()) {
-			m_logonType = ANONYMOUS;
-		}
-		else if (m_user == L"anonymous") {
-			if (m_pass.empty() || m_pass == L"anonymous@example.com") {
-				m_logonType = ANONYMOUS;
-			}
-			else {
-				m_logonType = NORMAL;
-			}
-		}
-		else {
-			m_logonType = NORMAL;
-		}
-	}
-
-	if (m_protocol == UNKNOWN) {
-		m_protocol = GetProtocolFromPort(port);
-	}
-
-	return true;
-}
-
 ServerProtocol CServer::GetProtocol() const
 {
 	return m_protocol;
@@ -250,38 +78,7 @@ unsigned int CServer::GetPort() const
 
 std::wstring CServer::GetUser() const
 {
-	if (m_logonType == ANONYMOUS) {
-		return L"anonymous";
-	}
-
 	return m_user;
-}
-
-std::wstring CServer::GetPass() const
-{
-	if (m_logonType == ANONYMOUS) {
-		return L"anon@localhost";
-	}
-
-	return m_pass;
-}
-
-std::wstring CServer::GetAccount() const
-{
-	if (m_logonType != ACCOUNT) {
-		return std::wstring();
-	}
-
-	return m_account;
-}
-
-std::wstring CServer::GetKeyFile() const
-{
-	if (m_logonType != KEY) {
-		return std::wstring();
-	}
-
-	return m_keyFile;
 }
 
 CServer& CServer::operator=(const CServer &op)
@@ -290,11 +87,7 @@ CServer& CServer::operator=(const CServer &op)
 	m_type = op.m_type;
 	m_host = op.m_host;
 	m_port = op.m_port;
-	m_logonType = op.m_logonType;
 	m_user = op.m_user;
-	m_pass = op.m_pass;
-	m_account = op.m_account;
-	m_keyFile = op.m_keyFile;
 	m_timezoneOffset = op.m_timezoneOffset;
 	m_pasvMode = op.m_pasvMode;
 	m_maximumMultipleConnections = op.m_maximumMultipleConnections;
@@ -321,32 +114,8 @@ bool CServer::operator==(const CServer &op) const
 	else if (m_port != op.m_port) {
 		return false;
 	}
-	else if (m_logonType != op.m_logonType) {
+	if (m_user != op.m_user) {
 		return false;
-	}
-	else if (m_logonType != ANONYMOUS) {
-		if (m_user != op.m_user) {
-			return false;
-		}
-
-		if (m_logonType == NORMAL) {
-			if (m_pass != op.m_pass) {
-				return false;
-			}
-		}
-		else if (m_logonType == ACCOUNT) {
-			if (m_pass != op.m_pass) {
-				return false;
-			}
-			if (m_account != op.m_account) {
-				return false;
-			}
-		}
-		else if (m_logonType == KEY) {
-			if (m_keyFile != op.m_keyFile) {
-				return false;
-			}
-		}
 	}
 	if (m_timezoneOffset != op.m_timezoneOffset) {
 		return false;
@@ -405,48 +174,12 @@ bool CServer::operator<(const CServer &op) const
 		return false;
 	}
 
-	if (m_logonType < op.m_logonType) {
+	cmp = m_user.compare(op.m_user);
+	if (cmp < 0) {
 		return true;
 	}
-	else if (m_logonType > op.m_logonType) {
+	else if (cmp > 0) {
 		return false;
-	}
-
-	if (m_logonType != ANONYMOUS) {
-		cmp = m_user.compare(op.m_user);
-		if (cmp < 0) {
-			return true;
-		}
-		else if (cmp > 0) {
-			return false;
-		}
-
-		if (m_logonType == NORMAL) {
-			cmp = m_pass.compare(op.m_pass);
-			if (cmp < 0) {
-				return true;
-			}
-			else if (cmp > 0) {
-				return false;
-			}
-		}
-		else if (m_logonType == ACCOUNT) {
-			cmp = m_pass.compare(op.m_pass);
-			if (cmp < 0) {
-				return true;
-			}
-			else if (cmp > 0) {
-				return false;
-			}
-
-			cmp = m_account.compare(op.m_account);
-			if (cmp < 0) {
-				return true;
-			}
-			else if (cmp > 0) {
-				return false;
-			}
-		}
 	}
 	if (m_timezoneOffset < op.m_timezoneOffset) {
 		return true;
@@ -494,74 +227,6 @@ bool CServer::operator!=(const CServer &op) const
 	return !(*this == op);
 }
 
-bool CServer::EqualsNoPass(const CServer &op) const
-{
-	if (m_protocol != op.m_protocol) {
-		return false;
-	}
-	else if (m_type != op.m_type) {
-		return false;
-	}
-	else if (m_host != op.m_host) {
-		return false;
-	}
-	else if (m_port != op.m_port) {
-		return false;
-	}
-	else if ((m_logonType == ANONYMOUS) != (op.m_logonType == ANONYMOUS)) {
-		return false;
-	}
-	else if ((m_logonType == ACCOUNT) != (op.m_logonType == ACCOUNT)) {
-		return false;
-	}
-	else if (m_logonType != ANONYMOUS) {
-		if (m_user != op.m_user) {
-			return false;
-		}
-		if (m_logonType == ACCOUNT) {
-			if (m_account != op.m_account) {
-				return false;
-			}
-		}
-	}
-	if (m_timezoneOffset != op.m_timezoneOffset) {
-		return false;
-	}
-	else if (m_pasvMode != op.m_pasvMode) {
-		return false;
-	}
-	else if (m_encodingType != op.m_encodingType) {
-		return false;
-	}
-	else if (m_encodingType == ENCODING_CUSTOM) {
-		if (m_customEncoding != op.m_customEncoding) {
-			return false;
-		}
-	}
-	if (m_postLoginCommands != op.m_postLoginCommands) {
-		return false;
-	}
-	if (m_bypassProxy != op.m_bypassProxy) {
-		return false;
-	}
-
-	// Do not compare number of allowed multiple connections
-
-	return true;
-}
-
-CServer::CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int port, std::wstring const& user, std::wstring const& pass, std::wstring const& account)
-{
-	m_protocol = protocol;
-	m_type = type;
-	m_host = host;
-	m_port = port;
-	m_logonType = NORMAL;
-	m_user = user;
-	m_pass = pass;
-	m_account = account;
-}
-
 CServer::CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int port)
 {
 	m_protocol = protocol;
@@ -573,17 +238,6 @@ CServer::CServer(ServerProtocol protocol, ServerType type, std::wstring const& h
 void CServer::SetType(ServerType type)
 {
 	m_type = type;
-}
-
-LogonType CServer::GetLogonType() const
-{
-	return m_logonType;
-}
-
-void CServer::SetLogonType(LogonType logonType)
-{
-	assert(logonType != LOGONTYPE_MAX);
-	m_logonType = logonType;
 }
 
 void CServer::SetProtocol(ServerProtocol serverProtocol)
@@ -617,47 +271,9 @@ bool CServer::SetHost(std::wstring const& host, unsigned int port)
 	return true;
 }
 
-bool CServer::SetUser(std::wstring const& user, std::wstring const& pass)
+void CServer::SetUser(std::wstring const& user)
 {
-	if (m_logonType == ANONYMOUS) {
-		return true;
-	}
-
-	if (user.empty()) {
-		if (m_logonType != ASK && m_logonType != INTERACTIVE) {
-			return false;
-		}
-		m_pass.clear();
-	}
-	else {
-		m_pass = pass;
-	}
-
 	m_user = user;
-
-	return true;
-}
-
-bool CServer::SetAccount(std::wstring const& account)
-{
-	if (m_logonType != ACCOUNT) {
-		return false;
-	}
-
-	m_account = account;
-
-	return true;
-}
-
-bool CServer::SetKeyFile(std::wstring const& keyFile)
-{
-	if (m_logonType != KEY) {
-		return false;
-	}
-
-	m_keyFile = keyFile;
-
-	return true;
 }
 
 bool CServer::SetTimezoneOffset(int minutes)
@@ -698,6 +314,11 @@ int CServer::MaximumMultipleConnections() const
 
 std::wstring CServer::Format(ServerFormat formatType) const
 {
+	return Format(formatType, Credentials());
+}
+
+std::wstring CServer::Format(ServerFormat formatType, Credentials const& credentials) const
+{
 	std::wstring server = m_host;
 
 	t_protocolInfo const& info = GetProtocolInfo(m_protocol);
@@ -718,8 +339,8 @@ std::wstring CServer::Format(ServerFormat formatType) const
 		return server;
 	}
 
-	if (m_logonType != ANONYMOUS) {
-		auto user = GetUser();
+	auto user = GetUser();
+	if (user != L"anonymous" || credentials.logonType_ != LogonType::anonymous) {
 		// For now, only escape if formatting for URL.
 		// Open question: Do we need some form of escapement for presentation within the GUI,
 		// that deals e.g. with whitespace but does not touch Unicode characters?
@@ -728,7 +349,7 @@ std::wstring CServer::Format(ServerFormat formatType) const
 		}
 		if (!user.empty()) {
 			if (formatType == ServerFormat::url_with_password) {
-				auto pass = GetPass();
+				auto pass = credentials.password_;
 				if (!pass.empty()) {
 					if (formatType == ServerFormat::url || formatType == ServerFormat::url_with_password) {
 						pass = fz::percent_encode_w(pass);
@@ -934,45 +555,217 @@ ServerType CServer::GetServerTypeFromName(std::wstring const& name)
 	return DEFAULT;
 }
 
-LogonType CServer::GetLogonTypeFromName(std::wstring const& name)
+LogonType GetLogonTypeFromName(std::wstring const& name)
 {
 	if (name == _("Normal")) {
-		return NORMAL;
+		return LogonType::normal;
 	}
 	else if (name == _("Ask for password")) {
-		return ASK;
+		return LogonType::ask;
 	}
 	else if (name == _("Key file")) {
-		return KEY;
+		return LogonType::key;
 	}
 	else if (name == _("Interactive")) {
-		return INTERACTIVE;
+		return LogonType::interactive;
 	}
 	else if (name == _("Account")) {
-		return ACCOUNT;
+		return LogonType::account;
 	}
 	else {
-		return ANONYMOUS;
+		return LogonType::anonymous;
 	}
 }
 
-std::wstring CServer::GetNameFromLogonType(LogonType type)
+std::wstring GetNameFromLogonType(LogonType type)
 {
-	assert(type != LOGONTYPE_MAX);
+	assert(type != LogonType::count);
 
 	switch (type)
 	{
-	case NORMAL:
+	case LogonType::normal:
 		return _("Normal");
-	case ASK:
+	case LogonType::ask:
 		return _("Ask for password");
-	case KEY:
+	case LogonType::key:
 		return _("Key file");
-	case INTERACTIVE:
+	case LogonType::interactive:
 		return _("Interactive");
-	case ACCOUNT:
+	case LogonType::account:
 		return _("Account");
 	default:
 		return _("Anonymous");
 	}
+}
+
+bool ServerWithCredentials::ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path)
+{
+	unsigned int nPort = 0;
+	if (!port.empty()) {
+		nPort = fz::to_integral<unsigned int>(fz::trimmed(port));
+		if (port.size() > 5 || !nPort || nPort > 65535) {
+			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
+			error += L"\n";
+			error += _("You can leave the port field empty to use the default port.");
+			return false;
+		}
+	}
+	return ParseUrl(host, nPort, user, pass, error, path);
+}
+
+bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::wstring user, std::wstring pass, std::wstring &error, CServerPath &path)
+{
+	server.SetType(DEFAULT);
+
+	if (host.empty()) {
+		error = _("No host given, please enter a host.");
+		return false;
+	}
+
+	size_t pos = host.find(L"://");
+	if (pos != std::wstring::npos) {
+		std::wstring protocol = fz::str_tolower_ascii(host.substr(0, pos));
+		host = host.substr(pos + 3);
+		if (protocol.substr(0, 3) == L"fz_") {
+			protocol = protocol.substr(3);
+		}
+		server.SetProtocol(CServer::GetProtocolFromPrefix(protocol));
+		if (server.GetProtocol() == UNKNOWN) {
+			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
+			return false;
+		}
+	}
+
+	pos = host.find('@');
+	if (pos != std::wstring::npos) {
+		// Check if it's something like
+		//   user@name:password@host:port/path
+		// => If there are multiple at signs, username/port ends at last at before
+		// the first slash. (Since host and port never contain any at sign)
+
+		size_t slash = host.find('/', pos + 1);
+
+		size_t next_at = host.find('@', pos + 1);
+		while (next_at != std::wstring::npos) {
+			if (slash != std::wstring::npos  && next_at > slash) {
+				break;
+			}
+
+			pos = next_at;
+			next_at = host.find('@', next_at + 1);
+		}
+
+		user = host.substr(0, pos);
+		host = host.substr(pos + 1);
+
+		// Extract password (if any) from username
+		pos = user.find(':');
+		if (pos != std::wstring::npos) {
+			pass = user.substr(pos + 1);
+			user = user.substr(0, pos);
+		}
+
+		// Remove leading and trailing whitespace
+		fz::trim(user);
+
+		if (user.empty()) {
+			error = _("Invalid username given.");
+			return false;
+		}
+	}
+	else {
+		// Remove leading and trailing whitespace
+		fz::trim(user);
+
+		if (user.empty() && credentials.logonType_ == LogonType::ask && credentials.logonType_ != LogonType::interactive) {
+			user = L"anonymous";
+			pass = L"anonymous@example.com";
+		}
+	}
+
+	pos = host.find('/');
+	if (pos != std::wstring::npos) {
+		path = CServerPath(host.substr(pos));
+		host = host.substr(0, pos);
+	}
+
+	if (!host.empty() && host[0] == '[') {
+		// Probably IPv6 address
+		pos = host.find(']');
+		if (pos == std::wstring::npos) {
+			error = _("Host starts with '[' but no closing bracket found.");
+			return false;
+		}
+		if (pos < host.size() - 1) {
+			if (host[pos + 1] != ':') {
+				error = _("Invalid host, after closing bracket only colon and port may follow.");
+				return false;
+			}
+			++pos;
+		}
+		else {
+			pos = std::wstring::npos;
+		}
+	}
+	else {
+		pos = host.find(':');
+	}
+	if (pos != std::wstring::npos) {
+		if (!pos) {
+			error = _("No host given, please enter a host.");
+			return false;
+		}
+
+		port = fz::to_integral<unsigned int>(host.substr(pos + 1));
+		host = host.substr(0, pos);
+	}
+	else {
+		if (!port) {
+			port = CServer::GetDefaultPort(server.GetProtocol());
+		}
+	}
+
+	if (port < 1 || port > 65535) {
+		error = _("Invalid port given. The port has to be a value from 1 to 65535.");
+		return false;
+	}
+
+	fz::trim(host);
+
+	if (host.empty()) {
+		error = _("No host given, please enter a host.");
+		return false;
+	}
+
+	if (host[0] == '[') {
+		host = host.substr(1, host.size() - 2);
+	}
+
+	server.SetHost(host, port);
+
+	server.SetUser(user);
+	credentials.password_ = pass;
+	credentials.account_.clear();
+	if (credentials.logonType_ != LogonType::ask && credentials.logonType_ != LogonType::interactive) {
+		if (server.GetUser().empty()) {
+			credentials.logonType_ = LogonType::anonymous;
+		}
+		else if (server.GetUser() == L"anonymous") {
+			if (credentials.password_.empty() || credentials.password_ == L"anonymous@example.com") {
+				credentials.logonType_ = LogonType::anonymous;
+			}
+			else {
+				credentials.logonType_ = LogonType::normal;
+			}
+		}
+		else {
+			credentials.logonType_ = LogonType::normal;
+		}
+	}
+
+	if (server.GetProtocol() == UNKNOWN) {
+		server.SetProtocol(CServer::GetProtocolFromPort(port));
+	}
+
+	return true;
 }

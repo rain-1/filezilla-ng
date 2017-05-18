@@ -348,7 +348,7 @@ bool CXmlFile::SaveXmlFile()
 	return true;
 }
 
-bool GetServer(pugi::xml_node node, CServer& server)
+bool GetServer(pugi::xml_node node, CServer& server, Credentials& credentials)
 {
 	wxASSERT(node);
 
@@ -380,20 +380,22 @@ bool GetServer(pugi::xml_node node, CServer& server)
 	server.SetType(static_cast<ServerType>(type));
 
 	int logonType = GetTextElementInt(node, "Logontype");
-	if (logonType < 0 || logonType >= LOGONTYPE_MAX) {
+	if (logonType < 0 || logonType >= static_cast<int>(LogonType::count)) {
 		return false;
 	}
 
-	server.SetLogonType(static_cast<LogonType>(logonType));
-
-	if (server.GetLogonType() != ANONYMOUS) {
+	credentials.logonType_ = static_cast<LogonType>(logonType);
+	
+	if (credentials.logonType_ != LogonType::anonymous) {
 		std::wstring user = GetTextElement(node, "User");
+		if (user.empty() && credentials.logonType_ != LogonType::interactive && credentials.logonType_ != LogonType::ask) {
+			return false;
+		}
 
 		std::wstring pass, key;
-		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType) {
+		if (credentials.logonType_ == LogonType::normal || credentials.logonType_ == LogonType::account) {
 			auto passElement = node.child("Pass");
 			if (passElement) {
-
 				std::wstring encoding = GetTextAttribute(passElement, "encoding");
 
 				if (encoding == _T("base64")) {
@@ -401,35 +403,26 @@ bool GetServer(pugi::xml_node node, CServer& server)
 					pass = fz::to_wstring_from_utf8(decoded);
 				}
 				else if (!encoding.empty()) {
-					server.SetLogonType(ASK);
+					credentials.logonType_ = LogonType::ask;
 				}
 				else {
 					pass = GetTextElement(passElement);
 				}
 			}
 		}
-		else if ((long)KEY == logonType) {
+		else if (credentials.logonType_ == LogonType::key) {
 			key = GetTextElement(node, "Keyfile");
 
 			// password should be empty if we're using a key file
 			pass.clear();
 
-			server.SetKeyFile(key);
+			credentials.keyFile_ = key;
 		}
 
-		if (!server.SetUser(user, pass)) {
-			return false;
-		}
+		server.SetUser(user);
+		credentials.password_ = pass;
 
-		if ((long)ACCOUNT == logonType) {
-			std::wstring account = GetTextElement(node, "Account");
-			if (account.empty()) {
-				return false;
-			}
-			if (!server.SetAccount(account)) {
-				return false;
-			}
-		}
+		credentials.account_ = GetTextElement(node, "Account");
 	}
 
 	int timezoneOffset = GetTextElementInt(node, "TimezoneOffset");
@@ -438,12 +431,15 @@ bool GetServer(pugi::xml_node node, CServer& server)
 	}
 
 	wxString pasvMode = GetTextElement(node, "PasvMode");
-	if (pasvMode == _T("MODE_PASSIVE"))
+	if (pasvMode == _T("MODE_PASSIVE")) {
 		server.SetPasvMode(MODE_PASSIVE);
-	else if (pasvMode == _T("MODE_ACTIVE"))
+	}
+	else if (pasvMode == _T("MODE_ACTIVE")) {
 		server.SetPasvMode(MODE_ACTIVE);
-	else
+	}
+	else {
 		server.SetPasvMode(MODE_DEFAULT);
+	}
 
 	int maximumMultipleConnections = GetTextElementInt(node, "MaximumMultipleConnections");
 	server.MaximumMultipleConnections(maximumMultipleConnections);
@@ -494,7 +490,7 @@ bool GetServer(pugi::xml_node node, CServer& server)
 	return true;
 }
 
-void SetServer(pugi::xml_node node, const CServer& server)
+void SetServer(pugi::xml_node node, CServer const& server, Credentials const& credentials)
 {
 	if (!node) {
 		return;
@@ -511,33 +507,33 @@ void SetServer(pugi::xml_node node, const CServer& server)
 	AddTextElement(node, "Protocol", server.GetProtocol());
 	AddTextElement(node, "Type", server.GetType());
 
-	LogonType logonType = server.GetLogonType();
+	LogonType logonType = credentials.logonType_;
 
-	if (server.GetLogonType() != ANONYMOUS) {
+	if (credentials.logonType_ != LogonType::anonymous) {
 		AddTextElement(node, "User", server.GetUser());
 
-		if (server.GetLogonType() == NORMAL || server.GetLogonType() == ACCOUNT) {
+		if (credentials.logonType_ == LogonType::normal || credentials.logonType_ == LogonType::account) {
 			if (kiosk_mode) {
-				logonType = ASK;
+				logonType = LogonType::ask;
 			}
 			else {
-				std::string pass = fz::to_utf8(server.GetPass());
+				std::string pass = fz::to_utf8(credentials.password_);
 
 				pugi::xml_node passElement = AddTextElementUtf8(node, "Pass", fz::base64_encode(pass));
 				if (passElement) {
 					SetTextAttribute(passElement, "encoding", _T("base64"));
 				}
 
-				if (server.GetLogonType() == ACCOUNT) {
-					AddTextElement(node, "Account", server.GetAccount());
+				if (credentials.logonType_ == LogonType::account) {
+					AddTextElement(node, "Account", credentials.account_);
 				}
 			}
 		}
-		else if (server.GetLogonType() == KEY) {
-			AddTextElement(node, "Keyfile", server.GetKeyFile());
+		else if (!credentials.keyFile_.empty()) {
+			AddTextElement(node, "Keyfile", credentials.keyFile_);
 		}
 	}
-	AddTextElement(node, "Logontype", logonType);
+	AddTextElement(node, "Logontype", static_cast<int>(logonType));
 
 	AddTextElement(node, "TimezoneOffset", server.GetTimezoneOffset());
 	switch (server.GetPasvMode())
@@ -663,8 +659,9 @@ struct xml_memory_writer : pugi::xml_writer
 
 size_t CXmlFile::GetRawDataLength()
 {
-	if (!m_document)
+	if (!m_document) {
 		return 0;
+	}
 
 	xml_memory_writer writer;
 	m_document.save(writer);

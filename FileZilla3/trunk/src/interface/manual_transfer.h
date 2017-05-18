@@ -1,5 +1,5 @@
-#ifndef __MANUAL_TRANSFER_H__
-#define __MANUAL_TRANSFER_H__
+#ifndef FILEZILLA_INTERFACE_MANUAL_TRANSFER_HEADER
+#define FILEZILLA_INTERFACE_MANUAL_TRANSFER_HEADER
 
 #include "dialogex.h"
 
@@ -24,8 +24,8 @@ protected:
 
 	bool m_local_file_exists;
 
-	CServer *m_pServer;
-	CServer* m_pLastSite;
+	ServerWithCredentials server_;
+	ServerWithCredentials lastSite_;
 
 	CState* m_pState;
 	CQueueView* m_pQueueView;
@@ -42,4 +42,4 @@ protected:
 	void OnLogontypeSelChanged(wxCommandEvent& event);
 };
 
-#endif //__MANUAL_TRANSFER_H__
+#endif

@@ -52,7 +52,7 @@ bool Bookmark::operator==(Bookmark const& b) const
 
 bool Site::operator==(Site const& s) const
 {
-	if (m_server != s.m_server) {
+	if (server_ != s.server_) {
 		return false;
 	}
 
@@ -151,14 +151,16 @@ bool CSiteManager::ReadBookmarkElement(Bookmark & bookmark, pugi::xml_node eleme
 
 std::unique_ptr<Site> CSiteManager::ReadServerElement(pugi::xml_node element)
 {
-	CServer server;
-	if (!::GetServer(element, server))
+	ServerWithCredentials server;
+	if (!::GetServer(element, server)) {
 		return 0;
-	if (server.GetName().empty())
+	}
+	if (server.server.GetName().empty()) {
 		return 0;
+	}
 
 	auto data = std::make_unique<Site>();
-	data->m_server = server;
+	data->server_ = server;
 
 	data->m_comments = GetTextElement(element, "Comments");
 	data->m_colour = GetColourFromIndex(GetTextElementInt(element, "Colour"));
@@ -234,12 +236,12 @@ public:
 
 	virtual bool AddSite(std::unique_ptr<Site> data)
 	{
-		wxString newName(data->m_server.GetName());
+		wxString newName(data->server_.server.GetName());
 		int i = GetInsertIndex(m_pMenu, newName);
 		newName.Replace(_T("&"), _T("&&"));
 		wxMenuItem* pItem = m_pMenu->Insert(i, wxID_ANY, newName);
 
-		data->m_path = path + _T("/") + CSiteManager::EscapeSegment(data->m_server.GetName());
+		data->m_path = path + _T("/") + CSiteManager::EscapeSegment(data->server_.server.GetName());
 
 		(*m_idMap)[pItem->GetId()] = std::move(data);
 
@@ -569,7 +571,7 @@ std::pair<std::unique_ptr<Site>, Bookmark> CSiteManager::DoGetSiteByPath(std::ws
 	return ret;
 }
 
-wxString CSiteManager::AddServer(CServer server)
+wxString CSiteManager::AddServer(ServerWithCredentials server)
 {
 	// We have to synchronize access to sitemanager.xml so that multiple processed don't write
 	// to the same file or one is reading while the other one writes.
@@ -616,10 +618,10 @@ wxString CSiteManager::AddServer(CServer server)
 		name = _("New site") + wxString::Format(_T(" %d"), ++i);
 	}
 
-	server.SetName(name);
+	server.server.SetName(name);
 
 	auto xServer = element.append_child("Server");
-	SetServer(xServer, server);
+	SetServer(xServer, server.server, server.credentials);
 	AddTextElement(xServer, name);
 
 	if (!file.Save(false)) {
@@ -640,20 +642,25 @@ pugi::xml_node CSiteManager::GetElementByPath(pugi::xml_node node, std::vector<s
 	for (auto const& segment : segments) {
 		pugi::xml_node child;
 		for (child = node.first_child(); child; child = child.next_sibling()) {
-			if (strcmp(child.name(), "Server") && strcmp(child.name(), "Folder") && strcmp(child.name(), "Bookmark"))
+			if (strcmp(child.name(), "Server") && strcmp(child.name(), "Folder") && strcmp(child.name(), "Bookmark")) {
 				continue;
+			}
 
 			wxString name = GetTextElement_Trimmed(child, "Name");
-			if (name.empty())
+			if (name.empty()) {
 				name = GetTextElement_Trimmed(child);
-			if (name.empty())
+			}
+			if (name.empty()) {
 				continue;
+			}
 
-			if (name == segment)
+			if (name == segment) {
 				break;
+			}
 		}
-		if (!child)
+		if (!child) {
 			return pugi::xml_node();
+		}
 
 		node = child;
 		continue;

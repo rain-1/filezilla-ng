@@ -114,7 +114,7 @@ public:
 				return wxDragNone;
 			}
 
-			if (!m_pLocalListView->m_state.GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pLocalListView->m_state.GetServer())) {
+			if (!m_pLocalListView->m_state.GetServer() || m_pRemoteDataObject->GetServer().server != m_pLocalListView->m_state.GetServer().server) {
 				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
@@ -570,8 +570,8 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 		return;
 	}
 
-	const CServer* pServer = m_state.GetServer();
-	if (!pServer) {
+	ServerWithCredentials const& server = m_state.GetServer();
+	if (!server) {
 		wxBell();
 		return;
 	}
@@ -584,7 +584,7 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 
 	const bool queue_only = action == 1;
 
-	m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, m_dir, path, *pServer, data->size);
+	m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, m_dir, path, server, data->size);
 	m_pQueue->QueueFile_Finish(true);
 }
 
@@ -824,8 +824,8 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 
 void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 {
-	const CServer* pServer = m_state.GetServer();
-	if (!pServer) {
+	ServerWithCredentials const& server = m_state.GetServer();
+	if (!server) {
 		wxBell();
 		return;
 	}
@@ -845,17 +845,21 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 	long item = -1;
 	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-		if (!item && m_hasParent)
+		if (!item && m_hasParent) {
 			continue;
-		if (item == -1)
+		}
+		if (item == -1) {
 			break;
+		}
 
 		const CLocalFileData *data = GetData(item);
-		if (!data)
+		if (!data) {
 			break;
+		}
 
-		if (data->comparison_flags == fill)
+		if (data->comparison_flags == fill) {
 			continue;
+		}
 
 		CServerPath remotePath = m_state.GetRemotePath();
 		if (remotePath.empty()) {
@@ -875,13 +879,14 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 			root.add_dir_to_visit(localPath, remotePath);
 		}
 		else {
-			m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, m_dir, remotePath, *pServer, data->size);
+			m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, m_dir, remotePath, server, data->size);
 			added = true;
 		}
 	}
 
-	if (added)
+	if (added) {
 		m_pQueue->QueueFile_Finish(!queue_only);
+	}
 
 	if (!root.empty()) {
 		recursiveOperation->AddRecursionRoot(std::move(root));
@@ -1614,7 +1619,7 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 
 void CLocalListView::OnMenuEdit(wxCommandEvent&)
 {
-	CServer server;
+	ServerWithCredentials server;
 	CServerPath path;
 
 	if (!m_state.GetServer()) {
@@ -1624,7 +1629,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent&)
 		}
 	}
 	else {
-		server = *m_state.GetServer();
+		server = m_state.GetServer();
 
 		path = m_state.GetRemotePath();
 		if (path.empty()) {

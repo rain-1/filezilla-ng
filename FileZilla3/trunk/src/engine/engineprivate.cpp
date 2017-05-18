@@ -297,9 +297,10 @@ int CFileZillaEnginePrivate::Connect(CConnectCommand const& command)
 	m_pControlSocket.reset();
 	m_nControlSocketError = 0;
 
-	if (command.GetServer().GetPort() != CServer::GetDefaultPort(command.GetServer().GetProtocol())) {
-		ServerProtocol protocol = CServer::GetProtocolFromPort(command.GetServer().GetPort(), true);
-		if (protocol != UNKNOWN && protocol != command.GetServer().GetProtocol()) {
+	auto const& server = command.GetServer();
+	if (server.GetPort() != CServer::GetDefaultPort(server.GetProtocol())) {
+		ServerProtocol protocol = CServer::GetProtocolFromPort(server.GetPort(), true);
+		if (protocol != UNKNOWN && protocol != server.GetProtocol()) {
 			m_pLogging->LogMessage(MessageType::Status, _("Selected port usually in use by a different protocol."));
 		}
 	}
@@ -529,7 +530,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 		return FZ_REPLY_SYNTAXERROR|FZ_REPLY_DISCONNECTED;
 	}
 
-	m_pControlSocket->Connect(server);
+	m_pControlSocket->Connect(server, pConnectCommand->GetCredentials());
 	return FZ_REPLY_CONTINUE;
 }
 

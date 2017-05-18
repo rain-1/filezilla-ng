@@ -33,8 +33,7 @@ public:
 	// > 0 = server id
 	//   0 = No server
 	// < 0 = failure.
-	int64_t GetServer(CServer& server, bool fromBeginning);
-	CServer GetNextServer();
+	int64_t GetServer(ServerWithCredentials& server, bool fromBeginning);
 
 	int64_t GetFile(CFileItem** pItem, int64_t server);
 

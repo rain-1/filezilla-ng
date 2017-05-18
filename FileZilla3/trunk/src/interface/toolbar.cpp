@@ -217,22 +217,22 @@ void CToolBar::UpdateToolbarState()
 		return;
 	}
 
-	const CServer* pServer = pState->GetServer();
-	const bool idle = pState->IsRemoteIdle();
+	bool const hasServer = static_cast<bool>(pState->GetServer());
+	bool const idle = pState->IsRemoteIdle();
 
-	EnableTool(XRCID("ID_TOOLBAR_DISCONNECT"), pServer && idle);
-	EnableTool(XRCID("ID_TOOLBAR_CANCEL"), pServer && !idle);
-	EnableTool(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), pServer != 0);
+	EnableTool(XRCID("ID_TOOLBAR_DISCONNECT"), hasServer && idle);
+	EnableTool(XRCID("ID_TOOLBAR_CANCEL"), hasServer && !idle);
+	EnableTool(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), hasServer);
 
 	ToggleTool(XRCID("ID_TOOLBAR_COMPARISON"), pState->GetComparisonManager()->IsComparing());
 	ToggleTool(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), pState->GetSyncBrowse());
 
 	bool canReconnect;
-	if (pServer || !idle) {
+	if (hasServer || !idle) {
 		canReconnect = false;
 	}
 	else {
-		canReconnect = static_cast<bool>(pState->GetLastSite().m_server);
+		canReconnect = static_cast<bool>(pState->GetLastSite().server_);
 	}
 	EnableTool(XRCID("ID_TOOLBAR_RECONNECT"), canReconnect);
 }

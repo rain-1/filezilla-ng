@@ -228,7 +228,6 @@ COptions::COptions()
 {
 	m_theOptions = this;
 	m_pXmlFile = 0;
-	m_pLastServer = 0;
 
 	SetDefaultValues();
 
@@ -269,7 +268,6 @@ COptions::~COptions()
 {
 	COptionChangeEventHandler::UnregisterAllHandlers();
 
-	delete m_pLastServer;
 	delete m_pXmlFile;
 }
 
@@ -555,7 +553,7 @@ std::wstring COptions::Validate(unsigned int nID, std::wstring const& value)
 	return value;
 }
 
-void COptions::SetServer(std::wstring path, const CServer& server)
+void COptions::SetServer(std::wstring path, ServerWithCredentials const& server)
 {
 	if (!m_pXmlFile) {
 		return;
@@ -589,7 +587,7 @@ void COptions::SetServer(std::wstring path, const CServer& server)
 		}
 	}
 
-	::SetServer(element, server);
+	::SetServer(element, server.server, server.credentials);
 
 	if (GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		return;
@@ -599,7 +597,7 @@ void COptions::SetServer(std::wstring path, const CServer& server)
 	m_pXmlFile->Save(true);
 }
 
-bool COptions::GetServer(std::wstring path, CServer& server)
+bool COptions::GetServer(std::wstring path, ServerWithCredentials& server)
 {
 	if (path.empty()) {
 		return false;
@@ -633,29 +631,29 @@ bool COptions::GetServer(std::wstring path, CServer& server)
 	return res;
 }
 
-void COptions::SetLastServer(const CServer& server)
+void COptions::SetLastServer(ServerWithCredentials const& server)
 {
-	if (!m_pLastServer) {
-		m_pLastServer = new CServer(server);
+	if (!lastServer_) {
+		lastServer_ = std::make_unique<ServerWithCredentials>(server);
 	}
 	else {
-		*m_pLastServer = server;
+		*lastServer_ = server;
 	}
 	SetServer(_T("Settings/LastServer"), server);
 }
 
-bool COptions::GetLastServer(CServer& server)
+bool COptions::GetLastServer(ServerWithCredentials& server)
 {
-	if (!m_pLastServer) {
+	if (!lastServer_) {
 		bool res = GetServer(_T("Settings/LastServer"), server);
 		if (res) {
-			m_pLastServer = new CServer(server);
+			lastServer_ = std::make_unique<ServerWithCredentials>(server);
 		}
 		return res;
 	}
 	else {
-		server = *m_pLastServer;
-		if (server == CServer()) {
+		server = *lastServer_;
+		if (!server) {
 			return false;
 		}
 

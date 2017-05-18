@@ -377,13 +377,13 @@ void CStatusBar::DoDisplayQueueSize()
 
 void CStatusBar::DisplayDataType()
 {
-	const CServer* pServer = 0;
-	const CState* pState = CContextManager::Get()->GetCurrentContext();
+	ServerWithCredentials server;
+	CState const* pState = CContextManager::Get()->GetCurrentContext();
 	if (pState) {
-		pServer = pState->GetServer();
+		server = pState->GetServer();
 	}
 
-	if (!pServer || !CServer::ProtocolHasDataTypeConcept(pServer->GetProtocol())) {
+	if (!server || !CServer::ProtocolHasDataTypeConcept(server.server.GetProtocol())) {
 		if (m_pDataTypeIndicator) {
 			RemoveField(widget_datatype);
 			m_pDataTypeIndicator->Destroy();
@@ -413,8 +413,9 @@ void CStatusBar::DisplayDataType()
 			m_pDataTypeIndicator = new CIndicator(this, bmp);
 			AddField(0, widget_datatype, m_pDataTypeIndicator);
 		}
-		else
+		else {
 			m_pDataTypeIndicator->SetBitmap(bmp);
+		}
 		m_pDataTypeIndicator->SetToolTip(desc);
 	}
 }
@@ -427,11 +428,11 @@ void CStatusBar::MeasureQueueSizeWidth()
 	wxSize s = dc.GetTextExtent(_("Queue: empty"));
 
 	wxString tmp = _T(">8888");
-	if (m_sizeFormatDecimalPlaces)
-	{
+	if (m_sizeFormatDecimalPlaces) {
 		tmp += _T(".");
-		for (int i = 0; i < m_sizeFormatDecimalPlaces; i++)
+		for (int i = 0; i < m_sizeFormatDecimalPlaces; ++i) {
 			tmp += _T("8");
+		}
 	}
 	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s MiB"), tmp)));
 
@@ -440,18 +441,19 @@ void CStatusBar::MeasureQueueSizeWidth()
 
 void CStatusBar::DisplayEncrypted()
 {
-	const CServer* pServer = 0;
-	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (pState)
-		pServer = pState->GetServer();
+	ServerWithCredentials server;
+	CState *const pState = CContextManager::Get()->GetCurrentContext();
+	if (pState) {
+		server = pState->GetServer();
+	}
 
 	bool encrypted = false;
-	if (pServer) {
+	if (server) {
 		CCertificateNotification* info;
-		if (pServer->GetProtocol() == FTPS || pServer->GetProtocol() == FTPES || pServer->GetProtocol() == SFTP) {
+		if (server.server.GetProtocol() == FTPS || server.server.GetProtocol() == FTPES || server.server.GetProtocol() == SFTP) {
 			encrypted = true;
 		}
-		else if (pServer->GetProtocol() == FTP && pState->GetSecurityInfo(info)) {
+		else if (server.server.GetProtocol() == FTP && pState->GetSecurityInfo(info)) {
 			encrypted = true;
 		}
 	}
@@ -470,8 +472,9 @@ void CStatusBar::DisplayEncrypted()
 			AddField(0, widget_encryption, m_pEncryptionIndicator);
 			m_pEncryptionIndicator->SetToolTip(_("The connection is encrypted. Click icon for details."));
 		}
-		else
+		else {
 			m_pEncryptionIndicator->SetBitmap(bmp);
+		}
 	}
 }
 

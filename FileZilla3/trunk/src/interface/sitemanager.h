@@ -23,11 +23,11 @@ public:
 class Site final
 {
 public:
-	bool empty() const { return !m_server; }
+	bool empty() const { return !server_; }
 	bool operator==(Site const& s) const;
 	bool operator!=(Site const& s) const { return !(*this == s); }
 
-	CServer m_server;
+	ServerWithCredentials server_;
 	wxString m_comments;
 
 	Bookmark m_default_bookmark;
@@ -65,7 +65,7 @@ public:
 
 	static std::pair<std::unique_ptr<Site>, Bookmark> GetSiteByPath(std::wstring const& sitePath, bool printErrors = true);
 
-	static wxString AddServer(CServer server);
+	static wxString AddServer(ServerWithCredentials server);
 	static bool AddBookmark(std::wstring sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison);
 	static bool ClearBookmarks(std::wstring sitePath);
 

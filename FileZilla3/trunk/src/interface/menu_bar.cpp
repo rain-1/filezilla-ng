@@ -199,7 +199,7 @@ void CMenuBar::UpdateBookmarkMenu()
 	}
 
 	Site site = pState->GetSite();
-	if (!site.m_server) {
+	if (!site.server_) {
 		site = pState->GetLastSite();
 	}
 	if (site.m_bookmarks.empty()) {
@@ -243,7 +243,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 			return;
 
 		Site site = pState->GetSite();
-		if (!site.m_server) {
+		if (!site.server_) {
 			site = pState->GetLastSite();
 		}
 
@@ -253,8 +253,8 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 
 				pState->SetSyncBrowse(false);
 				if (!bookmark.m_remoteDir.empty() && pState->IsRemoteIdle(true)) {
-					const CServer* pServer = pState->GetServer();
-					if (!pServer || *pServer != site.m_server) {
+					ServerWithCredentials const& server = pState->GetServer();
+					if (!server || server != site.server_) {
 						m_pMainFrame->ConnectToSite(site, bookmark);
 						break;
 					}
@@ -295,8 +295,8 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 
 		pState->SetSyncBrowse(false);
 		if (!remote_dir.empty() && pState->IsRemoteIdle(true)) {
-			const CServer* pServer = pState->GetServer();
-			if (pServer) {
+			ServerWithCredentials const& server = pState->GetServer();
+			if (server) {
 				CServerPath current_remote_path = pState->GetRemotePath();
 				if (!current_remote_path.empty() && current_remote_path.GetType() != remote_dir.GetType()) {
 					wxMessageBoxEx(_("Selected global bookmark and current server use a different server type.\nUse site-specific bookmarks for this server."), _("Bookmark"), wxICON_EXCLAMATION, this);
@@ -442,32 +442,33 @@ void CMenuBar::UpdateMenubarState()
 		return;
 	}
 
-	const CServer* const pServer = pState->GetServer();
+	ServerWithCredentials const& server = pState->GetServer();
 	const bool idle = pState->IsRemoteIdle();
 
-	Enable(XRCID("ID_MENU_SERVER_DISCONNECT"), pServer && idle);
-	Enable(XRCID("ID_CANCEL"), pServer && !idle);
-	Enable(XRCID("ID_MENU_SERVER_CMD"), pServer && idle);
-	Enable(XRCID("ID_MENU_FILE_COPYSITEMANAGER"), pServer != 0);
-	Enable(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), pServer != 0);
+	Enable(XRCID("ID_MENU_SERVER_DISCONNECT"), server && idle);
+	Enable(XRCID("ID_CANCEL"), server && !idle);
+	Enable(XRCID("ID_MENU_SERVER_CMD"), server && idle);
+	Enable(XRCID("ID_MENU_FILE_COPYSITEMANAGER"), server.operator bool());
+	Enable(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), server.operator bool());
 
 	Check(XRCID("ID_TOOLBAR_COMPARISON"), pState->GetComparisonManager()->IsComparing());
 	Check(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), pState->GetSyncBrowse());
 
 	bool canReconnect;
-	if (pServer || !idle)
+	if (server || !idle)
 		canReconnect = false;
 	else {
-		canReconnect = static_cast<bool>(pState->GetLastSite().m_server);
+		canReconnect = static_cast<bool>(pState->GetLastSite().server_);
 	}
 	Enable(XRCID("ID_MENU_SERVER_RECONNECT"), canReconnect);
 
 	wxMenuItem* pItem = FindItem(XRCID("ID_MENU_TRANSFER_TYPE"));
-	if (!pServer || CServer::ProtocolHasDataTypeConcept(pServer->GetProtocol())) {
+	if (!server || CServer::ProtocolHasDataTypeConcept(server.server.GetProtocol())) {
 		pItem->Enable(true);
 	}
-	else
+	else {
 		pItem->Enable(false);
+	}
 }
 
 bool CMenuBar::ShowItem(int id)

@@ -109,7 +109,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	std::wstring pass = m_pPass->GetValue().ToStdWstring();
 	std::wstring port = m_pPort->GetValue().ToStdWstring();
 
-	CServer server;
+	ServerWithCredentials server;
 
 	std::wstring error;
 
@@ -123,20 +123,20 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	}
 
 	host = server.Format(ServerFormat::host_only);
-	ServerProtocol protocol = server.GetProtocol();
+	ServerProtocol protocol = server.server.GetProtocol();
 	switch (protocol)
 	{
 	case FTP:
 	case UNKNOWN:
-		if (CServer::GetProtocolFromPort(server.GetPort()) != FTP &&
-			CServer::GetProtocolFromPort(server.GetPort()) != UNKNOWN)
+		if (CServer::GetProtocolFromPort(server.server.GetPort()) != FTP &&
+			CServer::GetProtocolFromPort(server.server.GetPort()) != UNKNOWN)
 		{
 			host = _T("ftp://") + host;
 		}
 		break;
 	default:
 		{
-			const wxString prefix = server.GetPrefixFromProtocol(protocol);
+			const wxString prefix = server.server.GetPrefixFromProtocol(protocol);
 			if (!prefix.empty()) {
 				host = prefix + _T("://") + host;
 			}
@@ -145,16 +145,16 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	}
 
 	m_pHost->SetValue(host);
-	if (server.GetPort() != server.GetDefaultPort(server.GetProtocol())) {
-		m_pPort->SetValue(wxString::Format(_T("%d"), server.GetPort()));
+	if (server.server.GetPort() != server.server.GetDefaultPort(server.server.GetProtocol())) {
+		m_pPort->SetValue(wxString::Format(_T("%d"), server.server.GetPort()));
 	}
 	else {
 		m_pPort->ChangeValue(wxString());
 	}
 
-	m_pUser->SetValue(server.GetUser());
-	if (server.GetLogonType() != ANONYMOUS) {
-		m_pPass->SetValue(server.GetPass());
+	m_pUser->SetValue(server.server.GetUser());
+	if (server.credentials.logonType_ != LogonType::anonymous) {
+		m_pPass->SetValue(server.credentials.password_);
 	}
 	else {
 		m_pPass->ChangeValue(wxString());
@@ -167,19 +167,19 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	}
 
 	if (event.GetId() == 1) {
-		server.SetBypassProxy(true);
+		server.server.SetBypassProxy(true);
 	}
 
-	if (server.GetLogonType() != ANONYMOUS && !CAskSavePasswordDialog::Run(this)) {
+	if (server.credentials.logonType_ != LogonType::anonymous && !CAskSavePasswordDialog::Run(this)) {
 		return;
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) && server.GetLogonType() == NORMAL) {
-		server.SetLogonType(ASK);
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) && server.credentials.logonType_ == LogonType::normal) {
+		server.credentials.logonType_ = LogonType::ask;
 		CLoginManager::Get().RememberPassword(server);
 	}
 	Site site;
-	site.m_server = server;
+	site.server_ = server;
 	Bookmark bm;
 	bm.m_remoteDir = path;
 	if (!m_pMainFrame->ConnectToSite(site, bm)) {
@@ -194,8 +194,9 @@ void CQuickconnectBar::OnQuickconnectDropdown(wxCommandEvent&)
 	wxMenu* pMenu = new wxMenu;
 
 	// We have to start with id 1 since menu items with id 0 don't work under OS X
-	if (COptions::Get()->GetOptionVal(OPTION_FTP_PROXY_TYPE))
+	if (COptions::Get()->GetOptionVal(OPTION_FTP_PROXY_TYPE)) {
 		pMenu->Append(1, _("Connect bypassing proxy settings"));
+	}
 	pMenu->Append(2, _("Clear quickconnect bar"));
 	pMenu->Append(3, _("Clear history"));
 
@@ -204,7 +205,7 @@ void CQuickconnectBar::OnQuickconnectDropdown(wxCommandEvent&)
 		pMenu->AppendSeparator();
 
 		unsigned int i = 0;
-		for (std::list<CServer>::const_iterator iter = m_recentServers.begin();
+		for (auto iter = m_recentServers.cbegin();
 			iter != m_recentServers.end();
 			++iter, ++i)
 		{
@@ -244,11 +245,11 @@ void CQuickconnectBar::OnMenu(wxCommandEvent& event)
 		return;
 	}
 
-	std::list<CServer>::const_iterator iter = m_recentServers.begin();
+	auto iter = m_recentServers.cbegin();
 	std::advance(iter, index);
 
 	Site site;
-	site.m_server = *iter;
+	site.server_ = *iter;
 	m_pMainFrame->ConnectToSite(site, Bookmark());
 }
 

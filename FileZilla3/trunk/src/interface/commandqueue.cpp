@@ -148,8 +148,9 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 			// Pending event, has no relevance during command execution
 			return;
 		}
-		if (nReplyCode & FZ_REPLY_PASSWORDFAILED)
-			CLoginManager::Get().CachedPasswordFailed(*m_state.GetServer());
+		if (nReplyCode & FZ_REPLY_PASSWORDFAILED) {
+			CLoginManager::Get().CachedPasswordFailed(m_state.GetServer().server);
+		}
 	}
 
 	if (m_CommandList.empty()) {
@@ -174,9 +175,9 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 
 		if (reconnect) {
 			// Try automatic reconnect
-			const CServer* pServer = m_state.GetServer();
-			if (pServer) {
-				m_CommandList.emplace_front(normal, std::make_unique<CConnectCommand>(*pServer));
+			ServerWithCredentials const& server = m_state.GetServer();
+			if (server) {
+				m_CommandList.emplace_front(normal, std::make_unique<CConnectCommand>(server.server, server.credentials));
 				ProcessNextCommand();
 				return;
 			}
@@ -324,6 +325,6 @@ void CCommandQueue::ProcessDirectoryListing(CDirectoryListingNotification const&
 	}
 
 	if (pListing && !listingNotification.Failed() && m_state.GetServer()) {
-		CContextManager::Get()->ProcessDirectoryListing(*m_state.GetServer(), pListing, listingIsRecursive ? 0 : &m_state);
+		CContextManager::Get()->ProcessDirectoryListing(m_state.GetServer().server, pListing, listingIsRecursive ? 0 : &m_state);
 	}
 }

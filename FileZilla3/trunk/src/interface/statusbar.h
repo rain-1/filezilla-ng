@@ -1,5 +1,5 @@
-#ifndef __STATUSBAR_H__
-#define __STATUSBAR_H__
+#ifndef FILEZILLA_INTERFACE_STATUSBAR_HEADER
+#define FILEZILLA_INTERFACE_STATUSBAR_HEADER
 
 #include <option_change_event_handler.h>
 #include "sizeformatting.h"
@@ -132,4 +132,4 @@ protected:
 	void OnTimer(wxTimerEvent& ev);
 };
 
-#endif //__STATUSBAR_H__
+#endif

@@ -77,7 +77,7 @@ public:
 
 	virtual bool Connected() const override { return static_cast<bool>(currentServer_); }
 protected:
-	virtual void Connect(CServer const& server) override;
+	virtual void Connect(CServer const& server, Credentials const& credentials) override;
 	virtual void FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 		std::wstring const& remoteFile, bool download,
 		CFileTransferCommand::t_transferSettings const& transferSettings) override;

@@ -38,9 +38,9 @@ CSftpControlSocket::~CSftpControlSocket()
 	DoClose();
 }
 
-void CSftpControlSocket::Connect(CServer const& server)
+void CSftpControlSocket::Connect(CServer const& server, Credentials const& credentials)
 {
-	LogMessage(MessageType::Status, _("Connecting to %s..."), server.Format(ServerFormat::with_optional_port));
+	LogMessage(MessageType::Status, _("Connecting to %s..."), server.Format(ServerFormat::with_optional_port, credentials));
 	SetWait(true);
 
 	m_sftpEncryptionDetails = CSftpEncryptionNotification();
@@ -55,9 +55,9 @@ void CSftpControlSocket::Connect(CServer const& server)
 
 	currentServer_ = server;
 
-	auto pData = std::make_unique<CSftpConnectOpData>(*this);
-	if (currentServer_.GetLogonType() == KEY) {
-		pData->keyfiles_ = fz::strtok(currentServer_.GetKeyFile(), L"\r\n");
+	auto pData = std::make_unique<CSftpConnectOpData>(*this, credentials);
+	if (!credentials.keyFile_.empty()) {
+		pData->keyfiles_ = fz::strtok(credentials.keyFile_, L"\r\n");
 	}
 	else {
 		pData->keyfiles_ = fz::strtok(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES), L"\r\n");
@@ -193,7 +193,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 			std::wstring const challengeIdentifier = m_requestPreamble + L"\n" + m_requestInstruction + L"\n" + message.text[0];
 
 			CInteractiveLoginNotification::type t = CInteractiveLoginNotification::interactive;
-			if (currentServer_.GetLogonType() == INTERACTIVE || m_requestPreamble == L"SSH key passphrase") {
+			if (data.credentials_.logonType_ == LogonType::interactive || m_requestPreamble == L"SSH key passphrase") {
 				if (m_requestPreamble == L"SSH key passphrase") {
 					t = CInteractiveLoginNotification::keyfile;
 				}
@@ -226,7 +226,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 					return;
 				}
 
-				std::wstring const pass = currentServer_.GetPass();
+				std::wstring const pass = data.credentials_.password_;
 				std::wstring show = L"Pass: ";
 				show.append(pass.size(), '*');
 				SendCommand(pass, show);
@@ -401,14 +401,21 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 		break;
 	case reqId_interactiveLogin:
 		{
+			if (operations_.empty() || operations_.back()->opId != Command::connect) {
+				LogMessage(MessageType::Debug_Info, L"No or invalid operation in progress, ignoring request reply %d", pNotification->GetRequestID());
+				return false;
+			}
+
+			auto & data = static_cast<CSftpConnectOpData&>(*operations_.back());
+
 			auto *pInteractiveLoginNotification = static_cast<CInteractiveLoginNotification *>(pNotification);
 
 			if (!pInteractiveLoginNotification->passwordSet) {
 				DoClose(FZ_REPLY_CANCELED);
 				return false;
 			}
-			std::wstring const pass = pInteractiveLoginNotification->server.GetPass();
-			currentServer_.SetUser(currentServer_.GetUser(), pass);
+			std::wstring const& pass = pInteractiveLoginNotification->credentials.password_;
+			data.credentials_.password_ = pass;
 			std::wstring show = L"Pass: ";
 			show.append(pass.size(), '*');
 			SendCommand(pass, show);

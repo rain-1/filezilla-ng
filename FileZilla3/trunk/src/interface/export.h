@@ -1,5 +1,5 @@
-#ifndef __EXPORT_H__
-#define __EXPORT_H__
+#ifndef FILEZILLA_INTERFACE_EXPORT_HEADER
+#define FILEZILLA_INTERFACE_EXPORT_HEADER
 
 #include "dialogex.h"
 
@@ -16,4 +16,4 @@ protected:
 	const CQueueView* const m_pQueueView;
 };
 
-#endif //__EXPORT_H__
+#endif

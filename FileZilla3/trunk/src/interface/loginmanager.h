@@ -1,5 +1,5 @@
-#ifndef __LOGINMANAGER_H__
-#define __LOGINMANAGER_H__
+#ifndef FILEZILLA_INTERFACE_LOGINMANAGER_HEADER
+#define FILEZILLA_INTERFACE_LOGINMANAGER_HEADER
 
 // The purpose of this class is to manage some aspects of the login
 // behaviour. These are:
@@ -11,14 +11,14 @@ class CLoginManager
 public:
 	static CLoginManager& Get() { return m_theLoginManager; }
 
-	bool GetPassword(CServer& server, bool silent, std::wstring const& name = std::wstring(), std::wstring const& challenge = std::wstring(), bool canRemember = true);
+	bool GetPassword(ServerWithCredentials& server, bool silent, std::wstring const& name = std::wstring(), std::wstring const& challenge = std::wstring(), bool canRemember = true);
 
-	void CachedPasswordFailed(const CServer& server, std::wstring const& challenge = std::wstring());
+	void CachedPasswordFailed(CServer const& server, std::wstring const& challenge = std::wstring());
 
-	void RememberPassword(CServer & server, std::wstring const& challenge = std::wstring());
+	void RememberPassword(ServerWithCredentials & server, std::wstring const& challenge = std::wstring());
 
 protected:
-	bool DisplayDialog(CServer& server, std::wstring const& name, std::wstring const& challenge, bool canRemember);
+	bool DisplayDialog(ServerWithCredentials& server, std::wstring const& name, std::wstring const& challenge, bool canRemember);
 
 	static CLoginManager m_theLoginManager;
 
@@ -37,4 +37,4 @@ protected:
 	std::list<t_passwordcache> m_passwordCache;
 };
 
-#endif //__LOGINMANAGER_H__
+#endif

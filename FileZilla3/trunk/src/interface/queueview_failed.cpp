@@ -84,17 +84,18 @@ void CQueueViewFailed::OnRemoveSelected(wxCommandEvent&)
 {
 #ifndef __WXMSW__
 	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
-	if (!GetSelectedItemCount())
+	if (!GetSelectedItemCount()) {
 		return;
+	}
 #endif
 
 	std::list<CQueueItem*> selectedItems;
 	long item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-		if (item == -1)
+		if (item == -1) {
 			break;
+		}
 
 		selectedItems.push_front(GetQueueItem(item));
 		SetItemState(item, 0, wxLIST_STATE_SELECTED);
@@ -102,47 +103,44 @@ void CQueueViewFailed::OnRemoveSelected(wxCommandEvent&)
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
 
-	while (!selectedItems.empty())
-	{
+	while (!selectedItems.empty()) {
 		CQueueItem* pItem = selectedItems.front();
 		selectedItems.pop_front();
 
 		CQueueItem* pTopLevelItem = pItem->GetTopLevelItem();
 
-		if (pItem->GetType() == QueueItemType::Server)
-		{
+		if (pItem->GetType() == QueueItemType::Server) {
 			CServerItem* pServerItem = (CServerItem*)pItem;
-			if (pEditHandler && pEditHandler->GetFileCount(CEditHandler::remote, CEditHandler::upload_and_remove_failed, &pServerItem->GetServer()))
-				pEditHandler->RemoveAll(CEditHandler::upload_and_remove_failed, &pServerItem->GetServer());
+			if (pEditHandler && pEditHandler->GetFileCount(CEditHandler::remote, CEditHandler::upload_and_remove_failed, pServerItem->GetServer())) {
+				pEditHandler->RemoveAll(CEditHandler::upload_and_remove_failed, pServerItem->GetServer());
+			}
 		}
-		else if (pItem->GetType() == QueueItemType::File)
-		{
+		else if (pItem->GetType() == QueueItemType::File) {
 			CFileItem* pFileItem = (CFileItem*)pItem;
-			if (pFileItem->m_edit == CEditHandler::remote && pEditHandler)
-			{
-				if (pFileItem->m_edit == CEditHandler::local)
-				{
+			if (pFileItem->m_edit == CEditHandler::remote && pEditHandler) {
+				if (pFileItem->m_edit == CEditHandler::local) {
 					wxString fullPath(pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile());
 					CEditHandler::fileState state = pEditHandler->GetFileState(fullPath);
-					if (state == CEditHandler::upload_and_remove_failed)
+					if (state == CEditHandler::upload_and_remove_failed) {
 						pEditHandler->Remove(fullPath);
+					}
 				}
-				else
-				{
+				else {
 					CServerItem* pServerItem = (CServerItem*)pFileItem->GetTopLevelItem();
 					CEditHandler::fileState state = pEditHandler->GetFileState(pFileItem->GetRemoteFile(), pFileItem->GetRemotePath(), pServerItem->GetServer());
-					if (state == CEditHandler::upload_and_remove_failed)
+					if (state == CEditHandler::upload_and_remove_failed) {
 						pEditHandler->Remove(pFileItem->GetRemoteFile(), pFileItem->GetRemotePath(), pServerItem->GetServer());
+					}
 				}
 			}
 		}
 
-		if (!pTopLevelItem->GetChild(1))
-		{
+		if (!pTopLevelItem->GetChild(1)) {
 			// Parent will get deleted
 			// If next selected item is parent, remove it from list
-			if (!selectedItems.empty() && selectedItems.front() == pTopLevelItem)
+			if (!selectedItems.empty() && selectedItems.front() == pTopLevelItem) {
 				selectedItems.pop_front();
+			}
 		}
 		RemoveItem(pItem, true, false, false);
 	}
@@ -150,8 +148,9 @@ void CQueueViewFailed::OnRemoveSelected(wxCommandEvent&)
 	SaveSetItemCount(m_itemCount);
 	RefreshListOnly();
 
-	if (!m_itemCount && m_pQueue->GetQueueView()->GetItemCount())
+	if (!m_itemCount && m_pQueue->GetQueueView()->GetItemCount()) {
 		m_pQueue->SetSelection(0);
+	}
 }
 
 bool CQueueViewFailed::RequeueFileItem(CFileItem* pFileItem, CServerItem* pServerItem)

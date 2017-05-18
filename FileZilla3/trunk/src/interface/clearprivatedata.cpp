@@ -96,8 +96,9 @@ void CClearPrivateDataDialog::Run()
 		CInterProcessMutex sitemanagerMutex(MUTEX_SITEMANAGERGLOBAL, false);
 		while (sitemanagerMutex.TryLock() == 0) {
 			int res = wxMessageBoxEx(_("The Site Manager is opened in another instance of FileZilla 3.\nPlease close it or the data cannot be deleted."), _("Clear private data"), wxOK | wxCANCEL);
-			if (res != wxYES)
+			if (res != wxYES) {
 				return;
+			}
 		}
 		CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 		RemoveXmlFile(_T("sitemanager"));
@@ -116,21 +117,20 @@ void CClearPrivateDataDialog::OnTimer(wxTimerEvent&)
 {
 	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
 
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter)
-	{
+	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter) {
 		CState* pState = *iter;
 
-		if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
-		{
-			if (!pState->m_pCommandQueue->Cancel())
+		if (pState->IsRemoteConnected() || !pState->IsRemoteIdle()) {
+			if (!pState->m_pCommandQueue->Cancel()) {
 				return;
+			}
 
 			pState->Disconnect();
 		}
 
-		if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
+		if (pState->IsRemoteConnected() || !pState->IsRemoteIdle()) {
 			return;
-
+		}
 	}
 
 	m_timer.Stop();
@@ -140,16 +140,17 @@ void CClearPrivateDataDialog::OnTimer(wxTimerEvent&)
 
 void CClearPrivateDataDialog::Delete()
 {
-	if (m_timer.IsRunning())
+	if (m_timer.IsRunning()) {
 		return;
+	}
 
 	Destroy();
 }
 
 bool CClearPrivateDataDialog::ClearReconnect()
 {
-	COptions::Get()->SetLastServer(CServer());
-	COptions::Get()->SetOption(OPTION_LASTSERVERPATH, _T(""));
+	COptions::Get()->SetLastServer(ServerWithCredentials());
+	COptions::Get()->SetOption(OPTION_LASTSERVERPATH, std::wstring());
 
 	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
 	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter) {
@@ -166,12 +167,14 @@ void CClearPrivateDataDialog::RemoveXmlFile(const wxString& name)
 {
 	{
 		wxFileName fn(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), name + _T(".xml"));
-		if (fn.FileExists())
+		if (fn.FileExists()) {
 			wxRemoveFile(fn.GetFullPath());
+		}
 	}
 	{
 		wxFileName fn(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), name + _T("xml~"));
-		if (fn.FileExists())
+		if (fn.FileExists()) {
 			wxRemoveFile(fn.GetFullPath());
+		}
 	}
 }

@@ -57,8 +57,9 @@ public:
 		int flags = 0;
 		wxTreeItemId hit = m_pRemoteTreeView->HitTest(point, flags);
 
-		if (flags & (wxTREE_HITTEST_ABOVE | wxTREE_HITTEST_BELOW | wxTREE_HITTEST_NOWHERE | wxTREE_HITTEST_TOLEFT | wxTREE_HITTEST_TORIGHT))
+		if (flags & (wxTREE_HITTEST_ABOVE | wxTREE_HITTEST_BELOW | wxTREE_HITTEST_NOWHERE | wxTREE_HITTEST_TOLEFT | wxTREE_HITTEST_TORIGHT)) {
 			return wxTreeItemId();
+		}
 
 		return hit;
 	}
@@ -71,32 +72,34 @@ public:
 			return def;
 
 		wxTreeItemId hit = GetHit(wxPoint(x, y));
-		if (!hit)
+		if (!hit) {
 			return wxDragNone;
+		}
 
 		CServerPath path = m_pRemoteTreeView->GetPathFromItem(hit);
-		if (path.empty())
+		if (path.empty()) {
 			return wxDragNone;
+		}
 
-		if (!GetData())
+		if (!GetData()) {
 			return wxDragError;
+		}
 
 		CDragDropManager* pDragDropManager = CDragDropManager::Get();
-		if (pDragDropManager)
+		if (pDragDropManager) {
 			pDragDropManager->pDropTarget = m_pRemoteTreeView;
+		}
 
-		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat())
+		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat()) {
 			m_pRemoteTreeView->m_state.UploadDroppedFiles(m_pFileDataObject, path, false);
-		else
-		{
-			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
-			{
+		}
+		else {
+			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId()) {
 				wxMessageBoxEx(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
 				return wxDragNone;
 			}
 
-			if (!m_pRemoteTreeView->m_state.GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pRemoteTreeView->m_state.GetServer()))
-			{
+			if (!m_pRemoteTreeView->m_state.GetServer() || m_pRemoteDataObject->GetServer().server != m_pRemoteTreeView->m_state.GetServer().server) {
 				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
@@ -788,27 +791,29 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 	}
 
 	const wxTreeItemId& item = event.GetItem();
-	if (!item)
+	if (!item) {
 		return;
+	}
 
 	CServerPath path = GetPathFromItem(item);
-	if (path.empty() || !path.HasParent())
+	if (path.empty() || !path.HasParent()) {
 		return;
+	}
 
 	const CServerPath& parent = path.GetParent();
 	const wxString& lastSegment = path.GetLastSegment();
-	if (lastSegment.empty())
+	if (lastSegment.empty()) {
 		return;
+	}
 
 	wxDataObjectComposite object;
 
-	CServer const* pServer = m_state.GetServer();
-	if (!pServer)
+	ServerWithCredentials server = m_state.GetServer(); // Make a copy as DoDragDrop later runs the event loop
+	if (!server) {
 		return;
-	CServer const server = *pServer;
+	}
 
-
-	CRemoteDataObject *pRemoteDataObject = new CRemoteDataObject(*pServer, parent);
+	CRemoteDataObject *pRemoteDataObject = new CRemoteDataObject(server, parent);
 	pRemoteDataObject->AddFile(lastSegment, true, -1, false);
 
 	pRemoteDataObject->Finalize();
@@ -831,7 +836,7 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 
 	CDragDropManager* pDragDropManager = CDragDropManager::Init();
 	pDragDropManager->pDragSource = this;
-	pDragDropManager->server = *pServer;
+	pDragDropManager->server = server;
 	pDragDropManager->remoteParent = parent;
 
 	wxDropSource source(this);
@@ -848,8 +853,8 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 #if FZ3_USESHELLEXT
 	if (ext) {
 		if (!pRemoteDataObject->DidSendData()) {
-			pServer = m_state.GetServer();
-			if (!pServer || !m_state.IsRemoteIdle() || *pServer != server) {
+			server = m_state.GetServer();
+			if (!server || !m_state.IsRemoteIdle() || server != server) {
 				wxBell();
 				return;
 			}
@@ -871,8 +876,9 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 {
 	m_contextMenuItem = event.GetItem();
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_REMOTETREE"));
-	if (!pMenu)
+	if (!pMenu) {
 		return;
+	}
 
 	const CServerPath& path = m_contextMenuItem ? GetPathFromItem(m_contextMenuItem) : CServerPath();
 	if (!m_state.IsRemoteIdle() || path.empty()) {
@@ -1389,14 +1395,14 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
 		return;
 	}
 
-	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
+	CServerPath const& path = GetPathFromItem(m_contextMenuItem);
 	if (path.empty()) {
 		wxBell();
 		return;
 	}
 
-	const CServer *pServer = m_state.GetServer();
-	if (!pServer) {
+	ServerWithCredentials const& server = m_state.GetServer();
+	if (!server) {
 		wxBell();
 		return;
 	}
@@ -1406,7 +1412,7 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
 		return;
 	}
 
-	wxString url = pServer->Format((event.GetId() == XRCID("ID_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
+	wxString url = server.Format((event.GetId() == XRCID("ID_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
 
 	std::wstring const pathPart = fz::percent_encode_w(path.GetPath(), true);
 	if (!pathPart.empty() && pathPart[0] != '/') {

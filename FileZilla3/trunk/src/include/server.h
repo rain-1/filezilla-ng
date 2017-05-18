@@ -36,18 +36,6 @@ enum ServerType
 	SERVERTYPE_MAX
 };
 
-enum LogonType
-{
-	ANONYMOUS,
-	NORMAL,
-	ASK, // ASK should not be sent to the engine, it's intended to be used by the interface
-	INTERACTIVE,
-	ACCOUNT,
-	KEY,
-
-	LOGONTYPE_MAX
-};
-
 enum PasvMode
 {
 	MODE_DEFAULT,
@@ -71,6 +59,7 @@ enum CharsetEncoding
 	ENCODING_CUSTOM
 };
 
+class Credentials;
 class CServerPath;
 class CServer final
 {
@@ -79,7 +68,6 @@ public:
 	// No error checking is done in the constructors
 	CServer() = default;
 	CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int);
-	CServer(ServerProtocol protocol, ServerType type, std::wstring const& host, unsigned int, std::wstring const& user, std::wstring const& pass = std::wstring(), std::wstring const& account = std::wstring());
 
 	void clear();
 
@@ -89,40 +77,28 @@ public:
 	ServerType GetType() const;
 	std::wstring GetHost() const;
 	unsigned int GetPort() const;
-	LogonType GetLogonType() const;
 	std::wstring GetUser() const;
-	std::wstring GetPass() const;
-	std::wstring GetAccount() const;
-	std::wstring GetKeyFile() const;
 	int GetTimezoneOffset() const;
 	PasvMode GetPasvMode() const;
 	int MaximumMultipleConnections() const;
 	bool GetBypassProxy() const;
 
-	// Return true if URL could be parsed correctly, false otherwise.
-	// If parsing fails, pError is filled with the reason and the CServer instance may be left an undefined state.
-	bool ParseUrl(std::wstring host, unsigned int port, std::wstring user, std::wstring pass, std::wstring &error, CServerPath &path);
-	bool ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path);
-
 	void SetProtocol(ServerProtocol serverProtocol);
 	bool SetHost(std::wstring const& host, unsigned int port);
 
-	void SetLogonType(LogonType logonType);
-	bool SetUser(std::wstring const& user, std::wstring const& pass = std::wstring());
-	bool SetAccount(std::wstring const& account);
-	bool SetKeyFile(std::wstring const& keyFile);
+	void SetUser(std::wstring const& user);
 
 	CServer& operator=(const CServer &op);
 	bool operator==(const CServer &op) const;
 	bool operator<(const CServer &op) const;
 	bool operator!=(const CServer &op) const;
-	bool EqualsNoPass(const CServer &op) const;
 
 	bool SetTimezoneOffset(int minutes);
 	void SetPasvMode(PasvMode pasvMode);
 	void MaximumMultipleConnections(int maximum);
 
 	std::wstring Format(ServerFormat formatType) const;
+	std::wstring Format(ServerFormat formatType, Credentials const& credentials) const;
 
 	bool SetEncodingType(CharsetEncoding type, std::wstring const& encoding = std::wstring());
 	bool SetCustomEncoding(std::wstring const& encoding);
@@ -158,21 +134,15 @@ public:
 	static std::wstring GetNameFromServerType(ServerType type);
 	static ServerType GetServerTypeFromName(std::wstring const& name);
 
-	static std::wstring GetNameFromLogonType(LogonType type);
-	static LogonType GetLogonTypeFromName(std::wstring const& name);
-
-	explicit operator bool() const { return !m_host.empty(); }
+	bool empty() const { return m_host.empty(); }
+	explicit operator bool() const { return !empty(); }
 
 protected:
 	ServerProtocol m_protocol{UNKNOWN};
 	ServerType m_type{DEFAULT};
 	std::wstring m_host;
 	unsigned int m_port{21};
-	LogonType m_logonType{ANONYMOUS};
 	std::wstring m_user;
-	std::wstring m_pass;
-	std::wstring m_account;
-	std::wstring m_keyFile;
 	int m_timezoneOffset{};
 	PasvMode m_pasvMode{MODE_DEFAULT};
 	int m_maximumMultipleConnections{};
@@ -182,6 +152,73 @@ protected:
 
 	std::vector<std::wstring> m_postLoginCommands;
 	bool m_bypassProxy{};
+};
+
+
+enum class LogonType
+{
+	anonymous,
+	normal,
+	ask, // ask should not be sent to the engine, it's intended to be used by the interface
+	interactive,
+	account,
+	key,
+
+	count
+};
+std::wstring GetNameFromLogonType(LogonType type);
+LogonType GetLogonTypeFromName(std::wstring const& name);
+
+
+class Credentials
+{
+public:
+	bool operator==(Credentials const& rhs) const {
+		return
+			logonType_ == rhs.logonType_ &&
+			password_ == rhs.password_ &&
+			account_ == rhs.account_ &&
+			keyFile_ == rhs.keyFile_;
+	}
+
+	LogonType logonType_{LogonType::anonymous};
+	std::wstring password_;
+	std::wstring account_;
+	std::wstring keyFile_;
+};
+
+class ServerWithCredentials final
+{
+public:
+	ServerWithCredentials() = default;
+
+	explicit ServerWithCredentials(CServer const& s, Credentials const& c)
+		: server(s)
+		, credentials(c)
+	{}
+
+	// Return true if URL could be parsed correctly, false otherwise.
+	// If parsing fails, pError is filled with the reason and the CServer instance may be left an undefined state.
+	bool ParseUrl(std::wstring host, unsigned int port, std::wstring user, std::wstring pass, std::wstring &error, CServerPath &path);
+	bool ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path);
+
+	std::wstring Format(ServerFormat formatType) const {
+		return server.Format(formatType, credentials);
+	}
+
+	explicit operator bool() const {
+		return static_cast<bool>(server);
+	}
+
+	bool operator==(ServerWithCredentials const& rhs) const {
+		return server == rhs.server && credentials == rhs.credentials;
+	}
+	bool operator!=(ServerWithCredentials const& rhs) const {
+		return !(*this == rhs);
+	}
+
+	CServer server;
+	Credentials credentials;
 };
 
 #endif
