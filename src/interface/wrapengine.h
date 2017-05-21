@@ -1,5 +1,5 @@
-#ifndef __WRAPENGINE_H__
-#define __WRAPENGINE_H__
+#ifndef FILEZILLA_INTERFACE_WRAPENGINE_HEADER
+#define FILEZILLA_INTERFACE_WRAPENGINE_HEADER
 
 class CWrapEngine
 {
@@ -53,4 +53,4 @@ protected:
 	static bool m_use_cache;
 };
 
-#endif //__WRAPENGINE_H__
+#endif
