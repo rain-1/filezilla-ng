@@ -25,9 +25,11 @@ bool CLoginManager::GetPassword(ServerWithCredentials &server, bool silent, std:
 	}
 
 	if (server.credentials.encrypted_) {
-		// FIXME
-		auto priv = private_key::from_password("hello", server.credentials.encrypted_.salt_);
-		return server.credentials.Unprotect(priv);
+		assert(challenge.empty());
+		auto priv = decryptors_.find(server.credentials.encrypted_);
+		if (priv != decryptors_.end()) {
+			return server.credentials.Unprotect(priv->second);
+		}
 	}
 
 	if (canRemember) {
