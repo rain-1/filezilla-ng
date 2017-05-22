@@ -490,7 +490,7 @@ bool GetServer(pugi::xml_node node, ServerWithCredentials & server)
 	return true;
 }
 
-void SetServer(pugi::xml_node node, CServer const& server, Credentials const& credentials)
+void SetServer(pugi::xml_node node, ServerWithCredentials const& server)
 {
 	if (!node) {
 		return;
@@ -502,41 +502,41 @@ void SetServer(pugi::xml_node node, CServer const& server, Credentials const& cr
 		node.remove_child(child);
 	}
 
-	AddTextElement(node, "Host", server.GetHost());
-	AddTextElement(node, "Port", server.GetPort());
-	AddTextElement(node, "Protocol", server.GetProtocol());
-	AddTextElement(node, "Type", server.GetType());
+	AddTextElement(node, "Host", server.server.GetHost());
+	AddTextElement(node, "Port", server.server.GetPort());
+	AddTextElement(node, "Protocol", server.server.GetProtocol());
+	AddTextElement(node, "Type", server.server.GetType());
 
-	LogonType logonType = credentials.logonType_;
+	LogonType logonType = server.credentials.logonType_;
 
-	if (credentials.logonType_ != LogonType::anonymous) {
-		AddTextElement(node, "User", server.GetUser());
+	if (server.credentials.logonType_ != LogonType::anonymous) {
+		AddTextElement(node, "User", server.server.GetUser());
 
-		if (credentials.logonType_ == LogonType::normal || credentials.logonType_ == LogonType::account) {
+		if (server.credentials.logonType_ == LogonType::normal || server.credentials.logonType_ == LogonType::account) {
 			if (kiosk_mode) {
 				logonType = LogonType::ask;
 			}
 			else {
-				std::string pass = fz::to_utf8(credentials.GetPass());
+				std::string pass = fz::to_utf8(server.credentials.GetPass());
 
 				pugi::xml_node passElement = AddTextElementUtf8(node, "Pass", fz::base64_encode(pass));
 				if (passElement) {
 					SetTextAttribute(passElement, "encoding", _T("base64"));
 				}
 
-				if (credentials.logonType_ == LogonType::account) {
-					AddTextElement(node, "Account", credentials.account_);
+				if (server.credentials.logonType_ == LogonType::account) {
+					AddTextElement(node, "Account", server.credentials.account_);
 				}
 			}
 		}
-		else if (!credentials.keyFile_.empty()) {
-			AddTextElement(node, "Keyfile", credentials.keyFile_);
+		else if (!server.credentials.keyFile_.empty()) {
+			AddTextElement(node, "Keyfile", server.credentials.keyFile_);
 		}
 	}
 	AddTextElement(node, "Logontype", static_cast<int>(logonType));
 
-	AddTextElement(node, "TimezoneOffset", server.GetTimezoneOffset());
-	switch (server.GetPasvMode())
+	AddTextElement(node, "TimezoneOffset", server.server.GetTimezoneOffset());
+	switch (server.server.GetPasvMode())
 	{
 	case MODE_PASSIVE:
 		AddTextElementUtf8(node, "PasvMode", "MODE_PASSIVE");
@@ -548,9 +548,9 @@ void SetServer(pugi::xml_node node, CServer const& server, Credentials const& cr
 		AddTextElementUtf8(node, "PasvMode", "MODE_DEFAULT");
 		break;
 	}
-	AddTextElement(node, "MaximumMultipleConnections", server.MaximumMultipleConnections());
+	AddTextElement(node, "MaximumMultipleConnections", server.server.MaximumMultipleConnections());
 
-	switch (server.GetEncodingType())
+	switch (server.server.GetEncodingType())
 	{
 	case ENCODING_AUTO:
 		AddTextElementUtf8(node, "EncodingType", "Auto");
@@ -560,12 +560,12 @@ void SetServer(pugi::xml_node node, CServer const& server, Credentials const& cr
 		break;
 	case ENCODING_CUSTOM:
 		AddTextElementUtf8(node, "EncodingType", "Custom");
-		AddTextElement(node, "CustomEncoding", server.GetCustomEncoding());
+		AddTextElement(node, "CustomEncoding", server.server.GetCustomEncoding());
 		break;
 	}
 
-	if (CServer::SupportsPostLoginCommands(server.GetProtocol())) {
-		std::vector<std::wstring> const& postLoginCommands = server.GetPostLoginCommands();
+	if (CServer::SupportsPostLoginCommands(server.server.GetProtocol())) {
+		std::vector<std::wstring> const& postLoginCommands = server.server.GetPostLoginCommands();
 		if (!postLoginCommands.empty()) {
 			auto element = node.append_child("PostLoginCommands");
 			for (auto const& command : postLoginCommands) {
@@ -574,8 +574,8 @@ void SetServer(pugi::xml_node node, CServer const& server, Credentials const& cr
 		}
 	}
 
-	AddTextElementUtf8(node, "BypassProxy", server.GetBypassProxy() ? "1" : "0");
-	std::wstring const& name = server.GetName();
+	AddTextElementUtf8(node, "BypassProxy", server.server.GetBypassProxy() ? "1" : "0");
+	std::wstring const& name = server.server.GetName();
 	if (!name.empty()) {
 		AddTextElement(node, "Name", name);
 	}

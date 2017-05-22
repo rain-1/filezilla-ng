@@ -90,7 +90,7 @@ void CRecentServerList::SetMostRecentServer(ServerWithCredentials const& server)
 
 	for (auto const& server : mostRecentServers) {
 		auto node = servers.append_child("Server");
-		SetServer(node, server.server, server.credentials);
+		SetServer(node, server);
 	}
 
 	xmlFile.Save(true);

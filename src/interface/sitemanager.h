@@ -1,5 +1,5 @@
-#ifndef __SITEMANAGER_H__
-#define __SITEMANAGER_H__
+#ifndef FILEZILLA_INTERFACE_SITEMANAGER_HEADER
+#define FILEZILLA_INTERFACE_SITEMANAGER_HEADER
 
 #include <wx/treectrl.h>
 
@@ -99,4 +99,4 @@ protected:
 	static bool LoadPredefined(CSiteManagerXmlHandler& handler);
 };
 
-#endif //__SITEMANAGER_H__
+#endif

@@ -1,5 +1,5 @@
-#ifndef __WELCOME_DIALOG_H__
-#define __WELCOME_DIALOG_H__
+#ifndef FILEZILLA_INTERFACE_WELCOME_DIALOG_HEADER
+#define FILEZILLA_INTERFACE_WELCOME_DIALOG_HEADER
 
 #include "dialogex.h"
 
@@ -23,4 +23,4 @@ protected:
 	void OnTimer(wxTimerEvent& event);
 };
 
-#endif //__WELCOME_DIALOG_H__
+#endif

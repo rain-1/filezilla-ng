@@ -80,7 +80,7 @@
       <Culture>0x0407</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>libnettle.dll.a;libgnutls-30.lib;normaliz.lib;odbc32.lib;odbccp32.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;..\engine\Debug\engine.lib;win32_static_debug\libfilezilla.lib;Netapi32.lib;Winmm.lib;Ws2_32.lib;mpr.lib;sqlite3.lib;powrprof.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libnettle.dll.a;libhogweed-4-2.lib;libgnutls-30.lib;normaliz.lib;odbc32.lib;odbccp32.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;..\engine\Debug\engine.lib;win32_static_debug\libfilezilla.lib;Netapi32.lib;Winmm.lib;Ws2_32.lib;mpr.lib;sqlite3.lib;powrprof.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Debug/FileZilla_dbg.pdb</ProgramDatabaseFile>
       <OutputFile>..\bin\FileZilla_dbg.exe</OutputFile>
@@ -188,6 +188,7 @@
     <ClCompile Include="msgbox.cpp" />
     <ClCompile Include="netconfwizard.cpp" />
     <ClCompile Include="Options.cpp" />
+    <ClCompile Include="password_crypto.cpp" />
     <ClCompile Include="recursive_operation.cpp" />
     <ClCompile Include="recursive_operation_status.cpp" />
     <ClCompile Include="settings\optionspage.cpp" />
@@ -306,6 +307,7 @@
     <ClInclude Include="msgbox.h" />
     <ClInclude Include="netconfwizard.h" />
     <ClInclude Include="Options.h" />
+    <ClInclude Include="password_crypto.h" />
     <ClInclude Include="recursive_operation.h" />
     <ClInclude Include="recursive_operation_status.h" />
     <ClInclude Include="settings\optionspage.h" />

@@ -621,7 +621,7 @@ wxString CSiteManager::AddServer(ServerWithCredentials server)
 	server.server.SetName(name);
 
 	auto xServer = element.append_child("Server");
-	SetServer(xServer, server.server, server.credentials);
+	SetServer(xServer, server);
 	AddTextElement(xServer, name);
 
 	if (!file.Save(false)) {

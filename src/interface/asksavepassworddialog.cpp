@@ -17,8 +17,9 @@ bool CAskSavePasswordDialog::Create(wxWindow*)
 	}
 
 	wxButton* ok = XRCCTRL(*this, "wxID_OK", wxButton);
-	if (ok)
+	if (ok) {
 		ok->Enable(false);
+	}
 
 	wxGetApp().GetWrapEngine()->WrapRecursive(this, 2, "");
 
@@ -42,8 +43,9 @@ bool CAskSavePasswordDialog::Run(wxWindow* parent)
 			}
 		}
 	}
-	else
+	else {
 		COptions::Get()->SetOption(OPTION_PROMPTPASSWORDSAVE, 0);
+	}
 
 	return ret;
 }
@@ -53,6 +55,7 @@ void CAskSavePasswordDialog::OnRadioButtonChanged(wxCommandEvent&)
 	wxRadioButton* yes = XRCCTRL(*this, "ID_REMEMBER_NO", wxRadioButton);
 	wxRadioButton* no = XRCCTRL(*this, "ID_REMEMBER_YES", wxRadioButton);
 	wxButton* ok = XRCCTRL(*this, "wxID_OK", wxButton);
-	if (yes && no && ok)
+	if (yes && no && ok) {
 		ok->Enable(yes->GetValue() || no->GetValue());
+	}
 }
