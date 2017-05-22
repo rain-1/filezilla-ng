@@ -26,6 +26,10 @@ public:
 		return !(*this == rhs);
 	}
 
+	bool operator<(public_key const& rhs) const {
+		return key_ < rhs.key_ || (key_ == rhs.key_ && salt_ < rhs.salt_);
+	}
+
 	std::string to_base64() const;
 	static public_key from_base64(std::string const& base64);
 

@@ -39,6 +39,8 @@ protected:
 	std::list<t_passwordcache>::iterator FindItem(CServer const& server, std::wstring const& challenge);
 
 	std::list<t_passwordcache> m_passwordCache;
+
+	std::map<public_key, private_key> decryptors_;
 };
 
 #endif
