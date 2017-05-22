@@ -1,5 +1,5 @@
-#ifndef __CONTEXT_CONTROL_H__
-#define __CONTEXT_CONTROL_H__
+#ifndef FILEZILLA_INTERFACE_CONTEXT_CONTROL_HEADER
+#define FILEZILLA_INTERFACE_CONTEXT_CONTROL_HEADER
 
 #include <wx/aui/auibook.h>
 #include "state.h"
@@ -87,4 +87,4 @@ protected:
 	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void*);
 };
 
-#endif //__CONTEX_CONTROL_H__
+#endif

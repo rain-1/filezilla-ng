@@ -32,10 +32,6 @@ CManualTransfer::CManualTransfer(CQueueView* pQueueView)
 {
 }
 
-CManualTransfer::~CManualTransfer()
-{
-}
-
 void CManualTransfer::Run(wxWindow* pParent, CState* pState)
 {
 	if (!Load(pParent, _T("ID_MANUALTRANSFER"))) {

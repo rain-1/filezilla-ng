@@ -198,6 +198,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Queue completion command", string, _T(""), normal },
 	{ "Drag and Drop disabled", number, _T("0"), normal },
 	{ "Disable update footer", number, _T("0"), normal },
+	{ "Master password encryptor", string, _T(""), normal },
 
 	// Default/internal options
 	{ "Config Location", string, _T(""), default_only },
@@ -587,7 +588,7 @@ void COptions::SetServer(std::wstring path, ServerWithCredentials const& server)
 		}
 	}
 
-	::SetServer(element, server.server, server.credentials);
+	::SetServer(element, server);
 
 	if (GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		return;

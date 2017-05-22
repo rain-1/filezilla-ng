@@ -100,6 +100,7 @@ enum interfaceOptions
 	OPTION_QUEUE_COMPLETION_COMMAND,
 	OPTION_DND_DISABLED,
 	OPTION_DISABLE_UPDATE_FOOTER,
+	OPTION_MASTERPASSWORDENCRYPTOR,
 
 	// Default/internal options
 	OPTION_DEFAULT_SETTINGSDIR, // guaranteed to be (back)slash-terminated

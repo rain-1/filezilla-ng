@@ -28,10 +28,6 @@ CQuickconnectBar::CQuickconnectBar()
 {
 }
 
-CQuickconnectBar::~CQuickconnectBar()
-{
-}
-
 bool CQuickconnectBar::Create(CMainFrame* pParent)
 {
 	m_pMainFrame = pParent;

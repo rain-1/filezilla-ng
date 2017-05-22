@@ -1,7 +1,9 @@
 #ifndef FILEZILLA_INTERFACE_LOGINMANAGER_HEADER
 #define FILEZILLA_INTERFACE_LOGINMANAGER_HEADER
 
-#include <vector>
+#include "serverdata.h"
+
+#include <list>
 
 // The purpose of this class is to manage some aspects of the login
 // behaviour. These are:

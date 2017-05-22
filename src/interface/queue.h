@@ -1,5 +1,5 @@
-#ifndef __QUEUE_H__
-#define __QUEUE_H__
+#ifndef FILEZILLA_INTERFACE_QUEUE_HEADER
+#define FILEZILLA_INTERFACE_QUEUE_HEADER
 
 #include "aui_notebook_ex.h"
 #include "listctrlex.h"
@@ -414,4 +414,4 @@ protected:
 
 #include "QueueView.h"
 
-#endif //__QUEUE_H__
+#endif

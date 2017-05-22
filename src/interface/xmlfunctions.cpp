@@ -402,6 +402,14 @@ bool GetServer(pugi::xml_node node, ServerWithCredentials & server)
 					std::string decoded = fz::base64_decode(passElement.child_value());
 					pass = fz::to_wstring_from_utf8(decoded);
 				}
+				else if (encoding == _T("crypt")) {
+					pass = fz::to_wstring_from_utf8(passElement.child_value());
+					server.credentials.encrypted_ = public_key::from_base64(passElement.attribute("pubkey").value());
+					if (!server.credentials.encrypted_) {
+						pass.clear();
+						server.SetLogonType(LogonType::ask);
+					}
+				}
 				else if (!encoding.empty()) {
 					server.SetLogonType(LogonType::ask);
 				}
@@ -507,33 +515,39 @@ void SetServer(pugi::xml_node node, ServerWithCredentials const& server)
 	AddTextElement(node, "Protocol", server.server.GetProtocol());
 	AddTextElement(node, "Type", server.server.GetType());
 
-	LogonType logonType = server.credentials.logonType_;
+	ProtectedCredentials credentials = server.credentials;
 
-	if (server.credentials.logonType_ != LogonType::anonymous) {
+	if (credentials.logonType_ != LogonType::anonymous) {
 		AddTextElement(node, "User", server.server.GetUser());
 
-		if (server.credentials.logonType_ == LogonType::normal || server.credentials.logonType_ == LogonType::account) {
-			if (kiosk_mode) {
-				logonType = LogonType::ask;
+		credentials.Protect();
+
+		if (credentials.logonType_ == LogonType::normal || credentials.logonType_ == LogonType::account) {
+			std::string pass = fz::to_utf8(credentials.GetPass());
+
+			if (credentials.encrypted_) {
+				pugi::xml_node passElement = AddTextElementUtf8(node, "Pass", pass);
+				if (passElement) {
+					SetTextAttribute(passElement, "encoding", _T("crypt"));
+					SetTextAttributeUtf8(passElement, "pubkey", credentials.encrypted_.to_base64());
+				}
 			}
 			else {
-				std::string pass = fz::to_utf8(server.credentials.GetPass());
-
 				pugi::xml_node passElement = AddTextElementUtf8(node, "Pass", fz::base64_encode(pass));
 				if (passElement) {
 					SetTextAttribute(passElement, "encoding", _T("base64"));
 				}
+			}
 
-				if (server.credentials.logonType_ == LogonType::account) {
-					AddTextElement(node, "Account", server.credentials.account_);
-				}
+			if (credentials.logonType_ == LogonType::account) {
+				AddTextElement(node, "Account", credentials.account_);
 			}
 		}
-		else if (!server.credentials.keyFile_.empty()) {
-			AddTextElement(node, "Keyfile", server.credentials.keyFile_);
+		else if (!credentials.keyFile_.empty()) {
+			AddTextElement(node, "Keyfile", credentials.keyFile_);
 		}
 	}
-	AddTextElement(node, "Logontype", static_cast<int>(logonType));
+	AddTextElement(node, "Logontype", static_cast<int>(credentials.logonType_));
 
 	AddTextElement(node, "TimezoneOffset", server.server.GetTimezoneOffset());
 	switch (server.server.GetPasvMode())

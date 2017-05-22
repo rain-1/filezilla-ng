@@ -8,6 +8,8 @@
 
 // As such, keep track on the objects.
 
+#include "serverdata.h"
+
 class CDragDropManager final
 {
 public:

@@ -2,6 +2,7 @@
 #define FILEZILLA_INTERFACE_BOOKMARKS_DIALOG_HEADER
 
 #include "dialogex.h"
+#include "serverdata.h"
 
 class CNewBookmarkDialog final : public wxDialogEx
 {
