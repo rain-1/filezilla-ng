@@ -1,5 +1,5 @@
-#ifndef __COMMANDQUEUE_H__
-#define __COMMANDQUEUE_H__
+#ifndef FILEZILLA_INTERFACE_COMMANDQUEUE_HEADER
+#define FILEZILLA_INTERFACE_COMMANDQUEUE_HEADER
 
 class CFileZillaEngine;
 class CNotification;
@@ -68,5 +68,5 @@ protected:
 	bool m_quit{};
 };
 
-#endif //__COMMANDQUEUE_H__
+#endif
 

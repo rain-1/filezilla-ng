@@ -3,6 +3,7 @@
 
 #include "dialogex.h"
 #include "filezillaapp.h"
+#include "Options.h"
 
 #include <algorithm>
 
@@ -19,7 +20,15 @@ std::list<CLoginManager::t_passwordcache>::iterator CLoginManager::FindItem(CSer
 
 bool CLoginManager::GetPassword(ServerWithCredentials &server, bool silent, std::wstring const& name, std::wstring const& challenge, bool canRemember)
 {
-	wxASSERT(server.credentials.logonType_ != LogonType::anonymous);
+	if (server.credentials.logonType_ != LogonType::ask && !server.credentials.encrypted_ && (server.credentials.logonType_ != LogonType::interactive || !server.server.GetUser().empty())) {
+		return true;
+	}
+
+	if (server.credentials.encrypted_) {
+		// FIXME
+		auto priv = private_key::from_password("hello", server.credentials.encrypted_.salt_);
+		return server.credentials.Unprotect(priv);
+	}
 
 	if (canRemember) {
 		auto it = FindItem(server.server, challenge);

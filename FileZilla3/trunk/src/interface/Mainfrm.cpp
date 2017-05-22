@@ -1936,12 +1936,8 @@ void CMainFrame::OnSitemanagerDropdown(wxCommandEvent& event)
 bool CMainFrame::ConnectToSite(Site & data, Bookmark const& bookmark)
 {
 	// First check if we need to ask user for a password
-	if (data.server_.credentials.logonType_ == LogonType::ask ||
-		(data.server_.credentials.logonType_ == LogonType::interactive && data.server_.server.GetUser().empty()))
-	{
-		if (!CLoginManager::Get().GetPassword(data.server_, false, data.server_.server.GetName())) {
-			return false;
-		}
+	if (!CLoginManager::Get().GetPassword(data.server_, false, data.server_.server.GetName())) {
+		return false;
 	}
 
 	// Check if current state is already connected and if needed ask whether to open in new tab
@@ -2427,12 +2423,8 @@ void CMainFrame::ProcessCommandLine()
 			server.SetLogonType(LogonType::ask);
 			CLoginManager::Get().RememberPassword(server);
 		}
-		else if (server.credentials.logonType_ == LogonType::ask ||
-			(server.credentials.logonType_ == LogonType::interactive && server.server.GetUser().empty()))
-		{
-			if (!CLoginManager::Get().GetPassword(server, false)) {
-				return;
-			}
+		else if (!CLoginManager::Get().GetPassword(server, false)) {
+			return;
 		}
 
 		Site site;

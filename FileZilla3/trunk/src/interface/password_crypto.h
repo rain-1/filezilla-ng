@@ -18,6 +18,17 @@ public:
 		return key_.size() == key_size && salt_.size() == salt_size;
 	}
 
+	bool operator==(public_key const& rhs) const {
+		return key_ == rhs.key_ && salt_ == rhs.salt_;
+	}
+
+	bool operator!=(public_key const& rhs) const {
+		return !(*this == rhs);
+	}
+
+	std::string to_base64() const;
+	static public_key from_base64(std::string const& base64);
+
 	std::vector<uint8_t> key_;
 	std::vector<uint8_t> salt_;
 };

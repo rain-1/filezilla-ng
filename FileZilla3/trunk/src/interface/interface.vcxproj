@@ -60,7 +60,7 @@
       <AdditionalOptions>/MP -Zm200 /permissive- %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>.;../include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>PACKAGE_VERSION="3.20.0";BUILDTYPE="official";WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PACKAGE_VERSION="3.20.0";BUILDTYPE="official";_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -191,6 +191,7 @@
     <ClCompile Include="password_crypto.cpp" />
     <ClCompile Include="recursive_operation.cpp" />
     <ClCompile Include="recursive_operation_status.cpp" />
+    <ClCompile Include="serverdata.cpp" />
     <ClCompile Include="settings\optionspage.cpp" />
     <ClCompile Include="settings\optionspage_connection.cpp" />
     <ClCompile Include="settings\optionspage_connection_active.cpp" />
@@ -310,6 +311,7 @@
     <ClInclude Include="password_crypto.h" />
     <ClInclude Include="recursive_operation.h" />
     <ClInclude Include="recursive_operation_status.h" />
+    <ClInclude Include="serverdata.h" />
     <ClInclude Include="settings\optionspage.h" />
     <ClInclude Include="settings\optionspage_connection.h" />
     <ClInclude Include="settings\optionspage_connection_active.h" />

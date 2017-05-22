@@ -12,6 +12,8 @@
 #include "../pugixml/pugixml.hpp"
 #endif
 
+#include "serverdata.h"
+
 class CXmlFile final
 {
 public:

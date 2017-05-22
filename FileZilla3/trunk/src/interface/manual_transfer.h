@@ -2,6 +2,7 @@
 #define FILEZILLA_INTERFACE_MANUAL_TRANSFER_HEADER
 
 #include "dialogex.h"
+#include "serverdata.h"
 
 class CQueueView;
 class CState;
@@ -9,7 +10,6 @@ class CManualTransfer final : public wxDialogEx
 {
 public:
 	CManualTransfer(CQueueView* pQueueView);
-	virtual ~CManualTransfer();
 
 	void Run(wxWindow* pParent, CState* pState);
 

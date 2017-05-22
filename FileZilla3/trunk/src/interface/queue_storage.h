@@ -1,11 +1,11 @@
-#ifndef __QUEUE_STORAGE_H__
-#define __QUEUE_STORAGE_H__
+#ifndef FILEZILLA_INTERFACE_QUEUE_STORAGE_HEADER
+#define FILEZILLA_INTERFACE_QUEUE_STORAGE_HEADER
 
 #include <vector>
 
 class CFileItem;
 class CServerItem;
-class CServer;
+class ServerWithCredentials;
 
 class CQueueStorage
 {

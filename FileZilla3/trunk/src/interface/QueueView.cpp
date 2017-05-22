@@ -688,16 +688,11 @@ bool CQueueView::TryStartNextTransfer()
 
 	if (pEngineData->state != t_EngineData::waitprimary) {
 		if (!pEngineData->pEngine->IsConnected()) {
-			if (pEngineData->lastServer.credentials.logonType_ == LogonType::ask) {
-				if (CLoginManager::Get().GetPassword(pEngineData->lastServer, true)) {
-					pEngineData->state = t_EngineData::connect;
-				}
-				else {
-					pEngineData->state = t_EngineData::askpassword;
-				}
+			if (CLoginManager::Get().GetPassword(pEngineData->lastServer, true)) {
+				pEngineData->state = t_EngineData::connect;
 			}
 			else {
-				pEngineData->state = t_EngineData::connect;
+				pEngineData->state = t_EngineData::askpassword;
 			}
 		}
 		else if (oldServer != bestMatch.serverItem->GetServer()) {
@@ -937,7 +932,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 		return;
 	}
 
-	if (pEngineData->state == t_EngineData::connect && pEngineData->lastServer.credentials.logonType_ == LogonType::ask) {
+	if (pEngineData->state == t_EngineData::connect) {
 		if (!CLoginManager::Get().GetPassword(pEngineData->lastServer, true)) {
 			pEngineData->state = t_EngineData::askpassword;
 		}
@@ -1182,7 +1177,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 				return;
 			}
 
-			if (engineData.lastServer.credentials.logonType_ == LogonType::ask && !CLoginManager::Get().GetPassword(engineData.lastServer, true)) {
+			if (!CLoginManager::Get().GetPassword(engineData.lastServer, true)) {
 				engineData.state = t_EngineData::askpassword;
 			}
 			else {
@@ -2882,21 +2877,22 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 
 bool CQueueView::IsOtherEngineConnected(t_EngineData* pEngineData)
 {
-	for (auto iter = m_engineData.begin(); iter != m_engineData.end(); ++iter)
-	{
-		t_EngineData* current = *iter;
-
-		if (current == pEngineData)
+	for (auto const* current : m_engineData) {
+		if (current == pEngineData) {
 			continue;
+		}
 
-		if (!current->pEngine)
+		if (!current->pEngine) {
 			continue;
+		}
 
-		if (current->lastServer != pEngineData->lastServer)
+		if (current->lastServer != pEngineData->lastServer) {
 			continue;
+		}
 
-		if (current->pEngine->IsConnected())
+		if (current->pEngine->IsConnected()) {
 			return true;
+		}
 	}
 
 	return false;
@@ -2909,21 +2905,25 @@ void CQueueView::OnChar(wxKeyEvent& event)
 		wxCommandEvent cmdEvt;
 		OnRemoveSelected(cmdEvt);
 	}
-	else
+	else {
 		event.Skip();
+	}
 }
 
 int CQueueView::GetLineHeight()
 {
-	if (m_line_height != -1)
+	if (m_line_height != -1) {
 		return m_line_height;
+	}
 
-	if (!GetItemCount())
+	if (!GetItemCount()) {
 		return 20;
+	}
 
 	wxRect rect;
-	if (!GetItemRect(0, rect))
+	if (!GetItemRect(0, rect)) {
 		return 20;
+	}
 
 	m_line_height = rect.GetHeight();
 

@@ -1,12 +1,13 @@
-#ifndef __QUICKCONNECTBAR_H__
-#define __QUICKCONNECTBAR_H__
+#ifndef FILEZILLA_INTERFACE_QUICKCONNECTBAR_HEADER
+#define FILEZILLA_INTERFACE_QUICKCONNECTBAR_HEADER
+
+#include "serverdata.h"
 
 class CMainFrame;
 class CQuickconnectBar final : public wxPanel
 {
 public:
 	CQuickconnectBar();
-	virtual ~CQuickconnectBar();
 
 	bool Create(CMainFrame* pParent);
 
@@ -30,4 +31,4 @@ protected:
 };
 
 
-#endif //__QUICKCONNECTBAR_H__
+#endif

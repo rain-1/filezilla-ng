@@ -1,9 +1,10 @@
-#ifndef __MAINFRM_H__
-#define __MAINFRM_H__
+#ifndef FILEZILLA_INTERFACE_MAINFRM_HEADER
+#define FILEZILLA_INTERFACE_MAINFRM_HEADER
 
 #include "statusbar.h"
 #include "engine_context.h"
 #include "notification.h"
+#include "serverdata.h"
 
 #include <wx/timer.h>
 

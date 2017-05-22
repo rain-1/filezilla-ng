@@ -12,6 +12,27 @@
 #include <nettle/pbkdf2.h>
 #include <nettle/sha2.h>
 
+std::string public_key::to_base64() const
+{
+	auto raw = std::string(key_.cbegin(), key_.cend());
+	raw += std::string(salt_.cbegin(), salt_.cend());
+	return fz::base64_encode(raw);
+}
+
+public_key public_key::from_base64(std::string const& base64)
+{
+	public_key ret;
+	
+	auto raw = fz::base64_decode(base64);
+	if (raw.size() == key_size + salt_size) {
+		auto p = reinterpret_cast<uint8_t const*>(&raw[0]);
+		ret.key_.assign(p, p + key_size);
+		ret.salt_.assign(p + key_size, p + key_size + salt_size);
+	}
+
+	return ret;
+}
+
 private_key private_key::generate()
 {
 	private_key ret;

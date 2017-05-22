@@ -173,6 +173,8 @@ LogonType GetLogonTypeFromName(std::wstring const& name);
 class Credentials
 {
 public:
+	virtual ~Credentials() = default;
+
 	bool operator==(Credentials const& rhs) const {
 		return
 			logonType_ == rhs.logonType_ &&
@@ -188,46 +190,8 @@ public:
 	std::wstring account_;
 	std::wstring keyFile_;
 
-private:
+protected:
 	std::wstring password_;
-};
-
-class ServerWithCredentials final
-{
-public:
-	ServerWithCredentials() = default;
-
-	explicit ServerWithCredentials(CServer const& s, Credentials const& c)
-		: server(s)
-		, credentials(c)
-	{}
-
-	// Return true if URL could be parsed correctly, false otherwise.
-	// If parsing fails, pError is filled with the reason and the CServer instance may be left an undefined state.
-	bool ParseUrl(std::wstring host, unsigned int port, std::wstring user, std::wstring pass, std::wstring &error, CServerPath &path);
-	bool ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path);
-
-	std::wstring Format(ServerFormat formatType) const {
-		return server.Format(formatType, credentials);
-	}
-	
-	void SetLogonType(LogonType logonType);
-
-	void SetUser(std::wstring const& user);
-
-	explicit operator bool() const {
-		return static_cast<bool>(server);
-	}
-
-	bool operator==(ServerWithCredentials const& rhs) const {
-		return server == rhs.server && credentials == rhs.credentials;
-	}
-	bool operator!=(ServerWithCredentials const& rhs) const {
-		return !(*this == rhs);
-	}
-
-	CServer server;
-	Credentials credentials;
 };
 
 #endif
