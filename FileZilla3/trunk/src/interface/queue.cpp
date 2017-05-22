@@ -625,11 +625,11 @@ void CServerItem::QueueImmediateFile(CFileItem* pItem)
 
 void CServerItem::SaveItem(pugi::xml_node& element) const
 {
-	auto server = element.append_child("Server");
-	SetServer(server, server_.server, server_.credentials);
+	auto server_node = element.append_child("Server");
+	SetServer(server_node, server_);
 
 	for (auto iter = m_children.cbegin() + m_removed_at_front; iter != m_children.cend(); ++iter) {
-		(*iter)->SaveItem(server);
+		(*iter)->SaveItem(server_node);
 	}
 }
 

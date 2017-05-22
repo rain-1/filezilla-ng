@@ -21,8 +21,9 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 
 	if (!force) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
-			if (delay)
+			if (delay) {
 				delete this;
+			}
 			return true;
 		}
 
@@ -30,14 +31,16 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 			CBuildInfo::ConvertToVersionNumber(ownVersion.c_str()) <= CBuildInfo::ConvertToVersionNumber(greetingVersion.c_str()))
 		{
 			// Been there done that
-			if (delay)
+			if (delay) {
 				delete this;
+			}
 			return true;
 		}
 		COptions::Get()->SetOption(OPTION_GREETINGVERSION, ownVersion.ToStdWstring());
 
-		if (greetingVersion.empty() && !COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE))
+		if (greetingVersion.empty() && !COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE)) {
 			COptions::Get()->SetOption(OPTION_PROMPTPASSWORDSAVE, 1);
+		}
 	}
 
 	if (!Load(parent, _T("ID_WELCOME"))) {
@@ -79,8 +82,9 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 		m_delayedShowTimer.SetOwner(this);
 		m_delayedShowTimer.Start(10, true);
 	}
-	else
+	else {
 		ShowModal();
+	}
 
 	return true;
 }

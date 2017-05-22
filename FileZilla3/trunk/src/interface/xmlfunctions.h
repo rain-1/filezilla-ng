@@ -106,10 +106,7 @@ int64_t GetTextElementInt(pugi::xml_node node, const char* name, int defValue = 
 bool GetTextElementBool(pugi::xml_node node, const char* name, bool defValue = false);
 
 // Functions to save and retrieve CServer objects to the XML file
-void SetServer(pugi::xml_node node, CServer const& server, Credentials const& credentials);
-inline void SetServer(pugi::xml_node node, ServerWithCredentials const& server) {
-	SetServer(node, server.server, server.credentials);
-}
+void SetServer(pugi::xml_node node, ServerWithCredentials const& server);
 
 bool GetServer(pugi::xml_node node, ServerWithCredentials& server);
 

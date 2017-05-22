@@ -237,7 +237,7 @@ void CRemoteDataObject::Finalize()
 	AddTextElement(element, "ProcessId", m_processId);
 
 	auto xServer = element.append_child("Server");
-	SetServer(xServer, server_.server, server_.credentials);
+	SetServer(xServer, server_);
 
 	AddTextElement(element, "Path", m_path.GetSafePath());
 
