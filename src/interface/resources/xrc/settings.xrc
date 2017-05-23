@@ -1267,6 +1267,79 @@
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
         <object class="wxStaticBoxSizer">
+          <label>Passwords</label>
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <cols>1</cols>
+              <vgap>5</vgap>
+              <flag>wxGROW</flag>
+              <object class="sizeritem">
+                <object class="wxRadioButton" name="ID_PASSWORDS_SAVE">
+                  <style>wxRB_GROUP</style>
+                  <label>Sav&amp;e passwords</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxRadioButton" name="ID_PASSWORDS_NOSAVE">
+                  <label>D&amp;o not save passwords</label>
+                </object>
+              </object>
+	      <object class="sizeritem">
+                <object class="wxRadioButton" name="ID_PASSWORDS_USEMASTERPASSWORD">
+                  <label>Sa&amp;ve passwords protected by a master password</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxFlexGridSizer">
+                  <growablecols>1</growablecols>
+                  <cols>2</cols>
+                  <vgap>3d</vgap>
+                  <hgap>3d</hgap>
+                  <object class="sizeritem">
+                    <object class="wxStaticText">
+                      <label>Master password:</label>
+                    </object>
+                   <flag>wxALIGN_CENTER_VERTICAL</flag>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxTextCtrl" name="ID_MASTERPASSWORD">
+                      <style>wxTE_PASSWORD</style>
+                    </object>
+                   <flag>wxGROW</flag>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxStaticText">
+                      <label>Repeat password:</label>
+                    </object>
+                   <flag>wxALIGN_CENTER_VERTICAL</flag>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxTextCtrl" name="ID_MASTERPASSWORD_REPEAT">
+                      <style>wxTE_PASSWORD</style>
+                    </object>
+                   <flag>wxGROW</flag>
+                  </object>
+                </object>
+                <border>10d</border>
+                <flag>wxGROW|wxLEFT</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText">
+                  <label>A lost master password cannot be recovered! Please thorougly memorize your password.</label>
+                </object>
+                <border>10d</border>
+                <flag>wxLEFT</flag>
+              </object>
+            </object>
+            <flag>wxGROW</flag>
+          </object>
+        </object>
+        <flag>wxGROW|wxTOP</flag>
+        <border>5</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStaticBoxSizer">
           <label>Layout</label>
           <orient>wxVERTICAL</orient>
           <object class="sizeritem">
@@ -1346,11 +1419,6 @@
           <orient>wxVERTICAL</orient>
           <object class="sizeritem">
             <object class="wxFlexGridSizer">
-              <object class="sizeritem">
-                <object class="wxCheckBox" name="ID_DONT_SAVE_PASSWORDS">
-                  <label>D&amp;o not save passwords</label>
-                </object>
-              </object>
               <object class="sizeritem">
                 <object class="wxCheckBox" name="ID_MINIMIZE_TRAY">
                   <label>&amp;Minimize to tray</label>
