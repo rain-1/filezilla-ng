@@ -102,7 +102,7 @@ bool CLoginManager::DisplayDialogForEncrypted(ServerWithCredentials &server, std
 		auto key = private_key::from_password(pass, server.credentials.encrypted_.salt_);
 
 		if (key.pubkey() != server.credentials.encrypted_) {
-			wxMessageBoxEx(_("The entered master password does not match."), _("Invalid input"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("Wrong master password entered, it cannot be used to decrypt this item."), _("Invalid input"), wxICON_EXCLAMATION);
 			continue;
 		}
 
@@ -156,6 +156,8 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 	XRCCTRL(pwdDlg, "ID_HOST", wxStaticText)->SetLabel(server.Format(ServerFormat::with_optional_port));
 
 	if (server.server.GetUser().empty()) {
+		canRemember = false;
+
 		XRCCTRL(pwdDlg, "ID_OLD_USER_LABEL", wxStaticText)->Hide();
 		XRCCTRL(pwdDlg, "ID_OLD_USER", wxStaticText)->Hide();
 
@@ -164,14 +166,13 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 			pwdDlg.SetTitle(_("Enter username"));
 			XRCCTRL(pwdDlg, "ID_PASSWORD_LABEL", wxStaticText)->Hide();
 			XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->Hide();
-			XRCCTRL(pwdDlg, "ID_REMEMBER", wxCheckBox)->Hide();
 			XRCCTRL(pwdDlg, "ID_HEADER_BOTH", wxStaticText)->Hide();
 		}
 		else {
 			pwdDlg.SetTitle(_("Enter username and password"));
 			XRCCTRL(pwdDlg, "ID_HEADER_USER", wxStaticText)->Hide();
 		}
-
+		XRCCTRL(pwdDlg, "ID_REMEMBER", wxCheckBox)->Hide();
 		XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->SetFocus();
 	}
 	else {
