@@ -4,6 +4,7 @@
 #include "dialogex.h"
 #include "filezillaapp.h"
 #include "Options.h"
+#include "xrc_helper.h"
 
 #include <algorithm>
 
@@ -18,20 +19,40 @@ std::list<CLoginManager::t_passwordcache>::iterator CLoginManager::FindItem(CSer
 	);
 }
 
-bool CLoginManager::GetPassword(ServerWithCredentials &server, bool silent, std::wstring const& name, std::wstring const& challenge, bool canRemember)
+bool CLoginManager::GetPassword(ServerWithCredentials &server, bool silent, std::wstring const& name)
 {
 	if (server.credentials.logonType_ != LogonType::ask && !server.credentials.encrypted_ && (server.credentials.logonType_ != LogonType::interactive || !server.server.GetUser().empty())) {
 		return true;
 	}
 
 	if (server.credentials.encrypted_) {
-		assert(challenge.empty());
 		auto priv = decryptors_.find(server.credentials.encrypted_);
 		if (priv != decryptors_.end()) {
 			return server.credentials.Unprotect(priv->second);
 		}
+
+		if (!silent) {
+			return DisplayDialogForEncrypted(server, name);
+		}
+	}
+	else {
+		auto it = FindItem(server.server, std::wstring());
+		if (it != m_passwordCache.end()) {
+			server.credentials.SetPass(it->password);
+			return true;
+		}
+
+		if (!silent) {
+			return DisplayDialog(server, name, std::wstring(), true);
+		}
 	}
 
+	return false;
+}
+
+
+bool CLoginManager::GetPassword(ServerWithCredentials &server, bool silent, std::wstring const& name, std::wstring const& challenge, bool canRemember)
+{
 	if (canRemember) {
 		auto it = FindItem(server.server, challenge);
 		if (it != m_passwordCache.end()) {
@@ -46,8 +67,63 @@ bool CLoginManager::GetPassword(ServerWithCredentials &server, bool silent, std:
 	return DisplayDialog(server, name, challenge, canRemember);
 }
 
+bool CLoginManager::DisplayDialogForEncrypted(ServerWithCredentials &server, std::wstring const& name)
+{
+	assert(server.credentials.encrypted_);
+
+	wxDialogEx pwdDlg;
+	if (!pwdDlg.Load(wxGetApp().GetTopWindow(), _T("ID_ENTERMASTERPASSWORD"))) {
+		return false;
+	}
+
+	if (name.empty()) {
+		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_NAMELABEL", wxStaticText), false, true);
+		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_NAME", wxStaticText), false, true);
+	}
+	else {
+		xrc_call(pwdDlg, "ID_NAME", &wxStaticText::SetLabel, name);
+	}
+
+	XRCCTRL(pwdDlg, "ID_HOST", wxStaticText)->SetLabel(server.Format(ServerFormat::with_optional_port));
+
+	XRCCTRL(pwdDlg, "ID_OLD_USER", wxStaticText)->SetLabel(server.server.GetUser());
+
+	XRCCTRL(pwdDlg, "wxID_OK", wxButton)->SetId(wxID_OK);
+	XRCCTRL(pwdDlg, "wxID_CANCEL", wxButton)->SetId(wxID_CANCEL);
+	pwdDlg.GetSizer()->Fit(&pwdDlg);
+	pwdDlg.GetSizer()->SetSizeHints(&pwdDlg);
+
+	while (true) {
+		if (pwdDlg.ShowModal() != wxID_OK) {
+			return false;
+		}
+
+		auto pass = fz::to_utf8(xrc_call(pwdDlg, "ID_PASSWORD", &wxTextCtrl::GetValue));
+		auto key = private_key::from_password(pass, server.credentials.encrypted_.salt_);
+
+		if (key.pubkey() != server.credentials.encrypted_) {
+			wxMessageBoxEx(_("The entered master password does not match."), _("Invalid input"), wxICON_EXCLAMATION);
+			continue;
+		}
+
+		if (!server.credentials.Unprotect(key)) {
+			wxMessageBoxEx(_("Failed to decrypt server password."), _("Invalid input"), wxICON_EXCLAMATION);
+			continue;
+		}
+
+		if (xrc_call(pwdDlg, "ID_REMEMBER", &wxCheckBox::IsChecked)) {
+			decryptors_[key.pubkey()] = key;
+		}
+		break;
+	}
+
+	return true;
+}
+
 bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring const& name, std::wstring const& challenge, bool canRemember)
 {
+	assert(!server.credentials.encrypted_);
+
 	wxDialogEx pwdDlg;
 	if (!pwdDlg.Load(wxGetApp().GetTopWindow(), _T("ID_ENTERPASSWORD"))) {
 		return false;
@@ -58,11 +134,13 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_NAME", wxStaticText), false, true);
 	}
 	else {
-		XRCCTRL(pwdDlg, "ID_NAME", wxStaticText)->SetLabel(name);
+		xrc_call(pwdDlg, "ID_NAME", &wxStaticText::SetLabel, name);
 	}
+
 	if (challenge.empty()) {
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_CHALLENGELABEL", wxStaticText), false, true);
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_CHALLENGE", wxTextCtrl), false, true);
+
 	}
 	else {
 		wxString displayChallenge = challenge;
@@ -82,7 +160,7 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 		XRCCTRL(pwdDlg, "ID_OLD_USER", wxStaticText)->Hide();
 
 		XRCCTRL(pwdDlg, "ID_HEADER_PASS", wxStaticText)->Hide();
-		if (server.credentials .logonType_ == LogonType::interactive) {
+		if (server.credentials.logonType_ == LogonType::interactive) {
 			pwdDlg.SetTitle(_("Enter username"));
 			XRCCTRL(pwdDlg, "ID_PASSWORD_LABEL", wxStaticText)->Hide();
 			XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->Hide();
@@ -101,36 +179,33 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 		XRCCTRL(pwdDlg, "ID_NEW_USER_LABEL", wxStaticText)->Hide();
 		XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->Hide();
 		XRCCTRL(pwdDlg, "ID_HEADER_USER", wxStaticText)->Hide();
-		XRCCTRL(pwdDlg, "ID_HEADER_BOTH", wxStaticText)->Hide();
+		xrc_call(pwdDlg, "ID_HEADER_BOTH", &wxStaticText::Hide);
 	}
 	XRCCTRL(pwdDlg, "wxID_OK", wxButton)->SetId(wxID_OK);
 	XRCCTRL(pwdDlg, "wxID_CANCEL", wxButton)->SetId(wxID_CANCEL);
 	pwdDlg.GetSizer()->Fit(&pwdDlg);
 	pwdDlg.GetSizer()->SetSizeHints(&pwdDlg);
 
-	std::wstring user;
-	while (user.empty()) {
+	while (true) {
 		if (pwdDlg.ShowModal() != wxID_OK) {
 			return false;
 		}
 
 		if (server.server.GetUser().empty()) {
-			user = XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->GetValue().ToStdWstring();
+			auto user = xrc_call(pwdDlg, "ID_NEW_USER", &wxTextCtrl::GetValue).ToStdWstring();
 			if (user.empty()) {
 				wxMessageBoxEx(_("No username given."), _("Invalid input"), wxICON_EXCLAMATION);
 				continue;
 			}
+			server.server.SetUser(user);
 		}
-		else {
-			user = server.server.GetUser();
-		}
-	}
-	
-	server.SetUser(user);
-	server.credentials.SetPass(XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->GetValue().ToStdWstring());
 
-	if (canRemember) {
-		RememberPassword(server, challenge);
+		server.credentials.SetPass(xrc_call(pwdDlg, "ID_PASSWORD", &wxTextCtrl::GetValue).ToStdWstring());
+
+		if (canRemember && xrc_call(pwdDlg, "ID_REMEMBER", &wxCheckBox::IsChecked)) {
+			RememberPassword(server, challenge);
+		}
+		break;
 	}
 
 	return true;
