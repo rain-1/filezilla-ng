@@ -1434,7 +1434,16 @@ bool CSiteManagerDialog::UpdateServer(Site &server, const wxString &name)
 	server.server_.SetLogonType(logon_type);
 
 	server.server_.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue).ToStdWstring());
-	server.server_.credentials.SetPass(xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring());
+	auto pw = xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring();
+	if (server.server_.credentials.encrypted_) {
+		if (!pw.empty()) {
+			server.server_.credentials.encrypted_ = public_key();
+			server.server_.credentials.SetPass(pw);
+		}
+	}
+	else {
+		server.server_.credentials.SetPass(pw);
+	}
 	server.server_.credentials.account_ = xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue).ToStdWstring();
 
 	server.server_.credentials.keyFile_ = xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue).ToStdWstring();
@@ -1625,8 +1634,9 @@ void CSiteManagerDialog::OnLimitMultipleConnectionsChanged(wxCommandEvent& event
 void CSiteManagerDialog::SetCtrlState()
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
 
@@ -1637,8 +1647,9 @@ void CSiteManagerDialog::SetCtrlState()
 #endif
 
 	CSiteManagerItemData* data = 0;
-	if (item.IsOk())
-		data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	if (item.IsOk()) {
+		data = static_cast<CSiteManagerItemData*>(pTree->GetItemData(item));
+	}
 	if (!data) {
 		m_pNotebook_Site->Show();
 		m_pNotebook_Bookmark->Hide();
@@ -1664,6 +1675,7 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetStringSelection, _("Anonymous"));
 		xrc_call(*this, "ID_USER", &wxTextCtrl::ChangeValue, wxString());
 		xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::SetHint, wxString());
 		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, wxString());
 		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, wxString());
 		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, wxString());
@@ -1707,10 +1719,12 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, data->m_site->server_.Format(ServerFormat::host_only));
 		unsigned int port = data->m_site->server_.server.GetPort();
 
-		if (port != CServer::GetDefaultPort(data->m_site->server_.server.GetProtocol()))
+		if (port != CServer::GetDefaultPort(data->m_site->server_.server.GetProtocol())) {
 			xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString::Format(_T("%d"), port));
-		else
+		}
+		else {
 			xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString());
+		}
 		xrc_call(*this, "ID_PORT", &wxWindow::Enable, !predefined);
 
 		SetProtocol(data->m_site->server_.server.GetProtocol());
@@ -1731,7 +1745,14 @@ void CSiteManagerDialog::SetCtrlState()
 
 		xrc_call(*this, "ID_USER", &wxTextCtrl::ChangeValue, data->m_site->server_.server.GetUser());
 		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.account_);
-		xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.GetPass());
+		if (data->m_site->server_.credentials.encrypted_) {
+			xrc_call(*this, "ID_PASS", &wxTextCtrl::Clear);
+			xrc_call(*this, "ID_PASS", &wxTextCtrl::SetHint, _("Leave empty to keep existing password.")); // @translator: Keep this string as short as possible
+		}
+		else {
+			xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.GetPass());
+			xrc_call(*this, "ID_PASS", &wxTextCtrl::SetHint, wxString());
+		}
 		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.keyFile_);
 		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, data->m_site->m_comments);
 		xrc_call(*this, "ID_COMMENTS", &wxWindow::Enable, !predefined);
@@ -1754,12 +1775,15 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_TIMEZONE_MINUTES", &wxWindow::Enable, !predefined);
 
 		PasvMode pasvMode = data->m_site->server_.server.GetPasvMode();
-		if (pasvMode == MODE_ACTIVE)
+		if (pasvMode == MODE_ACTIVE) {
 			xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxRadioButton::SetValue, true);
-		else if (pasvMode == MODE_PASSIVE)
+		}
+		else if (pasvMode == MODE_PASSIVE) {
 			xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxRadioButton::SetValue, true);
-		else
+		}
+		else {
 			xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxRadioButton::SetValue, true);
+		}
 		xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxWindow::Enable, !predefined);
