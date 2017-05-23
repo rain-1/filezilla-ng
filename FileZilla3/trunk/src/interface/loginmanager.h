@@ -15,13 +15,15 @@ class CLoginManager
 public:
 	static CLoginManager& Get() { return m_theLoginManager; }
 
-	bool GetPassword(ServerWithCredentials& server, bool silent, std::wstring const& name = std::wstring(), std::wstring const& challenge = std::wstring(), bool canRemember = true);
+	bool GetPassword(ServerWithCredentials& server, bool silent, std::wstring const& name = std::wstring());
+	bool GetPassword(ServerWithCredentials& server, bool silent, std::wstring const& name, std::wstring const& challenge, bool canRemember);
 
 	void CachedPasswordFailed(CServer const& server, std::wstring const& challenge = std::wstring());
 
 	void RememberPassword(ServerWithCredentials & server, std::wstring const& challenge = std::wstring());
 
 protected:
+	bool DisplayDialogForEncrypted(ServerWithCredentials& server, std::wstring const& name);
 	bool DisplayDialog(ServerWithCredentials& server, std::wstring const& name, std::wstring const& challenge, bool canRemember);
 
 	static CLoginManager m_theLoginManager;
