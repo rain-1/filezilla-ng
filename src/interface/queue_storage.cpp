@@ -286,7 +286,7 @@ bool CQueueStorage::Impl::MigrateSchema()
 	bool ret = sqlite3_exec(db_, "PRAGMA user_version", int_callback, &version, 0) == SQLITE_OK;
 
 	if (ret) {
-		if (version > 2) {
+		if (version > 3) {
 			ret = false;
 		}
 		else if (version > 0) {
@@ -295,8 +295,8 @@ bool CQueueStorage::Impl::MigrateSchema()
 				ret = sqlite3_exec(db_, "ALTER TABLE servers ADD COLUMN keyfile TEXT", int_callback, &version, 0) == SQLITE_OK;
 			}
 		}
-		if (ret && version != 2) {
-			ret = sqlite3_exec(db_, "PRAGMA user_version = 2", 0, 0, 0) == SQLITE_OK;
+		if (ret && version != 3) {
+			ret = sqlite3_exec(db_, "PRAGMA user_version = 3", 0, 0, 0) == SQLITE_OK;
 		}
 	}
 
@@ -600,7 +600,10 @@ bool CQueueStorage::Impl::SaveServer(CServerItem const& item)
 	Bind(insertServerQuery_, server_table_column_names::protocol, static_cast<int>(server.server.GetProtocol()));
 	Bind(insertServerQuery_, server_table_column_names::type, static_cast<int>(server.server.GetType()));
 
-	LogonType logonType = server.credentials.logonType_;
+	ProtectedCredentials credentials = server.credentials;
+	credentials.Protect();
+
+	LogonType logonType = credentials.logonType_;
 	if (logonType != LogonType::anonymous) {
 		Bind(insertServerQuery_, server_table_column_names::user, server.server.GetUser());
 
@@ -611,13 +614,19 @@ bool CQueueStorage::Impl::SaveServer(CServerItem const& item)
 				BindNull(insertServerQuery_, server_table_column_names::account);
 			}
 			else {
-				Bind(insertServerQuery_, server_table_column_names::password, server.credentials.GetPass());
+				std::wstring pw;
+				if (credentials.encrypted_) {
+					pw = fz::to_wstring_from_utf8(credentials.encrypted_.to_base64());
+					pw += ' ';
+				}
+				pw += credentials.GetPass();
+				Bind(insertServerQuery_, server_table_column_names::password, pw);
 
-				if (server.credentials.account_.empty()) {
+				if (credentials.account_.empty()) {
 					BindNull(insertServerQuery_, server_table_column_names::account);
 				}
 				else {
-					Bind(insertServerQuery_, server_table_column_names::account, server.credentials.account_);
+					Bind(insertServerQuery_, server_table_column_names::account, credentials.account_);
 				}
 			}
 		}
@@ -626,11 +635,11 @@ bool CQueueStorage::Impl::SaveServer(CServerItem const& item)
 			BindNull(insertServerQuery_, server_table_column_names::account);
 		}
 
-		if (server.credentials.keyFile_.empty()) {
+		if (credentials.keyFile_.empty()) {
 			BindNull(insertServerQuery_, server_table_column_names::keyfile);
 		}
 		else {
-			Bind(insertServerQuery_, server_table_column_names::keyfile, server.credentials.keyFile_);
+			Bind(insertServerQuery_, server_table_column_names::keyfile, credentials.keyFile_);
 		}
 	}
 	else {
@@ -639,7 +648,15 @@ bool CQueueStorage::Impl::SaveServer(CServerItem const& item)
 		BindNull(insertServerQuery_, server_table_column_names::account);
 		BindNull(insertServerQuery_, server_table_column_names::keyfile);
 	}
-	Bind(insertServerQuery_, server_table_column_names::logontype, static_cast<int>(logonType));
+
+	{
+		int64_t lt = static_cast<int>(logonType);
+		if (credentials.encrypted_) {
+			static_assert(static_cast<int64_t>(LogonType::count) < (1ll << 62), "LogonType::count too big");
+			lt |= 1ll << 62;
+		}
+		Bind(insertServerQuery_, server_table_column_names::logontype, lt);
+	}
 
 	Bind(insertServerQuery_, server_table_column_names::timezone_offset, server.server.GetTimezoneOffset());
 
@@ -900,7 +917,9 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(ServerWithCredentials& server)
 
 	server.server.SetType(static_cast<ServerType>(type));
 
-	int logonType = GetColumnInt(selectServersQuery_, server_table_column_names::logontype);
+	int64_t logonType = GetColumnInt64(selectServersQuery_, server_table_column_names::logontype);
+	bool const encrypted = logonType & (1ll << 62);
+	logonType &= ~(1ll << 62);
 	if (logonType < 0 || logonType >= static_cast<int>(LogonType::count)) {
 		return INVALID_DATA;
 	}
@@ -912,6 +931,16 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(ServerWithCredentials& server)
 		std::wstring pass = GetColumnText(selectServersQuery_, server_table_column_names::password);
 
 		server.SetUser(user);
+		if (encrypted) {
+			size_t pos = pass.find(' ');
+			if (pos == std::string::npos) {
+				return INVALID_DATA;
+			}
+			else {
+				server.credentials.encrypted_ = public_key::from_base64(fz::to_utf8(pass.substr(0, pos)));
+				pass = pass.substr(pos + 1);
+			}
+		}
 		server.credentials.SetPass(pass);
 
 		server.credentials.account_ = GetColumnText(selectServersQuery_, server_table_column_names::account);
