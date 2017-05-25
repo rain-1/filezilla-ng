@@ -22,6 +22,9 @@ public:
 
 	void RememberPassword(ServerWithCredentials & server, std::wstring const& challenge = std::wstring());
 
+	bool AskDecryptor(public_key const& pub, bool allowForgotten, bool allowCancel);
+	private_key GetDecryptor(public_key const& pub);
+
 protected:
 	bool DisplayDialogForEncrypted(ServerWithCredentials& server, std::wstring const& name);
 	bool DisplayDialog(ServerWithCredentials& server, std::wstring const& name, std::wstring const& challenge, bool canRemember);

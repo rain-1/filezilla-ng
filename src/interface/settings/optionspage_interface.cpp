@@ -3,6 +3,7 @@
 #include "settingsdialog.h"
 #include "optionspage.h"
 #include "optionspage_interface.h"
+#include "../loginmanager.h"
 #include "../Mainfrm.h"
 #include "../power_management.h"
 #include "../recentserverlist.h"
@@ -91,7 +92,6 @@ void COptionsPageInterface::SavePasswordOption()
 {
 	if (!m_pOptions->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) && m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 2) {
 		auto oldPub = public_key::from_base64(fz::to_utf8(m_pOptions->GetOption(OPTION_MASTERPASSWORDENCRYPTOR)));
-		private_key oldPriv;
 		wxString const newPw = xrc_call(*this, "ID_MASTERPASSWORD", &wxTextCtrl::GetValue);
 
 		bool useMaster = xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxRadioButton::GetValue);
@@ -100,34 +100,10 @@ void COptionsPageInterface::SavePasswordOption()
 			return;
 		}
 
-
+		CLoginManager loginManager;
 		if (oldPub) {
-
-			wxDialogEx pwdDlg;
-			if (!pwdDlg.Load(this, _T("ID_ENTEROLDMASTERPASSWORD"))) {
+			if (!loginManager.AskDecryptor(oldPub, true, true)) {
 				return;
-			}
-
-			while (true) {
-				if (pwdDlg.ShowModal() != wxID_OK) {
-					return;
-				}
-
-				bool forgot = xrc_call(pwdDlg, "ID_FORGOT", &wxCheckBox::GetValue);
-				if (forgot) {
-					useMaster = false;
-				}
-				else {
-					auto pass = fz::to_utf8(xrc_call(pwdDlg, "ID_PASSWORD", &wxTextCtrl::GetValue));
-					auto key = private_key::from_password(pass, oldPub.salt_);
-
-					if (key.pubkey() != oldPub) {
-						wxMessageBoxEx(_("Wrong master password entered, it cannot be used to decrypt the stored passwords."), _("Invalid input"), wxICON_EXCLAMATION);
-						continue;
-					}
-					oldPriv = key;
-				}
-				break;
 			}
 		}
 
@@ -152,17 +128,19 @@ void COptionsPageInterface::SavePasswordOption()
 
 		ServerWithCredentials last;
 		if (m_pOptions->GetLastServer(last)) {
-			last.credentials.Unprotect(oldPriv, true);
+			loginManager.AskDecryptor(last.credentials.encrypted_, true, false);
+			last.credentials.Unprotect(loginManager.GetDecryptor(last.credentials.encrypted_), true);
 			m_pOptions->SetLastServer(last);
 		}
 
 		auto recentServers = CRecentServerList::GetMostRecentServers();
 		for (auto & server : recentServers) {
-			server.credentials.Unprotect(oldPriv, true);
+			loginManager.AskDecryptor(server.credentials.encrypted_, true, false);
+			server.credentials.Unprotect(loginManager.GetDecryptor(server.credentials.encrypted_), true);
 		}
 		CRecentServerList::SetMostRecentServers(recentServers);
 
-		CSiteManager::Rewrite(oldPriv);
+		CSiteManager::Rewrite(loginManager, true);
 	}
 }
 
