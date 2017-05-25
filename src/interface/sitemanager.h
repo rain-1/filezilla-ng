@@ -69,6 +69,7 @@ public:
 	static bool AddBookmark(std::wstring sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison);
 	static bool ClearBookmarks(std::wstring sitePath);
 
+	static void Rewrite(private_key const& key);
 
 	static bool UnescapeSitePath(std::wstring path, std::vector<std::wstring>& result);
 	static std::wstring EscapeSegment(std::wstring segment);
@@ -82,6 +83,9 @@ public:
 	static wxString GetColourName(int i);
 
 protected:
+	static void Rewrite(private_key const& key, pugi::xml_node element);
+	static void Save(pugi::xml_node element, Site const& site);
+
 	static std::pair<std::unique_ptr<Site>, Bookmark> DoGetSiteByPath(std::wstring sitePath, wxString& error);
 
 	static bool Load(CSiteManagerXmlHandler& pHandler);

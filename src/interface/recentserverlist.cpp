@@ -78,18 +78,33 @@ void CRecentServerList::SetMostRecentServer(ServerWithCredentials const& server)
 		return;
 	}
 
-	CXmlFile xmlFile(wxGetApp().GetSettingsFile(_T("recentservers")));
-	auto element = xmlFile.CreateEmpty();
-	if (!element)
-		return;
+	SetMostRecentServers(mostRecentServers, false);
+}
 
-	auto servers = element.child("RecentServers");
-	if (!servers) {
-		servers = element.append_child("RecentServers");
+void CRecentServerList::SetMostRecentServers(std::deque<ServerWithCredentials> const& servers, bool lockMutex)
+{
+	CInterProcessMutex mutex(MUTEX_MOSTRECENTSERVERS, false);
+	if (lockMutex) {
+		mutex.Lock();
 	}
 
-	for (auto const& server : mostRecentServers) {
-		auto node = servers.append_child("Server");
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
+		return;
+	}
+
+	CXmlFile xmlFile(wxGetApp().GetSettingsFile(_T("recentservers")));
+	auto element = xmlFile.CreateEmpty();
+	if (!element) {
+		return;
+	}
+
+	auto serversNode = element.child("RecentServers");
+	if (!serversNode) {
+		serversNode = element.append_child("RecentServers");
+	}
+
+	for (auto const& server : servers) {
+		auto node = serversNode.append_child("Server");
 		SetServer(node, server);
 	}
 

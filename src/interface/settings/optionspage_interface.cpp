@@ -5,6 +5,9 @@
 #include "optionspage_interface.h"
 #include "../Mainfrm.h"
 #include "../power_management.h"
+#include "../recentserverlist.h"
+#include "../xrc_helper.h"
+#include <libfilezilla/util.hpp>
 
 BEGIN_EVENT_TABLE(COptionsPageInterface, COptionsPage)
 EVT_CHECKBOX(XRCID("ID_FILEPANESWAP"), COptionsPageInterface::OnLayoutChange)
@@ -29,21 +32,48 @@ bool COptionsPageInterface::LoadPage()
 
 	SetCheckFromOption(XRCID("ID_SPEED_DISPLAY"), OPTION_SPEED_DISPLAY, failure);
 
-	if (!CPowerManagement::IsSupported())
+	if (!CPowerManagement::IsSupported()) {
 		XRCCTRL(*this, "ID_PREVENT_IDLESLEEP", wxCheckBox)->Hide();
-
-/*	if (m_pOptions->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) || m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
-	{
-		XRCCTRL(*this, "ID_DONT_SAVE_PASSWORDS", wxCheckBox)->SetValue(true);
-		XRCCTRL(*this, "ID_DONT_SAVE_PASSWORDS", wxCheckBox)->Disable();
 	}
-	else
-		SetCheckFromOption(XRCID("ID_DONT_SAVE_PASSWORDS"), OPTION_DEFAULT_KIOSKMODE, failure);*/
+
+	auto onChange = [this](wxEvent&) {
+		bool checked = xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxRadioButton::GetValue);
+		xrc_call(*this, "ID_MASTERPASSWORD", &wxControl::Enable, checked);
+		xrc_call(*this, "ID_MASTERPASSWORD_REPEAT", &wxControl::Enable, checked);
+
+	};	
+	XRCCTRL(*this, "ID_PASSWORDS_SAVE", wxEvtHandler)->Bind(wxEVT_RADIOBUTTON, onChange);
+	XRCCTRL(*this, "ID_PASSWORDS_NOSAVE", wxEvtHandler)->Bind(wxEVT_RADIOBUTTON, onChange);
+	XRCCTRL(*this, "ID_PASSWORDS_USEMASTERPASSWORD", wxEvtHandler)->Bind(wxEVT_RADIOBUTTON, onChange);
+
+	if (m_pOptions->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) || m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
+		xrc_call(*this, "ID_PASSWORDS_NOSAVE", &wxRadioButton::SetValue, true);
+		xrc_call(*this, "ID_PASSWORDS_SAVE", &wxControl::Disable);
+		xrc_call(*this, "ID_PASSWORDS_NOSAVE", &wxControl::Disable);
+		xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxControl::Disable);
+		xrc_call(*this, "ID_MASTERPASSWORD", &wxControl::Disable);
+		xrc_call(*this, "ID_MASTERPASSWORD_REPEAT", &wxControl::Disable);
+	}
+	else {
+		if (m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0) {
+			xrc_call(*this, "ID_PASSWORDS_NOSAVE", &wxRadioButton::SetValue, true);
+		}
+		else {
+			auto key = public_key::from_base64(fz::to_utf8(m_pOptions->GetOption(OPTION_MASTERPASSWORDENCRYPTOR)));
+			if (key) {
+				xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxRadioButton::SetValue, true);
+				xrc_call(*this, "ID_MASTERPASSWORD", &wxTextCtrl::SetHint, _("Leave empty to keep existing password.")); // @translator: Keep this string as short as possible
+			}
+			else {
+				xrc_call(*this, "ID_PASSWORDS_SAVE", &wxRadioButton::SetValue, true);
+			}
+		}
+	}
 
 	SetCheckFromOption(XRCID("ID_INTERFACE_SITEMANAGER_ON_STARTUP"), OPTION_INTERFACE_SITEMANAGER_ON_STARTUP, failure);
 
 	int action = m_pOptions->GetOptionVal(OPTION_ALREADYCONNECTED_CHOICE);
-	if( action & 2 ) {
+	if (action & 2) {
 		action = 1 + (action & 1);
 	}
 	else {
@@ -56,6 +86,85 @@ bool COptionsPageInterface::LoadPage()
 	m_pOwner->RememberOldValue(OPTION_FILEPANE_SWAP);
 
 	return !failure;
+}
+
+void COptionsPageInterface::SavePasswordOption()
+{
+	if (!m_pOptions->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) && m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 2) {
+		auto oldPub = public_key::from_base64(fz::to_utf8(m_pOptions->GetOption(OPTION_MASTERPASSWORDENCRYPTOR)));
+		private_key oldPriv;
+		wxString const newPw = xrc_call(*this, "ID_MASTERPASSWORD", &wxTextCtrl::GetValue);
+
+		bool useMaster = xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxRadioButton::GetValue);
+		if (useMaster && newPw.empty()) {
+			// Keeping existing master password
+			return;
+		}
+
+
+		if (oldPub) {
+
+			wxDialogEx pwdDlg;
+			if (!pwdDlg.Load(this, _T("ID_ENTEROLDMASTERPASSWORD"))) {
+				return;
+			}
+
+			while (true) {
+				if (pwdDlg.ShowModal() != wxID_OK) {
+					return;
+				}
+
+				bool forgot = xrc_call(pwdDlg, "ID_FORGOT", &wxCheckBox::GetValue);
+				if (forgot) {
+					useMaster = false;
+				}
+				else {
+					auto pass = fz::to_utf8(xrc_call(pwdDlg, "ID_PASSWORD", &wxTextCtrl::GetValue));
+					auto key = private_key::from_password(pass, oldPub.salt_);
+
+					if (key.pubkey() != oldPub) {
+						wxMessageBoxEx(_("Wrong master password entered, it cannot be used to decrypt the stored passwords."), _("Invalid input"), wxICON_EXCLAMATION);
+						continue;
+					}
+					oldPriv = key;
+				}
+				break;
+			}
+		}
+
+		if (useMaster) {
+			auto priv = private_key::from_password(fz::to_utf8(newPw), fz::random_bytes(private_key::salt_size));
+			auto pub = priv.pubkey();
+			if (!pub) {
+				wxMessageBox(_("Could not generate key"), _("Error"));
+			}
+			else {
+				m_pOptions->SetOption(OPTION_DEFAULT_KIOSKMODE, 0);
+				m_pOptions->SetOption(OPTION_MASTERPASSWORDENCRYPTOR, fz::to_wstring_from_utf8(pub.to_base64()));
+			}
+		}
+		else {
+			bool save = xrc_call(*this, "ID_PASSWORDS_SAVE", &wxRadioButton::GetValue);
+			m_pOptions->SetOption(OPTION_DEFAULT_KIOSKMODE, save ? 0 : 1);
+			m_pOptions->SetOption(OPTION_MASTERPASSWORDENCRYPTOR, std::wstring());
+		}
+
+		// Now actually change stored passwords
+
+		ServerWithCredentials last;
+		if (m_pOptions->GetLastServer(last)) {
+			last.credentials.Unprotect(oldPriv, true);
+			m_pOptions->SetLastServer(last);
+		}
+
+		auto recentServers = CRecentServerList::GetMostRecentServers();
+		for (auto & server : recentServers) {
+			server.credentials.Unprotect(oldPriv, true);
+		}
+		CRecentServerList::SetMostRecentServers(recentServers);
+
+		CSiteManager::Rewrite(oldPriv);
+	}
 }
 
 bool COptionsPageInterface::SavePage()
@@ -73,8 +182,7 @@ bool COptionsPageInterface::SavePage()
 
 	SetOptionFromCheck(XRCID("ID_SPEED_DISPLAY"), OPTION_SPEED_DISPLAY);
 
-//	if (!m_pOptions->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) && m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 2)
-//		SetOptionFromCheck(XRCID("ID_DONT_SAVE_PASSWORDS"), OPTION_DEFAULT_KIOSKMODE);
+	SavePasswordOption();
 
 	SetOptionFromCheck(XRCID("ID_INTERFACE_SITEMANAGER_ON_STARTUP"), OPTION_INTERFACE_SITEMANAGER_ON_STARTUP);
 
@@ -92,6 +200,23 @@ bool COptionsPageInterface::SavePage()
 
 bool COptionsPageInterface::Validate()
 {
+	bool useMaster = xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxRadioButton::GetValue);
+	if (useMaster) {
+		wxString pw = xrc_call(*this, "ID_MASTERPASSWORD", &wxTextCtrl::GetValue);
+		wxString repeat = xrc_call(*this, "ID_MASTERPASSWORD_REPEAT", &wxTextCtrl::GetValue);
+		if (pw != repeat) {
+			return DisplayError(_T("ID_MASTERPASSWORD"), _("The entered passwords are not the same."));
+		}
+
+		auto key = public_key::from_base64(fz::to_utf8(m_pOptions->GetOption(OPTION_MASTERPASSWORDENCRYPTOR)));
+		if (!key && pw.empty()) {
+			return DisplayError(_T("ID_MASTERPASSWORD"), _("You need to enter a master password."));
+		}
+
+		if (!pw.empty() && pw.size() < 8) {
+			return DisplayError(_T("ID_MASTERPASSWORD"), _("The master password needs to be at least 8 characters long."));
+		}
+	}
 	return true;
 }
 
