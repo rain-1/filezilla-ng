@@ -9,6 +9,9 @@ public:
 	virtual bool SavePage();
 	virtual bool Validate();
 
+private:
+	void SavePasswordOption();
+
 	DECLARE_EVENT_TABLE()
 	void OnLayoutChange(wxCommandEvent& event);
 };

@@ -20,7 +20,7 @@ public:
 
 	void Protect();
 	void Protect(public_key const& key);
-	bool Unprotect(private_key const& key);
+	bool Unprotect(private_key const& key, bool on_failure_set_to_ask = false);
 
 	public_key encrypted_;
 };

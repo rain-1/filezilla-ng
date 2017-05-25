@@ -246,13 +246,18 @@ void ProtectedCredentials::Protect(public_key const& key)
 	}
 }
 
-bool ProtectedCredentials::Unprotect(private_key const& key)
+bool ProtectedCredentials::Unprotect(private_key const& key, bool on_failure_set_to_ask)
 {
 	if (!encrypted_) {
 		return true;
 	}
 
 	if (!key || key.pubkey() != encrypted_) {
+		if (on_failure_set_to_ask) {
+			encrypted_ = public_key();
+			password_.clear();
+			logonType_ = LogonType::ask;
+		}
 		return false;
 	}
 
@@ -260,6 +265,11 @@ bool ProtectedCredentials::Unprotect(private_key const& key)
 
 	auto plain = decrypt(cipher, key);
 	if (plain.size() < 16) {
+		if (on_failure_set_to_ask) {
+			encrypted_ = public_key();
+			password_.clear();
+			logonType_ = LogonType::ask;
+		}
 		return false;
 	}
 

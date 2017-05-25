@@ -853,3 +853,77 @@ wxString CSiteManager::GetColourName(int i)
 	return wxGetTranslation(background_colors[i].name);
 }
 
+void CSiteManager::Rewrite(private_key const& key, pugi::xml_node element)
+{
+	for (auto child = element.first_child(); child; child = child.next_sibling()) {
+		if (!strcmp(child.name(), "Folder")) {
+			Rewrite(key, child);
+		}
+		else if (!strcmp(child.name(), "Server")) {
+			auto site = ReadServerElement(child);
+			if (site) {
+				site->server_.credentials.Unprotect(key, true);
+				Save(child, *site);
+			}
+		}
+	}
+}
+
+void CSiteManager::Rewrite(private_key const& key)
+{
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
+		return;
+	}
+	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
+
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
+	auto document = file.Load();
+	if (!document) {
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		return;
+	}
+
+	auto element = document.child("Servers");
+	if (!element) {
+		return;
+	}
+
+	Rewrite(key, element);
+
+	file.Save(true);
+}
+
+void CSiteManager::Save(pugi::xml_node element, Site const& site)
+{
+	SetServer(element, site.server_);
+
+	// Save comments
+	AddTextElement(element, "Comments", site.m_comments.ToStdWstring());
+
+	// Save colour
+	AddTextElement(element, "Colour", CSiteManager::GetColourIndex(site.m_colour));
+
+	// Save local dir
+	AddTextElement(element, "LocalDir", site.m_default_bookmark.m_localDir.ToStdWstring());
+
+	// Save remote dir
+	AddTextElement(element, "RemoteDir", site.m_default_bookmark.m_remoteDir.GetSafePath());
+
+	AddTextElementUtf8(element, "SyncBrowsing", site.m_default_bookmark.m_sync ? "1" : "0");
+	AddTextElementUtf8(element, "DirectoryComparison", site.m_default_bookmark.m_comparison ? "1" : "0");
+
+	for (auto const& bookmark : site.m_bookmarks) {
+		auto node = element.append_child("Bookmark");
+
+		AddTextElement(node, "Name", bookmark.m_name.ToStdWstring());
+
+		// Save local dir
+		AddTextElement(node, "LocalDir", bookmark.m_localDir.ToStdWstring());
+
+		// Save remote dir
+		AddTextElement(node, "RemoteDir", bookmark.m_remoteDir.GetSafePath());
+
+		AddTextElementUtf8(node, "SyncBrowsing", bookmark.m_sync ? "1" : "0");
+		AddTextElementUtf8(node, "DirectoryComparison", bookmark.m_comparison ? "1" : "0");
+	}
+}

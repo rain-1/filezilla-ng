@@ -885,27 +885,21 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 	}
 	else if (data->m_site) {
 		auto node = element.append_child("Server");
-		SetServer(node, data->m_site->server_);
 
-		// Save comments
-		AddTextElement(node, "Comments", data->m_site->m_comments.ToStdWstring());
-
-		// Save colour
-		AddTextElement(node, "Colour", CSiteManager::GetColourIndex(data->m_site->m_colour));
-
-		// Save local dir
-		AddTextElement(node, "LocalDir", data->m_site->m_default_bookmark.m_localDir.ToStdWstring());
-
-		// Save remote dir
-		AddTextElement(node, "RemoteDir", data->m_site->m_default_bookmark.m_remoteDir.GetSafePath());
-
-		AddTextElementUtf8(node, "SyncBrowsing", data->m_site->m_default_bookmark.m_sync ? "1" : "0");
-		AddTextElementUtf8(node, "DirectoryComparison", data->m_site->m_default_bookmark.m_comparison ? "1" : "0");
-		AddTextElement(node, name);
-
+		// Update bookmarks
 		data->m_site->m_bookmarks.clear();
 
-		Save(node, child);
+		wxTreeItemIdValue cookie;
+		wxTreeItemId bookmarkChild = pTree->GetFirstChild(child, cookie);
+		while (bookmarkChild.IsOk()) {
+			CSiteManagerItemData* bookmarkData = static_cast<CSiteManagerItemData* >(pTree->GetItemData(bookmarkChild));
+			wxASSERT(bookmarkData->m_bookmark);
+			bookmarkData->m_bookmark->m_name = pTree->GetItemText(bookmarkChild).ToStdWstring();
+			data->m_site->m_bookmarks.push_back(*bookmarkData->m_bookmark);
+			bookmarkChild = pTree->GetNextChild(bookmarkChild, cookie);
+		}
+
+		CSiteManager::Save(node, *data->m_site);
 
 		if (data->connected_item != -1) {
 			if ((*m_connected_sites)[data->connected_item].server.server == data->m_site->server_.server) {
@@ -913,26 +907,6 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 				(*m_connected_sites)[data->connected_item].server = data->m_site->server_;
 			}
 		}
-	}
-	else if (data->m_bookmark) {
-		data->m_bookmark->m_name = name;
-		CSiteManagerItemData* siteData = static_cast<CSiteManagerItemData* >(pTree->GetItemData(pTree->GetItemParent(child)));
-		if (siteData && siteData->m_site) {
-			siteData->m_site->m_bookmarks.push_back(*data->m_bookmark);
-		}
-
-		auto node = element.append_child("Bookmark");
-
-		AddTextElement(node, "Name", name);
-
-		// Save local dir
-		AddTextElement(node, "LocalDir", data->m_bookmark->m_localDir.ToStdWstring());
-
-		// Save remote dir
-		AddTextElement(node, "RemoteDir", data->m_bookmark->m_remoteDir.GetSafePath());
-
-		AddTextElementUtf8(node, "SyncBrowsing", data->m_bookmark->m_sync ? "1" : "0");
-		AddTextElementUtf8(node, "DirectoryComparison", data->m_bookmark->m_comparison ? "1" : "0");
 	}
 
 	return true;
@@ -1236,8 +1210,9 @@ void CSiteManagerDialog::OnEndLabelEdit(wxTreeEvent& event)
 
 	wxTreeItemIdValue cookie;
 	for (wxTreeItemId child = pTree->GetFirstChild(parent, cookie); child.IsOk(); child = pTree->GetNextChild(parent, cookie)) {
-		if (child == item)
+		if (child == item) {
 			continue;
+		}
 		if (!name.CmpNoCase(pTree->GetItemText(child))) {
 			wxMessageBoxEx(_("Name already exists"), _("Cannot rename entry"), wxICON_EXCLAMATION, this);
 			event.Veto();
