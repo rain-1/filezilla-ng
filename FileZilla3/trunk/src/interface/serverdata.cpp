@@ -1,5 +1,6 @@
 #include <filezilla.h>
 
+#include "loginmanager.h"
 #include "serverdata.h"
 #include "Options.h"
 
@@ -224,8 +225,21 @@ void ProtectedCredentials::Protect(public_key const& key)
 		return;
 	}
 
-	if (!key || encrypted_) {
+	if (!key) {
 		return;
+	}
+
+	if (encrypted_ == key) {
+		return;
+	}
+	else {
+		// Different key used. Try decrypting it
+		auto priv = CLoginManager::Get().GetDecryptor(key);
+		if (priv) {
+			if (!Unprotect(priv, true)) {
+				return;
+			}
+		}
 	}
 	
 	auto plain = fz::to_utf8(password_);

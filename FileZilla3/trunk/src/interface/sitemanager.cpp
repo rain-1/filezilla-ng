@@ -3,6 +3,7 @@
 
 #include "filezillaapp.h"
 #include "ipcmutex.h"
+#include "loginmanager.h"
 #include "Options.h"
 #include "xmlfunctions.h"
 
@@ -853,23 +854,24 @@ wxString CSiteManager::GetColourName(int i)
 	return wxGetTranslation(background_colors[i].name);
 }
 
-void CSiteManager::Rewrite(private_key const& key, pugi::xml_node element)
+void CSiteManager::Rewrite(CLoginManager & loginManager, pugi::xml_node element, bool on_failure_set_to_ask)
 {
 	for (auto child = element.first_child(); child; child = child.next_sibling()) {
 		if (!strcmp(child.name(), "Folder")) {
-			Rewrite(key, child);
+			Rewrite(loginManager, child);
 		}
 		else if (!strcmp(child.name(), "Server")) {
 			auto site = ReadServerElement(child);
 			if (site) {
-				site->server_.credentials.Unprotect(key, true);
+				loginManager.AskDecryptor(site->server_.credentials.encrypted_, true, false);
+				site->server_.credentials.Unprotect(loginManager.GetDecryptor(site->server_.credentials.encrypted_), on_failure_set_to_ask);
 				Save(child, *site);
 			}
 		}
 	}
 }
 
-void CSiteManager::Rewrite(private_key const& key)
+void CSiteManager::Rewrite(CLoginManager & loginManager, bool on_failure_set_to_ask)
 {
 	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		return;
@@ -888,7 +890,7 @@ void CSiteManager::Rewrite(private_key const& key)
 		return;
 	}
 
-	Rewrite(key, element);
+	Rewrite(loginManager, element, on_failure_set_to_ask);
 
 	file.Save(true);
 }
