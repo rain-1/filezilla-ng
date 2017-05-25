@@ -36,7 +36,7 @@ bool COptionsPageInterface::LoadPage()
 		XRCCTRL(*this, "ID_PREVENT_IDLESLEEP", wxCheckBox)->Hide();
 	}
 
-	auto onChange = [this](wxEvent&) {
+	auto onChange = [this](wxEvent const&) {
 		bool checked = xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxRadioButton::GetValue);
 		xrc_call(*this, "ID_MASTERPASSWORD", &wxControl::Enable, checked);
 		xrc_call(*this, "ID_MASTERPASSWORD_REPEAT", &wxControl::Enable, checked);
@@ -51,8 +51,6 @@ bool COptionsPageInterface::LoadPage()
 		xrc_call(*this, "ID_PASSWORDS_SAVE", &wxControl::Disable);
 		xrc_call(*this, "ID_PASSWORDS_NOSAVE", &wxControl::Disable);
 		xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxControl::Disable);
-		xrc_call(*this, "ID_MASTERPASSWORD", &wxControl::Disable);
-		xrc_call(*this, "ID_MASTERPASSWORD_REPEAT", &wxControl::Disable);
 	}
 	else {
 		if (m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0) {
@@ -69,6 +67,7 @@ bool COptionsPageInterface::LoadPage()
 			}
 		}
 	}
+	onChange(wxCommandEvent());
 
 	SetCheckFromOption(XRCID("ID_INTERFACE_SITEMANAGER_ON_STARTUP"), OPTION_INTERFACE_SITEMANAGER_ON_STARTUP, failure);
 
