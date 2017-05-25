@@ -1,5 +1,5 @@
-#ifndef __ASKSAVEPASSWORDDIALOG_H__
-#define __ASKSAVEPASSWORDDIALOG_H__
+#ifndef FILEZILLA_INTERFACE_ASKSAVEPASSWORDDIALOG_HEADER
+#define FILEZILLA_INTERFACE_ASKSAVEPASSWORDDIALOG_HEADER
 
 #include "dialogex.h"
 
@@ -10,8 +10,7 @@ public:
 private:
 	bool Create(wxWindow* parent);
 
-	DECLARE_EVENT_TABLE()
-	void OnRadioButtonChanged(wxCommandEvent& event);
+	void OnOk(wxCommandEvent& event);
 };
 
 #endif
