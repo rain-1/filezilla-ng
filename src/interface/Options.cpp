@@ -192,7 +192,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Toolbar hidden", number, _T("0"), normal },
 	{ "Strip VMS revisions", number, _T("0"), normal },
 	{ "Show Site Manager on startup", number, _T("0"), normal },
-	{ "Prompt password change", number, _T("0"), normal },
+	{ "Prompt password save", number, _T("0"), normal },
 	{ "Persistent Choices", number, _T("0"), normal },
 	{ "Queue completion action", number, _T("1"), normal },
 	{ "Queue completion command", string, _T(""), normal },
