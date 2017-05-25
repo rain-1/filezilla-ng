@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "sitemanager_dialog.h"
 
+#include "asksavepassworddialog.h"
 #include "buildinfo.h"
 #include "conditionaldialog.h"
 #include "drop_target_ex.h"
@@ -555,6 +556,10 @@ void CSiteManagerDialog::OnOK(wxCommandEvent&)
 
 	UpdateItem();
 
+	if (!CAskSavePasswordDialog::Run(this)) {
+		return;
+	}
+
 	Save();
 
 	RememberLastSelected();
@@ -589,6 +594,10 @@ void CSiteManagerDialog::OnConnect(wxCommandEvent&)
 	}
 
 	UpdateItem();
+
+	if (!CAskSavePasswordDialog::Run(this)) {
+		return;
+	}
 
 	Save();
 
