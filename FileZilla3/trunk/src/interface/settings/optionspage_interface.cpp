@@ -126,19 +126,31 @@ void COptionsPageInterface::SavePasswordOption()
 
 		// Now actually change stored passwords
 
-		ServerWithCredentials last;
-		if (m_pOptions->GetLastServer(last)) {
-			loginManager.AskDecryptor(last.credentials.encrypted_, true, false);
-			last.credentials.Unprotect(loginManager.GetDecryptor(last.credentials.encrypted_), true);
-			m_pOptions->SetLastServer(last);
+		{
+			ServerWithCredentials last;
+			if (m_pOptions->GetLastServer(last)) {
+				loginManager.AskDecryptor(last.credentials.encrypted_, true, false);
+				last.credentials.Unprotect(loginManager.GetDecryptor(last.credentials.encrypted_), true);
+				m_pOptions->SetLastServer(last);
+			}
 		}
 
-		auto recentServers = CRecentServerList::GetMostRecentServers();
-		for (auto & server : recentServers) {
-			loginManager.AskDecryptor(server.credentials.encrypted_, true, false);
-			server.credentials.Unprotect(loginManager.GetDecryptor(server.credentials.encrypted_), true);
+		{
+			auto recentServers = CRecentServerList::GetMostRecentServers();
+			for (auto & server : recentServers) {
+				loginManager.AskDecryptor(server.credentials.encrypted_, true, false);
+				server.credentials.Unprotect(loginManager.GetDecryptor(server.credentials.encrypted_), true);
+			}
+			CRecentServerList::SetMostRecentServers(recentServers);
 		}
-		CRecentServerList::SetMostRecentServers(recentServers);
+
+		for (auto state : *CContextManager::Get()->GetAllStates()) {
+			auto site = state->GetLastSite();
+			auto path = state->GetLastServerPath();
+			loginManager.AskDecryptor(site.server_.credentials.encrypted_, true, false);
+			site.server_.credentials.Unprotect(loginManager.GetDecryptor(site.server_.credentials.encrypted_), true);
+			state->SetLastSite(site, path);
+		}
 
 		CSiteManager::Rewrite(loginManager, true);
 	}
@@ -164,7 +176,7 @@ bool COptionsPageInterface::SavePage()
 	SetOptionFromCheck(XRCID("ID_INTERFACE_SITEMANAGER_ON_STARTUP"), OPTION_INTERFACE_SITEMANAGER_ON_STARTUP);
 
 	int action = GetChoice(XRCID("ID_NEWCONN_ACTION"));
-	if( !action ) {
+	if (!action) {
 		action = m_pOptions->GetOptionVal(OPTION_ALREADYCONNECTED_CHOICE) & 1;
 	}
 	else {
