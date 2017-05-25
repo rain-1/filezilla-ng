@@ -11,7 +11,7 @@ BEGIN_EVENT_TABLE(CWelcomeDialog, wxDialogEx)
 EVT_TIMER(wxID_ANY, CWelcomeDialog::OnTimer)
 END_EVENT_TABLE()
 
-bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=false*/)
+bool CWelcomeDialog::Run(wxWindow* parent, bool force, bool delay)
 {
 	const wxString ownVersion = CBuildInfo::GetVersion();
 	wxString greetingVersion = COptions::Get()->GetOption(OPTION_GREETINGVERSION);
