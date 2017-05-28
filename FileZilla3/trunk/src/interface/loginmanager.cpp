@@ -159,8 +159,6 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 	XRCCTRL(pwdDlg, "ID_HOST", wxStaticText)->SetLabel(server.Format(ServerFormat::with_optional_port));
 
 	if (server.server.GetUser().empty()) {
-		canRemember = false;
-
 		XRCCTRL(pwdDlg, "ID_OLD_USER_LABEL", wxStaticText)->Hide();
 		XRCCTRL(pwdDlg, "ID_OLD_USER", wxStaticText)->Hide();
 
@@ -170,12 +168,14 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 			XRCCTRL(pwdDlg, "ID_PASSWORD_LABEL", wxStaticText)->Hide();
 			XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->Hide();
 			XRCCTRL(pwdDlg, "ID_HEADER_BOTH", wxStaticText)->Hide();
+
+			canRemember = false;
+			XRCCTRL(pwdDlg, "ID_REMEMBER", wxCheckBox)->Hide();
 		}
 		else {
 			pwdDlg.SetTitle(_("Enter username and password"));
 			XRCCTRL(pwdDlg, "ID_HEADER_USER", wxStaticText)->Hide();
 		}
-		XRCCTRL(pwdDlg, "ID_REMEMBER", wxCheckBox)->Hide();
 		XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->SetFocus();
 	}
 	else {
