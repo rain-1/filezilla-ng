@@ -12,7 +12,7 @@ dist_resources_DATA = \
 	downloadadd.png \
 	file.png \
 	folder.png \
-	folderback.png
+	folderback.png \
 	folderclosed.png \
 	folderup.png \
 	help.png \
