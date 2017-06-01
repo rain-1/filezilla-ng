@@ -61,7 +61,9 @@ bool COptionsPageInterface::LoadPage()
 			auto key = public_key::from_base64(fz::to_utf8(m_pOptions->GetOption(OPTION_MASTERPASSWORDENCRYPTOR)));
 			if (key) {
 				xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxRadioButton::SetValue, true);
-				xrc_call(*this, "ID_MASTERPASSWORD", &wxTextCtrl::SetHint, _("Leave empty to keep existing password.")); // @translator: Keep this string as short as possible
+
+				// @translator: Keep this string as short as possible
+				xrc_call(*this, "ID_MASTERPASSWORD", &wxTextCtrl::SetHint, _("Leave empty to keep existing password."));
 			}
 			else {
 				xrc_call(*this, "ID_PASSWORDS_SAVE", &wxRadioButton::SetValue, true);

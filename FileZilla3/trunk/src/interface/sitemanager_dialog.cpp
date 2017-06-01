@@ -1731,7 +1731,9 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.account_);
 		if (data->m_site->server_.credentials.encrypted_) {
 			xrc_call(*this, "ID_PASS", &wxTextCtrl::Clear);
-			xrc_call(*this, "ID_PASS", &wxTextCtrl::SetHint, _("Leave empty to keep existing password.")); // @translator: Keep this string as short as possible
+
+			// @translator: Keep this string as short as possible
+			xrc_call(*this, "ID_PASS", &wxTextCtrl::SetHint, _("Leave empty to keep existing password."));
 		}
 		else {
 			xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.GetPass());
