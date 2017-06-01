@@ -225,6 +225,8 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	RegisterOption(OPTION_CONCURRENTDOWNLOADLIMIT);
 	RegisterOption(OPTION_CONCURRENTUPLOADLIMIT);
 
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_REWRITE_CREDENTIALS, false);
+
 	SetDropTarget(new CQueueViewDropTarget(this));
 
 	m_line_height = -1;
@@ -3117,5 +3119,40 @@ CActionAfterBlocker::~CActionAfterBlocker()
 {
 	if (trigger_ && !queueView_.IsActive()) {
 		queueView_.ActionAfter();
+	}
+}
+
+void CQueueView::OnStateChange(CState*, t_statechange_notifications notification, wxString const&, const void* data2)
+{
+	if (notification != STATECHANGE_REWRITE_CREDENTIALS) {
+		return;
+	}
+
+	auto * loginManager = const_cast<CLoginManager*>(reinterpret_cast<CLoginManager const*>(data2));
+	if (!loginManager) {
+		return;
+	}
+
+
+	for (auto it = m_serverList.begin(); it != m_serverList.end(); ) {
+		ServerWithCredentials server = (*it)->GetServer();
+		loginManager->AskDecryptor(server.credentials.encrypted_, true, false);
+
+		// Since the queue may be running and AskDecryptor uses the GUI, re-find matching server item
+		for (it = m_serverList.begin(); it != m_serverList.end(); ++it) {
+			if ((*it)->GetServer() == server) {
+				server = (*it)->GetServer(); // Credentials aren't in ==
+				server.credentials.Unprotect(loginManager->GetDecryptor(server.credentials.encrypted_), true);
+				(*it)->GetCredentials() = server.credentials;
+				break;
+			}
+		}
+		if (it == m_serverList.end()) {
+			// Server has vanished, start over.
+			it = m_serverList.begin();
+		}
+		else {
+			++it;
+		}
 	}
 }
