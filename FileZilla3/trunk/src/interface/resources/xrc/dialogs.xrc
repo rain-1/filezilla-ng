@@ -494,7 +494,7 @@
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
         <object class="wxStaticText" name="ID_HEADER_PASS">
-          <label>Please enter your current master password to to change the password settings.</label>
+          <label>Please enter your current master password to change the password settings.</label>
         </object>
         <flag>wxTOP|wxLEFT|wxRIGHT</flag>
         <border>5</border>
