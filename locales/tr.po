@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Roman Neumüller <email@katpatuka.org>, 2007
 # Kaya Zeren <kayazeren@gmail.com>, 2014-2017
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-05-25 20:30+0200\n"
-"PO-Revision-Date: 2017-05-25 06:27+0000\n"
+"POT-Creation-Date: 2017-06-01 21:18+0200\n"
+"PO-Revision-Date: 2017-05-26 04:08+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/zeron/filezilla/"
 "language/tr_TR/)\n"
@@ -1527,7 +1527,7 @@ msgstr "Her &zaman şu işlem yapılsın"
 msgid "Algorithm:"
 msgstr "Algoritma:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2638
+#: ../../locales/../src/interface/QueueView.cpp:2640
 msgid "All files have been successfully transferred"
 msgstr "Tüm dosyalar aktarıldı"
 
@@ -1535,7 +1535,7 @@ msgstr "Tüm dosyalar aktarıldı"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "Yazılan tüm kapılar 1024 ile 65535 arasında olmalı."
 
-#: ../../locales/../src/interface/QueueView.cpp:2634
+#: ../../locales/../src/interface/QueueView.cpp:2636
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1581,7 +1581,7 @@ msgid ""
 msgstr ""
 "Alternatif olarak, son sürümü FileZilla web sitesinden indirebilirsiniz:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1644
+#: ../../locales/../src/interface/QueueView.cpp:1646
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1590,7 +1590,7 @@ msgstr ""
 "Aktarım kuyruğu \"%s\" üzerinden yüklenirken hata oluştu.\n"
 "Bazı aktarım kuyruğu ögeleri yüklenememiş olabilir."
 
-#: ../../locales/../src/interface/QueueView.cpp:1540
+#: ../../locales/../src/interface/QueueView.cpp:1542
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1603,7 +1603,7 @@ msgstr ""
 msgid "An issuer in the certificate chain is not a certificate authority"
 msgstr "Sertifika zincirindeki yayıncılardan biri sertifika yetkilisi değil"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2162
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2164
 msgid ""
 "An item with the same name as the dragged item already exists at the target "
 "location."
@@ -2122,7 +2122,7 @@ msgstr "Varsayılan yerel klasörü seçin"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:134
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:386
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2403
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2405
 msgid "Choose the local directory"
 msgstr "Yerel klasörü seçin"
 
@@ -2260,7 +2260,7 @@ msgstr "Do&sya Boyutları Karşılaştırılsın"
 msgid "Comparison &threshold (in minutes):"
 msgstr "Karşılaş&tırma eşiği (dakika cinsinden):"
 
-#: ../../locales/../src/interface/settings/optionspage_filelists.cpp:41
+#: ../../locales/../src/interface/settings/optionspage_filelists.cpp:40
 msgid "Comparison threshold needs to be between 0 and 1440 minutes."
 msgstr "Karşılaştırma eşiği 0 ile 1.440 dakika arasında olmalıdır."
 
@@ -2483,13 +2483,13 @@ msgid "Convert key file"
 msgstr "Anahtar dosyasını dönüştür"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:676
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1963
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1965
 #, c-format
 msgid "Copy (%d) of %s"
 msgstr "%d / (%s) kopya"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:655
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1942
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1944
 #, c-format
 msgid "Copy of %s"
 msgstr "%s kopyası"
@@ -2615,10 +2615,9 @@ msgid "Could not generate custom login sequence."
 msgstr "Özel oturum açma sıralaması üretilemedi."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:114
-#, fuzzy
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
 msgid "Could not generate key"
-msgstr "Kişisel anahtar dönüştürülemedi"
+msgstr "Anahtar üretilemedi"
 
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1085
 msgid ""
@@ -2816,7 +2815,7 @@ msgstr "\"%s\" dosyasına yazılamıyor, yer imi kaydedilemedi: %s"
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "\"%s\" dosyasına yazılamıyor, genel yer imleri kaydedilemedi: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1569
+#: ../../locales/../src/interface/QueueView.cpp:1571
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2827,7 +2826,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/sitemanager.cpp:758
 #: ../../locales/../src/interface/sitemanager.cpp:815
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2381
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2383
 #, c-format
 msgid "Could not write \"%s\", the selected sites could not be exported: %s"
 msgstr "\"%s\" dosyasına yazılamıyor, seçilen siteler verilemedi: %s"
@@ -3476,7 +3475,7 @@ msgstr "Arama sonuçları düzenleniyor"
 msgid "Email:"
 msgstr "E-posta:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1860
+#: ../../locales/../src/interface/QueueView.cpp:1862
 msgid "Empty command"
 msgstr "Boş komut"
 
@@ -3542,7 +3541,7 @@ msgstr "Özel &Komut Yazın..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Hız sınırlaması olmaması için 0 yazın."
 
-#: ../../locales/../src/interface/QueueView.cpp:1854
+#: ../../locales/../src/interface/QueueView.cpp:1856
 msgid "Enter command"
 msgstr "Komutu yazın"
 
@@ -3626,19 +3625,18 @@ msgstr ""
 "Sunucunun dinlediği kapıyı yazın. Varsayılan kapılar FTP için 21, SFTP için "
 "22'dir."
 
-#: ../../locales/../src/interface/loginmanager.cpp:169
+#: ../../locales/../src/interface/loginmanager.cpp:167
 msgid "Enter username"
 msgstr "Kullanıcı adını yazın"
 
-#: ../../locales/../src/interface/loginmanager.cpp:175
+#: ../../locales/../src/interface/loginmanager.cpp:176
 msgid "Enter username and password"
 msgstr "Kullanıcı adı ve parolayı yazın"
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:114
-#, fuzzy
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
 msgid "Error"
-msgstr "Hata:"
+msgstr "Hata"
 
 #: ../../locales/../src/interface/export.cpp:30
 msgid "Error exporting settings"
@@ -3649,7 +3647,7 @@ msgstr "Ayarlar verilirken sorun çıktı"
 msgid "Error importing"
 msgstr "Veriler alınırken sorun çıktı"
 
-#: ../../locales/../src/interface/QueueView.cpp:1645
+#: ../../locales/../src/interface/QueueView.cpp:1647
 msgid "Error loading queue"
 msgstr "Kuyruk yüklenirken sorun çıktı"
 
@@ -3665,7 +3663,7 @@ msgstr "Kuyruk yüklenirken sorun çıktı"
 #: ../../locales/../src/interface/Options.cpp:246
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:64
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:128
-#: ../../locales/../src/interface/QueueView.cpp:1552
+#: ../../locales/../src/interface/QueueView.cpp:1554
 #: ../../locales/../src/interface/search.cpp:1268
 #: ../../locales/../src/interface/search.cpp:1287
 #: ../../locales/../src/interface/sitemanager.cpp:91
@@ -3680,7 +3678,7 @@ msgstr "Kuyruk yüklenirken sorun çıktı"
 msgid "Error loading xml file"
 msgstr "XML dosyası yüklenirken sorun çıktı"
 
-#: ../../locales/../src/interface/QueueView.cpp:1541
+#: ../../locales/../src/interface/QueueView.cpp:1543
 msgid "Error saving queue"
 msgstr "Kuyruk kaydedilirken sorun çıktı"
 
@@ -3691,12 +3689,12 @@ msgstr "Uygulama başlatılırken sorun çıktı"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:332
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:883
-#: ../../locales/../src/interface/QueueView.cpp:1570
+#: ../../locales/../src/interface/QueueView.cpp:1572
 #: ../../locales/../src/interface/sitemanager.cpp:634
 #: ../../locales/../src/interface/sitemanager.cpp:759
 #: ../../locales/../src/interface/sitemanager.cpp:816
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:860
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2382
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2384
 #: ../../locales/../src/interface/xmlfunctions.cpp:150
 msgid "Error writing xml file"
 msgstr "XML dosyası yazılırken sorun çıktı"
@@ -3818,7 +3816,7 @@ msgstr "Dil değiştirilemedi"
 msgid "Failed to convert command to 8 bit charset"
 msgstr "8 bit karakter kümesine dönüştürme komutu yürütülemedi"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2162
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2164
 msgid "Failed to copy or move sites"
 msgstr "Siteler kopyalanamadı ya da taşınamadı"
 
@@ -4455,6 +4453,7 @@ msgstr "Saat,"
 msgid ""
 "I &forgot my master password. Delete all passwords stored with this key."
 msgstr ""
+"A&na parolamı unuttum. Bu anahtar ile kaydedilmiş tüm parolalar silinsin."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1630
 msgid "I&SO 8601 (example: 15:47)"
@@ -4925,9 +4924,8 @@ msgstr "Anahtar dosyası"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:431
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:506
-#, fuzzy
 msgid "Key identifier:"
-msgstr "&Anahtar dosyası:"
+msgstr "Anahtar Belirteci:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:374
 msgid "L&owest"
@@ -4952,8 +4950,9 @@ msgstr "Son Değişiklik"
 msgid "Layout"
 msgstr "Yerleşim"
 
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:64
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1734
+#. @translator: Keep this string as short as possible
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:66
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1736
 msgid "Leave empty to keep existing password."
 msgstr "Varolan parolanın korunması için boş bırakın."
 
@@ -5341,7 +5340,7 @@ msgstr "Yer İ&mi Ekle"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:600
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:853
 #: ../../locales/../src/interface/sitemanager.cpp:725
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2320
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2322
 msgid "New bookmark"
 msgstr "Yeni yer imi"
 
@@ -5366,7 +5365,7 @@ msgstr "Klasör oluştur"
 
 #: ../../locales/../src/interface/sitemanager.cpp:605
 #: ../../locales/../src/interface/sitemanager.cpp:619
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2293
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2295
 msgid "New site"
 msgstr "Yeni site"
 
@@ -5386,7 +5385,7 @@ msgstr "Nodename için bir adres belirtilmemiş"
 msgid "No category to export selected"
 msgstr "Verilecek bir kategori seçilmemiş"
 
-#: ../../locales/../src/interface/QueueView.cpp:1860
+#: ../../locales/../src/interface/QueueView.cpp:1862
 msgid "No command given, aborting."
 msgstr "Herhangi bir komut verilmedi, vazgeçiliyor."
 
@@ -5961,7 +5960,7 @@ msgstr ""
 "Lütfen standart bir FTP komutu yazın.\n"
 "Standart ftp komutları kullanıldığında klasör önbelleği silinir."
 
-#: ../../locales/../src/interface/QueueView.cpp:1854
+#: ../../locales/../src/interface/QueueView.cpp:1856
 msgid ""
 "Please enter the complete path of a program and its arguments. This command "
 "will be executed when the queue has finished processing.\n"
@@ -5991,10 +5990,10 @@ msgid "Please enter username and password for this server:"
 msgstr "Lütfen bu sunucu için bir kullanıcı adı ve parola yazın:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:497
-#, fuzzy
 msgid ""
-"Please enter your current master password to to change the password settings."
-msgstr "Bu sunucunun parola şifresinin çözülmesi için ana parolanızı yazın:"
+"Please enter your current master password to change the password settings."
+msgstr ""
+"Lütfen parola ayarlarını değiştirmek için geçerli ana parolanızı yazın."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:150
 msgid "Please enter your external IP address"
@@ -6159,7 +6158,7 @@ msgid "Preallocation"
 msgstr "Yer Ayırma"
 
 #: ../../locales/../src/interface/sitemanager.cpp:341
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2021
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2023
 msgid "Predefined Sites"
 msgstr "Öntanımlı Siteler"
 
@@ -6298,7 +6297,7 @@ msgstr "Genel Anahtar Algoritması:"
 msgid "Public permissions"
 msgstr "Genel izinler"
 
-#: ../../locales/../src/interface/QueueView.cpp:2758
+#: ../../locales/../src/interface/QueueView.cpp:2760
 msgid "Queue has been fully processed"
 msgstr "Kuyruk tamamen işlendi"
 
@@ -6411,7 +6410,7 @@ msgstr "Gerçekten seçili tüm dosya ve klasörleri silmek istiyor musunuz?"
 msgid "Reason"
 msgstr "Neden"
 
-#: ../../locales/../src/interface/QueueView.cpp:2751
+#: ../../locales/../src/interface/QueueView.cpp:2753
 msgid "Reboot now"
 msgstr "Yeniden başlat"
 
@@ -6869,7 +6868,7 @@ msgid "Select file for exported settings"
 msgstr "Ayarların verileceği dosyayı seçin"
 
 #: ../../locales/../src/interface/export.cpp:36
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2365
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2367
 msgid "Select file for exported sites"
 msgstr "Verilecek siteler için bir dosya seçin"
 
@@ -7193,7 +7192,7 @@ msgstr "Kullanılabilecek TLS şifrelerini görüntüler"
 msgid "Shows this help dialog"
 msgstr "Bu yardım penceresini görüntüler"
 
-#: ../../locales/../src/interface/QueueView.cpp:2747
+#: ../../locales/../src/interface/QueueView.cpp:2749
 msgid "Shutdown now"
 msgstr "Şimdi kapat"
 
@@ -7470,7 +7469,7 @@ msgstr "Aktarılanlar"
 msgid "Summary of test results:"
 msgstr "Sınama sonuçları özeti:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2755
+#: ../../locales/../src/interface/QueueView.cpp:2757
 msgid "Suspend now"
 msgstr "Şimdi askya al"
 
@@ -7682,10 +7681,9 @@ msgid "The entered filter name already exists, please choose a different name."
 msgstr "Yazdığınız süzgeç adı zaten var, lütfen başka bir ad seçin."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:41
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:197
-#, fuzzy
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:201
 msgid "The entered passwords are not the same."
-msgstr "Lütfen bu sunucunun parolasını yazın:"
+msgstr "Parola ile onayı aynı değil."
 
 #: ../../locales/../src/interface/settings/optionspage_filetype.cpp:153
 #, c-format
@@ -7859,9 +7857,9 @@ msgstr ""
 "En küçük kapı değeri, en büyük kapı değerinden küçük ya da eşit olmalı."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:46
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:206
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:210
 msgid "The master password needs to be at least 8 characters long."
-msgstr ""
+msgstr "Ana parola en az 8 karakter uzunluğunda olmalıdır."
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:122
 msgid "The new version could not be downloaded, please retry later."
@@ -7871,7 +7869,7 @@ msgstr "Yeni sürüm indirilemedi, lütfen daha sonra yeniden deneyin."
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Yeni sürüm İndirmeler klasörünüze kaydedilecek."
 
-#: ../../locales/../src/interface/QueueView.cpp:1551
+#: ../../locales/../src/interface/QueueView.cpp:1553
 msgid "The queue will not be saved."
 msgstr "Kuyruk kaydedilemedi."
 
@@ -7982,11 +7980,11 @@ msgstr "Belirtilen adres ailesi desteklenmiyor"
 msgid "The specified network name is no longer available"
 msgstr "Belirtilen ağ adı artık kullanılmıyor"
 
-#: ../../locales/../src/interface/QueueView.cpp:2750
+#: ../../locales/../src/interface/QueueView.cpp:2752
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "İptal düğmesine tıklamazsanız sistem yeniden başlatılacak."
 
-#: ../../locales/../src/interface/QueueView.cpp:2746
+#: ../../locales/../src/interface/QueueView.cpp:2748
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "İptal düğmesine tıklamazsanız sistem birazdan kapanacak."
 
@@ -8186,7 +8184,7 @@ msgstr "Aktarılıyor"
 msgid "Transfers"
 msgstr "Aktarım"
 
-#: ../../locales/../src/interface/QueueView.cpp:2630
+#: ../../locales/../src/interface/QueueView.cpp:2632
 msgid "Transfers finished"
 msgstr "Aktarımlar tamamlandı"
 
@@ -8555,9 +8553,8 @@ msgid "Waiting for transfer to be cancelled"
 msgstr "Aktarımın iptal edilmesi bekleniyor"
 
 #: ../../locales/../src/engine/engineprivate.cpp:239
-#, fuzzy
 msgid "Waiting to retry..."
-msgstr "'%s' klasörü oluşturuluyor..."
+msgstr "Yeniden deneniyor..."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:978
 msgid "Warning, ignoring data connection from wrong IP."
@@ -8635,11 +8632,12 @@ msgid "Wrong line endings"
 msgstr "Satır sonu yanlış"
 
 #: ../../locales/../src/interface/loginmanager.cpp:289
-#, fuzzy
 msgid ""
 "Wrong master password entered, it cannot be used to decrypt the stored "
 "passwords."
-msgstr "Yazılan ana parola doğru olmadığından bu ögenin şifresi çözülemedi."
+msgstr ""
+"Yazılan ana parola doğru olmadığından kaydedilmiş parolaların şifresi "
+"çözülemedi."
 
 #: ../../locales/../src/interface/loginmanager.cpp:108
 msgid "Wrong master password entered, it cannot be used to decrypt this item."
@@ -8767,10 +8765,9 @@ msgstr ""
 "Aktarılan veriyi değiştiren bir yönelticiniz ya da güvenlik duvarınız var "
 "gibi görünüyor."
 
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:202
-#, fuzzy
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:206
 msgid "You need to enter a master password."
-msgstr "Bir vekil sunucu adı yazmalısınız."
+msgstr "Bir ana parola yazmalısınız."
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:60
 msgid "You need to enter a name for the bookmark."
@@ -8841,7 +8838,7 @@ msgstr ""
 "Diğer sunuculara bağlanmakta bir sorununuz olmamalı. Dosya aktarımları "
 "düzgün çalışıyor olmalı."
 
-#: ../../locales/../src/interface/QueueView.cpp:2754
+#: ../../locales/../src/interface/QueueView.cpp:2756
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "İptal düğmesine tıklamazsanız sistem askıya alınacak."
 
@@ -9006,9 +9003,3 @@ msgstr "Herkes yazabilir"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:877
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
-
-#~ msgid "&Do not remember passwords (recommended)"
-#~ msgstr "Parolalar &hatırlanmasın (önerilir)"
-
-#~ msgid "&Remember passwords"
-#~ msgstr "Pa&rolalar hatırlansın"
