@@ -3,7 +3,6 @@
 #include "settingsdialog.h"
 #include "optionspage.h"
 #include "optionspage_filelists.h"
-#include "../Mainfrm.h"
 
 bool COptionsPageFilelists::LoadPage()
 {

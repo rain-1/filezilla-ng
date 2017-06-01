@@ -40,6 +40,7 @@ enum t_statechange_notifications
 	STATECHANGE_CHANGEDCONTEXT, /* Currently active context changed */
 	STATECHANGE_REMOVECONTEXT, /* Right before deleting a context */
 	STATECHANGE_GLOBALBOOKMARKS,
+	STATECHANGE_REWRITE_CREDENTIALS,
 
 	STATECHANGE_MAX
 };

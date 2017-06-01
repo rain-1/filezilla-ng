@@ -105,7 +105,7 @@ private:
 	bool trigger_{};
 };
 
-class CQueueView final : public CQueueViewBase, public COptionChangeEventHandler, private EngineNotificationHandler
+class CQueueView final : public CQueueViewBase, public COptionChangeEventHandler, public CGlobalStateEventHandler, private EngineNotificationHandler
 {
 	friend class CQueueViewDropTarget;
 	friend class CQueueViewFailed;
@@ -296,6 +296,8 @@ protected:
 	void OnAskPassword();
 
 	std::weak_ptr<CActionAfterBlocker> m_actionAfterBlocker;
+
+	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, wxString const& data, const void* data2) override;
 
 	DECLARE_EVENT_TABLE()
 	void OnChar(wxKeyEvent& event);

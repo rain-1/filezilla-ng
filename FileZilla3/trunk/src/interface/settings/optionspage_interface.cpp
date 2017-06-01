@@ -153,6 +153,8 @@ void COptionsPageInterface::SavePasswordOption()
 		}
 
 		CSiteManager::Rewrite(loginManager, true);
+
+		CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_REWRITE_CREDENTIALS, wxString(), &loginManager);
 	}
 }
 
