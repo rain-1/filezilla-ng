@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.26.1 (2017-06-02)
+
+- Fixed crash if changing password settings and the Site Manager contains subdirectories
+- *nix: Fixed saving of sites having more than one site-specific bookmark
+
 3.26.0 (2017-06-01)
 
 - When changing or removing the master password, update protected credentials of server items in the transfer queue
