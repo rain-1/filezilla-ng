@@ -905,7 +905,7 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 			wxASSERT(bookmarkData->m_bookmark);
 			bookmarkData->m_bookmark->m_name = pTree->GetItemText(bookmarkChild).ToStdWstring();
 			data->m_site->m_bookmarks.push_back(*bookmarkData->m_bookmark);
-			bookmarkChild = pTree->GetNextChild(bookmarkChild, cookie);
+			bookmarkChild = pTree->GetNextChild(child, cookie);
 		}
 
 		CSiteManager::Save(node, *data->m_site);
