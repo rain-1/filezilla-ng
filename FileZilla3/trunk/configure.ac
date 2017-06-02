@@ -546,6 +546,13 @@ if test "$buildmain" = "yes"; then
   AC_SUBST(NETTLE_LIBS)
   AC_SUBST(NETTLE_CFLAGS)
 
+  PKG_CHECK_MODULES([HOGWEED], [hogweed >= 3.1],, [
+    AC_MSG_ERROR([hogweed 3.1 greater was not found. You can get it from https://www.lysator.liu.se/~nisse/nettle/])
+  ])
+
+  AC_SUBST(HOGWEED_LIBS)
+  AC_SUBST(HOGWEED_CFLAGS)
+
   # GnuTLS
   # ------
 
