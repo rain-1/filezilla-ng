@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
   <object class="wxDialog" name="ID_FILEEXISTSDLG">
     <style>wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX</style>
     <exstyle>wxWS_EX_BLOCK_EVENTS</exstyle>
@@ -35,7 +35,7 @@
               <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                 <border>10</border>
-                <object class="wxStaticBitmap" name="ID_FILE2_ICON" />
+                <object class="wxStaticBitmap" name="ID_FILE2_ICON"/>
               </object>
               <object class="sizeritem">
                 <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTRE_VERTICAL</flag>
@@ -76,7 +76,7 @@
               <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                 <border>10</border>
-                <object class="wxStaticBitmap" name="ID_FILE1_ICON" />
+                <object class="wxStaticBitmap" name="ID_FILE1_ICON"/>
               </object>
               <object class="sizeritem">
                 <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTRE_VERTICAL</flag>
@@ -277,7 +277,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_NAME" />
+            <object class="wxStaticText" name="ID_NAME"/>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText">
@@ -285,7 +285,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_HOST" />
+            <object class="wxStaticText" name="ID_HOST"/>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="ID_OLD_USER_LABEL">
@@ -293,7 +293,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_OLD_USER" />
+            <object class="wxStaticText" name="ID_OLD_USER"/>
           </object>
           <vgap>5</vgap>
           <hgap>5</hgap>
@@ -400,7 +400,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_NAME" />
+            <object class="wxStaticText" name="ID_NAME"/>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText">
@@ -408,7 +408,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_HOST" />
+            <object class="wxStaticText" name="ID_HOST"/>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="ID_OLD_USER_LABEL">
@@ -416,7 +416,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_OLD_USER" />
+            <object class="wxStaticText" name="ID_OLD_USER"/>
           </object>
           <vgap>5</vgap>
           <hgap>5</hgap>
@@ -433,7 +433,7 @@
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_KEY_IDENTIFIER"> 
+            <object class="wxStaticText" name="ID_KEY_IDENTIFIER">
             <label>&lt;12345678&gt;</label>
             </object>
           </object>
@@ -508,7 +508,7 @@
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_KEY_IDENTIFIER"> 
+            <object class="wxStaticText" name="ID_KEY_IDENTIFIER">
             <label>&lt;12345678&gt;</label>
             </object>
           </object>
@@ -761,7 +761,7 @@
             <object class="wxBoxSizer">
           <orient>wxVERTICAL</orient>
           <object class="sizeritem">
-            <object class="wxStaticBitmap" name="ID_FILEZILLA_LOGO" />
+            <object class="wxStaticBitmap" name="ID_FILEZILLA_LOGO"/>
             <flag>wxALL</flag>
             <border>10</border>
           </object>
@@ -823,7 +823,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_HOST" />
+            <object class="wxStaticText" name="ID_HOST"/>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="ID_BUILD_DESC">
@@ -831,7 +831,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_BUILD" />
+            <object class="wxStaticText" name="ID_BUILD"/>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="ID_BUILDDATE_DESC">
@@ -839,7 +839,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_BUILDDATE" />
+            <object class="wxStaticText" name="ID_BUILDDATE"/>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="ID_COMPILEDWITH_DESC">
@@ -847,7 +847,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_COMPILEDWITH" />
+            <object class="wxStaticText" name="ID_COMPILEDWITH"/>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="ID_CFLAGS_DESC">
@@ -855,7 +855,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_CFLAGS" />
+            <object class="wxStaticText" name="ID_CFLAGS"/>
           </object>
           <vgap>3</vgap>
           <hgap>5</hgap>
@@ -2368,7 +2368,7 @@
               <object class="sizeritem">
                 <object class="wxFlexGridSizer">
                   <object class="sizeritem">
-                    <object class="wxCheckListBox" name="ID_ACTIVE" />
+                    <object class="wxCheckListBox" name="ID_ACTIVE"/>
                     <flag>wxGROW</flag>
                   </object>
                   <object class="sizeritem">
@@ -3292,7 +3292,7 @@
             </object>
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
-          <object class="spacer" />
+          <object class="spacer"/>
           <cols>3</cols>
           <vgap>7</vgap>
           <hgap>5</hgap>
@@ -3661,7 +3661,7 @@
             <option>1</option>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticBitmap" name="ID_FILEZILLA_LOGO" />
+            <object class="wxStaticBitmap" name="ID_FILEZILLA_LOGO"/>
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <orient>wxHORIZONTAL</orient>
@@ -3674,7 +3674,7 @@
           </object>
           <object class="sizeritem">
             <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
-            <object class="wxPanel" name="ID_HEADERMESSAGE_PANEL" />
+            <object class="wxPanel" name="ID_HEADERMESSAGE_PANEL"/>
             <hidden>1</hidden>
           </object>
           <object class="sizeritem">
@@ -3797,7 +3797,7 @@
           </object>
           <object class="sizeritem">
             <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
-            <object class="wxPanel" name="ID_FOOTERMESSAGE_PANEL" />
+            <object class="wxPanel" name="ID_FOOTERMESSAGE_PANEL"/>
             <hidden>1</hidden>
           </object>
           <object class="sizeritem">
@@ -3899,7 +3899,7 @@
           <object class="sizeritem">
             <object class="wxFlexGridSizer">
           <object class="sizeritem">
-            <object class="wxStaticBitmap" name="ID_SPEEDLIMITS_ICON" />
+            <object class="wxStaticBitmap" name="ID_SPEEDLIMITS_ICON"/>
           </object>
           <object class="spacer">
             <size>5,-1</size>
@@ -4116,7 +4116,7 @@
           <object class="sizeritem">
             <object class="wxFlexGridSizer">
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_SYNCBROWSE_NONEXISTING_LABEL" />
+            <object class="wxStaticText" name="ID_SYNCBROWSE_NONEXISTING_LABEL"/>
           </object>
           <object class="sizeritem">
             <object class="wxRadioButton" name="ID_SYNCBROWSE_CREATE">
@@ -4125,7 +4125,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxRadioButton" name="ID_SYNCBROWSE_DISABLE" />
+            <object class="wxRadioButton" name="ID_SYNCBROWSE_DISABLE"/>
           </object>
           <cols>1</cols>
           <vgap>5</vgap>
