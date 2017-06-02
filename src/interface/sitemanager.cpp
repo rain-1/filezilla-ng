@@ -858,7 +858,7 @@ void CSiteManager::Rewrite(CLoginManager & loginManager, pugi::xml_node element,
 {
 	for (auto child = element.first_child(); child; child = child.next_sibling()) {
 		if (!strcmp(child.name(), "Folder")) {
-			Rewrite(loginManager, child);
+			Rewrite(loginManager, child, on_failure_set_to_ask);
 		}
 		else if (!strcmp(child.name(), "Server")) {
 			auto site = ReadServerElement(child);
