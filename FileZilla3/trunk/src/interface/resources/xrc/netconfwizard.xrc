@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
   <object class="wxPanel" name="NETCONF_PANEL1" subclass="wxWizardPage">
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>

@@ -1,4 +1,5 @@
-<resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
+<?xml version="1.0"?>
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
   <object class="wxDialog" name="ID_SETTINGS">
     <title>Settings</title>
     <centered>1</centered>
@@ -1501,7 +1502,7 @@
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
               <object class="sizeritem">
-                <object class="wxChoice" name="ID_THEME" />
+                <object class="wxChoice" name="ID_THEME"/>
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText">
@@ -1550,7 +1551,7 @@
           <label>Preview</label>
           <orient>wxVERTICAL</orient>
           <object class="sizeritem">
-            <object class="wxScrolledWindow" subclass="CIconPreview" name="ID_PREVIEW" />
+            <object class="wxScrolledWindow" subclass="CIconPreview" name="ID_PREVIEW"/>
             <option>1</option>
             <flag>wxALL|wxGROW</flag>
             <border>5</border>
@@ -2089,7 +2090,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText">
-                  <label>Example: png &quot;c:\program files\viewer\viewer.exe&quot; -open</label>
+                  <label>Example: png "c:\program files\viewer\viewer.exe" -open</label>
                 </object>
               </object>
               <cols>1</cols>
@@ -2264,7 +2265,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText">
-                  <label>If the size of the logfile reaches the limit, it gets renamed by adding &quot;.1&quot; to the end of the filename (possibly overwriting older logfiles) and a new file gets created.</label>
+                  <label>If the size of the logfile reaches the limit, it gets renamed by adding ".1" to the end of the filename (possibly overwriting older logfiles) and a new file gets created.</label>
                 </object>
                 <flag>wxLEFT</flag>
                 <border>18</border>
@@ -2341,7 +2342,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText">
-                  <label>If reporting bugs, please provide logs with &quot;Verbose&quot; logging level.</label>
+                  <label>If reporting bugs, please provide logs with "Verbose" logging level.</label>
                 </object>
               </object>
               <object class="spacer">
