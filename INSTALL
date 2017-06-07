@@ -22,7 +22,7 @@ To compile FileZilla 3, the following tools need to be installed:
 Optional tools:
 - recent automake, autoconf if you plan to change configure.in or any of the
   Makefile.am files
-- CppUnit if you want to run the tests
+- CppUnit >= 1.13.0 if you want to run the tests, which you want.
 - NSIS if you want to create the Windows installer
 
 If crosscompiling, a native wxrc tool, which is part of wxWidgets, has to

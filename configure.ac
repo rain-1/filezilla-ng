@@ -511,7 +511,7 @@ if test "$buildmain" = "yes"; then
   # CppUnit tests
   # -------------
 
-  AM_PATH_CPPUNIT([1.10.2], [has_cppunit="yes"])
+  PKG_CHECK_MODULES(CPPUNIT, [cppunit >= 1.13.0], [has_cppunit="yes"], [:])
 
   # Updatecheck related flags
   # -------------------------
