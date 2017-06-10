@@ -288,7 +288,13 @@ bool ProtectedCredentials::Unprotect(private_key const& key, bool on_failure_set
 	}
 
 	// This undoes the length-hiding
-	password_ = fz::to_wstring_from_utf8(std::string(reinterpret_cast<char const*>(&plain[0])));
+	auto pw = std::string(plain.begin(), plain.end());
+	char const c = 0;
+	auto pos = pw.find(c);
+	if (pos != std::string::npos) {
+		pw = pw.substr(0, pos);
+	}
+	password_ = fz::to_wstring_from_utf8(pw);
 	encrypted_ = public_key();
 
 	return true;
