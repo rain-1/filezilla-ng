@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Filezilla italian translation rev. 26.05.2017\n"
+"Project-Id-Version: Filezilla italian translation rev. 05.06.2017\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-06-01 21:18+0200\n"
+"POT-Creation-Date: 2017-06-12 19:38+0200\n"
 "PO-Revision-Date: 2017-05-26 10:39+0200\n"
 "Last-Translator: Bovirus <bovirus@gmail.com>\n"
 "Language-Team: bovirus - Andrea Sanavia - Vincenzo Reale - Riccardo Vianello "
@@ -27,7 +27,7 @@ msgstr "Trascorsi %H:%M:%S"
 msgid "%H:%M:%S left"
 msgstr "Rimanenti %H:%M:%S"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:524
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:525
 #, c-format
 msgid ""
 "%a - Account (Lines containing this will be omitted if not using Account "
@@ -86,7 +86,7 @@ msgid_plural "%d seconds"
 msgstr[0] "%d secondo"
 msgstr[1] "%d secondi"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:501
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:502
 msgid "%h - Host"
 msgstr "%h - Host"
 
@@ -104,7 +104,7 @@ msgid_plural "%llu files"
 msgstr[0] "%llu file"
 msgstr[1] "%llu file"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:517
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:518
 #, c-format
 msgid "%p - Password"
 msgstr "%p - Password"
@@ -129,7 +129,7 @@ msgstr "%s - Certificato scaduto!"
 msgid "%s - Not yet valid!"
 msgstr "%s - Non ancora valido!"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:532
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:533
 #, c-format
 msgid "%s - Proxy user"
 msgstr "%s - Utente proxy"
@@ -189,12 +189,12 @@ msgstr ""
 msgid "%s with %d bits"
 msgstr "%s con %d bit"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:509
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:510
 #, c-format
 msgid "%u - Username"
 msgstr "%u - Nome utente"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:540
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:541
 msgid "%w - Proxy password"
 msgstr "%w - Password proxy"
 
@@ -212,7 +212,7 @@ msgid "&Account:"
 msgstr "&Account:"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:80
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:208
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:209
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:473
 msgid "&Active"
 msgstr "&Attiva"
@@ -226,7 +226,7 @@ msgstr "&Aggiungi preferito..."
 msgid "&Add files to queue"
 msgstr "&Aggiungi file alla coda"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:645
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:646
 msgid "&Add key file..."
 msgstr "&aggiungi file chiave..."
 
@@ -248,7 +248,7 @@ msgid "&Always trust this host, add this key to the cache"
 msgstr ""
 "Considera sempre sicuro questo host, &aggiungi questa chiave alla cache"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2037
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2038
 msgid "&Always use default editor"
 msgstr "&Utilizza sempre l'editor predefinito"
 
@@ -260,13 +260,13 @@ msgstr "Us&a sempre la selezione per i file non associati"
 msgid "&Always use this action"
 msgstr "&Usa sempre questa azione"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:341
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:342
 msgid "&Ask your operating system for the external IP address"
 msgstr "Richiedi l'indirizzo IP esterno &al sistema operativo"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:140
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:596
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1054
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1055
 msgid "&Auto"
 msgstr "&Automatico"
 
@@ -280,30 +280,30 @@ msgstr "&Colore sfondo:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:148
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:604
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1069
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1070
 msgid "&Binary"
 msgstr "&Binario"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1700
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1701
 msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes)"
 msgstr "Prefissi &binari utilizzando i simboli del SI (es. 1KB = 1024 byte)"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:204
 msgid "&Bookmarks"
-msgstr "&Segnalibri"
+msgstr "&Preferiti"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2489
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2898
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2985
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3180
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3393
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2009
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2224
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2010
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2225
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:362
 msgid "&Browse..."
 msgstr "&Sfoglia..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:955
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:956
 msgid "&Burst tolerance:"
 msgstr "Tolleranza &burst:"
 
@@ -313,7 +313,7 @@ msgstr "Tolleranza &burst:"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3983
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4085
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:40
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:34
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:35
 msgid "&Cancel"
 msgstr "A&nnulla"
 
@@ -348,7 +348,7 @@ msgstr "&Copia connessione corrente nel Gestore siti..."
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:972
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:432
 msgid "&Copy to clipboard"
-msgstr "&Copia negli appunti"
+msgstr "&Copia negli Appunti"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:264
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:304
@@ -365,11 +365,11 @@ msgstr "&Crea nuova scheda"
 msgid "&Debug"
 msgstr "&Debug"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2313
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2314
 msgid "&Debug information in message log:"
 msgstr "Informazioni di &debug nel registro messaggi:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1979
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1980
 msgid "&Default editor:"
 msgstr "E&ditor predefinito:"
 
@@ -378,7 +378,7 @@ msgstr "E&ditor predefinito:"
 msgid "&Default file exists action..."
 msgstr "Azione &predefinita per i file esistenti..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:155
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:156
 msgid "&Delay between failed login attempts:"
 msgstr "Ritar&do tra i tentativi di login non riusciti:"
 
@@ -421,12 +421,12 @@ msgstr "&Abbandona il file locale quindi scarica e modifica un nuovo file"
 msgid "&Disconnect"
 msgstr "&Disconnetti"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1472
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1473
 msgid "&Display momentary transfer speed instead of average speed"
 msgstr ""
 "&Visualizza velocità trasferimento istantanea invece della velocità media"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1687
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1688
 msgid "&Display size in bytes"
 msgstr "Visualizza dimensione in b&yte"
 
@@ -434,11 +434,11 @@ msgstr "Visualizza dimensione in b&yte"
 msgid "&Don't show this dialog again."
 msgstr "&Non visualizzare più questa finestra."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:389
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:390
 msgid "&Don't use external IP address on local connections."
 msgstr "Non utilizzare l'in&dirizzo IP esterno per le connessioni locali."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1894
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1895
 msgid "&Double-click action on files:"
 msgstr "Azione &doppio clic sui file:"
 
@@ -456,7 +456,7 @@ msgid "&Download..."
 msgstr "&Download..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1589
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1179
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1180
 msgid "&Downloads:"
 msgstr "&Download:"
 
@@ -476,12 +476,12 @@ msgstr "&Modifica regole filtri..."
 msgid "&Enable"
 msgstr "&Abilita"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:687
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:688
 msgid "&Enable compression"
 msgstr "Abilita compr&essione"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3911
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:896
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:897
 msgid "&Enable speed limits"
 msgstr "&Abilita Limiti di velocità"
 
@@ -514,7 +514,7 @@ msgstr "&Esporta le voci del Gestore siti"
 msgid "&Export..."
 msgstr "&Esporta..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:426
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:427
 msgid "&Fall back to active mode"
 msgstr "&Torna in modalità attiva"
 
@@ -576,7 +576,7 @@ msgstr ""
 "&Seguire i collegamenti simbolici, eliminare il contenuto della cartella "
 "destinazione"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:367
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:368
 msgid "&Get external IP address from the following URL:"
 msgstr "Ottieni l'indirizzo &IP esterno dal seguente URL:"
 
@@ -588,7 +588,7 @@ msgstr "&Ottieni aiuto..."
 msgid "&Global bookmark"
 msgstr "Preferito &globale"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:724
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:725
 msgid "&HTTP/1.1 using CONNECT method"
 msgstr "Metodo connessione &HTTP/1.1"
 
@@ -605,7 +605,7 @@ msgstr "&Nascondi file identici"
 msgid "&Highest"
 msgstr "&Massima"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:305
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:306
 msgid "&Highest available port:"
 msgstr "&Massima porta disponibile:"
 
@@ -615,11 +615,11 @@ msgstr "&Massima porta disponibile:"
 msgid "&Host:"
 msgstr "&Host:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1695
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1696
 msgid "&IEC binary prefixes (e.g. 1 KiB = 1024 bytes)"
 msgstr "Prefissi binari &IEC (es. 1KiB = 1024 byte)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1581
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1582
 msgid "&ISO 8601 (example: 2007-09-15)"
 msgstr "&ISO 8601 (esempio: 2007-09-15)"
 
@@ -627,7 +627,7 @@ msgstr "&ISO 8601 (esempio: 2007-09-15)"
 msgid "&Import..."
 msgstr "&Importa..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2070
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2071
 msgid "&Inherit system's filetype associations"
 msgstr "Eredita le assoc&iazioni dal sistema"
 
@@ -647,11 +647,11 @@ msgstr "&Mantieni struttura percorso remoto nella radice di ricerca"
 msgid "&Key file:"
 msgstr "File c&hiave:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1351
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1352
 msgid "&Layout of file and directory panes:"
 msgstr "Disposizione de&lle viste di file e cartelle:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:268
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:269
 msgid "&Limit local ports used by FileZilla"
 msgstr "&Limita le porte locali usate da FileZilla"
 
@@ -672,7 +672,7 @@ msgstr "Cartella &locale:"
 msgid "&Local search"
 msgstr "Ricerca &locale"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2201
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2202
 msgid "&Log to file"
 msgstr "&Log nel file"
 
@@ -690,7 +690,7 @@ msgstr "&Bassa"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:210
 msgid "&Manage bookmarks..."
-msgstr "Gestore &segnalibri..."
+msgstr "Gestione &preferiti..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:169
 msgid "&Manual transfer..."
@@ -700,7 +700,7 @@ msgstr "Trasferimento &manuale..."
 msgid "&Maximum number of connections:"
 msgstr "&Numero massimo di connessioni:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:137
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:138
 msgid "&Maximum number of retries:"
 msgstr "Numero &massimo di nuovi tentativi:"
 
@@ -708,11 +708,11 @@ msgstr "Numero &massimo di nuovi tentativi:"
 msgid "&Message log"
 msgstr "Registro &messaggi"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1424
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1425
 msgid "&Minimize to tray"
 msgstr "&Minimizza nella barra"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1821
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1822
 msgid "&Name sorting mode:"
 msgstr "Modalità ordinamento &nome:"
 
@@ -746,8 +746,8 @@ msgid "&No"
 msgstr "&No"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:381
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:458
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:719
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:459
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:720
 msgid "&None"
 msgstr "&Nessuno"
 
@@ -766,7 +766,7 @@ msgstr "&Valore numerico:"
 msgid "&OK"
 msgstr "&OK"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:473
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:474
 msgid "&OPEN"
 msgstr "&OPEN"
 
@@ -855,11 +855,11 @@ msgstr "Percorso &remoto:"
 msgid "&Remote search"
 msgstr "Ricerca &remota"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1117
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1118
 msgid "&Remove"
 msgstr "&Rimuovi"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:650
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:651
 msgid "&Remove key"
 msgstr "&Rimuovi chiave"
 
@@ -885,7 +885,7 @@ msgstr "&Rinomina..."
 msgid "&Reopen local file"
 msgstr "&Riapri file locale"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:999
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1000
 msgid "&Replace invalid characters with:"
 msgstr "&Sostituisci i caratteri non validi con:"
 
@@ -913,19 +913,19 @@ msgstr "&Ripristina"
 msgid "&Run command..."
 msgstr "&Esegui comando..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:76
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:77
 msgid "&Run configuration wizard now..."
 msgstr "Avvia configu&razione guidata rete..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2163
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2164
 msgid "&Run update check now..."
 msgstr "&Controlla gli aggiornamenti adesso..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:468
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:469
 msgid "&SITE"
 msgstr "&SITE"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:734
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:735
 msgid "&SOCKS 5"
 msgstr "&SOCK5"
 
@@ -945,7 +945,7 @@ msgstr "&Cerca i file remoti..."
 msgid "&Select Entry:"
 msgstr "&Seleziona elemento:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1946
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1947
 msgid "&Select language:"
 msgstr "&Seleziona la lingua:"
 
@@ -966,7 +966,7 @@ msgstr "&Impostazioni"
 msgid "&Settings..."
 msgstr "&Impostazioni..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2302
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2303
 msgid "&Show debug menu"
 msgstr "&Visualizza il menu di debug"
 
@@ -974,7 +974,7 @@ msgstr "&Visualizza il menu di debug"
 msgid "&Show detailed log"
 msgstr "Vi&sualizza registro dettagliato"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2196
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2197
 msgid "&Show timestamps in message log"
 msgstr "Vi&sualizza data e ora nel log messaggi"
 
@@ -988,7 +988,7 @@ msgstr "Gestore &siti..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2837
 msgid "&Site-specific bookmark"
-msgstr "&Segnalibri specifici per &sito"
+msgstr "Preferiti &specifici per sito"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:174
 msgid "&Skip"
@@ -1003,7 +1003,7 @@ msgstr "&Limiti di velocità"
 msgid "&Start transfer immediately"
 msgstr "Avvia &immediatamente il trasferimento"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1372
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1373
 msgid "&Swap local and remote panes"
 msgstr "Inverti vi&sualizzazione locale/remota"
 
@@ -1015,7 +1015,7 @@ msgstr "Crittografie &TLS"
 msgid "&Test"
 msgstr "&Test"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1499
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1500
 msgid "&Theme:"
 msgstr "&Tema:"
 
@@ -1032,7 +1032,7 @@ msgstr "Modalità di &trasferimento:"
 msgid "&Transfer queue"
 msgstr "Coda di &trasferimento"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1141
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1142
 msgid "&Treat dotfiles as ASCII files"
 msgstr "&Tratta i file che iniziano con un punto come file ASCII"
 
@@ -1058,7 +1058,7 @@ msgid "&Upload..."
 msgstr "&Invia..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1612
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1200
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1201
 msgid "&Uploads:"
 msgstr "&Upload:"
 
@@ -1070,19 +1070,19 @@ msgstr "&Usa programma personalizzato"
 msgid "&Use synchronized browsing"
 msgstr "&Usa navigazione sincronizzata"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1990
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1991
 msgid "&Use system's default editor for text files"
 msgstr "&Usa il programma predefinito di sistema per i file di testo"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:347
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:348
 msgid "&Use the following IP address:"
 msgstr "&Usa il seguente indirizzo IP:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:420
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:421
 msgid "&Use the server's external IP address instead"
 msgstr "&Usa l'indirizzo IP esterno del server"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1710
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1711
 msgid "&Use thousands separator"
 msgstr "Usa &separatore delle migliaia"
 
@@ -1110,12 +1110,12 @@ msgstr "&Visualizza"
 msgid "&View/Edit"
 msgstr "&Visualizza / modifica"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2047
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2048
 msgid "&Watch locally edited files and prompt to upload modifications"
 msgstr ""
 "&Controlla i file modificati localmente e richiedi se inviare le modifiche"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2139
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2140
 msgid "&When checking for updates, check for:"
 msgstr "&Quando controlli gli aggiornamenti, verifica:"
 
@@ -1186,24 +1186,24 @@ msgstr[1] "(%d oggetti filtrati)"
 msgid "(%u%% downloaded)"
 msgstr "(%u%% scaricato)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:858
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:879
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:859
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:880
 msgid "(0 for no limit)"
 msgstr "(0 per senza limite)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:149
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:150
 msgid "(0-99)"
 msgstr "(0-99)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:167
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:168
 msgid "(0-999 seconds)"
 msgstr "(0-999 secondi)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:837
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:838
 msgid "(1-10)"
 msgstr "(1-10)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:109
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:110
 msgid "(10-9999, 0 to disable)"
 msgstr "(10-9999, 0 per disabilitarlo)"
 
@@ -1213,18 +1213,18 @@ msgstr "(10-9999, 0 per disabilitarlo)"
 msgid "(app-compat is set to %d.%d)"
 msgstr "(app-compat impostato a %d.%d)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1648
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1649
 msgid "(example: %H:%M)"
 msgstr "(esempio: %H:%M)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1599
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1600
 msgid "(example: %Y-%m-%d)"
 msgstr "(esempio: %Y-%m-%d)"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3930
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3947
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:919
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:944
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:920
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:945
 #, c-format
 msgid "(in %s/s)"
 msgstr "(in %s/s)"
@@ -1253,19 +1253,19 @@ msgstr "-s e -c non possono essere presenti contemporaneamente."
 msgid "-s cannot be used together with an FTP URL."
 msgstr "-s non può essere usato insieme ad una URL FTP."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2323
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2324
 msgid "0 - None"
 msgstr "0 - Nessuno"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2324
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2325
 msgid "1 - Warning"
 msgstr "1 - Attenzione"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2325
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2326
 msgid "2 - Info"
 msgstr "2 - Informazioni"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2326
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2327
 msgid "3 - Verbose"
 msgstr "3 - Informazioni dettagliate"
 
@@ -1273,7 +1273,7 @@ msgstr "3 - Informazioni dettagliate"
 msgid "32-bit system"
 msgstr "Sistema a 32bit"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2327
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2328
 msgid "4 - Debug"
 msgstr "4 - Debug"
 
@@ -1351,7 +1351,7 @@ msgstr ""
 "Durante questa sessione non saranno visualizzati altri avvisi."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4066
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1329
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1330
 msgid ""
 "A lost master password cannot be recovered! Please thorougly memorize your "
 "password."
@@ -1371,7 +1371,7 @@ msgstr ""
 "Un server standard non richiede questo. Se vi serve questo contattate "
 "l'amministratore del server."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:245
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:246
 msgid ""
 "A proper server does not require this. Contact the server administrator if "
 "you need this."
@@ -1390,15 +1390,15 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:144
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:600
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1062
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1063
 msgid "A&SCII"
 msgstr "A&SCII"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1110
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1111
 msgid "A&dd"
 msgstr "&Aggiungi"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1247
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1248
 msgid "A&llow resume of ASCII files"
 msgstr "&Permetti il ripristino del trasferimento di file ASCII"
 
@@ -1426,7 +1426,7 @@ msgstr "ASCII"
 msgid "About FileZilla"
 msgstr "Informazioni su FileZilla"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1399
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1400
 msgid "Above the file lists"
 msgstr "Sopra la lista file"
 
@@ -1491,7 +1491,7 @@ msgstr ""
 "Test della modalità attiva non riuscito. È stato fornito l'indirizzo IP "
 "corretto, ma il vostro router l'ha erroneamente modificato."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:398
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:399
 msgid "Active mode IP"
 msgstr "IP in modalità attiva"
 
@@ -1510,8 +1510,8 @@ msgstr "Aggiungi le cartelle selezionate alla coda di trasferimento"
 msgid "Add selected files and folders to the transfer queue"
 msgstr "Aggiungi i file e cartelle selezionati alla coda di trasferimento"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1902
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1922
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1903
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1923
 msgid "Add to queue"
 msgstr "Aggiungi alla coda"
 
@@ -1523,7 +1523,7 @@ msgstr "Tipo di indirizzo non supportato"
 msgid "Advanced"
 msgstr "Avanzate"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2154
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2155
 msgid ""
 "Advice: Unless you want to test new features, please keep using stable "
 "versions only. Beta versions and nightly builds are development versions "
@@ -1565,7 +1565,7 @@ msgstr[0] ""
 msgstr[1] ""
 "Tutti i trasferimenti completati. I file %d non possono essere trasferiti."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:213
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:214
 msgid "Allow &fall back to other transfer mode on failure"
 msgstr ""
 "Permetti il passaggio ad altra modalità di tras&ferimento in caso di "
@@ -1587,7 +1587,7 @@ msgid_plural "Alternative names:"
 msgstr[0] "Nome alternativo:"
 msgstr[1] "Nomi alternativi:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:660
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:661
 msgid ""
 "Alternatively you can use the Pageant tool from PuTTY to manage your keys, "
 "FileZilla does recognize Pageant."
@@ -1595,7 +1595,7 @@ msgstr ""
 "È possibile usare lo strumento Pageant di PuTTY per la gestione delle "
 "chiavi; FileZilla non riconosce Pageant."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:665
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:666
 msgid ""
 "Alternatively you can use your system's SSH agent. To do so, make sure the "
 "SSH_AUTH_SOCK environment variable is set."
@@ -1695,15 +1695,15 @@ msgstr "Archivio"
 msgid "Argument buffer overflow"
 msgstr "Buffer argomenti pieno"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1401
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1402
 msgid "As tab in the transfer queue pane"
 msgstr "Come scheda nel pannello coda trasferimento"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1597
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1620
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1186
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1207
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1449
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1187
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1208
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1450
 msgid "Ask for action"
 msgstr "Richiedi un'azione"
 
@@ -1745,7 +1745,7 @@ msgstr "Attributo"
 msgid "Authentication failed."
 msgstr "Autenticazione non riuscita."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1508
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1509
 msgid "Author:"
 msgstr "Autore:"
 
@@ -1753,7 +1753,7 @@ msgstr "Autore:"
 msgid "Auto"
 msgstr "Automatico"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1080
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1081
 msgid "Automatic file type classification"
 msgstr "Classificazione automatica dei tipi di file"
 
@@ -1774,7 +1774,7 @@ msgstr "Errato descrittore file"
 msgid "Basic usage instructions"
 msgstr "Istruzione per l'uso base"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1418
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1419
 msgid "Behaviour"
 msgstr "Per conto"
 
@@ -1791,7 +1791,7 @@ msgstr "Attenzione! Il certificato è stato revocato"
 msgid "Binary"
 msgstr "Binario"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1361
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1362
 msgid "Blackboard"
 msgstr "Lavagna"
 
@@ -1811,7 +1811,7 @@ msgstr "Preferito:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3025
 msgid "Bookmarks"
-msgstr "Segnalibri"
+msgstr "Preferiti"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:249
 msgid "Browse..."
@@ -1823,13 +1823,13 @@ msgstr "Data di creazione:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:815
 msgid "Build information"
-msgstr "Informazioni versione"
+msgstr "Informazioni modo compilazione"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:243
 msgid "Business category:"
 msgstr "Categoria business:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:284
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:285
 msgid ""
 "By default uses any available local port to establish transfers in active "
 "mode. If you want to limit FileZilla to use only a small range of ports, "
@@ -1860,11 +1860,11 @@ msgstr "C&opia URL negli appunti"
 msgid "C&opy URL(s) with password to clipboard"
 msgstr "C&opia le URL con le password negli Appunti"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1586
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1587
 msgid "C&ustom"
 msgstr "&Personalizza"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2075
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2076
 msgid "C&ustom filetype associations:"
 msgstr "Associazioni &personalizzate:"
 
@@ -2033,19 +2033,19 @@ msgstr "Non è possibile visualizzare la finestra"
 msgid "Cannot view/edit selected file"
 msgstr "Impossibile visualizzare / modificare il file selezionato"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1830
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1831
 msgid "Case insensitive"
 msgstr "Non controlla maiuscolo/minuscolo"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1829
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1830
 msgid "Case insensitive (default)"
 msgstr "Non controlla maiuscolo/minuscolo (predefinito)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1831
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1832
 msgid "Case sensitive"
 msgstr "Controllo maiuscolo/minuscolo"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1832
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1833
 msgid "Case sensitive (default)"
 msgstr "Controllo maiuscolo/minuscolo (predefinito)"
 
@@ -2082,7 +2082,7 @@ msgstr "Cambia gli attributi del file"
 msgid "Change the file permissions."
 msgstr "Cambia i permessi del file."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2274
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2275
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr "Le modifiche al file di log richiedono il riavvio di FileZilla."
 
@@ -2098,7 +2098,7 @@ msgstr "Set di caratteri"
 msgid "Check for &updates..."
 msgstr "Controlla gli &aggiornamenti..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2121
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2122
 msgid "Check for FileZilla &updates automatically:"
 msgstr "Verifica a&utomaticamente aggiornamenti Filezilla:"
 
@@ -2175,7 +2175,7 @@ msgstr "Cipher:"
 msgid "Cl&ose tab"
 msgstr "C&hiudi scheda"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1358
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1359
 msgid "Classic"
 msgstr "Classica"
 
@@ -2246,7 +2246,7 @@ msgstr "Proprietà colonna"
 msgid "Column setup"
 msgstr "Impostazione colonna"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2019
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2020
 msgid "Command and its arguments should be properly quoted."
 msgstr "Il comando e i parametri devono essere correttamente specificati."
 
@@ -2292,7 +2292,7 @@ msgstr "Confronta data &modifica"
 msgid "Compare file&size"
 msgstr "Confronta dimen&sione file"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1863
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1864
 msgid "Comparison &threshold (in minutes):"
 msgstr "Soglia di confron&to (in minuti):"
 
@@ -2302,11 +2302,11 @@ msgstr "La soglia di confronto deve essere tra 0 e 1440 minuti."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:822
 msgid "Compiled for:"
-msgstr "Compilato con:"
+msgstr "Compilata per:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:830
 msgid "Compiled on:"
-msgstr "Compilato con:"
+msgstr "Compilato su:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:846
 msgid "Compiled with:"
@@ -2314,13 +2314,13 @@ msgstr "Compilato con:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:854
 msgid "Compiler flags:"
-msgstr "Opzioni di compilazione:"
+msgstr "Opzioni compilazione:"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:78
 msgid "Compressed"
 msgstr "Compresso"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:813
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:814
 msgid "Concurrent transfers"
 msgstr "Trasferimenti concorrenti"
 
@@ -2371,11 +2371,11 @@ msgstr "Connetti ignorando le impostazioni proxy"
 msgid "Connect failed: %s"
 msgstr "Connessione fallita: %s"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1451
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1452
 msgid "Connect in current tab"
 msgstr "Connetti nella scheda attuale"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1450
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1451
 msgid "Connect in new tab"
 msgstr "Connetti in una nuova scheda"
 
@@ -2864,7 +2864,7 @@ msgstr "Impossibile scrivere \"%s\", il preferito %s non potrà essere aggiunto"
 #, c-format
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr ""
-"Impossibile scrivere \"%s\", i segnalibri globali non saranno salvati: %s"
+"Impossibile scrivere \"%s\", i preferiti globali non saranno salvati: %s"
 
 #: ../../locales/../src/interface/QueueView.cpp:1571
 #, c-format
@@ -3018,8 +3018,8 @@ msgstr "Trasferimento corrente impostato su trasferimento binario."
 msgid "Curve:"
 msgstr "Curva:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:478
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1635
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:479
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1636
 msgid "Cus&tom"
 msgstr "&Personalizza"
 
@@ -3040,7 +3040,7 @@ msgstr "Ciano"
 msgid "D&ata type"
 msgstr "Tipo &trasferimento"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1705
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1706
 msgid "D&ecimal prefixes using SI symbols (e.g. 1 KB = 1000 bytes)"
 msgstr "Prefissi &decimali utilizzando i simboli SI (es. 1KB = 1000 byte)"
 
@@ -3063,11 +3063,11 @@ msgid "D&isable all"
 msgstr "D&isabilita tutto"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4022
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1285
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1286
 msgid "D&o not save passwords"
 msgstr "N&on salvare la password"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1911
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1912
 msgid "D&ouble-click action on directories:"
 msgstr "Azione d&oppio clic sulle cartelle:"
 
@@ -3097,7 +3097,7 @@ msgstr "Data socket chiuso troppo presto."
 msgid "Date"
 msgstr "Data"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1569
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1570
 msgid "Date formatting"
 msgstr "Formato data"
 
@@ -3113,7 +3113,7 @@ msgstr "Data/ora sconosciute"
 msgid "Debug"
 msgstr "Debug"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2295
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2296
 msgid "Debugging settings"
 msgstr "Impostazioni di debug"
 
@@ -3131,7 +3131,7 @@ msgstr "L'editor predefinito non è stato specificato correttamente."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1569
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1639
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1226
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1227
 msgid "Default file exists action"
 msgstr "Imposta azione predefinita per i file esistenti"
 
@@ -3155,12 +3155,12 @@ msgstr "Lingua di sistema predefinita"
 msgid "Default transfer mode:"
 msgstr "Modalità di trasferimento predefinita:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1050
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1051
 msgid "Default transfer type:"
 msgstr "Tipo di trasferimento predefinito:"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:233
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:380
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:381
 msgid "Default: http://ip.filezilla-project.org/ip.php"
 msgstr "Predefinito: http://ip.filezilla-project.org/ip.php"
 
@@ -3246,7 +3246,7 @@ msgstr "Cartella"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3012
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:534
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1849
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1850
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:390
 #: ../../locales/../src/interface/filelistctrl.cpp:469
 #: ../../locales/../src/interface/Mainfrm.cpp:2256
@@ -3342,7 +3342,7 @@ msgstr "Disconnette dal server attualmente visibile"
 msgid "Display about dialog"
 msgstr "Visualizza la finestra informazioni"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1984
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1985
 msgid "Do &not use default editor"
 msgstr "&Non usare il programma predefinito"
 
@@ -3391,11 +3391,11 @@ msgstr "Documentazione"
 msgid "Don't use external IP address on &local connections."
 msgstr "Non utilizzare l'indirizzo IP esterno per le connessioni &locali."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1147
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1148
 msgid "Dotfiles are filenames starting with a dot, e.g. .htaccess"
 msgstr "I file punto sono i file che iniziano con un punto, es. .htaccess"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1887
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1888
 msgid "Double-click action"
 msgstr "Azione doppio clic"
 
@@ -3404,7 +3404,7 @@ msgid "Download"
 msgstr "Download"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3919
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:905
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:906
 msgid "Download &limit:"
 msgstr "Limite di &download:"
 
@@ -3533,7 +3533,7 @@ msgstr "Modifica non riuscita"
 msgid "Editing search results"
 msgstr "Modifica risultati ricerca"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1519
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1520
 msgid "Email:"
 msgstr "Email:"
 
@@ -3575,7 +3575,7 @@ msgstr "Stringa vuota."
 msgid "En&able all"
 msgstr "&Abilita tutto"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:986
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:987
 msgid "Enable invalid character &filtering"
 msgstr "Abiliita &filtro caratteri non validi"
 
@@ -3611,7 +3611,7 @@ msgstr "Inserisci comando"
 msgid "Enter custom command"
 msgstr "Inserisci comando personalizzato"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1920
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1921
 msgid "Enter directory"
 msgstr "digita nome cartella"
 
@@ -3767,11 +3767,11 @@ msgstr "Errore di scrittura file xml"
 msgid "Error:"
 msgstr "Errore:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2092
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2093
 msgid "Example: png \"c:\\program files\\viewer\\viewer.exe\" -open"
 msgstr "Esempio: png \"C:\\Programmi\\Paint\\Paint.exe\" -open"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1742
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1743
 msgid "Examples"
 msgstr "Esempi"
 
@@ -3785,7 +3785,7 @@ msgstr ""
 "Il file eseguibile non contiene informazioni sulla versione, non è possibile "
 "verificare gli aggiornamenti."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1359
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1360
 msgid "Explorer"
 msgstr "Explorer"
 
@@ -3829,11 +3829,11 @@ msgstr "FTP - Protocollo trasferimento file non sicuro"
 msgid "FTP Engine not initialized, can't connect"
 msgstr "Il motore FTP non è stato inizializzato, impossibile connettersi"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:232
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:233
 msgid "FTP Keep-alive"
 msgstr "Mantieni attiva connessione FTP"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:445
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:446
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:96
 msgid "FTP Proxy"
 msgstr "Proxy FTP"
@@ -4188,7 +4188,7 @@ msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "FileZilla deve essere riavviato per rendere effettivo il cambio di lingua."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2180
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2181
 msgid "FileZilla updates"
 msgstr "Aggironamenti Filezilla"
 
@@ -4220,7 +4220,7 @@ msgid "Filename unchanged"
 msgstr "Nome file non modificato"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1889
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2212
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2213
 msgid "Filename:"
 msgstr "Nome file:"
 
@@ -4256,7 +4256,7 @@ msgstr "Dimensione file"
 msgid "Filetype"
 msgstr "Tipo file"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2104
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2105
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:109
 msgid "Filetype associations"
 msgstr "Associazioni tipi di file"
@@ -4265,7 +4265,7 @@ msgstr "Associazioni tipi di file"
 msgid "Filter applies to:"
 msgstr "Il filtro si applica a:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:980
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:981
 msgid "Filter invalid characters in filenames"
 msgstr "Filtro caratteri non validi nel nome file"
 
@@ -4333,7 +4333,7 @@ msgstr "Impronta digitale"
 msgid "Firewall and router configuration wizard"
 msgstr "Configurazione guidata firewall e router"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:70
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:71
 msgid ""
 "For more detailed information about what these options do, please run the "
 "network configuration wizard."
@@ -4367,11 +4367,11 @@ msgstr "Visualizza file &nascosti"
 msgid "Force showing hidden files"
 msgstr "Visualizza file nascosti"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:493
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:494
 msgid "Format specifications:"
 msgstr "Specifiche formato:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2087
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2088
 msgid "Format: Extension followed by properly quoted command and arguments."
 msgstr ""
 "Formato: estensione seguita da comando e parametri correttamente specificati."
@@ -4399,7 +4399,7 @@ msgstr "Generale"
 msgid "General SOCKS server failure"
 msgstr "Errore generico server SOCKS"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:706
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:707
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:98
 msgid "Generic proxy"
 msgstr "Proxy generico"
@@ -4419,7 +4419,7 @@ msgstr "Un set di filtri con questo nome è già presente, sovrascrivere?"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:258
 msgid "Global bookmarks"
-msgstr "Segnalibri globali"
+msgstr "Preferiti globali"
 
 #: ../../locales/../src/engine/tlssocket_impl.cpp:316
 #, c-format
@@ -4469,7 +4469,7 @@ msgstr "Hash:"
 msgid "Hidden"
 msgstr "Nascosto"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:963
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:964
 #: ../../locales/../src/interface/queue.cpp:891
 #: ../../locales/../src/interface/queue.cpp:947
 msgid "High"
@@ -4537,7 +4537,7 @@ msgstr ""
 "Ho &dimenticato la password principale. Elimina tutte le password salvate "
 "con questa chiave."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1630
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1631
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (esempio: 15:47)"
 
@@ -4545,7 +4545,7 @@ msgstr "I&SO 8601 (esempio: 15:47)"
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
 msgstr "Gli indirizzi IPv6 non sono supportati con il proxy SOCKS4"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:117
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:118
 msgid ""
 "If no data is sent or received during an operation for longer than the "
 "specified time, the connection will be closed and FileZilla will try to "
@@ -4555,7 +4555,7 @@ msgstr ""
 "dell'intervallo specificato, il collegamento sarà chiuso e FileZilla proverà "
 "a ricollegarsi."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2344
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2345
 msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
 msgstr ""
 "Quando si segnalano errori di funzionamento è opportuno fornire registri con "
@@ -4603,7 +4603,7 @@ msgid ""
 msgstr ""
 "Se il problema persiste, alcuni router o firewall impediscono la connessione."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2267
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2268
 msgid ""
 "If the size of the logfile reaches the limit, it gets renamed by adding "
 "\".1\" to the end of the filename (possibly overwriting older logfiles) and "
@@ -4634,7 +4634,7 @@ msgid "If this problem stays, please contact your router manufacturer."
 msgstr "Se il problema persiste, contattare il produttore del vostro router."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1648
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1239
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1240
 msgid ""
 "If using 'overwrite if newer', your system time has to be synchronized with "
 "the server. If the time differs (e.g. different timezone), specify a "
@@ -4644,7 +4644,7 @@ msgstr ""
 "sistema sia sincronizzato con il server. Se l'ora differisce (es. fusi orari "
 "diversi), specificare l'offset del fuso orario in Gestione Siti."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1856
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1857
 msgid ""
 "If using timestamp based comparison, consider two files equal if their "
 "timestamp difference does not exceed this threshold."
@@ -4652,7 +4652,7 @@ msgstr ""
 "Se si usa il confronto basato sulla data, considerare due file uguali se la "
 "differenza di data non supera questa soglia."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1961
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1962
 msgid "If you change the language, you need to restart FileZilla."
 msgstr "Se modifichi la linngua, è necessario riavviare Filezilla."
 
@@ -4668,7 +4668,7 @@ msgstr ""
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Se FileZilla verrà chiuso, i cambiamenti andranno persi."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1127
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1128
 msgid ""
 "If you enter the wrong filetypes, those files may get corrupted when "
 "transferred."
@@ -4680,7 +4680,7 @@ msgstr ""
 msgid "If you get any errors, your configuration is not correct."
 msgstr "In caso di errori, la configurazione non è corretta."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:218
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:219
 msgid ""
 "If you have problems to retrieve directory listings or to transfer files, "
 "try to change the default transfer mode."
@@ -4768,7 +4768,7 @@ msgstr ""
 "quanto FileZilla non può indicare al sistema quali porte scegliere."
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:168
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:336
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:337
 msgid ""
 "In order to use active mode, FileZilla needs to know your external IP "
 "address."
@@ -4976,7 +4976,7 @@ msgstr "Località giurisdizione:"
 msgid "Jurisdiction state or province:"
 msgstr "Provincia giurisdizione:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1813
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1814
 msgid "Keep directories on top"
 msgstr "Mantieni le cartelle in cima"
 
@@ -5015,7 +5015,7 @@ msgstr "Identificatore chiave:"
 msgid "L&owest"
 msgstr "Inferi&ore"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1942
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1943
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:107
 msgid "Language"
 msgstr "Lingua"
@@ -5030,7 +5030,7 @@ msgstr "Lingua modificata"
 msgid "Last modified"
 msgstr "Ultima modifica"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1343
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1344
 msgid "Layout"
 msgstr "Disposizione"
 
@@ -5040,23 +5040,23 @@ msgstr "Disposizione"
 msgid "Leave empty to keep existing password."
 msgstr "Lascia vuoto per mantenere la password esistente."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:843
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:844
 msgid "Limit for concurrent &downloads:"
 msgstr "Limite per &download concorrenti:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:864
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:865
 msgid "Limit for concurrent &uploads:"
 msgstr "Limite per &upload concorrenti:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:264
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:265
 msgid "Limit local ports"
 msgstr "Limita le porte locali"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2236
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2237
 msgid "Limit size of logfile"
 msgstr "Dimensione limite file Log"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2244
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2245
 msgid "Limit:"
 msgstr "Limite:"
 
@@ -5066,7 +5066,7 @@ msgstr "Lunghezza riga in eccesso"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:905
 msgid "Linked against"
-msgstr "Collegato contro"
+msgstr "Librerie collegate"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:274
 #: ../../locales/../src/interface/netconfwizard.cpp:280
@@ -5079,7 +5079,7 @@ msgstr "Socket di ascolto chiuso"
 msgid "Listing:"
 msgstr "Elenco:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:294
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:295
 msgid "Lo&west available port:"
 msgstr "P&orta più bassa disponibile:"
 
@@ -5147,7 +5147,7 @@ msgstr "File log"
 msgid "Logged in"
 msgstr "Accesso effettuato"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2190
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2191
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:115
 msgid "Logging"
 msgstr "Connessione"
@@ -5257,7 +5257,7 @@ msgid "Master &Password:"
 msgstr "&Password principale:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4038
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1301
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1302
 msgid "Master password:"
 msgstr "Password principale:"
 
@@ -5277,7 +5277,7 @@ msgstr "Nessuna corrispondenza trovata per i seguenti"
 msgid "Match not all of the following"
 msgstr "Non controllare corrispondenza dei seguneti"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:822
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:823
 msgid "Maximum simultaneous &transfers:"
 msgstr "&Trasferimenti massimi simultanei:"
 
@@ -5290,7 +5290,7 @@ msgstr "Fallita allocazione memoria"
 msgid "Message log"
 msgstr "Registro messaggi"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1410
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1411
 msgid "Message log position"
 msgstr "Posizione registro messaggi"
 
@@ -5298,7 +5298,7 @@ msgstr "Posizione registro messaggi"
 msgid "Message too large"
 msgstr "Messaggio troppo lungo"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2256
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2257
 msgid "MiB"
 msgstr "MiB"
 
@@ -5352,7 +5352,7 @@ msgstr "Nome del segnalibro già presente."
 msgid "Name:"
 msgstr "Nome:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1833
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1834
 msgid "Natural sort"
 msgstr "Ordinamento naturale"
 
@@ -5389,7 +5389,7 @@ msgstr ""
 msgid "Network unreachable"
 msgstr "Rete non raggiungibile"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2127
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2128
 msgid "Never"
 msgstr "Mai"
 
@@ -5450,7 +5450,7 @@ msgstr "Nuova cartella"
 msgid "New site"
 msgstr "Nuovo sito"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1400
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1401
 msgid "Next to the transfer queue"
 msgstr "Prossimo nella coda trasferimento"
 
@@ -5528,8 +5528,8 @@ msgstr "Metodo autenticazione SOCKS5 non supportato"
 msgid "No username given."
 msgstr "Nessun nome fornito."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1904
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1923
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1905
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1924
 #: ../../locales/../src/interface/sitemanager.cpp:17
 #: ../../locales/../src/interface/verifycertdialog.cpp:56
 msgid "None"
@@ -5543,7 +5543,7 @@ msgstr "Nessun elemento selezionato"
 msgid "Nonrecoverable failure in name resolution"
 msgstr "Errore non recuperabile nella risoluzione nomi"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:962
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:963
 #: ../../locales/../src/engine/server.cpp:560
 #: ../../locales/../src/engine/server.cpp:587
 #: ../../locales/../src/interface/manual_transfer.cpp:148
@@ -5587,17 +5587,17 @@ msgstr ""
 "Attenzione che questa caratteristica è supportata solo utilizzando il "
 "protocollo FTP."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:595
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:596
 msgid "Note: This only works with plain, unencrypted FTP connections."
 msgstr "Nota: funziona solo con connessioni FTP non cifrate."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:794
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:795
 msgid "Note: Using a generic proxy forces passive mode on FTP connections."
 msgstr ""
 "Nota: usando un proxy generico si forza la modalità passiva nelle "
 "connessioni FTP."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1717
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1718
 msgid "Number of decimal places:"
 msgstr "Numero di punti decimali:"
 
@@ -5632,7 +5632,7 @@ msgstr "Il numero di nuovi tentativi deve essere compreso tra 0 e 99."
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3977
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4079
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:34
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:27
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:28
 msgid "OK"
 msgstr "OK"
 
@@ -5652,11 +5652,11 @@ msgstr ""
 msgid "Once"
 msgstr "Una volta"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2128
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2129
 msgid "Once a day"
 msgstr "Una volta al giorno"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2129
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2130
 msgid "Once a week"
 msgstr "Una volta la settimana"
 
@@ -5743,7 +5743,7 @@ msgstr "Arancio"
 msgid "Organization:"
 msgstr "Organizzazione:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:680
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:681
 msgid "Other SFTP options"
 msgstr "Altre opzioni SFTP"
 
@@ -5760,7 +5760,7 @@ msgstr "Altro:"
 msgid "Out of memory"
 msgstr "Memoria esaurita"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:63
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:64
 msgid "Overview"
 msgstr "Descrizione generale"
 
@@ -5770,30 +5770,30 @@ msgstr "Sovrascr&ivi se più recente"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1598
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1621
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1187
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1208
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1188
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1209
 msgid "Overwrite file"
 msgstr "Sovrascrivi file"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1600
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1623
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1189
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1210
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1190
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1211
 msgid "Overwrite file if size differs"
 msgstr "Sovrascrivi file se la dimensione è differente"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1601
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1624
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1190
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1211
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1191
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1212
 msgid "Overwrite file if size differs or source file is newer"
 msgstr ""
 "Sovrascrivi file se la dimensione è differente o il sorgente più recente"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1599
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1622
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1188
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1209
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1189
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1210
 msgid "Overwrite file if source file newer"
 msgstr "Sovrascrivi file se il sorgente è più recente"
 
@@ -5819,7 +5819,7 @@ msgstr "Permessi proprietario"
 msgid "Owner/Group"
 msgstr "Proprietario/gruppo"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1429
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1430
 msgid ""
 "P&revent system from entering idle sleep during transfers and other "
 "operations"
@@ -5827,8 +5827,8 @@ msgstr ""
 "E&vita che il sistema vada in stato di standby durante il trasferimento o "
 "altre operazioni"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:555
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:742
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:556
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:743
 msgid "P&roxy host:"
 msgstr "Host p&roxy:"
 
@@ -5836,7 +5836,7 @@ msgstr "Host p&roxy:"
 msgid "PORT command tainted by router or firewall."
 msgstr "Comando PORT corrotto dal router."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:202
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:203
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&ssiva (consigliata)"
 
@@ -5859,7 +5859,7 @@ msgstr "Pass&word:"
 msgid "Passive (recommended)"
 msgstr "Passiva (consigliata)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:409
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:410
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:95
 msgid "Passive mode"
 msgstr "Modalità passiva"
@@ -5876,7 +5876,7 @@ msgstr ""
 msgid "Password required"
 msgstr "È richiesta la password"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1270
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1271
 msgid "Passwords"
 msgstr "Password"
 
@@ -6159,7 +6159,7 @@ msgstr ""
 "Notare che il mantenimento di data e ora dei file in upload funziona solo "
 "con server FTP, FTPS e FTPES (non SFTP) che supportano il comando MFMT."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:179
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:180
 msgid ""
 "Please note that some servers might ban you if you try to reconnect too "
 "often or in too short intervals."
@@ -6231,7 +6231,7 @@ msgstr ""
 "chiamata'modo DMZ' o 'modo game'. Cose come analisi del protocollo or "
 "specifichefixups del protocollo devono essere disabilitati"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1391
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1392
 msgid "Positio&n of the message log:"
 msgstr "Posizio&ne del registro messaggi:"
 
@@ -6240,11 +6240,11 @@ msgstr "Posizio&ne del registro messaggi:"
 msgid "Postal code:"
 msgstr "CAP:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1031
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1032
 msgid "Pre&allocate space before downloading"
 msgstr "Pre&alloca spazio prima del download"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1027
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1028
 msgid "Preallocation"
 msgstr "Preallocazione"
 
@@ -6257,7 +6257,7 @@ msgstr "Siti Predefiniti"
 msgid "Preserving file timestamps"
 msgstr "Preserva data e ora file"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1550
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1551
 msgid "Preview"
 msgstr "Anteprima"
 
@@ -6275,7 +6275,7 @@ msgstr "Stampa informazioni diagnostiche relative all'avvio di Filezilla."
 msgid "Print version information to stdout and exit"
 msgstr "Invia informazioni versione a stdout e esci"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1812
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1813
 msgid "Prioritize directories (default)"
 msgstr "Cartelle prioritizzate (predefinito)"
 
@@ -6283,7 +6283,7 @@ msgstr "Cartelle prioritizzate (predefinito)"
 msgid "Priority"
 msgstr "Priorità"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2168
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2169
 msgid ""
 "Privacy policy: Only your version of FileZilla, your used operating system "
 "and your CPU architecture will be submitted to the server."
@@ -6291,7 +6291,7 @@ msgstr ""
 "Policy privacy: verranno inviate al server solo informazioni sulla versione "
 "di FileZilla, del sistema operativo e dell'architettura della CPU."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:629
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:630
 msgid "Private &keys:"
 msgstr "Chiavi &private:"
 
@@ -6299,8 +6299,8 @@ msgstr "Chiavi &private:"
 msgid "Pro&tocol:"
 msgstr "Pro&tocollo:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:578
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:775
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:579
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:776
 msgid "Pro&xy password:"
 msgstr "Password pro&xy:"
 
@@ -6331,12 +6331,12 @@ msgstr "Protocollo non supportato dal socket fornito"
 msgid "Protocol:"
 msgstr "Protocollo:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:752
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:753
 msgid "Proxy &port:"
 msgstr "&Porta proxy:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:568
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:765
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:569
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:766
 msgid "Proxy &user:"
 msgstr "&Utente proxy:"
 
@@ -6381,7 +6381,7 @@ msgstr ""
 msgid "Proxy set but proxy host or port invalid"
 msgstr "Proxy impostato ma proxy o porta proxy non validi"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:616
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:617
 msgid "Public Key Authentication"
 msgstr "Autenticazione con chiave pubblica"
 
@@ -6564,7 +6564,7 @@ msgstr ""
 "connessi ad un server.\n"
 "Se si procede, la connessione sarà terminata."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:184
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:185
 msgid "Reconnection settings"
 msgstr "Impostazioni di riconnessione"
 
@@ -6687,8 +6687,8 @@ msgstr "Rimuovi gli elementi &selezionati"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1603
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1626
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1192
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1213
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1193
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1214
 #: ../../locales/../src/interface/asyncrequestqueue.cpp:304
 msgid "Rename file"
 msgstr "Rinomina file"
@@ -6710,7 +6710,7 @@ msgid "Renaming '%s' to '%s'"
 msgstr "Rinomina da '%s' a '%s'"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4050
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1313
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1314
 msgid "Repeat password:"
 msgstr "Ripeti password:"
 
@@ -6774,12 +6774,12 @@ msgstr "Risultati:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1602
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1625
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1191
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1212
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1192
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1213
 msgid "Resume file transfer"
 msgstr "Riprendi trasferimento file"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1252
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1253
 msgid ""
 "Resuming ASCII files can cause problems if server uses a different line "
 "ending format than the client."
@@ -6808,7 +6808,7 @@ msgstr "È in corso la lettura dell'indirizzo IP esterno da %s"
 msgid "S&how files currently being edited..."
 msgstr "Visualizza i file &su cui sono in corso modifiche..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1434
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1435
 msgid "S&how the Site Manager on startup"
 msgstr "&Visualizza Gestore siti all'avvio"
 
@@ -6832,7 +6832,7 @@ msgstr "Navigazione s&incronizzata"
 msgid "SFTP"
 msgstr "SFTP"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:729
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:730
 msgid "SOC&KS 4"
 msgstr "SOC&KS 4"
 
@@ -6852,12 +6852,12 @@ msgid "SQLite:"
 msgstr "SQLite:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4027
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1290
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1291
 msgid "Sa&ve passwords protected by a master password"
 msgstr "Sal&va le password protette dalla password principale"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4017
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1280
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1281
 msgid "Sav&e passwords"
 msgstr "Sal&va password"
 
@@ -6876,7 +6876,7 @@ msgstr ""
 msgid "Saving of passwords has been disabled by you."
 msgstr "Il salvataggio password è stato disabilitato dall'utente."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1530
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1531
 msgid "Scale factor:"
 msgstr "Fattore di scala:"
 
@@ -6913,15 +6913,15 @@ msgstr "Vedi anche: https://wiki.filezilla-project.org/Network_Configuration"
 msgid "Sele&ct server"
 msgstr "Sele&ziona server"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:12
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:13
 msgid "Select &page:"
 msgstr "Seleziona &pagina:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1492
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1493
 msgid "Select Theme"
 msgstr "Seleziona tema"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1167
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1168
 msgid ""
 "Select default action to perform if target file of a transfer already exists."
 msgstr "Imposta l'azione da eseguire se il file di destinazione esiste già."
@@ -7096,7 +7096,7 @@ msgid "Selected port usually in use by a different protocol."
 msgstr ""
 "La porta selezionata di solito viene utilizzata da un protocollo diverso."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:240
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:241
 msgid "Send FTP &keep-alive commands"
 msgstr "Invia coman&di FTP per mantenere attiva la connessione"
 
@@ -7257,7 +7257,7 @@ msgstr "Imposta &priorità"
 msgid "Setting permissions of '%s' to '%s'"
 msgstr "Impostazione permessi di '%s' a '%s'"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:3
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:4
 msgid "Settings"
 msgstr "Impostazioni"
 
@@ -7269,7 +7269,7 @@ msgstr "Cartella impostazioni:"
 msgid "Sh&ow notification bubble"
 msgstr "Visualizza fumett&o notifica"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2352
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2353
 msgid "Show &raw directory listing"
 msgstr "Most&ra elenco cartelle"
 
@@ -7287,7 +7287,7 @@ msgstr ""
 msgid "Show details"
 msgstr "Visualizza dettagli"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1667
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1668
 msgid "Show details about custom date and time formats"
 msgstr "Visualizza dettagli su formati personalizzati data e ora"
 
@@ -7360,7 +7360,7 @@ msgstr "Percorso sito non valido."
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:262
 msgid "Site-specific bookmarks"
-msgstr "Segnalibri specifici per sito"
+msgstr "Preferiti specifici per sito"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:97
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:567
@@ -7369,15 +7369,15 @@ msgid ""
 "Manager.\n"
 "Add current connection to the site manager?"
 msgstr ""
-"Segnalibri specifici per sito richiedono che il server sia memorizzato nel "
-"Gestore siti.\n"
+"Preferiti per sito richiedono che il server sia memorizzato nel Gestore "
+"siti.\n"
 "Aggiungere la connessione corrente al gestore siti?"
 
 #: ../../locales/../src/interface/queue.cpp:1162
 msgid "Size"
 msgstr "Dimensione"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1681
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1682
 msgid "Size formatting"
 msgstr "Formato Dimensione"
 
@@ -7387,8 +7387,8 @@ msgstr "Dimensione sconosciuta"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1604
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1627
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1193
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1214
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1194
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1215
 msgid "Skip file"
 msgstr "Ignora file"
 
@@ -7440,7 +7440,7 @@ msgstr ""
 "di essere inviati al server."
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:147
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:415
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:416
 msgid ""
 "Some misconfigured remote servers which are behind a router, may reply with "
 "their local IP address."
@@ -7448,7 +7448,7 @@ msgstr ""
 "Alcuni server remoti mal configurati, connessi a internet tramite un router "
 "potrebbero rispondere con il loro indirizzo IP locale."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1814
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1815
 msgid "Sort directories inline"
 msgstr "Ordina le cartelle"
 
@@ -7458,11 +7458,11 @@ msgstr ""
 "L'ordine di visualizzazione non può essere modificato se si stanno "
 "comparando le cartelle."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1798
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1799
 msgid "Sorting"
 msgstr "Ordinamento"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1805
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1806
 msgid "Sorting &mode:"
 msgstr "&Modalità di ordinamento:"
 
@@ -7488,7 +7488,7 @@ msgstr "File sorgente:"
 msgid "Speed Limits"
 msgstr "Limiti di velocità"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:892
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:893
 msgid "Speed limits"
 msgstr "Limiti di velocità"
 
@@ -7500,15 +7500,15 @@ msgstr "Limiti di velocità disabilitati, fai clic per modficarli."
 msgid "Speed limits are enabled, click to change."
 msgstr "Limiti di velocità abilitati, fai clic per modficarli."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2146
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2147
 msgid "Stable and beta versions"
 msgstr "Versioni stabili e beta"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2145
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2146
 msgid "Stable versions only"
 msgstr "Solo versioni stabili"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2147
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2148
 msgid "Stable, beta and nightly versions"
 msgstr "Versioni stabili, beta e build notturne."
 
@@ -7746,7 +7746,7 @@ msgstr "Il preferito non può essere aggiunto."
 
 #: ../../locales/../src/interface/sitemanager.cpp:781
 msgid "The bookmarks could not be cleared."
-msgstr "I segnalibri non possono essere azzerati."
+msgstr "I preferiti possono essere azzerati."
 
 #: ../../locales/../src/interface/statusbar.cpp:473
 msgid "The connection is encrypted. Click icon for details."
@@ -7928,9 +7928,9 @@ msgstr "La soluzione FTP open source gratuita"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:295
 msgid "The global bookmarks could not be saved."
-msgstr "I segnalibri globali non possono essere salvati."
+msgstr "I preferiti globali non possono essere salvati."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2339
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2340
 msgid ""
 "The higher the debug level, the more information will be displayed in the "
 "message log. Displaying debug information has a negative impact on "
@@ -8164,15 +8164,15 @@ msgstr ""
 msgid "Time"
 msgstr "Ora"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1618
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1619
 msgid "Time formatting"
 msgstr "Formato ora"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:96
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:97
 msgid "Time&out in seconds:"
 msgstr "Timeout in sec&ondi:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:125
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:126
 #: ../../locales/../src/interface/queue.cpp:337
 msgid "Timeout"
 msgstr "Timeout"
@@ -8192,7 +8192,7 @@ msgstr ""
 "per fare ciò, gli alberi delle cartelle devono essere entrambi vibili o "
 "nascosti."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:623
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:624
 msgid ""
 "To support public key authentication, FileZilla needs to know the private "
 "keys to use."
@@ -8262,8 +8262,8 @@ msgstr "Troppi re-indirizzamenti"
 msgid "Trace:"
 msgstr "Trace:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1901
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1921
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1902
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1922
 msgid "Transfer"
 msgstr "Trasferisci"
 
@@ -8275,11 +8275,11 @@ msgstr "&Direzione trasferimento"
 msgid "Transfer &type"
 msgstr "Modalità di &trasferimento"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:196
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:197
 msgid "Transfer Mode"
 msgstr "Modalità di trasferimento"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1479
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1480
 msgid "Transfer Queue"
 msgstr "Coda di trasferimento"
 
@@ -8310,11 +8310,11 @@ msgstr "Trasferimenti"
 msgid "Transfers finished"
 msgstr "Trasferimenti completati"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1135
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1136
 msgid "Treat files &without extension as ASCII file"
 msgstr "&I file senza estensione saranno interpretati come file ASCII"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1087
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1088
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "I seguenti tipi di &file saranno interpretati come file ASCII:"
 
@@ -8352,11 +8352,11 @@ msgstr "Riprova"
 msgid "Type"
 msgstr "Tipo"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:453
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:454
 msgid "Type of FTP Proxy:"
 msgstr "Tipo proxy FTP:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:714
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:715
 msgid "Type of generic proxy:"
 msgstr "Tipo di proxy generico:"
 
@@ -8365,20 +8365,20 @@ msgid "U&pload"
 msgstr "&Invia"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3936
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:930
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:931
 msgid "U&pload limit:"
 msgstr "Limite di &upload:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:2031
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:2032
 msgid "U&se filetype associations if available"
 msgstr ""
 "U&sa il programma associato dal sistema al tipo di file (se disponibile)"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1624
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1625
 msgid "U&se system defaults for current language"
 msgstr "U&sa valori predefiniti sistema per la lingua attuale"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:463
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:464
 msgid "USER@&HOST"
 msgstr "USER@&HOST"
 
@@ -8540,7 +8540,7 @@ msgstr "Invia e annulla le modifiche"
 msgid "Use &custom charset"
 msgstr "Utilizza un set di &caratteri personalizzato"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1995
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1996
 msgid "Use &custom editor:"
 msgstr "Usa &programma personalizzato:"
 
@@ -8576,7 +8576,7 @@ msgstr "Usa il server attualmente connesso"
 msgid "Use server from site manager"
 msgstr "Usa server dal Gestore siti"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1575
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1576
 msgid "Use system &defaults for current language"
 msgstr "Usa valori pre&definiti sistema per la lingua attuale"
 
@@ -8593,7 +8593,7 @@ msgid "Use the server's external IP address instead"
 msgstr "Usa l'indirizzo IP esterno del server"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:207
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:358
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:359
 msgid ""
 "Use this if you're behind a router and have a static external IP address."
 msgstr ""
@@ -8644,7 +8644,7 @@ msgstr "Messaggi dettagliati log di wxWidgets"
 msgid "Verifying certificate..."
 msgstr "Verifica del certificato in corso..."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:964
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:965
 msgid "Very high"
 msgstr "Molto alto"
 
@@ -8652,7 +8652,7 @@ msgstr "Molto alto"
 msgid "View hidden option set, but unsupported by server"
 msgstr "L'opzione 'visualizza file nascosti' non è supportata dal server"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1903
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1904
 msgid "View/Edit"
 msgstr "Visualizza/modifica"
 
@@ -8723,7 +8723,7 @@ msgstr ""
 "Filezilla può memorizzare le password in modo da potersi riconenttersi senza "
 "dove reinserire la password dopo aver riavviato Filezilla."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:991
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:992
 msgid ""
 "When enabled, characters that are not supported by the local operating "
 "system in filenames are replaced if downloading such a file."
@@ -8732,11 +8732,11 @@ msgstr ""
 "operativo locale per i nomi file saranno sostituiti se lo scaricherete come "
 "file."
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1443
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1444
 msgid "When st&arting a new connection while already connected:"
 msgstr "Qu&ando avvi una nuova connessione mentre sei già connesso:"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1360
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1361
 msgid "Widescreen"
 msgstr "Widescreen"
 
@@ -8922,7 +8922,7 @@ msgstr "Inserisci un valore nell'intervallo 1-65535 per la porta proxy"
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1153
 msgid "You need to enter at least one path, empty bookmarks are not supported."
 msgstr ""
-"È necessario inserire almeno un percorso, i segnalibri vuoti non sono "
+"È necessario inserire almeno un percorso, i preferiti vuoti non sono "
 "supportati."
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:85
@@ -9068,7 +9068,7 @@ msgstr "leggibile per il gruppo"
 msgid "group writeable"
 msgstr "scrivibile per il gruppo"
 
-#: ../../locales/../src/interface/resources/xrc/settings.xrc:1669
+#: ../../locales/../src/interface/resources/xrc/settings.xrc:1670
 msgid "https://wiki.filezilla-project.org/Date_and_Time_formatting"
 msgstr "https://wiki.filezilla-project.org/Date_and_Time_formatting"
 
