@@ -35,11 +35,12 @@ bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::
 		if (protocol.substr(0, 3) == L"fz_") {
 			protocol = protocol.substr(3);
 		}
-		server.SetProtocol(CServer::GetProtocolFromPrefix(protocol));
-		if (server.GetProtocol() == UNKNOWN) {
+		auto p = CServer::GetProtocolFromPrefix(protocol);
+		if (p == UNKNOWN) {
 			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
 			return false;
 		}
+		server.SetProtocol(p);
 	}
 
 	pos = host.find('@');
