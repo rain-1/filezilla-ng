@@ -575,12 +575,14 @@ void CSiteManagerDialog::OnCancel(wxCommandEvent&)
 void CSiteManagerDialog::OnConnect(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return;
+	}
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!data) {
@@ -964,8 +966,9 @@ bool CSiteManagerDialog::Verify()
 	}
 
 	CSiteManagerItemData* data = (CSiteManagerItemData *)pTree->GetItemData(item);
-	if (!data)
+	if (!data) {
 		return true;
+	}
 
 	if (data->m_site) {
 		std::wstring const host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue).ToStdWstring();
@@ -1137,10 +1140,12 @@ bool CSiteManagerDialog::Verify()
 			if (!remotePath.SetPath(remotePathRaw.ToStdWstring())) {
 				XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->SetFocus();
 				wxString msg;
-				if (pServer->m_site->server_.server.GetType() != DEFAULT)
+				if (pServer->m_site->server_.server.GetType() != DEFAULT) {
 					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the servertype (%s) selected on the parent site."), CServer::GetNameFromServerType(pServer->m_site->server_.server.GetType()));
-				else
+				}
+				else {
 					msg = _("Remote path cannot be parsed. Make sure it is a valid absolute path.");
+				}
 				wxMessageBoxEx(msg, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
 			}
