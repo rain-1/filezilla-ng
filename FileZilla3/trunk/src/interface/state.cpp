@@ -631,6 +631,7 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, t_statechange_notif
 				if (*iter == pHandler) {
 					if (handlers.inNotify_) {
 						handlers.compact_ = true;
+						*iter = 0;
 					}
 					else {
 						handlers.handlers.erase(iter);
@@ -646,6 +647,7 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, t_statechange_notif
 			if (*iter == pHandler) {
 				if (handlers.inNotify_) {
 					handlers.compact_ = true;
+					*iter = 0;
 				}
 				else {
 					handlers.handlers.erase(iter);
