@@ -13,6 +13,8 @@
 
 #include <libfilezilla/local_filesys.hpp>
 
+#include <algorithm>
+
 CContextManager CContextManager::m_the_context_manager;
 
 CContextManager::CContextManager()
@@ -210,7 +212,7 @@ CState::~CState()
 
 	// Unregister all handlers
 	for (int i = 0; i < STATECHANGE_MAX; ++i) {
-		wxASSERT(m_handlers[i].empty());
+		wxASSERT(m_handlers[i].handlers.empty());
 	}
 }
 
@@ -596,24 +598,23 @@ void CState::RegisterHandler(CStateEventHandler* pHandler, t_statechange_notific
 	}
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
 	wxASSERT(pHandler != insertBefore);
+	wxASSERT(!insertBefore || !inNotify_);
 
 
 	auto &handlers = m_handlers[notification];
-	auto insertionPoint = handlers.end();
+	auto insertionPoint = handlers.handlers.end();
 
-	for (auto it = handlers.begin(); it != handlers.end(); ++it) {
-		if (it->pHandler == insertBefore) {
+	for (auto it = handlers.handlers.begin(); it != handlers.handlers.end(); ++it) {
+		if (*it == insertBefore) {
 			insertionPoint = it;
 		}
-		if (it->pHandler == pHandler) {
-			wxASSERT(insertionPoint == handlers.end());
+		if (*it == pHandler) {
+			wxASSERT(insertionPoint == handlers.handlers.end());
 			return;
 		}
 	}
 
-	t_handler handler;
-	handler.pHandler = pHandler;
-	handlers.insert(insertionPoint, handler);
+	handlers.handlers.insert(insertionPoint, pHandler);
 }
 
 void CState::UnregisterHandler(CStateEventHandler* pHandler, t_statechange_notifications notification)
@@ -624,9 +625,14 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, t_statechange_notif
 	if (notification == STATECHANGE_NONE) {
 		for (int i = 0; i < STATECHANGE_MAX; ++i) {
 			auto &handlers = m_handlers[i];
-			for (auto iter = handlers.begin(); iter != handlers.end(); ++iter) {
-				if (iter->pHandler == pHandler) {
-					handlers.erase(iter);
+			for (auto iter = handlers.handlers.begin(); iter != handlers.handlers.end(); ++iter) {
+				if (*iter == pHandler) {
+					if (handlers.inNotify_) {
+						handlers.compact_ = true;
+					}
+					else {
+						handlers.handlers.erase(iter);
+					}
 					break;
 				}
 			}
@@ -634,9 +640,14 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, t_statechange_notif
 	}
 	else {
 		auto &handlers = m_handlers[notification];
-		for (auto iter = handlers.begin(); iter != handlers.end(); ++iter) {
-			if (iter->pHandler == pHandler) {
-				handlers.erase(iter);
+		for (auto iter = handlers.handlers.begin(); iter != handlers.handlers.end(); ++iter) {
+			if (*iter == pHandler) {
+				if (handlers.inNotify_) {
+					handlers.compact_ = true;
+				}
+				else {
+					handlers.handlers.erase(iter);
+				}
 				return;
 			}
 		}
@@ -647,10 +658,24 @@ void CState::NotifyHandlers(t_statechange_notifications notification, const wxSt
 {
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
-	auto const& handlers = m_handlers[notification];
-	for (auto const& handler : handlers) {
-		handler.pHandler->OnStateChange(notification, data, data2);
+	auto & handlers = m_handlers[notification];
+
+	wxASSERT(!handlers.inNotify_);
+
+	handlers.inNotify_ = true;
+	// Can't use iterators as inserting a handler might invalidate them
+	for (size_t i = 0; i < handlers.handlers.size(); ++i) {
+		if (handlers.handlers[i]) {
+			handlers.handlers[i]->OnStateChange(notification, data, data2);
+		}
 	}
+
+	if (handlers.compact_) {
+		handlers.handlers.erase(std::remove(handlers.handlers.begin(), handlers.handlers.end(), nullptr), handlers.handlers.end());
+		handlers.compact_ = false;
+	}
+
+	handlers.inNotify_ = false;
 
 	CContextManager::Get()->NotifyHandlers(this, notification, data, data2);
 }

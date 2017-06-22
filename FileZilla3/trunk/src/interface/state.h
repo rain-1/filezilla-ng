@@ -1,5 +1,5 @@
-#ifndef __STATE_H__
-#define __STATE_H__
+#ifndef FILEZILLA_INTERFACE_STATE_HEADER
+#define FILEZILLA_INTERFACE_STATE_HEADER
 
 #include "local_path.h"
 #include "sitemanager.h"
@@ -211,11 +211,14 @@ protected:
 
 	CComparisonManager* m_pComparisonManager;
 
-	struct t_handler
+	struct t_handlersForNotification
 	{
-		CStateEventHandler* pHandler;
+		std::vector<CStateEventHandler*> handlers;
+		bool compact_{};
+		bool inNotify_{};
 	};
-	std::vector<t_handler> m_handlers[STATECHANGE_MAX];
+
+	t_handlersForNotification m_handlers[STATECHANGE_MAX];
 
 	CLocalPath GetSynchronizedDirectory(CServerPath remote_path);
 	CServerPath GetSynchronizedDirectory(CLocalPath local_path);
