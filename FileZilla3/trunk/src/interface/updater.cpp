@@ -172,7 +172,7 @@ wxString CUpdater::GetUrl()
 	wxString version = CBuildInfo::GetVersion();
 	version.Replace(_T(" "), _T("%20"));
 
-	wxString url = wxString::Format(_T("https://update.filezilla-project.org/update2.php?platform=%s&version=%s"), host, version);
+	wxString url = wxString::Format(_T("https://update.filezilla-project.org/update.php?platform=%s&version=%s"), host, version);
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	// Makes not much sense to submit OS version on Linux, *BSD and the likes, too many flavours.
 	wxString osVersion = wxString::Format(_T("&osversion=%d.%d"), wxPlatformInfo::Get().GetOSMajorVersion(), wxPlatformInfo::Get().GetOSMinorVersion());
