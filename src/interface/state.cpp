@@ -598,10 +598,12 @@ void CState::RegisterHandler(CStateEventHandler* pHandler, t_statechange_notific
 	}
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
 	wxASSERT(pHandler != insertBefore);
-	wxASSERT(!insertBefore || !inNotify_);
 
 
 	auto &handlers = m_handlers[notification];
+
+	wxASSERT(!insertBefore || !handlers.inNotify_);
+
 	auto insertionPoint = handlers.handlers.end();
 
 	for (auto it = handlers.handlers.begin(); it != handlers.handlers.end(); ++it) {
