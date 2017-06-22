@@ -504,8 +504,6 @@ void SetServer(pugi::xml_node node, ServerWithCredentials const& server)
 		return;
 	}
 
-	bool kiosk_mode = COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0;
-
 	for (auto child = node.first_child(); child; child = node.first_child()) {
 		node.remove_child(child);
 	}
