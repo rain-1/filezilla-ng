@@ -141,9 +141,9 @@ public:
 	void LoadQueueFromXML();
 	void ImportQueue(pugi::xml_node element, bool updateSelections);
 
-	virtual void InsertItem(CServerItem* pServerItem, CQueueItem* pItem);
+	virtual void InsertItem(CServerItem* pServerItem, CQueueItem* pItem) override;
 
-	virtual void CommitChanges();
+	virtual void CommitChanges() override;
 
 	void ProcessNotification(CFileZillaEngine* pEngine, std::unique_ptr<CNotification>&& pNotification);
 
@@ -167,7 +167,7 @@ protected:
 	WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 #endif
 
-	virtual void OnOptionsChanged(changed_options_t const& options);
+	virtual void OnOptionsChanged(changed_options_t const& options) override;
 
 	void AdvanceQueue(bool refresh = true);
 	bool TryStartNextTransfer();
@@ -191,7 +191,7 @@ protected:
 	void ResetEngine(t_EngineData& data, const ResetReason reason);
 	void DeleteEngines();
 
-	virtual bool RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount = true, bool updateSelections = true, bool forward = true);
+	virtual bool RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount = true, bool updateSelections = true, bool forward = true) override;
 
 	// Stops processing of given item
 	// Returns true on success, false if it would block
@@ -266,7 +266,7 @@ protected:
 
 	std::list<CFileZillaEngine*> m_waitingForPassword;
 
-	virtual void OnPostScroll();
+	virtual void OnPostScroll() override;
 
 	int GetLineHeight();
 	int m_line_height;
@@ -290,7 +290,7 @@ protected:
 	// Unit is byte/s.
 	wxFileOffset GetCurrentSpeed(bool countDownload, bool countUpload);
 
-	virtual void OnEngineEvent(CFileZillaEngine* engine);
+	virtual void OnEngineEvent(CFileZillaEngine* engine) override;
 	void DoOnEngineEvent(CFileZillaEngine* engine);
 
 	void OnAskPassword();

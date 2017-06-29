@@ -344,10 +344,12 @@ public:
 
 		DataEntry &type1 = m_fileData[a];
 		DataEntry &type2 = m_fileData[b];
-		if (type1.fileType.empty())
-			type1.fileType = m_pListView->GetType(data1.name, data1.is_dir()).ToStdWstring();
-		if (type2.fileType.empty())
-			type2.fileType = m_pListView->GetType(data2.name, data2.is_dir()).ToStdWstring();
+		if (type1.fileType.empty()) {
+			type1.fileType = m_pListView->GetType(data1.name, data1.is_dir());
+		}
+		if (type2.fileType.empty()) {
+			type2.fileType = m_pListView->GetType(data2.name, data2.is_dir());
+		}
 
 		CMP(CmpStringNoCase, type1.fileType, type2.fileType);
 
@@ -532,7 +534,7 @@ protected:
 	virtual bool ItemIsDir(int index) const = 0;
 	virtual int64_t ItemGetSize(int index) const = 0;
 
-	std::map<wxString, wxString> m_fileTypeMap;
+	std::map<wxString, std::wstring> m_fileTypeMap;
 
 	// The .. item
 	bool m_hasParent;
@@ -547,7 +549,7 @@ protected:
 	virtual CSortComparisonObject GetSortComparisonObject() = 0;
 
 	// An empty path denotes a virtual file
-	wxString GetType(wxString name, bool dir, const wxString& path = _T(""));
+	std::wstring GetType(std::wstring name, bool dir, std::wstring const& path = std::wstring());
 
 	// Comparison related
 	virtual void ScrollTopItem(int item);
@@ -604,7 +606,7 @@ private:
 	std::unique_ptr<CGtkEventCallbackProxyBase> m_gtkEventCallbackProxy;
 #endif
 
-	wxString m_genericTypes[2];
+	std::wstring m_genericTypes[2];
 
 	DECLARE_EVENT_TABLE()
 	void OnColumnClicked(wxListEvent &event);

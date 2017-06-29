@@ -260,56 +260,70 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 
 	if (mode_ == CSearchDialog::search_mode::local) {
 		CLocalSearchFileData const& entry = localFileData_[index];
-		if (!column)
+		if (!column) {
 			return entry.name;
-		else if (column == 1)
+		}
+		else if (column == 1) {
 			return entry.path.GetPath();
+		}
 		else if (column == 2) {
-			if (entry.is_dir() || entry.size < 0)
+			if (entry.is_dir() || entry.size < 0) {
 				return wxString();
-			else
+			}
+			else {
 				return CSizeFormat::Format(entry.size);
+			}
 		}
 		else if (column == 3) {
 			auto & data = m_fileData[index];
 			if (data.fileType.empty()) {
-				data.fileType = GetType(entry.name, entry.is_dir()).ToStdWstring();
+				data.fileType = GetType(entry.name, entry.is_dir());
 			}
 
 			return data.fileType;
 		}
-		else if (column == 4)
+		else if (column == 4) {
 			return CTimeFormat::Format(entry.time);
+		}
 	}
 	else {
 		CRemoteSearchFileData const& entry = remoteFileData_[index];
-		if (!column)
+		if (!column) {
 			return entry.name;
-		else if (column == 1)
+		}
+		else if (column == 1) {
 			return entry.path.GetPath();
+		}
 		else if (column == 2) {
-			if (entry.is_dir() || entry.size < 0)
+			if (entry.is_dir() || entry.size < 0) {
 				return wxString();
-			else
+			}
+			else {
 				return CSizeFormat::Format(entry.size);
+			}
 		}
 		else if (column == 3) {
 			auto & data = m_fileData[index];
 			if (data.fileType.empty()) {
-				if (entry.path.GetType() == VMS)
-					data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir()).ToStdWstring();
-				else
-					data.fileType = GetType(entry.name, entry.is_dir()).ToStdWstring();
+				if (entry.path.GetType() == VMS) {
+					data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir());
+				}
+				else {
+					data.fileType = GetType(entry.name, entry.is_dir());
+				}
 			}
 
 			return data.fileType;
 		}
-		else if (column == 4)
+		else if (column == 4) {
 			return CTimeFormat::Format(entry.time);
-		else if (column == 5)
+		}
+		else if (column == 5) {
 			return *entry.permissions;
-		else if (column == 6)
+		}
+		else if (column == 6) {
 			return *entry.ownerGroup;
+		}
 	}
 	return wxString();
 }

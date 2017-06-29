@@ -1583,8 +1583,9 @@ bool CLocalListView::CanStartComparison()
 wxString CLocalListView::GetItemText(int item, unsigned int column)
 {
 	CLocalFileData *data = GetData(item);
-	if (!data)
+	if (!data) {
 		return wxString();
+	}
 
 	if (!column) {
 #ifdef __WXMSW__
@@ -1594,20 +1595,25 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 #endif
 	}
 	else if (column == 1) {
-		if (data->size < 0)
+		if (data->size < 0) {
 			return wxString();
-		else
+		}
+		else {
 			return CSizeFormat::Format(data->size);
+		}
 	}
 	else if (column == 2) {
-		if (!item && m_hasParent)
+		if (!item && m_hasParent) {
 			return wxString();
+		}
 
-		if (data->comparison_flags == fill)
+		if (data->comparison_flags == fill) {
 			return wxString();
+		}
 
-		if (data->fileType.empty())
-			data->fileType = GetType(data->name, data->dir, m_dir.GetPath()).ToStdWstring();
+		if (data->fileType.empty()) {
+			data->fileType = GetType(data->name, data->dir, m_dir.GetPath());
+		}
 
 		return data->fileType;
 	}

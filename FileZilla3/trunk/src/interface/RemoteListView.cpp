@@ -2395,55 +2395,62 @@ wxListItemAttr* CRemoteListView::OnGetItemAttr(long item) const
 wxString CRemoteListView::GetItemText(int item, unsigned int column)
 {
 	int index = GetItemIndex(item);
-	if (index == -1)
+	if (index == -1) {
 		return wxString();
+	}
 
-	if (!column)
-	{
-		if ((unsigned int)index == m_pDirectoryListing->GetCount())
+	if (!column) {
+		if ((unsigned int)index == m_pDirectoryListing->GetCount()) {
 			return _T("..");
-		else if ((unsigned int)index < m_pDirectoryListing->GetCount())
+		}
+		else if ((unsigned int)index < m_pDirectoryListing->GetCount()) {
 			return (*m_pDirectoryListing)[index].name;
-		else
+		}
+		else {
 			return wxString();
+		}
 	}
-	if (!item)
+	if (!item) {
 		return wxString(); //.. has no attributes
-
-	if ((unsigned int)index >= m_pDirectoryListing->GetCount())
-		return wxString();
-
-	if (column == 1)
-	{
-		const CDirentry& entry = (*m_pDirectoryListing)[index];
-		if (entry.is_dir() || entry.size < 0)
-			return wxString();
-		else
-			return CSizeFormat::Format(entry.size);
 	}
-	else if (column == 2)
-	{
+
+	if ((unsigned int)index >= m_pDirectoryListing->GetCount()) {
+		return wxString();
+	}
+
+	if (column == 1) {
+		const CDirentry& entry = (*m_pDirectoryListing)[index];
+		if (entry.is_dir() || entry.size < 0) {
+			return wxString();
+		}
+		else {
+			return CSizeFormat::Format(entry.size);
+		}
+	}
+	else if (column == 2) {
 		CGenericFileData& data = m_fileData[index];
-		if (data.fileType.empty())
-		{
+		if (data.fileType.empty()) {
 			const CDirentry& entry = (*m_pDirectoryListing)[index];
-			if (m_pDirectoryListing->path.GetType() == VMS)
-				data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir()).ToStdWstring();
-			else
-				data.fileType = GetType(entry.name, entry.is_dir()).ToStdWstring();
+			if (m_pDirectoryListing->path.GetType() == VMS) {
+				data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir());
+			}
+			else {
+				data.fileType = GetType(entry.name, entry.is_dir());
+			}
 		}
 
 		return data.fileType;
 	}
-	else if (column == 3)
-	{
+	else if (column == 3) {
 		const CDirentry& entry = (*m_pDirectoryListing)[index];
 		return CTimeFormat::Format(entry.time);
 	}
-	else if (column == 4)
+	else if (column == 4) {
 		return *(*m_pDirectoryListing)[index].permissions;
-	else if (column == 5)
+	}
+	else if (column == 5) {
 		return *(*m_pDirectoryListing)[index].ownerGroup;
+	}
 	return wxString();
 }
 
