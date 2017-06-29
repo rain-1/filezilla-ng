@@ -574,11 +574,11 @@ template<class CFileData> std::wstring CFileListCtrl<CFileData>::GetType(std::ws
 		return m_genericTypes[genericTypes::directory];
 	}
 
-	int pos = name.Find('.', true);
-	if (pos < 1 || !name[pos + 1]) { // Starts or ends with dot
+	size_t pos = name.rfind('.');
+	if (pos == std::wstring::npos || pos < 1 || !name[pos + 1]) { // No dot or starts or ends with dot
 		return m_genericTypes[genericTypes::file];
 	}
-	wxString ext = name.Mid(pos + 1);
+	wxString ext = name.substr(pos + 1);
 	wxString lower_ext = ext.Lower();
 
 	auto typeIter = m_fileTypeMap.find(lower_ext);
