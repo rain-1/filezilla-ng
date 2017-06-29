@@ -591,15 +591,15 @@ template<class CFileData> std::wstring CFileListCtrl<CFileData>::GetType(std::ws
 		wxString desc = ext;
 		desc += _T("-");
 		desc += _("file");
-		m_fileTypeMap[ext] = desc;
-		return desc;
+		m_fileTypeMap[ext] = desc.ToStdWstring();
+		return desc.ToStdWstring();
 	}
 
 	wxString desc;
 	if (pType->GetDescription(&desc) && !desc.empty()) {
 		delete pType;
 		m_fileTypeMap[ext] = desc.ToStdWstring();
-		return desc;
+		return desc.ToStdWstring();
 	}
 	delete pType;
 
@@ -607,7 +607,7 @@ template<class CFileData> std::wstring CFileListCtrl<CFileData>::GetType(std::ws
 	desc += _T("-");
 	desc += _("file");
 	m_fileTypeMap[lower_ext] = desc.ToStdWstring();
-	return desc;
+	return desc.ToStdWstring();
 #endif
 }
 
@@ -618,12 +618,14 @@ template<class CFileData> void CFileListCtrl<CFileData>::ScrollTopItem(int item)
 
 template<class CFileData> void CFileListCtrl<CFileData>::OnPostScroll()
 {
-	if (!IsComparing())
+	if (!IsComparing()) {
 		return;
+	}
 
 	CComparableListing* pOther = GetOther();
-	if (!pOther)
+	if (!pOther) {
 		return;
+	}
 
 	pOther->ScrollTopItem(GetTopItem());
 }
@@ -639,8 +641,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnExitComparisonMode()
 	m_indexMapping.clear();
 	m_indexMapping.swap(m_originalIndexMapping);
 
-	for (unsigned int i = 0; i < m_fileData.size() - 1; i++)
+	for (unsigned int i = 0; i < m_fileData.size() - 1; ++i) {
 		m_fileData[i].comparison_flags = normal;
+	}
 
 	SetItemCount(m_indexMapping.size());
 
@@ -666,17 +669,20 @@ template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRememberSelec
 {
 	m_comparisonSelections.clear();
 
-	if (GetItemCount() != (int)m_indexMapping.size())
+	if (GetItemCount() != (int)m_indexMapping.size()) {
 		return;
+	}
 
 	int focus = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
 	if (focus != -1) {
 		SetItemState(focus, 0, wxLIST_STATE_FOCUSED);
 		int index = m_indexMapping[focus];
-		if (m_fileData[index].comparison_flags == fill)
+		if (m_fileData[index].comparison_flags == fill) {
 			focus = -1;
-		else
+		}
+		else {
 			focus = index;
+		}
 	}
 	m_comparisonSelections.push_back(focus);
 
