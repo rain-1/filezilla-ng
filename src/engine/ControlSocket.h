@@ -27,6 +27,9 @@ public:
 
 	virtual int SubcommandResult(int, COpData const&) { return FZ_REPLY_INTERNALERROR; }
 
+	// Called just prior to destructing the operation. Do not push a new operation here.
+	virtual int Reset(int result) { return result; }
+
 	int opState{};
 	Command const opId;
 

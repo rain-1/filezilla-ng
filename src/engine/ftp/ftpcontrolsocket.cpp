@@ -378,12 +378,6 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 			}
 		}
 	}
-	if (!operations_.empty() && operations_.back()->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
-		auto & data = static_cast<CFtpDeleteOpData &>(*operations_.back());
-		if (data.needSendListing_) {
-			SendDirectoryListingNotification(data.path_, false, false);
-		}
-	}
 
 	if (!operations_.empty() && operations_.back()->opId == PrivCommand::rawtransfer &&
 		nErrorCode != FZ_REPLY_OK)

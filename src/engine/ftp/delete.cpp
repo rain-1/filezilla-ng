@@ -92,3 +92,13 @@ int CFtpDeleteOpData::SubcommandResult(int prevResult, COpData const&)
 		return FZ_REPLY_INTERNALERROR;
 	}
 }
+
+int CFtpDeleteOpData::Reset(int result)
+{
+	LogMessage(MessageType::Debug_Verbose, L"CFtpDeleteOpData::Reset(%d) in state %d", result, opState);
+
+	if (needSendListing_ && !(result & FZ_REPLY_DISCONNECTED)) {
+		controlSocket_.SendDirectoryListingNotification(path_, false, false);
+	}
+	return result;
+}
