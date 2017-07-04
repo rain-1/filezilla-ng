@@ -24,6 +24,8 @@ typedef std::map<std::string, std::string, HeaderCmp> Headers;
 class HttpRequest
 {
 public:
+	#define HEADER_NAME_CONTENT_LENGTH "Content-Length"
+
 	fz::uri uri_;
 	std::string verb_;
 	Headers headers_;
@@ -34,6 +36,21 @@ public:
 	// and update len with the amount written.
 	// Callback must return FZ_REPLY_CONTINUE or FZ_REPLY_ERROR
 	std::function<int(unsigned char* data, unsigned int &len)> data_request_;
+	
+	int64_t get_content_length() const
+	{
+		int64_t result = 0;
+		auto value = get_header(HEADER_NAME_CONTENT_LENGTH);
+		if (!value.empty()) {
+			result = fz::to_integral<int64_t>(value);
+		}
+		return result;
+	}
+
+	void set_content_length(int64_t length)
+	{
+		headers_[HEADER_NAME_CONTENT_LENGTH] = fz::to_string(length);
+	}
 
 	std::string get_header(std::string const& key) const
 	{
@@ -94,14 +111,17 @@ protected:
 	virtual void OnReceive() override;
 	virtual int OnSend() override;
 	
-	virtual int ResetOperation(int nErrorCode) override;
-
 	virtual void ResetSocket() override;
 	
 	friend class CProtocolOpData<CHttpControlSocket>;
 	friend class CHttpFileTransferOpData;
 	friend class CHttpInternalConnectOpData;
 	friend class CHttpRequestOpData;
+private:
+	std::wstring	connected_host_;
+	unsigned short	connected_port_{};
+	bool			connected_tls_{};
+	bool			is_reusing_ = {};
 };
 
 typedef CProtocolOpData<CHttpControlSocket> CHttpOpData;

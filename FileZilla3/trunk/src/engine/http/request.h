@@ -11,7 +11,8 @@ enum requestStates
 	request_wait_connect,
 	request_send_header,
 	request_send,
-	request_read
+	request_read,
+	request_done
 };
 
 class CHttpRequestOpData final : public COpData, public CHttpOpData
@@ -27,6 +28,7 @@ public:
 	virtual int Send() override;
 	virtual int ParseResponse() override;
 	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) override;
+	virtual int Reset(int result) override;
 
 	int OnReceive();
 	int OnClose();

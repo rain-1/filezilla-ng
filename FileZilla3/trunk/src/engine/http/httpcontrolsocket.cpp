@@ -70,7 +70,24 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 void CHttpControlSocket::OnReceive()
 {
 	if (operations_.empty() || operations_.back()->opId != PrivCommand::http_request) {
-		LogMessage(MessageType::Debug_Warning, L"OnReceive called while not processing http request");
+		uint8_t buffer;
+		int error{};
+		int read = m_pBackend->Read(&buffer, 1, error);
+		if (!read) {
+			LogMessage(MessageType::Debug_Warning, L"Idle socket got closed");
+			ResetSocket();
+		}
+		else if (read == -1) {
+			if (error != EAGAIN) {
+				LogMessage(MessageType::Debug_Warning, L"OnReceive called while not processing http request");
+				ResetSocket();
+			}
+		}
+		else if (read) {
+			LogMessage(MessageType::Debug_Warning, L"Server sent data while not in an active HTTP request");
+			ResetSocket();
+		}
+		return;
 	}
 
 	int res = static_cast<CHttpRequestOpData&>(*operations_.back()).OnReceive();
@@ -144,35 +161,29 @@ void CHttpControlSocket::InternalConnect(std::wstring const& host, unsigned shor
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::InternalConnect()");
 
-	if (fz::get_address_type(host) == fz::address_type::unknown) {
-		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
+	if (Connected() && m_pBackend && host == connected_host_ && port == connected_port_ && tls == connected_tls_) {
+		LogMessage(MessageType::Debug_Verbose, L"Reusing an existing connection");
+		is_reusing_ = true;
 	}
-
-	Push(std::make_unique<CHttpInternalConnectOpData>(*this, ConvertDomainName(host), port, tls));
-}
-
-int CHttpControlSocket::ResetOperation(int nErrorCode)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::ResetOperation(%d)", nErrorCode);
-
-	if (!operations_.empty() && operations_.back()->opId == PrivCommand::http_request) {
-		if (m_pBackend) {
-			if (nErrorCode == FZ_REPLY_OK) {
-				LogMessage(MessageType::Status, _("Disconnected from server"));
-			}
-			else {
-				LogMessage(MessageType::Error, _("Disconnected from server"));
-			}
-		}
+	else {
 		ResetSocket();
+		connected_host_ = host;
+		connected_port_ = port;
+		connected_tls_ = tls;
+		Push(std::make_unique<CHttpInternalConnectOpData>(*this, ConvertDomainName(host), port, tls));
+		is_reusing_ = false;
 	}
-
-	return CControlSocket::ResetOperation(nErrorCode);
 }
 
 void CHttpControlSocket::OnClose(int error)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::OnClose(%d)", error);
+
+	if (operations_.empty() || (operations_.back()->opId != PrivCommand::http_connect && operations_.back()->opId != PrivCommand::http_request)) {
+		LogMessage(MessageType::Debug_Warning, L"Idle socket got closed");
+		ResetSocket();
+		return;
+	}
 
 	if (error) {
 		LogMessage(MessageType::Error, _("Disconnected from server: %s"), fz::socket::error_description(error));
@@ -192,6 +203,7 @@ void CHttpControlSocket::OnClose(int error)
 
 void CHttpControlSocket::ResetSocket()
 {
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::ResetSocket()");
 	if (m_pTlsSocket) {
 		if (m_pTlsSocket != m_pBackend) {
 			delete m_pTlsSocket;
