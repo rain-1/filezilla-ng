@@ -136,7 +136,9 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			UnlockCache();
 		}
 		oldOperation = std::move(operations_.back());
-		operations_.pop_back();		
+		operations_.pop_back();
+
+		oldOperation->Reset(nErrorCode);
 	}
 	if (!operations_.empty()) {
 		int ret;
@@ -1147,6 +1149,7 @@ int CRealControlSocket::DoConnect(std::wstring const& host, unsigned int port)
 
 int CRealControlSocket::DoClose(int nErrorCode)
 {
+	LogMessage(MessageType::Debug_Debug, L"CRealControlSocket::DoClose(%d)", nErrorCode);
 	ResetSocket();
 
 	return CControlSocket::DoClose(nErrorCode);

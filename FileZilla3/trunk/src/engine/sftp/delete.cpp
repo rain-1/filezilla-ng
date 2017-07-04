@@ -65,3 +65,13 @@ int CSftpDeleteOpData::SubcommandResult(int, COpData const&)
 	LogMessage(MessageType::Debug_Verbose, L"CSftpDeleteOpData::SubcommandResult() in state %d", opState);
 	return FZ_REPLY_INTERNALERROR;
 }
+
+int CSftpDeleteOpData::Reset(int result)
+{
+	LogMessage(MessageType::Debug_Verbose, L"CSftpDeleteOpData::Reset(%d) in state %d", result, opState);
+
+	if (needSendListing_ && !(result & FZ_REPLY_DISCONNECTED)) {
+		controlSocket_.SendDirectoryListingNotification(path_, false, false);
+	}
+	return result;
+}

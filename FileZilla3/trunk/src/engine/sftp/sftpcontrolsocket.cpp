@@ -511,12 +511,6 @@ int CSftpControlSocket::ResetOperation(int nErrorCode)
 			nErrorCode |= FZ_REPLY_CRITICALERROR;
 		}
 	}
-	if (!operations_.empty() && operations_.back()->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
-		auto &data = static_cast<CSftpDeleteOpData &>(*operations_.back());
-		if (data.needSendListing_) {
-			SendDirectoryListingNotification(data.path_, false, false);
-		}
-	}
 
 	return CControlSocket::ResetOperation(nErrorCode);
 }

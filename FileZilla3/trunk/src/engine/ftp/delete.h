@@ -16,6 +16,7 @@ public:
 	virtual int Send() override;
 	virtual int ParseResponse() override;
 	virtual int SubcommandResult(int prevResult, COpData const&) override;
+	virtual int Reset(int result) override;
 
 	CServerPath path_;
 	std::deque<std::wstring> files_;
