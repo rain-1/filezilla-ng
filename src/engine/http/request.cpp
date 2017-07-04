@@ -8,18 +8,25 @@
 
 int CHttpRequestOpData::Send()
 {
-	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::Send() in state %d", opState);
+	LogMessage((opState == request_send) ? MessageType::Debug_Debug : MessageType::Debug_Verbose, L"CHttpRequestOpData::Send() in state %d", opState);
 
 	switch (opState) {
 	case request_init:
 		{
+			if (request_.verb_.empty()) {
+				LogMessage(MessageType::Debug_Warning, L"No request verb");
+				return FZ_REPLY_INTERNALERROR;
+			}
 			std::string host_header = request_.uri_.host_;
 			if (request_.uri_.port_ != 0) {
 				host_header += ':';
 				host_header += fz::to_string(request_.uri_.port_);
 			}
 			request_.headers_["Host"] = host_header;
-			request_.headers_["Connection"] = "close";
+			auto pos = request_.headers_.find("Connection");
+			if (pos == request_.headers_.end()) {
+				request_.headers_["Connection"] = "close";
+			}
 			request_.headers_["User-Agent"] = fz::replaced_substrings(PACKAGE_STRING, " ", "/");
 
 			auto const cl = request_.get_header("Content-Length");
@@ -32,8 +39,8 @@ int CHttpRequestOpData::Send()
 				dataToSend_ = static_cast<uint64_t>(requestContentLength);
 			}
 
-			if ((dataToSend_ > 0) != (request_.data_request_ != 0)) {
-				LogMessage(MessageType::Debug_Warning, L"dataToSend_ > 0 does not match request_.data_request_ != 0");
+			if ((dataToSend_ > 0) && !request_.data_request_) {
+				LogMessage(MessageType::Debug_Warning, L"(dataToSend_ > 0) && !request_.data_request_");
 				return FZ_REPLY_INTERNALERROR;
 			}
 
@@ -41,16 +48,24 @@ int CHttpRequestOpData::Send()
 			response_.headers_.clear();
 
 			opState = request_wait_connect;
+
 			controlSocket_.InternalConnect(fz::to_wstring_from_utf8(request_.uri_.host_), request_.uri_.port_, request_.uri_.scheme_ == "https");
+			if (controlSocket_.is_reusing_) {
+				opState = request_send_header;
+			}
 			return FZ_REPLY_CONTINUE;
 		}
 	case request_send_header:
 		{
 			// Assemble request and headers
-			std::string command = fz::sprintf("%s %s HTTP/1.1\r\n", request_.verb_, request_.uri_.get_request());
+			std::string command = fz::sprintf("%s %s HTTP/1.1", request_.verb_, request_.uri_.get_request());
+			LogMessage(MessageType::Command, "%s", command);
+			command += "\r\n";
 
 			for (auto const& header : request_.headers_) {
-				command += fz::sprintf("%s: %s\r\n", header.first, header.second);
+				std::string line = fz::sprintf("%s: %s", header.first, header.second);
+				LogMessage(MessageType::Debug_Info, "%s", line);
+				command += line + "\r\n";
 			}
 
 			command += "\r\n";
@@ -62,7 +77,11 @@ int CHttpRequestOpData::Send()
 				opState = request_read;
 			}
 
-			return controlSocket_.Send(command.c_str(), command.size());
+			auto result = controlSocket_.Send(command.c_str(), command.size());
+			if (result == FZ_REPLY_WOULDBLOCK && opState == request_send && !controlSocket_.sendBufferSize_) {
+				result = FZ_REPLY_CONTINUE;
+			}
+			return result;
 		}
 	case request_send:
 		{
@@ -141,7 +160,7 @@ int CHttpRequestOpData::SubcommandResult(int, COpData const&)
 
 int CHttpRequestOpData::OnReceive()
 {
-	while (true) {
+	while (controlSocket_.socket_) {
 		const fz::socket::socket_state state = controlSocket_.socket_->get_state();
 		if (state != fz::socket::connected && state != fz::socket::closing) {
 			return FZ_REPLY_WOULDBLOCK;
@@ -193,17 +212,23 @@ int CHttpRequestOpData::OnReceive()
 		else {
 			if (!read) {
 				assert(!m_recvBufferPos);
-				return FZ_REPLY_OK;
+
+				if (responseContentLength_ != -1 && receivedData_ != responseContentLength_) {
+					return FZ_REPLY_ERROR;
+				}
+				else {
+					return FZ_REPLY_OK;
+				}
 			}
 			else {
 				int res = ProcessData(recv_buffer_.get(), m_recvBufferPos);
 				if (res != FZ_REPLY_CONTINUE) {
 					return res;
-				}		
+				}
 				m_recvBufferPos = 0;
 			}
 		}
-	} while (controlSocket_.socket_);
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -214,8 +239,7 @@ int CHttpRequestOpData::ParseHeader()
 
 	// Parse the HTTP header.
 	// We do just the neccessary parsing and silently ignore most header fields
-	// Redirects are supported though if the server sends the Location field.
-
+	// The calling operation is responsible for things like redirect parsing.
 	for (;;) {
 		// Find line ending
 		unsigned int i = 0;
@@ -275,10 +299,6 @@ int CHttpRequestOpData::ParseHeader()
 					return res;
 				}
 
-				if (!m_recvBufferPos) {
-					return FZ_REPLY_WOULDBLOCK;
-				}
-
 				if (!got_header_) {
 					// In case we got 100 Continue
 					continue;
@@ -288,6 +308,16 @@ int CHttpRequestOpData::ParseHeader()
 					return ParseChunkedData();
 				}
 				else {
+					if (!m_recvBufferPos) {
+						if (!responseContentLength_) {
+							opState = request_done;
+							return FZ_REPLY_OK;
+						}
+						else {
+							return FZ_REPLY_WOULDBLOCK;
+						}
+					}
+
 					int res = ProcessData(recv_buffer_.get(), m_recvBufferPos);
 					if (res != FZ_REPLY_CONTINUE) {
 						return res;
@@ -424,6 +454,7 @@ int CHttpRequestOpData::ParseChunkedData()
 		else if (chunk_data_.getTrailer) {
 			if (!i) {
 				// We're done
+				opState = request_done;
 				return FZ_REPLY_OK;
 			}
 
@@ -482,6 +513,11 @@ int CHttpRequestOpData::ProcessData(unsigned char* data, unsigned int len)
 		res = response_.on_data_(data, len);
 	}
 
+	if (res == FZ_REPLY_CONTINUE && receivedData_ == responseContentLength_) {
+		opState = request_done;
+		res = FZ_REPLY_OK;
+	}
+
 	return res;
 }
 
@@ -513,4 +549,27 @@ int CHttpRequestOpData::OnClose()
 	}
 
 	return FZ_REPLY_OK;
+}
+
+int CHttpRequestOpData::Reset(int result)
+{
+	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::Reset(%d) in state %d", result, opState);
+
+	if (result != FZ_REPLY_OK) {
+		controlSocket_.ResetSocket();
+	}
+	else if (opState != request_done) {
+		controlSocket_.ResetSocket();
+	}
+	else if (response_.get_header("Connection") == "close" || request_.get_header("Connection") == "close") {
+		if (request_.get_header("Connection") != "close") {
+			LogMessage(MessageType::Debug_Verbose, L"Server closed connection despite request to use keep-alive");
+		}
+		controlSocket_.ResetSocket();
+	}
+	else {
+		controlSocket_.send_event<fz::socket_event>(controlSocket_.m_pBackend, fz::socket_event_flag::read, 0);
+	}
+
+	return result;
 }
