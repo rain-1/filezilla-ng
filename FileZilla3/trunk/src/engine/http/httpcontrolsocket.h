@@ -3,6 +3,7 @@
 
 #include "ControlSocket.h"
 #include "uri.h"
+#include "httpheaders.h"
 
 #include <libfilezilla/file.hpp>
 
@@ -11,16 +12,6 @@ auto const http_request = Command::private1;
 auto const http_connect = Command::private2;
 }
 
-struct HeaderCmp
-{
-	template<typename T>
-	bool operator()(T const& lhs, T const& rhs) const {
-		return fz::str_tolower_ascii(lhs) < fz::str_tolower_ascii(rhs);
-	}
-};
-
-typedef std::map<std::string, std::string, HeaderCmp> Headers;
-
 class HttpRequest
 {
 public:
@@ -28,7 +19,7 @@ public:
 
 	fz::uri uri_;
 	std::string verb_;
-	Headers headers_;
+	HttpHeaders headers_;
 
 	// Gets called for the request body data.
 	// If set, the headers_ must include a valid Content-Length.
@@ -66,7 +57,7 @@ class HttpResponse
 {
 public:
 	unsigned int code_{};
-	Headers headers_;
+	HttpHeaders headers_;
 
 	// Called once the complete header has been received.
 	std::function<int()> on_header_;
@@ -82,6 +73,14 @@ public:
 			return it->second;
 		}
 		return std::string();
+	}
+
+	bool success() const {
+		return code_ >= 200 && code_ < 300;
+	}
+
+	bool code_prohobits_body() const {
+		return (code_ >= 100 && code_ < 200) || code_ == 304 || code_ == 204;
 	}
 };
 
