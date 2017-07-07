@@ -326,7 +326,7 @@ int CFileZillaEnginePrivate::List(CListCommand const& command)
 	bool const avoid = (command.GetFlags() & LIST_FLAG_AVOID) != 0;
 
 	if (!refresh && !command.GetPath().empty()) {
-		CServer const& server =m_pControlSocket->GetCurrentServer();
+		CServer const& server = m_pControlSocket->GetCurrentServer();
 		if (server) {
 			CServerPath path(path_cache_.Lookup(server, command.GetPath(), command.GetSubDir()));
 			if (path.empty() && command.GetSubDir().empty()) {

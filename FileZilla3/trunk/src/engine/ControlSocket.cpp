@@ -358,6 +358,7 @@ bool CControlSocket::ParsePwdReply(std::wstring reply, bool unquoted, CServerPat
 
 int CControlSocket::CheckOverwriteFile()
 {
+	LogMessage(MessageType::Debug_Debug, L"CControlSocket::CheckOverwriteFile()");
 	if (operations_.empty() || operations_.back()->opId != Command::transfer) {
 		LogMessage(MessageType::Debug_Info, L"CheckOverwriteFile called without active transfer.");
 		return FZ_REPLY_INTERNALERROR;
