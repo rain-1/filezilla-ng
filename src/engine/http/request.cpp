@@ -64,7 +64,7 @@ int CHttpRequestOpData::Send()
 
 			for (auto const& header : request_.headers_) {
 				std::string line = fz::sprintf("%s: %s", header.first, header.second);
-				LogMessage(MessageType::Debug_Info, "%s", line);
+				LogMessage(MessageType::Command, "%s", line);
 				command += line + "\r\n";
 			}
 
@@ -222,10 +222,10 @@ int CHttpRequestOpData::OnReceive()
 			}
 			else {
 				int res = ProcessData(recv_buffer_.get(), m_recvBufferPos);
+				m_recvBufferPos = 0;
 				if (res != FZ_REPLY_CONTINUE) {
 					return res;
 				}
-				m_recvBufferPos = 0;
 			}
 		}
 	}
@@ -319,10 +319,10 @@ int CHttpRequestOpData::ParseHeader()
 					}
 
 					int res = ProcessData(recv_buffer_.get(), m_recvBufferPos);
+					m_recvBufferPos = 0;
 					if (res != FZ_REPLY_CONTINUE) {
 						return res;
 					}
-					m_recvBufferPos = 0;
 					return FZ_REPLY_WOULDBLOCK;
 				}
 			}
@@ -386,6 +386,19 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 	int res = FZ_REPLY_CONTINUE;
 	if (response_.on_header_) {
 		res = response_.on_header_();
+	}
+
+	if (res == FZ_REPLY_CONTINUE) {
+		if (request_.verb_ == "HEAD" || response_.code_prohobits_body()) {
+			if (m_recvBufferPos) {
+				LogMessage(MessageType::Error, _("Malformed response: Server sent response body with a request verb or response code that disallows a response body."));
+				return FZ_REPLY_ERROR;
+			}
+			else {
+				opState = request_done;
+				return FZ_REPLY_OK;
+			}
+		}
 	}
 
 	return res;
@@ -455,6 +468,12 @@ int CHttpRequestOpData::ParseChunkedData()
 			if (!i) {
 				// We're done
 				opState = request_done;
+
+				len -= 2;
+				p += 2;
+				memmove(recv_buffer_.get(), p, len);
+				m_recvBufferPos = len;
+
 				return FZ_REPLY_OK;
 			}
 
@@ -565,6 +584,10 @@ int CHttpRequestOpData::Reset(int result)
 		if (request_.get_header("Connection") != "close") {
 			LogMessage(MessageType::Debug_Verbose, L"Server closed connection despite request to use keep-alive");
 		}
+		controlSocket_.ResetSocket();
+	}
+	else if (m_recvBufferPos) {
+		LogMessage(MessageType::Debug_Verbose, L"Closing connection, the receive buffer isn't empty but at %d", m_recvBufferPos);
 		controlSocket_.ResetSocket();
 	}
 	else {
