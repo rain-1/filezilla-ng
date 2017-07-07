@@ -348,8 +348,9 @@ void CExternalIPResolver::OnHeader()
 		memmove(m_pRecvBuffer, m_pRecvBuffer + i + 2, m_recvBufferPos - i - 2);
 		m_recvBufferPos -= i + 2;
 
-		if (!m_recvBufferPos)
+		if (!m_recvBufferPos) {
 			break;
+		}
 	}
 }
 
