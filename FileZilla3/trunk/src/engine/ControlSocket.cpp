@@ -1135,6 +1135,8 @@ int CRealControlSocket::DoConnect(std::wstring const& host, unsigned int port)
 		LogMessage(MessageType::Status, _("Resolving address of %s"), real_host);
 	}
 
+	m_closed = false;
+
 	real_host = ConvertDomainName(real_host);
 	int res = socket_->connect(fz::to_native(real_host), real_port);
 
