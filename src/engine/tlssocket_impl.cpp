@@ -529,7 +529,7 @@ void CTlsSocketImpl::OnSend()
 }
 
 bool CTlsSocketImpl::CopySessionData(const CTlsSocketImpl* pPrimarySocket)
-{return true;
+{
 	datum_holder d;
 	int res = gnutls_session_get_data2(pPrimarySocket->m_session, &d);
 	if (res) {
