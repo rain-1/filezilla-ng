@@ -1341,7 +1341,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 	return true;
 }
 
-void CControlSocket::CreateLocalDir(std::wstring const & local_file)
+void CControlSocket::CreateLocalDir(std::wstring const& local_file)
 {
 	std::wstring file;
 	CLocalPath local_path(local_file, &file);
