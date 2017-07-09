@@ -2,10 +2,10 @@
 #define FILEZILLA_ENGINE_HTTP_HTTPCONTROLSOCKET_HEADER
 
 #include "ControlSocket.h"
-#include "uri.h"
 #include "httpheaders.h"
 
 #include <libfilezilla/file.hpp>
+#include <libfilezilla/uri.hpp>
 
 namespace PrivCommand {
 auto const http_request = Command::private1;

@@ -14,7 +14,7 @@
 #include "window_state_manager.h"
 #include "xrc_helper.h"
 
-#include "uri.h"
+#include <libfilezilla/uri.hpp>
 
 #include <wx/clipbrd.h>
 

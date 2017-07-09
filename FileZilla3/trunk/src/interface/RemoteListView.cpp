@@ -19,14 +19,13 @@
 #include "sizeformatting.h"
 #include "timeformatting.h"
 
-#include "uri.h"
-
 #include <wx/clipbrd.h>
 #include <wx/dcclient.h>
 
 #include <algorithm>
 
 #include <libfilezilla/file.hpp>
+#include <libfilezilla/uri.hpp>
 
 #ifdef __WXMSW__
 #include "shellapi.h"
