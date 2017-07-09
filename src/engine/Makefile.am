@@ -61,8 +61,7 @@ libengine_a_SOURCES = \
 		sizeformatting_base.cpp \
 		socket.cpp \
 		tlssocket.cpp \
-		tlssocket_impl.cpp \
-		uri.cpp
+		tlssocket_impl.cpp
 
 noinst_HEADERS = backend.h \
 		ControlSocket.h \

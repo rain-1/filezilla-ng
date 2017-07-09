@@ -1,8 +1,7 @@
 #include <filezilla.h>
 
-#include "uri.h"
-
 #include <libfilezilla/format.hpp>
+#include <libfilezilla/uri.hpp>
 
 #include <assert.h>
 

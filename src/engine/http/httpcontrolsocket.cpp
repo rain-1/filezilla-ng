@@ -8,11 +8,11 @@
 #include "internalconnect.h"
 #include "request.h"
 #include "tlssocket.h"
-#include "uri.h"
 
 #include <libfilezilla/file.hpp>
 #include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
+#include <libfilezilla/uri.hpp>
 
 CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate & engine)
 	: CRealControlSocket(engine)

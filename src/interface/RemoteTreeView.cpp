@@ -14,7 +14,7 @@
 #include "remote_recursive_operation.h"
 #include "themeprovider.h"
 
-#include "uri.h"
+#include <libfilezilla/uri.hpp>
 
 #include <wx/clipbrd.h>
 
