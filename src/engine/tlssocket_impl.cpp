@@ -568,8 +568,6 @@ int CTlsSocketImpl::Handshake(const CTlsSocketImpl* pPrimarySocket, bool try_res
 
 	m_tlsState = CTlsSocket::TlsState::handshake;
 
-	fz::native_string hostname;
-
 	if (pPrimarySocket) {
 		if (!pPrimarySocket->m_session) {
 			m_pOwner->LogMessage(MessageType::Debug_Warning, L"Primary socket has no session");
@@ -592,14 +590,28 @@ int CTlsSocketImpl::Handshake(const CTlsSocketImpl* pPrimarySocket, bool try_res
 			}
 		}
 
-		hostname = pPrimarySocket->m_socket.peer_host();
+		hostname_ = pPrimarySocket->m_socket.peer_host();
+
+		int port, tmp;
+		port = m_socket.remote_port(tmp);
+		if (port <= 0) {
+			return FZ_REPLY_ERROR;
+		}
+		port_ = port;
 	}
 	else {
-		hostname = m_socket.peer_host();
+		hostname_ = m_socket.peer_host();
+
+		int port, tmp;
+		port = m_socket.remote_port(tmp);
+		if (port <= 0) {
+			return FZ_REPLY_ERROR;
+		}
+		port_ = port;
 	}
 
-	if (!hostname.empty() && fz::get_address_type(hostname) == fz::address_type::unknown) {
-		auto const utf8 = fz::to_utf8(hostname);
+	if (!hostname_.empty() && fz::get_address_type(hostname_) == fz::address_type::unknown) {
+		auto const utf8 = fz::to_utf8(hostname_);
 		if (!utf8.empty()) {
 			int res = gnutls_server_name_set(m_session, GNUTLS_NAME_DNS, utf8.c_str(), utf8.size());
 			if (res) {
@@ -1427,8 +1439,8 @@ int CTlsSocketImpl::VerifyCertificate()
 	int const algorithmWarnings = GetAlgorithmWarnings();
 
 	CCertificateNotification *pNotification = new CCertificateNotification(
-		m_pOwner->GetCurrentServer().GetHost(),
-		m_pOwner->GetCurrentServer().GetPort(),
+		fz::to_wstring(hostname_),
+		port_,
 		GetProtocolName(),
 		GetKeyExchange(),
 		GetCipherName(),
