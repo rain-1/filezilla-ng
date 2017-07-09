@@ -135,6 +135,10 @@ protected:
 
 	friend class CTlsSocket;
 	friend class CTlsSocketCallbacks;
+
+	fz::native_string hostname_;
+	unsigned int port_;
+
 };
 
 #endif
