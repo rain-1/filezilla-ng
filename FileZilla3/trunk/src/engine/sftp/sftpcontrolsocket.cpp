@@ -497,24 +497,6 @@ void CSftpControlSocket::ProcessReply(int result, std::wstring const& reply)
 		}
 	}
 }
-
-int CSftpControlSocket::ResetOperation(int nErrorCode)
-{
-	LogMessage(MessageType::Debug_Verbose, L"CSftpControlSocket::ResetOperation(%d)", nErrorCode);
-
-	if (!operations_.empty() && operations_.back()->opId == Command::connect) {
-		auto &data = static_cast<CSftpConnectOpData &>(*operations_.back());
-		if (data.opState == connect_init && (nErrorCode & FZ_REPLY_CANCELED) != FZ_REPLY_CANCELED) {
-			LogMessage(MessageType::Error, _("fzsftp could not be started"));
-		}
-		if (data.criticalFailure) {
-			nErrorCode |= FZ_REPLY_CRITICALERROR;
-		}
-	}
-
-	return CControlSocket::ResetOperation(nErrorCode);
-}
-
 void CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
 									std::wstring const& remoteFile, bool download,
 									CFileTransferCommand::t_transferSettings const& transferSettings)

@@ -134,3 +134,16 @@ int CSftpConnectOpData::ParseResponse()
 
 	return FZ_REPLY_CONTINUE;
 }
+
+int CSftpConnectOpData::Reset(int result)
+{
+	LogMessage(MessageType::Debug_Verbose, L"CSftpConnectOpData::Reset(%d) in state %d", result, opState);
+
+	if (opState == connect_init && (result & FZ_REPLY_CANCELED) != FZ_REPLY_CANCELED) {
+		LogMessage(MessageType::Error, _("fzsftp could not be started"));
+	}
+	if (criticalFailure) {
+		result |= FZ_REPLY_CRITICALERROR;
+	}
+	return result;
+}

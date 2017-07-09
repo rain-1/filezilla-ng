@@ -23,6 +23,7 @@ public:
 
 	virtual int Send() override;
 	virtual int ParseResponse() override;
+	virtual int Reset(int result) override;
 
 	std::wstring lastChallenge;
 	CInteractiveLoginNotification::type lastChallengeType{ CInteractiveLoginNotification::interactive };

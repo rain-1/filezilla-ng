@@ -42,8 +42,6 @@ protected:
 
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED | FZ_REPLY_ERROR) override;
 
-	virtual int ResetOperation(int nErrorCode) override;
-
 	void ProcessReply(int result, std::wstring const& reply);
 
 	int SendCommand(std::wstring const& cmd, std::wstring const& show = std::wstring());
