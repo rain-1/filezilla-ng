@@ -18,6 +18,7 @@ dist_xrc_DATA = \
 	xrc/netconfwizard.xrc \
 	xrc/settings.xrc \
 	xrc/sitemanager.xrc \
+	xrc/storj.xrc \
 	xrc/update.xrc
 
 resources16dir = $(pkgdatadir)/resources/16x16

@@ -16,7 +16,9 @@ enum ServerProtocol
 
 	S3, // Amazon S3 or compatible
 
-	MAX_VALUE = S3
+	STORJ,
+
+	MAX_VALUE = STORJ
 };
 
 enum ServerType

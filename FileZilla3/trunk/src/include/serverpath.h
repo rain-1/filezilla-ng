@@ -44,6 +44,7 @@ public:
 
 	bool HasParent() const;
 	CServerPath GetParent() const;
+	std::wstring GetFirstSegment() const;
 	std::wstring GetLastSegment() const;
 
 	CServerPath GetCommonParent(CServerPath const& path) const;

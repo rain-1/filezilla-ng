@@ -42,6 +42,7 @@ protected:
 	bool Save(pugi::xml_node element = pugi::xml_node(), wxTreeItemId treeId = wxTreeItemId());
 	bool SaveChild(pugi::xml_node element, wxTreeItemId child);
 	void SetCtrlState();
+	void SetLogonTypeCtrlState();
 	bool LoadDefaultSites();
 
 	void SetProtocol(ServerProtocol protocol);
@@ -89,6 +90,7 @@ protected:
 	void OnNewBookmark(wxCommandEvent&);
 	void OnBookmarkBrowse(wxCommandEvent&);
 	void OnKeyFileBrowse(wxCommandEvent&);
+	void OnGenerateEncryptionKey(wxCommandEvent&);
 
 	void SetControlVisibility(ServerProtocol protocol, LogonType type);
 

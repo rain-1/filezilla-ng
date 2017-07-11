@@ -24,11 +24,21 @@ static const t_protocolInfo protocolInfos[] = {
 	{ FTPS,         L"ftps",  true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true  },
 	{ FTPES,        L"ftpes", true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true  },
 	{ INSECURE_FTP, L"ftp",   false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true  },
-	{ S3,           L"s3",    true,  80,  false,  "S3 - Amazon Simple Storage Service",	                                    false },
+	{ S3,           L"s3",    true,  80,  false,  "S3 - Amazon Simple Storage Service",	                                false },
+	{ STORJ,        L"storj", true, 443,  true,  fztranslate_mark("Storj - Decentralized Cloud Storage"),                   false },
 	{ UNKNOWN,      L"",      false, 21,  false, "", false }
 };
 
-static std::vector<ServerProtocol> const defaultProtocols = { FTP, SFTP, FTPS, FTPES, INSECURE_FTP };
+static std::vector<ServerProtocol> const defaultProtocols = {
+	FTP,
+	SFTP,
+	FTPS,
+	FTPES,
+	INSECURE_FTP,
+#if ENABLE_STORJ
+	STORJ,
+#endif
+};
 
 static char const* const typeNames[SERVERTYPE_MAX] = {
 	fztranslate_mark("Default (Autodetect)"),

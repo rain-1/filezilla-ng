@@ -1,9 +1,9 @@
-#ifndef __FILEZILLAAPP_H__
-#define __FILEZILLAAPP_H__
-
-#include <list>
+#ifndef FILEZILLA_INTERFACE_FILEZILLAAPP_HEADER
+#define FILEZILLA_INTERFACE_FILEZILLAAPP_HEADER
 
 #include "local_path.h"
+
+#include <vector>
 
 class CWrapEngine;
 class CCommandLine;
@@ -24,6 +24,9 @@ public:
 	std::wstring GetSettingsFile(std::wstring const& name) const;
 
 	void CheckExistsFzsftp();
+#if ENABLE_STORJ
+	void CheckExistsFzstorj();
+#endif
 
 	void InitLocale();
 	bool SetLocale(int language);
@@ -40,6 +43,8 @@ public:
 	void AddStartupProfileRecord(std::string const& msg);
 
 protected:
+	void CheckExistsTool(std::wstring const& tool, std::vector<std::wstring> const& searchPaths, std::wstring const& env, int setting, wxString const& description);
+
 	bool InitDefaultsDir();
 	bool LoadResourceFiles();
 	bool LoadLocales();
@@ -69,4 +74,4 @@ protected:
 
 DECLARE_APP(CFileZillaApp)
 
-#endif //__FILEZILLAAPP_H__
+#endif

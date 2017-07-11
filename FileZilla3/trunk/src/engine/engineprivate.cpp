@@ -8,6 +8,9 @@
 #include "pathcache.h"
 #include "ratelimiter.h"
 #include "sftp/sftpcontrolsocket.h"
+#if ENABLE_STORJ
+#include "storj/storjcontrolsocket.h"
+#endif
 
 #include <libfilezilla/event_loop.hpp>
 
@@ -329,8 +332,14 @@ int CFileZillaEnginePrivate::List(CListCommand const& command)
 		CServer const& server = m_pControlSocket->GetCurrentServer();
 		if (server) {
 			CServerPath path(path_cache_.Lookup(server, command.GetPath(), command.GetSubDir()));
-			if (path.empty() && command.GetSubDir().empty()) {
-				path = command.GetPath();
+			if (path.empty()) {
+				if (command.GetSubDir().empty()) {
+					path = command.GetPath();
+				}
+				else if (server.GetProtocol() == STORJ) {
+                                        path = command.GetPath();
+                                        path.ChangePath(command.GetSubDir());
+                                }
 			}
 			if (!path.empty()) {
 				CDirectoryListing *pListing = new CDirectoryListing;
@@ -525,6 +534,11 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	case HTTPS:
 		m_pControlSocket = std::make_unique<CHttpControlSocket>(*this);
 		break;
+#if ENABLE_STORJ
+	case STORJ:
+		m_pControlSocket = std::make_unique<CStorjControlSocket>(*this);
+		break;
+#endif
 	default:
 		m_pLogging->LogMessage(MessageType::Debug_Warning, L"Not a valid protocol: %d", server.GetProtocol());
 		return FZ_REPLY_SYNTAXERROR|FZ_REPLY_DISCONNECTED;
@@ -860,8 +874,9 @@ void CTransferStatusManager::Reset()
 void CTransferStatusManager::Init(int64_t totalSize, int64_t startOffset, bool list)
 {
 	fz::scoped_lock lock(mutex_);
-	if (startOffset < 0)
+	if (startOffset < 0) {
 		startOffset = 0;
+	}
 
 	status_ = CTransferStatus(totalSize, startOffset, list);
 	currentOffset_ = 0;
@@ -870,8 +885,9 @@ void CTransferStatusManager::Init(int64_t totalSize, int64_t startOffset, bool l
 void CTransferStatusManager::SetStartTime()
 {
 	fz::scoped_lock lock(mutex_);
-	if (!status_)
+	if (!status_) {
 		return;
+	}
 
 	status_.started = fz::datetime::now();
 }
@@ -879,8 +895,9 @@ void CTransferStatusManager::SetStartTime()
 void CTransferStatusManager::SetMadeProgress()
 {
 	fz::scoped_lock lock(mutex_);
-	if (!status_)
+	if (!status_) {
 		return;
+	}
 
 	status_.madeProgress = true;
 }
