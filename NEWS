@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.27.0-rc1 (2017-07-11)
+
++ Support for the Storj decentralized cloud storage provider
+- MSW: Fix display of file type of directories if the directory name contains a dot
+- Fix assertion if entering an invalid protocol prefix into the host field on the quickconnect bar or in the site manager
+- Improve error message if TLS certificate verification fails due to a missing stapled OCSP resonse
+- Building and running FileZilla now depends on libfilezilla >= 0.10.0 (https://lib.filezilla-project.org/)
+
 3.26.2 (2017-06-12)
 
 - Fixed crash if using master passwords and decrypting very long passwords
