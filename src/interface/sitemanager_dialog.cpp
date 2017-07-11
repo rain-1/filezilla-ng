@@ -14,6 +14,9 @@
 #include "wrapengine.h"
 #include "xmlfunctions.h"
 #include "fzputtygen_interface.h"
+#if ENABLE_STORJ
+#include "storj_key_interface.h"
+#endif
 #include "xrc_helper.h"
 
 #include <wx/dcclient.h>
@@ -56,6 +59,7 @@ EVT_TREE_ITEM_MENU(XRCID("ID_SITETREE"), CSiteManagerDialog::OnContextMenu)
 EVT_MENU(XRCID("ID_EXPORT"), CSiteManagerDialog::OnExportSelected)
 EVT_BUTTON(XRCID("ID_NEWBOOKMARK"), CSiteManagerDialog::OnNewBookmark)
 EVT_BUTTON(XRCID("ID_BOOKMARK_BROWSE"), CSiteManagerDialog::OnBookmarkBrowse)
+EVT_BUTTON(XRCID("ID_ENCRYPTIONKEY_GENERATE"), CSiteManagerDialog::OnGenerateEncryptionKey)
 END_EVENT_TABLE()
 
 std::array<ServerProtocol, 4> const ftpSubOptions{ FTP, FTPES, FTPS, INSECURE_FTP };
@@ -375,7 +379,8 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	// Set min height of encryption row
 	wxSize descSize = XRCCTRL(*this, "ID_ENCRYPTION_DESC", wxWindow)->GetSize();
 	wxSize encSize = XRCCTRL(*this, "ID_ENCRYPTION", wxWindow)->GetSize();
-	xrc_call(*this, "ID_ENCRYPTION", &wxWindow::GetContainingSizer)->GetItem(1)->SetMinSize(0, std::max(descSize.GetHeight(), encSize.GetHeight()));
+	auto encSizer = xrc_call(*this, "ID_ENCRYPTION", &wxWindow::GetContainingSizer);
+	encSizer->GetItem(encSizer->GetItemCount() - 1)->SetMinSize(0, std::max(descSize.GetHeight(), encSize.GetHeight()));
 
 	// Load bookmark notebook
 	m_pNotebook_Bookmark = new wxNotebook(m_pNotebook_Site->GetParent(), -1);
@@ -1081,9 +1086,8 @@ bool CSiteManagerDialog::Verify()
 		}
 
 		// In key file logon type, check that the provided key file exists
-		std::wstring keyFile, keyFileComment, keyFileData;
 		if (logon_type == LogonType::key) {
-			keyFile = xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue).ToStdWstring();
+			std::wstring keyFile = xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue).ToStdWstring();
 			if (keyFile.empty()) {
 				wxMessageBox(_("You have to enter a key file path"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);
@@ -1092,6 +1096,8 @@ bool CSiteManagerDialog::Verify()
 
 			// Check (again) that the key file is in the correct format since it might have been introduced manually
 			CFZPuttyGenInterface cfzg(this);
+
+			std::wstring keyFileComment, keyFileData;
 			if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData)) {
 				xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, keyFile);
 			}
@@ -1099,6 +1105,30 @@ bool CSiteManagerDialog::Verify()
 				xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);
 				return false;
 			}
+		}
+
+		if (protocol == STORJ && logon_type == LogonType::normal) {
+			std::wstring pw = xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring();
+			std::wstring encryptionKey = xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::GetValue).ToStdWstring();
+
+			bool encrypted = !xrc_call(*this, "ID_PASS", &wxTextCtrl::GetHint).empty();
+			if (encrypted) {
+				if (pw.empty() != encryptionKey.empty()) {
+					wxMessageBox(_("You cannot change password and encryption key individually if using a master password."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+					xrc_call(*this, "ID_ENCRYPTIONKEY", &wxWindow::SetFocus);
+					return false;
+				}
+			}
+#if ENABLE_STORJ
+			if (!encryptionKey.empty() || !encrypted) {
+				CStorjKeyInterface validator(this);
+				if (!validator.ValidateKey(encryptionKey, false)) {
+					wxMessageBox(_("You have to enter a valid encryption key"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+					xrc_call(*this, "ID_ENCRYPTIONKEY", &wxWindow::SetFocus);
+					return false;
+				}
+			}
+#endif
 		}
 
 		std::wstring const remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue().ToStdWstring();
@@ -1345,13 +1375,22 @@ void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 		return;
 	}
 
-	SetControlVisibility(GetProtocol(), GetLogonType());
+	LogonType const t = GetLogonType();
+	SetControlVisibility(GetProtocol(), t);
 
-	xrc_call(*this, "ID_USER", &wxTextCtrl::Enable, event.GetString() != _("Anonymous"));
-	xrc_call(*this, "ID_PASS", &wxTextCtrl::Enable, event.GetString() == _("Normal") || event.GetString() == _("Account"));
-	xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Enable, event.GetString() == _("Account"));
-	xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Enable, event.GetString() == _("Key file"));
-	xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Enable, event.GetString() == _("Key file"));
+	SetLogonTypeCtrlState();
+}
+
+void CSiteManagerDialog::SetLogonTypeCtrlState()
+{
+	LogonType const t = GetLogonType();
+	xrc_call(*this, "ID_USER", &wxTextCtrl::Enable, t != LogonType::anonymous);
+	xrc_call(*this, "ID_PASS", &wxTextCtrl::Enable, t == LogonType::normal || t == LogonType::account);
+	xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Enable, t == LogonType::account);
+	xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Enable, t == LogonType::key);
+	xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Enable, t == LogonType::key);
+	xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::Enable, t == LogonType::normal);
+	xrc_call(*this, "ID_ENCRYPTIONKEY_GENERATE", &wxButton::Enable, t == LogonType::normal);
 }
 
 bool CSiteManagerDialog::UpdateItem()
@@ -1424,6 +1463,12 @@ bool CSiteManagerDialog::UpdateServer(Site &server, const wxString &name)
 
 	server.server_.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue).ToStdWstring());
 	auto pw = xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue).ToStdWstring();
+
+	if (protocol == STORJ && logon_type == LogonType::normal && (!pw.empty() || !server.server_.credentials.encrypted_)) {
+		pw += '|';
+		pw += xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::GetValue).ToStdWstring();
+	}
+
 	if (server.server_.credentials.encrypted_) {
 		if (!pw.empty()) {
 			server.server_.credentials.encrypted_ = public_key();
@@ -1667,6 +1712,7 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_PASS", &wxTextCtrl::SetHint, wxString());
 		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, wxString());
 		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::ChangeValue, wxString());
 		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, wxString());
 		xrc_call(*this, "ID_COLOR", &wxChoice::Select, 0);
 
@@ -1716,33 +1762,50 @@ void CSiteManagerDialog::SetCtrlState()
 		}
 		xrc_call(*this, "ID_PORT", &wxWindow::Enable, !predefined);
 
-		SetProtocol(data->m_site->server_.server.GetProtocol());
+		ServerProtocol protocol = data->m_site->server_.server.GetProtocol();
+		SetProtocol(protocol);
 		xrc_call(*this, "ID_PROTOCOL", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_ENCRYPTION", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_BYPASSPROXY", &wxCheckBox::SetValue, data->m_site->server_.server.GetBypassProxy());
 
-		xrc_call(*this, "ID_USER", &wxTextCtrl::Enable, !predefined && data->m_site->server_.credentials.logonType_ != LogonType::anonymous);
-		xrc_call(*this, "ID_PASS", &wxTextCtrl::Enable, !predefined && (data->m_site->server_.credentials.logonType_ == LogonType::normal || data->m_site->server_.credentials.logonType_ == LogonType::account));
-		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Enable, !predefined && data->m_site->server_.credentials.logonType_ == LogonType::account);
-		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Enable, !predefined && data->m_site->server_.credentials.logonType_ == LogonType::key);
-		xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Enable, !predefined && data->m_site->server_.credentials.logonType_ == LogonType::key);
+		LogonType logonType = data->m_site->server_.credentials.logonType_;
+		xrc_call(*this, "ID_USER", &wxTextCtrl::Enable, !predefined && logonType != LogonType::anonymous);
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::Enable, !predefined && (logonType == LogonType::normal || logonType == LogonType::account));
+		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Enable, !predefined && logonType == LogonType::account);
+		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Enable, !predefined && logonType == LogonType::key);
+		xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Enable, !predefined && logonType == LogonType::key);
+		xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::Enable, !predefined && logonType == LogonType::normal);
+		xrc_call(*this, "ID_ENCRYPTIONKEY_GENERATE", &wxButton::Enable, !predefined && logonType == LogonType::normal);
 
-		SetControlVisibility(data->m_site->server_.server.GetProtocol(), data->m_site->server_.credentials.logonType_);
+		SetControlVisibility(protocol, logonType);
 
-		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetStringSelection, GetNameFromLogonType(data->m_site->server_.credentials.logonType_));
+		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetStringSelection, GetNameFromLogonType(logonType));
 		xrc_call(*this, "ID_LOGONTYPE", &wxWindow::Enable, !predefined);
 
 		xrc_call(*this, "ID_USER", &wxTextCtrl::ChangeValue, data->m_site->server_.server.GetUser());
 		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.account_);
+
+		std::wstring pass = data->m_site->server_.credentials.GetPass();
+		std::wstring encryptionKey;
+		if (protocol == STORJ) {
+			size_t pos = pass.rfind('|');
+			if (pos != std::wstring::npos) {
+				encryptionKey = pass.substr(pos + 1);
+				pass = pass.substr(0, pos);
+			}
+		}
+
 		if (data->m_site->server_.credentials.encrypted_) {
-			xrc_call(*this, "ID_PASS", &wxTextCtrl::Clear);
+			xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, wxString());
+			xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::ChangeValue, wxString());
 
 			// @translator: Keep this string as short as possible
 			xrc_call(*this, "ID_PASS", &wxTextCtrl::SetHint, _("Leave empty to keep existing password."));
 		}
 		else {
-			xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.GetPass());
+			xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, pass);
 			xrc_call(*this, "ID_PASS", &wxTextCtrl::SetHint, wxString());
+			xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::ChangeValue, encryptionKey);
 		}
 		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, data->m_site->server_.credentials.keyFile_);
 		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, data->m_site->m_comments);
@@ -1856,7 +1919,9 @@ void CSiteManagerDialog::OnCharsetChange(wxCommandEvent&)
 
 void CSiteManagerDialog::OnProtocolSelChanged(wxCommandEvent&)
 {
-	SetControlVisibility(GetProtocol(), GetLogonType());
+	auto protocol = GetProtocol();
+	auto logonType = GetLogonType();
+	SetControlVisibility(protocol, logonType);
 }
 
 namespace {
@@ -1882,18 +1947,28 @@ void CSiteManagerDialog::SetControlVisibility(ServerProtocol protocol, LogonType
 	xrc_call(*this, "ID_ENCRYPTION_DESC", &wxStaticText::Show, isFtp);
 	xrc_call(*this, "ID_ENCRYPTION", &wxChoice::Show, isFtp);
 
+	xrc_call(*this, "ID_SIGNUP", &wxControl::Show, protocol == STORJ);
+
 	auto choice = XRCCTRL(*this, "ID_LOGONTYPE", wxChoice);
 
 	// Disallow invalid combinations
 	if (protocol == SFTP && type == LogonType::account) {
 		type = LogonType::normal;
 		choice->Select(choice->FindString(GetNameFromLogonType(type)));
+		SetLogonTypeCtrlState();
 	}
 	else if (protocol != SFTP && type == LogonType::key) {
 		type = LogonType::normal;
 		choice->Select(choice->FindString(GetNameFromLogonType(type)));
+		SetLogonTypeCtrlState();
 	}
-
+	else if (protocol == STORJ && type != LogonType::normal && type != LogonType::ask) {
+		type = LogonType::normal;
+		choice->Select(choice->FindString(GetNameFromLogonType(type)));
+		SetLogonTypeCtrlState();
+	}
+	ShowItem(*choice, LogonType::anonymous, protocol != STORJ);
+	ShowItem(*choice, LogonType::interactive, protocol != STORJ);
 	ShowItem(*choice, LogonType::key, protocol == SFTP);
 	ShowItem(*choice, LogonType::account, isFtp);
 
@@ -1905,10 +1980,20 @@ void CSiteManagerDialog::SetControlVisibility(ServerProtocol protocol, LogonType
 	xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Show, protocol == SFTP && type == LogonType::key);
 	xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Show, protocol == SFTP && type == LogonType::key);
 
+	xrc_call(*this, "ID_ENCRYPTIONKEY_DESC", &wxStaticText::Show, protocol == STORJ);
+	xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::Show, protocol == STORJ);
+	xrc_call(*this, "ID_ENCRYPTIONKEY_GENERATE", &wxButton::Show, protocol == STORJ);
+
 	auto keyfileSizer = xrc_call(*this, "ID_KEYFILE_DESC", &wxStaticText::GetContainingSizer);
 	if (keyfileSizer) {
 		keyfileSizer->CalcMin();
 		keyfileSizer->Layout();
+	}
+
+	auto encryptionkeySizer = xrc_call(*this, "ID_ENCRYPTIONKEY_DESC", &wxStaticText::GetContainingSizer);
+	if (encryptionkeySizer) {
+		encryptionkeySizer->CalcMin();
+		encryptionkeySizer->Layout();
 	}
 }
 
@@ -2528,4 +2613,25 @@ ServerProtocol CSiteManagerDialog::GetProtocol() const
 LogonType CSiteManagerDialog::GetLogonType() const
 {
 	return GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection).ToStdWstring());
+}
+
+void CSiteManagerDialog::OnGenerateEncryptionKey(wxCommandEvent& event)
+{
+#if ENABLE_STORJ
+	CStorjKeyInterface generator(this);
+	std::wstring key = generator.GenerateKey();
+	if (!key.empty()) {
+		xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::ChangeValue, wxString(key));
+		xrc_call(*this, "ID_ENCRYPTIONKEY", &wxWindow::SetFocus);
+
+		wxDialogEx dlg;
+		if (dlg.Load(this, "ID_STORJ_GENERATED_KEY")) {
+			dlg.WrapRecursive(&dlg, 2.5);
+			dlg.GetSizer()->Fit(&dlg);
+			dlg.GetSizer()->SetSizeHints(&dlg);
+			xrc_call(dlg, "ID_KEY", &wxTextCtrl::ChangeValue, wxString(key));
+			dlg.ShowModal();
+		}
+	}
+#endif
 }

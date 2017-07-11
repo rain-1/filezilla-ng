@@ -151,12 +151,11 @@ if test "$buildmain" = "yes"; then
 
   # Find libfilezilla
   # -----------------
-  PKG_CHECK_MODULES(LIBFILEZILLA, [libfilezilla >= 0.9.2],, [
+  PKG_CHECK_MODULES(LIBFILEZILLA, [libfilezilla >= 0.10.0],, [
 	AC_MSG_ERROR([libfilezilla not found: $LIBFILEZILLA_PKG_ERRORS. You can download it from https://lib.filezilla-project.org/])
   ])
   AC_SUBST(LIBFILEZILLA_CFLAGS)
   AC_SUBST(LIBFILEZILLA_LIBS)
-
 
   # Detect wxWidgets
   # ----------------
@@ -569,7 +568,7 @@ if test "$buildmain" = "yes"; then
   if test "$gnutlssystemciphers" = "yes"; then
     AC_DEFINE(FZ_USE_GNUTLS_SYSTEM_CIPHERS, 1, [Set to 1 to use ciphers defined in system policy.])
   fi
- 
+
   # pugixml
   # ------
 
@@ -676,6 +675,30 @@ if test "$buildmain" = "yes"; then
   AC_SUBST(LIBSQLITE3_LIBS)
   AC_SUBST(LIBSQLITE3_CFLAGS)
 
+  # Find libstorj
+  # -----------------
+
+  AC_ARG_ENABLE(storj, AS_HELP_STRING([--enable-storj@<:@=ARG@:>@],[Enable support for the Storj decentralized cloud storage provider. Default: no]),
+    [
+    ],
+    [
+      enable_storj="no"
+    ])
+
+  if test "$enable_storj" != "no"; then
+    PKG_CHECK_MODULES(LIBSTORJ, [libstorj >= 1.0],[
+      AC_DEFINE([ENABLE_STORJ], [1], [Define if building with Storj support.])
+      enable_storj="yes"
+    ], [
+      if test "$enable_storj" = "yes"; then
+  	AC_MSG_ERROR([libstorj not found: $LIBSTORJ_PKG_ERRORS. You can download it from https://github.com/Storj/libstorj])
+      else
+        enable_storj="no"
+      fi
+    ])
+    AC_SUBST(LIBSTORJ_CFLAGS)
+    AC_SUBST(LIBSTORJ_LIBS)
+  fi
 fi
 
 # Everything translation related
@@ -761,6 +784,7 @@ AM_CONDITIONAL(ENABLE_PRECOMP, test "x$use_precomp" = "xyes")
 AM_CONDITIONAL(HAS_CPPUNIT, [test "$has_cppunit" = "yes"])
 AM_CONDITIONAL(HAVE_LIBPUGIXML, [test "x$with_pugixml" = "xsystem"])
 AM_CONDITIONAL(HAVE_DBUS, [test "x$with_dbus" = "xyes"])
+AM_CONDITIONAL(ENABLE_STORJ, [test "x$enable_storj" = "xyes"])
 
 AC_CONFIG_FILES(Makefile src/Makefile src/engine/Makefile src/pugixml/Makefile
 src/dbus/Makefile
@@ -781,6 +805,7 @@ src/interface/resources/tango/Makefile
 src/putty/Makefile
 src/putty/unix/Makefile
 src/putty/windows/Makefile
+src/storj/Makefile
 tests/Makefile
 src/interface/resources/version.rc
 src/interface/resources/MacInfo.plist

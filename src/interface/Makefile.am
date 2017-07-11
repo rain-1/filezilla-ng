@@ -255,6 +255,16 @@ noinst_HEADERS = aboutdialog.h \
 		 xmlfunctions.h \
 		 xrc_helper.h
 
+if ENABLE_STORJ
+filezilla_SOURCES += \
+		overlay.cpp \
+		storj_key_interface.cpp
+
+noinst_HEADERS += \
+		 overlay.h \
+		 storj_key_interface.h
+endif
+
 if USE_RESOURCEFILE
 RESOURCEFILE = resources/filezilla.o
 endif

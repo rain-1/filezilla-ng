@@ -258,6 +258,9 @@ USE AT OWN RISK"), _T("Important Information"));
 	}
 
 	CheckExistsFzsftp();
+#if ENABLE_STORJ
+	CheckExistsFzstorj();
+#endif
 
 	// Turn off idle events, we don't need them
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
@@ -440,6 +443,7 @@ bool CFileZillaApp::LoadResourceFiles()
 	pResource->LoadFile(wxString(dir + L"settings.xrc"));
 	pResource->LoadFile(wxString(dir + L"sitemanager.xrc"));
 	pResource->LoadFile(wxString(dir + L"update.xrc"));
+	pResource->LoadFile(wxString(dir + L"storj.xrc"));
 
 	// Useful for XRC files with embedded image data.
 	wxFileSystem::AddHandler(new wxFileSystemBlobHandler);
@@ -574,36 +578,50 @@ CWrapEngine* CFileZillaApp::GetWrapEngine()
 
 void CFileZillaApp::CheckExistsFzsftp()
 {
-	AddStartupProfileRecord("FileZillaApp::CheckExistsFzstp");
-	// Get the correct path to the fzsftp executable
+	AddStartupProfileRecord("FileZillaApp::CheckExistsFzsftp");
+	CheckExistsTool(L"fzsftp", {L"/src/putty", L"/putty"}, L"FZ_FZSFTP", OPTION_FZSFTP_EXECUTABLE, _("SFTP support"));
+}
+
+#if ENABLE_STORJ
+void CFileZillaApp::CheckExistsFzstorj()
+{
+	AddStartupProfileRecord("FileZillaApp::CheckExistsFzstorj");
+	CheckExistsTool(L"fzstorj", {L"/src/storj", L"/storj"}, L"FZ_FZSTORJ", OPTION_FZSTORJ_EXECUTABLE, _("Storj support"));
+}
+#endif
+
+void CFileZillaApp::CheckExistsTool(std::wstring const& tool, std::vector<std::wstring> const& searchPaths, std::wstring const& env, int setting, wxString const& description)
+{
+	// Get the correct path to the specified tool
 
 #ifdef __WXMAC__
 	wxString executable = wxStandardPaths::Get().GetExecutablePath();
 	int pos = executable.Find('/', true);
-	if (pos != -1)
+	if (pos != -1) {
 		executable = executable.Left(pos);
-	executable += _T("/fzsftp");
-	if (!wxFileName::FileExists(executable.ToStdWstring()))
-	{
-		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPlease download FileZilla again. If this problem persists, please submit a bug report."), executable),
+	}
+	executable += _T("/") + tool;
+	if (!wxFileName::FileExists(executable.ToStdWstring())) {
+		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, %s will not work.\n\nPlease download FileZilla again. If this problem persists, please submit a bug report."), executable, description),
 			_("File not found"), wxICON_ERROR);
 		executable.clear();
 	}
 
 #else
 
-	wxString program = _T("fzsftp");
+	wxString program = tool;
 #ifdef __WXMSW__
 	program += _T(".exe");
 #endif
 
 	bool found = false;
 
-	// First check the FZ_FZSFTP environment variable
+	// First check the given environment variable
 	wxString executable;
-	if (wxGetEnv(_T("FZ_FZSFTP"), &executable)) {
-		if (wxFileName::FileExists(executable.ToStdWstring()))
+	if (wxGetEnv(env, &executable)) {
+		if (wxFileName::FileExists(executable.ToStdWstring())) {
 			found = true;
+		}
 	}
 
 	if (!found) {
@@ -630,12 +648,14 @@ void CFileZillaApp::CheckExistsFzsftp()
 
 		// Add a few paths relative to the current working directory
 		pathList.Add(cwd + _T("/bin"));
-		pathList.Add(cwd + _T("/src/putty"));
-		pathList.Add(cwd + _T("/putty"));
+		for (auto const& path : searchPaths) {
+			pathList.Add(cwd + path);
+		}
 
 		executable = pathList.FindAbsoluteValidPath(program);
-		if (!executable.empty())
+		if (!executable.empty()) {
 			found = true;
+		}
 	}
 
 #ifdef __UNIX__
@@ -661,22 +681,24 @@ void CFileZillaApp::CheckExistsFzsftp()
 		wxPathList pathList;
 		pathList.AddEnvList(_T("PATH"));
 		executable = pathList.FindAbsoluteValidPath(program);
-		if (!executable.empty())
+		if (!executable.empty()) {
 			found = true;
+		}
 	}
 
 	if (!found) {
 		// Quote path if it contains spaces
-		if (executable.Find(_T(" ")) != -1 && executable[0] != '"' && executable[0] != '\'')
+		if (executable.Find(_T(" ")) != -1 && executable[0] != '"' && executable[0] != '\'') {
 			executable = _T("\"") + executable + _T("\"");
+		}
 
-		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPossible solutions:\n- Make sure %s is in a directory listed in your PATH environment variable.\n- Set the full path to %s in the FZ_FZSFTP environment variable."), program, program, program),
+		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, %s will not work.\n\nPossible solutions:\n- Make sure %s is in a directory listed in your PATH environment variable.\n- Set the full path to %s in the %s environment variable."), program, description, program, program, env),
 			_("File not found"), wxICON_ERROR | wxOK);
 		executable.clear();
 	}
 #endif
 
-	COptions::Get()->SetOption(OPTION_FZSFTP_EXECUTABLE, executable.ToStdWstring());
+	COptions::Get()->SetOption(setting, executable.ToStdWstring());
 }
 
 #ifdef __WXMSW__

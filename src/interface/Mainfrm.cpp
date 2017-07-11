@@ -252,6 +252,49 @@ protected:
 	CMainFrame* m_pMainFrame;
 };
 
+
+/*#include "overlay.h"
+#include <wx/hyperlink.h>
+
+namespace {
+void ShowStorjOverlay(wxWindow* parent, wxWindow* anchor, wxPoint const& offset)
+{
+	auto p = new OverlayWindow(parent);
+
+	auto box = new wxBoxSizer(wxVERTICAL);
+	auto sizer = new wxFlexGridSizer(1, wxSize(5, 5));
+	box->Add(sizer, 0, wxALL, 7);
+
+	p->SetSizer(box);
+
+	auto title = new wxStaticText(p, -1, _("Did you know about this new FileZilla feature?"));
+
+	wxFont f = title->GetFont();
+	f.SetWeight(wxBOLD);
+	title->SetFont(f);
+	sizer->Add(title);
+
+	sizer->AddSpacer(0);
+
+	sizer->Add(new wxStaticText(p, -1, _("You can use FileZilla to store your files securely in the Storj decentralized cloud.")));
+	sizer->Add(new wxHyperlinkCtrl(p, -1, _("Click to learn more"), L"https://wiki.filezilla-project.org/Storj"));
+
+	sizer->AddSpacer(10);
+
+	//sizer->Add(new wxCheckBox(p, -1, L"Don't show this again"), 0, wxALIGN_RIGHT);
+
+	auto dismiss = new wxButton(p, -1, L"Dismiss");
+	dismiss->Bind(wxEVT_BUTTON, [p](wxCommandEvent&) { p->Destroy(); });
+	sizer->Add(dismiss, 0, wxALIGN_RIGHT);
+
+	wxGetApp().GetWrapEngine()->WrapRecursive(p, 3);
+
+	box->Fit(p);
+
+	p->SetAnchor(anchor, offset);
+}
+}*/
+
 CMainFrame::CMainFrame()
 	: m_engineContext(*COptions::Get(), CustomEncodingConverter::Get())
 	, m_comparisonToggleAcceleratorId(wxNewId())

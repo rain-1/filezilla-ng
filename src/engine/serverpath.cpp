@@ -220,6 +220,20 @@ CServerPath CServerPath::GetParent() const
 	return parent;
 }
 
+std::wstring CServerPath::GetFirstSegment() const
+{
+	if (empty() || !HasParent()) {
+		return std::wstring();
+	}
+
+	if (!m_data->m_segments.empty()) {
+		return m_data->m_segments.front();
+	}
+	else {
+		return std::wstring();
+	}
+}
+
 std::wstring CServerPath::GetLastSegment() const
 {
 	if (empty() || !HasParent()) {

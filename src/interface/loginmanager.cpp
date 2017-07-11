@@ -185,6 +185,12 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 		XRCCTRL(pwdDlg, "ID_HEADER_USER", wxStaticText)->Hide();
 		xrc_call(pwdDlg, "ID_HEADER_BOTH", &wxStaticText::Hide);
 	}
+
+	if (server.server.GetProtocol() == STORJ) {
+		XRCCTRL(pwdDlg, "ID_ENCRYPTIONKEY_LABEL", wxStaticText)->Show();
+		XRCCTRL(pwdDlg, "ID_ENCRYPTIONKEY", wxTextCtrl)->Show();
+	}
+
 	XRCCTRL(pwdDlg, "wxID_OK", wxButton)->SetId(wxID_OK);
 	XRCCTRL(pwdDlg, "wxID_CANCEL", wxButton)->SetId(wxID_CANCEL);
 	pwdDlg.GetSizer()->Fit(&pwdDlg);
@@ -204,7 +210,21 @@ bool CLoginManager::DisplayDialog(ServerWithCredentials &server, std::wstring co
 			server.server.SetUser(user);
 		}
 
-		server.credentials.SetPass(xrc_call(pwdDlg, "ID_PASSWORD", &wxTextCtrl::GetValue).ToStdWstring());
+/* FIXME?
+	if (server.server.GetProtocol() == STORJ) {
+		std::wstring encryptionKey = XRCCTRL(pwdDlg, "ID_ENCRYPTIONKEY", wxTextCtrl)->GetValue().ToStdWstring();
+		if (encryptionKey.empty()) {
+			wxMessageBoxEx(_("No encryption key given."), _("Invalid input"), wxICON_EXCLAMATION);
+			continue;
+		}
+	}
+*/
+		std::wstring pass = xrc_call(pwdDlg, "ID_PASSWORD", &wxTextCtrl::GetValue).ToStdWstring();
+		if (server.server.GetProtocol() == STORJ) {
+			std::wstring encryptionKey = xrc_call(pwdDlg, "ID_ENCRYPTIONKEY", &wxTextCtrl::GetValue).ToStdWstring();
+			pass += L"|" + encryptionKey;
+		}
+		server.credentials.SetPass(pass);
 
 		if (canRemember && xrc_call(pwdDlg, "ID_REMEMBER", &wxCheckBox::IsChecked)) {
 			RememberPassword(server, challenge);

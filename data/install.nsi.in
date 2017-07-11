@@ -1008,6 +1008,9 @@ Section "FileZilla Client" SecMain
   File "..\src\interface\${LT_EXEDIR}FileZilla.exe"
   File "..\src\putty\${LT_EXEDIR}fzsftp.exe"
   File "..\src\putty\${LT_EXEDIR}fzputtygen.exe"
+!if /FileExists "..\src\storj\${LT_EXEDIR}fzstorj.exe"
+  File "..\src\storj\${LT_EXEDIR}fzstorj.exe"
+!endif
 
   File "${top_srcdir}\GPL.html"
   File "${top_srcdir}\NEWS"
@@ -1116,6 +1119,9 @@ Section "FileZilla Client" SecMain
     WriteRegDWORD HKLM "${DUMP_KEY}\filezilla.exe"  "DumpType" "1"
     WriteRegDWORD HKLM "${DUMP_KEY}\fzsftp.exe"     "DumpType" "1"
     WriteRegDWORD HKLM "${DUMP_KEY}\fzputtygen.exe" "DumpType" "1"
+!if /FileExists "..\src\storj\${LT_EXEDIR}fzstorj.exe"
+    WriteRegDWORD HKLM "${DUMP_KEY}\fzstorj.exe"    "DumpType" "1"
+!endif
     ${If} ${RunningX64}
       SetRegView lastused
     ${EndIf}
@@ -1471,6 +1477,9 @@ Section "Uninstall"
   Delete "$INSTDIR\filezilla.exe"
   Delete "$INSTDIR\fzsftp.exe"
   Delete "$INSTDIR\fzputtygen.exe"
+!if /FileExists "..\src\storj\${LT_EXEDIR}fzstorj.exe"
+  Delete "$INSTDIR\fzstorj.exe"
+!endif
 
   Delete "$INSTDIR\GPL.html"
   Delete "$INSTDIR\NEWS"
@@ -1559,9 +1568,15 @@ Section "Uninstall"
     DeleteRegValue HKLM "${DUMP_KEY}\filezilla.exe"  "DumpType"
     DeleteRegValue HKLM "${DUMP_KEY}\fzsftp.exe"     "DumpType"
     DeleteRegValue HKLM "${DUMP_KEY}\fzputtygen.exe" "DumpType"
+!if /FileExists "..\src\storj\${LT_EXEDIR}fzstorj.exe"
+    DeleteRegValue HKLM "${DUMP_KEY}\fzstorj.exe"    "DumpType"
+!endif
     DeleteRegKey /ifempty HKLM "${DUMP_KEY}\filezilla.exe"
     DeleteRegKey /ifempty HKLM "${DUMP_KEY}\fzsftp.exe"
     DeleteRegKey /ifempty HKLM "${DUMP_KEY}\fzputtygen.exe"
+!if /FileExists "..\src\storj\${LT_EXEDIR}fzstorj.exe"
+    DeleteRegKey /ifempty HKLM "${DUMP_KEY}\fzstorj.exe"
+!endif
     ${If} ${RunningX64}
       SetRegView lastused
     ${EndIf}

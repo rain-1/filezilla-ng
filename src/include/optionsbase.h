@@ -31,6 +31,7 @@ enum engineOptions
 	OPTION_LOGGING_RAWLISTING,
 
 	OPTION_FZSFTP_EXECUTABLE,	// full path to fzsftp executable
+	OPTION_FZSTORJ_EXECUTABLE,
 
 	OPTION_ALLOW_TRANSFERMODEFALLBACK, // If PORT fails, allow PASV and vice versa
 
