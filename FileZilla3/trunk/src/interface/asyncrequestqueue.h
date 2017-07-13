@@ -1,5 +1,5 @@
-#ifndef __ASYNCREQUESTQUEUE_H__
-#define __ASYNCREQUESTQUEUE_H__
+#ifndef FILEZILLA_INTERFACE_ASYNCREQUESTQUEUE_HEADER
+#define FILEZILLA_INTERFACE_ASYNCREQUESTQUEUE_HEADER
 
 #include <wx/timer.h>
 
@@ -59,4 +59,4 @@ protected:
 	wxTimer m_timer;
 };
 
-#endif //__ASYNCREQUESTQUEUE_H__
+#endif

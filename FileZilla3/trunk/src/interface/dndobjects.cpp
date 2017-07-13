@@ -19,10 +19,12 @@ CShellExtensionInterface::CShellExtensionInterface()
 		m_shellExtension = 0;
 	}
 
-	if (m_shellExtension)
+	if (m_shellExtension) {
 		m_hMutex = CreateMutex(0, false, _T("FileZilla3DragDropExtLogMutex"));
-	else
+	}
+	else {
 		m_hMutex = 0;
+	}
 
 	m_hMapping = 0;
 }
@@ -182,22 +184,18 @@ std::unique_ptr<CShellExtensionInterface> CShellExtensionInterface::CreateInitia
 	return ret;
 }
 
-//{7BB79969-2C7E-4107-996C-36DB90890AB2}
-
-#endif //__WXMSW__
+#endif
 
 CRemoteDataObject::CRemoteDataObject(ServerWithCredentials const& server, const CServerPath& path)
 	: wxDataObjectSimple(wxDataFormat(_T("FileZilla3RemoteDataObject")))
 	, server_(server)
 	, m_path(path)
-	, m_didSendData()
 	, m_processId(wxGetProcessId())
 {
 }
 
 CRemoteDataObject::CRemoteDataObject()
 	: wxDataObjectSimple(wxDataFormat(_T("FileZilla3RemoteDataObject")))
-	, m_didSendData()
 	, m_processId(wxGetProcessId())
 {
 }

@@ -7,7 +7,6 @@
 template<class Control>
 CScrollableDropTarget<Control>::CScrollableDropTarget(Control* pCtrl)
 	: m_pCtrl(pCtrl)
-	, m_count()
 {
 	m_timer.SetOwner(this);
 }

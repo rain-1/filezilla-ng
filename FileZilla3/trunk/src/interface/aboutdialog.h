@@ -1,13 +1,12 @@
-#ifndef __ABOUTDIALOG_H__
-#define __ABOUTDIALOG_H__
+#ifndef FILEZILLA_INTERFACE_ABOUTDIALOG_HEADER
+#define FILEZILLA_INTERFACE_ABOUTDIALOG_HEADER
 
 #include "dialogex.h"
 
 class CAboutDialog final : public wxDialogEx
 {
 public:
-	CAboutDialog() {}
-	virtual ~CAboutDialog() {}
+	CAboutDialog() = default;
 
 	bool Create(wxWindow* parent);
 
@@ -18,4 +17,4 @@ protected:
 	void OnCopy(wxCommandEvent&);
 };
 
-#endif //__ABOUTDIALOG_H__
+#endif

@@ -1,5 +1,5 @@
-#ifndef __AUI_NOTEBOOK_EX_H__
-#define __AUI_NOTEBOOK_EX_H__
+#ifndef FILEZILLA_INTERFACE_AUI_NOTEBOOK_EX_HEADER
+#define FILEZILLA_INTERFACE_AUI_NOTEBOOK_EX_HEADER
 
 #include <wx/aui/aui.h>
 
@@ -9,8 +9,7 @@ class wxAuiTabArtEx;
 class wxAuiNotebookEx : public wxAuiNotebook
 {
 public:
-	wxAuiNotebookEx();
-	virtual ~wxAuiNotebookEx();
+	wxAuiNotebookEx() = default;
 
 	void RemoveExtraBorders();
 
@@ -41,4 +40,4 @@ protected:
 	void OnTabDragMotion(wxAuiNotebookEvent& evt);
 };
 
-#endif //__AUI_NOTEBOOK_EX_H__
+#endif

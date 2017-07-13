@@ -123,14 +123,6 @@ EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiNotebookEx::OnPageChanged)
 EVT_AUINOTEBOOK_DRAG_MOTION(wxID_ANY, wxAuiNotebookEx::OnTabDragMotion)
 END_EVENT_TABLE()
 
-wxAuiNotebookEx::wxAuiNotebookEx()
-{
-}
-
-wxAuiNotebookEx::~wxAuiNotebookEx()
-{
-}
-
 void wxAuiNotebookEx::OnTabDragMotion(wxAuiNotebookEvent& evt)
 {
 	wxAuiNotebook::OnTabDragMotion(evt);
