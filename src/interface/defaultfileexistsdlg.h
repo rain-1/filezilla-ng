@@ -6,8 +6,6 @@
 class CDefaultFileExistsDlg final : protected wxDialogEx
 {
 public:
-	CDefaultFileExistsDlg();
-
 	bool Load(wxWindow *parent, bool fromQueue);
 
 	static CFileExistsNotification::OverwriteAction GetDefault(bool download);
@@ -21,4 +19,4 @@ protected:
 	static CFileExistsNotification::OverwriteAction m_defaults[2];
 };
 
-#endif //__DEFAULTFILEEXISTSDLG_H__
+#endif

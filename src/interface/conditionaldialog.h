@@ -1,5 +1,5 @@
-#ifndef __CONDITIONALDIALOG_H__
-#define __CONDITIONALDIALOG_H__
+#ifndef FILEZILLA_INTERFACE_CONDITIONALDIALOG_HEADER
+#define FILEZILLA_INTERFACE_CONDITIONALDIALOG_HEADER
 
 class CConditionalDialog final : public wxDialog
 {
@@ -38,4 +38,4 @@ protected:
 	void OnButton(wxCommandEvent& event);
 };
 
-#endif //__CONDITIONALDIALOG_H__
+#endif

@@ -1,5 +1,5 @@
-#ifndef __DNDOBJECTS_H__
-#define __DNDOBJECTS_H__
+#ifndef FILEZILLA_INTERFACE_DNDOBJECTS_HEADER
+#define FILEZILLA_INTERFACE_DNDOBJECTS_HEADER
 
 #ifdef __WXMSW__
 #define FZ3_USESHELLEXT 1
@@ -13,7 +13,7 @@
 
 #include <memory>
 
-class wxRemoteDataFormat : public wxDataFormat
+class wxRemoteDataFormat final : public wxDataFormat
 {
 public:
 	wxRemoteDataFormat()
@@ -22,7 +22,7 @@ public:
 	}
 };
 
-class CRemoteDataObject : public wxDataObjectSimple
+class CRemoteDataObject final : public wxDataObjectSimple
 {
 public:
 	CRemoteDataObject(ServerWithCredentials const& server, const CServerPath& path);
@@ -60,7 +60,7 @@ protected:
 
 	mutable CXmlFile m_xmlFile;
 
-	bool m_didSendData;
+	bool m_didSendData{};
 
 	int m_processId;
 
@@ -99,6 +99,6 @@ protected:
 	std::wstring m_dragDirectory;
 };
 
-#endif //__WXMSW__
+#endif
 
-#endif //__DNDOBJECTS_H__
+#endif

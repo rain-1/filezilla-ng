@@ -1,5 +1,5 @@
-#ifndef __DIALOGEX_H__
-#define __DIALOGEX_H__
+#ifndef FILEZILLA_INTERFACE_DIALOGEX_HEADER
+#define FILEZILLA_INTERFACE_DIALOGEX_HEADER
 
 #include "wrapengine.h"
 
@@ -31,4 +31,4 @@ protected:
 	static int m_shown_dialogs;
 };
 
-#endif //__DIALOGEX_H__
+#endif

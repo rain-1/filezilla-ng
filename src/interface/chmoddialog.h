@@ -1,5 +1,5 @@
-#ifndef __CHMODDIALOG_H__
-#define __CHMODDIALOG_H__
+#ifndef FILEZILLA_INTERFACE_CHMODDIALOG_HEADER
+#define FILEZILLA_INTERFACE_CHMODDIALOG_HEADER
 
 #include "dialogex.h"
 
@@ -46,4 +46,4 @@ protected:
 	int m_applyType{};
 };
 
-#endif //__CHMODDIALOG_H__
+#endif

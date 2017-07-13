@@ -1,9 +1,9 @@
-#ifndef __CMDLINE_H__
-#define __CMDLINE_H__
+#ifndef FILEZILLA_INTERFACE_CMDLINE_HEADER
+#define FILEZILLA_INTERFACE_CMDLINE_HEADER
 
 #include <wx/cmdline.h>
 
-class CCommandLine
+class CCommandLine final
 {
 public:
 	enum t_switches
@@ -33,4 +33,4 @@ protected:
 	wxCmdLineParser m_parser;
 };
 
-#endif //__CMDLINE_H__
+#endif

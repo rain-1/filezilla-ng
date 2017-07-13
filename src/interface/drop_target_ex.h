@@ -33,7 +33,7 @@ protected:
 	Control *m_pCtrl;
 
 	wxTimer m_timer;
-	int m_count;
+	int m_count{};
 
 	DECLARE_EVENT_TABLE()
 };

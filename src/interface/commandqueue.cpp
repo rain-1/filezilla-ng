@@ -14,16 +14,9 @@ DEFINE_EVENT_TYPE(fzEVT_GRANTEXCLUSIVEENGINEACCESS)
 int CCommandQueue::m_requestIdCounter = 0;
 
 CCommandQueue::CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, CState& state)
-	: m_state(state)
-{
-	m_pEngine = pEngine;
-	m_pMainFrame = pMainFrame;
-	m_exclusiveEngineRequest = false;
-	m_exclusiveEngineLock = false;
-	m_requestId = 0;
-}
-
-CCommandQueue::~CCommandQueue()
+	: m_pMainFrame(pMainFrame)
+	, m_pEngine(pEngine)
+	, m_state(state)
 {
 }
 
@@ -57,14 +50,17 @@ void CCommandQueue::ProcessCommand(CCommand *pCommand, CCommandQueue::command_or
 
 void CCommandQueue::ProcessNextCommand()
 {
-	if (m_inside_commandqueue)
+	if (m_inside_commandqueue) {
 		return;
+	}
 
-	if (m_exclusiveEngineLock)
+	if (m_exclusiveEngineLock) {
 		return;
+	}
 
-	if (m_pEngine->IsBusy())
+	if (m_pEngine->IsBusy()) {
 		return;
+	}
 
 	++m_inside_commandqueue;
 
@@ -91,10 +87,12 @@ void CCommandQueue::ProcessNextCommand()
 	--m_inside_commandqueue;
 
 	if (m_CommandList.empty()) {
-		if (m_exclusiveEngineRequest)
+		if (m_exclusiveEngineRequest) {
 			GrantExclusiveEngineRequest();
-		else
+		}
+		else {
 			m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+		}
 
 		if (!m_state.SuccessfulConnect()) {
 			m_state.SetSite(Site());
@@ -104,11 +102,13 @@ void CCommandQueue::ProcessNextCommand()
 
 bool CCommandQueue::Cancel()
 {
-	if (m_exclusiveEngineLock)
+	if (m_exclusiveEngineLock) {
 		return false;
+	}
 
-	if (m_CommandList.empty())
+	if (m_CommandList.empty()) {
 		return true;
+	}
 
 	m_CommandList.erase(++m_CommandList.begin(), m_CommandList.end());
 
@@ -119,8 +119,9 @@ bool CCommandQueue::Cancel()
 	}
 
 	int res = m_pEngine->Cancel();
-	if (res == FZ_REPLY_WOULDBLOCK)
+	if (res == FZ_REPLY_WOULDBLOCK) {
 		return false;
+	}
 	else {
 		m_CommandList.clear();
 		m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
@@ -228,8 +229,9 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 		m_state.SetSuccessfulConnect();
 		m_CommandList.pop_front();
 	}
-	else
+	else {
 		m_CommandList.pop_front();
+	}
 
 	--m_inside_commandqueue;
 
@@ -240,23 +242,21 @@ void CCommandQueue::RequestExclusiveEngine(bool requestExclusive)
 {
 	wxASSERT(!m_exclusiveEngineLock || !requestExclusive);
 
-	if (!m_exclusiveEngineRequest && requestExclusive)
-	{
+	if (!m_exclusiveEngineRequest && requestExclusive) {
 		m_requestId = ++m_requestIdCounter;
-		if (m_requestId < 0)
-		{
+		if (m_requestId < 0) {
 			m_requestIdCounter = 0;
 			m_requestId = 0;
 		}
-		if (m_CommandList.empty())
-		{
+		if (m_CommandList.empty()) {
 			m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 			GrantExclusiveEngineRequest();
 			return;
 		}
 	}
-	if (!requestExclusive)
+	if (!requestExclusive) {
 		m_exclusiveEngineLock = false;
+	}
 	m_exclusiveEngineRequest = requestExclusive;
 	m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 }
@@ -274,11 +274,13 @@ void CCommandQueue::GrantExclusiveEngineRequest()
 
 CFileZillaEngine* CCommandQueue::GetEngineExclusive(int requestId)
 {
-	if (!m_exclusiveEngineLock)
+	if (!m_exclusiveEngineLock) {
 		return 0;
+	}
 
-	if (requestId != m_requestId)
+	if (requestId != m_requestId) {
 		return 0;
+	}
 
 	return m_pEngine;
 }

@@ -1,7 +1,7 @@
-#ifndef __AUTO_ASCII_FILES_H__
-#define __AUTO_ASCII_FILES_H__
+#ifndef FILEZILLA_INTERFACE_AUTO_ASCII_FILES_HEADER
+#define FILEZILLA_INTERFACE_AUTO_ASCII_FILES_HEADER
 
-class CAutoAsciiFiles
+class CAutoAsciiFiles final
 {
 public:
 	static bool TransferLocalAsAscii(wxString const& local_file, ServerType server_type);
@@ -13,4 +13,4 @@ protected:
 	static std::vector<wxString> m_ascii_extensions;
 };
 
-#endif //__AUTO_ASCII_FILES_H__
+#endif

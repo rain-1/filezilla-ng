@@ -8,7 +8,7 @@ class CMainFrame;
 
 DECLARE_EVENT_TYPE(fzEVT_GRANTEXCLUSIVEENGINEACCESS, -1)
 
-class CCommandQueue
+class CCommandQueue final
 {
 public:
 	enum command_origin
@@ -19,7 +19,6 @@ public:
 	};
 
 	CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, CState& state);
-	~CCommandQueue();
 
 	void ProcessCommand(CCommand *pCommand, command_origin origin = normal);
 	void ProcessNextCommand();
@@ -44,9 +43,9 @@ protected:
 	CFileZillaEngine *m_pEngine;
 	CMainFrame* m_pMainFrame;
 	CState& m_state;
-	bool m_exclusiveEngineRequest;
-	bool m_exclusiveEngineLock;
-	int m_requestId;
+	bool m_exclusiveEngineRequest{};
+	bool m_exclusiveEngineLock{};
+	int m_requestId{};
 	static int m_requestIdCounter;
 
 	// Used to make this class reentrance-safe
