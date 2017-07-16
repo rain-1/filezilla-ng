@@ -1,5 +1,5 @@
-#ifndef __FILEEXISTSDLG_H__
-#define __FILEEXISTSDLG_H__
+#ifndef FILEZILLA_INTERFACE_FILEEXISTSDLG_HEADER
+#define FILEZILLA_INTERFACE_FILEEXISTSDLG_HEADER
 
 #include "dialogex.h"
 
@@ -37,4 +37,4 @@ protected:
 	bool m_queueOnly{};
 };
 
-#endif //__FILEEXISTSDLG_H__
+#endif

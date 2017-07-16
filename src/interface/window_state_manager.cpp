@@ -28,8 +28,9 @@ CWindowStateManager::~CWindowStateManager()
 
 void CWindowStateManager::Remember(unsigned int optionId)
 {
-	if (!m_lastWindowSize.IsFullySpecified())
+	if (!m_lastWindowSize.IsFullySpecified()) {
 		return;
+	}
 
 	wxString posString;
 
@@ -47,8 +48,9 @@ void CWindowStateManager::Remember(unsigned int optionId)
 
 bool CWindowStateManager::ReadDefaults(const unsigned int optionId, bool& maximized, wxPoint& position, wxSize& size)
 {
-	if (wxGetKeyState(WXK_SHIFT) && wxGetKeyState(WXK_ALT) && wxGetKeyState(WXK_CONTROL))
+	if (wxGetKeyState(WXK_SHIFT) && wxGetKeyState(WXK_ALT) && wxGetKeyState(WXK_CONTROL)) {
 		return false;
+	}
 
 	// Fields:
 	// - maximized (1 or 0)
@@ -59,18 +61,20 @@ bool CWindowStateManager::ReadDefaults(const unsigned int optionId, bool& maximi
 	const wxString layout = COptions::Get()->GetOption(optionId);
 	wxStringTokenizer tokens(layout, _T(" "));
 	int count = tokens.CountTokens();
-	if (count != 5)
+	if (count != 5) {
 		return false;
+	}
 
 	long values[5];
-	for (int i = 0; i < count; i++)
-	{
+	for (int i = 0; i < count; ++i) {
 		wxString token = tokens.GetNextToken();
-		if (!token.ToLong(values + i))
+		if (!token.ToLong(values + i)) {
 			return false;
+		}
 	}
-	if (values[3] <= 0 || values[4] <= 0)
+	if (values[3] <= 0 || values[4] <= 0) {
 		return false;
+	}
 
 	const wxRect screen_size = GetScreenDimensions();
 
@@ -82,13 +86,15 @@ bool CWindowStateManager::ReadDefaults(const unsigned int optionId, bool& maximi
 
 	// Deal with the horizontal
 	position.x = wxMin(screen_size.GetRight() - 30, values[1]);
-	if (position.x + size.x - 30 < screen_size.GetLeft())
+	if (position.x + size.x - 30 < screen_size.GetLeft()) {
 		position.x = screen_size.GetLeft() + 30 - size.x;
+	}
 
 	// Deal with the vertical
 	position.y = wxMin(screen_size.GetBottom() - 30, values[2]);
-	if (position.y < screen_size.GetTop())
+	if (position.y < screen_size.GetTop()) {
 		position.y = screen_size.GetTop();
+	}
 
 	maximized = values[0] != 0;
 
@@ -103,8 +109,7 @@ bool CWindowStateManager::Restore(const unsigned int optionId, const wxSize& def
 
 	bool read = ReadDefaults(optionId, maximized, position, size);
 
-	if (maximized)
-	{
+	if (maximized) {
 		// We need to move so it appears on the proper display on multi-monitor systems
 		m_pWindow->Move(position.x, position.y);
 
@@ -128,13 +133,12 @@ bool CWindowStateManager::Restore(const unsigned int optionId, const wxSize& def
 			m_maximize_requested = 4;
 #endif //__WXGTK__
 	}
-	else
-	{
-		if (read)
+	else {
+		if (read) {
 			m_pWindow->Move(position.x, position.y);
+		}
 
-		if (size.IsFullySpecified())
-		{
+		if (size.IsFullySpecified()) {
 			// The slight off-size is needed to ensure the client sizes gets changed at least once.
 			// Otherwise all the splitters would have default size still.
 			m_pWindow->SetClientSize(size.x + 1, size.x);
@@ -144,8 +148,9 @@ bool CWindowStateManager::Restore(const unsigned int optionId, const wxSize& def
 			m_pWindow->SetClientSize(size.x, size.y);
 		}
 
-		if (!read)
+		if (!read) {
 			m_pWindow->CentreOnScreen();
+		}
 	}
 
 	return true;
@@ -154,14 +159,13 @@ bool CWindowStateManager::Restore(const unsigned int optionId, const wxSize& def
 void CWindowStateManager::OnSize(wxSizeEvent& event)
 {
 #ifdef __WXGTK__
-	if (m_maximize_requested)
+	if (m_maximize_requested) {
 		m_maximize_requested--;
+	}
 #endif
-	if (!m_pWindow->IsIconized())
-	{
+	if (!m_pWindow->IsIconized()) {
 		m_lastMaximized = m_pWindow->IsMaximized();
-		if (!m_lastMaximized)
-		{
+		if (!m_lastMaximized) {
 			m_lastWindowPosition = m_pWindow->GetPosition();
 			m_lastWindowSize = m_pWindow->GetClientSize();
 		}
@@ -171,8 +175,7 @@ void CWindowStateManager::OnSize(wxSizeEvent& event)
 
 void CWindowStateManager::OnMove(wxMoveEvent& event)
 {
-	if (!m_pWindow->IsIconized() && !m_pWindow->IsMaximized())
-	{
+	if (!m_pWindow->IsIconized() && !m_pWindow->IsMaximized()) {
 		m_lastWindowPosition = m_pWindow->GetPosition();
 		m_lastWindowSize = m_pWindow->GetClientSize();
 	}
@@ -185,14 +188,14 @@ wxRect CWindowStateManager::GetScreenDimensions()
 	wxRect screen_size(0, 0, 0, 0);
 
 	// Get bounding rectangle of virtual screen
-	for (unsigned int i = 0; i < wxDisplay::GetCount(); i++)
-	{
+	for (unsigned int i = 0; i < wxDisplay::GetCount(); ++i) {
 		wxDisplay display(i);
 		wxRect rect = display.GetGeometry();
 		screen_size.Union(rect);
 	}
-	if (screen_size.GetWidth() <= 0 || screen_size.GetHeight() <= 0)
+	if (screen_size.GetWidth() <= 0 || screen_size.GetHeight() <= 0) {
 		screen_size = wxRect(0, 0, 1000000000, 1000000000);
+	}
 #else
 	wxRect screen_size(0, 0, 1000000000, 1000000000);
 #endif

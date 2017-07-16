@@ -1,5 +1,5 @@
-#ifndef __FZSFTP_H__
-#define __FZSFTP_H__
+#ifndef FILEZILLA_PUTTY_FZSFTP_HEADER
+#define FILEZILLA_PUTTY_FZSFTP_HEADER
 
 int ProcessQuotaCmd(const char* line);
 int RequestQuota(int i, int bytes);

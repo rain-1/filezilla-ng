@@ -1,5 +1,5 @@
-#ifndef __SETTINGSDIALOG_H__
-#define __SETTINGSDIALOG_H__
+#ifndef FILEZILLA_INTERFACE_SETTINGS_SETTINGSDIALOG_HEADER
+#define FILEZILLA_INTERFACE_SETTINGS_SETTINGSDIALOG_HEADER
 
 #include "../dialogex.h"
 
@@ -48,4 +48,4 @@ protected:
 	CFileZillaEngineContext& m_engine_context;
 };
 
-#endif //__SETTINGSDIALOG_H__
+#endif

@@ -1,5 +1,5 @@
-#ifndef __VIEW_H__
-#define __VIEW_H__
+#ifndef FILEZILLA_INTERFACE_VIEW_HEADER
+#define FILEZILLA_INTERFACE_VIEW_HEADER
 
 class CViewHeader;
 class CView final : public wxNavigationEnabled<wxWindow>
@@ -31,4 +31,4 @@ protected:
 	void OnSize(wxSizeEvent&);
 };
 
-#endif //__VIEW_H__
+#endif

@@ -1,5 +1,5 @@
-#ifndef __FILELISTCTRL_H__
-#define __FILELISTCTRL_H__
+#ifndef FILEZILLA_INTERFACE_FILELISTCTRL_HEADER
+#define FILEZILLA_INTERFACE_FILELISTCTRL_HEADER
 
 #include "listctrlex.h"
 #include "systemimagelist.h"
@@ -626,4 +626,4 @@ private:
 #include "filelistctrl.cpp"
 #endif
 
-#endif //__FILELISTCTRL_H__
+#endif
