@@ -1581,7 +1581,7 @@ int sftp_cmd_mkdir(struct sftp_command *cmd)
     for (i = 1; i < cmd->nwords; i++) {
 	dir = canonify(cmd->words[i], 0);
 	if (!dir) {
-	    fzprintf(sftpError, "%s: canonify: %s", dir, fxp_error());
+	    fzprintf(sftpError, "%s: canonify: %s", cmd->words[i], fxp_error());
 	    return 0;
 	}
 
