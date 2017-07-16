@@ -1,5 +1,5 @@
-#ifndef __SHELLEXT_H__
-#define __SHELLEXT_H__
+#ifndef FILEZILLA_FZSHELLEXT_SHELLEXT_HEADER
+#define FILEZILLA_FZSHELLEXT_SHELLEXT_HEADER
 
 // Shell extension to handle dragging of files from FileZilla 3 into Explorer.
 // Based on code from WinSCP (http://winscp.net/)
@@ -31,4 +31,4 @@ int const DRAG_EXT_MAX_PATH = (DRAG_EXT_MAPPING_LENGTH - 4) / 2;
 
 const int DRAG_EXT_VERSION = 2;
 
-#endif //__SHELLEXT_H__
+#endif

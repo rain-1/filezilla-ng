@@ -1,5 +1,5 @@
-#ifndef __WINDOW_STATE_MANAGER_H__
-#define __WINDOW_STATE_MANAGER_H__
+#ifndef FILEZILLA_INTERFACE_WINDOW_STATE_MANAGER_HEADER
+#define FILEZILLA_INTERFACE_WINDOW_STATE_MANAGER_HEADER
 
 // This class get used to remember toplevel window size and position across
 // sessions.
@@ -35,4 +35,4 @@ protected:
 	void OnMove(wxMoveEvent& event);
 };
 
-#endif //__WINDOW_STATE_MANAGER_H__
+#endif

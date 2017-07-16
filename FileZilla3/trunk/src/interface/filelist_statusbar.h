@@ -1,8 +1,9 @@
-#ifndef __FILELIST_STATUSBAR_H__
-#define __FILELIST_STATUSBAR_H__
+#ifndef FILEZILLA_INTERFACE_FILELIST_STATUSBAR_HEADER
+#define FILEZILLA_INTERFACE_FILELIST_STATUSBAR_HEADER
 
 #include <option_change_event_handler.h>
 
+#include <wx/statusbr.h>
 #include <wx/timer.h>
 
 class CFilelistStatusBar final : public wxStatusBar, protected COptionChangeEventHandler
@@ -56,4 +57,4 @@ protected:
 	void OnTimer(wxTimerEvent& event);
 };
 
-#endif //__FILELIST_STATUSBAR_H__
+#endif

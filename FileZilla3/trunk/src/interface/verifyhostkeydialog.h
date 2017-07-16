@@ -1,10 +1,10 @@
-#ifndef __VERIFYHOSTKEYDIALOG_H__
-#define __VERIFYHOSTKEYDIALOG_H__
+#ifndef FILEZILLAINTERFACE_VERIFYHOSTKEYDIALOG_HEADER
+#define FILEZILLAINTERFACE_VERIFYHOSTKEYDIALOG_HEADER
 
 /* Full handling is done inside fzsftp, this class is just to display the
  * dialog and for temporary session trust, lost on restart of FileZilla.
  */
-class CVerifyHostkeyDialog
+class CVerifyHostkeyDialog final
 {
 public:
 	static bool IsTrusted(CHostKeyNotification const& pNotification);
@@ -19,4 +19,4 @@ protected:
 	static std::list<t_keyData> m_sessionTrustedKeys;
 };
 
-#endif //__VERIFYHOSTKEYDIALOG_H__
+#endif

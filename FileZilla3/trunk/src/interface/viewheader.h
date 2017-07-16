@@ -1,5 +1,5 @@
-#ifndef __VIEWHEADER_H__
-#define __VIEWHEADER_H__
+#ifndef FILEZILLA_INTERFACE_VIEWHEADER_HEADER
+#define FILEZILLA_INTERFACE_VIEWHEADER_HEADER
 
 #include "state.h"
 
@@ -85,4 +85,4 @@ protected:
 	void OnSelectionChanged(wxCommandEvent& event);
 };
 
-#endif //__VIEWHEADER_H__
+#endif
