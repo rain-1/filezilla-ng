@@ -9,6 +9,8 @@
 
 #include <wx/dcclient.h>
 
+#include <algorithm>
+
 static const int statbarWidths[3] = {
 	-3, 0, 25
 };
@@ -50,7 +52,7 @@ void wxStatusBarEx::SetFieldsCount(int number, const int* widths)
 	m_columnWidths = new int[number];
 	if (!widths) {
 		if (oldWidths) {
-			const int min = wxMin(oldCount, number);
+			const int min = std::min(oldCount, number);
 			for (int i = 0; i < min; ++i) {
 				m_columnWidths[i] = oldWidths[i];
 			}

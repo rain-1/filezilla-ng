@@ -1141,8 +1141,7 @@ BOOL CALLBACK FzEnumThreadWndProc(HWND hwnd, LPARAM lParam)
 bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
 {
 #ifndef __WXMAC__
-	if (m_taskBarIcon)
-	{
+	if (m_taskBarIcon) {
 		delete m_taskBarIcon;
 		m_taskBarIcon = 0;
 		m_closeEvent = event.GetEventType();
@@ -1161,16 +1160,27 @@ bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
 		wxWindowList::reverse_iterator iter = wxTopLevelWindows.rbegin();
 		wxTopLevelWindow* pTop = (wxTopLevelWindow*)(*iter);
 		while (pTop != this && (size != prev_size || pLast != pTop)) {
+			if (!pTop) {
+				++iter;
+				if (iter == wxTopLevelWindows.rend()) {
+					break;
+				}
+				pTop = (wxTopLevelWindow*)(*iter);
+				continue;
+			}
+
 			wxDialog* pDialog = dynamic_cast<wxDialog*>(pTop);
-			if (pDialog)
+			if (pDialog) {
 				pDialog->EndModal(wxID_CANCEL);
+			}
 			else {
 				wxWindow* pParent = pTop->GetParent();
 				if (m_pQueuePane && pParent == m_pQueuePane) {
 					// It's the AUI frame manager hint window. Ignore it
 					++iter;
-					if (iter == wxTopLevelWindows.rend())
+					if (iter == wxTopLevelWindows.rend()) {
 						break;
+					}
 					pTop = (wxTopLevelWindow*)(*iter);
 					continue;
 				}
@@ -1192,8 +1202,7 @@ bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
 	// wxMessageBoxEx does not use wxTopLevelWindow, close it too
 	bool dialog = false;
 	EnumThreadWindows(GetCurrentThreadId(), FzEnumThreadWndProc, (LPARAM)&dialog);
-	if (dialog)
-	{
+	if (dialog) {
 		m_closeEvent = event.GetEventType();
 		m_closeEventTimer.Start(1, true);
 
