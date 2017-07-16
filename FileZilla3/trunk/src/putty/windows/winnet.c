@@ -1674,7 +1674,7 @@ static void sk_tcp_write_eof(Socket sock)
 
 void select_result(WPARAM wParam, LPARAM lParam)
 {
-    int ret;
+    int ret, toRecv;
     DWORD err;
     char buf[20480];		       /* nice big buffer for plenty of speed */
     Actual_Socket s;
