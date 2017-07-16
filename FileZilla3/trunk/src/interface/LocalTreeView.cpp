@@ -946,12 +946,16 @@ wxString CLocalTreeView::GetSpecialFolder(int folder, int &iconIndex, int &openI
 	if (SHGetSpecialFolderLocation((HWND)GetHandle(), folder, &list) == S_OK) {
 		SHFILEINFO shFinfo{};
 		if (SHGetFileInfo((LPCTSTR)list, 0, &shFinfo, sizeof(shFinfo), SHGFI_PIDL | SHGFI_ICON | SHGFI_SMALLICON) != 0) {
-			DestroyIcon(shFinfo.hIcon);
+			if (shFinfo.hIcon) {
+				DestroyIcon(shFinfo.hIcon);
+			}
 			iconIndex = shFinfo.iIcon;
 		}
 
 		if (SHGetFileInfo((LPCTSTR)list, 0, &shFinfo, sizeof(shFinfo), SHGFI_PIDL | SHGFI_ICON | SHGFI_SMALLICON | SHGFI_OPENICON | SHGFI_DISPLAYNAME) != 0) {
-			DestroyIcon(shFinfo.hIcon);
+			if (shFinfo.hIcon) {
+				DestroyIcon(shFinfo.hIcon);
+			}
 			openIconIndex = shFinfo.iIcon;
 			name = shFinfo.szDisplayName;
 		}

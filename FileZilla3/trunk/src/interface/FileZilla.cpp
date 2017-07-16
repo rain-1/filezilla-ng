@@ -71,14 +71,16 @@ static void SetAppId()
 	if (!dll.Load(_T("shell32.dll")))
 		return;
 
-	if (!dll.HasSymbol(_T("SetCurrentProcessExplicitAppUserModelID")))
+	if (!dll.HasSymbol(_T("SetCurrentProcessExplicitAppUserModelID"))) {
 		return;
+	}
 
 	t_SetCurrentProcessExplicitAppUserModelID pSetCurrentProcessExplicitAppUserModelID =
 		(t_SetCurrentProcessExplicitAppUserModelID)dll.GetSymbol(_T("SetCurrentProcessExplicitAppUserModelID"));
 
-	if (!pSetCurrentProcessExplicitAppUserModelID)
+	if (!pSetCurrentProcessExplicitAppUserModelID) {
 		return;
+	}
 
 	pSetCurrentProcessExplicitAppUserModelID(_T("FileZilla.Client.AppID"));
 }
@@ -117,24 +119,28 @@ void CFileZillaApp::InitLocale()
 			wxLocale *loc = wxGetLocale();
 			const wxLanguageInfo* currentInfo = loc ? loc->GetLanguageInfo(loc->GetLanguage()) : 0;
 			if (!loc || !currentInfo) {
-				if (!pInfo)
+				if (!pInfo) {
 					error.Printf(_("Failed to set language to %s, using default system language."),
 						language);
-				else
+				}
+				else {
 					error.Printf(_("Failed to set language to %s (%s), using default system language."),
 						pInfo->Description, language);
+				}
 			}
 			else {
 				wxString currentName = currentInfo->CanonicalName;
 
-				if (!pInfo)
+				if (!pInfo) {
 					error.Printf(_("Failed to set language to %s, using default system language (%s, %s)."),
 						language, loc->GetLocale(),
 						currentName);
-				else
+				}
+				else {
 					error.Printf(_("Failed to set language to %s (%s), using default system language (%s, %s)."),
 						pInfo->Description, language, loc->GetLocale(),
 						currentName);
+				}
 			}
 
 			error += _T("\n");
@@ -145,18 +151,20 @@ void CFileZillaApp::InitLocale()
 		}
 #else
 		if (!pInfo || !SetLocale(pInfo->Language)) {
-			for( language = GetFallbackLocale(language); !language.empty(); language = GetFallbackLocale(language) ) {
+			for (language = GetFallbackLocale(language); !language.empty(); language = GetFallbackLocale(language)) {
 				const wxLanguageInfo* fallbackInfo = wxLocale::FindLanguageInfo(language);
-				if( fallbackInfo && SetLocale(fallbackInfo->Language )) {
+				if (fallbackInfo && SetLocale(fallbackInfo->Language)) {
 					COptions::Get()->SetOption(OPTION_LANGUAGE, language.ToStdWstring());
 					return;
 				}
 			}
 			COptions::Get()->SetOption(OPTION_LANGUAGE, std::wstring());
-			if (pInfo && !pInfo->Description.empty())
+			if (pInfo && !pInfo->Description.empty()) {
 				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s (%s), using default system language"), pInfo->Description, language), _("Failed to change language"), wxICON_EXCLAMATION);
-			else
+			}
+			else {
 				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s, using default system language"), language), _("Failed to change language"), wxICON_EXCLAMATION);
+			}
 		}
 #endif
 	}
@@ -456,7 +464,7 @@ bool CFileZillaApp::InitDefaultsDir()
 	AddStartupProfileRecord("InitDefaultsDir");
 #ifdef __WXGTK__
 	m_defaultsDir = COptions::GetUnadjustedSettingsDir();
-	if( m_defaultsDir.empty() || !wxFileName::FileExists(m_defaultsDir.GetPath() + _T("fzdefaults.xml"))) {
+	if (m_defaultsDir.empty() || !wxFileName::FileExists(m_defaultsDir.GetPath() + _T("fzdefaults.xml"))) {
 		if (wxFileName::FileExists(_T("/etc/filezilla/fzdefaults.xml"))) {
 			m_defaultsDir.SetPath(_T("/etc/filezilla"));
 		}
@@ -466,7 +474,7 @@ bool CFileZillaApp::InitDefaultsDir()
 	}
 
 #endif
-	if( m_defaultsDir.empty() ) {
+	if (m_defaultsDir.empty()) {
 		m_defaultsDir = GetDataDir(_T("fzdefaults.xml"));
 	}
 
@@ -478,8 +486,9 @@ bool CFileZillaApp::LoadLocales()
 	AddStartupProfileRecord("CFileZillaApp::LoadLocales");
 #ifndef __WXMAC__
 	m_localesDir = GetDataDir(_T("../locale/de/filezilla.mo"));
-	if (m_localesDir.empty())
+	if (m_localesDir.empty()) {
 		m_localesDir = GetDataDir(_T("../locale/de/LC_MESSAGES/filezilla.mo"));
+	}
 	if (!m_localesDir.empty()) {
 		m_localesDir.ChangePath( _T("../locale") );
 	}
@@ -540,16 +549,18 @@ bool CFileZillaApp::SetLocale(int language)
 
 int CFileZillaApp::GetCurrentLanguage() const
 {
-	if (!m_pLocale)
+	if (!m_pLocale) {
 		return wxLANGUAGE_ENGLISH;
+	}
 
 	return m_pLocale->GetLanguage();
 }
 
 wxString CFileZillaApp::GetCurrentLanguageCode() const
 {
-	if (!m_pLocale)
+	if (!m_pLocale) {
 		return wxString();
+	}
 
 	return m_pLocale->GetCanonicalName();
 }
@@ -563,8 +574,9 @@ void CFileZillaApp::OnFatalException()
 void CFileZillaApp::DisplayEncodingWarning()
 {
 	static bool displayedEncodingWarning = false;
-	if (displayedEncodingWarning)
+	if (displayedEncodingWarning) {
 		return;
+	}
 
 	displayedEncodingWarning = true;
 
@@ -729,8 +741,9 @@ int CFileZillaApp::ProcessCommandLine()
 
 		if (m_pCommandLine->HasSwitch(CCommandLine::version)) {
 			wxString out = wxString::Format(_T("FileZilla %s"), CBuildInfo::GetVersion());
-			if (!CBuildInfo::GetBuildType().empty())
+			if (!CBuildInfo::GetBuildType().empty()) {
 				out += _T(" ") + CBuildInfo::GetBuildType() + _T(" build");
+			}
 			out += _T(", compiled on ") + CBuildInfo::GetBuildDateString();
 
 			printf("%s\n", (const char*)out.mb_str());

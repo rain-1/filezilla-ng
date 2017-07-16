@@ -766,40 +766,38 @@ void wxListCtrlEx::ShowColumnEditor()
 	wxCheckListBox* pListBox = XRCCTRL(dlg, "ID_ACTIVE", wxCheckListBox);
 
 	dlg.m_order = new int[m_columnInfo.size()];
-	for (unsigned int j = 0; j < m_columnInfo.size(); j++)
-	{
-		for (unsigned int i = 0; i < m_columnInfo.size(); i++)
-		{
-			if (m_columnInfo[i].order != j)
+	for (unsigned int j = 0; j < m_columnInfo.size(); ++j) {
+		for (unsigned int i = 0; i < m_columnInfo.size(); ++i) {
+			if (m_columnInfo[i].order != j) {
 				continue;
+			}
 			dlg.m_order[j] = i;
 			pListBox->Append(m_columnInfo[i].name);
-			if (m_columnInfo[i].shown)
+			if (m_columnInfo[i].shown) {
 				pListBox->Check(j);
+			}
 		}
 	}
 	wxASSERT(pListBox->GetCount() == m_columnInfo.size());
 
 	dlg.GetSizer()->Fit(&dlg);
 
-	if (dlg.ShowModal() != wxID_OK)
-	{
+	if (dlg.ShowModal() != wxID_OK) {
 		delete [] dlg.m_order;
 		return;
 	}
 
-	for (unsigned int i = 0; i < m_columnInfo.size(); i++)
-	{
+	for (unsigned int i = 0; i < m_columnInfo.size(); ++i) {
 		int col = dlg.m_order[i];
 		bool isChecked = pListBox->IsChecked(i);
-		if (!isChecked && !col)
-		{
+		if (!isChecked && !col) {
 			isChecked = true;
 			wxMessageBoxEx(_("The filename column cannot be hidden."));
 		}
 		MoveColumn(col, i);
-		if (m_columnInfo[col].shown != isChecked)
+		if (m_columnInfo[col].shown != isChecked) {
 			ShowColumn(col, isChecked);
+		}
 	}
 
 	delete [] dlg.m_order;

@@ -34,8 +34,10 @@ wxFSFile* wxFileSystemBlobHandler::OpenFile(wxFileSystem&, const wxString& locat
 		wxChar const* str = data.c_str();
 
 		buf = static_cast<unsigned char*>(malloc(data.size() / 2));
-		for (size_t i = 0; i < data.size() / 2; ++i) {
-			buf[i] = static_cast<unsigned char>(fz::hex_char_to_int(str[i * 2]) * 16 + fz::hex_char_to_int(str[i * 2 + 1]));
+		if (buf) {
+			for (size_t i = 0; i < data.size() / 2; ++i) {
+				buf[i] = static_cast<unsigned char>(fz::hex_char_to_int(str[i * 2]) * 16 + fz::hex_char_to_int(str[i * 2 + 1]));
+			}
 		}
 
 		buf_len = data.size() / 2;
@@ -45,8 +47,10 @@ wxFSFile* wxFileSystemBlobHandler::OpenFile(wxFileSystem&, const wxString& locat
 		std::string data = fz::base64_decode(fz::to_utf8(location.Mid(pos + 1)));
 		if (!data.empty()) {
 			buf = static_cast<unsigned char*>(malloc(data.size()));
-			memcpy(buf, data.c_str(), data.size());
-			buf_len = data.size();
+			if (buf) {
+				memcpy(buf, data.c_str(), data.size());
+				buf_len = data.size();
+			}
 		}
 	}
 
