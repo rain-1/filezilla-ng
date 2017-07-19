@@ -162,7 +162,7 @@ if test "$buildmain" = "yes"; then
 
   AM_OPTIONS_WXCONFIG
 
-  MIN_WX_VERSION="3.0.3"
+  MIN_WX_VERSION="3.0.3" # Do not downgrade this. wx 3.0.2 has too many known and fixed bugs affecting FileZilla.
   AM_PATH_WXCONFIG([$MIN_WX_VERSION], [wxWin=1], , [aui,xrc,adv,core,xml,base], [--unicode=yes --universal=no])
   if test "$wxWin" != 1; then
     AC_MSG_ERROR([
