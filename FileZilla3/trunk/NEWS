@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.27.0 (2017-07-19)
+
+- SFTP components have been updated and are now based on PuTTY 0.70
+
 3.27.0-rc1 (2017-07-11)
 
 + Support for the Storj decentralized cloud storage provider
