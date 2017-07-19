@@ -42,8 +42,12 @@ copy_libtool()
 
   if [ -x "$top_builddir/$1/.libs/$2" ]; then
     cp "$top_builddir/$1/.libs/$2" "$targetdir/$target" || exit 1
-  else
+  elif [ -x "$top_builddir/$1/$2" ]; then
     cp "$top_builddir/$1/$2" "$targetdir/$target" || exit 1
+  else
+    if [ "$4" != "1" ]; then
+      exit 1
+    fi
   fi
 }
 
@@ -51,6 +55,7 @@ copy_libtool()
 copy_libtool "src/interface" "filezilla.exe"
 copy_libtool "src/putty" "fzsftp.exe"
 copy_libtool "src/putty" "fzputtygen.exe"
+copy_libtool "src/storj" "fzstorj.exe" "" 1
 copy_libtool "src/fzshellext/32" "libfzshellext-0.dll" "fzshellext.dll"
 copy_libtool "src/fzshellext/64" "libfzshellext-0.dll" "fzshellext_64.dll"
 
