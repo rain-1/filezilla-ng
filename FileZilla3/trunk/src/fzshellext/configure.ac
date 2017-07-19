@@ -12,19 +12,19 @@ AC_CANONICAL_HOST
 # Work around libtool bug, it strips -static-libgcc...
 AC_PROG_CC
 AC_PROG_CXX
-if echo "$LDFLAGS" | grep -e '\b-static-libgcc\b'; then
-  if ! echo "$CXX" | grep -e '\b-static-libgcc\b'; then
+if echo "$LDFLAGS" | grep -e '\(^\|\s\)-static-libgcc\b' >/dev/null 2>&1; then
+  if ! echo "$CXX" | grep -e '\(^\|\s\)-static-libgcc\b' >/dev/null 2>&1; then
     CXX="$CXX -static-libgcc"
   fi
-  if ! echo "$CC" | grep -e '-static-libgcc'; then
+  if ! echo "$CC" | grep -e '\(^\|\s\)-static-libgcc\b' >/dev/null 2>&1; then
     CC="$CC -static-libgcc"
   fi
 fi
-if echo "$LDFLAGS" | grep -e '\b-static-libstdc++\b'; then
-  if ! echo "$CXX" | grep -e '\b-static-libstdc++\b'; then
+if echo "$LDFLAGS" | grep -e '\(^\|\s\)-static-libstdc++\($\|\s\)' >/dev/null 2>&1; then
+  if ! echo "$CXX" | grep -e '\(^\|\s\)-static-libstdc++\($\|\s\)' >/dev/null 2>&1; then
     CXX="$CXX -static-libstdc++"
   fi
-  if ! echo "$CC" | grep -e '-static-libstdc++'; then
+  if ! echo "$CC" | grep -e '\(^\|\s\)-static-libstdc++\($\|\s\)' >/dev/null 2>&1; then
     CC="$CC -static-libstdc++"
   fi
 fi
