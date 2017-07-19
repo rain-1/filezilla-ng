@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-07-11 17:36+0200\n"
-"PO-Revision-Date: 2017-06-21 05:35+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
+"POT-Creation-Date: 2017-07-19 09:29+0200\n"
+"PO-Revision-Date: 2017-07-12 19:02+0300\n"
+"Last-Translator: Kaya Zeren <translator@zeron.net>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/zeron/filezilla/"
 "language/tr_TR/)\n"
 "Language: tr_TR\n"
@@ -21,6 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:59
@@ -149,8 +150,8 @@ msgid "%s byte"
 msgid_plural "%s bytes"
 msgstr[0] "%s bayt"
 
-#: ../../locales/../src/interface/FileZilla.cpp:605
-#, fuzzy, c-format
+#: ../../locales/../src/interface/FileZilla.cpp:617
+#, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, %s will not "
 "work.\n"
@@ -158,13 +159,13 @@ msgid ""
 "Please download FileZilla again. If this problem persists, please submit a "
 "bug report."
 msgstr ""
-"%s bulunamadı. Bu FileZilla bileşeni olmadan SFTP çalışmaz.\n"
+"%s bulunamadı. Bu FileZilla bileşeni olmadan %s çalışmaz.\n"
 "\n"
-"FileZilla uygulamasını yeniden indirip kurun. Sorun çözülmüyorsa bir hata "
+"FileZilla yazılımını yeniden indirip kurun. Sorun çözülmüyorsa bir hata "
 "raporu gönderin."
 
-#: ../../locales/../src/interface/FileZilla.cpp:695
-#, fuzzy, c-format
+#: ../../locales/../src/interface/FileZilla.cpp:707
+#, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, %s will not "
 "work.\n"
@@ -173,11 +174,11 @@ msgid ""
 "- Make sure %s is in a directory listed in your PATH environment variable.\n"
 "- Set the full path to %s in the %s environment variable."
 msgstr ""
-"%s bulunamadı. Bu FileZilla bileşeni olmadan, SFTP çalışmaz.\n"
+"%s bulunamadı. Bu FileZilla bileşeni olmadan, %s çalışmaz.\n"
 "\n"
 "Olası çözümler:\n"
-"- %s klasörün PATH çevre değişkeninde listelenmiş olduğundan emin olun.\n"
-"- FZ_FZSFTP çevre değişkenine tam yolu olarak %s yazın."
+"- %s klasörünün PATH çevre değişkeninde listelenmiş olduğundan emin olun.\n"
+"- %s tam yolunu %s ortam değişkenine yazın."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:59
 #, c-format
@@ -719,7 +720,7 @@ msgstr "Ye&ni"
 msgid "&New Site"
 msgstr "Site E&kle"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1754
+#: ../../locales/../src/interface/Mainfrm.cpp:1763
 msgid "&New version available!"
 msgstr "Ye&ni Bir Sürüm Yayınlanmış!"
 
@@ -1083,7 +1084,7 @@ msgstr "K&ullanıcı:"
 msgid "&Username:"
 msgstr "K&ullanıcı Adı:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1748
+#: ../../locales/../src/interface/Mainfrm.cpp:1757
 #, c-format
 msgid "&Version %s"
 msgstr "&Sürüm %s"
@@ -1320,7 +1321,7 @@ msgid ""
 msgstr ""
 "Aynı adlı bir dosya zaten düzenleniyor. Açık dosyayı kapatıp yeniden deneyin."
 
-#: ../../locales/../src/interface/FileZilla.cpp:571
+#: ../../locales/../src/interface/FileZilla.cpp:583
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1405,9 +1406,8 @@ msgid "ASCII"
 msgstr "ASCII"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:767
-#, fuzzy
 msgid "About FileZilla"
-msgstr "FileZilla Pro Hakkında"
+msgstr "FileZilla Hakkında"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1400
 msgid "Above the file lists"
@@ -1785,9 +1785,8 @@ msgstr "Gözat..."
 #: ../../locales/../src/engine/storj/resolve.cpp:150
 #: ../../locales/../src/engine/storj/resolve.cpp:218
 #: ../../locales/../src/engine/storj/resolve.cpp:291
-#, fuzzy
 msgid "Bucket not found"
-msgstr "Dosya bulunamadı"
+msgstr "Buket bulunamadı"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:851
 msgid "Build date:"
@@ -2021,7 +2020,7 @@ msgstr "Büyük küçük harfe duyarlı (varsayılan)"
 msgid "Categories to clear"
 msgstr "Silinecek kategoriler"
 
-#: ../../locales/../src/interface/statusbar.cpp:512
+#: ../../locales/../src/interface/statusbar.cpp:514
 msgid "Certificate and session data are not available yet."
 msgstr "Sertifika ve oturum verileri henüz bilinmiyor."
 
@@ -2056,7 +2055,7 @@ msgstr ""
 "Değiştirilen günlük dosyası ayarlarının etkin olması için FileZilla yeniden "
 "başlatılmalıdır."
 
-#: ../../locales/../src/interface/FileZilla.cpp:571
+#: ../../locales/../src/interface/FileZilla.cpp:583
 msgid "Character encoding issue"
 msgstr "Karakter kodlaması sorunu"
 
@@ -2191,8 +2190,8 @@ msgid "Close &all other tabs"
 msgstr "Diğer tüm sekmeleri k&apat"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1222
-#: ../../locales/../src/interface/Mainfrm.cpp:1243
+#: ../../locales/../src/interface/Mainfrm.cpp:1231
+#: ../../locales/../src/interface/Mainfrm.cpp:1252
 msgid "Close FileZilla"
 msgstr "FileZilla uygulamasını kapatır"
 
@@ -2609,7 +2608,7 @@ msgstr ""
 msgid "Could not establish connection to server"
 msgstr "Sunucu ile bağlantı kurulamadı"
 
-#: ../../locales/../src/interface/FileZilla.cpp:421
+#: ../../locales/../src/interface/FileZilla.cpp:429
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2664,7 +2663,7 @@ msgstr "Beklenen fzputtygen yanıtı alınamadı."
 msgid "Could not get temporary directory to download file into."
 msgstr "Dosyanın kayıt edileceği geçici klasöre erişilemedi."
 
-#: ../../locales/../src/interface/FileZilla.cpp:92
+#: ../../locales/../src/interface/FileZilla.cpp:94
 #, c-format
 msgid "Could not initialize Winsock (%d): %s"
 msgstr "Winsock başlatılamadı (%d): %s"
@@ -2790,9 +2789,8 @@ msgid "Could not send command to fzputtygen."
 msgstr "Komut fzputtygen üzerine gönderilemedi."
 
 #: ../../locales/../src/interface/storj_key_interface.cpp:95
-#, fuzzy
 msgid "Could not send command to fzstorj."
-msgstr "Komut fzputtygen üzerine gönderilemedi."
+msgstr "Komut fzstorj üzerine gönderilemedi."
 
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1283
 msgid "Could not sort peer certificates"
@@ -2916,7 +2914,7 @@ msgid "Create director&y and enter it"
 msgstr "Kla&sör oluştur ve aç"
 
 #: ../../locales/../src/interface/LocalListView.cpp:932
-#: ../../locales/../src/interface/LocalTreeView.cpp:1166
+#: ../../locales/../src/interface/LocalTreeView.cpp:1170
 #: ../../locales/../src/interface/RemoteListView.cpp:1324
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1251
 msgid "Create directory"
@@ -2965,15 +2963,15 @@ msgstr ""
 "Geçerli (%s) uzak klasörü, (%s) eşleştirme kökü altında değil.\n"
 "Eşzamanlı tarama devre dışı bırakıldı."
 
-#: ../../locales/../src/interface/statusbar.cpp:400
+#: ../../locales/../src/interface/statusbar.cpp:402
 msgid "Current transfer type is set to ASCII."
 msgstr "Geçerli aktarım türü ASCII olarak ayarlandı."
 
-#: ../../locales/../src/interface/statusbar.cpp:408
+#: ../../locales/../src/interface/statusbar.cpp:410
 msgid "Current transfer type is set to automatic detection."
 msgstr "Geçerli aktarım türü otomatik algılanacak şekilde ayarlandı."
 
-#: ../../locales/../src/interface/statusbar.cpp:404
+#: ../../locales/../src/interface/statusbar.cpp:406
 msgid "Current transfer type is set to binary."
 msgstr "Geçerli aktarım türü ikili olarak ayarlandı."
 
@@ -3174,7 +3172,7 @@ msgstr "%u dosya şuradan siliniyor: \"%s\""
 msgid "Deleting symbolic link"
 msgstr "Sembolik bağlantı siliniyor"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:971
+#: ../../locales/../src/interface/LocalTreeView.cpp:975
 msgid "Desktop"
 msgstr "Masaüstü"
 
@@ -3209,7 +3207,7 @@ msgstr "Klasör"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1850
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:429
 #: ../../locales/../src/interface/filelistctrl.cpp:469
-#: ../../locales/../src/interface/Mainfrm.cpp:2299
+#: ../../locales/../src/interface/Mainfrm.cpp:2308
 #: ../../locales/../src/interface/toolbar.cpp:51
 msgid "Directory comparison"
 msgstr "K&lasör karşılaştırma kullanılsın"
@@ -3305,8 +3303,8 @@ msgstr "Varsayılan düzenleyici kulla&nılmasın"
 msgid "Do the same with &all selected files already being edited"
 msgstr "Düzenlenen &tüm dosyalar için aynı işlem uygulansın"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1225
-#: ../../locales/../src/interface/Mainfrm.cpp:1247
+#: ../../locales/../src/interface/Mainfrm.cpp:1234
+#: ../../locales/../src/interface/Mainfrm.cpp:1256
 msgid "Do you really want to close FileZilla?"
 msgstr "FileZilla kapatılsın mı?"
 
@@ -3363,12 +3361,12 @@ msgstr "İndirme"
 msgid "Download &limit:"
 msgstr "İndirme &sınırı:"
 
-#: ../../locales/../src/interface/statusbar.cpp:595
+#: ../../locales/../src/interface/statusbar.cpp:597
 #, c-format
 msgid "Download limit: %s/s"
 msgstr "İndirme sınırı: %s/s"
 
-#: ../../locales/../src/interface/statusbar.cpp:598
+#: ../../locales/../src/interface/statusbar.cpp:600
 msgid "Download limit: none"
 msgstr "İndirme sınırı: yok"
 
@@ -3541,14 +3539,12 @@ msgid "Encryption"
 msgstr "Şifreleme"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:269
-#, fuzzy
 msgid "Encryption &Key:"
-msgstr "Şifr&eleme:"
+msgstr "Şifreleme &Anahtarı:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:347
-#, fuzzy
 msgid "Encryption &key:"
-msgstr "Şifr&eleme:"
+msgstr "Şifreleme &anahtarı:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2197
 msgid "Encryption details"
@@ -3828,14 +3824,14 @@ msgstr "FTPS - FTP üzerinden örtülü TLS"
 #: ../../locales/../src/interface/LocalListView.cpp:919
 #: ../../locales/../src/interface/LocalListView.cpp:1836
 #: ../../locales/../src/interface/LocalTreeView.cpp:860
-#: ../../locales/../src/interface/LocalTreeView.cpp:1139
+#: ../../locales/../src/interface/LocalTreeView.cpp:1143
 #: ../../locales/../src/interface/viewheader.cpp:499
 msgid "Failed to change directory"
 msgstr "Klasör değiştirilemedi"
 
-#: ../../locales/../src/interface/FileZilla.cpp:142
-#: ../../locales/../src/interface/FileZilla.cpp:157
-#: ../../locales/../src/interface/FileZilla.cpp:159
+#: ../../locales/../src/interface/FileZilla.cpp:148
+#: ../../locales/../src/interface/FileZilla.cpp:163
+#: ../../locales/../src/interface/FileZilla.cpp:166
 msgid "Failed to change language"
 msgstr "Dil değiştirilemedi"
 
@@ -3890,7 +3886,7 @@ msgstr "FTP motoru başlatılamadı"
 msgid "Failed to initialize TLS."
 msgstr "TLS başlatılamadı."
 
-#: ../../locales/../src/interface/FileZilla.cpp:93
+#: ../../locales/../src/interface/FileZilla.cpp:95
 msgid "Failed to initialize networking"
 msgstr "Ağ sistemi başlatılamadı"
 
@@ -3955,13 +3951,13 @@ msgstr "Dış IP adresi okunamadı."
 msgid "Failed to send command."
 msgstr "Komut gönderilemedi."
 
-#: ../../locales/../src/interface/FileZilla.cpp:157
+#: ../../locales/../src/interface/FileZilla.cpp:163
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language"
 msgstr ""
 "Dil %s (%s) olarak değiştirilemiyor, sistem varsayılan dili kullanılacak"
 
-#: ../../locales/../src/interface/FileZilla.cpp:135
+#: ../../locales/../src/interface/FileZilla.cpp:140
 #, c-format
 msgid ""
 "Failed to set language to %s (%s), using default system language (%s, %s)."
@@ -3969,24 +3965,24 @@ msgstr ""
 "Dil %s (%s) olarak değiştirilemedi, sistem varsayılan dili kullanılacak (%s, "
 "%s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:124
+#: ../../locales/../src/interface/FileZilla.cpp:127
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language."
 msgstr ""
 "Dil %s (%s) olarak değiştirilemiyor, sistem varsayılan dili kullanılacak."
 
-#: ../../locales/../src/interface/FileZilla.cpp:159
+#: ../../locales/../src/interface/FileZilla.cpp:166
 #, c-format
 msgid "Failed to set language to %s, using default system language"
 msgstr "Dil %s olarak değiştirilemiyor, sistem varsayılan dili kullanılacak"
 
-#: ../../locales/../src/interface/FileZilla.cpp:131
+#: ../../locales/../src/interface/FileZilla.cpp:135
 #, c-format
 msgid "Failed to set language to %s, using default system language (%s, %s)."
 msgstr ""
 "Dil %s olarak değiştirilemiyor, sistem varsayılan dili kullanılacak (%s, %s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:121
+#: ../../locales/../src/interface/FileZilla.cpp:123
 #, c-format
 msgid "Failed to set language to %s, using default system language."
 msgstr "Dil %s olarak değiştirilemiyor, sistem varsayılan dili kullanılacak."
@@ -4063,8 +4059,8 @@ msgstr "Dosya Listeleri"
 #: ../../locales/../src/engine/storj/resolve.cpp:105
 #: ../../locales/../src/engine/storj/resolve.cpp:176
 #: ../../locales/../src/interface/edithandler.cpp:1602
-#: ../../locales/../src/interface/FileZilla.cpp:606
-#: ../../locales/../src/interface/FileZilla.cpp:696
+#: ../../locales/../src/interface/FileZilla.cpp:618
+#: ../../locales/../src/interface/FileZilla.cpp:708
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "Dosya bulunamadı"
@@ -4107,7 +4103,7 @@ msgstr "Dosya aktarıldı"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "%s boyutundaki dosya %s sürede aktarıldı"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1224
+#: ../../locales/../src/interface/Mainfrm.cpp:1233
 msgid "File transfers still in progress."
 msgstr "Dosya aktarımı henüz bitmedi."
 
@@ -4119,7 +4115,7 @@ msgstr "Dosya ASCII veri türüyle aktarılsa olurdu."
 msgid "File would transfer with binary data type."
 msgstr "Dosya ikili veri türüyle aktarılsa olurdu."
 
-#: ../../locales/../src/interface/FileZilla.cpp:422
+#: ../../locales/../src/interface/FileZilla.cpp:430
 #: ../../locales/../src/interface/quickconnectbar.cpp:99
 msgid "FileZilla Error"
 msgstr "FileZilla Sorunu"
@@ -4135,7 +4131,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "Filezilla şu anda bir sunucuya bağlı."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1530
+#: ../../locales/../src/interface/Mainfrm.cpp:1539
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "Dil değişikliğinin etkili olabilmesi için FileZilla yeniden başlatılmalı."
@@ -4191,9 +4187,8 @@ msgid "Files currently being edited"
 msgstr "Şu an düzenlenen dosyalar"
 
 #: ../../locales/../src/engine/storj/resolve.cpp:313
-#, fuzzy
 msgid "Files not found"
-msgstr "Dosya bulunamadı"
+msgstr "Dosyalar bulunamadı"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:105
 #: ../../locales/../src/interface/LocalListView.cpp:287
@@ -4355,9 +4350,8 @@ msgid "General SOCKS server failure"
 msgstr "Genel SOCKS sunucu sorunu"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:288
-#, fuzzy
 msgid "Generate..."
-msgstr "Genel"
+msgstr "Oluştur..."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:707
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:98
@@ -4623,7 +4617,7 @@ msgstr ""
 "Sına'ya tıkladığınızda, probe.filezilla-project.org adresine bağlanılarak "
 "bazı basit sınamalar yapılır."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1246
+#: ../../locales/../src/interface/Mainfrm.cpp:1255
 msgid "If you close FileZilla, your changes will be lost."
 msgstr ""
 "FileZilla uygulamasını şimdi kapatırsanız, yaptığınız değişiklikler "
@@ -4854,9 +4848,8 @@ msgstr "Satır geçersiz"
 #: ../../locales/../src/engine/storj/list.cpp:21
 #: ../../locales/../src/engine/storj/mkd.cpp:22
 #: ../../locales/../src/engine/storj/rmd.cpp:24
-#, fuzzy
 msgid "Invalid path"
-msgstr "Tarih geçersiz"
+msgstr "Yol geçersiz"
 
 #: ../../locales/../src/interface/serverdata.cpp:13
 #: ../../locales/../src/interface/serverdata.cpp:136
@@ -4979,7 +4972,7 @@ msgstr "E&n düşük"
 msgid "Language"
 msgstr "Dil"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1530
+#: ../../locales/../src/interface/Mainfrm.cpp:1539
 msgid "Language changed"
 msgstr "Dil değişti"
 
@@ -5208,6 +5201,8 @@ msgid ""
 "Malformed response: Server sent response body with a request verb or "
 "response code that disallows a response body."
 msgstr ""
+"Yanıt biçimi hatalı: Sunucu yanıt gövdesini istek eylemi ile gönderdi ya da "
+"yanıt kodu bir yanıt gövdesi bulunmasına izin vermiyor."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2824
 #: ../../locales/../src/interface/manual_transfer.cpp:288
@@ -5256,7 +5251,7 @@ msgid "Memory allocation failure"
 msgstr "Bellek yerleşimi sorunu"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:434
-#: ../../locales/../src/interface/Mainfrm.cpp:1845
+#: ../../locales/../src/interface/Mainfrm.cpp:1854
 msgid "Message log"
 msgstr "Günlük"
 
@@ -5284,11 +5279,11 @@ msgstr "&Aşağı taşı"
 msgid "Move &up"
 msgstr "Y&ukarı taşı"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:990
+#: ../../locales/../src/interface/LocalTreeView.cpp:994
 msgid "My Computer"
 msgstr "Bilgisayarım"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:980
+#: ../../locales/../src/interface/LocalTreeView.cpp:984
 msgid "My Documents"
 msgstr "Belgelerim"
 
@@ -5393,7 +5388,7 @@ msgstr "Yer İ&mi Ekle"
 msgid "New bookmark"
 msgstr "Yeni yer imi"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1170
+#: ../../locales/../src/interface/LocalTreeView.cpp:1174
 #: ../../locales/../src/interface/RemoteListView.cpp:1337
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1264
 msgid "New directory"
@@ -5553,9 +5548,8 @@ msgstr ""
 "Dikkat bu özellik yalnız FTP iletişim kuralı kullanılırken desteklenir."
 
 #: ../../locales/../src/interface/resources/xrc/storj.xrc:27
-#, fuzzy
 msgid "Note: A lost key cannot be recovered."
-msgstr "Bu süzgeç kümesi silinemiyor."
+msgstr "Not: Kaybedilen bir anahtar öğrenilemez."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:596
 msgid "Note: This only works with plain, unencrypted FTP connections."
@@ -5807,7 +5801,7 @@ msgstr "PORT komutu yöneltici ya da güvenlik duvarı tarafından bozuldu."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&sif (önerilen)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2460
+#: ../../locales/../src/interface/Mainfrm.cpp:2469
 msgid "Parameter not a valid URL"
 msgstr "Parametre geçerli bir İnternet adresi değil"
 
@@ -5840,7 +5834,7 @@ msgstr "Varsayılan aktarım kipi Pasif olarak seçildi."
 #: ../../locales/../src/engine/storj/connect.cpp:82
 #: ../../locales/../src/engine/storj/connect.cpp:93
 msgid "Password or encryption key is not set"
-msgstr ""
+msgstr "Parola ya da şifreleme anahtarı ayarlanmamış"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:95
 msgid "Password required"
@@ -5861,7 +5855,7 @@ msgstr "Yol"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "%s klasörü ve %s alt klasörü için yol oluşturulamıyor"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2415
+#: ../../locales/../src/interface/Mainfrm.cpp:2424
 msgid "Path not found:"
 msgstr "Yol bulunamadı:"
 
@@ -6034,7 +6028,7 @@ msgstr ""
 "almalısınız."
 
 #: ../../locales/../src/interface/LocalListView.cpp:932
-#: ../../locales/../src/interface/LocalTreeView.cpp:1166
+#: ../../locales/../src/interface/LocalTreeView.cpp:1170
 #: ../../locales/../src/interface/RemoteListView.cpp:1324
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1251
 msgid "Please enter the name of the directory which should be created:"
@@ -6089,7 +6083,7 @@ msgstr ""
 "Lütfen dışarı giden FileZilla bağlantılarına izin verildiğine ve adres "
 "bulucudaki adresin doğru yazıldığına emin olun."
 
-#: ../../locales/../src/interface/FileZilla.cpp:141
+#: ../../locales/../src/interface/FileZilla.cpp:147
 msgid "Please make sure the requested locale is installed on your system."
 msgstr ""
 "Lütfen istenen yerel dosyaların sisteminize kurulmuş olduğuna emin olun."
@@ -6152,6 +6146,8 @@ msgid ""
 "Please save this key in a secure location. Without the correct key your "
 "uploaded files cannot be accessed."
 msgstr ""
+"Lütfen bu anahtarı güvenli bir yerde saklayın. Doğru anahtar olmadan "
+"yüklediğiniz dosyalara erişilemez."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3593
 msgid "Please select an action:"
@@ -6364,18 +6360,18 @@ msgstr "Genel izinler"
 msgid "Queue has been fully processed"
 msgstr "Kuyruk tamamen işlendi"
 
-#: ../../locales/../src/interface/statusbar.cpp:437
+#: ../../locales/../src/interface/statusbar.cpp:439
 #, c-format
 msgid "Queue: %s MiB"
 msgstr "Aktarım Kuyruğu: %s MiB"
 
-#: ../../locales/../src/interface/statusbar.cpp:372
+#: ../../locales/../src/interface/statusbar.cpp:374
 #, c-format
 msgid "Queue: %s%s"
 msgstr "Aktarım Kuyruğu: %s%s"
 
-#: ../../locales/../src/interface/statusbar.cpp:368
-#: ../../locales/../src/interface/statusbar.cpp:428
+#: ../../locales/../src/interface/statusbar.cpp:370
+#: ../../locales/../src/interface/statusbar.cpp:430
 msgid "Queue: empty"
 msgstr "Aktarım Kuyruğu: Boş"
 
@@ -6793,9 +6789,9 @@ msgstr "Eş&zamanlı Tarama"
 msgid "SFTP"
 msgstr "SFTP"
 
-#: ../../locales/../src/interface/FileZilla.cpp:582
+#: ../../locales/../src/interface/FileZilla.cpp:594
 msgid "SFTP support"
-msgstr ""
+msgstr "SFTP desteği"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:730
 msgid "SOC&KS 4"
@@ -6864,7 +6860,7 @@ msgstr "Sunucuda dosya arayın"
 msgid "Search type:"
 msgstr "Arama türü:"
 
-#: ../../locales/../src/interface/statusbar.cpp:512
+#: ../../locales/../src/interface/statusbar.cpp:514
 msgid "Security information"
 msgstr "Güvenlik bilgileri"
 
@@ -6898,7 +6894,7 @@ msgstr ""
 msgid "Select default editor"
 msgstr "Varsayılan düzenleyiciyi seçin"
 
-#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:18
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:16
 msgid ""
 "Select default file exists action if the target file already exists. This "
 "selection is valid only for the current session."
@@ -6906,7 +6902,7 @@ msgstr ""
 "Varsayılan 'Hedef Dosya Var' işlemini seçin. Bu seçim yalnız bu oturum için "
 "geçerli olur."
 
-#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:16
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:13
 msgid ""
 "Select default file exists action only for the currently selected files in "
 "the queue."
@@ -7239,7 +7235,7 @@ msgstr "Ham klasö&r listesi görüntülensin"
 msgid "Show &welcome dialog..."
 msgstr "&Karşılama Penceresini Görüntüle..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2302
+#: ../../locales/../src/interface/Mainfrm.cpp:2311
 msgid "Show both directory trees and continue comparing?"
 msgstr "Her iki klasör ağacı görüntülenerek karşılaştırmaya devam edilsin mi?"
 
@@ -7270,7 +7266,7 @@ msgstr "İmza Algoritması:"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:159
 msgid "Signup"
-msgstr ""
+msgstr "Hesap Aç"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1833
 msgid "Site &Manager entries"
@@ -7285,9 +7281,8 @@ msgid "Site Manager - Cannot remember password"
 msgstr "Site Yöneticisi - Parolalar hatırlanmıyor"
 
 #: ../../locales/../src/interface/resources/xrc/storj.xrc:51
-#, fuzzy
 msgid "Site Manager - Generated key"
-msgstr "&Site Yöneticisi kayıtları"
+msgstr "Site Yöneticisi - Oluşturulmuş anahtar"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:982
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:995
@@ -7405,7 +7400,7 @@ msgstr "Soket bağlı değil"
 msgid "Socket type not supported for address family"
 msgstr "Soket türü bu adres ailesinde desteklenmiyor"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1245
+#: ../../locales/../src/interface/Mainfrm.cpp:1254
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Bazı dosyalar düzenlenmiş ve yüklenmeleri gerekli."
 
@@ -7460,11 +7455,11 @@ msgstr "Hız sınırları"
 msgid "Speed limits"
 msgstr "Hız Sınırları"
 
-#: ../../locales/../src/interface/statusbar.cpp:589
+#: ../../locales/../src/interface/statusbar.cpp:591
 msgid "Speed limits are disabled, click to change."
 msgstr "Hız sınırları devre dışı, değiştirmek için tıklayın."
 
-#: ../../locales/../src/interface/statusbar.cpp:592
+#: ../../locales/../src/interface/statusbar.cpp:594
 msgid "Speed limits are enabled, click to change."
 msgstr "Hız sınırları etkin, değiştirmek için tıklayın."
 
@@ -7536,11 +7531,11 @@ msgstr "Alt klasör işlemini durdur"
 
 #: ../../locales/../src/engine/server.cpp:28
 msgid "Storj - Decentralized Cloud Storage"
-msgstr ""
+msgstr "Storj - Merkezi Olmayan Bulut Depolama"
 
-#: ../../locales/../src/interface/FileZilla.cpp:589
+#: ../../locales/../src/interface/FileZilla.cpp:601
 msgid "Storj support"
-msgstr ""
+msgstr "Storj desteği"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:251
 msgid "Street:"
@@ -7605,8 +7600,8 @@ msgstr "Sözdizimi sorunu"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2417
-#: ../../locales/../src/interface/Mainfrm.cpp:2462
+#: ../../locales/../src/interface/Mainfrm.cpp:2426
+#: ../../locales/../src/interface/Mainfrm.cpp:2471
 msgid "Syntax error in command line"
 msgstr "Komut satırında sözdizimi sorunu"
 
@@ -7731,8 +7726,10 @@ msgid ""
 "The certificate requires the server to include an OCSP status in its "
 "response, but the OCSP status is missing."
 msgstr ""
+"Sertifika için yanıt içinde bir OCSP durumunun bulunması gerekiyor ancak "
+"OCSP durumu eksik."
 
-#: ../../locales/../src/interface/statusbar.cpp:473
+#: ../../locales/../src/interface/statusbar.cpp:475
 msgid "The connection is encrypted. Click icon for details."
 msgstr "Bu bağlantı şifrelenmiş. Ayrıntılar için simgeye tıklayın."
 
@@ -7890,7 +7887,7 @@ msgstr ""
 msgid "The filename column can neither be hidden nor moved."
 msgstr "Dosya adı sütunu gizlenemez ya da kaldırılamaz."
 
-#: ../../locales/../src/interface/listctrlex.cpp:798
+#: ../../locales/../src/interface/listctrlex.cpp:795
 msgid "The filename column cannot be hidden."
 msgstr "Dosya adı sütunu gizlenemez."
 
@@ -7905,13 +7902,12 @@ msgid "The following characters will be replaced: %s"
 msgstr "Değiştirilecek karakterler: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3665
-#, fuzzy
 msgid "The free open source FTP solution"
-msgstr "Profesyonel açık kaynaklı FTP çözümü"
+msgstr "Açık kaynaklı FTP çözümü"
 
 #: ../../locales/../src/interface/resources/xrc/storj.xrc:10
 msgid "The generated encryption key is:"
-msgstr ""
+msgstr "Oluşturulan şifreleme anahtarı:"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:295
 msgid "The global bookmarks could not be saved."
@@ -8161,12 +8157,12 @@ msgstr "Zaman Aşımı"
 msgid "Title:"
 msgstr "Başlık:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2300
+#: ../../locales/../src/interface/Mainfrm.cpp:2309
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Klasörleri karşılaştırmak için her iki dosya listesi de hizalanmış olmalı."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2301
+#: ../../locales/../src/interface/Mainfrm.cpp:2310
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Bunu yapabilmek için klasör ağaçlarının ikisi de görünmeli ya da gizlenmeli."
@@ -8465,12 +8461,12 @@ msgstr "Yükleme"
 msgid "Upload failed"
 msgstr "Yüklenemedi"
 
-#: ../../locales/../src/interface/statusbar.cpp:602
+#: ../../locales/../src/interface/statusbar.cpp:604
 #, c-format
 msgid "Upload limit: %s/s"
 msgstr "Yükleme sınırı: %s/s"
 
-#: ../../locales/../src/interface/statusbar.cpp:605
+#: ../../locales/../src/interface/statusbar.cpp:607
 msgid "Upload limit: none"
 msgstr "Yükleme sınırı: yok"
 
@@ -8677,9 +8673,8 @@ msgid "Warning: Potential security breach!"
 msgstr "Dikkat: Olası güvenlik ihlali!"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3836
-#, fuzzy
 msgid "Welcome to FileZilla"
-msgstr "FileZilla Pro Uygulamasına Hoş Geldiniz"
+msgstr "FileZilla Uygulamasına Hoş Geldiniz"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3697
 msgid "What's new"
@@ -8786,6 +8781,8 @@ msgid ""
 "You cannot change password and encryption key individually if using a master "
 "password."
 msgstr ""
+"Ana parola kullanıyorsanız tek başına parola ya da şifreleme anahtarını "
+"değiştiremezsiniz."
 
 #: ../../locales/../src/interface/import.cpp:29
 msgid "You cannot import settings from FileZilla's own settings directory."
@@ -8800,9 +8797,8 @@ msgstr ""
 "Lütfen dosya adlarında geçerli olan bir karakter yazın."
 
 #: ../../locales/../src/engine/storj/file_transfer.cpp:34
-#, fuzzy
 msgid "You cannot upload files into the root directory."
-msgstr "Uzak bir klasör yazmalısınız."
+msgstr "Kök klasöre dosya yükleyemezsiniz."
 
 #: ../../locales/../src/interface/asyncrequestqueue.cpp:313
 msgid "You did not enter a new name for the file. Overwrite the file instead?"
@@ -8854,9 +8850,8 @@ msgid "You have to enter a valid IPv4 address."
 msgstr "Geçerli bir IPv4 adresi yazmalısınız."
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1126
-#, fuzzy
 msgid "You have to enter a valid encryption key"
-msgstr "Yerel bir klasör yazmalısınız."
+msgstr "Geçerli bir şifreleme anahtarı yazmalısınız"
 
 #: ../../locales/../src/interface/search.cpp:887
 msgid "You have to enter a writable local directory."
@@ -9031,24 +9026,21 @@ msgid "fzsftp could not be started"
 msgstr "fzsftp başlatılamadı"
 
 #: ../../locales/../src/engine/storj/connect.cpp:119
-#, fuzzy
 msgid "fzstorj belongs to a different version of FileZilla"
-msgstr "fzsftp farklı bir FileZilla sürümüne ait"
+msgstr "fzstorj farklı bir FileZilla sürümüne ait"
 
 #: ../../locales/../src/engine/storj/storjcontrolsocket.cpp:337
-#, fuzzy
 msgid "fzstorj could not be started"
-msgstr "fzsftp başlatılamadı"
+msgstr "fzstorj başlatılamadı"
 
 #: ../../locales/../src/interface/storj_key_interface.cpp:62
 #: ../../locales/../src/interface/storj_key_interface.cpp:77
-#, fuzzy
 msgid ""
 "fzstorj could not be started.\n"
 "Please make sure this executable exists in the same directory as the main "
 "FileZilla executable."
 msgstr ""
-"fzputtygen başlatılamadı.\n"
+"fzstorj başlatılamadı.\n"
 "Lütfen bu çalıştırılabilir dosyanın FileZilla çalıştırılabilir dosyası ile "
 "aynı klasörde bulunduğundan emin olun."
 
@@ -9140,93 +9132,3 @@ msgstr "herkes yazabilir"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:890
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
-
-#~ msgid "&Glacier"
-#~ msgstr "&Glacier"
-
-#~ msgid "&Reduced Redundancy"
-#~ msgstr "&Azaltılmış Yedeklilik"
-
-#~ msgid "&Standard"
-#~ msgstr "&Standart"
-
-#~ msgid "- s3:// for Amazon Simple Storage Service (S3)"
-#~ msgstr "- s3:// for Amazon Basit Depolama Hizmeti (S3)"
-
-#~ msgid ""
-#~ "A Content-Type for application/xml was returned but the payload cannot be "
-#~ "interpreted as XML."
-#~ msgstr ""
-#~ "application/xml için bir içerik türü bildirildi ancak yük XML olarak "
-#~ "yorumlanamadı."
-
-#~ msgid "Edit"
-#~ msgstr "Düzenle"
-
-#~ msgid ""
-#~ "File attributes could not be retrieved. Please check the log for more "
-#~ "details and troubleshooting."
-#~ msgstr ""
-#~ "Dosya öznitelikleri alınamadı. Lütfen ayrıntılı bilgi almak ve sorunu "
-#~ "çözmek için günlüğe bakın."
-
-#~ msgid "Grantee:"
-#~ msgstr "İzin Veren:"
-
-#~ msgid "Metadata"
-#~ msgstr "Üst Veri"
-
-#~ msgid "Moving files between different buckets is not supported."
-#~ msgstr "Farklı buketler arasında dosya aktarımı desteklenmiyor."
-
-#~ msgid ""
-#~ "On S3, the root represents your account. Please choose or create a bucket "
-#~ "for uploading contents."
-#~ msgstr ""
-#~ "S3 üzerinde kök klasör hesabınızı görüntüler. Lütfen içerik yüklemek için "
-#~ "bir buket seçin ya da ekleyin."
-
-#~ msgid "Open"
-#~ msgstr "Aç"
-
-#~ msgid "Please verify the user name and password used to connect."
-#~ msgstr "Lütfen bağlantının kullanıcı adı ve parolasını denetleyin."
-
-#~ msgid "Retrieving object permissions and metadata..."
-#~ msgstr "Nesne izinleri ve üst veri alınıyor..."
-
-#~ msgid "S3 Properties"
-#~ msgstr "S3 Özellikleri"
-
-#~ msgid "Standard - &Infrequent Access"
-#~ msgstr "Standard - &Aralıklı Erişim"
-
-#~ msgid "Storage Class:"
-#~ msgstr "Depolama Sınıfı:"
-
-#~ msgid "Successfully deleted"
-#~ msgstr "Silindi"
-
-#~ msgid "Tags"
-#~ msgstr "Etiketler"
-
-#~ msgid "The S3 metadata command requires an S3 connection."
-#~ msgstr "S3 üst veri komutu için bir S3 bağlantısı olmalıdır."
-
-#~ msgid "The file %s could not be deleted. %s."
-#~ msgstr "%s dosyası silinemedi. %s."
-
-#~ msgid "The file %s does not exist. You may need to refresh the list."
-#~ msgstr "%s dosyası bulunamadı. Listeyi yenilemelisiniz."
-
-#~ msgid "The name of the directory to delete cannot be empty."
-#~ msgstr "Silinecek klasör adı boş olamaz."
-
-#~ msgid "The part upload response did not contain an ETag header."
-#~ msgstr "Yükleme yanıtı bölümünde ETag üst bilgisi bulunamadı."
-
-#~ msgid "Unable to retrieve"
-#~ msgstr "Alınamadı"
-
-#~ msgid "View"
-#~ msgstr "Görüntüle"
