@@ -945,23 +945,23 @@ void wxListCtrlEx::CancelLabelEdit()
 void wxListCtrlEx::OnBeginLabelEdit(wxListEvent& event)
 {
 #ifndef __WXMSW__
-	if (m_editing)
-	{
+	if (m_editing) {
 		event.Veto();
 		return;
 	}
 #endif
-	if (m_blockedLabelEditing)
-	{
+	if (m_blockedLabelEditing) {
 		event.Veto();
 		return;
 	}
 
-	if (!OnBeginRename(event))
+	if (!OnBeginRename(event)) {
 		event.Veto();
+	}
 #ifndef __WXMSW__
-	else
+	else {
 		m_editing = true;
+	}
 #endif
 }
 
@@ -969,35 +969,36 @@ void wxListCtrlEx::OnEndLabelEdit(wxListEvent& event)
 {
 #ifdef __WXMAC__
 	int item = event.GetIndex();
-	if (item != -1)
-	{
+	if (item != -1) {
 		int to = item + 1;
-		if (to < GetItemCount())
-		{
+		if (to < GetItemCount()) {
 			int from = item;
-			if (from)
+			if (from) {
 				from--;
+			}
 			RefreshItems(from, to);
 		}
-		else
+		else {
 			RefreshListOnly();
+		}
 	}
 #endif
 
 #ifndef __WXMSW__
-	if (!m_editing)
-	{
+	if (!m_editing) {
 		event.Veto();
 		return;
 	}
 	m_editing = false;
 #endif
 
-	if (event.IsEditCancelled())
+	if (event.IsEditCancelled()) {
 		return;
+	}
 
-	if (!OnAcceptRename(event))
+	if (!OnAcceptRename(event)) {
 		event.Veto();
+	}
 }
 
 bool wxListCtrlEx::OnBeginRename(const wxListEvent&)
@@ -1012,16 +1013,15 @@ bool wxListCtrlEx::OnAcceptRename(const wxListEvent&)
 
 void wxListCtrlEx::SetLabelEditBlock(bool block)
 {
-	if (block)
-	{
+	if (block) {
 		CancelLabelEdit();
 		++m_blockedLabelEditing;
 	}
-	else
-	{
+	else {
 		wxASSERT(m_blockedLabelEditing);
-		if (m_blockedLabelEditing > 0)
-			m_blockedLabelEditing--;
+		if (m_blockedLabelEditing > 0) {
+			--m_blockedLabelEditing;
+		}
 	}
 }
 
@@ -1038,8 +1038,9 @@ CLabelEditBlocker::~CLabelEditBlocker()
 
 void wxListCtrlEx::OnColumnDragging(wxListEvent& event)
 {
-	if (event.GetItem().GetWidth() < MIN_COLUMN_WIDTH)
+	if (event.GetItem().GetWidth() < MIN_COLUMN_WIDTH) {
 		event.Veto();
+	}
 }
 
 #ifdef __WXMSW__
@@ -1050,8 +1051,9 @@ bool wxListCtrlEx::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 	NMHDR *nmhdr = (NMHDR *)lParam;
 	HWND hwndHdr = ListView_GetHeader((HWND)GetHandle());
 
-	if (nmhdr->hwndFrom != hwndHdr)
+	if (nmhdr->hwndFrom != hwndHdr) {
 		return wxListCtrl::MSWOnNotify(idCtrl, lParam, result);
+	}
 
 	HD_NOTIFY *nmHDR = (HD_NOTIFY *)nmhdr;
 

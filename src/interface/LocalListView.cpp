@@ -1068,29 +1068,35 @@ bool CLocalListView::OnBeginRename(const wxListEvent& event)
 bool CLocalListView::OnAcceptRename(const wxListEvent& event)
 {
 	const int index = event.GetIndex();
-	if (!index && m_hasParent)
+	if (!index && m_hasParent) {
 		return false;
+	}
 
-	if (event.GetLabel().empty())
+	if (event.GetLabel().empty()) {
 		return false;
+	}
 
-	if (!m_state.GetLocalDir().IsWriteable())
+	if (!m_state.GetLocalDir().IsWriteable()) {
 		return false;
+	}
 
 	CLocalFileData *const data = GetData(event.GetIndex());
-	if (!data || data->comparison_flags == fill)
+	if (!data || data->comparison_flags == fill) {
 		return false;
+	}
 
 	wxString newname = event.GetLabel();
 #ifdef __WXMSW__
 	newname = newname.Left(255);
 #endif
 
-	if (newname == data->name)
+	if (newname == data->name) {
 		return false;
+	}
 
-	if (!RenameFile(this, m_dir.GetPath(), data->name, newname))
+	if (!RenameFile(this, m_dir.GetPath(), data->name, newname)) {
 		return false;
+	}
 
 	data->name = newname;
 #ifdef __WXMSW__
