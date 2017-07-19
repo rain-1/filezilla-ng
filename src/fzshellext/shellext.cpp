@@ -110,6 +110,10 @@ void operator delete[](void* ptr, std::size_t)
 	}
 }
 
+#ifdef __GNUC__
+extern "C" void __cxa_pure_virtual() {}
+#endif
+
 //---------------------------------------------------------------------------
 class CShellExtClassFactory : public IClassFactory
 {
