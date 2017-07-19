@@ -9,6 +9,27 @@ AC_ARG_ENABLE(shellext, AS_HELP_STRING([--disable-shellext],[Disable shellextens
 
 AC_CANONICAL_HOST
 
+# Work around libtool bug, it strips -static-libgcc...
+AC_PROG_CC
+AC_PROG_CXX
+if echo "$LDFLAGS" | grep -e '\b-static-libgcc\b'; then
+  if ! echo "$CXX" | grep -e '\b-static-libgcc\b'; then
+    CXX="$CXX -static-libgcc"
+  fi
+  if ! echo "$CC" | grep -e '-static-libgcc'; then
+    CC="$CC -static-libgcc"
+  fi
+fi
+if echo "$LDFLAGS" | grep -e '\b-static-libstdc++\b'; then
+  if ! echo "$CXX" | grep -e '\b-static-libstdc++\b'; then
+    CXX="$CXX -static-libstdc++"
+  fi
+  if ! echo "$CC" | grep -e '-static-libstdc++'; then
+    CC="$CC -static-libstdc++"
+  fi
+fi
+
+
 LT_INIT
 LT_LANG([C++])
 
@@ -32,6 +53,7 @@ else
 	# Weird compiler, trust it in blind faith
 	matching=1
 fi
+
 if test "x$matching" = "x1"; then
   AC_MSG_RESULT([yes])
 else
