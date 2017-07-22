@@ -244,7 +244,7 @@ bool CState::SetLocalDir(std::wstring const& dir, std::wstring *error, bool reme
 bool CState::SetLocalDir(CLocalPath const& dir, std::wstring *error, bool rememberPreviousSubdir)
 {
 	if (m_changeDirFlags.syncbrowse) {
-		wxMessageBoxEx(_T("Cannot change directory, there already is a synchronized browsing operation in progress."), _("Synchronized browsing"));
+		wxMessageBoxEx(_("Cannot change directory, there already is a synchronized browsing operation in progress."), _("Synchronized browsing"));
 		return false;
 	}
 
