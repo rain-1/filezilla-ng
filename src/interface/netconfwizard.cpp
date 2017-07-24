@@ -748,14 +748,17 @@ wxString CNetConfWizard::GetExternalIPAddress()
 
 void CNetConfWizard::OnExternalIPAddress2(wxCommandEvent&)
 {
-	if (!m_pIPResolver)
+	if (!m_pIPResolver) {
 		return;
+	}
 
-	if (m_state != 3)
+	if (m_state != 3) {
 		return;
+	}
 
-	if (!m_pIPResolver->Done())
+	if (!m_pIPResolver->Done()) {
 		return;
+	}
 
 	SendNextCommand();
 }
@@ -776,8 +779,9 @@ void CNetConfWizard::SendNextCommand()
 		{
 			PrintMessage(_("Checking for correct external IP address"), 0);
 			wxString ip = GetExternalIPAddress();
-			if (ip.empty())
+			if (ip.empty()) {
 				return;
+			}
 			if (!fz::get_ipv6_long_form(ip.ToStdWstring()).empty()) {
 				PrintMessage(_("You appear to be using an IPv6-only host. This wizard does not support this environment."), 1);
 				CloseSocket();
@@ -805,7 +809,7 @@ void CNetConfWizard::SendNextCommand()
 			int port = CreateListenSocket();
 			if (!port)
 			{
-				PrintMessage(_("Failed to create listen socket, aborting."), 1);
+				PrintMessage(wxString::Format(_("Failed to create listen socket on port %d, aborting."), port), 1);
 				CloseSocket();
 				return;
 			}
@@ -841,8 +845,9 @@ void CNetConfWizard::OnRestart(wxCommandEvent&)
 
 void CNetConfWizard::ResetTest()
 {
-	if (m_timer.IsRunning())
+	if (m_timer.IsRunning()) {
 		m_timer.Stop();
+	}
 
 	m_state = 0;
 	m_connectSuccessful = false;
