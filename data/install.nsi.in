@@ -105,6 +105,7 @@
   Var USERNAME
   Var PERFORM_UPDATE
   Var SKIPLICENSE
+  Var SKIPUAC
   Var GetInstalledSize.total
   Var OldRunDir
   Var CommandLine
@@ -328,6 +329,18 @@ Function ReadSkipLicense
 
 FunctionEnd
 
+Function ReadSkipUAC
+
+  ${GetOptions} $CommandLine "/skipuac" $R1
+
+  ${If} ${Errors}
+    StrCpy $SKIPUAC 0
+  ${Else}
+    StrCpy $SKIPUAC 1
+  ${EndIf}
+
+FunctionEnd
+
 Function .onInit
 
   ; The very first thing we should do: See if there's still a running FZ, we use it to detect
@@ -353,24 +366,28 @@ install64on32:
     ${EndUnless}
   !endif
 
-  !insertmacro UAC_RunElevated
+  Call ReadSkipUAc
 
-  ${Switch} $0
-  ${Case} 0
-    ${IfThen} $1 = 1 ${|} Quit ${|} ;we are the outer process, the inner process has done its work, we are done.
+  ${If} $SKIPUAC != 1
+    !insertmacro UAC_RunElevated
 
-    ; Ignore success or failure here. Correct privileges are checked later on.
-    ${Break}
-  ${Case} 1223
-    ; User aborted elevation, continue regardless
-    ${Break}
-  ${Default}
-    MessageBox mb_iconstop "Could not elevate process (errorcode $0), continuing with normal user privileges." /SD IDOK
-    ${Break}
-  ${EndSwitch}
+    ${Switch} $0
+    ${Case} 0
+      ${IfThen} $1 = 1 ${|} Quit ${|} ;we are the outer process, the inner process has done its work, we are done.
 
-  ; The UAC plugin changes the error level even in the inner process, reset it.
-  SetErrorLevel -1
+      ; Ignore success or failure here. Correct privileges are checked later on.
+      ${Break}
+    ${Case} 1223
+      ; User aborted elevation, continue regardless
+      ${Break}
+    ${Default}
+      MessageBox mb_iconstop "Could not elevate process (errorcode $0), continuing with normal user privileges." /SD IDOK
+      ${Break}
+    ${EndSwitch}
+
+    ; The UAC plugin changes the error level even in the inner process, reset it.
+    SetErrorLevel -1
+  ${EndIf}
 
   ; /update argument
   Call ReadUpdateCommandline
