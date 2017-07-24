@@ -109,6 +109,7 @@
   Var GetInstalledSize.total
   Var OldRunDir
   Var CommandLine
+  Var Quiet
 
 ;--------------------------------
 ; Interface Settings
@@ -156,7 +157,6 @@
   !define MUI_PAGE_CUSTOMFUNCTION_PRE PageStartmenuPre
   !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER
 
-  !define MUI_PAGE_CUSTOMFUNCTION_SHOW PageInstfilesShow
   !define MUI_PAGE_CUSTOMFUNCTION_LEAVE PostInstPage
   !insertmacro MUI_PAGE_INSTFILES
 
@@ -201,6 +201,17 @@ Function UpdateShellVarContext
 
 FunctionEnd
 
+!Macro MessageBoxImpl options text sdreturn checks
+  ${If} $Quiet == 1
+    MessageBox ${options} `${text}` ${checks}
+  ${Else}
+    MessageBox ${options} `${text}` /SD ${sdreturn} ${checks}
+  ${Endif}
+
+!MacroEnd
+
+!define MessageBox `!insertmacro MessageBoxImpl`
+
 Function ReadAllUsersCommandline
 
   ${GetOptions} $CommandLine "/user" $R1
@@ -213,7 +224,7 @@ Function ReadAllUsersCommandline
     ${OrIf} $R1 == "=all"
       StrCpy $ALL_USERS 1
     ${Else}
-      MessageBox MB_ICONSTOP "Invalid option for /user. Has to be either /user=all or /user=current" /SD IDOK
+      ${MessageBox} MB_ICONSTOP "Invalid option for /user. Has to be either /user=all or /user=current" IDOK ''
       Abort
     ${EndIf}
   ${EndUnless}
@@ -341,6 +352,19 @@ Function ReadSkipUAC
 
 FunctionEnd
 
+Function ReadQuiet
+
+  ${GetOptions} $CommandLine "/quiet" $R1
+
+  ${If} ${Errors}
+    StrCpy $Quiet 0
+  ${Else}
+    StrCpy $Quiet 1
+    SetSilent silent
+  ${EndIf}
+
+FunctionEnd
+
 Function .onInit
 
   ; The very first thing we should do: See if there's still a running FZ, we use it to detect
@@ -352,15 +376,17 @@ Function .onInit
   ; Store command line
   ${GetParameters} $CommandLine
 
+  Call ReadQuiet
+
   ${Unless} ${AtLeastWin7}
-    MessageBox MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nFileZilla ${VERSION} requires at least Windows 7 and may not work correctly on your system.$\nDo you really want to continue with the installation?" /SD IDNO IDYES installonoldwindows
+    ${MessageBox} MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nFileZilla ${VERSION} requires at least Windows 7 and may not work correctly on your system.$\nDo you really want to continue with the installation?" IDNO 'IDYES installonoldwindows'
     Abort
 installonoldwindows:
   ${EndUnless}
 
   !if "@NSIS_64BIT@" == "1"
     ${Unless} ${RunningX64}
-      MessageBox MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nThis is the installer for the 64bit version of FileZilla ${VERSION} and does not run on your operating system which is only 32bit.$\nPlease download the 32bit FileZilla installer instead.$\nDo you really want to continue with the installation?" /SD IDNO IDYES install64on32
+      ${MessageBox} MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nThis is the installer for the 64bit version of FileZilla ${VERSION} and does not run on your operating system which is only 32bit.$\nPlease download the 32bit FileZilla installer instead.$\nDo you really want to continue with the installation?" IDNO 'IDYES install64on32'
       Abort
 install64on32:
     ${EndUnless}
@@ -381,7 +407,7 @@ install64on32:
       ; User aborted elevation, continue regardless
       ${Break}
     ${Default}
-      MessageBox mb_iconstop "Could not elevate process (errorcode $0), continuing with normal user privileges." /SD IDOK
+      ${MessageBox} mb_iconstop "Could not elevate process (errorcode $0), continuing with normal user privileges." IDOK ''
       ${Break}
     ${EndSwitch}
 
@@ -408,6 +434,10 @@ install64on32:
   ; This can change ALL_USERS
   Call ReadPreviousVersion
 
+  ${If} $PREVIOUS_VERSION != ""
+    StrCpy $REINSTALL_UNINSTALL 1
+  ${EndIf}
+
   ; Load _all_ previous settings.
   ; Need to do it now as up to now, $ALL_USERS was possibly reflecting a
   ; previous installation. After this call, $ALL_USERS reflects the requested
@@ -420,10 +450,10 @@ install64on32:
     ${If} $IS_ADMIN == 0
 
       ${If} $PREVIOUS_VERSION != ""
-        MessageBox MB_ICONSTOP "FileZilla has been previously installed for all users.$\nPlease restart the installer with Administrator privileges." /SD IDOK
+        ${MessageBox} MB_ICONSTOP "FileZilla has been previously installed for all users.$\nPlease restart the installer with Administrator privileges." IDOK ''
         Abort
       ${Else}
-        MessageBox MB_ICONSTOP "Cannot install for all users.$\nPlease restart the installer with Administrator privileges." /SD IDOK
+        ${MessageBox} MB_ICONSTOP "Cannot install for all users.$\nPlease restart the installer with Administrator privileges." IDOK ''
         Abort
       ${EndIf}
     ${EndIf}
@@ -557,7 +587,6 @@ Function PageReinstall
   ${EndIf}
 
   ${If} $PERFORM_UPDATE == 1
-    StrCpy $REINSTALL_UNINSTALL 1
     Abort
   ${EndIf}
 
@@ -598,17 +627,17 @@ Function PageReinstall
     nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 0 100% 40 "FileZilla ${VERSION} is already installed. Select the operation you want to perform and click Next to continue."
     Pop $R0
     nsDialogs::CreateItem /NOUNLOAD BUTTON ${BS_AUTORADIOBUTTON}|${BS_VCENTER}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}|${WS_GROUP}|${WS_TABSTOP} 0 10 55 100% 30 "Add/Remove/Reinstall components"
-    Pop $R0
-    nsDialogs::CreateItem /NOUNLOAD BUTTON ${BS_AUTORADIOBUTTON}|${BS_TOP}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 10 85 100% 50 "Uninstall FileZilla"
     Pop $REINSTALL_UNINSTALLBUTTON
+    nsDialogs::CreateItem /NOUNLOAD BUTTON ${BS_AUTORADIOBUTTON}|${BS_TOP}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 10 85 100% 50 "Uninstall FileZilla"
+    Pop $R0
 
     ${If} $REINSTALL_UNINSTALL == ""
-      StrCpy $REINSTALL_UNINSTALL 2
+      StrCpy $REINSTALL_UNINSTALL 1
     ${EndIf}
 
   ${Else}
 
-    MessageBox MB_ICONSTOP "Unknown value of PREVIOUS_VERSION_STATE, aborting" /SD IDOK
+    ${MessageBox} MB_ICONSTOP "Unknown value of PREVIOUS_VERSION_STATE, aborting" IDOK ''
     Abort
 
   ${EndIf}
@@ -732,13 +761,22 @@ Function RunUninstaller
 
   ClearErrors
 
-  ${If} $PREVIOUS_VERSION_STATE == "same"
-  ${AndIf} $REINSTALL_UNINSTALL == "1"
-  ${AndIf} $PERFORM_UPDATE != "1"
-    ExecWait '"$R1" _?=$INSTDIR'
+  ${If} $REINSTALL_UNINSTALL == "2"
+  ${AndIf} $PREVIOUS_VERSION_STATE == "same"
+    StrCpy $R2 ""
   ${Else}
-    ExecWait '"$R1" /frominstall /keepstartmenudir _?=$INSTDIR'
+    StrCpy $R2 "/frominstall /keepstartmenudir"
   ${EndIf}
+
+  ${If} $QUIET == 1
+    StrCpy $R2 "$R2 /quiet"
+  ${EndIf}
+
+  ${If} ${Silent}
+    StrCpy $R2 "$R2 /S"
+  ${EndIf}
+
+  ExecWait '"$R1" $R2 _?=$INSTDIR'
 
   IfErrors no_remove_uninstaller
 
@@ -747,9 +785,7 @@ Function RunUninstaller
     Delete "$R1"
 
   ; Remove directory only if uninstalling for good
-  ${If} $PREVIOUS_VERSION_STATE == "same"
-  ${AndIf} $REINSTALL_UNINSTALL == "1"
-  ${AndIf} $PERFORM_UPDATE != "1"
+  ${If} $REINSTALL_UNINSTALL == "2"
     RMDir $INSTDIR
   ${EndIf}
 
@@ -769,33 +805,25 @@ Function PageLeaveReinstall
   ${Else}
     ; Custom up/downgrade or add/remove/reinstall
     StrCpy $REINSTALL_UNINSTALL 2
-  ${EndIf}
-
-  ${If} $REINSTALL_UNINSTALL == 1
-
     ${If} $PREVIOUS_VERSION_STATE == "same"
-
       Call RunUninstaller
       Quit
-
-    ${Else}
-
-      ; Need to reload defaults. User could have
-      ; chosen custom, change something, went back and selected
-      ; the express option.
-      StrCpy $ALL_USERS $ALL_USERS_DEFAULT
-      Call UpdateShellVarContext
-      Call LoadPreviousSettings
-
     ${EndIf}
-
   ${EndIf}
+
+  ; Need to reload defaults. User could have
+  ; chosen custom, change something, went back and selected
+  ; the express option.
+  StrCpy $ALL_USERS $ALL_USERS_DEFAULT
+  Call UpdateShellVarContext
+  Call LoadPreviousSettings
 
 FunctionEnd
 
 Function PageAllUsers
 
   ${If} $REINSTALL_UNINSTALL == 1
+  ${AndIf} $PREVIOUS_VERSION_STATE != "same"
     ; Keep same settings
     Abort
   ${EndIf}
@@ -874,6 +902,7 @@ FunctionEnd
 Function PageComponentsPre
 
   ${If} $REINSTALL_UNINSTALL == 1
+  ${AndIf} $PREVIOUS_VERSION_STATE != "same"
 
     Abort
 
@@ -884,6 +913,7 @@ FunctionEnd
 Function PageDirectoryPre
 
   ${If} $REINSTALL_UNINSTALL == "1"
+  ${AndIf} $PREVIOUS_VERSION_STATE != "same"
 
     Abort
 
@@ -894,6 +924,7 @@ FunctionEnd
 Function PageStartmenuPre
 
   ${If} $REINSTALL_UNINSTALL == "1"
+  ${AndIf} $PREVIOUS_VERSION_STATE != "same"
 
     ${If} "$STARTMENU_FOLDER" == ""
 
@@ -943,7 +974,7 @@ Function CheckFileZillaRunning
 
   ${While} $R1 != ''
 
-    MessageBox MB_ABORTRETRYIGNORE|MB_DEFBUTTON2 "FileZilla appears to be running.$\nPlease close all running instances of FileZilla before continuing the installation." /SD IDIGNORE IDABORT CheckFileZillaRunning_abort IDIGNORE CheckFileZillaRunning_ignore
+    ${MessageBox} MB_ABORTRETRYIGNORE|MB_DEFBUTTON2 "FileZilla appears to be running.$\nPlease close all running instances of FileZilla before continuing the installation." IDIGNORE 'IDABORT CheckFileZillaRunning_abort IDIGNORE CheckFileZillaRunning_ignore'
 
     Push "filezilla.exe"
     Call IsProcessRunning
@@ -956,20 +987,6 @@ Function CheckFileZillaRunning
 
  CheckFileZillaRunning_abort:
   Quit
-
-FunctionEnd
-
-Function PageInstfilesShow
-
-  Call CheckFileZillaRunning
-
-  ${If} $REINSTALL_UNINSTALL != ""
-
-    Call RunUninstaller
-
-  ${EndIf}
-
-  Call CleanLeftovers
 
 FunctionEnd
 
@@ -990,7 +1007,7 @@ Function .onInstSuccess
     ${If} $R0 != ''
     ${AndIf} $R1 != ''
     ${AndIf} $R0 != $R1
-      MessageBox MB_ICONEXCLAMATION 'Multiple installations of FileZilla detected.$\n$\nFileZilla ${VERSION} has been installed to "$InstDir".$\nAn old installation of FileZilla $R0 still exists in the "$R2" directory.$\n$\nPlease delete the old version in the "$R2" directory.' /SD IDOK
+      ${MessageBox} MB_ICONEXCLAMATION 'Multiple installations of FileZilla detected.$\n$\nFileZilla ${VERSION} has been installed to "$InstDir".$\nAn old installation of FileZilla $R0 still exists in the "$R2" directory.$\n$\nPlease delete the old version in the "$R2" directory.' IDOK ''
     ${EndIf}
   ${EndIf}
 
@@ -1019,6 +1036,17 @@ FunctionEnd
 Section "FileZilla Client" SecMain
 
   SectionIn 1 RO
+
+  Call CheckFileZillaRunning
+
+  ${If} $REINSTALL_UNINSTALL != ""
+
+    Call RunUninstaller
+
+  ${EndIf}
+
+  Call CleanLeftovers
+
 
   SetOutPath "$INSTDIR"
 
@@ -1373,12 +1401,20 @@ Function un.onInit
 
   ${un.GetParameters} $CommandLine
 
+  ${un.GetOptions} $CommandLine "/quiet" $R1
+  ${If} ${Errors}
+    StrCpy $Quiet 0
+  ${Else}
+    StrCpy $Quiet 1
+    SetSilent silent
+  ${EndIf}
+
   Call un.GetUserInfo
   Call un.ReadPreviousVersion
 
   ${If} $un.REMOVE_ALL_USERS == 1
   ${AndIf} $IS_ADMIN == 0
-    MessageBox MB_ICONSTOP "FileZilla has been installed for all users.$\nPlease restart the uninstaller with Administrator privileges to remove it." /SD IDOK
+    ${MessageBox} MB_ICONSTOP "FileZilla has been installed for all users.$\nPlease restart the uninstaller with Administrator privileges to remove it." IDOK ''
     Abort
   ${EndIf}
 
