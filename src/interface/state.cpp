@@ -767,8 +767,9 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const CLocalPath& path, bool copy)
 {
 	const wxArrayString &files = pFileDataObject->GetFilenames();
-	if (!files.Count())
+	if (!files.Count()) {
 		return;
+	}
 
 #ifdef __WXMSW__
 	int len = 1;
@@ -815,34 +816,41 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 				continue;
 			}
 			wxString target = path.GetPath() + name;
-			if (file == target)
+			if (file == target) {
 				continue;
+			}
 
-			if (copy)
+			if (copy) {
 				wxCopyFile(file, target);
-			else
+			}
+			else {
 				wxRenameFile(file, target);
+			}
 		}
 		else if (type == fz::local_filesys::dir) {
 			CLocalPath sourcePath(file);
-			if (sourcePath == path || sourcePath.GetParent() == path)
+			if (sourcePath == path || sourcePath.GetParent() == path) {
 				continue;
+			}
 			if (sourcePath.IsParentOf(path)) {
 				error = _("A directory cannot be dragged into one of its subdirectories.");
 				continue;
 			}
 
-			if (copy)
+			if (copy) {
 				RecursiveCopy(sourcePath, path);
+			}
 			else {
-				if (!sourcePath.HasParent())
+				if (!sourcePath.HasParent()) {
 					continue;
+				}
 				wxRenameFile(file, path.GetPath() + sourcePath.GetLastSegment());
 			}
 		}
 	}
-	if (!error.empty())
+	if (!error.empty()) {
 		wxMessageBoxEx(error, _("Could not complete operation"));
+	}
 #endif
 
 	RefreshLocal();

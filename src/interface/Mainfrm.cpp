@@ -1324,8 +1324,9 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 		}
 
 		if (pState->m_pCommandQueue) {
-			if (!pState->m_pCommandQueue->Quit())
+			if (!pState->m_pCommandQueue->Quit()) {
 				res = false;
+			}
 		}
 	}
 

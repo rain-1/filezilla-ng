@@ -473,12 +473,14 @@ void CSearchDialog::Run()
 			m_state.m_pCommandQueue->Cancel();
 			m_state.GetRemoteRecursiveOperation()->StopRecursiveOperation();
 		}
-		if (!m_original_dir.empty())
+		if (!m_original_dir.empty()) {
 			m_state.ChangeRemoteDir(m_original_dir);
+		}
 	}
 	else {
-		if (m_state.IsRemoteIdle() && !m_original_dir.empty())
+		if (m_state.IsRemoteIdle() && !m_original_dir.empty()) {
 			m_state.ChangeRemoteDir(m_original_dir);
+		}
 	}
 }
 
