@@ -2,38 +2,15 @@
  * PuTTY version numbering
  */
 
-#define STR1(x) #x
-#define STR(x) STR1(x)
-
-#if defined SNAPSHOT
-
-#if defined SVN_REV
-#define SNAPSHOT_TEXT STR(SNAPSHOT) ":r" STR(SVN_REV)
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+const char ver[] = "FileZilla" PACKAGE_VERSION;
+const char sshver[] = "FileZilla-" PACKAGE_VERSION;
 #else
-#define SNAPSHOT_TEXT STR(SNAPSHOT)
+const char ver[] = "FileZilla";
+const char sshver[] = "FileZilla-custom";
 #endif
 
-const char ver[] = "Development snapshot " SNAPSHOT_TEXT;
-const char sshver[] = "PuTTY-Snapshot-" SNAPSHOT_TEXT;
-
-#undef SNAPSHOT_TEXT
-
-#elif defined RELEASE
-
-const char ver[] = "Release " STR(RELEASE);
-const char sshver[] = "PuTTY-Release-" STR(RELEASE);
-
-#elif defined SVN_REV
-
-const char ver[] = "Custom build r" STR(SVN_REV) ", " __DATE__ " " __TIME__;
-const char sshver[] = "PuTTY-Custom-r" STR(SVN_REV);
-
-#else
-
-const char ver[] = "Unidentified build, " __DATE__ " " __TIME__;
-const char sshver[] = "PuTTY-Local: " __DATE__ " " __TIME__;
-
-#endif
 
 const char commitid[] = "unavailable";
 
