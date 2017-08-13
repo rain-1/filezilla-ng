@@ -54,6 +54,10 @@
         <label>&amp;Settings...</label>
         <help>Open the settings dialog of FileZilla</help>
       </object>
+      <object class="wxMenuItem" name="ID_MENU_EDIT_SANDBOX_DIRECTORIES" platform="mac">
+        <label>&amp;Directory access permisssions...</label>
+        <help>Open the directory access permissions dialog to configure the local directories FileZilla has access to.</help>
+      </object>
     </object>
     <object class="wxMenu">
       <label>&amp;View</label>
