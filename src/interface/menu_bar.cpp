@@ -8,6 +8,9 @@
 #include "QueueView.h"
 #include "sitemanager.h"
 #include "state.h"
+#if USE_MAC_SANDBOX
+#include "osx_sandbox_userdirs.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(CMenuBar, wxMenuBar)
 
@@ -135,6 +138,22 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 	menubar->RegisterOption(OPTION_SPEEDLIMIT_ENABLE);
 	menubar->RegisterOption(OPTION_SPEEDLIMIT_INBOUND);
 	menubar->RegisterOption(OPTION_SPEEDLIMIT_OUTBOUND);
+
+#ifdef FZ_MAC
+	wxMenu* editMenu = nullptr;
+	wxMenuItem* dirsItem = menubar->FindItem(XRCID("ID_MENU_EDIT_SANDBOX_DIRECTORIES"), &editMenu);
+	if (editMenu && dirsItem) {
+#if USE_MAC_SANDBOX
+		editMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, [pMainFrame](wxCommandEvent&)
+			{
+				OSXSandboxUserdirsDialog dlg;
+				dlg.Run(pMainFrame);
+			}, XRCID("ID_MENU_EDIT_SANDBOX_DIRECTORIES"));
+#else		
+		editMenu->Delete(dirsItem);
+#endif
+	}
+#endif
 
 	return menubar;
 }
