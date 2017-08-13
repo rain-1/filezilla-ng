@@ -22,6 +22,10 @@
 #include "volume_enumerator.h"
 #endif
 
+#ifdef USE_MAC_SANDBOX
+#include "osx_sandbox_userdirs.h"
+#endif
+
 #include <algorithm>
 
 class CTreeItemData : public wxTreeItemData
@@ -275,6 +279,13 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState& state, C
 	SetItemImage(root, GetIconIndex(iconType::opened_dir), wxTreeItemIcon_Selected);
 	SetItemImage(root, GetIconIndex(iconType::dir), wxTreeItemIcon_Expanded);
 	SetItemImage(root, GetIconIndex(iconType::opened_dir), wxTreeItemIcon_SelectedExpanded);
+
+#if USE_MAC_SANDBOX
+	auto userDirs = OSXSandboxUserdirs::Get().GetDirs();
+	for (auto const& dir : userDirs) {
+		SetDir(dir);
+	}
+#endif
 
 	SetDir(_T("/"));
 #endif

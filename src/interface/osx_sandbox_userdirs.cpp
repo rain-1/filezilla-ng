@@ -184,3 +184,13 @@ bool OSXSandboxUserdirs::Add()
 
 	return Save();
 }
+
+std::vector<std::wstring> OSXSandboxUserdirs::GetDirs() const
+{
+	std::vector<std::wstring> ret;
+	ret.reserve(userdirs_.size());
+	for (auto const& it : userdirs_) {
+		ret.push_back(it.first);
+	}
+	return ret;
+}
