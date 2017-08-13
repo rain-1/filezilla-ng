@@ -18,6 +18,8 @@ public:
 
 	bool Add();
 
+	std::vector<std::wstring> GetDirs() const;
+
 private:
 	OSXSandboxUserdirs();
 	~OSXSandboxUserdirs();
