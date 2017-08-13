@@ -4,6 +4,7 @@
 #include "filezillaapp.h"
 #include "ipcmutex.h"
 #include "xmlfunctions.h"
+#include "xrc_helper.h"
 
 #include <wx/osx/core/cfstring.h>
 
@@ -113,6 +114,8 @@ void OSXSandboxUserdirs::Load()
 		error = _("Access to some local directories could not be restored:") + _T("\n") + error;
 		error += L"\n\n";
 		error += _("Please re-add local data directories in the settings dialog.");
+		error += L"\n\n";
+		error += _("You need to grant FileZilla access to the directories you want to download files into or upload files from.");
 		wxMessageBox(error, _("Could not restore directory access"), wxICON_EXCLAMATION);
 	}
 
@@ -193,4 +196,67 @@ std::vector<std::wstring> OSXSandboxUserdirs::GetDirs() const
 		ret.push_back(it.first);
 	}
 	return ret;
+}
+
+void OSXSandboxUserdirs::Remove(std::wstring const& dir)
+{
+	auto it = userdirs_.find(dir);
+	if (it != userdirs_.cend()) {
+		CFURLStopAccessingSecurityScopedResource(it->second.second.get());
+		userdirs_.erase(it);
+	}
+}
+
+void OSXSandboxUserdirsDialog::Run(wxWindow* parent)
+{
+	if (!Load(parent, L"ID_OSX_SANDBOX_USERDIRS")) {
+		wxBell();
+		return;
+	}
+
+	WrapRecursive(this, GetSizer(), ConvertDialogToPixels(wxSize(250, -1)).x);
+	GetSizer()->Fit(this);
+
+
+	XRCCTRL(*this, "ID_ADD", wxButton)->Bind(wxEVT_BUTTON, &OSXSandboxUserdirsDialog::OnAdd, this);
+	XRCCTRL(*this, "ID_REMOVE", wxButton)->Bind(wxEVT_BUTTON, &OSXSandboxUserdirsDialog::OnRemove, this);
+
+	DisplayCurrentDirs();
+
+	ShowModal();
+}
+
+void OSXSandboxUserdirsDialog::OnAdd(wxCommandEvent&)
+{
+	OSXSandboxUserdirs::Get().Add();
+	DisplayCurrentDirs();
+}
+
+void OSXSandboxUserdirsDialog::OnRemove(wxCommandEvent&)
+{
+	int pos = xrc_call(*this, "ID_DIRS", &wxListBox::GetSelection);
+	if (pos != wxNOT_FOUND) {
+		wxString sel = xrc_call(*this, "ID_DIRS", &wxListBox::GetString, pos);
+		OSXSandboxUserdirs::Get().Remove(sel.ToStdWstring());
+		DisplayCurrentDirs();
+	}
+}
+
+void OSXSandboxUserdirsDialog::DisplayCurrentDirs()
+{
+	auto dirs = OSXSandboxUserdirs::Get().GetDirs();
+
+	wxString sel;
+	int pos = xrc_call(*this, "ID_DIRS", &wxListBox::GetSelection);
+	if (pos != wxNOT_FOUND) {
+		sel = xrc_call(*this, "ID_DIRS", &wxListBox::GetString, pos);
+	}
+
+	xrc_call(*this, "ID_DIRS", &wxListBox::Clear);
+
+	for (auto const& dir : dirs) {
+		XRCCTRL(*this, "ID_DIRS", wxListBox)->Append(dir);
+	}
+
+	XRCCTRL(*this, "ID_DIRS", wxListBox)->SetStringSelection(sel);
 }

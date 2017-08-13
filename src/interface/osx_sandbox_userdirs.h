@@ -1,6 +1,8 @@
 #ifndef FILEZILLA_OSX_SANDBOX_USERDIRS
 #define FILEZILLA_OSX_SANDBOX_USERDIRS
 
+#include "dialogex.h"
+
 #include <map>
 #include <string>
 
@@ -18,6 +20,8 @@ public:
 
 	bool Add();
 
+	void Remove(std::wstring const& dir);
+
 	std::vector<std::wstring> GetDirs() const;
 
 private:
@@ -27,6 +31,18 @@ private:
 	bool Save();
 
 	std::map<std::wstring, std::pair<wxCFDataRef, wxCFRef<CFURLRef>>> userdirs_;
+};
+
+class OSXSandboxUserdirsDialog final : public wxDialogEx
+{
+public:
+	void Run(wxWindow* parent);
+
+private:
+	void DisplayCurrentDirs();
+
+	void OnAdd(wxCommandEvent&);
+	void OnRemove(wxCommandEvent&);
 };
 
 #endif
