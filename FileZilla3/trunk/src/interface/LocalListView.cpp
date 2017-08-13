@@ -1185,29 +1185,30 @@ std::list<wxString> CLocalListView::RememberSelectedItems(wxString& focused)
 #endif
 	{
 		int item = -1;
-		for (;;)
-		{
+		for (;;) {
 			item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-			if (item == -1)
+			if (item < 0 || item >= m_indexMapping.size()) {
 				break;
+			}
 			const CLocalFileData &data = m_fileData[m_indexMapping[item]];
-			if (data.comparison_flags != fill)
-			{
-				if (data.dir)
+			if (data.comparison_flags != fill) {
+				if (data.dir) {
 					selectedNames.push_back(_T("d") + data.name);
-				else
+				}
+				else {
 					selectedNames.push_back(_T("-") + data.name);
+				}
 			}
 			SetSelection(item, false);
 		}
 	}
 
 	int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-	if (item != -1)
-	{
+	if (item >= 0 && item <= m_indexMapping.size()) {
 		const CLocalFileData &data = m_fileData[m_indexMapping[item]];
-		if (data.comparison_flags != fill)
+		if (data.comparison_flags != fill) {
 			focused = data.name;
+		}
 
 		SetItemState(item, 0, wxLIST_STATE_FOCUSED);
 	}
