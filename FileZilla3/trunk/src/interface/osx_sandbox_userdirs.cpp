@@ -113,10 +113,10 @@ void OSXSandboxUserdirs::Load()
 	if (!error.empty()) {
 		error = _("Access to some local directories could not be restored:") + _T("\n") + error;
 		error += L"\n\n";
-		error += _("Please re-add local data directories in the settings dialog.");
-		error += L"\n\n";
-		error += _("You need to grant FileZilla access to the directories you want to download files into or upload files from.");
+		error += _("Please check the granted permissions and re-add any missing local directories you are working with in the dialog that follows.");
 		wxMessageBox(error, _("Could not restore directory access"), wxICON_EXCLAMATION);
+		OSXSandboxUserdirsDialog dlg;
+		dlg.Run(0);
 	}
 
 	Save();
