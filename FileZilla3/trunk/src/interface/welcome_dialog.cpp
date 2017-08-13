@@ -4,14 +4,24 @@
 #include "Options.h"
 #include "themeprovider.h"
 #include "xrc_helper.h"
-
+#if USE_MAC_SANDBOX
+#include "osx_sandbox_userdirs.h"
+#endif
 #include <wx/hyperlink.h>
 
 BEGIN_EVENT_TABLE(CWelcomeDialog, wxDialogEx)
 EVT_TIMER(wxID_ANY, CWelcomeDialog::OnTimer)
 END_EVENT_TABLE()
 
-bool CWelcomeDialog::Run(wxWindow* parent, bool force, bool delay)
+void CWelcomeDialog::RunDelayed(wxWindow* parent)
+{
+	CWelcomeDialog * dlg = new CWelcomeDialog;
+	dlg->parent_ = parent;
+	dlg->m_delayedShowTimer.SetOwner(dlg);
+	dlg->m_delayedShowTimer.Start(10, true);
+}
+
+bool CWelcomeDialog::Run(wxWindow* parent, bool force)
 {
 	const wxString ownVersion = CBuildInfo::GetVersion();
 	wxString greetingVersion = COptions::Get()->GetOption(OPTION_GREETINGVERSION);
@@ -21,9 +31,6 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force, bool delay)
 
 	if (!force) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
-			if (delay) {
-				delete this;
-			}
 			return true;
 		}
 
@@ -31,9 +38,6 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force, bool delay)
 			CBuildInfo::ConvertToVersionNumber(ownVersion.c_str()) <= CBuildInfo::ConvertToVersionNumber(greetingVersion.c_str()))
 		{
 			// Been there done that
-			if (delay) {
-				delete this;
-			}
 			return true;
 		}
 		COptions::Get()->SetOption(OPTION_GREETINGVERSION, ownVersion.ToStdWstring());
@@ -44,9 +48,6 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force, bool delay)
 	}
 
 	if (!Load(parent, _T("ID_WELCOME"))) {
-		if (delay) {
-			delete this;
-		}
 		return false;
 	}
 
@@ -78,20 +79,21 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force, bool delay)
 
 	GetSizer()->Fit(this);
 
-	if (delay) {
-		m_delayedShowTimer.SetOwner(this);
-		m_delayedShowTimer.Start(10, true);
-	}
-	else {
-		ShowModal();
-	}
+	ShowModal();
 
 	return true;
 }
 
 void CWelcomeDialog::OnTimer(wxTimerEvent&)
 {
-	ShowModal();
+	Run(parent_, false);
+#if USE_MAC_SANDBOX
+        if (OSXSandboxUserdirs::Get().GetDirs().empty()) {
+                OSXSandboxUserdirsDialog dlg;
+                dlg.Run(parent_);
+        }
+#endif
+
 	Destroy();
 }
 

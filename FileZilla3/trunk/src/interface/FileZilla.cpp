@@ -234,10 +234,6 @@ bool CFileZillaApp::OnInit()
 
 	COptions::Init();
 
-#ifdef USE_MAC_SANDBOX
-	OSXSandboxUserdirs::Get().Load();
-#endif
-
 	InitLocale();
 
 #ifndef _DEBUG
@@ -283,12 +279,15 @@ USE AT OWN RISK"), _T("Important Information"));
 	m_pWrapEngine = std::make_unique<CWrapEngine>();
 	m_pWrapEngine->LoadCache();
 
+#ifdef USE_MAC_SANDBOX
+	OSXSandboxUserdirs::Get().Load();
+#endif
+
 	CMainFrame *frame = new CMainFrame();
 	frame->Show(true);
 	SetTopWindow(frame);
 
-	CWelcomeDialog *welcome_dialog = new CWelcomeDialog;
-	welcome_dialog->Run(frame, false, true);
+	CWelcomeDialog::RunDelayed(frame);
 
 	frame->ProcessCommandLine();
 	frame->PostInitialize();

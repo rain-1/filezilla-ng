@@ -8,16 +8,19 @@
 class CWelcomeDialog final : public wxDialogEx
 {
 public:
-	CWelcomeDialog() {}
-	virtual ~CWelcomeDialog() {}
+	CWelcomeDialog() = default;
 
-	bool Run(wxWindow* parent, bool force = false, bool delay = false);
+	bool Run(wxWindow* parent, bool force = false);
+
+	static void RunDelayed(wxWindow* parent);
 
 protected:
 
 	void InitFooter(wxString const& resources);
 
 	wxTimer m_delayedShowTimer;
+
+	wxWindow* parent_{};
 
 	DECLARE_EVENT_TABLE()
 	void OnTimer(wxTimerEvent& event);
