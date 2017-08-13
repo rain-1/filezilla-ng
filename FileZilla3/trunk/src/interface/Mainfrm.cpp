@@ -66,6 +66,10 @@
 #include <functional>
 #include <map>
 
+#ifdef USE_MAC_SANDBOX
+#include "osx_sandbox_userdirs.h"
+#endif
+
 #ifdef __WXGTK__
 DECLARE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED, -1)
 DEFINE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED)
@@ -2651,17 +2655,23 @@ void CMainFrame::PostInitialize()
 	NavigateIn(wxNavigationKeyEvent::IsForward);
 #endif
 
+#ifdef USE_MAC_SANDBOX
+	if (OSXSandboxUserdirs::Get().GetDirs().empty()) {
+		OSXSandboxUserdirsDialog dlg;
+		dlg.Run(this);
+	}
+#endif
+
 #if FZ_MANUALUPDATECHECK
 	// Need to do this after welcome screen to avoid simultaneous display of multiple dialogs
-	if( !m_pUpdater ) {
+	if (!m_pUpdater) {
 		update_dialog_timer_.SetOwner(this);
 		m_pUpdater = new CUpdater(*this, m_engineContext);
 		m_pUpdater->Init();
 	}
 #endif
 
-	if (COptions::Get()->GetOptionVal(OPTION_INTERFACE_SITEMANAGER_ON_STARTUP) != 0)
-	{
+	if (COptions::Get()->GetOptionVal(OPTION_INTERFACE_SITEMANAGER_ON_STARTUP) != 0) {
 		Show();
 		OpenSiteManager();
 	}
@@ -2669,14 +2679,16 @@ void CMainFrame::PostInitialize()
 
 void CMainFrame::OnMenuNewTab(wxCommandEvent&)
 {
-	if (m_pContextControl)
+	if (m_pContextControl) {
 		m_pContextControl->CreateTab();
+	}
 }
 
 void CMainFrame::OnMenuCloseTab(wxCommandEvent&)
 {
-	if (!m_pContextControl)
+	if (!m_pContextControl) {
 		return;
+	}
 
 	m_pContextControl->CloseTab(m_pContextControl->GetCurrentTab());
 }

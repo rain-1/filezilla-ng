@@ -4166,4 +4166,73 @@
       </object>
     </object>
   </object>
+  <object class="wxDialog" name="ID_OSX_SANDBOX_USERDIRS">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <flag>wxALL</flag>
+        <border>5d</border>
+        <object class="wxFlexGridSizer">
+          <cols>1</cols>
+          <vgap>3d</vgap>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>You need to grant FileZilla access to the directories you want to download files into or to upload files from.</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>Please add the local directories you want to use FileZilla with.</label>
+            </object>
+          </object>
+          <object class="spacer">
+            <size>0,5d</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>Directories:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxListBox" name="ID_DIRS">
+            </object>
+            <flag>wxGROW</flag>
+            <minsize>-1,100d</minsize>
+          </object>
+          <object class="sizeritem">
+            <object class="wxGridSizer">
+              <cols>2</cols>
+              <object class="sizeritem">
+                <object class="wxButton" name="ID_ADD">
+                  <label>&amp;Add directory...</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="ID_REMOVE">
+                  <label>&amp;Remove selected</label>
+                </object>
+              </object>
+              <hgap>3d</hgap>
+            </object>
+            <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
+          </object>
+          <object class="spacer">
+            <size>0,5d</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStdDialogButtonSizer">
+              <object class="button">
+                <object class="wxButton" name="wxID_OK">
+                  <label>OK</label>
+                  <default>1</default>
+                </object>
+              </object>
+            </object>
+            <flag>wxGROW</flag>
+          </object>
+        </object>
+      </object>
+    </object>
+    <title>Directory access permissions</title>
+  </object>
 </resource>
