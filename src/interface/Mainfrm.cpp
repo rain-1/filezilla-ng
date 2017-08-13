@@ -66,10 +66,6 @@
 #include <functional>
 #include <map>
 
-#ifdef USE_MAC_SANDBOX
-#include "osx_sandbox_userdirs.h"
-#endif
-
 #ifdef __WXGTK__
 DECLARE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED, -1)
 DEFINE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED)
@@ -2653,13 +2649,6 @@ void CMainFrame::PostInitialize()
 #ifdef __WXMAC__
 	// Focus first control
 	NavigateIn(wxNavigationKeyEvent::IsForward);
-#endif
-
-#ifdef USE_MAC_SANDBOX
-	if (OSXSandboxUserdirs::Get().GetDirs().empty()) {
-		OSXSandboxUserdirsDialog dlg;
-		dlg.Run(this);
-	}
 #endif
 
 #if FZ_MANUALUPDATECHECK
