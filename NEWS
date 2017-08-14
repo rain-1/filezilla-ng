@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.27.1 (2017-08-14)
+
+! Change client identification string if connecting with SFTP due to OpenSSH disregarding the supported ciphers announced by the client, resulting in less secure algorithms being chosen by OpenSSH.
+- MSW: Improve handling of NTFS reparse points
+- MSW: If running the installer with /S, previous versions where not uninstalled prior to the new version being installed
+- MSW: The installer can be run with /quiet for a semi-silent installation
+- OS X, *nix: Potential fix for a rare crash if changing local directories while the local directory list is being updated and vice versa.
+
 3.27.0.1 (2017-07-19)
 
 - MSW: Add misssing file to .zip binary package
