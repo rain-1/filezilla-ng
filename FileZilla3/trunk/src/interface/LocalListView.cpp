@@ -1204,7 +1204,7 @@ std::list<wxString> CLocalListView::RememberSelectedItems(wxString& focused)
 	}
 
 	int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-	if (item >= 0 && static_cast<size_t>(item) <= m_indexMapping.size()) {
+	if (item >= 0 && static_cast<size_t>(item) < m_indexMapping.size()) {
 		const CLocalFileData &data = m_fileData[m_indexMapping[item]];
 		if (data.comparison_flags != fill) {
 			focused = data.name;
