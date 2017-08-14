@@ -1221,18 +1221,17 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 	// Reselect previous items if neccessary.
 	// Sorting direction did not change. We just have to scan through items once
 
-	if (selectedNames.empty())
-	{
-		if (focused.empty())
+	if (selectedNames.empty()) {
+		if (focused.empty()) {
 			return;
-		for (unsigned int i = 0; i < m_indexMapping.size(); i++)
-		{
+		}
+		for (unsigned int i = 0; i < m_indexMapping.size(); ++i) {
 			const CLocalFileData &data = m_fileData[m_indexMapping[i]];
-			if (data.name == focused)
-			{
+			if (data.name == focused) {
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
-				if (ensureVisible)
+				if (ensureVisible) {
 					EnsureVisible(i);
+				}
 				return;
 			}
 		}
@@ -1242,39 +1241,40 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 	int firstSelected = -1;
 
 	int i = -1;
-	for (std::list<wxString>::const_iterator iter = selectedNames.begin(); iter != selectedNames.end(); ++iter)
-	{
-		while (++i < (int)m_indexMapping.size())
-		{
+	for (auto const& selectedName : selectedNames) {
+		while (++i < (int)m_indexMapping.size()) {
 			const CLocalFileData &data = m_fileData[m_indexMapping[i]];
-			if (data.name == focused)
-			{
+			if (data.name == focused) {
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
-				if (ensureVisible)
+				if (ensureVisible) {
 					EnsureVisible(i);
-				focused = _T("");
+				}
+				focused.clear();
 			}
-			if (data.dir && *iter == (_T("d") + data.name))
-			{
-				if (firstSelected == -1)
+			if (data.dir && selectedName == (_T("d") + data.name)) {
+				if (firstSelected == -1) {
 					firstSelected = i;
-				if (m_pFilelistStatusBar)
+				}
+				if (m_pFilelistStatusBar) {
 					m_pFilelistStatusBar->SelectDirectory();
+				}
 				SetSelection(i, true);
 				break;
 			}
-			else if (*iter == (_T("-") + data.name))
-			{
-				if (firstSelected == -1)
+			else if (selectedName == (_T("-") + data.name)) {
+				if (firstSelected == -1) {
 					firstSelected = i;
-				if (m_pFilelistStatusBar)
+				}
+				if (m_pFilelistStatusBar) {
 					m_pFilelistStatusBar->SelectFile(data.size);
+				}
 				SetSelection(i, true);
 				break;
 			}
 		}
-		if (i == (int)m_indexMapping.size())
+		if (i == (int)m_indexMapping.size()) {
 			break;
+		}
 	}
 	if (!focused.empty()) {
 		if (firstSelected != -1) {
@@ -1288,10 +1288,12 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 
 void CLocalListView::OnStateChange(t_statechange_notifications notification, const wxString& data, const void*)
 {
-	if (notification == STATECHANGE_LOCAL_DIR)
+	if (notification == STATECHANGE_LOCAL_DIR) {
 		DisplayDir(m_state.GetLocalDir());
-	else if (notification == STATECHANGE_APPLYFILTER)
+	}
+	else if (notification == STATECHANGE_APPLYFILTER) {
 		ApplyCurrentFilter();
+	}
 	else if (notification == STATECHANGE_SERVER) {
 		m_windowTinter->SetBackgroundTint(m_state.GetSite().m_colour);
 	}
