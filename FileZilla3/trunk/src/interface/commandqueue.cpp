@@ -14,8 +14,8 @@ DEFINE_EVENT_TYPE(fzEVT_GRANTEXCLUSIVEENGINEACCESS)
 int CCommandQueue::m_requestIdCounter = 0;
 
 CCommandQueue::CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, CState& state)
-	: m_pMainFrame(pMainFrame)
-	, m_pEngine(pEngine)
+	: m_pEngine(pEngine)
+	, m_pMainFrame(pMainFrame)
 	, m_state(state)
 {
 }
