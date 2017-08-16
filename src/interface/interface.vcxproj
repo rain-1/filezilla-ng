@@ -121,7 +121,7 @@
       <Culture>0x0407</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>libnettle.dll.a;libgnutls-30.lib;normaliz.lib;wsock32.lib;odbc32.lib;odbccp32.lib;comctl32.lib;..\engine\Release\engine.lib;Win32_static_release\libfilezilla.lib;Netapi32.lib;Winmm.lib;Ws2_32.lib;mpr.lib;sqlite3.lib;powrprof.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libnettle.dll.a;libhogweed-4-2.lib;libgnutls-30.lib;normaliz.lib;wsock32.lib;odbc32.lib;odbccp32.lib;comctl32.lib;..\engine\Release\engine.lib;Win32_static_release\libfilezilla.lib;Netapi32.lib;Winmm.lib;Ws2_32.lib;mpr.lib;sqlite3.lib;powrprof.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Release/FileZilla.pdb</ProgramDatabaseFile>
