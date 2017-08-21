@@ -28,6 +28,7 @@ enum type {
 	Reboot,
 	Shutdown,
 	Sleep,
+	CloseOnce,
 
 	Count
 };

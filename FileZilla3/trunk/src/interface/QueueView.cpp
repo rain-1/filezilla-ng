@@ -212,7 +212,7 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	if (action < 0 || action >= ActionAfterState::Count) {
 		action = 1;
 	}
-	else if (action == ActionAfterState::Reboot || action == ActionAfterState::Shutdown || action == ActionAfterState::Sleep) {
+	else if (action == ActionAfterState::Reboot || action == ActionAfterState::Shutdown || action == ActionAfterState::Sleep || action == ActionAfterState::CloseOnce) {
 		action = 1;
 	}
 	m_actionAfterState = static_cast<ActionAfterState::type>(action);
@@ -1790,6 +1790,7 @@ void CQueueView::OnContextMenu(wxContextMenuEvent&)
 	pMenu->Check(XRCID("ID_ACTIONAFTER_SHOW_NOTIFICATION_BUBBLE"), IsActionAfter(ActionAfterState::ShowNotification));
 	pMenu->Check(XRCID("ID_ACTIONAFTER_REQUEST_ATTENTION"), IsActionAfter(ActionAfterState::RequestAttention));
 	pMenu->Check(XRCID("ID_ACTIONAFTER_CLOSE"), IsActionAfter(ActionAfterState::Close));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_CLOSE_ONCE"), IsActionAfter(ActionAfterState::CloseOnce));
 	pMenu->Check(XRCID("ID_ACTIONAFTER_RUNCOMMAND"), IsActionAfter(ActionAfterState::RunCommand));
 	pMenu->Check(XRCID("ID_ACTIONAFTER_PLAYSOUND"), IsActionAfter(ActionAfterState::PlaySound));
 #if defined(__WXMSW__) || defined(__WXMAC__)
@@ -1846,8 +1847,8 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_CLOSE")) {
 		m_actionAfterState = ActionAfterState::Close;
 	}
-	else if (event.GetId() == XRCID("ID_ACTIONAFTER_CLOSE")) {
-		m_actionAfterState = ActionAfterState::Close;
+	else if (event.GetId() == XRCID("ID_ACTIONAFTER_CLOSE_ONCE")) {
+		m_actionAfterState = ActionAfterState::CloseOnce;
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_PLAYSOUND")) {
 		m_actionAfterState = ActionAfterState::PlaySound;
@@ -1876,7 +1877,7 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 		m_actionAfterState = ActionAfterState::Sleep;
 #endif
 
-	if (m_actionAfterState != ActionAfterState::Reboot && m_actionAfterState != ActionAfterState::Shutdown && m_actionAfterState != ActionAfterState::Sleep) {
+	if (m_actionAfterState != ActionAfterState::Reboot && m_actionAfterState != ActionAfterState::Shutdown && m_actionAfterState != ActionAfterState::Sleep && m_actionAfterState != ActionAfterState::CloseOnce) {
 		COptions::Get()->SetOption(OPTION_QUEUE_COMPLETION_ACTION, m_actionAfterState);
 	}
 }
@@ -2660,6 +2661,7 @@ void CQueueView::ActionAfter(bool warned)
 			break;
 		}
 		case ActionAfterState::Close:
+		case ActionAfterState::CloseOnce:
 		{
 			m_pMainFrame->Close();
 			break;
