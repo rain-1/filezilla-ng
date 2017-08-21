@@ -47,7 +47,7 @@ void CToolBar::MakeTools()
 	MakeTool("ID_TOOLBAR_RECONNECT", L"ART_RECONNECT", _("Reconnects to the last used server"));
 	AddSeparator();
 
-	MakeTool("ID_TOOLBAR_FILTER", L"ART_FILTER", _("Opens the directory listing filter dialog. Right-click to toggle filters."), _("Filter the directory listings"), wxITEM_CHECK);
+	MakeTool("ID_TOOLBAR_FILTER", L"ART_FILTER", _("Opens the directory listing filter dialog. Right-click to toggle filters.") + L"\n" + _("Files matching a filter rule are removed from directory listings."), _("Filter the directory listings"), wxITEM_CHECK);
 	MakeTool("ID_TOOLBAR_COMPARISON", L"ART_COMPARE", _("Toggle directory comparison. Right-click to change comparison mode.\n\nColors:\nYellow: File only exists on one side\nGreen: File is newer than the unmarked file on other side\nRed: File sizes different"), _("Directory comparison"), wxITEM_CHECK);
 	MakeTool("ID_TOOLBAR_SYNCHRONIZED_BROWSING", L"ART_SYNCHRONIZE", _("Toggle synchronized browsing.\nIf enabled, navigating the local directory hierarchy will also change the directory on the server accordingly and vice versa."), _("Synchronized browsing"), wxITEM_CHECK);
 	MakeTool("ID_TOOLBAR_FIND", L"ART_FIND", _("Search for files recursively."), _("File search"));
