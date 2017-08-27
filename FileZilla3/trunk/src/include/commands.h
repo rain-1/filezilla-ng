@@ -58,7 +58,7 @@ class CCommand
 {
 public:
 	CCommand() = default;
-	virtual ~CCommand() {}; // TODO: One GCC >= 4.8 is in Debian Stable (Jessie by then), make default and add testcase to configure.
+	virtual ~CCommand() = default;
 
 	virtual Command GetId() const = 0;
 	virtual CCommand *Clone() const = 0;
@@ -155,11 +155,7 @@ public:
 	class t_transferSettings final
 	{
 	public:
-		t_transferSettings()
-			: binary(true)
-		{}
-
-		bool binary;
+		bool binary{true};
 	};
 
 	// For uploads, set download to false.

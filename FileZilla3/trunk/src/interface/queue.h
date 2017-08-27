@@ -196,7 +196,7 @@ public:
 
 	void SetTargetFile(wxString const& file);
 
-	enum Status : char {
+	enum class Status : char {
 		none,
 		incorrect_password,
 		timeout,
