@@ -348,7 +348,7 @@ wxString const& CFileItem::GetStatusMessage() const
 		_("Creating directory")
 	};
 
-	return statusTexts[m_status];
+	return statusTexts[std::underlying_type_t<Status>(m_status)];
 }
 
 CFolderItem::CFolderItem(CServerItem* parent, bool queued, CLocalPath const& localPath)
@@ -594,8 +594,9 @@ void CServerItem::QueueImmediateFiles()
 		for (auto iter = fileList.rbegin(); iter != fileList.rend(); ++iter) {
 			CFileItem* item = *iter;
 			wxASSERT(!item->queued());
-			if (item->IsActive())
+			if (item->IsActive()) {
 				activeList.push_front(item);
+			}
 			else {
 				item->set_queued(true);
 				m_fileList[0][i].push_front(item);

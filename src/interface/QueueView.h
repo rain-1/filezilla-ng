@@ -180,7 +180,7 @@ protected:
 	void ProcessReply(t_EngineData* pEngineData, COperationNotification const& notification);
 	void SendNextCommand(t_EngineData& engineData);
 
-	enum ResetReason
+	enum class ResetReason
 	{
 		success,
 		failure,
