@@ -406,12 +406,12 @@ regular_dir:
 		bool wasLink;
 		fz::native_string name;
 		while (local_filesys.get_next_file(name, wasLink, data.dir, &data.size, &data.time, &data.attributes)) {
-			if (name.empty()) {
+			data.name = fz::to_wstring(name);
+			if (name.empty() || data.name.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
 			}
 
-			data.name = fz::to_wstring(name);
 			m_fileData.push_back(data);
 			if (!filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time)) {
 				if (data.dir)

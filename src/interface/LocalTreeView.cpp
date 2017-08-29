@@ -451,8 +451,9 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, st
 		if (!local_filesys.begin_find_files(fz::to_native(dirname), true)) {
 			if (!knownSubdir.empty()) {
 				wxTreeItemId item = GetSubdir(parent, knownSubdir);
-				if (item != wxTreeItemId())
+				if (item != wxTreeItemId()) {
 					return;
+				}
 
 				const wxString fullName = dirname + knownSubdir;
 				item = AppendItem(parent, knownSubdir, GetIconIndex(iconType::dir, fullName),
@@ -490,11 +491,11 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, st
 	fz::datetime date;
 	while (local_filesys.get_next_file(file, wasLink, is_dir, 0, &date, &attributes)) {
 		wxASSERT(is_dir);
-		if (file.empty()) {
+		std::wstring wfile = fz::to_wstring(file);
+		if (file.empty() || wfile.empty()) {
 			wxGetApp().DisplayEncodingWarning();
 			continue;
 		}
-		std::wstring wfile = fz::to_wstring(file);
 
 		std::wstring fullName = dirname.ToStdWstring() + wfile;
 #ifdef __WXMSW__
@@ -557,12 +558,12 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	fz::datetime date;
 	while (local_filesys.get_next_file(file, wasLink, is_dir, 0, &date, &attributes)) {
 		wxASSERT(is_dir);
-		if (file.empty()) {
+		std::wstring wfile = fz::to_wstring(file);
+		if (file.empty() || wfile.empty()) {
 			wxGetApp().DisplayEncodingWarning();
 			continue;
 		}
 
-		std::wstring wfile = fz::to_wstring(file);
 		if (filter.FilenameFiltered(wfile, dirname, true, size, true, attributes, date)) {
 			continue;
 		}
@@ -760,12 +761,12 @@ void CLocalTreeView::RefreshListing()
 		int attributes;
 		fz::datetime date;
 		while (local_filesys.get_next_file(file, was_link, is_dir, 0, &date, &attributes)) {
-			if (file.empty()) {
+			std::wstring wfile = fz::to_wstring(file);
+			if (file.empty() || wfile.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
 			}
 
-			std::wstring wfile = fz::to_wstring(file);
 			if (filter.FilenameFiltered(wfile, dir.dir, true, size, true, attributes, date)) {
 				continue;
 			}
