@@ -507,6 +507,9 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, st
 				continue;
 			}
 		}
+		else {
+			matchedKnown = true;
+		}
 
 		wxTreeItemId item = AppendItem(parent, wfile, GetIconIndex(iconType::dir, fullName),
 #ifdef __WXMSW__
