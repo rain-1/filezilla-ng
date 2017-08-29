@@ -1,5 +1,5 @@
-#ifndef __SPLITTER_H__
-#define __SPLITTER_H__
+#ifndef FILEZILLA_INTERFACE_SPLITTER_HEADER
+#define FILEZILLA_INTERFACE_SPLITTER_HEADER
 
 class CSplitterWindowEx final : public wxSplitterWindow
 {
@@ -33,8 +33,6 @@ protected:
 
 	int CalcSoftLimit(int newSashPosition);
 
-	DECLARE_CLASS(CSplitterWindowEx)
-
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 
@@ -45,4 +43,4 @@ protected:
 	int m_lastSashPosition;
 };
 
-#endif //__SPLITTER_H__
+#endif

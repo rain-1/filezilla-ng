@@ -222,8 +222,6 @@ protected:
 	wxDataObjectComposite* m_pDataObject;
 };
 
-IMPLEMENT_CLASS(CRemoteTreeView, wxTreeCtrlEx)
-
 BEGIN_EVENT_TABLE(CRemoteTreeView, wxTreeCtrlEx)
 EVT_TREE_ITEM_EXPANDING(wxID_ANY, CRemoteTreeView::OnItemExpanding)
 EVT_TREE_SEL_CHANGED(wxID_ANY, CRemoteTreeView::OnSelectionChanged)
