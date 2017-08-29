@@ -1,5 +1,5 @@
-#ifndef __REMOTETREEVIEW_H__
-#define __REMOTETREEVIEW_H__
+#ifndef FILEZILLA_INTERFACE_REMOTETREEVIEW_HEADER
+#define FILEZILLA_INTERFACE_REMOTETREEVIEW_HEADER
 
 #include <option_change_event_handler.h>
 #include "systemimagelist.h"
@@ -11,8 +11,6 @@ class CQueueView;
 class CWindowTinter;
 class CRemoteTreeView final : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler, COptionChangeEventHandler
 {
-	DECLARE_CLASS(CRemoteTreeView)
-
 	friend class CRemoteTreeViewDropTarget;
 
 public:
