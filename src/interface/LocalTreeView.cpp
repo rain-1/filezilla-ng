@@ -470,20 +470,19 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, st
 					);
 				CheckSubdirStatus(item, fullName);
 			}
-			else
-			{
-				m_setSelection = true;
+			else {
+				++m_setSelection;
 				DeleteChildren(parent);
-				m_setSelection = false;
+				--m_setSelection;
 			}
 			return;
 		}
 	}
 
 	wxASSERT(parent);
-	m_setSelection = true;
+	++m_setSelection;
 	DeleteChildren(parent);
-	m_setSelection = false;
+	--m_setSelection;
 
 	CFilterManager filter;
 
@@ -873,9 +872,9 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 		else {
 			wxBell();
 		}
-		m_setSelection = true;
+		++m_setSelection;
 		SelectItem(event.GetOldItem());
-		m_setSelection = false;
+		--m_setSelection;
 	}
 }
 

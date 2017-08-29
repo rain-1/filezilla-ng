@@ -39,7 +39,7 @@ public:
 
 protected:
 
-	bool m_setSelection{};
+	int m_setSelection{};
 
 #ifdef __WXMAC__
 	DECLARE_EVENT_TABLE()
