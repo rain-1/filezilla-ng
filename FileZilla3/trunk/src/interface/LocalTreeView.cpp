@@ -579,6 +579,7 @@ wxTreeItemId CLocalTreeView::MakeSubdirs(wxTreeItemId parent, wxString dirname, 
 		int pos = subDir.Find(separator);
 		if (!pos) {
 			subDir = subDir.Mid(1);
+			continue;
 		}
 		else if (pos == -1) {
 			segment = subDir;
