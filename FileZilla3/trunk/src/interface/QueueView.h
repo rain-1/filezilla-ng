@@ -1,5 +1,5 @@
-#ifndef __QUEUEVIEW_H__
-#define __QUEUEVIEW_H__
+#ifndef FILEZILLA_INTERFACE_QUEUEVIEW_HEADER
+#define FILEZILLA_INTERFACE_QUEUEVIEW_HEADER
 
 #include "dndobjects.h"
 #include "queue.h"

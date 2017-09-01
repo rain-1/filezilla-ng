@@ -1,5 +1,5 @@
-#ifndef __FILTEREDIT_H__
-#define __FILTEREDIT_H__
+#ifndef FILEZILLA_INTERFACE_FILTEREDIT_HEADER
+#define FILEZILLA_INTERFACE_FILTEREDIT_HEADER
 
 #include "filter.h"
 #include "filter_conditions_dialog.h"
@@ -44,4 +44,4 @@ protected:
 	CWindowStateManager* m_pWindowStateManager;
 };
 
-#endif //__FILTEREDIT_H__
+#endif

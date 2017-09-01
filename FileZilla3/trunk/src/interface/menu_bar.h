@@ -1,5 +1,5 @@
-#ifndef __MENU_BAR_H__
-#define __MENU_BAR_H__
+#ifndef FILEZILLA_INTERFACE_MENU_BAR_HEADER
+#define FILEZILLA_INTERFACE_MENU_BAR_HEADER
 
 #include <option_change_event_handler.h>
 #include "state.h"
@@ -39,4 +39,4 @@ protected:
 	std::map<wxMenu*, std::map<int, wxMenuItem*> > m_hidden_items;
 };
 
-#endif //__MENU_BAR_H__
+#endif

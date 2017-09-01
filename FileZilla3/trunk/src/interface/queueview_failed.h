@@ -1,5 +1,5 @@
-#ifndef __QUEUEVIEW_FAILED_H__
-#define __QUEUEVIEW_FAILED_H__
+#ifndef FILEZILLA_INTERFACE_QUEUEVIEW_FAILED_HEADER
+#define FILEZILLA_INTERFACE_QUEUEVIEW_FAILED_HEADER
 
 class CQueueViewFailed : public CQueueViewBase
 {
@@ -21,4 +21,4 @@ protected:
 	void OnChar(wxKeyEvent& event);
 };
 
-#endif //__QUEUEVIEW_FAILED_H__
+#endif

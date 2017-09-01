@@ -1,5 +1,5 @@
-#ifndef __LED_H__
-#define __LED_H__
+#ifndef FILEZILLA_INTERFACE_LED_HEADER
+#define FILEZILLA_INTERFACE_LED_HEADER
 
 #include <wx/event.h>
 #include <wx/timer.h>
@@ -31,4 +31,4 @@ protected:
 	void OnEnterWindow(wxMouseEvent& event);
 };
 
-#endif //__LED_H__
+#endif

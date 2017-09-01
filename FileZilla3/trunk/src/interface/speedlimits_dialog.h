@@ -1,5 +1,5 @@
-#ifndef __SPEEDLIMITS_DIALOG_H__
-#define __SPEEDLIMITS_DIALOG_H__
+#ifndef FILEZILLA_INTERFACE_SPEEDLIMITS_DIALOG_HEADER
+#define FILEZILLA_INTERFACE_SPEEDLIMITS_DIALOG_HEADER
 
 #include "dialogex.h"
 
@@ -17,4 +17,4 @@ protected:
 	void OnOK(wxCommandEvent& event);
 };
 
-#endif //__SPEEDLIMITS_DIALOG_H__
+#endif

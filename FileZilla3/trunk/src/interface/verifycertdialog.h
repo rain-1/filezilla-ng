@@ -1,5 +1,5 @@
-#ifndef __VERIFYCERTDIALOG_H__
-#define __VERIFYCERTDIALOG_H__
+#ifndef FILEZILLA_INTERFACE_VERIFYCERTDIALOG_HEADER
+#define FILEZILLA_INTERFACE_VERIFYCERTDIALOG_HEADER
 
 #include "xmlfunctions.h"
 
@@ -49,4 +49,4 @@ private:
 	void OnCertificateChoice(wxCommandEvent& event);
 };
 
-#endif //__VERIFYCERTDIALOG_H__
+#endif

@@ -1,5 +1,5 @@
-#ifndef __SEARCH_H__
-#define __SEARCH_H__
+#ifndef FILEZILLA_INTERFACE_SEARCH_HEADER
+#define FILEZILLA_INTERFACE_SEARCH_HEADER
 
 #include "filter_conditions_dialog.h"
 #include "local_recursive_operation.h"
@@ -68,4 +68,4 @@ protected:
 	CServerPath m_remote_search_root;
 };
 
-#endif //__SEARCH_H__
+#endif
