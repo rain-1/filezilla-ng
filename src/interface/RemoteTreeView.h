@@ -43,7 +43,7 @@ protected:
 
 	// Set to true in SetDirectoryListing.
 	// Used to suspends event processing in OnItemExpanding for example
-	bool m_busy;
+	bool m_busy{};
 
 	wxTreeItemId m_ExpandAfterList;
 
