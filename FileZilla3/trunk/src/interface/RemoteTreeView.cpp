@@ -259,7 +259,6 @@ CRemoteTreeView::CRemoteTreeView(wxWindow* parent, wxWindowID id, CState& state,
 	UpdateSortMode();
 	RegisterOption(OPTION_FILELIST_NAMESORT);
 
-	m_busy = false;
 	m_pQueue = pQueue;
 	AddRoot(_T(""));
 	m_ExpandAfterList = wxTreeItemId();
@@ -325,8 +324,7 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 	Freeze();
 #endif
 	wxTreeItemId parent = MakeParent(pListing->path, !modified);
-	if (!parent)
-	{
+	if (!parent) {
 		m_busy = false;
 #ifndef __WXMSW__
 		Thaw();
@@ -683,15 +681,16 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 
 void CRemoteTreeView::OnItemExpanding(wxTreeEvent& event)
 {
-	if (m_busy)
+	if (m_busy) {
 		return;
+	}
 
 	wxTreeItemId item = event.GetItem();
-	if (!item)
+	if (!item) {
 		return;
+	}
 
-	if (!ListExpand(item))
-	{
+	if (!ListExpand(item)) {
 		event.Veto();
 		return;
 	}
@@ -724,10 +723,12 @@ void CRemoteTreeView::SetItemImages(wxTreeItemId item, bool unknown)
 
 void CRemoteTreeView::OnSelectionChanged(wxTreeEvent& event)
 {
-	if (event.GetItem() != m_ExpandAfterList)
+	if (event.GetItem() != m_ExpandAfterList) {
 		m_ExpandAfterList = wxTreeItemId();
-	if (m_busy)
+	}
+	if (m_busy) {
 		return;
+	}
 
 	if (!m_state.IsRemoteIdle(true)) {
 		wxBell();
@@ -735,13 +736,15 @@ void CRemoteTreeView::OnSelectionChanged(wxTreeEvent& event)
 	}
 
 	wxTreeItemId item = event.GetItem();
-	if (!item)
+	if (!item) {
 		return;
+	}
 
 	const CServerPath path = GetPathFromItem(item);
 	wxASSERT(!path.empty());
-	if (path.empty())
+	if (path.empty()) {
 		return;
+	}
 
 	m_state.ChangeRemoteDir(path);
 }
