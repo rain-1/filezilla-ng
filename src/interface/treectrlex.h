@@ -1,5 +1,5 @@
-#ifndef __TREECTRLEX_H__
-#define __TREECTRLEX_H__
+#ifndef FILEZILLA_INTERFACE_TREECTRLEX_HEADER
+#define FILEZILLA_INTERFACE_TREECTRLEX_HEADER
 
 #include <wx/dnd.h>
 #include "filelistctrl.h"
@@ -51,4 +51,4 @@ protected:
 	CFileListCtrlSortBase::NameSortMode m_nameSortMode;
 };
 
-#endif //__TREECTRLEX_H__
+#endif

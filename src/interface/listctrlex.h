@@ -1,5 +1,5 @@
-#ifndef __LISTCTRLEX_H__
-#define __LISTCTRLEX_H__
+#ifndef FILEZILLA_INTERFACE_LISTCTRLEX_HEADER
+#define FILEZILLA_INTERFACE_LISTCTRLEX_HEADER
 
 #include "systemimagelist.h"
 #include <wx/dnd.h>
@@ -172,4 +172,4 @@ private:
 	wxListCtrlEx& m_listCtrl;
 };
 
-#endif //__LISTCTRLEX_H__
+#endif

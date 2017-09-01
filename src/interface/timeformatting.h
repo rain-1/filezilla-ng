@@ -1,5 +1,5 @@
-#ifndef __TIMEFORMATTING_H__
-#define __TIMEFORMATTING_H__
+#ifndef FILEZILLA_INTERFACE_TIMEFORMATTING_HEADER
+#define FILEZILLA_INTERFACE_TIMEFORMATTING_HEADER
 
 namespace fz {
 class datetime;
@@ -13,4 +13,4 @@ public:
 	static wxString FormatDate(fz::datetime const& time);
 };
 
-#endif //__TIMEFORMATTING_H__
+#endif

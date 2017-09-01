@@ -1,5 +1,5 @@
-#ifndef __STATUSVIEW_H__
-#define __STATUSVIEW_H__
+#ifndef FILEZILLA_INTERFACE_STATUSVIEW_HEADER
+#define FILEZILLA_INTERFACE_STATUSVIEW_HEADER
 
 #ifdef __WXMSW__
 #include "richedit.h"
@@ -75,4 +75,3 @@ private:
 };
 
 #endif
-

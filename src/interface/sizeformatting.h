@@ -1,9 +1,9 @@
-#ifndef __SIZEFORMATTING_H__
-#define __SIZEFORMATTING_H__
+#ifndef FILEZILLA_INTERFACE_SIZEFORMATTING_HEADER
+#define FILEZILLA_INTERFACE_SIZEFORMATTING_HEADER
 
 #include <sizeformatting_base.h>
 
-class CSizeFormat : public CSizeFormatBase
+class CSizeFormat final : public CSizeFormatBase
 {
 public:
 	static std::wstring FormatNumber(int64_t size, bool* thousands_separator = 0);
@@ -16,4 +16,4 @@ public:
 	static std::wstring Format(int64_t size, bool add_bytes_suffix = false);
 };
 
-#endif //__SIZEFORMATTING_H__
+#endif

@@ -1,5 +1,5 @@
-#ifndef __TEXTCTRLEX_H__
-#define __TEXTCTRLEX_H__
+#ifndef FILEZILLA_INTERFACE_TEXTCTRLEX_HEADER
+#define FILEZILLA_INTERFACE_TEXTCTRLEX_HEADER
 
 #include <wx/textctrl.h>
 
@@ -19,4 +19,4 @@ const wxTextAttr& GetDefaultTextCtrlStyle(wxTextCtrl* ctrl);
 
 #endif
 
-#endif //__TEXTCTRLEX_H__
+#endif
