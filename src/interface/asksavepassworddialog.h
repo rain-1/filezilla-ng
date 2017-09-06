@@ -3,7 +3,7 @@
 
 #include "dialogex.h"
 
-class CAskSavePasswordDialog : public wxDialogEx
+class CAskSavePasswordDialog final : public wxDialogEx
 {
 public:
 	static bool Run(wxWindow* parent);
