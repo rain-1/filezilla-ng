@@ -204,7 +204,7 @@ protected:
 	void UpdateStatusLinePositions();
 	void CalculateQueueSize();
 	void DisplayQueueSize();
-	void SaveQueue();
+	void SaveQueue(bool silent = false);
 
 	bool IsActionAfter(ActionAfterState::type);
 	void ActionAfter(bool warned = false);

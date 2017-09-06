@@ -500,27 +500,27 @@ void wxListCtrlEx::SaveColumnSettings(int widthsOptionId, int visibilityOptionId
 	}
 
 	if (visibilityOptionId != -1) {
-		wxString visibleColumns;
+		std::wstring visibleColumns;
 		for (unsigned int i = 0; i < m_columnInfo.size(); ++i) {
 			if (m_columnInfo[i].shown) {
-				visibleColumns += _T("1");
+				visibleColumns += L"1";
 			}
 			else {
-				visibleColumns += _T("0");
+				visibleColumns += L"0";
 			}
 		}
-		COptions::Get()->SetOption(visibilityOptionId, visibleColumns.ToStdWstring());
+		COptions::Get()->SetOption(visibilityOptionId, visibleColumns);
 	}
 
 	if (sortOptionId != -1) {
-		wxString order;
+		std::wstring order;
 		for (unsigned int i = 0; i < m_columnInfo.size(); ++i) {
 			if (i) {
-				order += _T(",");
+				order += L",";
 			}
-			order += wxString::Format(_T("%d"), m_columnInfo[i].order);
+			order += fz::to_wstring(m_columnInfo[i].order);
 		}
-		COptions::Get()->SetOption(sortOptionId, order.ToStdWstring());
+		COptions::Get()->SetOption(sortOptionId, order);
 	}
 }
 

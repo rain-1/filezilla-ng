@@ -13,6 +13,8 @@
 
 #include <libfilezilla/local_filesys.hpp>
 
+#include <wx/evtloop.h>
+
 #include "wxfilesystem_blob_handler.h"
 #include "xrc_helper.h"
 #ifdef __WXMSW__
@@ -299,11 +301,22 @@ USE AT OWN RISK"), _T("Important Information"));
 
 int CFileZillaApp::OnExit()
 {
+	CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_QUITNOW);
+
 	COptions::Get()->SaveIfNeeded();
 
 #ifdef WITH_LIBDBUS
 	CSessionManager::Uninit();
 #endif
+
+	if (GetMainLoop() && wxEventLoopBase::GetActive() != GetMainLoop()) {
+		// There's open dialogs and such and we just have to quit _NOW_.
+		// We cannot continue as wx proceeds to destroy all windows, which interacts
+		// badly with nested event loops, virtually always causing a crash.
+		// I very much prefer clean shutdown but it's impossible in this situation. Sad.
+		_exit(0);
+	}
+
 #ifdef __WXMSW__
 	UninitWinsock();
 #endif
