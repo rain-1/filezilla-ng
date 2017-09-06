@@ -19,7 +19,7 @@ bool RenameFile(wxWindow* pWnd, wxString dir, wxString from, wxString to);
 
 CLocalPath GetDownloadDir();
 
-class gui_recursive_remove : public fz::recursive_remove
+class gui_recursive_remove final : public fz::recursive_remove
 {
 public:
 	gui_recursive_remove(wxWindow* parent)
