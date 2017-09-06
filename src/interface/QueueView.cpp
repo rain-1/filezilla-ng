@@ -226,6 +226,7 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	RegisterOption(OPTION_CONCURRENTUPLOADLIMIT);
 
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_REWRITE_CREDENTIALS, false);
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_QUITNOW, false);
 
 	SetDropTarget(new CQueueViewDropTarget(this));
 
@@ -1396,11 +1397,13 @@ bool CQueueView::Quit()
 #endif
 
 	bool canQuit = true;
-	if (!SetActive(false))
+	if (!SetActive(false)) {
 		canQuit = false;
+	}
 
-	if (!canQuit)
+	if (!canQuit) {
 		return false;
+	}
 
 	DeleteEngines();
 
@@ -1530,7 +1533,7 @@ void CQueueView::DisplayQueueSize()
 	pStatusBar->DisplayQueueSize(m_totalQueueSize, m_filesWithUnknownSize != 0);
 }
 
-void CQueueView::SaveQueue()
+void CQueueView::SaveQueue(bool silent)
 {
 	// Kiosk mode 2 doesn't save queue
 	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
@@ -1541,7 +1544,7 @@ void CQueueView::SaveQueue()
 	// just as extra precaution. Better 'save' than sorry.
 	CInterProcessMutex mutex(MUTEX_QUEUE);
 
-	if (!m_queue_storage.SaveQueue(m_serverList)) {
+	if (!m_queue_storage.SaveQueue(m_serverList) && !silent) {
 		wxString msg = wxString::Format(_("An error occurred saving the transfer queue to \"%s\".\nSome queue items might not have been saved."), m_queue_storage.GetDatabaseFilename());
 		wxMessageBoxEx(msg, _("Error saving queue"), wxICON_ERROR);
 	}
@@ -1560,15 +1563,17 @@ void CQueueView::LoadQueueFromXML()
 	}
 
 	auto queue = document.child("Queue");
-	if (!queue)
+	if (!queue) {
 		return;
+	}
 
 	ImportQueue(queue, false);
 
 	document.remove_child(queue);
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		return;
+	}
 
 	if (!xml.Save(false)) {
 		wxString msg = wxString::Format(_("Could not write \"%s\", the queue could not be saved.\n%s"), xml.GetFileName(), xml.GetError());
@@ -1586,8 +1591,9 @@ void CQueueView::LoadQueue()
 
 	bool error = false;
 
-	if (!m_queue_storage.BeginTransaction())
+	if (!m_queue_storage.BeginTransaction()) {
 		error = true;
+	}
 	else {
 		ServerWithCredentials server;
 		int64_t const first_id = m_queue_storage.GetServer(server, true);
@@ -3130,35 +3136,39 @@ CActionAfterBlocker::~CActionAfterBlocker()
 
 void CQueueView::OnStateChange(CState*, t_statechange_notifications notification, wxString const&, const void* data2)
 {
-	if (notification != STATECHANGE_REWRITE_CREDENTIALS) {
-		return;
-	}
-
-	auto * loginManager = const_cast<CLoginManager*>(reinterpret_cast<CLoginManager const*>(data2));
-	if (!loginManager) {
-		return;
-	}
+	if (notification == STATECHANGE_REWRITE_CREDENTIALS) {
+		auto * loginManager = const_cast<CLoginManager*>(reinterpret_cast<CLoginManager const*>(data2));
+		if (!loginManager) {
+			return;
+		}
 
 
-	for (auto it = m_serverList.begin(); it != m_serverList.end(); ) {
-		ServerWithCredentials server = (*it)->GetServer();
-		loginManager->AskDecryptor(server.credentials.encrypted_, true, false);
+		for (auto it = m_serverList.begin(); it != m_serverList.end(); ) {
+			ServerWithCredentials server = (*it)->GetServer();
+			loginManager->AskDecryptor(server.credentials.encrypted_, true, false);
 
-		// Since the queue may be running and AskDecryptor uses the GUI, re-find matching server item
-		for (it = m_serverList.begin(); it != m_serverList.end(); ++it) {
-			if ((*it)->GetServer() == server) {
-				server = (*it)->GetServer(); // Credentials aren't in ==
-				server.credentials.Unprotect(loginManager->GetDecryptor(server.credentials.encrypted_), true);
-				(*it)->GetCredentials() = server.credentials;
-				break;
+			// Since the queue may be running and AskDecryptor uses the GUI, re-find matching server item
+			for (it = m_serverList.begin(); it != m_serverList.end(); ++it) {
+				if ((*it)->GetServer() == server) {
+					server = (*it)->GetServer(); // Credentials aren't in ==
+					server.credentials.Unprotect(loginManager->GetDecryptor(server.credentials.encrypted_), true);
+					(*it)->GetCredentials() = server.credentials;
+					break;
+				}
+			}
+			if (it == m_serverList.end()) {
+				// Server has vanished, start over.
+				it = m_serverList.begin();
+			}
+			else {
+				++it;
 			}
 		}
-		if (it == m_serverList.end()) {
-			// Server has vanished, start over.
-			it = m_serverList.begin();
-		}
-		else {
-			++it;
+	}
+	else if (notification == STATECHANGE_QUITNOW) {
+		if (m_quit != 2) {
+			SaveQueue(false);
+			SaveColumnSettings(OPTION_QUEUE_COLUMN_WIDTHS, -1, -1);
 		}
 	}
 }
