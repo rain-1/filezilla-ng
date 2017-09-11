@@ -1358,7 +1358,7 @@ void CSiteManagerDialog::OnNewSite(wxCommandEvent&)
 	AddNewSite(item, server);
 }
 
-void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
+void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree) {
@@ -2615,7 +2615,7 @@ LogonType CSiteManagerDialog::GetLogonType() const
 	return GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection).ToStdWstring());
 }
 
-void CSiteManagerDialog::OnGenerateEncryptionKey(wxCommandEvent& event)
+void CSiteManagerDialog::OnGenerateEncryptionKey(wxCommandEvent&)
 {
 #if ENABLE_STORJ
 	CStorjKeyInterface generator(this);
