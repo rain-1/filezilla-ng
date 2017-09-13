@@ -2582,6 +2582,10 @@ void CSiteManagerDialog::SetProtocol(ServerProtocol protocol)
 	if (protoIt != mainProtocolListIndex_.cend()) {
 		pProtocol->SetSelection(protoIt->second);
 	}
+	else if (protocol != ServerProtocol::UNKNOWN) {
+		mainProtocolListIndex_[protocol] = pProtocol->Append(CServer::GetProtocolName(protocol));
+		pProtocol->SetSelection(mainProtocolListIndex_[protocol]); 
+	}
 	else {
 		pProtocol->SetSelection(mainProtocolListIndex_[FTP]);
 	}
