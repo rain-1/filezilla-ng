@@ -540,7 +540,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 		break;
 #endif
 	default:
-		m_pLogging->LogMessage(MessageType::Debug_Warning, L"Not a valid protocol: %d", server.GetProtocol());
+		m_pLogging->LogMessage(MessageType::Error, _("'%s' is not a supported protocol."), CServer::GetProtocolName(server.GetProtocol()));
 		return FZ_REPLY_SYNTAXERROR|FZ_REPLY_DISCONNECTED;
 	}
 
