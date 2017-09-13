@@ -41,7 +41,7 @@ int CFtpFileTransferOpData::Send()
 
 		int64_t size;
 		bool isLink;
-		if (fz::local_filesys::get_file_info(fz::to_native(localFile_), isLink, &size, 0, 0) == fz::local_filesys::file) {
+		if (fz::local_filesys::get_file_info(fz::to_native(localFile_), isLink, &size, nullptr, nullptr) == fz::local_filesys::file) {
 			localFileSize_ = size;
 		}
 

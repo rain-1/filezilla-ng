@@ -133,7 +133,7 @@ int CSftpListOpData::ParseEntry(std::wstring && entry, std::wstring const& stime
 
 	fz::datetime time;
 	if (!stime.empty()) {
-		int64_t t = std::wcstoll(stime.c_str(), 0, 10);
+		int64_t t = std::wcstoll(stime.c_str(), nullptr, 10);
 		if (t > 0) {
 			time = fz::datetime(static_cast<time_t>(t), fz::datetime::seconds);
 		}

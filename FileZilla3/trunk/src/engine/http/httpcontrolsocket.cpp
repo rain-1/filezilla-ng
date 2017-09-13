@@ -208,7 +208,7 @@ void CHttpControlSocket::ResetSocket()
 		if (m_pTlsSocket != m_pBackend) {
 			delete m_pTlsSocket;
 		}
-		m_pTlsSocket = 0;
+		m_pTlsSocket = nullptr;
 	}
 
 	CRealControlSocket::ResetSocket();

@@ -98,7 +98,7 @@ struct cert_list_holder final
 struct datum_holder final : gnutls_datum_t
 {
 	datum_holder() {
-		data = 0;
+		data = nullptr;
 	}
 
 	~datum_holder() {
@@ -113,7 +113,7 @@ struct datum_holder final : gnutls_datum_t
 void clone_cert(gnutls_x509_crt_t in, gnutls_x509_crt_t &out)
 {
 	gnutls_x509_crt_deinit(out);
-	out = 0;
+	out = nullptr;
 
 	if (in) {
 		datum_holder der;
@@ -121,7 +121,7 @@ void clone_cert(gnutls_x509_crt_t in, gnutls_x509_crt_t &out)
 			gnutls_x509_crt_init(&out);
 			if (gnutls_x509_crt_import(out, &der, GNUTLS_X509_FMT_DER) != GNUTLS_E_SUCCESS) {
 				gnutls_x509_crt_deinit(out);
-				out = 0;
+				out = nullptr;
 			}
 		}
 	}
@@ -134,7 +134,7 @@ CTlsSocketImpl::CTlsSocketImpl(CTlsSocket& tlsSocket, fz::socket& socket, CContr
 	, m_socket(socket)
 	, socketBackend_(std::make_unique<CSocketBackend>(static_cast<fz::event_handler*>(&tlsSocket_), m_socket, m_pOwner->GetEngine().GetRateLimiter()))
 {
-	m_implicitTrustedCert.data = 0;
+	m_implicitTrustedCert.data = nullptr;
 	m_implicitTrustedCert.size = 0;
 }
 
@@ -189,7 +189,7 @@ bool CTlsSocketImpl::SetClientCertificate(fz::native_string const& keyfile, fz::
 	}
 
 	int res = gnutls_certificate_set_x509_key_file2(m_certCredentials, fz::to_string(certs).c_str(),
-		fz::to_string(keyfile).c_str(), GNUTLS_X509_FMT_PEM, password.empty() ? 0 : fz::to_utf8(password).c_str(), 0);
+		fz::to_string(keyfile).c_str(), GNUTLS_X509_FMT_PEM, password.empty() ? nullptr : fz::to_utf8(password).c_str(), 0);
 	if (res < 0) {
 		LogError(res, L"gnutls_certificate_set_x509_key_file2");
 		Uninit();
@@ -222,7 +222,7 @@ bool CTlsSocketImpl::InitSession()
 	// session is cached or not.
 	gnutls_db_set_cache_expiration(m_session, 100000000);
 
-	res = gnutls_priority_set_direct(m_session, ciphers, 0);
+	res = gnutls_priority_set_direct(m_session, ciphers, nullptr);
 	if (res) {
 		LogError(res, L"gnutls_priority_set_direct");
 		Uninit();
@@ -247,7 +247,7 @@ void CTlsSocketImpl::Uninit()
 
 	if (m_certCredentials) {
 		gnutls_certificate_free_credentials(m_certCredentials);
-		m_certCredentials = 0;
+		m_certCredentials = nullptr;
 	}
 
 	if (m_initialized) {
@@ -258,15 +258,16 @@ void CTlsSocketImpl::Uninit()
 	m_tlsState = CTlsSocket::TlsState::noconn;
 
 	delete [] m_peekData;
-	m_peekData = 0;
+	m_peekData = nullptr;
 	m_peekDataLen = 0;
 
 	delete [] m_implicitTrustedCert.data;
-	m_implicitTrustedCert.data = 0;
+	m_implicitTrustedCert.data = nullptr;
 
 #if TLSDEBUG
-	if (pLoggingControlSocket == m_pOwner)
-		pLoggingControlSocket = 0;
+	if (pLoggingControlSocket == m_pOwner) {
+		pLoggingControlSocket = nullptr;
+	}
 #endif
 }
 
@@ -275,7 +276,7 @@ void CTlsSocketImpl::UninitSession()
 {
 	if (m_session) {
 		gnutls_deinit(m_session);
-		m_session = 0;
+		m_session = nullptr;
 	}
 }
 
@@ -699,7 +700,7 @@ int CTlsSocketImpl::Read(void *buffer, unsigned int len, int& error)
 		if (min == m_peekDataLen) {
 			m_peekDataLen = 0;
 			delete [] m_peekData;
-			m_peekData = 0;
+			m_peekData = nullptr;
 		}
 		else {
 			memmove(m_peekData, m_peekData + min, m_peekDataLen - min);
@@ -769,7 +770,7 @@ int CTlsSocketImpl::Write(const void *buffer, unsigned int len, int& error)
 	int res = gnutls_record_send(m_session, buffer, len);
 
 	while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket)
-		res = gnutls_record_send(m_session, 0, 0);
+		res = gnutls_record_send(m_session, nullptr, 0);
 
 	if (res >= 0) {
 		error = 0;
@@ -821,7 +822,7 @@ void CTlsSocketImpl::CheckResumeFailedReadWrite()
 	if (m_lastWriteFailed) {
 		int res = GNUTLS_E_AGAIN;
 		while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket) {
-			res = gnutls_record_send(m_session, 0, 0);
+			res = gnutls_record_send(m_session, nullptr, 0);
 		}
 
 		if (res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) {
@@ -847,7 +848,7 @@ void CTlsSocketImpl::CheckResumeFailedReadWrite()
 		if (res < 0) {
 			m_peekDataLen = 0;
 			delete [] m_peekData;
-			m_peekData = 0;
+			m_peekData = nullptr;
 			if (res != GNUTLS_E_INTERRUPTED && res != GNUTLS_E_AGAIN) {
 				Failure(res, true);
 			}
@@ -857,7 +858,7 @@ void CTlsSocketImpl::CheckResumeFailedReadWrite()
 		if (!res) {
 			m_peekDataLen = 0;
 			delete [] m_peekData;
-			m_peekData = 0;
+			m_peekData = nullptr;
 		}
 		else {
 			m_peekDataLen = res;
@@ -1053,7 +1054,7 @@ bool CTlsSocketImpl::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& ou
 	std::wstring subject, issuer;
 
 	size = 0;
-	res = gnutls_x509_crt_get_dn(cert, 0, &size);
+	res = gnutls_x509_crt_get_dn(cert, nullptr, &size);
 	if (size) {
 		char* dn = new char[size + 1];
 		dn[size] = 0;
@@ -1077,7 +1078,7 @@ bool CTlsSocketImpl::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& ou
 	std::vector<std::wstring> alt_subject_names = GetCertSubjectAltNames(cert);
 
 	size = 0;
-	res = gnutls_x509_crt_get_issuer_dn(cert, 0, &size);
+	res = gnutls_x509_crt_get_issuer_dn(cert, nullptr, &size);
 	if (size) {
 		char* dn = new char[++size + 1];
 		dn[size] = 0;
@@ -1143,7 +1144,7 @@ std::vector<std::wstring> CTlsSocketImpl::GetCertSubjectAltNames(gnutls_x509_crt
 	char san[4096];
 	for (unsigned int i = 0; i < 10000; ++i) { // I assume this is a sane limit
 		size_t san_size = sizeof(san) - 1;
-		int const type_or_error = gnutls_x509_crt_get_subject_alt_name(cert, i, san, &san_size, 0);
+		int const type_or_error = gnutls_x509_crt_get_subject_alt_name(cert, i, san, &san_size, nullptr);
 		if (type_or_error == GNUTLS_E_SHORT_MEMORY_BUFFER) {
 			continue;
 		}
@@ -1229,7 +1230,7 @@ int CTlsSocketImpl::GetAlgorithmWarnings()
 
 bool CTlsSocketImpl::GetSortedPeerCertificates(gnutls_x509_crt_t *& certs, unsigned int & certs_size)
 {
-	certs = 0;
+	certs = nullptr;
 	certs_size = 0;
 
 	// First get unsorted list of peer certificates in DER
@@ -1531,7 +1532,7 @@ std::string CTlsSocketImpl::ListTlsCiphers(std::string priority)
 	auto list = fz::sprintf("Ciphers for %s:\n", priority);
 
 	gnutls_priority_t pcache;
-	const char *err = 0;
+	const char *err = nullptr;
 	int ret = gnutls_priority_init(&pcache, priority.c_str(), &err);
 	if (ret < 0) {
 		list += fz::sprintf("gnutls_priority_init failed with code %d: %s", ret, err ? err : "Unknown error");
@@ -1550,9 +1551,9 @@ std::string CTlsSocketImpl::ListTlsCiphers(std::string priority)
 
 			gnutls_protocol_t version;
 			unsigned char id[2];
-			const char* name = gnutls_cipher_suite_info(idx, id, NULL, NULL, NULL, &version);
+			const char* name = gnutls_cipher_suite_info(idx, id, nullptr, nullptr, nullptr, &version);
 
-			if (name != 0) {
+			if (name != nullptr) {
 				list += fz::sprintf(
 					"%-50s    0x%02x, 0x%02x    %s\n",
 					name,
@@ -1585,7 +1586,7 @@ int CTlsSocketImpl::DoCallGnutlsRecordRecv(void* data, size_t len)
 
 std::wstring CTlsSocketImpl::GetGnutlsVersion()
 {
-	const char* v = gnutls_check_version(0);
+	const char* v = gnutls_check_version(nullptr);
 	if (!v || !*v) {
 		return L"unknown";
 	}

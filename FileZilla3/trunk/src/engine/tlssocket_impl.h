@@ -20,7 +20,7 @@ public:
 	bool Init();
 	void Uninit();
 
-	int Handshake(const CTlsSocketImpl* pPrimarySocket = 0, bool try_resume = 0);
+	int Handshake(const CTlsSocketImpl* pPrimarySocket = nullptr, bool try_resume = 0);
 
 	int Read(void *buffer, unsigned int size, int& error);
 	int Peek(void *buffer, unsigned int size, int& error);

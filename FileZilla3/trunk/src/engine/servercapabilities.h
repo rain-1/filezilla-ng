@@ -47,7 +47,7 @@ enum capabilityNames
 class CCapabilities final
 {
 public:
-	capabilities GetCapability(capabilityNames name, std::wstring* pOption = 0) const;
+	capabilities GetCapability(capabilityNames name, std::wstring* pOption = nullptr) const;
 	capabilities GetCapability(capabilityNames name, int* pOption) const;
 	void SetCapability(capabilityNames name, capabilities cap, std::wstring const& option = std::wstring());
 	void SetCapability(capabilityNames name, capabilities cap, int option);
@@ -66,7 +66,7 @@ class CServerCapabilities final
 {
 public:
 	// If return value isn't 'yes', pOptions remains unchanged
-	static capabilities GetCapability(const CServer& server, capabilityNames name, std::wstring* pOption = 0);
+	static capabilities GetCapability(const CServer& server, capabilityNames name, std::wstring* pOption = nullptr);
 	static capabilities GetCapability(const CServer& server, capabilityNames name, int* option);
 
 	static void SetCapability(const CServer& server, capabilityNames name, capabilities cap, std::wstring const& option = std::wstring());

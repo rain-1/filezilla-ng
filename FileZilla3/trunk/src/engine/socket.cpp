@@ -468,7 +468,7 @@ protected:
 			bind_hints.ai_flags = AI_NUMERICHOST | AI_NUMERICSERV | AI_PASSIVE;
 			bind_hints.ai_socktype = SOCK_STREAM;
 			addrinfo *bindAddressList{};
-			int res = getaddrinfo(bind.empty() ? 0 : bind.c_str(), "0", &bind_hints, &bindAddressList);
+			int res = getaddrinfo(bind.empty() ? nullptr : bind.c_str(), "0", &bind_hints, &bindAddressList);
 			if (!res && bindAddressList) {
 				if (bindAddressList->ai_addr) {
 					memcpy(&bindAddr.storage, bindAddressList->ai_addr, bindAddressList->ai_addrlen);
@@ -652,7 +652,7 @@ protected:
 
 			l.unlock();
 
-			int res = select(maxfd, &readfds, &writefds, 0, 0);
+			int res = select(maxfd, &readfds, &writefds, nullptr, nullptr);
 
 			l.lock();
 
@@ -915,17 +915,17 @@ void socket::detach_thread(scoped_lock & l)
 		return;
 	}
 
-	socket_thread_->set_socket(0, l);
+	socket_thread_->set_socket(nullptr, l);
 	if (socket_thread_->finished_) {
 		socket_thread_->wakeup_thread(l);
 		l.unlock();
 		delete socket_thread_;
-		socket_thread_ = 0;
+		socket_thread_ = nullptr;
 	}
 	else {
 		if (!socket_thread_->started_) {
 			auto thread = socket_thread_;
-			socket_thread_ = 0;
+			socket_thread_ = nullptr;
 			l.unlock();
 			delete thread;
 		}
@@ -933,7 +933,7 @@ void socket::detach_thread(scoped_lock & l)
 			socket_thread_->quit_ = true;
 			socket_thread_->thread_.detach();
 			socket_thread_->wakeup_thread(l);
-			socket_thread_ = 0;
+			socket_thread_ = nullptr;
 		}
 	}
 }
@@ -991,7 +991,7 @@ int socket::connect(native_string const& host, unsigned int port, address_type f
 	if (res) {
 		state_ = none;
 		delete socket_thread_;
-		socket_thread_ = 0;
+		socket_thread_ = nullptr;
 		return res;
 	}
 
@@ -1124,7 +1124,7 @@ static Error_table const error_table[] =
 	ERRORDECL(WSAEADDRNOTAVAIL, fztranslate_mark("Cannot assign requested address"))
 	ERRORDECL(ERROR_NETNAME_DELETED, fztranslate_mark("The specified network name is no longer available"))
 #endif
-	{ 0, 0, 0 }
+	{ 0, nullptr, nullptr }
 };
 
 std::string socket::error_string(int error)
@@ -1175,7 +1175,7 @@ int socket::close()
 
 		if (evt_handler_) {
 			remove_socket_events(evt_handler_, this);
-			evt_handler_ = 0;
+			evt_handler_ = nullptr;
 		}
 	}
 	else {
@@ -1186,7 +1186,7 @@ int socket::close()
 
 		if (evt_handler_) {
 			remove_socket_events(evt_handler_, this);
-			evt_handler_ = 0;
+			evt_handler_ = nullptr;
 		}
 	}
 
@@ -1422,8 +1422,8 @@ int socket::listen(address_type family, int port)
 
 		std::string portstring = sprintf("%d", port);
 
-		addrinfo* addressList = 0;
-		int res = getaddrinfo(0, portstring.c_str(), &hints, &addressList);
+		addrinfo* addressList = nullptr;
+		int res = getaddrinfo(nullptr, portstring.c_str(), &hints, &addressList);
 
 		if (res) {
 #ifdef FZ_WINDOWS
@@ -1528,10 +1528,11 @@ socket* socket::accept(int &error)
 		socket_thread_->waiting_ |= WAIT_ACCEPT;
 		socket_thread_->wakeup_thread(l);
 	}
-	int fd = ::accept(fd_, 0, 0);
+	// TODO: accept4 for SOCK_CLOEXEC
+	int fd = ::accept(fd_, nullptr, nullptr);
 	if (fd == -1) {
 		error = last_socket_error();
-		return 0;
+		return nullptr;
 	}
 
 #if defined(SO_NOSIGPIPE) && !defined(MSG_NOSIGNAL)
@@ -1544,7 +1545,7 @@ socket* socket::accept(int &error)
 
 	do_set_buffer_sizes(fd, buffer_sizes_[0], buffer_sizes_[1]);
 
-	socket* pSocket = new socket(thread_pool_, 0);
+	socket* pSocket = new socket(thread_pool_, nullptr);
 	pSocket->state_ = connected;
 	pSocket->fd_ = fd;
 	pSocket->socket_thread_ = new socket_thread();
