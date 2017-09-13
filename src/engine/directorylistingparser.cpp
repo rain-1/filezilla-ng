@@ -424,12 +424,7 @@ protected:
 
 CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding)
 	: m_pControlSocket(pControlSocket)
-	, m_currentOffset(0)
-	, m_totalData()
-	, m_prevLine(0)
 	, m_server(server)
-	, m_fileListOnly(true)
-	, m_maybeMultilineVms(false)
 	, m_listingEncoding(encoding)
 {
 	if (m_MonthNamesMap.empty()) {
@@ -684,7 +679,7 @@ bool CDirectoryListingParser::ParseData(bool partial)
 
 				if (res) {
 					delete pLine;
-					m_prevLine = 0;
+					m_prevLine = nullptr;
 				}
 				else {
 					m_prevLine = pLine;
@@ -696,7 +691,7 @@ bool CDirectoryListingParser::ParseData(bool partial)
 		}
 		else {
 			delete m_prevLine;
-			m_prevLine = 0;
+			m_prevLine = nullptr;
 			delete pLine;
 		}
 		pLine = GetLine(partial, error);
@@ -2037,7 +2032,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 				m_currentOffset = 0;
 				if (iter == m_DataList.end()) {
 					m_DataList.clear();
-					return 0;
+					return nullptr;
 				}
 				len = iter->len;
 			}
@@ -2062,10 +2057,10 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 							m_pControlSocket->LogMessage(MessageType::Error, _("Received a line exceeding 10000 characters, aborting."));
 						}
 						error = true;
-						return 0;
+						return nullptr;
 					}
 					if (breakAtEnd) {
-						return 0;
+						return nullptr;
 					}
 					break;
 				}
@@ -2079,7 +2074,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 				m_pControlSocket->LogMessage(MessageType::Error, _("Received a line exceeding 10000 characters, aborting."));
 			}
 			error = true;
-			return 0;
+			return nullptr;
 		}
 		m_currentOffset = currentOffset;
 
@@ -2151,7 +2146,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd, bool &error)
 		}
 	}
 
-	return 0;
+	return nullptr;
 }
 
 bool CDirectoryListingParser::ParseAsWfFtp(CLine &line, CDirentry &entry)
@@ -2820,12 +2815,13 @@ bool CDirectoryListingParser::ParseAsOS9(CLine &line, CDirentry &entry)
 
 void CDirectoryListingParser::Reset()
 {
-	for (auto iter = m_DataList.begin(); iter != m_DataList.end(); ++iter)
-		delete [] iter->p;
+	for (auto & item : m_DataList) {
+		delete [] item.p;
+	}
 	m_DataList.clear();
 
 	delete m_prevLine;
-	m_prevLine = 0;
+	m_prevLine = nullptr;
 
 	m_entryList.clear();
 	m_fileList.clear();

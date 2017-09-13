@@ -24,7 +24,7 @@ public:
 	bool Init();
 	void Uninit();
 
-	int Handshake(const CTlsSocket* pPrimarySocket = 0, bool try_resume = 0);
+	int Handshake(const CTlsSocket* pPrimarySocket = nullptr, bool try_resume = 0);
 
 	virtual int Read(void *buffer, unsigned int size, int& error) override;
 	virtual int Peek(void *buffer, unsigned int size, int& error) override;

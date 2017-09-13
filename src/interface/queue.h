@@ -6,7 +6,7 @@
 #include "edithandler.h"
 #include <libfilezilla/optional.hpp>
 
-enum class QueuePriority : char {
+enum class QueuePriority : unsigned char {
 	lowest,
 	low,
 	normal,
@@ -196,7 +196,7 @@ public:
 
 	void SetTargetFile(wxString const& file);
 
-	enum class Status : char {
+	enum class Status : unsigned char {
 		none,
 		incorrect_password,
 		timeout,

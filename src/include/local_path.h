@@ -21,8 +21,8 @@ public:
 	// correct, empty() will return true.
 	// If file is given and path not terminated by a separator,
 	// the filename portion is returned in file.
-	explicit CLocalPath(std::wstring const& path, std::wstring* file = 0);
-	bool SetPath(std::wstring const& path, std::wstring* file = 0);
+	explicit CLocalPath(std::wstring const& path, std::wstring* file = nullptr);
+	bool SetPath(std::wstring const& path, std::wstring* file = nullptr);
 
 	// Always terminated by a separator
 	std::wstring const& GetPath() const { return *m_path; }
@@ -41,10 +41,10 @@ public:
 	bool HasParent() const;
 	bool HasLogicalParent() const;
 
-	CLocalPath GetParent(std::wstring* last_segment = 0) const;
+	CLocalPath GetParent(std::wstring* last_segment = nullptr) const;
 
 	// If it fails, the path is undefined
-	bool MakeParent(std::wstring* last_segment = 0);
+	bool MakeParent(std::wstring* last_segment = nullptr);
 
 	/* Calling GetLastSegment() only returns non-empty string if
 	 * HasParent() returns true
@@ -61,10 +61,10 @@ public:
 	bool IsWriteable() const;
 
 	// Checks if the directory exists.
-	bool Exists(std::wstring *error = 0) const;
+	bool Exists(std::wstring *error = nullptr) const;
 
 	// Craetes direcory if it doesn't yet exist
-	bool Create(CLocalPath *last_successful = 0);
+	bool Create(CLocalPath *last_successful = nullptr);
 
 	static wchar_t const path_separator;
 

@@ -72,7 +72,7 @@ protected:
 
 	bool ParseData(bool partial);
 
-	bool ParseLine(CLine &line, ServerType const serverType, bool concatenated, CDirentry const* override = 0);
+	bool ParseLine(CLine &line, ServerType const serverType, bool concatenated, CDirentry const* override = nullptr);
 
 	bool ParseAsUnix(CLine &line, CDirentry &entry, bool expect_date);
 	bool ParseAsDos(CLine &line, CDirentry &entry);
@@ -125,20 +125,20 @@ protected:
 		int len;
 	};
 
-	int m_currentOffset;
+	int m_currentOffset{};
 
 	std::deque<t_list> m_DataList;
 	std::deque<fz::shared_value<CDirentry>> m_entryList;
-	int64_t m_totalData;
+	int64_t m_totalData{};
 
-	CLine *m_prevLine;
+	CLine *m_prevLine{};
 
 	CServer m_server;
 
-	bool m_fileListOnly;
+	bool m_fileListOnly{true};
 	std::vector<std::wstring> m_fileList;
 
-	bool m_maybeMultilineVms;
+	bool m_maybeMultilineVms{};
 
 	fz::duration m_timezoneOffset;
 

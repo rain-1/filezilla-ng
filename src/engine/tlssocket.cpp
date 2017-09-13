@@ -28,7 +28,7 @@ void CTlsSocket::Uninit()
 
 int CTlsSocket::Handshake(CTlsSocket const* pPrimarySocket, bool try_resume)
 {
-	return impl_->Handshake(pPrimarySocket ? pPrimarySocket->impl_.get() : 0, try_resume);
+	return impl_->Handshake(pPrimarySocket ? pPrimarySocket->impl_.get() : nullptr, try_resume);
 }
 
 int CTlsSocket::Read(void *buffer, unsigned int size, int& error)

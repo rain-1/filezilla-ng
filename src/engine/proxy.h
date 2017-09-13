@@ -39,7 +39,7 @@ public:
 	virtual int Write(const void *buffer, unsigned int size, int& error) override;
 
 	void Detach();
-	bool Detached() const { return socket_ == 0; }
+	bool Detached() const { return socket_ == nullptr; }
 
 	ProxyType GetProxyType() const { return m_proxyType; }
 	std::wstring GetUser() const;

@@ -13,7 +13,7 @@
 namespace {
 wchar_t const prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
 
-std::wstring ToString(int64_t n, wchar_t const* const sepBegin = 0, wchar_t const* const sepEnd = 0)
+std::wstring ToString(int64_t n, wchar_t const* const sepBegin = nullptr, wchar_t const* const sepEnd = nullptr)
 {
 	std::wstring ret;
 	if (!n) {
@@ -152,7 +152,7 @@ std::wstring CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool 
 		places = fz::sprintf(fmt, remainder);
 	}
 
-	std::wstring result = ToString(r, 0, 0);
+	std::wstring result = ToString(r, nullptr, nullptr);
 	if (!places.empty()) {
 		std::wstring const& sep = GetRadixSeparator();
 
@@ -303,8 +303,8 @@ std::wstring const& CSizeFormatBase::GetRadixSeparator()
 std::wstring CSizeFormatBase::FormatNumber(COptionsBase* pOptions, int64_t size, bool* thousands_separator)
 {
 	std::wstring sep;
-	wchar_t const* sepBegin = 0;
-	wchar_t const* sepEnd = 0;
+	wchar_t const* sepBegin = nullptr;
+	wchar_t const* sepEnd = nullptr;
 
 	if ((!thousands_separator || *thousands_separator) && pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0) {
 		sep = GetThousandsSeparator();

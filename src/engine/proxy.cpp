@@ -45,7 +45,7 @@ CProxySocket::~CProxySocket()
 	remove_handler();
 
 	if (socket_) {
-		socket_->set_event_handler(0);
+		socket_->set_event_handler(nullptr);
 	}
 	delete [] m_pSendBuffer;
 	delete [] m_pRecvBuffer;
@@ -127,7 +127,7 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, std::wstring const& ho
 			hints.ai_socktype = SOCK_STREAM;
 
 			addrinfo * result{};
-			int res = getaddrinfo(fz::to_string(m_host).c_str(), 0, &hints, &result);
+			int res = getaddrinfo(fz::to_string(m_host).c_str(), nullptr, &hints, &result);
 			if (!res && result) {
 				if (result->ai_family == AF_INET) {
 					ip = fz::socket::address_to_string(result->ai_addr, result->ai_addrlen, false);
@@ -246,8 +246,8 @@ void CProxySocket::Detach()
 		return;
 	}
 
-	socket_->set_event_handler(0);
-	socket_ = 0;
+	socket_->set_event_handler(nullptr);
+	socket_ = nullptr;
 }
 
 void CProxySocket::OnReceive()
@@ -264,7 +264,7 @@ void CProxySocket::OnReceive()
 		for (;;) {
 			int error;
 			int do_read = m_recvBufferLen - m_recvBufferPos - 1;
-			char* end = 0;
+			char* end = nullptr;
 			for (int i = 0; i < 2; ++i) {
 				int read;
 				if (!i) {
@@ -675,7 +675,7 @@ void CProxySocket::OnSend()
 
 		if (written == m_sendBufferLen) {
 			delete [] m_pSendBuffer;
-			m_pSendBuffer = 0;
+			m_pSendBuffer = nullptr;
 
 			if (m_can_read) {
 				OnReceive();

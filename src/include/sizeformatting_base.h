@@ -28,7 +28,7 @@ public:
 		exa
 	};
 
-	static std::wstring FormatNumber(COptionsBase* pOptions, int64_t size, bool* thousands_separator = 0);
+	static std::wstring FormatNumber(COptionsBase* pOptions, int64_t size, bool* thousands_separator = nullptr);
 
 	static std::wstring GetUnitWithBase(COptionsBase* pOptions, _unit unit, int base);
 	static std::wstring GetUnit(COptionsBase* pOptions, _unit unit, _format = formats_count);

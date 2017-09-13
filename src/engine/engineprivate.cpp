@@ -106,7 +106,7 @@ void CFileZillaEnginePrivate::OnEngineEvent(EngineNotificationType type)
 bool CFileZillaEnginePrivate::IsBusy() const
 {
 	fz::scoped_lock lock(mutex_);
-	return m_pCurrentCommand != 0;
+	return m_pCurrentCommand != nullptr;
 }
 
 bool CFileZillaEnginePrivate::IsConnected() const
@@ -753,7 +753,7 @@ std::unique_ptr<CNotification> CFileZillaEnginePrivate::GetNextNotification()
 
 	if (m_NotificationList.empty()) {
 		m_maySendNotificationEvent = true;
-		return 0;
+		return nullptr;
 	}
 	std::unique_ptr<CNotification> pNotification(m_NotificationList.front());
 	m_NotificationList.pop_front();
@@ -904,7 +904,7 @@ void CTransferStatusManager::SetMadeProgress()
 
 void CTransferStatusManager::Update(int64_t transferredBytes)
 {
-	CNotification* notification = 0;
+	CNotification* notification = nullptr;
 
 	{
 		int64_t oldOffset = currentOffset_.fetch_add(transferredBytes);
