@@ -44,7 +44,7 @@ DWORD GetSystemErrorCode()
 std::wstring GetSystemErrorDescription(DWORD err)
 {
 	wchar_t* buf{};
-	if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 0, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<wchar_t*>(&buf), 0, 0) || !buf) {
+	if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<wchar_t*>(&buf), 0, nullptr) || !buf) {
 		return fz::sprintf(_("Unknown error %u"), err);
 	}
 	std::wstring ret = buf;

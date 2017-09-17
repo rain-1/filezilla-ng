@@ -251,7 +251,7 @@ int CControlSocket::DoClose(int nErrorCode)
 std::wstring CControlSocket::ConvertDomainName(std::wstring const& domain)
 {
 #ifdef FZ_WINDOWS
-	int len = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.c_str(), domain.size() + 1, 0, 0);
+	int len = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.c_str(), domain.size() + 1, nullptr, 0);
 	if (!len) {
 		LogMessage(MessageType::Debug_Warning, L"Could not convert domain name");
 		return domain;

@@ -1613,7 +1613,7 @@ int socket::do_set_flags(int fd, int flags, int flags_mask, duration const& keep
 		v.keepalivetime = static_cast<ULONG>(keepalive_interval.get_milliseconds());
 		v.keepaliveinterval = 1000;
 		DWORD tmp{};
-		int res = WSAIoctl(fd, SIO_KEEPALIVE_VALS, &v, sizeof(v), 0, 0, &tmp, 0, 0);
+		int res = WSAIoctl(fd, SIO_KEEPALIVE_VALS, &v, sizeof(v), nullptr, 0, &tmp, nullptr, nullptr);
 		if (res != 0) {
 			return last_socket_error();
 		}
@@ -1682,7 +1682,7 @@ int socket::ideal_send_buffer_size()
 #endif
 		ULONG v{};
 		DWORD outlen{};
-		if (!WSAIoctl(fd_, SIO_IDEAL_SEND_BACKLOG_QUERY, 0, 0, &v, sizeof(v), &outlen, 0, 0)) {
+		if (!WSAIoctl(fd_, SIO_IDEAL_SEND_BACKLOG_QUERY, nullptr, 0, &v, sizeof(v), &outlen, nullptr, nullptr)) {
 			size = v;
 		}
 	}
