@@ -738,7 +738,7 @@ void CBookmarksDialog::OnEndLabelEdit(wxTreeEvent& event)
 	m_pTree->SortChildren(parent);
 }
 
-bool CBookmarksDialog::GetGlobalBookmarks(std::list<wxString> &bookmarks)
+bool CBookmarksDialog::GetGlobalBookmarks(std::vector<wxString> &bookmarks)
 {
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
