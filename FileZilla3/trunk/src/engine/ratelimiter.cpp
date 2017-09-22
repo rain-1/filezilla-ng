@@ -136,7 +136,7 @@ void CRateLimiter::OnTimer(fz::timer_id)
 		tokens = 0;
 
 		// This list will hold all objects which didn't reach maxTokens
-		std::list<CRateLimiterObject*> unsaturatedObjects;
+		std::vector<CRateLimiterObject*> unsaturatedObjects;
 
 		for (auto iter = m_objectList.begin(); iter != m_objectList.end(); ++iter) {
 			if ((*iter)->m_bytesAvailable[i] == -1) {
@@ -170,7 +170,7 @@ void CRateLimiter::OnTimer(fz::timer_id)
 			}
 			tokens = 0;
 
-			std::list<CRateLimiterObject*> objects;
+			std::vector<CRateLimiterObject*> objects;
 			objects.swap(unsaturatedObjects);
 
 			for (auto iter = objects.begin(); iter != objects.end(); ++iter) {
