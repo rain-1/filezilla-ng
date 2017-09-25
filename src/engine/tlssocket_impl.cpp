@@ -692,7 +692,7 @@ int CTlsSocketImpl::Read(void *buffer, unsigned int len, int& error)
 	}
 
 	if (peekBuffer_) {
-		auto min = std::min(len, peekBuffer_.size());
+		auto min = std::min(static_cast<size_t>(len), peekBuffer_.size());
 		memcpy(buffer, peekBuffer_.get(), min);
 		peekBuffer_.consume(min);
 
@@ -869,7 +869,7 @@ void CTlsSocketImpl::Failure(int code, bool send_close, std::wstring const& func
 int CTlsSocketImpl::Peek(void *buffer, unsigned int len, int& error)
 {
 	if (peekBuffer_) {
-		auto min = std::min(len, peekBuffer_.size());
+		auto min = std::min(static_cast<size_t>(len), peekBuffer_.size());
 		memcpy(buffer, peekBuffer_.get(), min);
 
 		error = 0;
