@@ -78,7 +78,7 @@ int CHttpRequestOpData::Send()
 			}
 
 			auto result = controlSocket_.Send(command.c_str(), command.size());
-			if (result == FZ_REPLY_WOULDBLOCK && opState == request_send && !controlSocket_.sendBufferSize_) {
+			if (result == FZ_REPLY_WOULDBLOCK && opState == request_send && !controlSocket_.sendBuffer_) {
 				result = FZ_REPLY_CONTINUE;
 			}
 			return result;
@@ -88,14 +88,12 @@ int CHttpRequestOpData::Send()
 			int const chunkSize = 65536;
 
 			while (dataToSend_) {
-				controlSocket_.SendBufferReserve(chunkSize);
-
-				if (!controlSocket_.sendBufferSize_) {
+				if (!controlSocket_.sendBuffer_) {
 					unsigned int len = chunkSize;
 					if (chunkSize > dataToSend_) {
 						len = static_cast<unsigned int>(dataToSend_);
 					}
-					int res = request_.data_request_(controlSocket_.sendBuffer_, len);
+					int res = request_.data_request_(controlSocket_.sendBuffer_.get(len), len);
 					if (res != FZ_REPLY_CONTINUE) {
 						return res;
 					}
@@ -104,31 +102,25 @@ int CHttpRequestOpData::Send()
 						return FZ_REPLY_INTERNALERROR;
 					}
 
-					controlSocket_.sendBufferSize_ = len;
+					controlSocket_.sendBuffer_.add(len);
+					dataToSend_ -= len;
 				}
 
 				int error;
-				int written = controlSocket_.m_pBackend->Write(controlSocket_.sendBuffer_ + controlSocket_.sendBufferPos_, controlSocket_.sendBufferSize_ - controlSocket_.sendBufferPos_, error);
+				int written = controlSocket_.m_pBackend->Write(controlSocket_.sendBuffer_.get(), controlSocket_.sendBuffer_.size(), error);
 				if (written < 0) {
 					if (error != EAGAIN) {
 						LogMessage(MessageType::Error, _("Could not write to socket: %s"), fz::socket::error_description(error));
 						LogMessage(MessageType::Error, _("Disconnected from server"));
 						return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 					}
-					dataToSend_ -= controlSocket_.sendBufferSize_ - controlSocket_.sendBufferPos_;
 					return FZ_REPLY_WOULDBLOCK;
 				}
 
 				if (written) {
-					dataToSend_ -= written;
-
 					controlSocket_.SetActive(CFileZillaEngine::send);
 
-					controlSocket_.sendBufferPos_ += static_cast<unsigned int>(written);
-					if (controlSocket_.sendBufferPos_ == controlSocket_.sendBufferSize_) {
-						controlSocket_.sendBufferSize_ = 0;
-						controlSocket_.sendBufferPos_ = 0;
-					}
+					controlSocket_.sendBuffer_.consume(static_cast<size_t>(written));
 				}
 			}
 			opState = request_read;

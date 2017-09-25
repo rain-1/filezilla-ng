@@ -887,59 +887,11 @@ CRealControlSocket::~CRealControlSocket()
 	m_pBackend = nullptr;
 
 	delete socket_;
-	delete[] sendBuffer_;
 }
 
 bool CRealControlSocket::Connected() const
 {
 	return socket_ ? (socket_->get_state() == fz::socket::connected) : false;
-}
-
-void CRealControlSocket::AppendToSendBuffer(unsigned char const* data, unsigned int len)
-{
-	if (sendBufferSize_ + len > sendBufferCapacity_) {
-		if (sendBufferSize_ + len - sendBufferPos_ <= sendBufferCapacity_) {
-			memmove(sendBuffer_, sendBuffer_ + sendBufferPos_, sendBufferSize_ - sendBufferPos_);
-			sendBufferSize_ -= sendBufferPos_;
-			sendBufferPos_ = 0;
-		}
-		else if (!sendBuffer_) {
-			assert(!sendBufferSize_ && !sendBufferPos_);
-			sendBufferCapacity_ = len;
-			sendBuffer_ = new unsigned char[sendBufferCapacity_];
-		}
-		else {
-			unsigned char *old = sendBuffer_;
-			sendBufferCapacity_ += len;
-			sendBuffer_ = new unsigned char[sendBufferCapacity_];
-			memcpy(sendBuffer_, old + sendBufferPos_, sendBufferSize_ - sendBufferPos_);
-			sendBufferSize_ -= sendBufferPos_;
-			sendBufferPos_ = 0;
-			delete[] old;
-		}
-	}
-
-	memcpy(sendBuffer_ + sendBufferSize_, data, len);
-	sendBufferSize_ += len;
-}
-
-void CRealControlSocket::SendBufferReserve(unsigned int len)
-{
-	if (sendBufferCapacity_ < len) {
-		if (sendBuffer_) {
-			unsigned char *old = sendBuffer_;
-			sendBuffer_ = new unsigned char[sendBufferCapacity_ + len];
-			memcpy(sendBuffer_, old + sendBufferPos_, sendBufferSize_ - sendBufferPos_);
-			sendBufferSize_ -= sendBufferPos_;
-			sendBufferPos_ = 0;
-			sendBufferCapacity_ += len;
-			delete[] old;
-		}
-		else {
-			sendBufferCapacity_ = len;
-			sendBuffer_ = new unsigned char[sendBufferCapacity_];
-		}
-	}
 }
 
 int CRealControlSocket::Send(unsigned char const* buffer, unsigned int len)
@@ -950,8 +902,8 @@ int CRealControlSocket::Send(unsigned char const* buffer, unsigned int len)
 	}
 
 	SetWait(true);
-	if (sendBufferSize_) {
-		AppendToSendBuffer(buffer, len);
+	if (sendBuffer_) {
+		sendBuffer_.append(buffer, len);
 	}
 	else {
 		int error;
@@ -970,7 +922,7 @@ int CRealControlSocket::Send(unsigned char const* buffer, unsigned int len)
 		}
 
 		if (static_cast<unsigned int>(written) < len) {
-			AppendToSendBuffer(buffer + written, len - written);
+			sendBuffer_.append(buffer + written, len - written);
 		}
 	}
 
@@ -1048,12 +1000,9 @@ void CRealControlSocket::OnReceive()
 
 int CRealControlSocket::OnSend()
 {
-	while (sendBufferSize_) {
-		assert(sendBufferPos_ < sendBufferSize_);
-		assert(sendBuffer_);
-
+	while (sendBuffer_) {
 		int error;
-		int written = m_pBackend->Write(sendBuffer_ + sendBufferPos_, sendBufferSize_ - sendBufferPos_, error);
+		int written = m_pBackend->Write(sendBuffer_.get(), sendBuffer_.size(), error);
 		if (written < 0) {
 			if (error != EAGAIN) {
 				LogMessage(MessageType::Error, _("Could not write to socket: %s"), fz::socket::error_description(error));
@@ -1069,11 +1018,7 @@ int CRealControlSocket::OnSend()
 		if (written) {
 			SetActive(CFileZillaEngine::send);
 
-			sendBufferPos_ += static_cast<unsigned int>(written);
-			if (sendBufferPos_ == sendBufferSize_) {
-				sendBufferSize_ = 0;
-				sendBufferPos_ = 0;
-			}
+			sendBuffer_.consume(static_cast<size_t>(written));
 		}
 	}
 
@@ -1162,8 +1107,7 @@ void CRealControlSocket::ResetSocket()
 {
 	socket_->close();
 
-	sendBufferSize_ = 0;
-	sendBufferPos_ = 0;
+	sendBuffer_.clear();
 
 	if (m_pProxyBackend) {
 		if (m_pProxyBackend != m_pBackend) {
