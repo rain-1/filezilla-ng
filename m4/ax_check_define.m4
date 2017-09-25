@@ -53,6 +53,7 @@ AC_CACHE_CHECK([for $1 defined], ac_var,
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
   #ifdef $1
   int ok;
+  (void)ok;
   #else
   choke me
   #endif
@@ -68,6 +69,7 @@ AC_CACHE_CHECK([for $2 defined in $1], ac_var,
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <$1>]], [[
   #ifdef $2
   int ok;
+  (void) ok;
   #else
   choke me
   #endif
