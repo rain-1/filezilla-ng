@@ -9,6 +9,8 @@ typedef std::make_signed_t<size_t> ssize_t;
 #include "backend.h"
 #include "socket.h"
 
+#include <libfilezilla/buffer.hpp>
+
 class CControlSocket;
 class CTlsSocket;
 class CTlsSocketImpl final
@@ -124,9 +126,7 @@ protected:
 	bool m_lastWriteFailed{false};
 	unsigned int m_writeSkip{};
 
-	// Peek data
-	char* m_peekData{};
-	unsigned int m_peekDataLen{};
+	fz::buffer peekBuffer_;
 
 	gnutls_datum_t m_implicitTrustedCert;
 

@@ -257,9 +257,7 @@ void CTlsSocketImpl::Uninit()
 
 	m_tlsState = CTlsSocket::TlsState::noconn;
 
-	delete [] m_peekData;
-	m_peekData = nullptr;
-	m_peekDataLen = 0;
+	peekBuffer_.clear();
 
 	delete [] m_implicitTrustedCert.data;
 	m_implicitTrustedCert.data = nullptr;
@@ -693,19 +691,10 @@ int CTlsSocketImpl::Read(void *buffer, unsigned int len, int& error)
 		return -1;
 	}
 
-	if (m_peekDataLen) {
-		auto min = std::min(len, m_peekDataLen);
-		memcpy(buffer, m_peekData, min);
-
-		if (min == m_peekDataLen) {
-			m_peekDataLen = 0;
-			delete [] m_peekData;
-			m_peekData = nullptr;
-		}
-		else {
-			memmove(m_peekData, m_peekData + min, m_peekDataLen - min);
-			m_peekDataLen -= min;
-		}
+	if (peekBuffer_) {
+		auto min = std::min(len, peekBuffer_.size());
+		memcpy(buffer, peekBuffer_.get(), min);
+		peekBuffer_.consume(min);
 
 		TriggerEvents();
 
@@ -839,30 +828,15 @@ void CTlsSocketImpl::CheckResumeFailedReadWrite()
 		m_canTriggerWrite = true;
 	}
 	if (m_lastReadFailed) {
-		assert(!m_peekData);
-
-		m_peekDataLen = 65536;
-		m_peekData = new char[m_peekDataLen];
-
-		int res = DoCallGnutlsRecordRecv(m_peekData, m_peekDataLen);
+		int res = DoCallGnutlsRecordRecv(peekBuffer_.get(65536), 65536);
 		if (res < 0) {
-			m_peekDataLen = 0;
-			delete [] m_peekData;
-			m_peekData = nullptr;
 			if (res != GNUTLS_E_INTERRUPTED && res != GNUTLS_E_AGAIN) {
 				Failure(res, true);
 			}
 			return;
 		}
 
-		if (!res) {
-			m_peekDataLen = 0;
-			delete [] m_peekData;
-			m_peekData = nullptr;
-		}
-		else {
-			m_peekDataLen = res;
-		}
+		peekBuffer_.add(static_cast<size_t>(res));
 
 		m_lastReadFailed = false;
 		m_canTriggerRead = true;
@@ -894,22 +868,20 @@ void CTlsSocketImpl::Failure(int code, bool send_close, std::wstring const& func
 
 int CTlsSocketImpl::Peek(void *buffer, unsigned int len, int& error)
 {
-	if (m_peekData) {
-		auto min = std::min(len, m_peekDataLen);
-		memcpy(buffer, m_peekData, min);
+	if (peekBuffer_) {
+		auto min = std::min(len, peekBuffer_.size());
+		memcpy(buffer, peekBuffer_.get(), min);
 
 		error = 0;
 		return min;
 	}
 
-	int read = Read(buffer, len, error);
+	int read = Read(peekBuffer_.get(len), len, error);
 	if (read <= 0) {
 		return read;
 	}
-
-	m_peekDataLen = read;
-	m_peekData = new char[m_peekDataLen];
-	memcpy(m_peekData, buffer, m_peekDataLen);
+	peekBuffer_.add(static_cast<size_t>(read));
+	memcpy(buffer, peekBuffer_.get(), static_cast<size_t>(read));
 
 	return read;
 }

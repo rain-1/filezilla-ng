@@ -4,6 +4,8 @@
 #include "socket.h"
 #include "logging_private.h"
 
+#include <libfilezilla/buffer.hpp>
+
 class COpData
 {
 public:
@@ -351,12 +353,7 @@ protected:
 	CBackend* m_pBackend;
 	CProxySocket* m_pProxyBackend{};
 
-	void SendBufferReserve(unsigned int len);
-	void AppendToSendBuffer(unsigned char const* data, unsigned int len);
-	unsigned char* sendBuffer_{};
-	unsigned int sendBufferCapacity_{};
-	unsigned int sendBufferPos_{};
-	unsigned int sendBufferSize_{};
+	fz::buffer sendBuffer_;
 };
 
 #endif
