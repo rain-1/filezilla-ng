@@ -6,7 +6,7 @@
 bool IsShowingMessageBox();
 
 int wxMessageBoxEx(const wxString& message, const wxString& caption = wxMessageBoxCaptionStr
-	, long style = wxOK | wxCENTRE, wxWindow *parent = NULL
+	, long style = wxOK | wxCENTRE, wxWindow *parent = nullptr
 	, int x = wxDefaultCoord, int y = wxDefaultCoord);
 
 #endif

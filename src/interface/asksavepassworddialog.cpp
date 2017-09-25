@@ -8,7 +8,7 @@
 
 bool CAskSavePasswordDialog::Create(wxWindow*)
 {
-	if (!Load(0, _T("ID_ASK_SAVE_PASSWORD"))) {
+	if (!Load(nullptr, _T("ID_ASK_SAVE_PASSWORD"))) {
 		return false;
 	}
 
