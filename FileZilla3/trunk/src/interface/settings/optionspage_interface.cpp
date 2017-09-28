@@ -47,7 +47,8 @@ bool COptionsPageInterface::LoadPage()
 	XRCCTRL(*this, "ID_PASSWORDS_NOSAVE", wxEvtHandler)->Bind(wxEVT_RADIOBUTTON, onChange);
 	XRCCTRL(*this, "ID_PASSWORDS_USEMASTERPASSWORD", wxEvtHandler)->Bind(wxEVT_RADIOBUTTON, onChange);
 
-	if (m_pOptions->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) || m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
+	bool const disabledByDefault = m_pOptions->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) && m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0;
+	if (disabledByDefault || m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		xrc_call(*this, "ID_PASSWORDS_NOSAVE", &wxRadioButton::SetValue, true);
 		xrc_call(*this, "ID_PASSWORDS_SAVE", &wxControl::Disable);
 		xrc_call(*this, "ID_PASSWORDS_NOSAVE", &wxControl::Disable);
@@ -92,72 +93,75 @@ bool COptionsPageInterface::LoadPage()
 
 void COptionsPageInterface::SavePasswordOption()
 {
-	if (!m_pOptions->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) && m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 2) {
-		auto oldPub = public_key::from_base64(fz::to_utf8(m_pOptions->GetOption(OPTION_MASTERPASSWORDENCRYPTOR)));
-		wxString const newPw = xrc_call(*this, "ID_MASTERPASSWORD", &wxTextCtrl::GetValue);
+	bool const disabledByDefault = m_pOptions->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) && m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0;
+	if (disabledByDefault || m_pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
+		return;
+	}
 
-		bool useMaster = xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxRadioButton::GetValue);
-		if (useMaster && newPw.empty()) {
-			// Keeping existing master password
+	auto oldPub = public_key::from_base64(fz::to_utf8(m_pOptions->GetOption(OPTION_MASTERPASSWORDENCRYPTOR)));
+	wxString const newPw = xrc_call(*this, "ID_MASTERPASSWORD", &wxTextCtrl::GetValue);
+
+	bool useMaster = xrc_call(*this, "ID_PASSWORDS_USEMASTERPASSWORD", &wxRadioButton::GetValue);
+	if (useMaster && newPw.empty()) {
+		// Keeping existing master password
+		return;
+	}
+
+	CLoginManager loginManager;
+	if (oldPub) {
+		if (!loginManager.AskDecryptor(oldPub, true, true)) {
 			return;
 		}
+	}
 
-		CLoginManager loginManager;
-		if (oldPub) {
-			if (!loginManager.AskDecryptor(oldPub, true, true)) {
-				return;
-			}
-		}
-
-		if (useMaster) {
-			auto priv = private_key::from_password(fz::to_utf8(newPw), fz::random_bytes(private_key::salt_size));
-			auto pub = priv.pubkey();
-			if (!pub) {
-				wxMessageBox(_("Could not generate key"), _("Error"));
-			}
-			else {
-				m_pOptions->SetOption(OPTION_DEFAULT_KIOSKMODE, 0);
-				m_pOptions->SetOption(OPTION_MASTERPASSWORDENCRYPTOR, fz::to_wstring_from_utf8(pub.to_base64()));
-			}
+	if (useMaster) {
+		auto priv = private_key::from_password(fz::to_utf8(newPw), fz::random_bytes(private_key::salt_size));
+		auto pub = priv.pubkey();
+		if (!pub) {
+			wxMessageBox(_("Could not generate key"), _("Error"));
 		}
 		else {
-			bool save = xrc_call(*this, "ID_PASSWORDS_SAVE", &wxRadioButton::GetValue);
-			m_pOptions->SetOption(OPTION_DEFAULT_KIOSKMODE, save ? 0 : 1);
-			m_pOptions->SetOption(OPTION_MASTERPASSWORDENCRYPTOR, std::wstring());
+			m_pOptions->SetOption(OPTION_DEFAULT_KIOSKMODE, 0);
+			m_pOptions->SetOption(OPTION_MASTERPASSWORDENCRYPTOR, fz::to_wstring_from_utf8(pub.to_base64()));
 		}
-
-		// Now actually change stored passwords
-
-		{
-			ServerWithCredentials last;
-			if (m_pOptions->GetLastServer(last)) {
-				loginManager.AskDecryptor(last.credentials.encrypted_, true, false);
-				last.credentials.Unprotect(loginManager.GetDecryptor(last.credentials.encrypted_), true);
-				m_pOptions->SetLastServer(last);
-			}
-		}
-
-		{
-			auto recentServers = CRecentServerList::GetMostRecentServers();
-			for (auto & server : recentServers) {
-				loginManager.AskDecryptor(server.credentials.encrypted_, true, false);
-				server.credentials.Unprotect(loginManager.GetDecryptor(server.credentials.encrypted_), true);
-			}
-			CRecentServerList::SetMostRecentServers(recentServers);
-		}
-
-		for (auto state : *CContextManager::Get()->GetAllStates()) {
-			auto site = state->GetLastSite();
-			auto path = state->GetLastServerPath();
-			loginManager.AskDecryptor(site.server_.credentials.encrypted_, true, false);
-			site.server_.credentials.Unprotect(loginManager.GetDecryptor(site.server_.credentials.encrypted_), true);
-			state->SetLastSite(site, path);
-		}
-
-		CSiteManager::Rewrite(loginManager, true);
-
-		CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_REWRITE_CREDENTIALS, wxString(), &loginManager);
 	}
+	else {
+		bool save = xrc_call(*this, "ID_PASSWORDS_SAVE", &wxRadioButton::GetValue);
+		m_pOptions->SetOption(OPTION_DEFAULT_KIOSKMODE, save ? 0 : 1);
+		m_pOptions->SetOption(OPTION_MASTERPASSWORDENCRYPTOR, std::wstring());
+	}
+
+	// Now actually change stored passwords
+
+	{
+		ServerWithCredentials last;
+		if (m_pOptions->GetLastServer(last)) {
+			loginManager.AskDecryptor(last.credentials.encrypted_, true, false);
+			last.credentials.Unprotect(loginManager.GetDecryptor(last.credentials.encrypted_), true);
+			m_pOptions->SetLastServer(last);
+		}
+	}
+
+	{
+		auto recentServers = CRecentServerList::GetMostRecentServers();
+		for (auto & server : recentServers) {
+			loginManager.AskDecryptor(server.credentials.encrypted_, true, false);
+			server.credentials.Unprotect(loginManager.GetDecryptor(server.credentials.encrypted_), true);
+		}
+		CRecentServerList::SetMostRecentServers(recentServers);
+	}
+
+	for (auto state : *CContextManager::Get()->GetAllStates()) {
+		auto site = state->GetLastSite();
+		auto path = state->GetLastServerPath();
+		loginManager.AskDecryptor(site.server_.credentials.encrypted_, true, false);
+		site.server_.credentials.Unprotect(loginManager.GetDecryptor(site.server_.credentials.encrypted_), true);
+		state->SetLastSite(site, path);
+	}
+
+	CSiteManager::Rewrite(loginManager, true);
+
+	CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_REWRITE_CREDENTIALS, wxString(), &loginManager);
 }
 
 bool COptionsPageInterface::SavePage()

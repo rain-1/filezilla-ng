@@ -425,7 +425,7 @@ bool CManualTransfer::VerifyServer()
 	{
 		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetFocus);
 		wxString msg;
-		if (COptions::Get()->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE)) {
+		if (COptions::Get()->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE) && COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0) {
 			msg = _("Saving of password has been disabled by your system administrator.");
 		}
 		else {
