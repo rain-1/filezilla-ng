@@ -87,7 +87,7 @@ int CHttpRequestOpData::Send()
 		{
 			int const chunkSize = 65536;
 
-			while (dataToSend_) {
+			while (dataToSend_ || controlSocket_.sendBuffer_) {
 				if (!controlSocket_.sendBuffer_) {
 					unsigned int len = chunkSize;
 					if (chunkSize > dataToSend_) {
