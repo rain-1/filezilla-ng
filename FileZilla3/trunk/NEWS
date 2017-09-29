@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.28.0 (2017-09-29)
+
++ *nix: Official Linux binaries are now built for Debian 9 (Stretch)
+- Do not disable password saving settings if fzdefaults.xml contains a kiosk mode setting of 0.
+
 3.28.0-rc1 (2017-09-22)
 
 + Add "Close once" as queue completion action
