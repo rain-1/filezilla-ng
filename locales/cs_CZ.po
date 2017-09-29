@@ -1,27 +1,27 @@
 # Czech translations of FileZilla 3
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the FileZilla 3 package.
-# Michal Molhanec <michal@molhanec.net>, 2007-2016.
+# Michal Molhanec <michal@molhanec.net>, 2007-2017.
 # Martin Ruzicka <martin.ruzicka.cz@gmail.com>, 2011.
 # Ivan Masár <helix84@centrum.sk>, 2008.
 # Acci <acci@acci.cz>, 2008.
-# 
+# Tobiczech <tobiczech@gmail.com>
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-09-22 10:03+0200\n"
-"PO-Revision-Date: 2017-09-02 22:22+0200\n"
+"POT-Creation-Date: 2017-09-29 12:11+0200\n"
+"PO-Revision-Date: 2017-09-25 09:43+0200\n"
 "Last-Translator: Michal Molhanec <michal@molhanec.net>\n"
-"Language-Team: Michal Molhanec <michal@molhanec.net>; Tobiczech < "
-"tobiczech@gmail.com\n"
+"Language-Team: Michal Molhanec <michal@molhanec.net>\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,924,-1,541,986,-1\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:59
@@ -239,9 +239,8 @@ msgid "&Add bookmark..."
 msgstr "&Přidat do záložek..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4207
-#, fuzzy
 msgid "&Add directory..."
-msgstr "%d složka"
+msgstr "&Přidat složku..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:249
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:295
@@ -421,7 +420,6 @@ msgid "&Delete symlink"
 msgstr "O&dstranit symbolický odkaz"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:58
-#, fuzzy
 msgid "&Directory access permissions..."
 msgstr "&Přístupová práva ke složce..."
 
@@ -439,7 +437,7 @@ msgstr ""
 msgid ""
 "&Disable synchronized browsing and continue changing the remote directory"
 msgstr ""
-"&Zakázat synchronizované procházení a pokračovat ve změně vzdálené složky?"
+"&Zakázat synchronizované procházení a pokračovat ve změně vzdálené složky"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2025
 msgid "&Discard local file then download and edit file anew"
@@ -1169,9 +1167,9 @@ msgid "'%s' is not a directory."
 msgstr "„%s“ není složka."
 
 #: ../../locales/../src/engine/engineprivate.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a supported protocol."
-msgstr "„%s“ není složka."
+msgstr "„%s“ není podporovaný protokol."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:419
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:995
@@ -1326,7 +1324,7 @@ msgid ""
 "A bookmark with the entered name already exists. Please enter an unused name."
 msgstr "Záložka se zadaným názvem již existuje. Zadejte nový název."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1311
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1283
 msgid "A certificate in the chain was signed using an insecure algorithm"
 msgstr "Certifikát v řetězci byl podepsán pomocí nejistého algoritmu"
 
@@ -1645,7 +1643,7 @@ msgstr ""
 "Došlo k chybě při ukládání fronty přenosů do „%s“.\n"
 "Některé položky fronty nemusí být uloženy."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1315
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1287
 msgid "An issuer in the certificate chain is not a certificate authority"
 msgstr "Emitent v řetězci certifikátů není certifikační autoritou"
 
@@ -1795,7 +1793,7 @@ msgstr "Chování"
 msgid "Being edited"
 msgstr "Upravován"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1301
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1273
 msgid "Beware! Certificate has been revoked"
 msgstr "Pozor! Certifikát byl odvolán"
 
@@ -2089,7 +2087,7 @@ msgstr "Certifikát v řetězci:"
 msgid "Certificate issuer"
 msgstr "Vydavatel certifikátu"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1307
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1279
 msgid "Certificate signature verification failed"
 msgstr "Ověření podpisu certifikátu se nezdařilo"
 
@@ -2186,7 +2184,7 @@ msgstr "Vyberte výchozí místní složku"
 msgid "Choose the local directory"
 msgstr "Vyberte místní složku"
 
-#: ../../locales/../src/engine/http/request.cpp:462
+#: ../../locales/../src/engine/http/request.cpp:454
 msgid "Chunk data improperly terminated"
 msgstr "Části dat chybně ukončeny"
 
@@ -2419,13 +2417,13 @@ msgstr "Připojování"
 msgid "Connecting to %s"
 msgstr "Připojování k %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1113
+#: ../../locales/../src/engine/ControlSocket.cpp:1058
 #: ../../locales/../src/engine/ftp/logon.cpp:96
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Připojování k %s přes proxy %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1038
+#: ../../locales/../src/engine/ControlSocket.cpp:990
 #: ../../locales/../src/engine/proxy.cpp:240
 #: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:43
 #: ../../locales/../src/engine/storj/storjcontrolsocket.cpp:42
@@ -2445,13 +2443,13 @@ msgstr "Připojení bylo přerušeno"
 msgid "Connection attempt failed"
 msgstr "Pokus o připojení se nezdařil"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1000
+#: ../../locales/../src/engine/ControlSocket.cpp:952
 #: ../../locales/../src/engine/proxy.cpp:212
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "Pokus o připojení se nezdařil s „%s“, zkouší se další adresa."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1006
+#: ../../locales/../src/engine/ControlSocket.cpp:958
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Pokus o připojení se nezdařil. Došlo k chybě „%s“."
@@ -2469,7 +2467,7 @@ msgstr "Pokus o připojení překročil časový limit"
 msgid "Connection closed"
 msgstr "Připojení bylo ukončeno"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1091
+#: ../../locales/../src/engine/ControlSocket.cpp:1036
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:75
 msgid "Connection closed by server"
 msgstr "Připojení uzavřeno serverem"
@@ -2580,7 +2578,7 @@ msgstr "Nelze navázat připojení k %s"
 msgid "Could not access path %s"
 msgstr "Nelze získat přístup k %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1376
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1348
 msgid "Could not add certificate to temporary trust list"
 msgstr "Nepodařilo se přidat certifikát do dočasného seznamu důvěryhodných"
 
@@ -2597,7 +2595,7 @@ msgstr "Nelze dokončit operaci"
 msgid "Could not connect to server"
 msgstr "Nelze se připojit k serveru"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1146
+#: ../../locales/../src/engine/ControlSocket.cpp:1091
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Nelze se připojit k serveru: %s"
@@ -2620,7 +2618,7 @@ msgstr "Nelze převést soukromý klíč"
 msgid "Could not copy URLs"
 msgstr "Nelze kopírovat URL"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1358
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1330
 msgid "Could not copy certificate"
 msgstr "Nelze kopírovat certifikát"
 
@@ -2683,11 +2681,11 @@ msgid "Could not generate custom login sequence."
 msgstr "Nelze vytvořit vlastní přihlašovací sekvenci."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:121
 msgid "Could not generate key"
 msgstr "Nelze vygenerovat klíč"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1098
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1070
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2695,7 +2693,7 @@ msgstr ""
 "Nelze získat rozlišující název vydavatele certifikátu, vykonání funkce "
 "gnutls_x509_get_issuer_dn se nezdařilo"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1074
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1046
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2855,7 +2853,7 @@ msgstr "Nelze poslat příkaz pro fzputtygen."
 msgid "Could not send command to fzstorj."
 msgstr "Nelze poslat příkaz pro fzstorj."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1284
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1256
 msgid "Could not sort peer certificates"
 msgstr "Certifikáty peer nelze řadit"
 
@@ -2863,7 +2861,7 @@ msgstr "Certifikáty peer nelze řadit"
 msgid "Could not spawn IO thread"
 msgstr "Nelze spustit vlákno pro vstup a výstup"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1127
+#: ../../locales/../src/engine/ControlSocket.cpp:1072
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Nelze začít handshake s proxy: %s"
@@ -2926,9 +2924,9 @@ msgstr "Nelze zapsat místní soubor"
 msgid "Could not write to log file: %s"
 msgstr "Nelze zapsat do souboru protokolu: %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:961
-#: ../../locales/../src/engine/ControlSocket.cpp:1059
-#: ../../locales/../src/engine/http/request.cpp:114
+#: ../../locales/../src/engine/ControlSocket.cpp:913
+#: ../../locales/../src/engine/ControlSocket.cpp:1008
+#: ../../locales/../src/engine/http/request.cpp:113
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Nelze zapsat do soketu: %s"
@@ -3340,15 +3338,15 @@ msgid "Disconnect from server"
 msgstr "Odpojení od serveru"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:52
-#: ../../locales/../src/engine/ControlSocket.cpp:962
-#: ../../locales/../src/engine/ControlSocket.cpp:1061
+#: ../../locales/../src/engine/ControlSocket.cpp:914
+#: ../../locales/../src/engine/ControlSocket.cpp:1010
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
-#: ../../locales/../src/engine/http/request.cpp:115
+#: ../../locales/../src/engine/http/request.cpp:114
 #: ../../locales/../src/interface/queue.cpp:339
 msgid "Disconnected from server"
 msgstr "Odpojen od serveru"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1094
+#: ../../locales/../src/engine/ControlSocket.cpp:1039
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:189
 #, c-format
 msgid "Disconnected from server: %s"
@@ -3726,7 +3724,7 @@ msgid "Enter username and password"
 msgstr "Zadejte uživatelské jméno a heslo"
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:121
 msgid "Error"
 msgstr "Chyba"
 
@@ -3823,7 +3821,7 @@ msgstr "Průzkumník"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1792
 msgid "Export &Filters"
-msgstr "Exportovat f&iltry:"
+msgstr "Exportovat f&iltry"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1787
 msgid "Export &Queue"
@@ -3922,7 +3920,7 @@ msgstr "Nezdařilo se vytvořit záložní kopii XML souboru"
 #, c-format
 msgid "Failed to create listen socket on port %d, aborting."
 msgstr ""
-"Nezdařilo se vytvořit naslouchající soket na portu %d, probíhá přerušení"
+"Nezdařilo se vytvořit naslouchající soket na portu %d, probíhá přerušení."
 
 #: ../../locales/../src/engine/ftp/rawtransfer.cpp:217
 #: ../../locales/../src/engine/ftp/rawtransfer.cpp:220
@@ -4006,7 +4004,7 @@ msgstr "Nezdařilo se získat výpis složky"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:737
 msgid "Failed to retrieve external IP address, aborting."
-msgstr "Nezdařilo se získat externí IP adresu, probíhá přerušení"
+msgstr "Nezdařilo se získat externí IP adresu, probíhá přerušení."
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:671
 msgid "Failed to retrieve external IP address, using local address"
@@ -4014,7 +4012,7 @@ msgstr "Nezdařilo se získat externí IP adresu, použije se místní"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:712
 msgid "Failed to retrieve local IP address, aborting."
-msgstr "Nezdařilo se získat místní IP adresu. Probíhá přerušení"
+msgstr "Nezdařilo se získat místní IP adresu. Probíhá přerušení."
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:689
 msgid "Failed to retrieve local IP address."
@@ -4068,7 +4066,7 @@ msgstr "Nezdařilo se nastavit jazyk na %s, používá se výchozí jazyk systé
 msgid "Failed to validate settings"
 msgstr "Chyba v nastavení"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1386
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1358
 msgid "Failed to verify peer certificate"
 msgstr "Nezdařilo se ověřit certifikát druhé strany"
 
@@ -4459,22 +4457,22 @@ msgstr "Zadaný název sady filtrů již existuje, přepsat?"
 msgid "Global bookmarks"
 msgstr "Globální záložky"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:317
+#: ../../locales/../src/engine/tlssocket_impl.cpp:315
 #, c-format
 msgid "GnuTLS error %d"
 msgstr "Chyba GnuTLS %d"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:320
+#: ../../locales/../src/engine/tlssocket_impl.cpp:318
 #, c-format
 msgid "GnuTLS error %d in %s"
 msgstr "Chyba GnuTLS %d v %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:312
+#: ../../locales/../src/engine/tlssocket_impl.cpp:310
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
 msgstr "Chyba GnuTLS %d v %s: %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:309
+#: ../../locales/../src/engine/tlssocket_impl.cpp:307
 #, c-format
 msgid "GnuTLS error %d: %s"
 msgstr "Chyba GnuTLS %d: %s"
@@ -4854,11 +4852,11 @@ msgid "Interrupted by user"
 msgstr "Přerušeno uživatelem"
 
 #: ../../locales/../src/engine/http/request.cpp:36
-#: ../../locales/../src/engine/http/request.cpp:381
+#: ../../locales/../src/engine/http/request.cpp:373
 msgid "Invalid Content-Length"
 msgstr "Neplatný Content-Length"
 
-#: ../../locales/../src/engine/http/request.cpp:276
+#: ../../locales/../src/engine/http/request.cpp:268
 msgid "Invalid HTTP Response"
 msgstr "Neplatná HTTP odpověď"
 
@@ -4874,7 +4872,7 @@ msgstr ""
 "Přijata neplatná posloupnost znaků, vypíná se UTF-8. Pokud chcete vynutit "
 "používání UTF-8, nastavte UTF-8 ve správci míst."
 
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:489
 msgid "Invalid chunk size"
 msgstr "Neplatná velikost části"
 
@@ -4915,7 +4913,7 @@ msgstr "Neplatné jméno hostitele: %s"
 msgid "Invalid input"
 msgstr "Neplatný vstup"
 
-#: ../../locales/../src/engine/http/request.cpp:334
+#: ../../locales/../src/engine/http/request.cpp:326
 msgid "Invalid line"
 msgstr "Neplatný řádek"
 
@@ -4960,7 +4958,7 @@ msgstr "Neplatný regulární výraz"
 msgid "Invalid regular expression in search conditions."
 msgstr "Neplatný regulární výraz v podmínkách hledání."
 
-#: ../../locales/../src/engine/http/request.cpp:285
+#: ../../locales/../src/engine/http/request.cpp:277
 msgid "Invalid response code"
 msgstr "Neplatný kód odpovědi"
 
@@ -5062,7 +5060,7 @@ msgid "Layout"
 msgstr "Rozložení"
 
 #. @translator: Keep this string as short as possible
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:66
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:67
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1803
 msgid "Leave empty to keep existing password."
 msgstr "Pro zachování stávajícího hesla nechte prázdné."
@@ -5087,7 +5085,7 @@ msgstr "Omezit velikost souboru protokolu"
 msgid "Limit:"
 msgstr "Omezení:"
 
-#: ../../locales/../src/engine/http/request.cpp:450
+#: ../../locales/../src/engine/http/request.cpp:442
 msgid "Line length exceeded"
 msgstr "Překročena délka řádku"
 
@@ -5244,10 +5242,10 @@ msgstr ""
 "Ujistěte se, že je soubor přístupný a je správně strukturovaným XML "
 "dokumentem."
 
-#: ../../locales/../src/engine/http/request.cpp:441
-#: ../../locales/../src/engine/http/request.cpp:450
-#: ../../locales/../src/engine/http/request.cpp:462
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:433
+#: ../../locales/../src/engine/http/request.cpp:442
+#: ../../locales/../src/engine/http/request.cpp:454
+#: ../../locales/../src/engine/http/request.cpp:489
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Chybně vytvořený blok dat: %s"
@@ -5257,20 +5255,20 @@ msgstr "Chybně vytvořený blok dat: %s"
 msgid "Malformed request header: %s"
 msgstr "Chybná hlavička požadavku: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:526
+#: ../../locales/../src/engine/http/request.cpp:518
 #, c-format
 msgid "Malformed response body: %s"
 msgstr "Chybná odpověď těla: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:249
-#: ../../locales/../src/engine/http/request.cpp:334
+#: ../../locales/../src/engine/http/request.cpp:241
+#: ../../locales/../src/engine/http/request.cpp:326
+#: ../../locales/../src/engine/http/request.cpp:365
 #: ../../locales/../src/engine/http/request.cpp:373
-#: ../../locales/../src/engine/http/request.cpp:381
 #, c-format
 msgid "Malformed response header: %s"
 msgstr "Chybná odpověď hlavičky: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:394
+#: ../../locales/../src/engine/http/request.cpp:386
 msgid ""
 "Malformed response: Server sent response body with a request verb or "
 "response code that disallows a response body."
@@ -5958,7 +5956,7 @@ msgstr "Oprávnění"
 #: ../../locales/../src/engine/socket.cpp:1058
 #: ../../locales/../src/engine/socket.cpp:1067
 msgid "Permission denied"
-msgstr "Přístup byl odepřen."
+msgstr "Přístup byl odepřen"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:397
 #: ../../locales/../src/interface/search.cpp:159
@@ -6287,7 +6285,7 @@ msgstr ""
 "dostupnou verzi firmware. Kromě toho musí být váš server správně nastaven. "
 "Musí být povoleno manuální přesměrování portů. Nespouštějte router v tzv. "
 "„DMZ režimu“ nebo „herním režimu“. Možnosti typu inspekce protokolu nebo pro "
-"protokol specifické „záplaty“ musí být vypnuty."
+"protokol specifické „záplaty“ musí být vypnuty"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1392
 msgid "Positio&n of the message log:"
@@ -6319,7 +6317,7 @@ msgstr "Zachovávání času souborů"
 msgid "Preview"
 msgstr "Náhled"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1408
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1380
 msgid "Primary connection and data connection certificates don't match."
 msgstr "Certifikáty primárního a datového připojení si neodpovídají."
 
@@ -6381,7 +6379,7 @@ msgstr "Protokol není podporován"
 
 #: ../../locales/../src/engine/socket.cpp:1122
 msgid "Protocol not supported on given socket type"
-msgstr "Protokol není podporovám daným typem soketu."
+msgstr "Protokol není podporovám daným typem soketu"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:190
 msgid "Protocol:"
@@ -6570,7 +6568,7 @@ msgstr "Restartovat nyní"
 msgid "Rec&urse into subdirectories"
 msgstr "&Rekurzivně použít pro vnořené složky"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:331
+#: ../../locales/../src/engine/tlssocket_impl.cpp:329
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Ze serveru byla přijata výstraha TLS: %s (%d)"
@@ -6584,7 +6582,7 @@ msgstr "Přijatý výpis složky se zdá být v kódování EBCDIC."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Přijat řádek překračující 10000 znaků, probíhá přerušení."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1329
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1301
 #, c-format
 msgid ""
 "Received certificate chain could not be verified. Verification status is %d."
@@ -6600,7 +6598,7 @@ msgstr "Přijatá data poškozena"
 msgid "Received invalid character in version information"
 msgstr "V informaci o verzi byly přijaty neplatné znaky"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:334
+#: ../../locales/../src/engine/tlssocket_impl.cpp:332
 #, c-format
 msgid "Received unknown TLS alert %d from the server"
 msgstr "Ze serveru bylo přijato neznámé TLS upozornění %d"
@@ -6663,7 +6661,7 @@ msgstr "Pamatovat si hesla?"
 msgid "Remote"
 msgstr "Vzdálený"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1000
+#: ../../locales/../src/engine/tlssocket_impl.cpp:972
 msgid "Remote certificate not trusted."
 msgstr "Nedůvěryhodný vzdálený certifikát."
 
@@ -6803,7 +6801,7 @@ msgstr "Obnovit a &zařadit vše znovu do fronty"
 msgid "Resolved protocol is unknown"
 msgstr "Překlad protokolu není znám"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1136
+#: ../../locales/../src/engine/ControlSocket.cpp:1081
 #, c-format
 msgid "Resolving address of %s"
 msgstr "Zjišťování adresy %s"
@@ -7180,7 +7178,7 @@ msgstr "Sériové číslo:"
 msgid "Server &Type:"
 msgstr "T&yp serveru:"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:884
+#: ../../locales/../src/engine/tlssocket_impl.cpp:858
 msgid "Server did not properly shut down TLS connection"
 msgstr "Server správně neukončil připojení TLS"
 
@@ -7228,9 +7226,9 @@ msgstr ""
 msgid ""
 "Server might require an account. Try specifying an account using the Site "
 "Manager"
-msgstr "Server možná vyžaduje účet. Zkuste ho určit pomocí správce míst."
+msgstr "Server možná vyžaduje účet. Zkuste ho určit pomocí správce míst"
 
-#: ../../locales/../src/engine/http/request.cpp:249
+#: ../../locales/../src/engine/http/request.cpp:241
 msgid "Server not sending proper line endings"
 msgstr "Server neposílá správné konce řádků"
 
@@ -7260,7 +7258,7 @@ msgstr ""
 "Server poslal pasivní odpověď s nedostupnou adresou. Použije se raději "
 "adresa serveru."
 
-#: ../../locales/../src/engine/http/request.cpp:526
+#: ../../locales/../src/engine/http/request.cpp:518
 msgid "Server sent too much data."
 msgstr "Server odeslal příliš mnoho údajů."
 
@@ -7276,7 +7274,7 @@ msgstr "Server odeslal příliš mnoho údajů."
 msgid "Server sent unexpected reply."
 msgstr "Server poslal neočekávanou odpověď."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1277
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1249
 msgid ""
 "Server sent unsorted certificate chain in violation of the TLS specifications"
 msgstr ""
@@ -7462,10 +7460,10 @@ msgstr "Neznámá velikost"
 msgid "Skip file"
 msgstr "Přeskočit soubor"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1207
-#: ../../locales/../src/engine/ControlSocket.cpp:1224
-#: ../../locales/../src/engine/ControlSocket.cpp:1250
-#: ../../locales/../src/engine/ControlSocket.cpp:1328
+#: ../../locales/../src/engine/ControlSocket.cpp:1151
+#: ../../locales/../src/engine/ControlSocket.cpp:1168
+#: ../../locales/../src/engine/ControlSocket.cpp:1194
+#: ../../locales/../src/engine/ControlSocket.cpp:1272
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Přeskočení stahování %s"
@@ -7475,10 +7473,10 @@ msgstr "Přeskočení stahování %s"
 msgid "Skipping non-existing key file \"%s\""
 msgstr "Přeskočit neexistující klíčové soubory \"%s\""
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1210
-#: ../../locales/../src/engine/ControlSocket.cpp:1227
-#: ../../locales/../src/engine/ControlSocket.cpp:1253
-#: ../../locales/../src/engine/ControlSocket.cpp:1331
+#: ../../locales/../src/engine/ControlSocket.cpp:1154
+#: ../../locales/../src/engine/ControlSocket.cpp:1171
+#: ../../locales/../src/engine/ControlSocket.cpp:1197
+#: ../../locales/../src/engine/ControlSocket.cpp:1275
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Přeskočení odesílání %s na server"
@@ -7824,7 +7822,7 @@ msgstr "Záložku nelze přidat."
 msgid "The bookmarks could not be cleared."
 msgstr "Záložku nelze vymazat."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1324
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1296
 msgid ""
 "The certificate requires the server to include an OCSP status in its "
 "response, but the OCSP status is missing."
@@ -7876,7 +7874,7 @@ msgid "The entered filter name already exists, please choose a different name."
 msgstr "Filtr se zadaným názvem již existuje, zvolte jiný název."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:41
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:201
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:205
 msgid "The entered passwords are not the same."
 msgstr "Zadaná hesla nejsou stejná."
 
@@ -8031,12 +8029,12 @@ msgstr "Omezení musí být mezi 1 a 2000 MiB"
 #: ../../locales/../src/interface/state.cpp:1105
 #, c-format
 msgid "The local directory '%s' could not be created."
-msgstr "Místní složku \"%s\" nelze vytvořit"
+msgstr "Místní složku „%s“ nelze vytvořit."
 
 #: ../../locales/../src/interface/state.cpp:1090
 #, c-format
 msgid "The local directory '%s' does not exist."
-msgstr "Místní složku \"%s\" neexistuje"
+msgstr "Místní složku „%s“ neexistuje."
 
 #: ../../locales/../src/interface/state.cpp:259
 #, c-format
@@ -8056,7 +8054,7 @@ msgstr ""
 "portu."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:46
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:210
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:214
 msgid "The master password needs to be at least 8 characters long."
 msgstr "Centrální heslo musí mít alespoň 8 písmen."
 
@@ -8075,7 +8073,7 @@ msgstr "Fronta nebude uložena."
 #: ../../locales/../src/interface/state.cpp:1012
 #, c-format
 msgid "The remote directory '%s' does not exist."
-msgstr "Vzdálená složka \"%s\" neexistuje"
+msgstr "Vzdálená složka \"%s\" neexistuje."
 
 #: ../../locales/../src/interface/state.cpp:1059
 #, c-format
@@ -8155,7 +8153,7 @@ msgstr ""
 "Hostitelský klíč serveru není znám. Nemáte žádnou záruku, že daný server je "
 "tím počítačem, kterým si myslíte, že je."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1319
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1291
 msgid "The server's hostname does not match the certificate's hostname"
 msgstr "Název hostitele serveru se neshoduje s název hostitele certifikátu"
 
@@ -8323,7 +8321,7 @@ msgstr "Přepíná zobrazení stromu vzdálených složek"
 msgid "Toggles the display of the transfer queue"
 msgstr "Přepíná zobrazení fronty přenosů"
 
-#: ../../locales/../src/engine/http/request.cpp:258
+#: ../../locales/../src/engine/http/request.cpp:250
 msgid "Too long header line"
 msgstr "Řádek hlavičky je příliš dlouhý"
 
@@ -8515,7 +8513,7 @@ msgstr ""
 "Neznámý kořenový element. Zdá se, že soubor nebyl vytvořen aplikací "
 "FileZilla."
 
-#: ../../locales/../src/engine/http/request.cpp:373
+#: ../../locales/../src/engine/http/request.cpp:365
 msgid "Unknown transfer encoding"
 msgstr "Neznámé kódování přenosu"
 
@@ -8536,7 +8534,7 @@ msgstr ""
 "Dokud se tento problém nevyřeší, nebude aktivní FTP režim pracovat a musí se "
 "použít pasivní."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1344
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1316
 msgid "Unsupported certificate type"
 msgstr "Nepodporovaný typ certifikátu"
 
@@ -8708,7 +8706,7 @@ msgstr "Platný do:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Podrobné protokolování zpráv z wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1420
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1392
 msgid "Verifying certificate..."
 msgstr "Ověřování certifikátu..."
 
@@ -8802,7 +8800,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1444
 msgid "When st&arting a new connection while already connected:"
-msgstr "&Pokud se během stávajícího spojení otevírá nové"
+msgstr "&Pokud se během stávajícího spojení otevírá nové:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1361
 msgid "Widescreen"
@@ -8821,7 +8819,7 @@ msgstr "Záp&is"
 msgid "Wrong external IP address"
 msgstr "Neplatná externí IP adresa"
 
-#: ../../locales/../src/engine/http/request.cpp:441
+#: ../../locales/../src/engine/http/request.cpp:433
 msgid "Wrong line endings"
 msgstr "Nesprávné konce řádků"
 
@@ -8972,7 +8970,7 @@ msgid ""
 msgstr ""
 "Pravděpodobně máte router nebo firewall, který poškodil přenášená data."
 
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:206
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:210
 msgid "You need to enter a master password."
 msgstr "Musíte zadat centrální heslo."
 
@@ -9128,7 +9126,7 @@ msgstr "fzsftp patří k jiné verzi aplikace FileZilla"
 
 #: ../../locales/../src/engine/sftp/connect.cpp:143
 msgid "fzsftp could not be started"
-msgstr "fzputtygen nelze spustit."
+msgstr "fzputtygen nelze spustit"
 
 #: ../../locales/../src/engine/storj/connect.cpp:119
 msgid "fzstorj belongs to a different version of FileZilla"
@@ -9136,7 +9134,7 @@ msgstr "fzstorj patří k jiné verzi aplikace FileZilla"
 
 #: ../../locales/../src/engine/storj/storjcontrolsocket.cpp:337
 msgid "fzstorj could not be started"
-msgstr "fzstorj nelze spustit."
+msgstr "fzstorj nelze spustit"
 
 #: ../../locales/../src/interface/storj_key_interface.cpp:62
 #: ../../locales/../src/interface/storj_key_interface.cpp:77
@@ -9149,11 +9147,11 @@ msgstr ""
 "Ujistěte se, zda existuje tento spustitelný soubor ve stejné složce jako "
 "spouštěcí soubor aplikace FileZilla."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1240
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1212
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers nevrátil žádné certifikáty"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1252
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1224
 msgid "gnutls_pem_base64_encode2 failed"
 msgstr "gnutls_pem_base64_encode2 selhal"
 
@@ -9214,10 +9212,10 @@ msgid "owner writeable"
 msgstr "zapisovatelný vlastníkem"
 
 #: ../../locales/../src/engine/proxy.cpp:64
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1472
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1488
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1504
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1520
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1444
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1460
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1476
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1492
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:43
 msgid "unknown"
 msgstr "neznámý"
