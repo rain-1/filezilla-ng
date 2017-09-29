@@ -42,12 +42,14 @@ CServerPath CPathCache::Lookup(CServer const& server, CServerPath const& source,
 
 	CServerPath result = Lookup(iter->second, source, subdir);
 
+#ifndef NDEBUG
 	if (result.empty()) {
 		m_misses++;
 	}
 	else {
 		m_hits++;
 	}
+#endif
 
 	return result;
 }
@@ -59,8 +61,9 @@ CServerPath CPathCache::Lookup(tServerCache const& serverCache, CServerPath cons
 	sourcePath.subdir = subdir;
 
 	tServerCacheConstIterator serverIter = serverCache.find(sourcePath);
-	if (serverIter == serverCache.end())
+	if (serverIter == serverCache.end()) {
 		return CServerPath();
+	}
 
 	return serverIter->second;
 }
@@ -70,8 +73,9 @@ void CPathCache::InvalidateServer(CServer const& server)
 	fz::scoped_lock lock(mutex_);
 
 	tCacheIterator iter = m_cache.find(server);
-	if (iter == m_cache.end())
+	if (iter == m_cache.end()) {
 		return;
+	}
 
 	m_cache.erase(iter);
 }

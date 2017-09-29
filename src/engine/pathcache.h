@@ -51,9 +51,10 @@ protected:
 	CServerPath Lookup(tServerCache const& serverCache, CServerPath const& source, std::wstring const& subdir);
 	void InvalidatePath(tServerCache & serverCache, CServerPath const& path, std::wstring const& subdir = std::wstring());
 
+#ifndef NDEBUG
 	int m_hits{};
 	int m_misses{};
-
+#endif
 };
 
 #endif
