@@ -45,22 +45,22 @@ protected:
 	// "filename""with""quotes"
 	std::wstring QuoteFilename(std::wstring const& filename);
 
-	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
+	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED) override;
 
-	virtual int ResetOperation(int nErrorCode);
+	virtual int ResetOperation(int nErrorCode) override;
 
 	void ProcessReply(int result, std::wstring const& reply);
 
 	int SendCommand(std::wstring const& cmd, std::wstring const& show = std::wstring());
 	int AddToStream(std::wstring const& cmd);
 
-	virtual void OnRateAvailable(CRateLimiter::rate_direction direction);
+	virtual void OnRateAvailable(CRateLimiter::rate_direction direction) override;
 	void OnQuotaRequest(CRateLimiter::rate_direction direction);
 
 	std::unique_ptr<fz::process> process_;
 	std::unique_ptr<CStorjInputThread> input_thread_;
 
-	virtual void operator()(fz::event_base const& ev);
+	virtual void operator()(fz::event_base const& ev) override;
 	void OnStorjEvent(storj_message const& message);
 	void OnTerminate(std::wstring const& error);
 
