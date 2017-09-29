@@ -3,21 +3,20 @@
 # This file is distributed under the same license as the FileZilla package.
 # Niels Fanøe <niels.f@noee.dk>, 2012-2016.
 # scootergrisen, 2015-2017.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-09-22 10:03+0200\n"
-"PO-Revision-Date: 2017-08-30 10:06+0200\n"
-"Last-Translator: Niels Fanøe <niels.f@noee.dk>\n"
+"POT-Creation-Date: 2017-09-29 12:11+0200\n"
+"PO-Revision-Date: 2017-09-25 00:00+0200\n"
+"Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.1\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:59
@@ -163,7 +162,7 @@ msgid ""
 "Please download FileZilla again. If this problem persists, please submit a "
 "bug report."
 msgstr ""
-"%s blev ikke fundet. Uden denne FileZilla-komponent virker %s ikke.\n"
+"Kunne ikke finde %s. Uden denne FileZilla-komponent virker %s ikke.\n"
 "\n"
 "Download FileZilla igen. Hvis problemet fortsætter, så indsend en "
 "fejlrapport."
@@ -178,12 +177,12 @@ msgid ""
 "- Make sure %s is in a directory listed in your PATH environment variable.\n"
 "- Set the full path to %s in the %s environment variable."
 msgstr ""
-"%s blev ikke fundet. Uden denne FileZilla-komponent virker %s ikke.\n"
+"Kunne ikke finde %s. Uden denne FileZilla-komponent virker %s ikke.\n"
 "\n"
 "Mulige løsninger:\n"
 "- Sørg for at %s findes i en mappe, der er angivet i din PATH-"
 "miljøvariabel.\n"
-"- Angiv den fulde sti til %s i miljøvariablen %s."
+"- Angiv den fulde sti til %s i %s-miljøvariablen."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:59
 #, c-format
@@ -409,9 +408,8 @@ msgid "&Delete symlink"
 msgstr "Sl&et symlink"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:58
-#, fuzzy
 msgid "&Directory access permissions..."
-msgstr "&Mappetilladelser..."
+msgstr "Adgangstilladelser for &mappe..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:74
 msgid "&Directory comparison"
@@ -1161,9 +1159,9 @@ msgid "'%s' is not a directory."
 msgstr "'%s' er ikke en mappe."
 
 #: ../../locales/../src/engine/engineprivate.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a supported protocol."
-msgstr "'%s' er ikke en mappe."
+msgstr "'%s' er ikke en understøttet protokol."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:419
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:995
@@ -1320,7 +1318,7 @@ msgstr ""
 "Et bogmærke med det indtastede navn findes allerede. Indtast et navn, der "
 "ikke er i brug."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1311
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1283
 msgid "A certificate in the chain was signed using an insecure algorithm"
 msgstr "Et certifikat i kæden er underskrevet med en usikker algoritme"
 
@@ -1645,7 +1643,7 @@ msgstr ""
 "Der opstod en fejl ved indlæsning af overførselskøen fra \"%s\".\n"
 "Det lykkedes måske ikke at gemme alle emner i køen."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1315
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1287
 msgid "An issuer in the certificate chain is not a certificate authority"
 msgstr "En udsteder i certifikatkæden er ikke en certifikatmyndighed"
 
@@ -1733,7 +1731,6 @@ msgstr "Spørg styresystemet om en port."
 msgid "Ask your operating system for the external IP address"
 msgstr "Spørg dit styresystem om den eksterne IP-adresse"
 
-# scootergrisen: kilde: jeg har foreslået at rette til "Ask questions..." - https://trac.filezilla-project.org/ticket/10877
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3740
 msgid "Asking questions in the FileZilla forums"
 msgstr "Stil spørgsmål i FileZilla-foraene"
@@ -1770,7 +1767,6 @@ msgstr "Auto"
 msgid "Automatic file type classification"
 msgstr "Automatisk filtypeklassificering"
 
-# scootergrisen: jeg har foreslået at flytte " <Unit symbol for bytes. Only translate first letter>"-delen flyttes ud af strengen - https://trac.filezilla-project.org/ticket/11119
 #: ../../locales/../src/engine/sizeformatting_base.cpp:166
 #: ../../locales/../src/engine/sizeformatting_base.cpp:233
 msgid "B <Unit symbol for bytes. Only translate first letter>"
@@ -1797,7 +1793,7 @@ msgstr "Adfærd"
 msgid "Being edited"
 msgstr "Ved at blive redigeret"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1301
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1273
 msgid "Beware! Certificate has been revoked"
 msgstr "Pas på! Certifikat er tilbagekaldt"
 
@@ -1962,7 +1958,9 @@ msgstr "Kan ikke tildele den angivne adresse"
 msgid ""
 "Cannot change directory, there already is a synchronized browsing operation "
 "in progress."
-msgstr "Kan ikke skifte mappe - en synkroniseret gennemgang er i gang."
+msgstr ""
+"Kan ikke skifte mappe - der er allerede en igangværende handling for "
+"synkroniseret gennemgang."
 
 #: ../../locales/../src/interface/context_control.cpp:353
 msgid ""
@@ -2089,7 +2087,7 @@ msgstr "Certifikat i kæde:"
 msgid "Certificate issuer"
 msgstr "Certifikatudsteder"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1307
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1279
 msgid "Certificate signature verification failed"
 msgstr "Kontrol af certifikatunderskrift mislykkedes"
 
@@ -2190,7 +2188,7 @@ msgstr "Vælg standardplacering af lokalmappe"
 msgid "Choose the local directory"
 msgstr "Vælg den lokale mappe"
 
-#: ../../locales/../src/engine/http/request.cpp:462
+#: ../../locales/../src/engine/http/request.cpp:454
 msgid "Chunk data improperly terminated"
 msgstr "Chunk-data ikke afsluttet korrekt"
 
@@ -2373,7 +2371,6 @@ msgstr "Konfigurer passiv tilstand"
 msgid "Configure port range"
 msgstr "Konfigurer portinterval"
 
-# scootergrisen: kilde: jeg har foreslået at rette til "Configure FileZilla..." - https://trac.filezilla-project.org/ticket/10877
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3783
 msgid "Configuring FileZilla and your network"
 msgstr "Konfiguration af FileZilla og dit netværk"
@@ -2426,13 +2423,13 @@ msgstr "Opretter forbindelse"
 msgid "Connecting to %s"
 msgstr "Opretter forbindelse til %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1113
+#: ../../locales/../src/engine/ControlSocket.cpp:1058
 #: ../../locales/../src/engine/ftp/logon.cpp:96
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Opretter forbindelse til %s gennem proxyen %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1038
+#: ../../locales/../src/engine/ControlSocket.cpp:990
 #: ../../locales/../src/engine/proxy.cpp:240
 #: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:43
 #: ../../locales/../src/engine/storj/storjcontrolsocket.cpp:42
@@ -2452,13 +2449,13 @@ msgstr "Forbindelsen blev afbrudt"
 msgid "Connection attempt failed"
 msgstr "Forbindelsesforsøg mislykkedes"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1000
+#: ../../locales/../src/engine/ControlSocket.cpp:952
 #: ../../locales/../src/engine/proxy.cpp:212
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "Forbindelsesforsøg mislykkedes med \"%s\". Prøver næste adresse."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1006
+#: ../../locales/../src/engine/ControlSocket.cpp:958
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Forbindelsesforsøg mislykkedes med \"%s\"."
@@ -2476,7 +2473,7 @@ msgstr "Forbindelsesforsøg blev afsluttet ved timeout"
 msgid "Connection closed"
 msgstr "Forbindelsen blev lukket"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1091
+#: ../../locales/../src/engine/ControlSocket.cpp:1036
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:75
 msgid "Connection closed by server"
 msgstr "Forbindelsen blev lukket af serveren"
@@ -2592,7 +2589,7 @@ msgstr "Kunne ikke acceptere forbindelse: %s"
 msgid "Could not access path %s"
 msgstr "Kunne ikke tilgå stien %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1376
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1348
 msgid "Could not add certificate to temporary trust list"
 msgstr "Kunne ikke tilføje certifikat i midlertidig tillidsliste"
 
@@ -2609,7 +2606,7 @@ msgstr "Kunne ikke fuldføre handling"
 msgid "Could not connect to server"
 msgstr "Kunne ikke forbinde til server"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1146
+#: ../../locales/../src/engine/ControlSocket.cpp:1091
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Kunne ikke forbinde til server: %s"
@@ -2632,7 +2629,7 @@ msgstr "Kunne ikke konvertere privat nøgle"
 msgid "Could not copy URLs"
 msgstr "Kunne ikke kopiere URL'er"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1358
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1330
 msgid "Could not copy certificate"
 msgstr "Kunne ikke kopiere certifikat"
 
@@ -2694,11 +2691,11 @@ msgid "Could not generate custom login sequence."
 msgstr "Kunne ikke generere en brugerdefineret login-sekvens."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:121
 msgid "Could not generate key"
 msgstr "Kunne ikke generere nøgle"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1098
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1070
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2706,7 +2703,7 @@ msgstr ""
 "Kunne ikke få entydigt navn på certifikatudstederen - "
 "gnutls_x509_get_issuer_dn mislykkedes"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1074
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1046
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2865,7 +2862,7 @@ msgstr "Kunne ikke sende kommando til fzputtygen."
 msgid "Could not send command to fzstorj."
 msgstr "Kunne ikke sende kommando til fzstorj."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1284
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1256
 msgid "Could not sort peer certificates"
 msgstr "Kunne ikke sortere peer-certifikater"
 
@@ -2873,7 +2870,7 @@ msgstr "Kunne ikke sortere peer-certifikater"
 msgid "Could not spawn IO thread"
 msgstr "Kunne ikke danne IO-tråd"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1127
+#: ../../locales/../src/engine/ControlSocket.cpp:1072
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Kunne ikke starte proxy-håndtryk: %s"
@@ -2938,9 +2935,9 @@ msgstr "Kunne ikke skrive til lokal fil"
 msgid "Could not write to log file: %s"
 msgstr "Kunne ikke skrive til logfil: %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:961
-#: ../../locales/../src/engine/ControlSocket.cpp:1059
-#: ../../locales/../src/engine/http/request.cpp:114
+#: ../../locales/../src/engine/ControlSocket.cpp:913
+#: ../../locales/../src/engine/ControlSocket.cpp:1008
+#: ../../locales/../src/engine/http/request.cpp:113
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Kunne ikke skrive til sokkel: %s"
@@ -3286,7 +3283,7 @@ msgstr "Mappe"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4236
 msgid "Directory access permissions"
-msgstr "Mappetilladelser"
+msgstr "Adgangstilladelser for mappe"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3025
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:541
@@ -3346,7 +3343,7 @@ msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
 msgstr ""
-"Deaktivér denne valgmulighed igen, hvis du ikke længere vil se det korrekte "
+"Deaktivér denne valgmulighed igen, hvis du ikke længere kan se det korrekte "
 "mappeindhold."
 
 #: ../../locales/../src/interface/toolbar.cpp:46
@@ -3354,15 +3351,15 @@ msgid "Disconnect from server"
 msgstr "Afbryd forbindelsen til serveren"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:52
-#: ../../locales/../src/engine/ControlSocket.cpp:962
-#: ../../locales/../src/engine/ControlSocket.cpp:1061
+#: ../../locales/../src/engine/ControlSocket.cpp:914
+#: ../../locales/../src/engine/ControlSocket.cpp:1010
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
-#: ../../locales/../src/engine/http/request.cpp:115
+#: ../../locales/../src/engine/http/request.cpp:114
 #: ../../locales/../src/interface/queue.cpp:339
 msgid "Disconnected from server"
 msgstr "Forbindelsen til serveren blev afbrudt"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1094
+#: ../../locales/../src/engine/ControlSocket.cpp:1039
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:189
 #, c-format
 msgid "Disconnected from server: %s"
@@ -3629,11 +3626,11 @@ msgstr "Kryptering"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:269
 msgid "Encryption &Key:"
-msgstr "&Krypteringsnøgle:"
+msgstr "Krypterings&nøgle:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:347
 msgid "Encryption &key:"
-msgstr "&Krypteringsnøgle:"
+msgstr "Krypterings&nøgle:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2197
 msgid "Encryption details"
@@ -3743,7 +3740,7 @@ msgid "Enter username and password"
 msgstr "Indtast brugernavn og adgangskode"
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:121
 msgid "Error"
 msgstr "Fejl"
 
@@ -4081,7 +4078,7 @@ msgstr "Kunne ikke sætte sproget til %s. Anvender systemets standardsprog."
 msgid "Failed to validate settings"
 msgstr "Kunne ikke validere indstillinger"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1386
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1358
 msgid "Failed to verify peer certificate"
 msgstr "Kunne ikke kontrollere peer-certifikat"
 
@@ -4278,7 +4275,7 @@ msgstr "Filer der redigeres i øjeblikket"
 
 #: ../../locales/../src/interface/toolbar.cpp:50
 msgid "Files matching a filter rule are removed from directory listings."
-msgstr "Filer, der matcher en filterregel, vises ikke i mapperne."
+msgstr "Filer, der matcher en filterregel, fjernes fra mappevisningerne."
 
 #: ../../locales/../src/engine/storj/resolve.cpp:313
 msgid "Files not found"
@@ -4475,22 +4472,22 @@ msgstr ""
 msgid "Global bookmarks"
 msgstr "Globale bogmærker"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:317
+#: ../../locales/../src/engine/tlssocket_impl.cpp:315
 #, c-format
 msgid "GnuTLS error %d"
 msgstr "GnuTLS-fejl %d"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:320
+#: ../../locales/../src/engine/tlssocket_impl.cpp:318
 #, c-format
 msgid "GnuTLS error %d in %s"
 msgstr "GnuTLS-fejl %d i %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:312
+#: ../../locales/../src/engine/tlssocket_impl.cpp:310
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
 msgstr "GnuTLS-fejl %d i %s: %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:309
+#: ../../locales/../src/engine/tlssocket_impl.cpp:307
 #, c-format
 msgid "GnuTLS error %d: %s"
 msgstr "GnuTLS-fejl %d: %s"
@@ -4578,7 +4575,6 @@ msgid "Hostkey algorithm:"
 msgstr "Algoritme for værtsnøgle:"
 
 # scootergrisen: kan ses i Stedhåndtering > fanebladet Avanceret > "0 timer, 0 minutter"
-# scootergrisen: jeg har foreslået at skrive det med småt - https://trac.filezilla-project.org/ticket/10859
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:463
 msgid "Hours,"
 msgstr "timer,"
@@ -4883,11 +4879,11 @@ msgid "Interrupted by user"
 msgstr "Afbrudt af brugeren"
 
 #: ../../locales/../src/engine/http/request.cpp:36
-#: ../../locales/../src/engine/http/request.cpp:381
+#: ../../locales/../src/engine/http/request.cpp:373
 msgid "Invalid Content-Length"
 msgstr "Ugyldig Content-Length"
 
-#: ../../locales/../src/engine/http/request.cpp:276
+#: ../../locales/../src/engine/http/request.cpp:268
 msgid "Invalid HTTP Response"
 msgstr "Ugyldigt HTTP-svar"
 
@@ -4903,7 +4899,7 @@ msgstr ""
 "Ugyldig række af tegn modtaget; deaktiverer UTF-8. Vælg valgmuligheden UTF-8 "
 "i stedhåndtering for at gennemtvinge UTF-8."
 
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:489
 msgid "Invalid chunk size"
 msgstr "Ugyldig chunk-størrelse"
 
@@ -4942,7 +4938,7 @@ msgstr "Ugyldigt værtsnavn: %s"
 msgid "Invalid input"
 msgstr "Ugyldig indtastning"
 
-#: ../../locales/../src/engine/http/request.cpp:334
+#: ../../locales/../src/engine/http/request.cpp:326
 msgid "Invalid line"
 msgstr "Ugyldig linje"
 
@@ -4985,7 +4981,7 @@ msgstr "Ugyldigt regulært udtryk"
 msgid "Invalid regular expression in search conditions."
 msgstr "Ugyldigt regulært udtryk i søgebetingelser."
 
-#: ../../locales/../src/engine/http/request.cpp:285
+#: ../../locales/../src/engine/http/request.cpp:277
 msgid "Invalid response code"
 msgstr "Ugyldig svarkode"
 
@@ -5040,8 +5036,8 @@ msgid ""
 "some tests to check if the server supports this feature, the test may fail."
 msgstr ""
 "Husk på, at ikke alle servere understøtter denne funktion, og kan returnere "
-"forkerte lister, hvis denne valgmulighed er aktiveret. FileZilla tester for "
-"at se om serveren understøtter funktionen, men testen kan godt fejle."
+"forkerte lister, hvis denne valgmulighed er aktiveret. Selvom FileZilla "
+"tester om serveren understøtter funktionen, så kan testen godt fejle."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2205
 msgid "Key exchange"
@@ -5085,7 +5081,7 @@ msgid "Layout"
 msgstr "Layout"
 
 #. @translator: Keep this string as short as possible
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:66
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:67
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1803
 msgid "Leave empty to keep existing password."
 msgstr "Lad være tom, for at beholde eksisterende adgangskode."
@@ -5110,7 +5106,7 @@ msgstr "Begræns størrelsen på logfil"
 msgid "Limit:"
 msgstr "Grænse:"
 
-#: ../../locales/../src/engine/http/request.cpp:450
+#: ../../locales/../src/engine/http/request.cpp:442
 msgid "Line length exceeded"
 msgstr "Linjelængde oversteget"
 
@@ -5267,10 +5263,10 @@ msgstr ""
 "Sørg for, at der er adgang til filen, og at det er et korrekt udformet XML-"
 "dokument."
 
-#: ../../locales/../src/engine/http/request.cpp:441
-#: ../../locales/../src/engine/http/request.cpp:450
-#: ../../locales/../src/engine/http/request.cpp:462
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:433
+#: ../../locales/../src/engine/http/request.cpp:442
+#: ../../locales/../src/engine/http/request.cpp:454
+#: ../../locales/../src/engine/http/request.cpp:489
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Forkert udformet chunk-data: %s"
@@ -5280,26 +5276,26 @@ msgstr "Forkert udformet chunk-data: %s"
 msgid "Malformed request header: %s"
 msgstr "Forkert udformet forespørgsel-header: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:526
+#: ../../locales/../src/engine/http/request.cpp:518
 #, c-format
 msgid "Malformed response body: %s"
 msgstr "Forkert udformet svar-krop: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:249
-#: ../../locales/../src/engine/http/request.cpp:334
+#: ../../locales/../src/engine/http/request.cpp:241
+#: ../../locales/../src/engine/http/request.cpp:326
+#: ../../locales/../src/engine/http/request.cpp:365
 #: ../../locales/../src/engine/http/request.cpp:373
-#: ../../locales/../src/engine/http/request.cpp:381
 #, c-format
 msgid "Malformed response header: %s"
 msgstr "Forkert udformet svar-header: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:394
+#: ../../locales/../src/engine/http/request.cpp:386
 msgid ""
 "Malformed response: Server sent response body with a request verb or "
 "response code that disallows a response body."
 msgstr ""
-"Dårligt udformet svar: Serveren har sendt svar-body med et "
-"forespørgselsverbum eller en svarkode, der ikke tillader et svar-body."
+"Forkert udformet svar: Serveren sendte svar-krop med et anmodningsverb eller "
+"svarkode som ikke tillod en svar-krop."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2824
 #: ../../locales/../src/interface/manual_transfer.cpp:288
@@ -5367,7 +5363,6 @@ msgid "MiB"
 msgstr "MiB"
 
 # scootergrisen: kan ses i Stedhåndtering > fanebladet Avanceret > "0 timer, 0 minutter"
-# scootergrisen: jeg har foreslået at skrive det med småt - https://trac.filezilla-project.org/ticket/10859
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:479
 msgid "Minutes"
 msgstr "minutter"
@@ -5656,7 +5651,7 @@ msgstr "Bemærk, at denne funktion kun understøttes af FTP-protokollen."
 
 #: ../../locales/../src/interface/resources/xrc/storj.xrc:27
 msgid "Note: A lost key cannot be recovered."
-msgstr "Bemærk: En mistet nøgle kan ikke genskabes."
+msgstr "Bemærk: En mistet nøgle kan ikke gendannes."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:596
 msgid "Note: This only works with plain, unencrypted FTP connections."
@@ -5763,8 +5758,8 @@ msgid ""
 "Open the directory access permissions dialog to configure the local "
 "directories FileZilla has access to."
 msgstr ""
-"Åbn dialogen Mappetilladelser for at konfigurere, hvilke lokale mapper "
-"FileZilla har adgang til."
+"Åbn dialogen adgangstilladelser for mappe for at konfigurerer de lokale "
+"mapper, som FileZilla har adgang til."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:260
 msgid "Open the file."
@@ -5953,7 +5948,7 @@ msgstr "Passiv tilstand er blevet sat som standard-overførselstilstand."
 #: ../../locales/../src/engine/storj/connect.cpp:82
 #: ../../locales/../src/engine/storj/connect.cpp:93
 msgid "Password or encryption key is not set"
-msgstr "Adgangskode eller krypteringsnøgle ikke indstillet"
+msgstr "Adgangskode eller krypteringsnøgle er ikke sat"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:95
 msgid "Password required"
@@ -6009,9 +6004,8 @@ msgstr "Platform:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4185
 msgid "Please add the local directories you want to use FileZilla with."
-msgstr "Tilføj de lokale mapper, du ønsker at bruge med FileZilla."
+msgstr "Tilføj de lokale mapper, som FileZilla skal bruges med."
 
-# scootergrisen: kilde: jeg har foreslået at erstatte link med pladsholder - https://trac.filezilla-project.org/ticket/10879
 # scootergrisen: jeg foreslår at "again" oversættes til "igen" ligesom i andre strenge i stedet for "en gang til"
 #: ../../locales/../src/interface/netconfwizard.cpp:574
 msgid ""
@@ -6026,8 +6020,8 @@ msgid ""
 "Please check the granted permissions and re-add any missing local "
 "directories you are working with in the dialog that follows."
 msgstr ""
-"Tjek de tildelte tilladelser, og tilføj evt. manglende lokale mapper, du "
-"arbejder med, igen i den næste dialog."
+"Tjek de givne tilladelser og tilføj manglende lokale mapper igen, som du "
+"arbejder med i den følgende dialog."
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:123
 msgid ""
@@ -6283,8 +6277,8 @@ msgid ""
 "Please save this key in a secure location. Without the correct key your "
 "uploaded files cannot be accessed."
 msgstr ""
-"Gem denne nøgle på et sikkert sted. Uden den rigtige nøgle kan du ikke tilgå "
-"dine uploadede filer."
+"Gem denne nøgle et sikkert sted. Uden den korrekte nøgle kan dine uploadede "
+"filer ikke tilgås."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3593
 msgid "Please select an action:"
@@ -6365,7 +6359,7 @@ msgstr "Bevaring af filers tidsstempler"
 msgid "Preview"
 msgstr "Forhåndsvisning"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1408
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1380
 msgid "Primary connection and data connection certificates don't match."
 msgstr "Primær forbindelse og data-forbindelse certifikater er ikke ens."
 
@@ -6520,7 +6514,6 @@ msgstr "Filer i kø"
 msgid "Queueing:"
 msgstr "Sætter i kø:"
 
-# scootergrisen: jeg har foreslået at forbedre reboot/shutdown/suspend-strengene - https://trac.filezilla-project.org/ticket/10882
 # scootergrisen: i mellemtiden synes jeg det er bedre at "once" oversættes til "(en gang)"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:413
 msgid "R&eboot system once"
@@ -6617,7 +6610,7 @@ msgstr "Genstart nu"
 msgid "Rec&urse into subdirectories"
 msgstr "Rek&ursivt i undermapper"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:331
+#: ../../locales/../src/engine/tlssocket_impl.cpp:329
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Modtog TLS-advarsel fra serveren: %s (%d)"
@@ -6631,7 +6624,7 @@ msgstr "Modtog en mappevisning, som ser ud til at være kodet med EBCDIC."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Modtog en linje med over 10000 tegn. Afbryder."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1329
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1301
 #, c-format
 msgid ""
 "Received certificate chain could not be verified. Verification status is %d."
@@ -6647,7 +6640,7 @@ msgstr "Modtog data der er forstyrret"
 msgid "Received invalid character in version information"
 msgstr "Modtog ugyldigt tegn i versionsinformation"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:334
+#: ../../locales/../src/engine/tlssocket_impl.cpp:332
 #, c-format
 msgid "Received unknown TLS alert %d from the server"
 msgstr "Modtog ukendt TLS-advarsel %d fra serveren"
@@ -6712,7 +6705,7 @@ msgstr "Husk adgangskoder?"
 msgid "Remote"
 msgstr "Fjern"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1000
+#: ../../locales/../src/engine/tlssocket_impl.cpp:972
 msgid "Remote certificate not trusted."
 msgstr "Ingen tillid til fjern-certifikat."
 
@@ -6815,7 +6808,6 @@ msgstr "Omdøber '%s' til '%s'"
 msgid "Repeat password:"
 msgstr "Gentag adgangskode:"
 
-# scootergrisen: kilde: jeg har foreslået at rette til "Report bugs..." - https://trac.filezilla-project.org/ticket/10877
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3746
 msgid "Reporting bugs and feature requests"
 msgstr "Rapportér fejl og ønsker om nye funktioner"
@@ -6854,7 +6846,7 @@ msgstr "Nulstil og sæt &alle i kø igen"
 msgid "Resolved protocol is unknown"
 msgstr "Fortolket protokol er ukendt"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1136
+#: ../../locales/../src/engine/ControlSocket.cpp:1081
 #, c-format
 msgid "Resolving address of %s"
 msgstr "Fortolker adressen %s"
@@ -6916,7 +6908,6 @@ msgstr "&Vis filer som redigeres i øjeblikket..."
 msgid "S&how the Site Manager on startup"
 msgstr "Vis &stedhåndtering ved start"
 
-# scootergrisen: jeg har foreslået at forbedre reboot/shutdown/suspend-strengene - https://trac.filezilla-project.org/ticket/10882
 # scootergrisen: i mellemtiden synes jeg det er bedre at "once" oversættes til "(en gang)"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:417
 msgid "S&hutdown system once"
@@ -6926,7 +6917,6 @@ msgstr "L&uk systemet én gang"
 msgid "S&top"
 msgstr "S&top"
 
-# scootergrisen: jeg har foreslået at forbedre reboot/shutdown/suspend-strengene - https://trac.filezilla-project.org/ticket/10882
 # scootergrisen: i mellemtiden synes jeg det er bedre at "once" oversættes til "(en gang)"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:421
 msgid "S&uspend system once"
@@ -7230,7 +7220,7 @@ msgstr "Serienummer:"
 msgid "Server &Type:"
 msgstr "Servert&ype:"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:884
+#: ../../locales/../src/engine/tlssocket_impl.cpp:858
 msgid "Server did not properly shut down TLS connection"
 msgstr "Serveren lukkede ikke TLS-forbindelsen korrekt"
 
@@ -7285,7 +7275,7 @@ msgstr ""
 "Serveren kræver muligvis en konto. Prøv at angiv en konto med "
 "stedhåndteringen"
 
-#: ../../locales/../src/engine/http/request.cpp:249
+#: ../../locales/../src/engine/http/request.cpp:241
 msgid "Server not sending proper line endings"
 msgstr "Serveren sender ikke korrekte linjeskift"
 
@@ -7314,7 +7304,7 @@ msgstr ""
 "Serveren sendte passivt svar med en adresse, der ikke kan omdirigeres. "
 "Anvender i stedet serveradressen."
 
-#: ../../locales/../src/engine/http/request.cpp:526
+#: ../../locales/../src/engine/http/request.cpp:518
 msgid "Server sent too much data."
 msgstr "Serveren sendte for meget data."
 
@@ -7330,7 +7320,7 @@ msgstr "Serveren sendte for meget data."
 msgid "Server sent unexpected reply."
 msgstr "Serveren sendte et uventet svar."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1277
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1249
 msgid ""
 "Server sent unsorted certificate chain in violation of the TLS specifications"
 msgstr ""
@@ -7424,7 +7414,7 @@ msgstr "Underskriftalgoritme:"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:159
 msgid "Signup"
-msgstr "Tilmelding"
+msgstr "Tilmeld"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1833
 msgid "Site &Manager entries"
@@ -7440,7 +7430,7 @@ msgstr "Stedhåndtering - kan ikke huske adgangskode"
 
 #: ../../locales/../src/interface/resources/xrc/storj.xrc:51
 msgid "Site Manager - Generated key"
-msgstr "Stedhåndtering - genereret nøgle"
+msgstr "Stedhåndtering - Genereret nøgle"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:982
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:995
@@ -7516,10 +7506,10 @@ msgstr "Størrelse ukendt"
 msgid "Skip file"
 msgstr "Spring fil over"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1207
-#: ../../locales/../src/engine/ControlSocket.cpp:1224
-#: ../../locales/../src/engine/ControlSocket.cpp:1250
-#: ../../locales/../src/engine/ControlSocket.cpp:1328
+#: ../../locales/../src/engine/ControlSocket.cpp:1151
+#: ../../locales/../src/engine/ControlSocket.cpp:1168
+#: ../../locales/../src/engine/ControlSocket.cpp:1194
+#: ../../locales/../src/engine/ControlSocket.cpp:1272
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Springer download af %s over"
@@ -7529,10 +7519,10 @@ msgstr "Springer download af %s over"
 msgid "Skipping non-existing key file \"%s\""
 msgstr "Springer ikke-eksisterende nøglefil \"%s\" over"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1210
-#: ../../locales/../src/engine/ControlSocket.cpp:1227
-#: ../../locales/../src/engine/ControlSocket.cpp:1253
-#: ../../locales/../src/engine/ControlSocket.cpp:1331
+#: ../../locales/../src/engine/ControlSocket.cpp:1154
+#: ../../locales/../src/engine/ControlSocket.cpp:1171
+#: ../../locales/../src/engine/ControlSocket.cpp:1197
+#: ../../locales/../src/engine/ControlSocket.cpp:1275
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Springer upload af %s over"
@@ -7691,7 +7681,7 @@ msgstr "Stop rekursiv handling"
 
 #: ../../locales/../src/engine/server.cpp:28
 msgid "Storj - Decentralized Cloud Storage"
-msgstr "Storj - Decentral lagring i skyen"
+msgstr "Storj - Decentraliseret lager i skyen"
 
 #: ../../locales/../src/interface/FileZilla.cpp:613
 msgid "Storj support"
@@ -7882,13 +7872,13 @@ msgstr "Bogmærket kunne ikke tilføjes."
 msgid "The bookmarks could not be cleared."
 msgstr "Bogmærkerne kunne ikke ryddes."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1324
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1296
 msgid ""
 "The certificate requires the server to include an OCSP status in its "
 "response, but the OCSP status is missing."
 msgstr ""
-"Certifikatet kræver, at svaret fra serveren indeholder en OCSP-status, men "
-"OCSP-status mangler."
+"Certifikatet kræver, at serveren inkluderer en OCSP-status i sit svar, men "
+"OCSP-statussen mangler."
 
 #: ../../locales/../src/interface/statusbar.cpp:475
 msgid "The connection is encrypted. Click icon for details."
@@ -7934,7 +7924,7 @@ msgid "The entered filter name already exists, please choose a different name."
 msgstr "Det indtastede filternavn findes allerede. Vælg et andet navn."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:41
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:201
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:205
 msgid "The entered passwords are not the same."
 msgstr "De indtastede adgangskoder er ikke ens."
 
@@ -8117,7 +8107,7 @@ msgstr ""
 "tilgængelige port."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:46
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:210
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:214
 msgid "The master password needs to be at least 8 characters long."
 msgstr "Hovedadgangskoden skal være mindst 8 tegn lang."
 
@@ -8216,7 +8206,7 @@ msgstr ""
 "Serverens værtsnøgle er ukendt. Der er ingen garanti for, at serveren er den "
 "computer, som du tror den er."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1319
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1291
 msgid "The server's hostname does not match the certificate's hostname"
 msgstr "Serverens værtsnavn er ikke magen til certifikatets værtsnavn"
 
@@ -8386,7 +8376,7 @@ msgstr "Slår visning af fjernstedets mappetræ til/fra"
 msgid "Toggles the display of the transfer queue"
 msgstr "Slår visning af overførselskøen til/fra"
 
-#: ../../locales/../src/engine/http/request.cpp:258
+#: ../../locales/../src/engine/http/request.cpp:250
 msgid "Too long header line"
 msgstr "Header-linjen er for lang"
 
@@ -8580,7 +8570,7 @@ msgid ""
 msgstr ""
 "Ukendt rodelement - filen ser ikke ud til at være genereret af FileZilla."
 
-#: ../../locales/../src/engine/http/request.cpp:373
+#: ../../locales/../src/engine/http/request.cpp:365
 msgid "Unknown transfer encoding"
 msgstr "Ukendt overførselskodning"
 
@@ -8601,7 +8591,7 @@ msgstr ""
 "Medmindre dette problem løses, vil FTP i aktiv tilstand ikke fungere, og du "
 "skal anvende passiv tilstand."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1344
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1316
 msgid "Unsupported certificate type"
 msgstr "Certifikattype ikke understøttet"
 
@@ -8771,7 +8761,7 @@ msgstr "Gyldig til:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Detaljerede logmeddelelser fra wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1420
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1392
 msgid "Verifying certificate..."
 msgstr "Kontrollere certifikat..."
 
@@ -8887,7 +8877,7 @@ msgstr "Skr&iv"
 msgid "Wrong external IP address"
 msgstr "Forkert ekstern IP-adresse"
 
-#: ../../locales/../src/engine/http/request.cpp:441
+#: ../../locales/../src/engine/http/request.cpp:433
 msgid "Wrong line endings"
 msgstr "Forkerte linjeskift"
 
@@ -8951,8 +8941,8 @@ msgid ""
 "You cannot change password and encryption key individually if using a master "
 "password."
 msgstr ""
-"Du kan ikke ændre adgangskode og krypteringsnøgle hver for sig, når du "
-"bruger en master-adgangskode."
+"Du kan ikke skifte adgangskode og krypteringsnøgle hver for sig, hvis der "
+"bruges en hovedadgangskode."
 
 #: ../../locales/../src/interface/import.cpp:29
 msgid "You cannot import settings from FileZilla's own settings directory."
@@ -9044,7 +9034,7 @@ msgid ""
 msgstr ""
 "Din router eller firewall har sikkert ved en fejl ændret de overførte data."
 
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:206
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:210
 msgid "You need to enter a master password."
 msgstr "Du skal indtaste en hovedadgangskode."
 
@@ -9098,8 +9088,8 @@ msgid ""
 "You need to grant FileZilla access to the directories you want to download "
 "files into or to upload files from."
 msgstr ""
-"Du skal give FileZilla adgang til de mapper, du ønsker at downloade filer "
-"til eller uploade filer fra."
+"Du skal give FileZilla adgang til de mapper, som du vil downloade filer i "
+"eller uploade filer fra."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:294
 msgid "You need to specify a local file."
@@ -9221,11 +9211,11 @@ msgstr ""
 "Sørg for, at denne eksekverbare fil findes i samme mappe som FileZillas "
 "eksekverbare fil."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1240
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1212
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers returnerede ingen certifikater"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1252
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1224
 msgid "gnutls_pem_base64_encode2 failed"
 msgstr "gnutls_pem_base64_encode2 mislykkedes"
 
@@ -9291,10 +9281,10 @@ msgid "owner writeable"
 msgstr "skrivbar af ejer"
 
 #: ../../locales/../src/engine/proxy.cpp:64
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1472
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1488
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1504
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1520
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1444
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1460
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1476
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1492
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:43
 msgid "unknown"
 msgstr "ukendt"

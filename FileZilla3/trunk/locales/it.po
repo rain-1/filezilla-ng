@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Filezilla italian translation rev. 04.09.2017\n"
+"Project-Id-Version: Filezilla italian translation rev. 22.09.2017\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-09-22 10:03+0200\n"
-"PO-Revision-Date: 2017-09-04 15:11+0200\n"
+"POT-Creation-Date: 2017-09-29 12:11+0200\n"
+"PO-Revision-Date: 2017-09-22 14:15+0200\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: bovirus - Andrea Sanavia - Vincenzo Reale - Riccardo Vianello "
 "<bovirus@gmail.com>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
@@ -221,9 +221,8 @@ msgid "&Add bookmark..."
 msgstr "&Aggiungi preferito..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4207
-#, fuzzy
 msgid "&Add directory..."
-msgstr "%d cartella"
+msgstr "&Aggiungi cartella..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:249
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:295
@@ -1155,9 +1154,9 @@ msgid "'%s' is not a directory."
 msgstr "'%s' non è una cartella."
 
 #: ../../locales/../src/engine/engineprivate.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a supported protocol."
-msgstr "'%s' non è una cartella."
+msgstr "'%s' non è un protocollo supportato."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:419
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:995
@@ -1314,7 +1313,7 @@ msgstr ""
 "Un preferito con il nome indicato esiste già. Scegliere un nome non "
 "esistente."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1311
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1283
 msgid "A certificate in the chain was signed using an insecure algorithm"
 msgstr ""
 "Un certificato nella struttura è stato firmato con un algoritmpo non sicuro"
@@ -1647,7 +1646,7 @@ msgstr ""
 "\".\n"
 "Alcuni elementi della coda potrebebro non essere stati ripristinati."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1315
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1287
 msgid "An issuer in the certificate chain is not a certificate authority"
 msgstr "L'autore nelle info certificato non è una autorità di certificazione"
 
@@ -1798,7 +1797,7 @@ msgstr "Per conto"
 msgid "Being edited"
 msgstr "Modifiche in corso"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1301
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1273
 msgid "Beware! Certificate has been revoked"
 msgstr "Attenzione! Il certificato è stato revocato"
 
@@ -2095,7 +2094,7 @@ msgstr "Certificato collegato:"
 msgid "Certificate issuer"
 msgstr "Ente emissione certificato"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1307
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1279
 msgid "Certificate signature verification failed"
 msgstr "Verifica fallita firma certificato"
 
@@ -2192,7 +2191,7 @@ msgstr "Selezionare la cartella locale predefinita"
 msgid "Choose the local directory"
 msgstr "Selezionare la cartella locale"
 
-#: ../../locales/../src/engine/http/request.cpp:462
+#: ../../locales/../src/engine/http/request.cpp:454
 msgid "Chunk data improperly terminated"
 msgstr "Blocco di dati terminato non appropriatamente"
 
@@ -2425,13 +2424,13 @@ msgstr "Connessione"
 msgid "Connecting to %s"
 msgstr "Connessione a %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1113
+#: ../../locales/../src/engine/ControlSocket.cpp:1058
 #: ../../locales/../src/engine/ftp/logon.cpp:96
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Connessione a %s attraverso proxy %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1038
+#: ../../locales/../src/engine/ControlSocket.cpp:990
 #: ../../locales/../src/engine/proxy.cpp:240
 #: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:43
 #: ../../locales/../src/engine/storj/storjcontrolsocket.cpp:42
@@ -2451,7 +2450,7 @@ msgstr "Connessione interrotta"
 msgid "Connection attempt failed"
 msgstr "Tentativo di connessione non riuscito"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1000
+#: ../../locales/../src/engine/ControlSocket.cpp:952
 #: ../../locales/../src/engine/proxy.cpp:212
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
@@ -2459,7 +2458,7 @@ msgstr ""
 "Tentativo di connessione non riuscito con \"%s\", provare l'indirizzo "
 "successivo."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1006
+#: ../../locales/../src/engine/ControlSocket.cpp:958
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Tentativo di connessione non riuscito con \"%s\"."
@@ -2477,7 +2476,7 @@ msgstr "Scaduto tentativo connessione"
 msgid "Connection closed"
 msgstr "Connessione chiusa"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1091
+#: ../../locales/../src/engine/ControlSocket.cpp:1036
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:75
 msgid "Connection closed by server"
 msgstr "Connessione chiusa dal server"
@@ -2588,7 +2587,7 @@ msgstr "Impossibile accettare la connessione: %s"
 msgid "Could not access path %s"
 msgstr "Impossibile accedere al percorso %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1376
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1348
 msgid "Could not add certificate to temporary trust list"
 msgstr "Impossibile aggiungere certificato all'elenco temporaneo certificati"
 
@@ -2605,7 +2604,7 @@ msgstr "Impossibile completare l'operazione"
 msgid "Could not connect to server"
 msgstr "Impossibile collegarsi al server"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1146
+#: ../../locales/../src/engine/ControlSocket.cpp:1091
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Impossibile collegarsi al server: %s"
@@ -2628,7 +2627,7 @@ msgstr "Impossibile convertire la chiave privata"
 msgid "Could not copy URLs"
 msgstr "Impossibile copiare gli URL"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1358
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1330
 msgid "Could not copy certificate"
 msgstr "Impossibile copiare il certificato"
 
@@ -2693,11 +2692,11 @@ msgid "Could not generate custom login sequence."
 msgstr "Impossibile generare sequenza login personalizzata."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:121
 msgid "Could not generate key"
 msgstr "Impossibile generare la chiave"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1098
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1070
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2705,7 +2704,7 @@ msgstr ""
 "Impossibile distinguere nome del certificato emittente, "
 "gnutls_x509_get_issuer_dn fallito"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1074
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1046
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2867,7 +2866,7 @@ msgstr "Impossibile inviare comando a fzputtygen."
 msgid "Could not send command to fzstorj."
 msgstr "Imposibile inviare comando a fzstorj."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1284
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1256
 msgid "Could not sort peer certificates"
 msgstr "Impossibile ordinare certificati peer"
 
@@ -2875,7 +2874,7 @@ msgstr "Impossibile ordinare certificati peer"
 msgid "Could not spawn IO thread"
 msgstr "Impossibile lanciare thread di IO"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1127
+#: ../../locales/../src/engine/ControlSocket.cpp:1072
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Impossibile avviare handshake proxy: %s"
@@ -2943,9 +2942,9 @@ msgstr "Impossibile scrivere nel file locale"
 msgid "Could not write to log file: %s"
 msgstr "Impossibile scrivere nel file log: %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:961
-#: ../../locales/../src/engine/ControlSocket.cpp:1059
-#: ../../locales/../src/engine/http/request.cpp:114
+#: ../../locales/../src/engine/ControlSocket.cpp:913
+#: ../../locales/../src/engine/ControlSocket.cpp:1008
+#: ../../locales/../src/engine/http/request.cpp:113
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Impossibile scrivere nel socket: %s"
@@ -3361,15 +3360,15 @@ msgid "Disconnect from server"
 msgstr "Disconnetti dal server"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:52
-#: ../../locales/../src/engine/ControlSocket.cpp:962
-#: ../../locales/../src/engine/ControlSocket.cpp:1061
+#: ../../locales/../src/engine/ControlSocket.cpp:914
+#: ../../locales/../src/engine/ControlSocket.cpp:1010
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
-#: ../../locales/../src/engine/http/request.cpp:115
+#: ../../locales/../src/engine/http/request.cpp:114
 #: ../../locales/../src/interface/queue.cpp:339
 msgid "Disconnected from server"
 msgstr "Disconnesso dal server"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1094
+#: ../../locales/../src/engine/ControlSocket.cpp:1039
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:189
 #, c-format
 msgid "Disconnected from server: %s"
@@ -3750,7 +3749,7 @@ msgid "Enter username and password"
 msgstr "Inserisci nome utente e password"
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:121
 msgid "Error"
 msgstr "Errore"
 
@@ -4100,7 +4099,7 @@ msgstr ""
 msgid "Failed to validate settings"
 msgstr "Verifica delle impostazioni non riuscita"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1386
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1358
 msgid "Failed to verify peer certificate"
 msgstr "Impossibile verificare il certificato connessione"
 
@@ -4302,7 +4301,7 @@ msgstr "File in corso di modifica"
 msgid "Files matching a filter rule are removed from directory listings."
 msgstr ""
 "I file corrispondenti alle regola del filtro saranno rimossi dall'elenco "
-"delle cartelle"
+"delle cartelle."
 
 #: ../../locales/../src/engine/storj/resolve.cpp:313
 msgid "Files not found"
@@ -4494,22 +4493,22 @@ msgstr "Un set di filtri con questo nome è già presente. Vuoi sovrascriverlo?"
 msgid "Global bookmarks"
 msgstr "Preferiti globali"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:317
+#: ../../locales/../src/engine/tlssocket_impl.cpp:315
 #, c-format
 msgid "GnuTLS error %d"
 msgstr "Errore GnuTLS %d"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:320
+#: ../../locales/../src/engine/tlssocket_impl.cpp:318
 #, c-format
 msgid "GnuTLS error %d in %s"
 msgstr "Errore GnuTLS %d in %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:312
+#: ../../locales/../src/engine/tlssocket_impl.cpp:310
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
 msgstr "Errore GnuTLS %d in %s: %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:309
+#: ../../locales/../src/engine/tlssocket_impl.cpp:307
 #, c-format
 msgid "GnuTLS error %d: %s"
 msgstr "Errore GnuTLS %d: %s"
@@ -4903,11 +4902,11 @@ msgid "Interrupted by user"
 msgstr "Interrotto dall'utente"
 
 #: ../../locales/../src/engine/http/request.cpp:36
-#: ../../locales/../src/engine/http/request.cpp:381
+#: ../../locales/../src/engine/http/request.cpp:373
 msgid "Invalid Content-Length"
 msgstr "Lunghezza contenuti non valida"
 
-#: ../../locales/../src/engine/http/request.cpp:276
+#: ../../locales/../src/engine/http/request.cpp:268
 msgid "Invalid HTTP Response"
 msgstr "Risposta HTTP non valida"
 
@@ -4923,7 +4922,7 @@ msgstr ""
 "Ricevuta una sequenza di caratteri non valida, UTF-8 disabilitato. Seleziona "
 "l'opzione UTF-8 in Gestione Siti per forzare UTF-8."
 
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:489
 msgid "Invalid chunk size"
 msgstr "Dimensione blocco non valido"
 
@@ -4964,7 +4963,7 @@ msgstr "Nome host non valido: %s"
 msgid "Invalid input"
 msgstr "Input non valido"
 
-#: ../../locales/../src/engine/http/request.cpp:334
+#: ../../locales/../src/engine/http/request.cpp:326
 msgid "Invalid line"
 msgstr "Linea non valida"
 
@@ -5011,7 +5010,7 @@ msgstr "Espressione regolare non valida"
 msgid "Invalid regular expression in search conditions."
 msgstr "Espressione non valida nelle condizioni di ricerca."
 
-#: ../../locales/../src/engine/http/request.cpp:285
+#: ../../locales/../src/engine/http/request.cpp:277
 msgid "Invalid response code"
 msgstr "Codice di risposta non valido"
 
@@ -5112,7 +5111,7 @@ msgid "Layout"
 msgstr "Disposizione"
 
 #. @translator: Keep this string as short as possible
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:66
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:67
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1803
 msgid "Leave empty to keep existing password."
 msgstr "Lascia vuoto per mantenere la password esistente."
@@ -5137,7 +5136,7 @@ msgstr "Dimensione limite file Log"
 msgid "Limit:"
 msgstr "Limite:"
 
-#: ../../locales/../src/engine/http/request.cpp:450
+#: ../../locales/../src/engine/http/request.cpp:442
 msgid "Line length exceeded"
 msgstr "Lunghezza riga in eccesso"
 
@@ -5290,10 +5289,10 @@ msgstr "Magenta"
 msgid "Make sure the file can be accessed and is a well-formed XML document."
 msgstr "Assicurarsi che il file sia accessibile e sia un documento XML valido."
 
-#: ../../locales/../src/engine/http/request.cpp:441
-#: ../../locales/../src/engine/http/request.cpp:450
-#: ../../locales/../src/engine/http/request.cpp:462
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:433
+#: ../../locales/../src/engine/http/request.cpp:442
+#: ../../locales/../src/engine/http/request.cpp:454
+#: ../../locales/../src/engine/http/request.cpp:489
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Blocco dati non corretto: %s"
@@ -5303,20 +5302,20 @@ msgstr "Blocco dati non corretto: %s"
 msgid "Malformed request header: %s"
 msgstr "Intestazione richiesta mal formattata: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:526
+#: ../../locales/../src/engine/http/request.cpp:518
 #, c-format
 msgid "Malformed response body: %s"
 msgstr "Corpo risposta mal formattato: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:249
-#: ../../locales/../src/engine/http/request.cpp:334
+#: ../../locales/../src/engine/http/request.cpp:241
+#: ../../locales/../src/engine/http/request.cpp:326
+#: ../../locales/../src/engine/http/request.cpp:365
 #: ../../locales/../src/engine/http/request.cpp:373
-#: ../../locales/../src/engine/http/request.cpp:381
 #, c-format
 msgid "Malformed response header: %s"
 msgstr "Intestazione risposta mal formattata: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:394
+#: ../../locales/../src/engine/http/request.cpp:386
 msgid ""
 "Malformed response: Server sent response body with a request verb or "
 "response code that disallows a response body."
@@ -6381,7 +6380,7 @@ msgstr "Preserva data e ora file"
 msgid "Preview"
 msgstr "Anteprima"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1408
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1380
 msgid "Primary connection and data connection certificates don't match."
 msgstr ""
 "I certificati della connessione primaria e della connessione dati non "
@@ -6634,7 +6633,7 @@ msgstr "Riavvia adesso"
 msgid "Rec&urse into subdirectories"
 msgstr "&Includi sottocartelle"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:331
+#: ../../locales/../src/engine/tlssocket_impl.cpp:329
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Ricevuto avviso TLS dal server: %s (%d)"
@@ -6648,7 +6647,7 @@ msgstr "Ricevuto un elenco di cartella che appare codificato in EBCDIC."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Ricevuta una linea eccedente i 10000 caratteri, interruzione."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1329
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1301
 #, c-format
 msgid ""
 "Received certificate chain could not be verified. Verification status is %d."
@@ -6666,7 +6665,7 @@ msgstr "Ricevuti dati corrotti"
 msgid "Received invalid character in version information"
 msgstr "Ricevuti caratteri non validi nell'informazione versione"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:334
+#: ../../locales/../src/engine/tlssocket_impl.cpp:332
 #, c-format
 msgid "Received unknown TLS alert %d from the server"
 msgstr "Ricevuto avviso TLS sconosciuto %d dal server"
@@ -6730,7 +6729,7 @@ msgstr "Memorizzare la password?"
 msgid "Remote"
 msgstr "Remoto"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1000
+#: ../../locales/../src/engine/tlssocket_impl.cpp:972
 msgid "Remote certificate not trusted."
 msgstr "Certificato remoto non sicuro."
 
@@ -6871,7 +6870,7 @@ msgstr "Ripristina e rimetti in cod&a tutti i file"
 msgid "Resolved protocol is unknown"
 msgstr "Il protocollo risoluzione è sconosciuto"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1136
+#: ../../locales/../src/engine/ControlSocket.cpp:1081
 #, c-format
 msgid "Resolving address of %s"
 msgstr "Risoluzione dell'indirizzo IP %s in corso"
@@ -7242,7 +7241,7 @@ msgstr "Numero seriale:"
 msgid "Server &Type:"
 msgstr "&Tipo di server:"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:884
+#: ../../locales/../src/engine/tlssocket_impl.cpp:858
 msgid "Server did not properly shut down TLS connection"
 msgstr "Il server non ha correttamente chiuso la connessione TLS"
 
@@ -7294,7 +7293,7 @@ msgstr ""
 "Il server richiede un account. Specificare un account utilizzando il Gestore "
 "siti"
 
-#: ../../locales/../src/engine/http/request.cpp:249
+#: ../../locales/../src/engine/http/request.cpp:241
 msgid "Server not sending proper line endings"
 msgstr "Il server non ha inviato la terminazione riga corretta"
 
@@ -7324,7 +7323,7 @@ msgstr ""
 "Il server ha inviato una risposta passiva contenente un indirizzo non "
 "raggiungibile. Sarà usato l'indirizzo del server."
 
-#: ../../locales/../src/engine/http/request.cpp:526
+#: ../../locales/../src/engine/http/request.cpp:518
 msgid "Server sent too much data."
 msgstr "Il server ha inviato troppi dati."
 
@@ -7340,7 +7339,7 @@ msgstr "Il server ha inviato troppi dati."
 msgid "Server sent unexpected reply."
 msgstr "Il server ha inviato una risposta non prevista."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1277
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1249
 msgid ""
 "Server sent unsorted certificate chain in violation of the TLS specifications"
 msgstr ""
@@ -7527,10 +7526,10 @@ msgstr "Dimensione sconosciuta"
 msgid "Skip file"
 msgstr "Ignora file"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1207
-#: ../../locales/../src/engine/ControlSocket.cpp:1224
-#: ../../locales/../src/engine/ControlSocket.cpp:1250
-#: ../../locales/../src/engine/ControlSocket.cpp:1328
+#: ../../locales/../src/engine/ControlSocket.cpp:1151
+#: ../../locales/../src/engine/ControlSocket.cpp:1168
+#: ../../locales/../src/engine/ControlSocket.cpp:1194
+#: ../../locales/../src/engine/ControlSocket.cpp:1272
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Salta il download di %s"
@@ -7540,10 +7539,10 @@ msgstr "Salta il download di %s"
 msgid "Skipping non-existing key file \"%s\""
 msgstr "Salta file chiave non esistente \"%s\""
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1210
-#: ../../locales/../src/engine/ControlSocket.cpp:1227
-#: ../../locales/../src/engine/ControlSocket.cpp:1253
-#: ../../locales/../src/engine/ControlSocket.cpp:1331
+#: ../../locales/../src/engine/ControlSocket.cpp:1154
+#: ../../locales/../src/engine/ControlSocket.cpp:1171
+#: ../../locales/../src/engine/ControlSocket.cpp:1197
+#: ../../locales/../src/engine/ControlSocket.cpp:1275
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Salta l'invio di %s"
@@ -7893,7 +7892,7 @@ msgstr "Il preferito non può essere aggiunto."
 msgid "The bookmarks could not be cleared."
 msgstr "I preferiti possono essere azzerati."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1324
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1296
 msgid ""
 "The certificate requires the server to include an OCSP status in its "
 "response, but the OCSP status is missing."
@@ -7945,7 +7944,7 @@ msgid "The entered filter name already exists, please choose a different name."
 msgstr "Il nome filtro inserito esiste già. Scegliere un nome differente."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:41
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:201
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:205
 msgid "The entered passwords are not the same."
 msgstr "Le password inserite non sono le stesse."
 
@@ -8131,7 +8130,7 @@ msgstr ""
 "disponibile."
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:46
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:210
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:214
 msgid "The master password needs to be at least 8 characters long."
 msgstr "La password principale deve contenere almeno 8 caratteri."
 
@@ -8231,7 +8230,7 @@ msgstr ""
 "La chiave host del server è sconosciuta. Non è possibile garantire che tale "
 "server sia davvero quello che vi aspettate."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1319
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1291
 msgid "The server's hostname does not match the certificate's hostname"
 msgstr "Il nome host server non corrisponde al nome host del certificato"
 
@@ -8405,7 +8404,7 @@ msgstr "Visualizza o nasconde l'albero delle cartelle remote"
 msgid "Toggles the display of the transfer queue"
 msgstr "Visualizza o nasconde la finestra della coda di trasferimento"
 
-#: ../../locales/../src/engine/http/request.cpp:258
+#: ../../locales/../src/engine/http/request.cpp:250
 msgid "Too long header line"
 msgstr "Riga di intestazione troppo lunga"
 
@@ -8600,7 +8599,7 @@ msgid ""
 "Unknown root element, the file does not appear to be generated by FileZilla."
 msgstr "Elemento root sconosciuto, il file non sembra generato da FileZilla."
 
-#: ../../locales/../src/engine/http/request.cpp:373
+#: ../../locales/../src/engine/http/request.cpp:365
 msgid "Unknown transfer encoding"
 msgstr "Codifica trasferimento sconosciuta"
 
@@ -8621,7 +8620,7 @@ msgstr ""
 "Finché non sarà risolto questo problema, la modalità FTP attiva non "
 "funzionerà e dovrà essere utilizzata la modalità passiva."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1344
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1316
 msgid "Unsupported certificate type"
 msgstr "Tipo certificato non supportato"
 
@@ -8796,7 +8795,7 @@ msgstr "Valido fino al:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Messaggi dettagliati log di wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1420
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1392
 msgid "Verifying certificate..."
 msgstr "Verifica del certificato in corso..."
 
@@ -8909,7 +8908,7 @@ msgstr "Scr&ittura"
 msgid "Wrong external IP address"
 msgstr "Indirizzo IP esterno non valido"
 
-#: ../../locales/../src/engine/http/request.cpp:441
+#: ../../locales/../src/engine/http/request.cpp:433
 msgid "Wrong line endings"
 msgstr "Terminazioni di riga non corrette"
 
@@ -9064,7 +9063,7 @@ msgid ""
 msgstr ""
 "Probabilmente avete un router o firewall che ha modificato i dati trasferiti."
 
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:206
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:210
 msgid "You need to enter a master password."
 msgstr "Devi inserire la password principale."
 
@@ -9243,11 +9242,11 @@ msgstr ""
 "Assicurati che l'eseguibile di fzstorj sia presente nella stessa cartella "
 "dell'eseguibile principale di Filezilla."
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1240
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1212
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers ha ritornato nessun certificato"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1252
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1224
 msgid "gnutls_pem_base64_encode2 failed"
 msgstr "Fallita gnutls_pem_base64_encode2"
 
@@ -9308,10 +9307,10 @@ msgid "owner writeable"
 msgstr "scrivibile per il proprietario"
 
 #: ../../locales/../src/engine/proxy.cpp:64
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1472
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1488
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1504
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1520
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1444
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1460
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1476
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1492
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:43
 msgid "unknown"
 msgstr "sconosciuto"

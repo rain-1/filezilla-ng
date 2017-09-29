@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-09-22 10:03+0200\n"
-"PO-Revision-Date: 2017-08-26 11:06+0800\n"
+"POT-Creation-Date: 2017-09-29 12:11+0200\n"
+"PO-Revision-Date: 2017-09-24 13:51+0800\n"
 "Last-Translator: Sun Junwen <sunjw8888@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -393,7 +393,6 @@ msgid "&Delete symlink"
 msgstr "删除符号链接(&D)"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:58
-#, fuzzy
 msgid "&Directory access permissions..."
 msgstr "目录访问权限(&D)..."
 
@@ -1133,9 +1132,9 @@ msgid "'%s' is not a directory."
 msgstr "“%s”不是目录。"
 
 #: ../../locales/../src/engine/engineprivate.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a supported protocol."
-msgstr "“%s”不是目录。"
+msgstr "不支持“%s”协议。"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:419
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:995
@@ -1283,7 +1282,7 @@ msgid ""
 "A bookmark with the entered name already exists. Please enter an unused name."
 msgstr "该名称的书签已经存在。请输入一个未使用的名字。"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1311
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1283
 msgid "A certificate in the chain was signed using an insecure algorithm"
 msgstr "证书链中某张证书的签名使用了不安全的算法"
 
@@ -1587,7 +1586,7 @@ msgstr ""
 "在保存传输队列到“%s”时发生了一个错误。\n"
 "队列中的一些项可能没有保存。"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1315
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1287
 msgid "An issuer in the certificate chain is not a certificate authority"
 msgstr "证书链中某张证书的颁发者不可信"
 
@@ -1735,7 +1734,7 @@ msgstr "行为"
 msgid "Being edited"
 msgstr "正在编辑"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1301
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1273
 msgid "Beware! Certificate has been revoked"
 msgstr "注意！证书已被撤销"
 
@@ -2020,7 +2019,7 @@ msgstr "证书链:"
 msgid "Certificate issuer"
 msgstr "证书颁发者"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1307
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1279
 msgid "Certificate signature verification failed"
 msgstr "证书签名验证失败"
 
@@ -2113,7 +2112,7 @@ msgstr "选择默认的本地目录"
 msgid "Choose the local directory"
 msgstr "选择本地目录"
 
-#: ../../locales/../src/engine/http/request.cpp:462
+#: ../../locales/../src/engine/http/request.cpp:454
 msgid "Chunk data improperly terminated"
 msgstr "块数据错误中止"
 
@@ -2346,13 +2345,13 @@ msgstr "正在连接"
 msgid "Connecting to %s"
 msgstr "连接到 %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1113
+#: ../../locales/../src/engine/ControlSocket.cpp:1058
 #: ../../locales/../src/engine/ftp/logon.cpp:96
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "连接到 %s，通过代理 %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1038
+#: ../../locales/../src/engine/ControlSocket.cpp:990
 #: ../../locales/../src/engine/proxy.cpp:240
 #: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:43
 #: ../../locales/../src/engine/storj/storjcontrolsocket.cpp:42
@@ -2372,13 +2371,13 @@ msgstr "连接中止"
 msgid "Connection attempt failed"
 msgstr "连接尝试失败"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1000
+#: ../../locales/../src/engine/ControlSocket.cpp:952
 #: ../../locales/../src/engine/proxy.cpp:212
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "尝试连接“%s”失败，正在尝试下一个地址。"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1006
+#: ../../locales/../src/engine/ControlSocket.cpp:958
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "尝试连接“%s”失败。"
@@ -2396,7 +2395,7 @@ msgstr "连接尝试超时"
 msgid "Connection closed"
 msgstr "连接关闭"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1091
+#: ../../locales/../src/engine/ControlSocket.cpp:1036
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:75
 msgid "Connection closed by server"
 msgstr "连接被服务器关闭"
@@ -2504,7 +2503,7 @@ msgstr "无法接受连接: %s"
 msgid "Could not access path %s"
 msgstr "无法访问路径 %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1376
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1348
 msgid "Could not add certificate to temporary trust list"
 msgstr "无法将证书加入临时信任列表"
 
@@ -2521,7 +2520,7 @@ msgstr "完成操作"
 msgid "Could not connect to server"
 msgstr "无法连接到服务器"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1146
+#: ../../locales/../src/engine/ControlSocket.cpp:1091
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "无法连接到服务器: %s"
@@ -2544,7 +2543,7 @@ msgstr "无法转换私钥"
 msgid "Could not copy URLs"
 msgstr "无法复制 URL"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1358
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1330
 msgid "Could not copy certificate"
 msgstr "无法复制证书"
 
@@ -2606,17 +2605,17 @@ msgid "Could not generate custom login sequence."
 msgstr "无法生成自定义登录过程。"
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:121
 msgid "Could not generate key"
 msgstr "无法生成密钥"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1098
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1070
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
 msgstr "无法获得明确的证书颁发者名称，gnutls_x509_get_issuer_dn 失败"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1074
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1046
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2772,7 +2771,7 @@ msgstr "无法将命令发送到 fzputtygen。"
 msgid "Could not send command to fzstorj."
 msgstr "无法将命令发送到 fzstorj。"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1284
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1256
 msgid "Could not sort peer certificates"
 msgstr "无法排序对等证书"
 
@@ -2780,7 +2779,7 @@ msgstr "无法排序对等证书"
 msgid "Could not spawn IO thread"
 msgstr "无法生成 IO 线程"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1127
+#: ../../locales/../src/engine/ControlSocket.cpp:1072
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "无法开始代理握手: %s"
@@ -2843,9 +2842,9 @@ msgstr "无法写入本地文件"
 msgid "Could not write to log file: %s"
 msgstr "无法写入日志文件: %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:961
-#: ../../locales/../src/engine/ControlSocket.cpp:1059
-#: ../../locales/../src/engine/http/request.cpp:114
+#: ../../locales/../src/engine/ControlSocket.cpp:913
+#: ../../locales/../src/engine/ControlSocket.cpp:1008
+#: ../../locales/../src/engine/http/request.cpp:113
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "无法写入套接字: %s"
@@ -3245,15 +3244,15 @@ msgid "Disconnect from server"
 msgstr "从服务器断开"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:52
-#: ../../locales/../src/engine/ControlSocket.cpp:962
-#: ../../locales/../src/engine/ControlSocket.cpp:1061
+#: ../../locales/../src/engine/ControlSocket.cpp:914
+#: ../../locales/../src/engine/ControlSocket.cpp:1010
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
-#: ../../locales/../src/engine/http/request.cpp:115
+#: ../../locales/../src/engine/http/request.cpp:114
 #: ../../locales/../src/interface/queue.cpp:339
 msgid "Disconnected from server"
 msgstr "已从服务器断开"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1094
+#: ../../locales/../src/engine/ControlSocket.cpp:1039
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:189
 #, c-format
 msgid "Disconnected from server: %s"
@@ -3623,7 +3622,7 @@ msgid "Enter username and password"
 msgstr "输入用户名和密码"
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:53
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:116
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:121
 msgid "Error"
 msgstr "错误"
 
@@ -3951,7 +3950,7 @@ msgstr "无法将语言设置为 %s，将使用系统默认语言。"
 msgid "Failed to validate settings"
 msgstr "校验设置失败"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1386
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1358
 msgid "Failed to verify peer certificate"
 msgstr "验证对等证书失败"
 
@@ -4331,22 +4330,22 @@ msgstr "给定的过滤器集合名已经存在，是否覆盖过滤器集合？
 msgid "Global bookmarks"
 msgstr "全局书签"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:317
+#: ../../locales/../src/engine/tlssocket_impl.cpp:315
 #, c-format
 msgid "GnuTLS error %d"
 msgstr "GnuTLS 错误 %d"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:320
+#: ../../locales/../src/engine/tlssocket_impl.cpp:318
 #, c-format
 msgid "GnuTLS error %d in %s"
 msgstr "GnuTLS 错误 %d，位于 %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:312
+#: ../../locales/../src/engine/tlssocket_impl.cpp:310
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
 msgstr "GnuTLS 错误 %d，位于 %s: %s"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:309
+#: ../../locales/../src/engine/tlssocket_impl.cpp:307
 #, c-format
 msgid "GnuTLS error %d: %s"
 msgstr "GnuTLS 错误 %d: %s"
@@ -4700,11 +4699,11 @@ msgid "Interrupted by user"
 msgstr "用户终止"
 
 #: ../../locales/../src/engine/http/request.cpp:36
-#: ../../locales/../src/engine/http/request.cpp:381
+#: ../../locales/../src/engine/http/request.cpp:373
 msgid "Invalid Content-Length"
 msgstr "无效的 Content-Length"
 
-#: ../../locales/../src/engine/http/request.cpp:276
+#: ../../locales/../src/engine/http/request.cpp:268
 msgid "Invalid HTTP Response"
 msgstr "无效的 HTTP 响应"
 
@@ -4718,7 +4717,7 @@ msgid ""
 "site manager to force UTF-8."
 msgstr "收到无效字节，将禁用 UTF-8 编码。请在站点管理器中强制选择 UTF-8 编码。"
 
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:489
 msgid "Invalid chunk size"
 msgstr "无效的块大小"
 
@@ -4757,7 +4756,7 @@ msgstr "无效的主机名: %s"
 msgid "Invalid input"
 msgstr "无效输入"
 
-#: ../../locales/../src/engine/http/request.cpp:334
+#: ../../locales/../src/engine/http/request.cpp:326
 msgid "Invalid line"
 msgstr "无效的行"
 
@@ -4800,7 +4799,7 @@ msgstr "无效的正则表达式"
 msgid "Invalid regular expression in search conditions."
 msgstr "无效的搜索条件正则表达式。"
 
-#: ../../locales/../src/engine/http/request.cpp:285
+#: ../../locales/../src/engine/http/request.cpp:277
 msgid "Invalid response code"
 msgstr "无效的响应码"
 
@@ -4900,7 +4899,7 @@ msgid "Layout"
 msgstr "布局"
 
 #. @translator: Keep this string as short as possible
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:66
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:67
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1803
 msgid "Leave empty to keep existing password."
 msgstr "不输入以保持现有密码不变。"
@@ -4925,7 +4924,7 @@ msgstr "限制日志文件大小"
 msgid "Limit:"
 msgstr "限制:"
 
-#: ../../locales/../src/engine/http/request.cpp:450
+#: ../../locales/../src/engine/http/request.cpp:442
 msgid "Line length exceeded"
 msgstr "行长度已超出"
 
@@ -5073,10 +5072,10 @@ msgstr "洋红"
 msgid "Make sure the file can be accessed and is a well-formed XML document."
 msgstr "确认该文件可以被存取而且是一个格式正确的 XML 文档。"
 
-#: ../../locales/../src/engine/http/request.cpp:441
-#: ../../locales/../src/engine/http/request.cpp:450
-#: ../../locales/../src/engine/http/request.cpp:462
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:433
+#: ../../locales/../src/engine/http/request.cpp:442
+#: ../../locales/../src/engine/http/request.cpp:454
+#: ../../locales/../src/engine/http/request.cpp:489
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "错误的块数据: %s"
@@ -5086,20 +5085,20 @@ msgstr "错误的块数据: %s"
 msgid "Malformed request header: %s"
 msgstr "错误的请求头: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:526
+#: ../../locales/../src/engine/http/request.cpp:518
 #, c-format
 msgid "Malformed response body: %s"
 msgstr "错误的响应数据: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:249
-#: ../../locales/../src/engine/http/request.cpp:334
+#: ../../locales/../src/engine/http/request.cpp:241
+#: ../../locales/../src/engine/http/request.cpp:326
+#: ../../locales/../src/engine/http/request.cpp:365
 #: ../../locales/../src/engine/http/request.cpp:373
-#: ../../locales/../src/engine/http/request.cpp:381
 #, c-format
 msgid "Malformed response header: %s"
 msgstr "错误的响应头: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:394
+#: ../../locales/../src/engine/http/request.cpp:386
 msgid ""
 "Malformed response: Server sent response body with a request verb or "
 "response code that disallows a response body."
@@ -6112,7 +6111,7 @@ msgstr "保留文件时间戳"
 msgid "Preview"
 msgstr "预览"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1408
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1380
 msgid "Primary connection and data connection certificates don't match."
 msgstr "主连接和数据连接的证书不匹配。"
 
@@ -6355,7 +6354,7 @@ msgstr "马上重启"
 msgid "Rec&urse into subdirectories"
 msgstr "递归处理子目录(&U)"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:331
+#: ../../locales/../src/engine/tlssocket_impl.cpp:329
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "收到服务器的 TLS 警告: %s (%d)"
@@ -6369,7 +6368,7 @@ msgstr "收到了一个疑似使用 EBCDIC 编码的目录列表。"
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "接收到超过 1000 个字符的行，中止操作。"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1329
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1301
 #, c-format
 msgid ""
 "Received certificate chain could not be verified. Verification status is %d."
@@ -6385,7 +6384,7 @@ msgstr "已收到的数据被损坏"
 msgid "Received invalid character in version information"
 msgstr "在版本信息中收到了无效字符"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:334
+#: ../../locales/../src/engine/tlssocket_impl.cpp:332
 #, c-format
 msgid "Received unknown TLS alert %d from the server"
 msgstr "收到了服务器的未知 TLS 警告 %d"
@@ -6448,7 +6447,7 @@ msgstr "记住密码？"
 msgid "Remote"
 msgstr "远程"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1000
+#: ../../locales/../src/engine/tlssocket_impl.cpp:972
 msgid "Remote certificate not trusted."
 msgstr "远程证书不被信任。"
 
@@ -6582,7 +6581,7 @@ msgstr "重置并重新请求所有(&A)"
 msgid "Resolved protocol is unknown"
 msgstr "解析的协议为未知协议"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1136
+#: ../../locales/../src/engine/ControlSocket.cpp:1081
 #, c-format
 msgid "Resolving address of %s"
 msgstr "正在解析 %s 的地址"
@@ -6938,7 +6937,7 @@ msgstr "序列号:"
 msgid "Server &Type:"
 msgstr "服务器类型(&T):"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:884
+#: ../../locales/../src/engine/tlssocket_impl.cpp:858
 msgid "Server did not properly shut down TLS connection"
 msgstr "服务器没有正常的关闭 TLS 连接"
 
@@ -6984,7 +6983,7 @@ msgid ""
 "Manager"
 msgstr "服务器可能需要帐号。请尝试在站点管理器里指定一个帐号"
 
-#: ../../locales/../src/engine/http/request.cpp:249
+#: ../../locales/../src/engine/http/request.cpp:241
 msgid "Server not sending proper line endings"
 msgstr "服务器没有发送正确的行结尾"
 
@@ -7008,7 +7007,7 @@ msgid ""
 "instead."
 msgstr "服务器发回了不可路由的地址。使用服务器地址代替。"
 
-#: ../../locales/../src/engine/http/request.cpp:526
+#: ../../locales/../src/engine/http/request.cpp:518
 msgid "Server sent too much data."
 msgstr "服务器发送了过多的数据。"
 
@@ -7024,7 +7023,7 @@ msgstr "服务器发送了过多的数据。"
 msgid "Server sent unexpected reply."
 msgstr "服务器发送了意外的回应。"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1277
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1249
 msgid ""
 "Server sent unsorted certificate chain in violation of the TLS specifications"
 msgstr "服务器发送了不符合 TLS 规范的未排序证书链"
@@ -7207,10 +7206,10 @@ msgstr "大小未知"
 msgid "Skip file"
 msgstr "跳过文件"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1207
-#: ../../locales/../src/engine/ControlSocket.cpp:1224
-#: ../../locales/../src/engine/ControlSocket.cpp:1250
-#: ../../locales/../src/engine/ControlSocket.cpp:1328
+#: ../../locales/../src/engine/ControlSocket.cpp:1151
+#: ../../locales/../src/engine/ControlSocket.cpp:1168
+#: ../../locales/../src/engine/ControlSocket.cpp:1194
+#: ../../locales/../src/engine/ControlSocket.cpp:1272
 #, c-format
 msgid "Skipping download of %s"
 msgstr "跳过下载 %s"
@@ -7220,10 +7219,10 @@ msgstr "跳过下载 %s"
 msgid "Skipping non-existing key file \"%s\""
 msgstr "跳过不存在的密匙文件“%s”"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1210
-#: ../../locales/../src/engine/ControlSocket.cpp:1227
-#: ../../locales/../src/engine/ControlSocket.cpp:1253
-#: ../../locales/../src/engine/ControlSocket.cpp:1331
+#: ../../locales/../src/engine/ControlSocket.cpp:1154
+#: ../../locales/../src/engine/ControlSocket.cpp:1171
+#: ../../locales/../src/engine/ControlSocket.cpp:1197
+#: ../../locales/../src/engine/ControlSocket.cpp:1275
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "跳过上传 %s"
@@ -7564,7 +7563,7 @@ msgstr "无法添加该书签。"
 msgid "The bookmarks could not be cleared."
 msgstr "无法清除该书签。"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1324
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1296
 msgid ""
 "The certificate requires the server to include an OCSP status in its "
 "response, but the OCSP status is missing."
@@ -7610,7 +7609,7 @@ msgid "The entered filter name already exists, please choose a different name."
 msgstr "您输入的过滤器名称已经存在，请另选一个名称。"
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:41
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:201
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:205
 msgid "The entered passwords are not the same."
 msgstr "输入的密码不同。"
 
@@ -7784,7 +7783,7 @@ msgid ""
 msgstr "最低的可用端口必须小于或等于最高的。"
 
 #: ../../locales/../src/interface/asksavepassworddialog.cpp:46
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:210
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:214
 msgid "The master password needs to be at least 8 characters long."
 msgstr "主密码至少需要 8 个字符。"
 
@@ -7876,7 +7875,7 @@ msgid ""
 "the computer you think it is."
 msgstr "该服务器的主机密匙是未知的。不能保证该服务器就是您所认定的那台计算机。"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1319
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1291
 msgid "The server's hostname does not match the certificate's hostname"
 msgstr "服务器的主机名与证书的主机名不匹配"
 
@@ -8033,7 +8032,7 @@ msgstr "开/关远程目录树显示"
 msgid "Toggles the display of the transfer queue"
 msgstr "开/关传输队列显示"
 
-#: ../../locales/../src/engine/http/request.cpp:258
+#: ../../locales/../src/engine/http/request.cpp:250
 msgid "Too long header line"
 msgstr "标题行太长"
 
@@ -8223,7 +8222,7 @@ msgid ""
 "Unknown root element, the file does not appear to be generated by FileZilla."
 msgstr "未知的根元素，该文件似乎不是由 FileZilla 生成的。"
 
-#: ../../locales/../src/engine/http/request.cpp:373
+#: ../../locales/../src/engine/http/request.cpp:365
 msgid "Unknown transfer encoding"
 msgstr "未知的传输编码方式"
 
@@ -8240,7 +8239,7 @@ msgid ""
 "mode has to be used."
 msgstr "除非问题被修复，主动模式 FTP 不会工作，只能使用被动模式。"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1344
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1316
 msgid "Unsupported certificate type"
 msgstr "不支持的证书类型"
 
@@ -8408,7 +8407,7 @@ msgstr "有效期截止:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "来自 wxWidgets 的详细日志消息"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1420
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1392
 msgid "Verifying certificate..."
 msgstr "正在验证证书..."
 
@@ -8516,7 +8515,7 @@ msgstr "写入(&I)"
 msgid "Wrong external IP address"
 msgstr "错误的外部 IP 地址"
 
-#: ../../locales/../src/engine/http/request.cpp:441
+#: ../../locales/../src/engine/http/request.cpp:433
 msgid "Wrong line endings"
 msgstr "错误的行结尾"
 
@@ -8655,7 +8654,7 @@ msgid ""
 "transferred data."
 msgstr "您的防火墙或路由器似乎错误地更改了传输的数据。"
 
-#: ../../locales/../src/interface/settings/optionspage_interface.cpp:206
+#: ../../locales/../src/interface/settings/optionspage_interface.cpp:210
 msgid "You need to enter a master password."
 msgstr "请输入一个主密码。"
 
@@ -8822,11 +8821,11 @@ msgstr ""
 "fzstorj 无法启动。\n"
 "请确认该执行程序和 FileZilla 执行程序在相同的目录内。"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1240
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1212
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers 没有返回证书"
 
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1252
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1224
 msgid "gnutls_pem_base64_encode2 failed"
 msgstr "gnutls_pem_base64_encode2 失败"
 
@@ -8887,10 +8886,10 @@ msgid "owner writeable"
 msgstr "所有者可写"
 
 #: ../../locales/../src/engine/proxy.cpp:64
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1472
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1488
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1504
-#: ../../locales/../src/engine/tlssocket_impl.cpp:1520
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1444
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1460
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1476
+#: ../../locales/../src/engine/tlssocket_impl.cpp:1492
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:43
 msgid "unknown"
 msgstr "未知"
