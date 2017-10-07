@@ -402,7 +402,8 @@ public:
 		std::wstring const& sessionCipher,
 		std::wstring const& sessionMac,
 		int algorithmWarnings,
-		std::vector<CCertificate> && certificates);
+	    std::vector<CCertificate> && certificates,
+	    bool hostnameMismatch);
 	virtual RequestId GetRequestID() const { return reqId_certificate; }
 
 	std::wstring const& GetHost() const { return m_host; }
@@ -428,6 +429,8 @@ public:
 
 	int GetAlgorithmWarnings() const { return m_algorithmWarnings; }
 
+	bool MismatchedHostname() const { return hostnameMismatch_; }
+
 private:
 	std::wstring m_host;
 	unsigned int m_port{};
@@ -439,6 +442,8 @@ private:
 	int m_algorithmWarnings{};
 
 	std::vector<CCertificate> m_certificates;
+
+	bool hostnameMismatch_{};
 };
 
 class CSftpEncryptionNotification final : public CNotificationHelper<nId_sftp_encryption>, public CSftpEncryptionDetails

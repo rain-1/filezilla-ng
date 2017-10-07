@@ -1367,6 +1367,14 @@ int CTlsSocketImpl::VerifyCertificate()
 		return FZ_REPLY_ERROR;
 	}
 
+	bool hostnameMismatch = false;
+	if (!hostname_.empty() && fz::get_address_type(hostname_) == fz::address_type::unknown) {
+		if (!gnutls_x509_crt_check_hostname(certs.certs[0], fz::to_utf8(hostname_).c_str())) {
+			hostnameMismatch = true;
+			m_pOwner->LogMessage(MessageType::Debug_Warning, L"Hostname does not match certificate SANs");
+		}
+	}
+
 	datum_holder cert_der{};
 	if (gnutls_x509_crt_export2(certs.certs[0], GNUTLS_X509_FMT_DER, &cert_der) != GNUTLS_E_SUCCESS) {
 		Failure(0, true);
@@ -1384,8 +1392,9 @@ int CTlsSocketImpl::VerifyCertificate()
 
 		TrustCurrentCert(true);
 
-		if (m_tlsState != CTlsSocket::TlsState::conn)
+		if (m_tlsState != CTlsSocket::TlsState::conn) {
 			return FZ_REPLY_ERROR;
+		}
 		return FZ_REPLY_OK;
 	}
 
@@ -1419,7 +1428,8 @@ int CTlsSocketImpl::VerifyCertificate()
 		GetCipherName(),
 		GetMacName(),
 		algorithmWarnings,
-		std::move(certificates));
+		std::move(certificates),
+		hostnameMismatch);
 
 	// Finally, ask user to verify the certificate chain
 	m_pOwner->SendAsyncRequest(pNotification);
