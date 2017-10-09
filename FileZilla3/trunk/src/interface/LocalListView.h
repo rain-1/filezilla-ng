@@ -9,6 +9,7 @@ class CLocalListViewDropTarget;
 #ifdef __WXMSW__
 class CVolumeDescriptionEnumeratorThread;
 #endif
+class CView;
 class CWindowTinter;
 
 class CLocalFileData final : public CGenericFileData
@@ -31,7 +32,7 @@ class CLocalListView final : public CFileListCtrl<CLocalFileData>, CStateEventHa
 	friend class CLocalListViewSortType;
 
 public:
-	CLocalListView(wxWindow* parent, CState& state, CQueueView *pQueue);
+	CLocalListView(CView* parent, CState& state, CQueueView *pQueue);
 	virtual ~CLocalListView();
 
 protected:
@@ -90,6 +91,8 @@ protected:
 	wxString MenuMkdir();
 
 	std::unique_ptr<CWindowTinter> m_windowTinter;
+
+	CView *m_parentView{};
 
 	// Event handlers
 	DECLARE_EVENT_TABLE()

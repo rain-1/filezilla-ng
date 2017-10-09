@@ -9,13 +9,14 @@ class CChmodDialog;
 class CInfoText;
 class CQueueView;
 class CRemoteListViewDropTarget;
+class CView;
 class CWindowTinter;
 
 class CRemoteListView final : public CFileListCtrl<CGenericFileData>, CStateEventHandler
 {
 	friend class CRemoteListViewDropTarget;
 public:
-	CRemoteListView(wxWindow* pParent, CState& state, CQueueView* pQueue);
+	CRemoteListView(CView* pParent, CState& state, CQueueView* pQueue);
 	virtual ~CRemoteListView();
 
 	virtual bool CanStartComparison();
@@ -102,6 +103,8 @@ protected:
 
 	std::unique_ptr<CWindowTinter> m_windowTinter;
 
+	CView *m_parentView{};
+	
 	DECLARE_EVENT_TABLE()
 	void OnItemActivated(wxListEvent &event);
 	void OnContextMenu(wxContextMenuEvent& event);

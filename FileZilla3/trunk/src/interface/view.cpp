@@ -2,6 +2,10 @@
 #include "view.h"
 #include "viewheader.h"
 
+#include "state.h"
+#include "listingcomparison.h"
+#include "conditionaldialog.h"
+
 #include <algorithm>
 
 BEGIN_EVENT_TABLE(CView, wxNavigationEnabled<wxWindow>)
@@ -21,6 +25,11 @@ void CView::SetStatusBar(wxStatusBar* pStatusBar)
 void CView::SetFooter(wxWindow* footer)
 {
 	m_pFooter = footer;
+}
+
+void CView::SetSearchPanel(wxWindow* panel)
+{
+	m_pSearchPanel = panel;
 }
 
 void CView::Arrange(wxWindow* child, wxRect& clientRect, bool top)
@@ -54,6 +63,7 @@ void CView::OnSize(wxSizeEvent&)
 	Arrange(m_pHeader, rect, true);
 	Arrange(m_pFooter, rect, false);
 	Arrange(m_pStatusBar, rect, false);
+	Arrange(m_pSearchPanel, rect, false);
 
 	if (m_pWnd) {
 		m_pWnd->SetSize(rect);
@@ -86,4 +96,25 @@ CViewHeader* CView::DetachHeader()
 	CViewHeader* pHeader = m_pHeader;
 	m_pHeader = 0;
 	return pHeader;
+}
+
+void CView::ShowSearchPanel()
+{
+	if (m_pSearchPanel) {
+		CState* pState = CContextManager::Get()->GetCurrentContext();
+		if (pState) {
+			CComparisonManager* pComparisonManager = pState->GetComparisonManager();
+			if (pComparisonManager && pComparisonManager->IsComparing()) {
+				CConditionalDialog dlg(this, CConditionalDialog::quick_search, CConditionalDialog::yesno);
+				dlg.SetTitle(_("Directory comparison"));
+				dlg.AddText(_("Quick search cannot be opened if comparing directories."));
+				dlg.AddText(_("End comparison and open quick search?"));
+				if (!dlg.Run())
+					return;
+				pComparisonManager->ExitComparisonMode();
+			}		
+		}		
+
+		m_pSearchPanel->Show();
+	}
 }

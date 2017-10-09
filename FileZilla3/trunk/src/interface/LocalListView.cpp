@@ -2,6 +2,7 @@
 
 #define FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
 
+#include "view.h"
 #include "LocalListView.h"
 #include "queue.h"
 #include "filezillaapp.h"
@@ -269,9 +270,10 @@ BEGIN_EVENT_TABLE(CLocalListView, CFileListCtrl<CLocalFileData>)
 	EVT_MENU(XRCID("ID_CONTEXT_REFRESH"), CLocalListView::OnMenuRefresh)
 END_EVENT_TABLE()
 
-CLocalListView::CLocalListView(wxWindow* pParent, CState& state, CQueueView *pQueue)
+CLocalListView::CLocalListView(CView* pParent, CState& state, CQueueView *pQueue)
 	: CFileListCtrl<CLocalFileData>(pParent, pQueue),
-	CStateEventHandler(state)
+	CStateEventHandler(state),
+	m_parentView(pParent)
 {
 	wxGetApp().AddStartupProfileRecord("CLocalListView::CLocalListView");
 	m_state.RegisterHandler(this, STATECHANGE_LOCAL_DIR);
@@ -387,7 +389,7 @@ bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 #ifdef __WXMSW__
 regular_dir:
 #endif
-		CFilterManager filter;
+		CStateFilterManager const& filter = m_state.GetStateFilterManager();
 		fz::local_filesys local_filesys;
 
 		if (!local_filesys.begin_find_files(fz::to_native(m_dir.GetPath()), false)) {
@@ -1046,6 +1048,11 @@ void CLocalListView::OnKeyDown(wxKeyEvent& event)
 		wxCommandEvent cmdEvent;
 		OnMenuMkdir(cmdEvent);
 	}
+	else if (code == 'F' && event.GetModifiers() == wxMOD_CONTROL) {
+		if (m_parentView) {
+			m_parentView->ShowSearchPanel();
+		}
+	}
 	else
 		event.Skip();
 }
@@ -1109,8 +1116,8 @@ bool CLocalListView::OnAcceptRename(const wxListEvent& event)
 
 void CLocalListView::ApplyCurrentFilter()
 {
-	CFilterManager filter;
-
+	CStateFilterManager const& filter = m_state.GetStateFilterManager();
+	
 	if (!filter.HasSameLocalAndRemoteFilters() && IsComparing()) {
 		ExitComparisonMode();
 	}
@@ -1371,15 +1378,17 @@ void CLocalListView::RefreshFile(const wxString& file)
 
 	bool wasLink;
 	fz::local_filesys::type type = fz::local_filesys::get_file_info(fz::to_native(m_dir.GetPath() + file), wasLink, &data.size, &data.time, &data.attributes);
-	if (type == fz::local_filesys::unknown)
+	if (type == fz::local_filesys::unknown) {
 		return;
+	}
 
 	data.name = file;
 	data.dir = type == fz::local_filesys::dir;
 
-	CFilterManager filter;
-	if (filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time))
+	CStateFilterManager const& filter = m_state.GetStateFilterManager();
+	if (filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time)) {
 		return;
+	}
 
 	CancelLabelEdit();
 
