@@ -3,6 +3,7 @@
 
 #include "local_path.h"
 #include "sitemanager.h"
+#include "filter.h"
 
 #include <memory>
 
@@ -57,6 +58,22 @@ class CStateEventHandler;
 class CRemoteDataObject;
 class CRemoteRecursiveOperation;
 class CComparisonManager;
+
+class CStateFilterManager : public CFilterManager
+{
+public:
+	virtual bool FilenameFiltered(std::wstring const& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const override;
+
+	CFilter const& GetLocalFilter() const { return m_localFilter; }
+	void SetLocalFilter(CFilter const& filter) { m_localFilter = filter; }
+
+	CFilter const& GetRemoteFilter() const { return m_remoteFilter; }
+	void SetRemoteFilter(CFilter const& filter) { m_remoteFilter = filter; }
+
+private:
+	CFilter m_localFilter;
+	CFilter m_remoteFilter;
+};
 
 class CState;
 class CContextManager final
@@ -190,6 +207,8 @@ public:
 
 	void UpdateSite(wxString const& oldPath, Site const& newSite);
 
+	CStateFilterManager& GetStateFilterManager() { return m_stateFilterManager; }
+
 protected:
 	void SetSite(Site const& site, CServerPath const& path = CServerPath());
 
@@ -212,7 +231,9 @@ protected:
 	CRemoteRecursiveOperation* m_pRemoteRecursiveOperation;
 
 	CComparisonManager* m_pComparisonManager;
-
+	
+	CStateFilterManager m_stateFilterManager;
+	
 	struct t_handlersForNotification
 	{
 		std::vector<CStateEventHandler*> handlers;

@@ -91,7 +91,7 @@ public:
 	virtual ~CFilterManager() = default;
 
 	// Note: Under non-windows, attributes are permissions
-	bool FilenameFiltered(std::wstring const& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const;
+	virtual bool FilenameFiltered(std::wstring const& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const;
 	bool FilenameFiltered(std::vector<CFilter> const& filters, std::wstring const& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date) const;
 	static bool FilenameFilteredByFilter(CFilter const& filter, std::wstring const& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date);
 	static bool HasActiveFilters(bool ignore_disabled = false);

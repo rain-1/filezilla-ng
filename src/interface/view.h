@@ -15,6 +15,9 @@ public:
 	wxStatusBar* GetStatusBar() { return m_pStatusBar; }
 
 	void SetFooter(wxWindow* footer);
+	void SetSearchPanel(wxWindow* panel);
+
+	void ShowSearchPanel();
 
 protected:
 	void Arrange(wxWindow* child, wxRect& clientRect, bool top);
@@ -26,6 +29,7 @@ protected:
 	wxStatusBar* m_pStatusBar{};
 
 	wxWindow* m_pFooter{};
+	wxWindow* m_pSearchPanel{};
 
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent&);

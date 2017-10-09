@@ -3,6 +3,7 @@
 #include "context_control.h"
 #include "filelist_statusbar.h"
 #include "filezillaapp.h"
+#include "list_search_panel.h"
 #include "local_recursive_operation.h"
 #include "LocalListView.h"
 #include "LocalTreeView.h"
@@ -227,6 +228,12 @@ void CContextControl::CreateContextControls(CState& state)
 
 	auto remoteRecursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, state, false);
 	context_controls.pRemoteListViewPanel->SetFooter(remoteRecursiveStatus);
+
+	auto localListSearchPanel = new CListSearchPanel(context_controls.pLocalListViewPanel, context_controls.pLocalListView, &context_controls.pState->GetStateFilterManager(), true);
+	context_controls.pLocalListViewPanel->SetSearchPanel(localListSearchPanel);
+
+	auto remoteListSearchPanel = new CListSearchPanel(context_controls.pRemoteListViewPanel, context_controls.pRemoteListView, &context_controls.pState->GetStateFilterManager(), false);
+	context_controls.pRemoteListViewPanel->SetSearchPanel(remoteListSearchPanel);
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
 	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);

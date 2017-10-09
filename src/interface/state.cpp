@@ -15,6 +15,22 @@
 
 #include <algorithm>
 
+bool CStateFilterManager::FilenameFiltered(std::wstring const& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const
+{
+	if (local) {
+		if (m_localFilter && FilenameFilteredByFilter(m_localFilter, name, path, dir, size, attributes, date)) {
+			return true;
+		}
+	}
+	else {
+		if (m_remoteFilter && FilenameFilteredByFilter(m_remoteFilter, name, path, dir, size, attributes, date)) {
+			return true;
+		}
+	}
+
+	return CFilterManager::FilenameFiltered(name, path, dir, size, local, attributes, date);
+}
+
 CContextManager CContextManager::m_the_context_manager;
 
 CContextManager::CContextManager()

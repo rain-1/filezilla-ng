@@ -2,6 +2,7 @@
 
 #define FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
 
+#include "view.h"
 #include "chmoddialog.h"
 #include "commandqueue.h"
 #include "dndobjects.h"
@@ -373,9 +374,10 @@ BEGIN_EVENT_TABLE(CRemoteListView, CFileListCtrl<CGenericFileData>)
 	EVT_MENU(XRCID("ID_CONTEXT_REFRESH"), CRemoteListView::OnMenuRefresh)
 END_EVENT_TABLE()
 
-CRemoteListView::CRemoteListView(wxWindow* pParent, CState& state, CQueueView* pQueue)
+CRemoteListView::CRemoteListView(CView* pParent, CState& state, CQueueView* pQueue)
 	: CFileListCtrl<CGenericFileData>(pParent, pQueue),
-	CStateEventHandler(state)
+	CStateEventHandler(state),
+	m_parentView(pParent)
 {
 	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
 	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
@@ -468,7 +470,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 
 	m_indexMapping[0] = pDirectoryListing->GetCount();
 
-	CFilterManager filter;
+	CFilterManager const& filter = m_state.GetStateFilterManager();
 	const wxString path = m_pDirectoryListing->path.GetPath();
 
 	CGenericFileData last = m_fileData.back();
@@ -494,8 +496,9 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 		}
 		m_fileData.push_back(data);
 
-		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time))
+		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time)) {
 			continue;
+		}
 
 		if (m_pFilelistStatusBar) {
 			if (entry.is_dir())
@@ -776,7 +779,8 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 
 		const wxString path = m_pDirectoryListing->path.GetPath();
 
-		CFilterManager filter;
+		CFilterManager const& filter = m_state.GetStateFilterManager();
+		
 		for (unsigned int i = 0; i < m_pDirectoryListing->GetCount(); ++i) {
 			const CDirentry& entry = (*m_pDirectoryListing)[i];
 			CGenericFileData data;
@@ -1557,6 +1561,11 @@ void CRemoteListView::OnKeyDown(wxKeyEvent& event)
 	else if (code == 'N' && event.GetModifiers() == (wxMOD_CONTROL | wxMOD_SHIFT)) {
 		MenuMkdir();
 	}
+	else if (code == 'F' && event.GetModifiers() == wxMOD_CONTROL) {
+		if (m_parentView) {
+			m_parentView->ShowSearchPanel();
+		}
+	}
 	else {
 		event.Skip();
 	}
@@ -1779,8 +1788,8 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 
 void CRemoteListView::ApplyCurrentFilter()
 {
-	CFilterManager filter;
-
+	CFilterManager const& filter = m_state.GetStateFilterManager();
+	
 	if (!filter.HasSameLocalAndRemoteFilters() && IsComparing()) {
 		ExitComparisonMode();
 	}
@@ -1811,7 +1820,7 @@ void CRemoteListView::ApplyCurrentFilter()
 			++hidden;
 			continue;
 		}
-
+	
 		if (entry.is_dir())
 			++totalDirCount;
 		else {

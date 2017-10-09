@@ -20,7 +20,8 @@ public:
 		confirm_preserve_timestamps,
 		compare_treeviewmismatch,
 		compare_changesorting,
-		many_selected_for_edit
+		many_selected_for_edit,
+		quick_search
 	};
 
 	CConditionalDialog(wxWindow* parent, DialogType type, Modes mode, bool checked = false);
