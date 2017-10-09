@@ -10,7 +10,7 @@ dist_resources480_DATA = \
 		480x480/bookmark.png \
 		480x480/bookmarks.png \
 		480x480/cancel.png \
-		480x180/close.png \
+		480x480/close.png \
 		480x480/compare.png \
 		480x480/disconnect.png \
 		480x480/download.png \
