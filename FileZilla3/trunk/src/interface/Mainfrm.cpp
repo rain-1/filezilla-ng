@@ -22,6 +22,7 @@
 #include "import.h"
 #include "inputdialog.h"
 #include "led.h"
+#include "list_search_panel.h"
 #include "local_recursive_operation.h"
 #include "LocalListView.h"
 #include "LocalTreeView.h"
@@ -2300,6 +2301,21 @@ void CMainFrame::OnToolbarComparison(wxCommandEvent&)
 		CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
 		if (!controls) {
 			return;
+		}
+
+		if (controls->pLocalListSearchPanel->IsShown() || controls->pLocalListSearchPanel->IsShown()) {
+			CConditionalDialog dlg(this, CConditionalDialog::quick_search, CConditionalDialog::yesno);
+			dlg.SetTitle(_("Directory comparison"));
+			dlg.AddText(_("To compare directories quick search must be closed."));
+			dlg.AddText(_("Close quick search and continue comparing?"));
+			if (!dlg.Run())
+				return;
+
+			if (controls->pLocalListSearchPanel->IsShown())
+				controls->pLocalListSearchPanel->Close();
+
+			if (controls->pRemoteListSearchPanel->IsShown())
+				controls->pRemoteListSearchPanel->Close();
 		}
 
 		if ((controls->pLocalSplitter->IsSplit() && !controls->pRemoteSplitter->IsSplit()) ||

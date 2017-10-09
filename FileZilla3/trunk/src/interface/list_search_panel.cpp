@@ -26,10 +26,10 @@ EVT_MENU(ID_USE_REGEX, CListSearchPanel::OnUseRegex)
 EVT_MENU(ID_INVERT_FILTER, CListSearchPanel::OnInvertFilter)
 END_EVENT_TABLE()
 
-CListSearchPanel::CListSearchPanel(wxWindow* parent, wxWindow* pListView, CStateFilterManager* pStateFilterManager, bool local)
+CListSearchPanel::CListSearchPanel(wxWindow* parent, wxWindow* pListView, CState* pState, bool local)
 	: wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 	, m_listView(pListView)
-	, m_filterManager(pStateFilterManager)
+	, m_pState(pState)
 	, m_local(local)
 {
 	Hide();
@@ -108,26 +108,30 @@ void CListSearchPanel::ApplyFilter()
 
 	filter.filters.push_back(condition);
 
+	CStateFilterManager& filterManager = m_pState->GetStateFilterManager();
+
 	if (m_local) {
-		m_filterManager->SetLocalFilter(filter);
+		filterManager.SetLocalFilter(filter);
 	}
 	else {
-		m_filterManager->SetRemoteFilter(filter);
+		filterManager.SetRemoteFilter(filter);
 	}
 	
-	CContextManager::Get()->NotifyAllHandlers(STATECHANGE_APPLYFILTER);
+	m_pState->NotifyHandlers(STATECHANGE_APPLYFILTER);
 }
 
 void CListSearchPanel::ResetFilter()
 {
+	CStateFilterManager& filterManager = m_pState->GetStateFilterManager();
+	
 	if (m_local) {
-		m_filterManager->SetLocalFilter(CFilter());
+		filterManager.SetLocalFilter(CFilter());
 	}
 	else {
-		m_filterManager->SetRemoteFilter(CFilter());
+		filterManager.SetRemoteFilter(CFilter());
 	}
 
-	CContextManager::Get()->NotifyAllHandlers(STATECHANGE_APPLYFILTER);
+	m_pState->NotifyHandlers(STATECHANGE_APPLYFILTER);
 }
 
 void CListSearchPanel::Close()
@@ -164,7 +168,7 @@ void CListSearchPanel::OnText(wxCommandEvent& ev)
 	if (text != m_text) {
 		m_text = text;
 
-		if (text.IsEmpty() && !m_invertFilter)
+		if (text.IsEmpty())
 			ResetFilter();
 		else
 			ApplyFilter();
