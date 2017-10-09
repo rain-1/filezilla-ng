@@ -8,6 +8,7 @@
 
 enum iconSize
 {
+	iconSizeTiny,
 	iconSizeSmall,
 	iconSize24,
 	iconSizeNormal,
