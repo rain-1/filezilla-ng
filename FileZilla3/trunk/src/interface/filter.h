@@ -50,6 +50,10 @@ public:
 		not_all
 	};
 
+	bool empty() const { return filters.empty(); }
+
+	explicit operator bool() const { return !filters.empty(); }
+
 	wxString name;
 
 	bool filterFiles{true};
