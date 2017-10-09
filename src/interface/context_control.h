@@ -16,6 +16,7 @@ class CView;
 class CViewHeader;
 class CSplitterWindowEx;
 class CState;
+class CListSearchPanel;
 
 class CContextControl final : public wxSplitterWindow, public CGlobalStateEventHandler
 {
@@ -35,6 +36,8 @@ public:
 		CRemoteListView* pRemoteListView{};
 		CViewHeader* pLocalViewHeader{};
 		CViewHeader* pRemoteViewHeader{};
+		CListSearchPanel* pLocalListSearchPanel{};
+		CListSearchPanel* pRemoteListSearchPanel{};
 
 		CSplitterWindowEx* pViewSplitter{}; // Contains local and remote splitters
 		CSplitterWindowEx* pLocalSplitter{};

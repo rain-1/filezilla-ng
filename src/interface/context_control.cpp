@@ -229,11 +229,11 @@ void CContextControl::CreateContextControls(CState& state)
 	auto remoteRecursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, state, false);
 	context_controls.pRemoteListViewPanel->SetFooter(remoteRecursiveStatus);
 
-	auto localListSearchPanel = new CListSearchPanel(context_controls.pLocalListViewPanel, context_controls.pLocalListView, &context_controls.pState->GetStateFilterManager(), true);
-	context_controls.pLocalListViewPanel->SetSearchPanel(localListSearchPanel);
+	context_controls.pLocalListSearchPanel = new CListSearchPanel(context_controls.pLocalListViewPanel, context_controls.pLocalListView, context_controls.pState, true);
+	context_controls.pLocalListViewPanel->SetSearchPanel(context_controls.pLocalListSearchPanel);
 
-	auto remoteListSearchPanel = new CListSearchPanel(context_controls.pRemoteListViewPanel, context_controls.pRemoteListView, &context_controls.pState->GetStateFilterManager(), false);
-	context_controls.pRemoteListViewPanel->SetSearchPanel(remoteListSearchPanel);
+	context_controls.pRemoteListSearchPanel = new CListSearchPanel(context_controls.pRemoteListViewPanel, context_controls.pRemoteListView, context_controls.pState, false);
+	context_controls.pRemoteListViewPanel->SetSearchPanel(context_controls.pRemoteListSearchPanel);
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
 	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);
