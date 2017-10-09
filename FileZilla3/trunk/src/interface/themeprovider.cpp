@@ -468,7 +468,13 @@ void CThemeProvider::OnOptionsChanged(changed_options_t const&)
 wxSize CThemeProvider::GetIconSize(iconSize size, bool userScaled)
 {
 	int s;
-	if (size == iconSizeSmall) {
+	if (size == iconSizeTiny) {
+		s = wxSystemSettings::GetMetric(wxSYS_SMALLICON_X) / 2;
+		if (s <= 0) {
+			s = 8;
+		}
+	}
+	else if (size == iconSizeSmall) {
 		s = wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
 		if (s <= 0) {
 			s = 16;
