@@ -29,6 +29,8 @@ class CFilterCondition
 public:
 	CFilterCondition();
 
+	bool CompileRegex();
+
 	t_filterType type;
 	int condition;
 

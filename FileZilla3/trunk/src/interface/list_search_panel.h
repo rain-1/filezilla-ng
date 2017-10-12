@@ -37,7 +37,7 @@ private:
 
 	bool m_local{};		// or remote
 	wxString m_text;
-	bool m_caseInsensitive{};
+	bool m_caseInsensitive{true};
 	bool m_useRegex{};
 	bool m_invertFilter{};
 };
