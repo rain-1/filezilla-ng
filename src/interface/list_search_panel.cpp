@@ -184,7 +184,8 @@ void CListSearchPanel::OnOptions(wxCommandEvent& ev)
 {
 	if (!m_optionsMenu) {
 		m_optionsMenu = new wxMenu;
-		m_optionsMenu->AppendCheckItem(ID_CASE_INSENSITIVE, _("Case Insensitive"));
+		wxMenuItem* item = m_optionsMenu->AppendCheckItem(ID_CASE_INSENSITIVE, _("Case Insensitive"));
+		item->Check();
 		m_optionsMenu->AppendCheckItem(ID_USE_REGEX, _("Use Regular Expressions"));
 		m_optionsMenu->AppendCheckItem(ID_INVERT_FILTER, _("Invert Filter"));
 	}
