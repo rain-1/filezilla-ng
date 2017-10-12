@@ -80,8 +80,11 @@ bool CListSearchPanel::Show(bool show)
 
 void CListSearchPanel::ApplyFilter()
 {
+	if (m_text.empty()) {
+		return;
+	}
+
 	CFilter filter;
-	filter.name = "QuickFilter";
 	filter.filterFiles = true;
 	filter.filterDirs = true;
 	filter.matchType = m_invertFilter ? CFilter::all : CFilter::not_all;
@@ -163,15 +166,17 @@ void CListSearchPanel::OnPaint(wxPaintEvent&)
 
 void CListSearchPanel::OnText(wxCommandEvent& ev)
 {
-	wxString text = m_textCtrl->GetLineText(0);
+	wxString text = m_textCtrl->GetValue();
 
 	if (text != m_text) {
 		m_text = text;
 
-		if (text.IsEmpty())
+		if (text.IsEmpty()) {
 			ResetFilter();
-		else
+		}
+		else {
 			ApplyFilter();
+		}
 	}
 }
 
