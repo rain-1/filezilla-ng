@@ -59,7 +59,7 @@ class CRemoteDataObject;
 class CRemoteRecursiveOperation;
 class CComparisonManager;
 
-class CStateFilterManager : public CFilterManager
+class CStateFilterManager final : public CFilterManager
 {
 public:
 	virtual bool FilenameFiltered(std::wstring const& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const override;
