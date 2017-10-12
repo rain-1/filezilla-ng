@@ -96,15 +96,12 @@ void CListSearchPanel::ApplyFilter()
 	condition.strValue = m_text;
 	condition.pRegEx.reset();
 	condition.condition = 0;	// "contains"
+	condition.matchCase = !m_caseInsensitive;
 
 	if (m_useRegex) {
 		condition.condition = 4;	// "matches regex"
 
-		try {
-			condition.pRegEx = std::make_shared<std::wregex>(condition.strValue.ToStdWstring());
-		}
-		catch (std::regex_error const&) {
-			condition.pRegEx.reset();
+		if (!condition.CompileRegex()) {
 			return;
 		}
 	}

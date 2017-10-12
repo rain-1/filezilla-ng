@@ -49,6 +49,24 @@ CFilterCondition::CFilterCondition()
 	value = 0;
 }
 
+bool CFilterCondition::CompileRegex()
+{
+	pRegEx.reset();
+	if ((type == filter_name || type == filter_path) && condition == 4) {
+		try {
+			auto flags = std::regex_constants::ECMAScript;
+			if (!matchCase) {
+				flags |= std::regex_constants::icase;
+			}
+			pRegEx = std::make_shared<std::wregex>(strValue.ToStdWstring(), flags);
+		}
+		catch (std::regex_error const&) {
+			return false;
+		}
+	}
+	return true;
+}
+
 bool CFilter::HasConditionOfType(t_filterType type) const
 {
 	for (std::vector<CFilterCondition>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter) {
@@ -769,17 +787,8 @@ bool CFilterManager::CompileRegexes(CFilter& filter)
 {
 	bool ret = true;
 	for (auto & condition : filter.filters) {
-		if ((condition.type == filter_name || condition.type == filter_path) && condition.condition == 4) {
-			try {
-				condition.pRegEx = std::make_shared<std::wregex>(condition.strValue.ToStdWstring());
-			}
-			catch (std::regex_error const&) {
-				condition.pRegEx.reset();
-				ret = false;
-			}
-		}
-		else {
-			condition.pRegEx.reset();
+		if (!condition.CompileRegex()) {
+			ret = false;
 		}
 	}
 
