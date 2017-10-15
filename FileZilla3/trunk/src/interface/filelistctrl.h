@@ -29,6 +29,10 @@ public:
 class CFileListCtrlSortBase
 {
 public:
+	CFileListCtrlSortBase() = default;
+	CFileListCtrlSortBase(CFileListCtrlSortBase const&) = delete;
+	CFileListCtrlSortBase& operator=(CFileListCtrlSortBase const&) = delete;
+
 	enum DirSortMode
 	{
 		dirsort_ontop,
@@ -270,7 +274,7 @@ protected:
 
 template<class CFileData> class CFileListCtrl;
 
-template<class T, typename DataEntry> class CReverseSort : public T
+template<class T, typename DataEntry> class CReverseSort final : public T
 {
 public:
 	CReverseSort(typename T::List const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
@@ -494,27 +498,6 @@ public:
 	CFileListCtrl(wxWindow* pParent, CQueueView *pQueue, bool border = false);
 	virtual ~CFileListCtrl();
 
-	class CSortComparisonObject : public std::binary_function<int,int,bool>
-	{
-	public:
-		CSortComparisonObject(CFileListCtrlSortBase* pObject)
-			: m_pObject(pObject)
-		{
-		}
-
-		void Destroy()
-		{
-			delete m_pObject;
-		}
-
-		inline bool operator()(int a, int b)
-		{
-			return m_pObject->operator ()(a, b);
-		}
-	protected:
-		CFileListCtrlSortBase* m_pObject;
-	};
-
 	void SetFilelistStatusBar(CFilelistStatusBar* pFilelistStatusBar) { m_pFilelistStatusBar = pFilelistStatusBar; }
 	CFilelistStatusBar* GetFilelistStatusBar() { return m_pFilelistStatusBar; }
 
@@ -546,7 +529,7 @@ protected:
 	void SortList(int column = -1, int direction = -1, bool updateSelections = true);
 	CFileListCtrlSortBase::DirSortMode GetDirSortMode();
 	CFileListCtrlSortBase::NameSortMode GetNameSortMode();
-	virtual CSortComparisonObject GetSortComparisonObject() = 0;
+	virtual std::unique_ptr<CFileListCtrlSortBase> GetSortComparisonObject() = 0;
 
 	// An empty path denotes a virtual file
 	std::wstring GetType(std::wstring name, bool dir, std::wstring const& path = std::wstring());
@@ -625,5 +608,21 @@ private:
 #ifdef FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
 #include "filelistctrl.cpp"
 #endif
+
+class SortPredicate
+{
+public:
+	SortPredicate() = delete;
+	SortPredicate(std::unique_ptr<CFileListCtrlSortBase> const& ref)
+		: p_(ref.get())
+	{}
+
+	inline bool operator()(int lhs, int rhs) {
+		return (*p_)(lhs, rhs);
+	}
+
+public:
+	CFileListCtrlSortBase const* p_;
+};
 
 #endif

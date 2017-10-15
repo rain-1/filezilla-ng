@@ -103,7 +103,7 @@ protected:
 
 	virtual int64_t ItemGetSize(int index) const;
 
-	CFileListCtrl<CGenericFileData>::CSortComparisonObject GetSortComparisonObject();
+	virtual std::unique_ptr<CFileListCtrlSortBase> GetSortComparisonObject() override;
 
 	CSearchDialog *m_searchDialog;
 
@@ -183,71 +183,93 @@ int64_t CSearchDialogFileList::ItemGetSize(int index) const
 	}
 }
 
-CFileListCtrl<CGenericFileData>::CSortComparisonObject CSearchDialogFileList::GetSortComparisonObject()
+std::unique_ptr<CFileListCtrlSortBase> CSearchDialogFileList::GetSortComparisonObject()
 {
 	CFileListCtrlSortBase::DirSortMode dirSortMode = GetDirSortMode();
 	CFileListCtrlSortBase::NameSortMode nameSortMode = GetNameSortMode();
 
 	if (mode_ == CSearchDialog::search_mode::local) {
 		if (!m_sortDirection) {
-			if (m_sortColumn == 1)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortPath<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 2)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortSize<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 3)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortType<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 4)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortTime<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-
-			else
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortNamePath<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			if (m_sortColumn == 1) {
+				return std::make_unique<CFileListCtrlSortPath<std::vector<CLocalSearchFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 2) {
+				return std::make_unique<CFileListCtrlSortSize<std::vector<CLocalSearchFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 3) {
+				return std::make_unique<CFileListCtrlSortType<std::vector<CLocalSearchFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 4) {
+				return std::make_unique<CFileListCtrlSortTime<std::vector<CLocalSearchFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else {
+				return std::make_unique<CFileListCtrlSortNamePath<std::vector<CLocalSearchFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
 		}
 		else {
-			if (m_sortColumn == 1)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPath<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 2)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortSize<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 3)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortType<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 4)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortTime<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
-
-			else
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortNamePath<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			if (m_sortColumn == 1) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortPath<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 2) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortSize<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 3) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortType<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 4) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortTime<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else {
+				return std::make_unique<CReverseSort<CFileListCtrlSortNamePath<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>>(localFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
 		}
 	}
 	else {
 		if (!m_sortDirection) {
-			if (m_sortColumn == 1)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortPath<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 2)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortSize<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 3)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortType<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 4)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortTime<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 5)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortPermissions<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 6)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortOwnerGroup<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortNamePath<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			if (m_sortColumn == 1) {
+				return std::make_unique<CFileListCtrlSortPath<std::vector<CRemoteSearchFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 2) {
+				return std::make_unique<CFileListCtrlSortSize<std::vector<CRemoteSearchFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 3) {
+				return std::make_unique<CFileListCtrlSortType<std::vector<CRemoteSearchFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 4) {
+				return std::make_unique<CFileListCtrlSortTime<std::vector<CRemoteSearchFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 5) {
+				return std::make_unique<CFileListCtrlSortPermissions<std::vector<CRemoteSearchFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 6) {
+				return std::make_unique<CFileListCtrlSortOwnerGroup<std::vector<CRemoteSearchFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else {
+				return std::make_unique<CFileListCtrlSortNamePath<std::vector<CRemoteSearchFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
 		}
 		else {
-			if (m_sortColumn == 1)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPath<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 2)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortSize<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 3)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortType<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 4)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortTime<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 5)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPermissions<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else if (m_sortColumn == 6)
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortOwnerGroup<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
-			else
-				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortNamePath<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			if (m_sortColumn == 1) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortPath<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 2) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortSize<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 3) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortType<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 4) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortTime<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 5) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortPermissions<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else if (m_sortColumn == 6) {
+				return std::make_unique<CReverseSort<CFileListCtrlSortOwnerGroup<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
+			else {
+				return std::make_unique<CReverseSort<CFileListCtrlSortNamePath<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this);
+			}
 		}
 	}
 }
@@ -540,7 +562,7 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 		added_indexes.reserve(listing->GetCount());
 	}
 
-	CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = m_results->GetSortComparisonObject();
+	std::unique_ptr<CFileListCtrlSortBase> compare = m_results->GetSortComparisonObject();
 	for (unsigned int i = 0; i < listing->GetCount(); ++i) {
 		const CDirentry& entry = (*listing)[i];
 
@@ -557,7 +579,7 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 		data.icon = entry.is_dir() ? m_results->m_dirIcon : -2;
 		m_results->m_fileData.push_back(data);
 
-		auto insertPos = std::lower_bound(m_results->m_indexMapping.begin(), m_results->m_indexMapping.end(), old_count + added_count, compare);
+		auto insertPos = std::lower_bound(m_results->m_indexMapping.begin(), m_results->m_indexMapping.end(), old_count + added_count, SortPredicate(compare));
 		int const added_index = insertPos - m_results->m_indexMapping.begin();
 		m_results->m_indexMapping.insert(insertPos, old_count + added_count++);
 
@@ -575,7 +597,6 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 		else
 			m_results->GetFilelistStatusBar()->AddFile(entry.size);
 	}
-	compare.Destroy();
 
 	if (added_count) {
 		m_results->SetItemCount(old_count + added_count);
@@ -598,7 +619,7 @@ void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing co
 		added_indexes.reserve(listing.files.size() + listing.dirs.size());
 	}
 
-	CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = m_results->GetSortComparisonObject();
+	std::unique_ptr<CFileListCtrlSortBase> compare = m_results->GetSortComparisonObject();
 
 	auto const& add_entry = [&](CLocalRecursiveOperation::listing::entry const& entry, bool dir) {
 		if (!CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, path, dir, entry.size, entry.attributes, entry.time)) {
@@ -615,7 +636,7 @@ void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing co
 		data.icon = dir ? m_results->m_dirIcon : -2;
 		m_results->m_fileData.push_back(data);
 
-		auto insertPos = std::lower_bound(m_results->m_indexMapping.begin(), m_results->m_indexMapping.end(), old_count + added_count, compare);
+		auto insertPos = std::lower_bound(m_results->m_indexMapping.begin(), m_results->m_indexMapping.end(), old_count + added_count, SortPredicate(compare));
 		int const added_index = insertPos - m_results->m_indexMapping.begin();
 		m_results->m_indexMapping.insert(insertPos, old_count + added_count++);
 
@@ -642,7 +663,6 @@ void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing co
 	for (auto const& dir : listing.dirs) {
 		add_entry(dir, true);
 	}
-	compare.Destroy();
 
 	if (added_count) {
 		m_results->SetItemCount(old_count + added_count);
