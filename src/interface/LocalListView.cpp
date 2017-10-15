@@ -722,40 +722,50 @@ CLocalFileData* CLocalListView::GetData(unsigned int item)
 
 bool CLocalListView::IsItemValid(unsigned int item) const
 {
-	if (item >= m_indexMapping.size())
+	if (item >= m_indexMapping.size()) {
 		return false;
+	}
 
 	unsigned int index = m_indexMapping[item];
-	if (index >= m_fileData.size())
+	if (index >= m_fileData.size()) {
 		return false;
+	}
 
 	return true;
 }
 
-CFileListCtrl<CLocalFileData>::CSortComparisonObject CLocalListView::GetSortComparisonObject()
+std::unique_ptr<CFileListCtrlSortBase> CLocalListView::GetSortComparisonObject()
 {
 	CFileListCtrlSortBase::DirSortMode dirSortMode = GetDirSortMode();
 	CFileListCtrlSortBase::NameSortMode nameSortMode = GetNameSortMode();
 
 	if (!m_sortDirection) {
-		if (m_sortColumn == 1)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CFileListCtrlSortSize<std::vector<CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 2)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CFileListCtrlSortType<std::vector<CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 3)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CFileListCtrlSortTime<std::vector<CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CFileListCtrlSortName<std::vector<CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
+		if (m_sortColumn == 1) {
+			return std::make_unique<CFileListCtrlSortSize<std::vector<CLocalFileData>, CLocalFileData>>(m_fileData, m_fileData, dirSortMode, nameSortMode, this);
+		}
+		else if (m_sortColumn == 2) {
+			return std::make_unique<CFileListCtrlSortType<std::vector<CLocalFileData>, CLocalFileData>>(m_fileData, m_fileData, dirSortMode, nameSortMode, this);
+		}
+		else if (m_sortColumn == 3) {
+			return std::make_unique<CFileListCtrlSortTime<std::vector<CLocalFileData>, CLocalFileData>>(m_fileData, m_fileData, dirSortMode, nameSortMode, this);
+		}
+		else {
+			return std::make_unique<CFileListCtrlSortName<std::vector<CLocalFileData>, CLocalFileData>>(m_fileData, m_fileData, dirSortMode, nameSortMode, this);
+		}
 	}
 	else {
-		if (m_sortColumn == 1)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortSize<std::vector<CLocalFileData>, CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 2)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortType<std::vector<CLocalFileData>, CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 3)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortTime<std::vector<CLocalFileData>, CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortName<std::vector<CLocalFileData>, CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
+		if (m_sortColumn == 1) {
+			return std::make_unique<CReverseSort<CFileListCtrlSortSize<std::vector<CLocalFileData>, CLocalFileData>, CLocalFileData>>(m_fileData, m_fileData, dirSortMode, nameSortMode, this);
+		}
+		else if (m_sortColumn == 2) {
+			return std::make_unique<CReverseSort<CFileListCtrlSortType<std::vector<CLocalFileData>, CLocalFileData>, CLocalFileData>>(m_fileData, m_fileData, dirSortMode, nameSortMode, this);
+		}
+		else if (m_sortColumn == 3) {
+			return std::make_unique<CReverseSort<CFileListCtrlSortTime<std::vector<CLocalFileData>, CLocalFileData>, CLocalFileData>>(m_fileData, m_fileData, dirSortMode, nameSortMode, this);
+		}
+		else {
+			return std::make_unique<CReverseSort<CFileListCtrlSortName<std::vector<CLocalFileData>, CLocalFileData>, CLocalFileData>>(m_fileData, m_fileData, dirSortMode, nameSortMode, this);
+		}
 	}
 }
 
@@ -1473,11 +1483,11 @@ void CLocalListView::RefreshFile(const wxString& file)
 
 	// Find correct position in index mapping
 	std::vector<unsigned int>::iterator start = m_indexMapping.begin();
-	if (m_hasParent)
+	if (m_hasParent) {
 		++start;
-	CFileListCtrl<CLocalFileData>::CSortComparisonObject compare = GetSortComparisonObject();
-	std::vector<unsigned int>::iterator insertPos = std::lower_bound(start, m_indexMapping.end(), index, compare);
-	compare.Destroy();
+	}
+	std::unique_ptr<CFileListCtrlSortBase> compare = GetSortComparisonObject();
+	std::vector<unsigned int>::iterator insertPos = std::lower_bound(start, m_indexMapping.end(), index, SortPredicate(compare));
 
 	const int item = insertPos - m_indexMapping.begin();
 	m_indexMapping.insert(insertPos, index);

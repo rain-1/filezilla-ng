@@ -51,7 +51,7 @@ protected:
 	bool IsItemValid(unsigned int item) const;
 	int GetItemIndex(unsigned int item) const;
 
-	virtual CSortComparisonObject GetSortComparisonObject();
+	virtual std::unique_ptr<CFileListCtrlSortBase> GetSortComparisonObject() override;
 
 	virtual void OnStateChange(t_statechange_notifications notification, const wxString& data, const void* data2);
 	void ApplyCurrentFilter();
