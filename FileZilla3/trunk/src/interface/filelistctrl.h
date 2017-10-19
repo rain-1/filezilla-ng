@@ -605,10 +605,6 @@ private:
 	void OnKeyDown(wxKeyEvent& event);
 };
 
-#ifdef FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
-#include "filelistctrl.cpp"
-#endif
-
 class SortPredicate
 {
 public:
@@ -624,5 +620,9 @@ public:
 public:
 	CFileListCtrlSortBase const* p_;
 };
+
+#ifdef FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
+#include "filelistctrl.cpp"
+#endif
 
 #endif
