@@ -848,11 +848,13 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 
 void CWrapEngine::SetWidthToCache(const char* name, int width)
 {
-	if (!m_use_cache)
+	if (!m_use_cache) {
 		return;
+	}
 
-	if (!name || !*name)
+	if (!name || !*name) {
 		return;
+	}
 
 	// We have to synchronize access to layout.xml so that multiple processes don't write
 	// to the same file or one is reading while the other one writes.
@@ -1071,7 +1073,7 @@ bool CWrapEngine::LoadCache()
 		return true;
 	}
 
-	if (!xml.Save(true)) {
+	if (!xml.Save(false)) {
 		m_use_cache = false;
 	}
 	return true;
