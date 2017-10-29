@@ -5,6 +5,7 @@
 #include <wx/ffile.h>
 #include <wx/log.h>
 
+#include <libfilezilla/file.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
 CXmlFile::CXmlFile(std::wstring const& fileName, std::string const& root)
@@ -314,8 +315,9 @@ bool CXmlFile::SaveXmlFile()
 	wxString redirectedName = GetRedirectedName();
 	if (fz::local_filesys::get_file_info(fz::to_native(redirectedName), isLink, 0, 0, &flags) == fz::local_filesys::file) {
 #ifdef __WXMSW__
-		if (flags & FILE_ATTRIBUTE_HIDDEN)
+		if (flags & FILE_ATTRIBUTE_HIDDEN) {
 			SetFileAttributes(redirectedName.c_str(), flags & ~FILE_ATTRIBUTE_HIDDEN);
+		}
 #endif
 
 		exists = true;
@@ -330,8 +332,38 @@ bool CXmlFile::SaveXmlFile()
 		}
 	}
 
-	bool success = m_document.save_file(static_cast<wchar_t const*>(redirectedName.c_str()));
+	struct flushing_xml_writer final : public pugi::xml_writer
+	{
+	public:
+		static bool save(pugi::xml_document const& document, std::wstring const& filename)
+		{
+			flushing_xml_writer writer(filename);
+			if (!writer.file_.opened()) {
+				return false;
+			}
+			document.save(writer);
 
+			return writer.file_.opened() && writer.file_.fsync();
+		}
+
+	private:
+		flushing_xml_writer(std::wstring const& filename)
+			: file_(fz::to_native(filename), fz::file::writing)
+		{
+		}
+
+		virtual void write(const void* data, size_t size) override {
+			if (file_.opened()) {
+				if (file_.write(data, static_cast<int64_t>(size)) != static_cast<int64_t>(size)) {
+					file_.close();
+				}
+			}
+		}
+
+		fz::file file_;
+	};
+
+	bool success = flushing_xml_writer::save(m_document, redirectedName.ToStdWstring());
 	if (!success) {
 		wxRemoveFile(redirectedName);
 		if (exists) {
@@ -342,8 +374,9 @@ bool CXmlFile::SaveXmlFile()
 		return false;
 	}
 
-	if (exists)
+	if (exists) {
 		wxRemoveFile(redirectedName + _T("~"));
+	}
 
 	return true;
 }
