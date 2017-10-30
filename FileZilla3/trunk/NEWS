@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.29.0-rc1 (2017-10-30)
+
++ Added new quick search filter to file lists, accessed through Ctrl+F
++ FTP over TLS: Mismatched hostnames are now highlighted in red in the certificate verification dialog
++ Filters using regular expressions can now be case-insensitive
+- Explicitly wait for the settings to be written to disk before removing the backup file to prevent loss of data in case of system crashes
+
 3.28.0 (2017-09-29)
 
 + *nix: Official Linux binaries are now built for Debian 9 (Stretch)
