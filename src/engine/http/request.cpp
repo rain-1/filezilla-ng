@@ -158,29 +158,18 @@ int CHttpRequestOpData::OnReceive()
 			return FZ_REPLY_WOULDBLOCK;
 		}
 
-		if (!recv_buffer_) {
-			recv_buffer_ = std::make_unique<unsigned char[]>(m_recvBufferLen);
-			m_recvBufferPos = 0;
-		}
-
-		unsigned int len = m_recvBufferLen - m_recvBufferPos;
-		if (!len) {
-			LogMessage(MessageType::Debug_Warning, L"Read data isn't being consumed.");
-			return FZ_REPLY_INTERNALERROR;
-		}
-
 		int error;
-		int read = controlSocket_.m_pBackend->Read(recv_buffer_.get() + m_recvBufferPos, len, error);
-		if (read == -1) {
+		size_t const recv_size = 1024 * 16;
+		int read = controlSocket_.m_pBackend->Read(recv_buffer_.get(recv_size), recv_size, error);
+		if (read <= -1) {
 			if (error != EAGAIN) {
 				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 			}
 			return FZ_REPLY_WOULDBLOCK;
 		}
+		recv_buffer_.add(static_cast<size_t>(read));
 
 		controlSocket_.SetActive(CFileZillaEngine::recv);
-
-		m_recvBufferPos += read;
 
 		if (!got_header_) {
 			if (!read) {
@@ -203,7 +192,7 @@ int CHttpRequestOpData::OnReceive()
 		}
 		else {
 			if (!read) {
-				assert(!m_recvBufferPos);
+				assert(recv_buffer_.empty());
 
 				if (responseContentLength_ != -1 && receivedData_ != responseContentLength_) {
 					return FZ_REPLY_ERROR;
@@ -213,8 +202,8 @@ int CHttpRequestOpData::OnReceive()
 				}
 			}
 			else {
-				int res = ProcessData(recv_buffer_.get(), m_recvBufferPos);
-				m_recvBufferPos = 0;
+				int res = ProcessData(recv_buffer_.get(), recv_buffer_.size());
+				recv_buffer_.clear();
 				if (res != FZ_REPLY_CONTINUE) {
 					return res;
 				}
@@ -234,8 +223,8 @@ int CHttpRequestOpData::ParseHeader()
 	// The calling operation is responsible for things like redirect parsing.
 	for (;;) {
 		// Find line ending
-		unsigned int i = 0;
-		for (i = 0; (i + 1) < m_recvBufferPos; ++i) {
+		size_t i = 0;
+		for (i = 0; (i + 1) < recv_buffer_.size(); ++i) {
 			if (recv_buffer_[i] == '\r') {
 				if (recv_buffer_[i + 1] != '\n') {
 					LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Server not sending proper line endings"));
@@ -243,27 +232,30 @@ int CHttpRequestOpData::ParseHeader()
 				}
 				break;
 			}
+			if (!recv_buffer_[i]) {
+				LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Null character in line"));
+				return FZ_REPLY_ERROR;
+			}
 		}
-		if ((i + 1) >= m_recvBufferPos) {
-			if (m_recvBufferPos == m_recvBufferLen) {
-				// We don't support header lines larger than 4096
+		if ((i + 1) >= recv_buffer_.size()) {
+			size_t const max_line_size = 8192;
+			if (recv_buffer_.size() >= max_line_size) {
 				LogMessage(MessageType::Error, _("Too long header line"));
 				return FZ_REPLY_ERROR;
 			}
 			return FZ_REPLY_WOULDBLOCK;
 		}
 
-		recv_buffer_[i] = 0;
-		std::wstring wline = fz::to_wstring_from_utf8(reinterpret_cast<char*>(recv_buffer_.get()));
+		std::wstring wline = fz::to_wstring_from_utf8(reinterpret_cast<char const*>(recv_buffer_.get()), i);
 		if (wline.empty()) {
-			wline = fz::to_wstring(reinterpret_cast<char*>(recv_buffer_.get()));
+			wline = fz::to_wstring(std::string(recv_buffer_.get(), recv_buffer_.get() + i));
 		}
 		if (!wline.empty()) {
 			controlSocket_.LogMessageRaw(MessageType::Response, wline);
 		}
 
 		if (!response_.code_) {
-			if (m_recvBufferPos < 16 || memcmp(recv_buffer_.get(), "HTTP/1.", 7)) {
+			if (recv_buffer_.size() < 16 || memcmp(recv_buffer_.get(), "HTTP/1.", 7)) {
 				// Invalid HTTP Status-Line
 				LogMessage(MessageType::Error, _("Invalid HTTP Response"));
 				return FZ_REPLY_ERROR;
@@ -282,8 +274,7 @@ int CHttpRequestOpData::ParseHeader()
 		}
 		else {
 			if (!i) {
-				memmove(recv_buffer_.get(), recv_buffer_.get() + 2, m_recvBufferPos - 2);
-				m_recvBufferPos -= 2;
+				recv_buffer_.consume(2);
 
 				// End of header
 				int res = ProcessCompleteHeader();
@@ -300,7 +291,7 @@ int CHttpRequestOpData::ParseHeader()
 					return ParseChunkedData();
 				}
 				else {
-					if (!m_recvBufferPos) {
+					if (recv_buffer_.empty()) {
 						if (!responseContentLength_) {
 							opState = request_done;
 							return FZ_REPLY_OK;
@@ -310,8 +301,8 @@ int CHttpRequestOpData::ParseHeader()
 						}
 					}
 
-					int res = ProcessData(recv_buffer_.get(), m_recvBufferPos);
-					m_recvBufferPos = 0;
+					int res = ProcessData(recv_buffer_.get(), recv_buffer_.size());
+					recv_buffer_.clear();
 					if (res != FZ_REPLY_CONTINUE) {
 						return res;
 					}
@@ -330,10 +321,9 @@ int CHttpRequestOpData::ParseHeader()
 			response_.headers_[line.substr(0, pos)] = line.substr(pos + 2);
 		}
 
-		memmove(recv_buffer_.get(), recv_buffer_.get() + i + 2, m_recvBufferPos - i - 2);
-		m_recvBufferPos -= i + 2;
+		recv_buffer_.consume(i + 2);
 
-		if (!m_recvBufferPos) {
+		if (recv_buffer_.empty()) {
 			break;
 		}
 	}
@@ -382,7 +372,7 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 
 	if (res == FZ_REPLY_CONTINUE) {
 		if (request_.verb_ == "HEAD" || response_.code_prohobits_body()) {
-			if (m_recvBufferPos) {
+			if (!recv_buffer_.empty()) {
 				LogMessage(MessageType::Error, _("Malformed response: Server sent response body with a request verb or response code that disallows a response body."));
 				return FZ_REPLY_ERROR;
 			}
@@ -398,54 +388,47 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 
 int CHttpRequestOpData::ParseChunkedData()
 {
-	unsigned char* p = recv_buffer_.get();
-	unsigned int len = m_recvBufferPos;
-
-	for (;;) {
+	while (!recv_buffer_.empty()) {
 		if (chunk_data_.size != 0) {
-			unsigned int dataLen = len;
-			if (chunk_data_.size < len) {
-				dataLen = static_cast<unsigned int>(chunk_data_.size);
+			size_t dataLen = recv_buffer_.size();
+			if (chunk_data_.size < recv_buffer_.size()) {
+				dataLen = chunk_data_.size;
 			}
-			int res = ProcessData(p, dataLen);
+			int res = ProcessData(recv_buffer_.get(), dataLen);
 			if (res != FZ_REPLY_CONTINUE) {
 				return res;
 			}
-
+			recv_buffer_.consume(dataLen);
 			chunk_data_.size -= dataLen;
-			p += dataLen;
-			len -= dataLen;
 
 			if (chunk_data_.size == 0) {
 				chunk_data_.terminateChunk = true;
 			}
-
-			if (!len) {
-				break;
-			}
 		}
 
 		// Find line ending
-		unsigned int i = 0;
-		for (i = 0; (i + 1) < len; ++i) {
-			if (p[i] == '\r') {
-				if (p[i + 1] != '\n') {
+		size_t i = 0;
+		for (i = 0; (i + 1) < recv_buffer_.size(); ++i) {
+			if (recv_buffer_[i] == '\r') {
+				if (recv_buffer_[i + 1] != '\n') {
 					LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Wrong line endings"));
 					return FZ_REPLY_ERROR;
 				}
 				break;
 			}
+			if (!recv_buffer_[i]) {
+				LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Null character in line"));
+				return FZ_REPLY_ERROR;
+			}
 		}
-		if ((i + 1) >= len) {
-			if (len == m_recvBufferLen) {
-				// We don't support lines larger than 4096
+		if ((i + 1) >= recv_buffer_.size()) {
+			size_t const max_line_size = 8192;
+			if (recv_buffer_.size() >= max_line_size) {
 				LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Line length exceeded"));
 				return FZ_REPLY_ERROR;
 			}
 			break;
 		}
-
-		p[i] = 0;
 
 		if (chunk_data_.terminateChunk) {
 			if (i) {
@@ -461,10 +444,7 @@ int CHttpRequestOpData::ParseChunkedData()
 				// We're done
 				opState = request_done;
 
-				len -= 2;
-				p += 2;
-				memmove(recv_buffer_.get(), p, len);
-				m_recvBufferPos = len;
+				recv_buffer_.consume(2);
 
 				return FZ_REPLY_OK;
 			}
@@ -473,7 +453,8 @@ int CHttpRequestOpData::ParseChunkedData()
 		}
 		else {
 			// Read chunk size
-			for (unsigned char* q = p; *q && *q != ';' && *q != ' '; ++q) {
+			unsigned char const* end = recv_buffer_.get() + i;
+			for (unsigned char* q = recv_buffer_.get(); q != end && *q != ';' && *q != ' '; ++q) {
 				chunk_data_.size *= 16;
 				if (*q >= '0' && *q <= '9') {
 					chunk_data_.size += *q - '0';
@@ -495,17 +476,7 @@ int CHttpRequestOpData::ParseChunkedData()
 			}
 		}
 
-		p += i + 2;
-		len -= i + 2;
-
-		if (!len) {
-			break;
-		}
-	}
-
-	if (p != recv_buffer_.get()) {
-		memmove(recv_buffer_.get(), p, len);
-		m_recvBufferPos = len;
+		recv_buffer_.consume(i + 2);
 	}
 
 	return FZ_REPLY_WOULDBLOCK;
@@ -578,8 +549,8 @@ int CHttpRequestOpData::Reset(int result)
 		}
 		controlSocket_.ResetSocket();
 	}
-	else if (m_recvBufferPos) {
-		LogMessage(MessageType::Debug_Verbose, L"Closing connection, the receive buffer isn't empty but at %d", m_recvBufferPos);
+	else if (!recv_buffer_.empty()) {
+		LogMessage(MessageType::Debug_Verbose, L"Closing connection, the receive buffer isn't empty but at %d", recv_buffer_.size());
 		controlSocket_.ResetSocket();
 	}
 	else {

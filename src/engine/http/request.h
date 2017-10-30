@@ -3,6 +3,8 @@
 
 #include "httpcontrolsocket.h"
 
+#include <libfilezilla/buffer.hpp>
+
 class CServerPath;
 
 enum requestStates
@@ -42,9 +44,7 @@ private:
 	HttpRequest & request_;
 	HttpResponse & response_;
 
-	std::unique_ptr<unsigned char[]> recv_buffer_;
-	unsigned int m_recvBufferPos{};
-	static const unsigned int m_recvBufferLen = 8192;
+	fz::buffer recv_buffer_;
 	bool got_header_{};
 
 	enum transferEncodings
@@ -59,7 +59,7 @@ private:
 	{
 		bool getTrailer{};
 		bool terminateChunk{};
-		int64_t size{};
+		uint64_t size{};
 	} chunk_data_;
 
 	uint64_t dataToSend_{};
