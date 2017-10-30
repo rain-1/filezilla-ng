@@ -348,7 +348,7 @@ bool CXmlFile::SaveXmlFile()
 
 	private:
 		flushing_xml_writer(std::wstring const& filename)
-			: file_(fz::to_native(filename), fz::file::writing)
+			: file_(fz::to_native(filename), fz::file::writing, fz::file::empty)
 		{
 		}
 
