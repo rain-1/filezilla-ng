@@ -16,17 +16,16 @@
 
 #include <algorithm>
 
-fz::mutex CFileZillaEnginePrivate::mutex_;
+fz::mutex CFileZillaEnginePrivate::global_mutex_{false};
 std::vector<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
 std::atomic_int CFileZillaEnginePrivate::m_activeStatus[2] = {{0}, {0}};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
 namespace {
-unsigned int get_next_engine_id(fz::mutex& mutex)
+unsigned int get_next_engine_id()
 {
-	fz::scoped_lock lock(mutex);
-	static unsigned int id = 0;
-	return ++id;
+	static std::atomic<int> next_{};
+	return ++next_;
 }
 }
 
@@ -34,7 +33,7 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	: event_handler(context.GetEventLoop())
 	, transfer_status_(*this)
 	, notification_handler_(notificationHandler)
-	, m_engine_id(get_next_engine_id(mutex_))
+	, m_engine_id(get_next_engine_id())
 	, m_options(context.GetOptions())
 	, m_rateLimiter(context.GetRateLimiter())
 	, directory_cache_(context.GetDirectoryCache())
@@ -71,7 +70,7 @@ CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 	remove_handler();
 	m_maySendNotificationEvent = false;
 
-	m_pControlSocket.reset();
+	controlSocket_.reset();
 	m_pCurrentCommand.reset();
 
 	// Delete notification list
@@ -112,11 +111,12 @@ bool CFileZillaEnginePrivate::IsBusy() const
 bool CFileZillaEnginePrivate::IsConnected() const
 {
 	fz::scoped_lock lock(mutex_);
-	if (!m_pControlSocket) {
+	if (!controlSocket_) {
 		return false;
 	}
 
-	return m_pControlSocket->Connected();
+	// FIXME: This is unsafe!
+	return controlSocket_->Connected();
 }
 
 const CCommand *CFileZillaEnginePrivate::GetCurrentCommand() const
@@ -132,7 +132,7 @@ Command CFileZillaEnginePrivate::GetCurrentCommandId() const
 		return Command::none;
 	}
 	else {
-		return GetCurrentCommand()->GetId();
+		return m_pCurrentCommand->GetId();
 	}
 }
 
@@ -297,7 +297,7 @@ int CFileZillaEnginePrivate::Connect(CConnectCommand const& command)
 	// Need to delete before setting m_pCurrentCommand.
 	// The destructor can call CFileZillaEnginePrivate::ResetOperation
 	// which would delete m_pCurrentCommand
-	m_pControlSocket.reset();
+	controlSocket_.reset();
 	m_nControlSocketError = 0;
 
 	auto const& server = command.GetServer();
@@ -314,9 +314,9 @@ int CFileZillaEnginePrivate::Connect(CConnectCommand const& command)
 int CFileZillaEnginePrivate::Disconnect(CDisconnectCommand const&)
 {
 	int res = FZ_REPLY_OK;
-	if (m_pControlSocket) {
-		res = m_pControlSocket->Disconnect();
-		m_pControlSocket.reset();
+	if (controlSocket_) {
+		res = controlSocket_->Disconnect();
+		controlSocket_.reset();
 	}
 
 	return res;
@@ -329,7 +329,7 @@ int CFileZillaEnginePrivate::List(CListCommand const& command)
 	bool const avoid = (command.GetFlags() & LIST_FLAG_AVOID) != 0;
 
 	if (!refresh && !command.GetPath().empty()) {
-		CServer const& server = m_pControlSocket->GetCurrentServer();
+		CServer const& server = controlSocket_->GetCurrentServer();
 		if (server) {
 			CServerPath path(path_cache_.Lookup(server, command.GetPath(), command.GetSubDir()));
 			if (path.empty()) {
@@ -366,13 +366,13 @@ int CFileZillaEnginePrivate::List(CListCommand const& command)
 		}
 	}
 
-	m_pControlSocket->List(command.GetPath(), command.GetSubDir(), flags);
+	controlSocket_->List(command.GetPath(), command.GetSubDir(), flags);
 	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::FileTransfer(CFileTransferCommand const& command)
 {
-	m_pControlSocket->FileTransfer(command.GetLocalFile(), command.GetRemotePath(), command.GetRemoteFile(), command.Download(), command.GetTransferSettings());
+	controlSocket_->FileTransfer(command.GetLocalFile(), command.GetRemotePath(), command.GetRemoteFile(), command.Download(), command.GetTransferSettings());
 	return FZ_REPLY_CONTINUE;
 }
 
@@ -382,7 +382,7 @@ int CFileZillaEnginePrivate::RawCommand(CRawCommand const& command)
 		fz::scoped_lock lock(notification_mutex_);
 		queue_logs_ = false;
 	}
-	m_pControlSocket->RawCommand(command.GetCommand());
+	controlSocket_->RawCommand(command.GetCommand());
 	return FZ_REPLY_CONTINUE;
 }
 
@@ -394,37 +394,37 @@ int CFileZillaEnginePrivate::Delete(CDeleteCommand& command)
 	else {
 		m_pLogging->LogMessage(MessageType::Status, _("Deleting %u files from \"%s\""), static_cast<unsigned int>(command.GetFiles().size()), command.GetPath().GetPath());
 	}
-	m_pControlSocket->Delete(command.GetPath(), command.ExtractFiles());
+	controlSocket_->Delete(command.GetPath(), command.ExtractFiles());
 	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::RemoveDir(CRemoveDirCommand const& command)
 {
-	m_pControlSocket->RemoveDir(command.GetPath(), command.GetSubDir());
+	controlSocket_->RemoveDir(command.GetPath(), command.GetSubDir());
 	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::Mkdir(CMkdirCommand const& command)
 {
-	m_pControlSocket->Mkdir(command.GetPath());
+	controlSocket_->Mkdir(command.GetPath());
 	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::Rename(CRenameCommand const& command)
 {
-	m_pControlSocket->Rename(command);
+	controlSocket_->Rename(command);
 	return FZ_REPLY_CONTINUE;
 }
 
 int CFileZillaEnginePrivate::Chmod(CChmodCommand const& command)
 {
-	m_pControlSocket->Chmod(command);
+	controlSocket_->Chmod(command);
 	return FZ_REPLY_CONTINUE;
 }
 
 void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, bool critical)
 {
-	fz::scoped_lock lock(mutex_);
+	fz::scoped_lock lock(global_mutex_);
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
 	while (iter != m_failedLogins.end()) {
 		fz::duration const span = fz::monotonic_clock::now() - iter->time;
@@ -449,7 +449,7 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 
 fz::duration CFileZillaEnginePrivate::GetRemainingReconnectDelay(CServer const& server)
 {
-	fz::scoped_lock lock(mutex_);
+	fz::scoped_lock lock(global_mutex_);
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
 	while (iter != m_failedLogins.end()) {
 		fz::duration const span = fz::monotonic_clock::now() - iter->time;
@@ -485,15 +485,15 @@ void CFileZillaEnginePrivate::OnTimer(fz::timer_id)
 		return;
 	}
 
-	m_pControlSocket.reset();
+	controlSocket_.reset();
 
 	int res = ContinueConnect();
 	res |= m_nControlSocketError;
 	m_nControlSocketError = 0;
 
 	if (res == FZ_REPLY_CONTINUE) {
-		assert(m_pControlSocket);
-		m_pControlSocket->SendNextCommand();
+		assert(controlSocket_);
+		controlSocket_->SendNextCommand();
 	}
 	else if (res != FZ_REPLY_WOULDBLOCK) {
 		ResetOperation(res);
@@ -525,18 +525,18 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	case FTPS:
 	case FTPES:
 	case INSECURE_FTP:
-		m_pControlSocket = std::make_unique<CFtpControlSocket>(*this);
+		controlSocket_ = std::make_unique<CFtpControlSocket>(*this);
 		break;
 	case SFTP:
-		m_pControlSocket = std::make_unique<CSftpControlSocket>(*this);
+		controlSocket_ = std::make_unique<CSftpControlSocket>(*this);
 		break;
 	case HTTP:
 	case HTTPS:
-		m_pControlSocket = std::make_unique<CHttpControlSocket>(*this);
+		controlSocket_ = std::make_unique<CHttpControlSocket>(*this);
 		break;
 #if ENABLE_STORJ
 	case STORJ:
-		m_pControlSocket = std::make_unique<CStorjControlSocket>(*this);
+		controlSocket_ = std::make_unique<CStorjControlSocket>(*this);
 		break;
 #endif
 	default:
@@ -544,7 +544,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 		return FZ_REPLY_SYNTAXERROR|FZ_REPLY_DISCONNECTED;
 	}
 
-	m_pControlSocket->Connect(server, pConnectCommand->GetCredentials());
+	controlSocket_->Connect(server, pConnectCommand->GetCredentials());
 	return FZ_REPLY_CONTINUE;
 }
 
@@ -552,8 +552,8 @@ void CFileZillaEnginePrivate::InvalidateCurrentWorkingDirs(const CServerPath& pa
 {
 	fz::scoped_lock lock(mutex_);
 
-	assert(m_pControlSocket);
-	CServer const& ownServer  = m_pControlSocket->GetCurrentServer();
+	assert(controlSocket_);
+	CServer const& ownServer  = controlSocket_->GetCurrentServer();
 	assert(ownServer);
 
 	for (auto & engine : m_engineList) {
@@ -561,16 +561,16 @@ void CFileZillaEnginePrivate::InvalidateCurrentWorkingDirs(const CServerPath& pa
 			continue;
 		}
 
-		if (!engine->m_pControlSocket) {
+		if (!engine->controlSocket_) {
 			continue;
 		}
 
-		CServer const& server = engine->m_pControlSocket->GetCurrentServer();
+		CServer const& server = engine->controlSocket_->GetCurrentServer();
 		if (server != ownServer) {
 			continue;
 		}
 
-		engine->m_pControlSocket->InvalidateCurrentWorkingDir(path);
+		engine->controlSocket_->InvalidateCurrentWorkingDir(path);
 	}
 }
 
@@ -597,7 +597,7 @@ int CFileZillaEnginePrivate::CheckCommandPreconditions(CCommand const& command, 
 	else if (command.GetId() != Command::connect && command.GetId() != Command::disconnect && !IsConnected()) {
 		return FZ_REPLY_NOTCONNECTED;
 	}
-	else if (command.GetId() == Command::connect && m_pControlSocket) {
+	else if (command.GetId() == Command::connect && controlSocket_) {
 		return FZ_REPLY_ALREADYCONNECTED;
 	}
 	return FZ_REPLY_OK;
@@ -659,8 +659,8 @@ void CFileZillaEnginePrivate::OnCommandEvent()
 		m_nControlSocketError = 0;
 
 		if (res == FZ_REPLY_CONTINUE) {
-			assert(m_pControlSocket);
-			m_pControlSocket->SendNextCommand();
+			assert(controlSocket_);
+			controlSocket_->SendNextCommand();
 		}
 		else if (res != FZ_REPLY_WOULDBLOCK) {
 			ResetOperation(res);
@@ -678,7 +678,7 @@ void CFileZillaEnginePrivate::DoCancel()
 	if (m_retryTimer) {
 		assert(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
 
-		m_pControlSocket.reset();
+		controlSocket_.reset();
 
 		m_pCurrentCommand.reset();
 
@@ -694,8 +694,8 @@ void CFileZillaEnginePrivate::DoCancel()
 		ClearQueuedLogs(true);
 	}
 	else {
-		if (m_pControlSocket) {
-			m_pControlSocket->Cancel();
+		if (controlSocket_) {
+			controlSocket_->Cancel();
 		}
 		else {
 			ResetOperation(FZ_REPLY_CANCELED);
@@ -718,7 +718,7 @@ bool CFileZillaEnginePrivate::CheckAsyncRequestReplyPreconditions(std::unique_pt
 		match = reply->requestNumber == m_asyncRequestCounter;
 	}
 
-	return match && m_pControlSocket;
+	return match && controlSocket_;
 }
 
 void CFileZillaEnginePrivate::OnSetAsyncRequestReplyEvent(std::unique_ptr<CAsyncRequestNotification> const& reply)
@@ -728,8 +728,8 @@ void CFileZillaEnginePrivate::OnSetAsyncRequestReplyEvent(std::unique_ptr<CAsync
 		return;
 	}
 
-	m_pControlSocket->SetAlive();
-	m_pControlSocket->SetAsyncRequestReply(reply.get());
+	controlSocket_->SetAlive();
+	controlSocket_->SetAsyncRequestReply(reply.get());
 }
 
 int CFileZillaEnginePrivate::Execute(const CCommand &command)
@@ -821,10 +821,10 @@ int CFileZillaEnginePrivate::CacheLookup(const CServerPath& path, CDirectoryList
 		return FZ_REPLY_ERROR;
 	}
 
-	assert(m_pControlSocket->GetCurrentServer());
+	assert(controlSocket_->GetCurrentServer());
 
 	bool is_outdated = false;
-	if (!directory_cache_.Lookup(listing, m_pControlSocket->GetCurrentServer(), path, true, is_outdated)) {
+	if (!directory_cache_.Lookup(listing, controlSocket_->GetCurrentServer(), path, true, is_outdated)) {
 		return FZ_REPLY_ERROR;
 	}
 
