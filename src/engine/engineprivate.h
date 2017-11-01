@@ -140,9 +140,11 @@ protected:
 	void OnTimer(fz::timer_id);
 	void OnCommandEvent();
 
-	// General mutex for operations on the engine
 	// Todo: More fine-grained locking, a global mutex isn't nice
-	static fz::mutex mutex_;
+	static fz::mutex global_mutex_;
+	
+	// General mutex for operations on this engine
+	mutable fz::mutex mutex_;
 
 	// Used to synchronize access to the notification list
 	fz::mutex notification_mutex_{false};
@@ -156,7 +158,7 @@ protected:
 	// Indicicates if data has been received/sent and whether to send any notifications
 	static std::atomic_int m_activeStatus[2];
 
-	std::unique_ptr<CControlSocket> m_pControlSocket;
+	std::unique_ptr<CControlSocket> controlSocket_;
 
 	std::unique_ptr<CCommand> m_pCurrentCommand;
 
