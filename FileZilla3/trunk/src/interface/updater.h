@@ -9,9 +9,9 @@
 
 struct build
 {
-	wxString url_;
-	wxString version_;
-	wxString hash_;
+	std::wstring url_;
+	std::wstring version_;
+	std::wstring hash_;
 	int64_t size_{-1};
 };
 
@@ -83,16 +83,16 @@ public:
 	void RunIfNeeded();
 
 protected:
-	int Download(wxString const& url, std::wstring const& local_file = std::wstring());
+	int Download(std::wstring const& url, std::wstring const& local_file = std::wstring());
 	int ContinueDownload();
 
 	void AutoRunIfNeeded();
 	bool Run();
 
-	bool CreateConnectCommand(wxString const& url);
-	bool CreateTransferCommand(wxString const& url, std::wstring const& local_file);
+	bool CreateConnectCommand(std::wstring const& url);
+	bool CreateTransferCommand(std::wstring const& url, std::wstring const& local_file);
 
-	wxString GetUrl();
+	std::wstring GetUrl();
 	void ProcessNotification(std::unique_ptr<CNotification> && notification);
 	void ProcessOperation(COperationNotification const& operation);
 	void ProcessData(CDataNotification& dataNotification);
