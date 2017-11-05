@@ -166,8 +166,9 @@ bool CUpdater::LongTimeSinceLastCheck() const
 wxString CUpdater::GetUrl()
 {
 	wxString host = CBuildInfo::GetHostname();
-	if (host.empty())
+	if (host.empty()) {
 		host = _T("unknown");
+	}
 
 	wxString version = CBuildInfo::GetVersion();
 	version.Replace(_T(" "), _T("%20"));
@@ -180,10 +181,12 @@ wxString CUpdater::GetUrl()
 #endif
 
 #ifdef __WXMSW__
-	if (wxIsPlatform64Bit())
+	if (wxIsPlatform64Bit()) {
 		url += _T("&osarch=64");
-	else
+	}
+	else {
 		url += _T("&osarch=32");
+	}
 
 	// Add information about package
 	{
@@ -204,6 +207,11 @@ wxString CUpdater::GetUrl()
 		long package{};
 		if (key->GetValueType(_T("Package")) == wxRegKey::Type_Dword && key->QueryValue(_T("Package"), &package)) {
 			url += wxString::Format(_T("&package=%d"), package);
+		}
+
+		wxString channel;
+		if (key->GetValueType(_T("Channel")) == wxRegKey::Type_String && key->QueryValue(_T("Channel"), &channel)) {
+			url += wxString::Format(_T("&channel=%s"), channel);
 		}
 	}
 #endif
