@@ -163,29 +163,28 @@ bool CUpdater::LongTimeSinceLastCheck() const
 	return span.get_days() >= days;
 }
 
-wxString CUpdater::GetUrl()
+std::wstring CUpdater::GetUrl()
 {
-	wxString host = CBuildInfo::GetHostname();
+	std::wstring host = CBuildInfo::GetHostname();
 	if (host.empty()) {
-		host = _T("unknown");
+		host = L"unknown";
 	}
 
-	wxString version = CBuildInfo::GetVersion();
-	version.Replace(_T(" "), _T("%20"));
+	std::wstring version = CBuildInfo::GetVersion();
+	fz::replace_substrings(version, L" ", L"%20");
 
-	wxString url = wxString::Format(_T("https://update.filezilla-project.org/update.php?platform=%s&version=%s"), host, version);
+	std::wstring url = fz::sprintf(L"https://update.filezilla-project.org/update.php?platform=%s&version=%s", host, version);
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	// Makes not much sense to submit OS version on Linux, *BSD and the likes, too many flavours.
-	wxString osVersion = wxString::Format(_T("&osversion=%d.%d"), wxPlatformInfo::Get().GetOSMajorVersion(), wxPlatformInfo::Get().GetOSMinorVersion());
-	url += osVersion;
+	url += fz::sprintf(L"&osversion=%d.%d", wxPlatformInfo::Get().GetOSMajorVersion(), wxPlatformInfo::Get().GetOSMinorVersion());
 #endif
 
 #ifdef __WXMSW__
 	if (wxIsPlatform64Bit()) {
-		url += _T("&osarch=64");
+		url += L"&osarch=64";
 	}
 	else {
-		url += _T("&osarch=32");
+		url += L"&osarch=32";
 	}
 
 	// Add information about package
@@ -201,32 +200,32 @@ wxString CUpdater::GetUrl()
 
 		long updated{};
 		if (key->GetValueType(_T("Updated")) == wxRegKey::Type_Dword && key->QueryValue(_T("Updated"), &updated)) {
-			url += wxString::Format(_T("&updated=%d"), updated);
+			url += fz::sprintf(L"&updated=%d", updated);
 		}
 
 		long package{};
 		if (key->GetValueType(_T("Package")) == wxRegKey::Type_Dword && key->QueryValue(_T("Package"), &package)) {
-			url += wxString::Format(_T("&package=%d"), package);
+			url += fz::sprintf(L"&package=%d", package);
 		}
 
 		wxString channel;
-		if (key->GetValueType(_T("Channel")) == wxRegKey::Type_String && key->QueryValue(_T("Channel"), &channel)) {
-			url += wxString::Format(_T("&channel=%s"), channel);
+		if (key->GetValueType(_T("Channel")) == wxRegKey::Type_String && key->QueryValue(_T("Channel"), channel)) {
+			url += fz::sprintf(L"&channel=%s", channel.ToStdWstring());
 		}
 	}
 #endif
 
-	wxString const cpuCaps = CBuildInfo::GetCPUCaps(',');
+	std::wstring const cpuCaps = CBuildInfo::GetCPUCaps(',');
 	if (!cpuCaps.empty()) {
-		url += _T("&cpuid=") + cpuCaps;
+		url += L"&cpuid=" + cpuCaps;
 	}
 
-	wxString const lastVersion = COptions::Get()->GetOption(OPTION_UPDATECHECK_LASTVERSION);
+	std::wstring const lastVersion = COptions::Get()->GetOption(OPTION_UPDATECHECK_LASTVERSION);
 	if (lastVersion != CBuildInfo::GetVersion()) {
-		url += _T("&initial=1");
+		url += L"&initial=1";
 	}
 	else {
-		url += _T("&initial=0");
+		url += L"&initial=0";
 	}
 
 	return url;
@@ -265,7 +264,7 @@ bool CUpdater::Run()
 	return state_ == UpdaterState::checking;
 }
 
-int CUpdater::Download(wxString const& url, std::wstring const& local_file)
+int CUpdater::Download(std::wstring const& url, std::wstring const& local_file)
 {
 	wxASSERT(pending_commands_.empty());
 	pending_commands_.clear();
@@ -292,12 +291,12 @@ int CUpdater::ContinueDownload()
 	return res;
 }
 
-bool CUpdater::CreateConnectCommand(wxString const& url)
+bool CUpdater::CreateConnectCommand(std::wstring const& url)
 {
 	ServerWithCredentials s;
 	CServerPath path;
 	std::wstring error;
-	if (!s.ParseUrl(url.ToStdWstring(), 0, std::wstring(), std::wstring(), error, path) || (s.server.GetProtocol() != HTTP && s.server.GetProtocol() != HTTPS)) {
+	if (!s.ParseUrl(url, 0, std::wstring(), std::wstring(), error, path) || (s.server.GetProtocol() != HTTP && s.server.GetProtocol() != HTTPS)) {
 		return false;
 	}
 
@@ -305,14 +304,14 @@ bool CUpdater::CreateConnectCommand(wxString const& url)
 	return true;
 }
 
-bool CUpdater::CreateTransferCommand(wxString const& url, std::wstring const& local_file)
+bool CUpdater::CreateTransferCommand(std::wstring const& url, std::wstring const& local_file)
 {
 	CFileTransferCommand::t_transferSettings transferSettings;
 
 	ServerWithCredentials s;
 	CServerPath path;
 	std::wstring error;
-	if (!s.ParseUrl(url.ToStdWstring(), 0, std::wstring(), std::wstring(), error, path) || (s.server.GetProtocol() != HTTP && s.server.GetProtocol() != HTTPS)) {
+	if (!s.ParseUrl(url, 0, std::wstring(), std::wstring(), error, path) || (s.server.GetProtocol() != HTTP && s.server.GetProtocol() != HTTPS)) {
 		return false;
 	}
 	std::wstring file = path.GetLastSegment();
@@ -767,19 +766,19 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const
 std::wstring CUpdater::GetTempFile() const
 {
 	wxASSERT( !version_information_.available_.hash_.empty() );
-	wxString ret = wxFileName::GetTempDir();
+	std::wstring ret = wxFileName::GetTempDir().ToStdWstring();
 	if (!ret.empty()) {
-		if (ret.Last() != wxFileName::GetPathSeparator()) {
+		if (ret.back() != wxFileName::GetPathSeparator()) {
 			ret += wxFileName::GetPathSeparator();
 		}
 
-		ret += _T("fzupdate_") + version_information_.available_.hash_.Left(16) + _T(".tmp");
+		ret += L"fzupdate_" + version_information_.available_.hash_.substr(0, 16) + L".tmp";
 	}
 
-	return ret.ToStdWstring();
+	return ret;
 }
 
-wxString CUpdater::GetFilename( wxString const& url) const
+wxString CUpdater::GetFilename(wxString const& url) const
 {
 	wxString ret;
 	int pos = url.Find('/', true);
