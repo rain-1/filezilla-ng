@@ -1108,7 +1108,15 @@ Section "FileZilla Client" SecMain
 !else
     WriteRegDWORD SHCTX "Software\FileZilla Client" "Package" 1
 !endif
+
+    ClearErrors
+    ${GetOptions} $CommandLine "/channel" $R1
+    ${Unless} ${Errors}
+      WriteRegStr SHCTX "Software\FileZilla Client" "Channel" $R1
+    ${EndUnless}
+
   ${EndIf}
+
   WriteRegDWORD SHCTX "Software\FileZilla Client" "Updated" $PERFORM_UPDATE
 
   WriteRegExpandStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "UninstallString" "$INSTDIR\uninstall.exe"
@@ -1603,6 +1611,7 @@ Section "Uninstall"
 
     DeleteRegValue SHCTX "Software\FileZilla Client" "Package"
     DeleteRegValue SHCTX "Software\FileZilla Client" "Updated"
+	DeleteRegValue SHCTX "Software\FileZilla Client" "Channel"
   ${EndIf}
 
   ${If} $un.REMOVE_ALL_USERS == 1
