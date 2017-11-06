@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-10-30 18:09+0100\n"
-"PO-Revision-Date: 2017-10-09 10:36+0100\n"
+"POT-Creation-Date: 2017-11-06 09:37+0100\n"
+"PO-Revision-Date: 2017-11-05 20:27+0100\n"
 "Last-Translator: Åka Sikrom <a4 æt hush dåt com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb_NO\n"
@@ -2044,7 +2044,6 @@ msgid "Cannot view/edit selected file"
 msgstr "Klarte ikke å vise/redigere valgt fil"
 
 #: ../../locales/../src/interface/list_search_panel.cpp:184
-#, fuzzy
 msgid "Case Insensitive"
 msgstr "Ikke skill mellom små og store bokstaver"
 
@@ -2153,12 +2152,12 @@ msgstr "Ser etter korrekt ekstern IP-adresse"
 msgid "Checking for updates..."
 msgstr "Ser etter oppdateringer …"
 
-#: ../../locales/../src/interface/updater.cpp:755
+#: ../../locales/../src/interface/updater.cpp:762
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Kontrollsum samsvarer med fila %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:751
+#: ../../locales/../src/interface/updater.cpp:758
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Kontrollsum samsvarer ikke med fila %s\n"
@@ -2232,9 +2231,8 @@ msgid "Client to server cipher:"
 msgstr "Krypteringsmetode (klient til tjener):"
 
 #: ../../locales/../src/interface/list_search_panel.cpp:61
-#, fuzzy
 msgid "Close"
-msgstr "&Lukk"
+msgstr "Lukk"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:644
 msgid "Close &all other tabs"
@@ -2251,9 +2249,8 @@ msgid "Close all running instances of FileZilla"
 msgstr "Lukk alle instanser av FileZilla"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:2310
-#, fuzzy
 msgid "Close quick search and continue comparing?"
-msgstr "Vil du se begge mappetrærne og fortsette sammenlikning?"
+msgstr "Vil du lukke hurtigsøk og fortsette å sammenlikne?"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:23
 msgid "Closes current tab"
@@ -2638,7 +2635,7 @@ msgstr "Klarte ikke å lage CFURL av sti %s"
 msgid "Could not create URI for this transfer."
 msgstr "Klarte ikke å lage nettadresse for gjeldende overføring."
 
-#: ../../locales/../src/interface/updater.cpp:490
+#: ../../locales/../src/interface/updater.cpp:497
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "Klarte ikke å lage den lokale fila %s\n"
@@ -3632,9 +3629,8 @@ msgid "End comparison and change sorting order?"
 msgstr "Vil du avslutte sammenlikning og endre sorteringsrekkefølge?"
 
 #: ../../locales/../src/interface/view.cpp:111
-#, fuzzy
 msgid "End comparison and open quick search?"
-msgstr "Vil du avslutte sammenlikning og endre sorteringsrekkefølge?"
+msgstr "Vil du avslutte sammenlikning og åpne hurtigsøk?"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:199
 msgid "Enter &custom command..."
@@ -4407,7 +4403,7 @@ msgid "Format: Extension followed by properly quoted command and arguments."
 msgstr "Format: Filetternavn etterfulgt av gyldig kommando og argument(er)."
 
 #. @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
-#: ../../locales/../src/interface/updater.cpp:687
+#: ../../locales/../src/interface/updater.cpp:694
 #, c-format
 msgid "Found new %s %s\n"
 msgstr "Fant ny %s: %s\n"
@@ -4997,9 +4993,8 @@ msgid "Invalid value for hints"
 msgstr "Ugyldig hintverdi"
 
 #: ../../locales/../src/interface/list_search_panel.cpp:187
-#, fuzzy
 msgid "Invert Filter"
-msgstr "Eksporter &filtre:"
+msgstr "Inverter filter"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:260
 msgid "Jurisdiction country:"
@@ -5139,8 +5134,8 @@ msgstr "Lokal fil"
 msgid "Local file does not exist."
 msgstr "Lokal fil finnes ikke."
 
-#: ../../locales/../src/interface/updater.cpp:401
-#: ../../locales/../src/interface/updater.cpp:494
+#: ../../locales/../src/interface/updater.cpp:408
+#: ../../locales/../src/interface/updater.cpp:501
 #, c-format
 msgid "Local file is %s\n"
 msgstr "Lokal fil er %s\n"
@@ -5645,9 +5640,8 @@ msgstr ""
 
 #: ../../locales/../src/engine/http/request.cpp:236
 #: ../../locales/../src/engine/http/request.cpp:420
-#, fuzzy
 msgid "Null character in line"
-msgstr "Filtrer ugyldige tegn i filnavn"
+msgstr "Nulltegn på linje"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1718
 msgid "Number of decimal places:"
@@ -5797,7 +5791,7 @@ msgstr "Denne handlinga støttes ikke"
 
 #: ../../locales/../src/interface/list_search_panel.cpp:55
 msgid "Options"
-msgstr ""
+msgstr "Valg"
 
 #: ../../locales/../src/interface/sitemanager.cpp:24
 msgid "Orange"
@@ -5868,7 +5862,7 @@ msgstr "Overskriv hvis størrelsen er &ulik"
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Overskriv hvis størrelsen er ulik eller hvis &kildefila er nyere"
 
-#: ../../locales/../src/interface/updater.cpp:245
+#: ../../locales/../src/interface/updater.cpp:252
 #, c-format
 msgid "Own build type: %s\n"
 msgstr "Egen oppbyggingstype: %s\n"
@@ -5906,7 +5900,7 @@ msgstr "Pa&ssiv (anbefalt)"
 msgid "Parameter not a valid URL"
 msgstr "Parameteret er ikke en gyldig nettadresse"
 
-#: ../../locales/../src/interface/updater.cpp:574
+#: ../../locales/../src/interface/updater.cpp:581
 #, c-format
 msgid "Parsing %d bytes of version information.\n"
 msgstr "Tolker %d byte med versjonsinformasjon.\n"
@@ -6497,14 +6491,12 @@ msgid "Queueing:"
 msgstr "Kølegging:"
 
 #: ../../locales/../src/interface/list_search_panel.cpp:42
-#, fuzzy
 msgid "Quick Search:"
-msgstr "&Søk"
+msgstr "Hurtigsøk:"
 
 #: ../../locales/../src/interface/view.cpp:110
-#, fuzzy
 msgid "Quick search cannot be opened if comparing directories."
-msgstr "Sorteringsrekkefølgen kan ikke endres når du sammenlikner mapper."
+msgstr "Du kan ikke bruke hurtigsøk og sammenlikne mapper samtidig."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:413
 msgid "R&eboot system once"
@@ -6630,7 +6622,7 @@ msgstr ""
 msgid "Received data tainted"
 msgstr "Mottatt data er ødelagt"
 
-#: ../../locales/../src/interface/updater.cpp:553
+#: ../../locales/../src/interface/updater.cpp:560
 msgid "Received invalid character in version information"
 msgstr "Versjonsinformasjon inneholder ugyldig(e) tegn"
 
@@ -6639,7 +6631,7 @@ msgstr "Versjonsinformasjon inneholder ugyldig(e) tegn"
 msgid "Received unknown TLS alert %d from the server"
 msgstr "Mottok ukjent TLS-varsel %d fra tjeneren"
 
-#: ../../locales/../src/interface/updater.cpp:546
+#: ../../locales/../src/interface/updater.cpp:553
 msgid "Received version information is too large"
 msgstr "Versjonsinformasjonen er for lang"
 
@@ -7612,7 +7604,7 @@ msgstr "Start overføring &umiddelbart"
 msgid "Start with opened Site Manager"
 msgstr "Åpne tjeneroppsett ved oppstart"
 
-#: ../../locales/../src/interface/updater.cpp:239
+#: ../../locales/../src/interface/updater.cpp:246
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "Begynte å se etter oppdateringer %s\n"
@@ -8289,10 +8281,8 @@ msgid "Title:"
 msgstr "Tittel"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:2309
-#, fuzzy
 msgid "To compare directories quick search must be closed."
-msgstr ""
-"Fillistene må være oppstilt på samme linje for å kunne sammenlikne mapper."
+msgstr "Hvis du vil sammenlikne mapper, må du lukke hurtigsøk"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:2326
 msgid "To compare directories, both file lists have to be aligned."
@@ -8658,9 +8648,8 @@ msgid "Use &synchronized browsing"
 msgstr "Bruk &synkronisert filbehandling"
 
 #: ../../locales/../src/interface/list_search_panel.cpp:186
-#, fuzzy
 msgid "Use Regular Expressions"
-msgstr "Ugyldig regulært uttrykk"
+msgstr "Bruk regulære uttrykk"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:580
 msgid "Use UTF-8 if the server supports it, else use local charset."
@@ -9114,7 +9103,7 @@ msgstr "byte"
 msgid "contains"
 msgstr "inneholder"
 
-#: ../../locales/../src/interface/updater.cpp:243
+#: ../../locales/../src/interface/updater.cpp:250
 msgid "custom"
 msgstr "selvvalgt"
 

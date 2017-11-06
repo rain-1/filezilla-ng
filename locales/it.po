@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Filezilla italian translation rev. 13.10.2017\n"
+"Project-Id-Version: Filezilla italian translation rev. 31.10.2017\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-10-30 18:09+0100\n"
-"PO-Revision-Date: 2017-10-13 15:27+0200\n"
+"POT-Creation-Date: 2017-11-06 09:37+0100\n"
+"PO-Revision-Date: 2017-10-31 17:14+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: bovirus - Andrea Sanavia - Vincenzo Reale - Riccardo Vianello "
 "<bovirus@gmail.com>\n"
@@ -2176,12 +2176,12 @@ msgstr "Controllo di correttezza dell'IP esterno"
 msgid "Checking for updates..."
 msgstr "Controllo disponibilità aggiornamenti..."
 
-#: ../../locales/../src/interface/updater.cpp:755
+#: ../../locales/../src/interface/updater.cpp:762
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Corrispondenza checksum nel file %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:751
+#: ../../locales/../src/interface/updater.cpp:758
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Discordanza checksum nel file %s\n"
@@ -2661,7 +2661,7 @@ msgstr "Impossibile creare CFURL dal percorso %s"
 msgid "Could not create URI for this transfer."
 msgstr "Impossibile creare URI per questo trasferimento."
 
-#: ../../locales/../src/interface/updater.cpp:490
+#: ../../locales/../src/interface/updater.cpp:497
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "Impossibile creare il file locale %s\n"
@@ -4468,7 +4468,7 @@ msgstr ""
 "Formato: estensione seguita da comando e parametri correttamente specificati."
 
 #. @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
-#: ../../locales/../src/interface/updater.cpp:687
+#: ../../locales/../src/interface/updater.cpp:694
 #, c-format
 msgid "Found new %s %s\n"
 msgstr "Trovato nuovo %s %s\n"
@@ -5207,8 +5207,8 @@ msgstr "File locale"
 msgid "Local file does not exist."
 msgstr "Il file locale non esiste."
 
-#: ../../locales/../src/interface/updater.cpp:401
-#: ../../locales/../src/interface/updater.cpp:494
+#: ../../locales/../src/interface/updater.cpp:408
+#: ../../locales/../src/interface/updater.cpp:501
 #, c-format
 msgid "Local file is %s\n"
 msgstr "Il file locale è %s\n"
@@ -5716,9 +5716,8 @@ msgstr ""
 
 #: ../../locales/../src/engine/http/request.cpp:236
 #: ../../locales/../src/engine/http/request.cpp:420
-#, fuzzy
 msgid "Null character in line"
-msgstr "Filtro caratteri non validi nel nome file"
+msgstr "Caratteri nulli nella linea"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1718
 msgid "Number of decimal places:"
@@ -5870,7 +5869,7 @@ msgstr "Operazione non supportata"
 
 #: ../../locales/../src/interface/list_search_panel.cpp:55
 msgid "Options"
-msgstr ""
+msgstr "Opzioni"
 
 #: ../../locales/../src/interface/sitemanager.cpp:24
 msgid "Orange"
@@ -5942,7 +5941,7 @@ msgstr "Sovrascrivi se &dimensione differente"
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Sovrascrivi se dimensione dif&ferente o sorgente più recente"
 
-#: ../../locales/../src/interface/updater.cpp:245
+#: ../../locales/../src/interface/updater.cpp:252
 #, c-format
 msgid "Own build type: %s\n"
 msgstr "Tipo build proprietario: %s\n"
@@ -5981,7 +5980,7 @@ msgstr "Pa&ssiva (consigliata)"
 msgid "Parameter not a valid URL"
 msgstr "Il parametro non è una URL valida"
 
-#: ../../locales/../src/interface/updater.cpp:574
+#: ../../locales/../src/interface/updater.cpp:581
 #, c-format
 msgid "Parsing %d bytes of version information.\n"
 msgstr "Analisi %d byte informazione versione.\n"
@@ -6709,7 +6708,7 @@ msgstr ""
 msgid "Received data tainted"
 msgstr "Ricevuti dati corrotti"
 
-#: ../../locales/../src/interface/updater.cpp:553
+#: ../../locales/../src/interface/updater.cpp:560
 msgid "Received invalid character in version information"
 msgstr "Ricevuti caratteri non validi nell'informazione versione"
 
@@ -6718,7 +6717,7 @@ msgstr "Ricevuti caratteri non validi nell'informazione versione"
 msgid "Received unknown TLS alert %d from the server"
 msgstr "Ricevuto avviso TLS sconosciuto %d dal server"
 
-#: ../../locales/../src/interface/updater.cpp:546
+#: ../../locales/../src/interface/updater.cpp:553
 msgid "Received version information is too large"
 msgstr "L'informazione versione ricevuta è troppo grande"
 
@@ -7702,7 +7701,7 @@ msgstr "Avvia &immediatamente il trasferimento"
 msgid "Start with opened Site Manager"
 msgstr "Avvia aprendo Gestore siti"
 
-#: ../../locales/../src/interface/updater.cpp:239
+#: ../../locales/../src/interface/updater.cpp:246
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "Controllo aggiornamenti su %s\n"
@@ -9227,7 +9226,7 @@ msgstr "byte"
 msgid "contains"
 msgstr "contiene"
 
-#: ../../locales/../src/interface/updater.cpp:243
+#: ../../locales/../src/interface/updater.cpp:250
 msgid "custom"
 msgstr "personalizzato"
 
