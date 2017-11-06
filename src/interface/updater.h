@@ -62,8 +62,8 @@ public:
 	// 2-Stage initialization
 	void Init();
 
-	void AddHandler( CUpdateHandler& handler );
-	void RemoveHandler( CUpdateHandler& handler );
+	void AddHandler(CUpdateHandler& handler);
+	void RemoveHandler(CUpdateHandler& handler);
 
 	UpdaterState GetState() const { return state_; }
 	build AvailableBuild() const { return version_information_.available_; }
@@ -108,7 +108,7 @@ protected:
 	wxString GetFilename(wxString const& url) const;
 	wxString GetLocalFile(build const& b, bool allow_existing);
 
-	void SetState( UpdaterState s );
+	void SetState(UpdaterState s);
 
 	virtual void OnEngineEvent(CFileZillaEngine* engine);
 	void DoOnEngineEvent(CFileZillaEngine* engine);
@@ -133,7 +133,7 @@ protected:
 
 	std::deque<std::unique_ptr<CCommand>> pending_commands_;
 
-	std::function<void(CActiveNotification const&)> const& activityNotificationHandler_;
+	std::function<void(CActiveNotification const&)> activityNotificationHandler_;
 };
 
 #endif //FZ_MANUALUPDATECHECK
