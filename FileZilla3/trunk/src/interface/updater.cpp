@@ -77,9 +77,10 @@ void version_information::update_available()
 
 static CUpdater* instance = 0;
 
-CUpdater::CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context)
+CUpdater::CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context, std::function<void(CActiveNotification const&)> const& activityNotificationHandler)
 	: state_(UpdaterState::idle)
 	, engine_(new CFileZillaEngine(engine_context, *this))
+	, activityNotificationHandler_(activityNotificationHandler)
 {
 	AddHandler(parent);
 }
@@ -340,6 +341,12 @@ void CUpdater::DoOnEngineEvent(CFileZillaEngine* engine)
 
 void CUpdater::ProcessNotification(std::unique_ptr<CNotification> && notification)
 {
+	if (notification->GetID() == nId_active) {
+		if (activityNotificationHandler_) {
+			activityNotificationHandler_(static_cast<CActiveNotification const&>(*notification.get()));
+		}
+		return;
+	}
 	if (state_ != UpdaterState::checking && state_ != UpdaterState::newversion_downloading) {
 		return;
 	}

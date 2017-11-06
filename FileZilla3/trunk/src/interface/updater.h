@@ -7,6 +7,8 @@
 
 #include <wx/timer.h>
 
+#include <functional>
+
 struct build
 {
 	std::wstring url_;
@@ -54,7 +56,7 @@ class CFileZillaEngineContext;
 class CUpdater final : public wxEvtHandler, private EngineNotificationHandler
 {
 public:
-	CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context);
+	CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context, std::function<void(CActiveNotification const&)> const& activityNotificationHandler);
 	virtual ~CUpdater();
 
 	// 2-Stage initialization
@@ -130,6 +132,8 @@ protected:
 	wxTimer update_timer_;
 
 	std::deque<std::unique_ptr<CCommand>> pending_commands_;
+
+	std::function<void(CActiveNotification const&)> const& activityNotificationHandler_;
 };
 
 #endif //FZ_MANUALUPDATECHECK

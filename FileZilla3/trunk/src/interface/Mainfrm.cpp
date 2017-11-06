@@ -2671,7 +2671,11 @@ void CMainFrame::PostInitialize()
 	// Need to do this after welcome screen to avoid simultaneous display of multiple dialogs
 	if (!m_pUpdater) {
 		update_dialog_timer_.SetOwner(this);
-		m_pUpdater = new CUpdater(*this, m_engineContext);
+		m_pUpdater = new CUpdater(*this, m_engineContext,
+			[this](CActiveNotification const& notification) {
+				UpdateActivityLed(notification.GetDirection());
+			}
+		);
 		m_pUpdater->Init();
 	}
 #endif
