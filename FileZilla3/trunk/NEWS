@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.29.0 (2017-11-06)
+
+- Fix activity indicators not working after the update check has been run
+
 3.29.0-rc1 (2017-10-30)
 
 + Added new quick search filter to file lists, accessed through Ctrl+F
