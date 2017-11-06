@@ -89,13 +89,18 @@ int CStorjResolveOpData::Send()
 			CDirectoryListing listing;
 
 			bool outdated{};
-			bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, path_, false, outdated);
+			bool found = engine_.GetDirectoryCache().Lookup(listing, currentServer_, path_, ignore_missing_file_, outdated);
 			if (found && !outdated) {
 				int pos = listing.FindFile_CmpCase(file_);
 				if (pos != -1) {
 					*fileId_ = ExtractId(*listing[pos].ownerGroup);
-					LogMessage(MessageType::Debug_Info, L"File %s has id %s", path_.FormatFilename(file_), *fileId_);
-					return FZ_REPLY_OK;
+					if (!fileId_->empty()) {
+						LogMessage(MessageType::Debug_Info, L"File %s has id %s", path_.FormatFilename(file_), *fileId_);
+						return FZ_REPLY_OK;
+					}
+					else {
+						ignore_missing_file_ = false;
+					}
 				}
 
 				if (ignore_missing_file_) {
