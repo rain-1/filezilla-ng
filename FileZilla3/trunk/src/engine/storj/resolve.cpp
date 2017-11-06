@@ -99,7 +99,10 @@ int CStorjResolveOpData::Send()
 						return FZ_REPLY_OK;
 					}
 					else {
-						ignore_missing_file_ = false;
+						// Must refresh listing
+						opState = resolve_waitlist;
+						controlSocket_.List(path_, std::wstring(), 0);
+						return FZ_REPLY_CONTINUE;
 					}
 				}
 
