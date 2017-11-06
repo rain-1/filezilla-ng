@@ -1,4 +1,5 @@
 #include <Foundation/NSFileManager.h>
+#include <Foundation/NSURL.h>
 
 #include <string.h>
 
