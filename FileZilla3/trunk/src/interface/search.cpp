@@ -1099,7 +1099,7 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 	}
 
 	ServerWithCredentials const& server = m_state.GetServer();
-	if (server) {
+	if (!server) {
 		wxBell();
 		return;
 	}
