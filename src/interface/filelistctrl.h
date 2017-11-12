@@ -496,7 +496,7 @@ template<class CFileData> class CFileListCtrl : public wxListCtrlEx, public CCom
 	template<typename Listing, typename DataEntry> friend class CFileListCtrlSortType;
 public:
 	CFileListCtrl(wxWindow* pParent, CQueueView *pQueue, bool border = false);
-	virtual ~CFileListCtrl();
+	virtual ~CFileListCtrl() = default;
 
 	void SetFilelistStatusBar(CFilelistStatusBar* pFilelistStatusBar) { m_pFilelistStatusBar = pFilelistStatusBar; }
 	CFilelistStatusBar* GetFilelistStatusBar() { return m_pFilelistStatusBar; }
@@ -508,7 +508,7 @@ public:
 	std::vector<unsigned int> const& indexMapping() const { return m_indexMapping; }
 
 protected:
-	CQueueView *m_pQueue;
+	CQueueView *m_pQueue{};
 
 	std::vector<CFileData> m_fileData;
 	std::vector<unsigned int> m_indexMapping;
@@ -520,7 +520,7 @@ protected:
 	std::map<wxString, std::wstring> m_fileTypeMap;
 
 	// The .. item
-	bool m_hasParent;
+	bool m_hasParent{true};
 
 	int m_sortColumn{-1};
 	int m_sortDirection{};
@@ -540,7 +540,7 @@ protected:
 	virtual void OnExitComparisonMode();
 	virtual void CompareAddFile(t_fileEntryFlags flags);
 
-	int m_comparisonIndex;
+	int m_comparisonIndex{-1};
 
 	// Remembers which non-fill items are selected if enabling/disabling comparison.
 	// Exploit fact that sort order doesn't change -> O(n)
@@ -548,7 +548,7 @@ protected:
 	void ComparisonRestoreSelections();
 	std::deque<int> m_comparisonSelections;
 
-	CFilelistStatusBar* m_pFilelistStatusBar;
+	CFilelistStatusBar* m_pFilelistStatusBar{};
 
 	// Indexes of the items added, sorted ascending.
 	void UpdateSelections_ItemsAdded(std::vector<int> const& added_indexes);
@@ -574,15 +574,15 @@ private:
 	void SortList_UpdateSelections(bool* selections, int focused_item, unsigned int focused_index);
 
 	// If this is set to true, don't process selection changed events
-	bool m_insideSetSelection;
+	bool m_insideSetSelection{};
 
 #ifdef __WXMSW__
 	virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 	virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 #else
-	int m_focusItem;
+	int m_focusItem{-1};
 	std::vector<bool> m_selections;
-	int m_pending_focus_processing;
+	int m_pending_focus_processing{};
 #endif
 
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
