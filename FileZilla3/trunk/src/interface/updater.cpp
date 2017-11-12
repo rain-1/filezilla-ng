@@ -343,7 +343,8 @@ void CUpdater::ProcessNotification(std::unique_ptr<CNotification> && notificatio
 {
 	if (notification->GetID() == nId_active) {
 		if (activityNotificationHandler_) {
-			activityNotificationHandler_(static_cast<CActiveNotification const&>(*notification.get()));
+			auto const& activityNotification = static_cast<CActiveNotification const&>(*notification.get());
+			activityNotificationHandler_(activityNotification);
 		}
 		return;
 	}

@@ -17,7 +17,7 @@ class CLocalFileData final : public CGenericFileData
 public:
 	std::wstring name;
 #ifdef __WXMSW__
-	fz::sparse_optional<wxString> label;
+	fz::sparse_optional<std::wstring> label;
 #endif
 	fz::datetime time;
 	int64_t size;
@@ -86,7 +86,7 @@ protected:
 
 	CLocalPath m_dir;
 
-	int m_dropTarget;
+	int m_dropTarget{-1};
 
 	wxString MenuMkdir();
 
@@ -108,11 +108,12 @@ protected:
 	void OnMenuOpen(wxCommandEvent& event);
 	void OnMenuEdit(wxCommandEvent& event);
 	void OnMenuEnter(wxCommandEvent& event);
+	void OnMenuRefresh(wxCommandEvent& event);
+
 #ifdef __WXMSW__
 	void OnVolumesEnumerated(wxCommandEvent& event);
-	CVolumeDescriptionEnumeratorThread* m_pVolumeEnumeratorThread;
+	std::unique_ptr<CVolumeDescriptionEnumeratorThread> volumeEnumeratorThread_;
 #endif
-	void OnMenuRefresh(wxCommandEvent& event);
 };
 
 #endif

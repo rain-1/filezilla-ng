@@ -85,8 +85,9 @@ template<class CFileData> WXLRESULT CFileListCtrl<CFileData>::MSWWindowProc(WXUI
 
 template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
-	if (!m_pFilelistStatusBar)
+	if (!m_pFilelistStatusBar) {
 		return wxListCtrlEx::MSWOnNotify(idCtrl, lParam, result);
+	}
 
 	*result = 0;
 
@@ -94,31 +95,36 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 	if (pNmhdr->code == LVN_ODSTATECHANGED) {
 		// A range of items got (de)selected
 
-		if (m_insideSetSelection)
+		if (m_insideSetSelection) {
 			return true;
+		}
 
-		if (!m_pFilelistStatusBar)
+		if (!m_pFilelistStatusBar) {
 			return true;
+		}
 
-		if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_SHIFT))
-		{
+		if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_SHIFT)) {
 			// The behavior of Ctrl+Shift+Click is highly erratic.
 			// Even though it is very slow, we need to manually recount.
 			m_pFilelistStatusBar->UnselectAll();
 			int item = -1;
 			while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
-				if (m_hasParent && !item)
+				if (m_hasParent && !item) {
 					continue;
+				}
 
 				const int index = m_indexMapping[item];
 				const CFileData& data = m_fileData[index];
-				if (data.comparison_flags == fill)
+				if (data.comparison_flags == fill) {
 					continue;
+				}
 
-				if (ItemIsDir(index))
+				if (ItemIsDir(index)) {
 					m_pFilelistStatusBar->SelectDirectory();
-				else
+				}
+				else {
 					m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
+				}
 			}
 		}
 		else {
@@ -126,31 +132,35 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 
 			wxASSERT(pNmOdStateChange->iFrom <= pNmOdStateChange->iTo);
 			for (int i = pNmOdStateChange->iFrom; i <= pNmOdStateChange->iTo; ++i) {
-				if (m_hasParent && !i)
+				if (m_hasParent && !i) {
 					continue;
+				}
 
 				const int index = m_indexMapping[i];
 				const CFileData& data = m_fileData[index];
-				if (data.comparison_flags == fill)
+				if (data.comparison_flags == fill) {
 					continue;
+				}
 
-				if (ItemIsDir(index))
+				if (ItemIsDir(index)) {
 					m_pFilelistStatusBar->SelectDirectory();
-				else
+				}
+				else {
 					m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
+				}
 			}
 		}
 		return true;
 	}
 	else if (pNmhdr->code == LVN_ITEMCHANGED) {
-		if (m_insideSetSelection)
+		if (m_insideSetSelection) {
 			return true;
+		}
 
 		NMLISTVIEW* pNmListView = (NMLISTVIEW*)lParam;
 
 		// Item of -1 means change applied to all items
-		if (pNmListView->iItem == -1 && !(pNmListView->uNewState & LVIS_SELECTED))
-		{
+		if (pNmListView->iItem == -1 && !(pNmListView->uNewState & LVIS_SELECTED)) {
 			m_pFilelistStatusBar->UnselectAll();
 		}
 	}
@@ -174,14 +184,17 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 		}
 
 		if (lvi.mask & LVIF_IMAGE) {
-			if (!lvi.iSubItem)
+			if (!lvi.iSubItem) {
 				lvi.iImage = OnGetItemImage(item);
-			else
+			}
+			else {
 				lvi.iImage = -1;
+			}
 		}
 
-		if (!lvi.iSubItem)
+		if (!lvi.iSubItem) {
 			lvi.state = INDEXTOOVERLAYMASK(GetOverlayIndex(lvi.iItem));
+		}
 
 		return true;
 	}
@@ -221,8 +234,9 @@ static gboolean gtk_button_release_event(GtkWidget*, void *gdk_event, CGtkEventC
 	GdkEventButton* button_event = (GdkEventButton*)gdk_event;
 
 	// 8 is back, 9 is forward.
-	if (button_event->button != 8 && button_event->button != 9)
+	if (button_event->button != 8 && button_event->button != 9) {
 		return FALSE;
+	}
 
 	proxy->OnNavigationEvent(button_event->button == 9);
 
@@ -231,31 +245,21 @@ static gboolean gtk_button_release_event(GtkWidget*, void *gdk_event, CGtkEventC
 }
 #endif
 
-template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pParent, CQueueView* pQueue, bool border /*=false*/)
-: wxListCtrlEx(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxLC_VIRTUAL | wxLC_REPORT | wxLC_EDIT_LABELS | (border ? wxBORDER_SUNKEN : wxNO_BORDER)),
-	CComparableListing(this)
+template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pParent, CQueueView* pQueue, bool border)
+	: wxListCtrlEx(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxLC_VIRTUAL | wxLC_REPORT | wxLC_EDIT_LABELS | (border ? wxBORDER_SUNKEN : wxNO_BORDER))
+	, CComparableListing(this)
+	, m_pQueue(pQueue)
 {
 	CreateSystemImageList(CThemeProvider::GetIconSize(iconSizeSmall).x);
-	m_pQueue = pQueue;
-
-	m_hasParent = true;
-
-	m_comparisonIndex = -1;
 
 #ifndef __WXMSW__
 	m_dropHighlightAttribute.SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
 #endif
 
-	m_pFilelistStatusBar = 0;
-
-	m_insideSetSelection = false;
 #ifdef __WXMSW__
 	// Enable use of overlay images
 	DWORD mask = ListView_GetCallbackMask((HWND)GetHandle()) | LVIS_OVERLAYMASK;
 	ListView_SetCallbackMask((HWND)GetHandle(), mask);
-#else
-	m_pending_focus_processing = 0;
-	m_focusItem = -1;
 #endif
 
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
@@ -274,10 +278,6 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 #endif
 }
 
-template<class CFileData> CFileListCtrl<CFileData>::~CFileListCtrl()
-{
-}
-
 template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=-1*/, int direction /*=-1*/, bool updateSelections /*=true*/)
 {
 	CancelLabelEdit();
@@ -285,8 +285,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 	if (column != -1) {
 		if (column != m_sortColumn) {
 			const int oldVisibleColumn = GetColumnVisibleIndex(m_sortColumn);
-			if (oldVisibleColumn != -1)
+			if (oldVisibleColumn != -1) {
 				SetHeaderSortIconIndex(oldVisibleColumn, -1);
+			}
 		}
 	}
 	else {
@@ -298,8 +299,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 		}
 	}
 
-	if (direction == -1)
+	if (direction == -1) {
 		direction = m_sortDirection;
+	}
 
 
 	if (column != m_sortColumn || direction != m_sortDirection) {
@@ -334,8 +336,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 			}
 		}
 		focused_item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-		if (focused_item != -1)
+		if (focused_item != -1) {
 			focused_index = m_indexMapping[focused_item];
+		}
 	}
 
 	const int dirSortOption = COptions::Get()->GetOptionVal(OPTION_FILELIST_DIRSORT);
@@ -347,8 +350,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 		m_sortDirection = direction;
 		m_sortColumn = column;
 		std::vector<unsigned int>::iterator start = m_indexMapping.begin();
-		if (m_hasParent)
+		if (m_hasParent) {
 			++start;
+		}
 		std::reverse(start, m_indexMapping.end());
 
 		if (updateSelections) {
@@ -401,8 +405,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList_UpdateSelectio
 			const bool selected = (state & wxLIST_STATE_SELECTED) != 0;
 
 			int item = m_indexMapping[i];
-			if (selections[item] != selected)
+			if (selections[item] != selected) {
 				SetSelection(i, selections[item]);
+			}
 		}
 	}
 }
@@ -419,10 +424,12 @@ template<class CFileData> CFileListCtrlSortBase::DirSortMode CFileListCtrl<CFile
 		dirSortMode = CFileListCtrlSortBase::dirsort_ontop;
 		break;
 	case 1:
-		if (m_sortDirection)
+		if (m_sortDirection) {
 			dirSortMode = CFileListCtrlSortBase::dirsort_onbottom;
-		else
+		}
+		else {
 			dirSortMode = CFileListCtrlSortBase::dirsort_ontop;
+		}
 		break;
 	case 2:
 		dirSortMode = CFileListCtrlSortBase::dirsort_inline;
@@ -457,8 +464,9 @@ template<class CFileData> CFileListCtrlSortBase::NameSortMode CFileListCtrl<CFil
 template<class CFileData> void CFileListCtrl<CFileData>::OnColumnClicked(wxListEvent &event)
 {
 	int col = m_pVisibleColumnMapping[event.GetColumn()];
-	if (col == -1)
+	if (col == -1) {
 		return;
+	}
 
 	if (IsComparing()) {
 #ifdef __WXMSW__
@@ -469,16 +477,19 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnColumnClicked(wxListE
 		dlg.SetTitle(_("Directory comparison"));
 		dlg.AddText(_("Sort order cannot be changed if comparing directories."));
 		dlg.AddText(_("End comparison and change sorting order?"));
-		if (!dlg.Run())
+		if (!dlg.Run()) {
 			return;
+		}
 		ExitComparisonMode();
 	}
 
 	int dir;
-	if (col == m_sortColumn)
+	if (col == m_sortColumn) {
 		dir = m_sortDirection ? 0 : 1;
-	else
+	}
+	else {
 		dir = m_sortDirection;
+	}
 
 	SortList(col, dir);
 	RefreshListOnly(false);
@@ -491,8 +502,9 @@ wxString GetExt(const wxString& file)
 	wxString ret;
 
 	int pos = file.Find('.', true);
-	if (pos > 0 && (static_cast<size_t>(pos) + 1) < file.size()) // Does neither starts nor end with dot
+	if (pos > 0 && (static_cast<size_t>(pos) + 1) < file.size()) { // Does neither starts nor end with dot
 		ret = file.Mid(pos + 1);
+	}
 
 	return ret;
 }
@@ -692,11 +704,11 @@ template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRememberSelec
 #endif
 	{
 		int item = -1;
-		while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-		{
+		while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 			int index = m_indexMapping[item];
-			if (m_fileData[index].comparison_flags == fill)
+			if (m_fileData[index].comparison_flags == fill) {
 				continue;
+			}
 			m_comparisonSelections.push_back(index);
 		}
 	}
@@ -704,41 +716,40 @@ template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRememberSelec
 
 template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRestoreSelections()
 {
-	if (m_comparisonSelections.empty())
+	if (m_comparisonSelections.empty()) {
 		return;
+	}
 
 	int focus = m_comparisonSelections.front();
 	m_comparisonSelections.pop_front();
 
 	int item = -1;
-	if (!m_comparisonSelections.empty())
-	{
+	if (!m_comparisonSelections.empty()) {
 		item = m_comparisonSelections.front();
 		m_comparisonSelections.pop_front();
 	}
-	if (focus == -1)
+	if (focus == -1) {
 		focus = item;
+	}
 
-	for (unsigned int i = 0; i < m_indexMapping.size(); i++)
-	{
+	for (unsigned int i = 0; i < m_indexMapping.size(); ++i) {
 		int index = m_indexMapping[i];
-		if (focus == index)
-		{
+		if (focus == index) {
 			SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
 			focus = -1;
 		}
 
 		bool isSelected = GetItemState(i, wxLIST_STATE_SELECTED) == wxLIST_STATE_SELECTED;
 		bool shouldSelected = item == index;
-		if (isSelected != shouldSelected)
+		if (isSelected != shouldSelected) {
 			SetSelection(i, shouldSelected);
+		}
 
-		if (shouldSelected)
-		{
-			if (m_comparisonSelections.empty())
+		if (shouldSelected) {
+			if (m_comparisonSelections.empty()) {
 				item = -1;
-			else
-			{
+			}
+			else {
 				item = m_comparisonSelections.front();
 				m_comparisonSelections.pop_front();
 			}
@@ -760,8 +771,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::InitSort(int optionID)
 	else {
 		m_sortDirection = 0;
 	}
-	if (m_sortDirection < 0 || m_sortDirection > 1)
+	if (m_sortDirection < 0 || m_sortDirection > 1) {
 		m_sortDirection = 0;
+	}
 
 	if (sortInfo.Len() == 3) {
 		m_sortColumn = sortInfo[2] - '0';
@@ -769,8 +781,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::InitSort(int optionID)
 			m_sortColumn = 0;
 		}
 	}
-	else
+	else {
 		m_sortColumn = 0;
+	}
 
 	SetHeaderSortIconIndex(GetColumnVisibleIndex(m_sortColumn), m_sortDirection);
 }
@@ -1040,15 +1053,15 @@ template<class CFileData> void CFileListCtrl<CFileData>::ClearSelection()
 #endif
 	{
 		int item = -1;
-		while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-		{
+		while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 			SetSelection(item, false);
 		}
 	}
 
 	int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-	if (item != -1)
+	if (item != -1) {
 		SetItemState(item, 0, wxLIST_STATE_FOCUSED);
+	}
 }
 
 template<class CFileData> void CFileListCtrl<CFileData>::OnKeyDown(wxKeyEvent& event)
