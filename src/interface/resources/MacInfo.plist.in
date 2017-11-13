@@ -7,11 +7,11 @@
 	<key>CFBundleExecutable</key>
 	<string>filezilla</string>
 	<key>CFBundleGetInfoString</key>
-	<string>FileZilla Client @PACKAGE_VERSION@, Copyright (C) 2004-2016  Tim Kosse, Website: https://filezilla-project.org</string>
+	<string>FileZilla Client @PACKAGE_VERSION@, Copyright (C) 2004-2017  Tim Kosse, Website: https://filezilla-project.org</string>
 	<key>CFBundleIconFile</key>
 	<string>FileZilla.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>de.filezilla</string>
+	<string>org.filezilla-project.filezilla@CFBUNDLEIDSUFFIX@</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
@@ -35,6 +35,14 @@
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright (C) 2004-2016  Tim Kosse</string>
+	<string>Copyright (C) 2004-2017  Tim Kosse</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.9</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
 </dict>
 </plist>
