@@ -396,7 +396,11 @@ if test "$buildmain" = "yes"; then
   if test "$use_mac_sandbox" == "yes"; then
     AC_DEFINE([USE_MAC_SANDBOX], [1],
        [Define to 1 if the App Sandbox on OS X should be used.])
+    CFBUNDLEIDSUFFIX=".sandbox"
+  else
+    CFBUNDLEIDSUFFIX=""
   fi
+  AC_SUBST(CFBUNDLEIDSUFFIX)
 
   if test "$macappbundle" = "yes"; then
     AC_PROG_OBJC
