@@ -205,6 +205,10 @@ void OSXSandboxUserdirs::Remove(std::wstring const& dir)
 		CFURLStopAccessingSecurityScopedResource(it->second.second.get());
 		userdirs_.erase(it);
 	}
+
+	CInterProcessMutex mutex(MUTEX_MAC_SANDBOX_USERDIRS);
+
+	Save();
 }
 
 void OSXSandboxUserdirsDialog::Run(wxWindow* parent)
