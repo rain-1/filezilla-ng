@@ -232,6 +232,16 @@ bool CFileZillaApp::OnInit()
 		return false;
 	}
 
+#if USE_MAC_SANDBOX
+	// Set PUTTYDIR so that fzsftp uses the sandboxed home to put settings.
+	wxString home;
+	if (wxGetEnv(L"HOME", &home) && !home.empty()) {
+		if (home[home.size() - 1] != '/') {
+			home += '/';
+		}
+		wxSetEnv("PUTTYDIR", home + L".config/putty");
+	}
+#endif
 	InitDefaultsDir();
 
 	COptions::Init();
