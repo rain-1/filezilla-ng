@@ -6,6 +6,8 @@
 
 #include "backend.h"
 
+#include <libfilezilla/encode.hpp>
+
 int CHttpRequestOpData::Send()
 {
 	LogMessage((opState == request_send) ? MessageType::Debug_Debug : MessageType::Debug_Verbose, L"CHttpRequestOpData::Send() in state %d", opState);
@@ -434,6 +436,7 @@ int CHttpRequestOpData::ParseChunkedData()
 			if (i) {
 				// The chunk data has to end with CRLF. If i is nonzero,
 				// it didn't end with just CRLF.
+				LogMessage(MessageType::Debug_Debug, L"%u characters preceeding line-ending with value %s", i, fz::hex_encode<std::string>(std::string(recv_buffer_.get(), recv_buffer_.get() + recv_buffer_.size())));
 				LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Chunk data improperly terminated"));
 				return FZ_REPLY_ERROR;
 			}
