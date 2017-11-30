@@ -1289,8 +1289,9 @@ Function PostInstPage
   System::Call user32::IsWindowVisible(i$R0)i.s
   Pop $R0
 
-  StrCmp $R0 0 +2
-  SetAutoClose false
+  ${If} $R0 != 0
+    SetAutoClose false
+  ${EndIf}
 
 FunctionEnd
 
