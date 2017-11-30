@@ -782,7 +782,7 @@ Function RunUninstaller
 
   IfFileExists "$INSTDIR\uninstall.exe" 0 no_remove_uninstaller
 
-    Delete "$R1"
+  Delete "$R1"
 
   ; Remove directory only if uninstalling for good
   ${If} $REINSTALL_UNINSTALL == "2"
@@ -825,6 +825,11 @@ Function PageAllUsers
   ${If} $REINSTALL_UNINSTALL == 1
   ${AndIf} $PREVIOUS_VERSION_STATE != "same"
     ; Keep same settings
+    Abort
+  ${EndIf}
+
+  ${If} $PERFORM_UPDATE == 1
+    StrCpy $REINSTALL_UNINSTALL 1
     Abort
   ${EndIf}
 
@@ -871,17 +876,10 @@ Function PageAllUsers
   ${EndIf}
 
   ${If} $PREVIOUS_VERSION == ""
-  ${OrIf} $PERFORM_UPDATE == 1}
     ${IF} $SKIPLICENSE == 1
       EnableWindow $mui.Button.Back 0
     ${ENDIF}
   ${EndIf}
-
-  ${If} $PERFORM_UPDATE == 1
-    StrCpy $REINSTALL_UNINSTALL 1
-    Abort
-  ${EndIf}
-
 
   nsDialogs::Show
 
