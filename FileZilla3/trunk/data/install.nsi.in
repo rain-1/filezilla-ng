@@ -901,6 +901,10 @@ FunctionEnd
 
 Function PageComponentsPre
 
+  ${If} $PERFORM_UPDATE == 1
+    Abort
+  ${EndIf}
+
   ${If} $REINSTALL_UNINSTALL == 1
   ${AndIf} $PREVIOUS_VERSION_STATE != "same"
 
@@ -912,6 +916,10 @@ FunctionEnd
 
 Function PageDirectoryPre
 
+  ${If} $PERFORM_UPDATE == 1
+    Abort
+  ${EndIf}
+
   ${If} $REINSTALL_UNINSTALL == "1"
   ${AndIf} $PREVIOUS_VERSION_STATE != "same"
 
@@ -922,6 +930,10 @@ Function PageDirectoryPre
 FunctionEnd
 
 Function PageStartmenuPre
+
+  ${If} $PERFORM_UPDATE == 1
+    Abort
+  ${EndIf}
 
   ${If} $REINSTALL_UNINSTALL == "1"
   ${AndIf} $PREVIOUS_VERSION_STATE != "same"
