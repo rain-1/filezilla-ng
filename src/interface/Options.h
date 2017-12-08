@@ -178,7 +178,7 @@ protected:
 
 	void NotifyChangedOptions();
 
-	CXmlFile* m_pXmlFile;
+	std::unique_ptr<CXmlFile> xmlFile_;
 
 	t_OptionsCache m_optionsCache[OPTIONS_NUM];
 

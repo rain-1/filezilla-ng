@@ -229,7 +229,6 @@ t_OptionsCache& t_OptionsCache::operator=(int v)
 COptions::COptions()
 {
 	m_theOptions = this;
-	m_pXmlFile = 0;
 
 	SetDefaultValues();
 
@@ -241,12 +240,11 @@ COptions::COptions()
 	CLocalPath const dir = InitSettingsDir();
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
-	m_pXmlFile = new CXmlFile(dir.GetPath() + _T("filezilla.xml"));
-	if (!m_pXmlFile->Load()) {
-		wxString msg = m_pXmlFile->GetError() + _T("\n\n") + _("For this session the default settings will be used. Any changes to the settings will not be saved.");
+	xmlFile_ = std::make_unique<CXmlFile>(dir.GetPath() + _T("filezilla.xml"));
+	if (!xmlFile_->Load()) {
+		wxString msg = xmlFile_->GetError() + _T("\n\n") + _("For this session the default settings will be used. Any changes to the settings will not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
-		delete m_pXmlFile;
-		m_pXmlFile = 0;
+		xmlFile_.reset();
 	}
 	else {
 		CreateSettingsXmlElement();
@@ -269,8 +267,6 @@ std::map<std::string, unsigned int> COptions::GetNameOptionMap() const
 COptions::~COptions()
 {
 	COptionChangeEventHandler::UnregisterAllHandlers();
-
-	delete m_pXmlFile;
 }
 
 int COptions::GetOptionVal(unsigned int nID)
@@ -374,11 +370,11 @@ bool COptions::OptionFromFzDefaultsXml(unsigned int nID)
 
 pugi::xml_node COptions::CreateSettingsXmlElement()
 {
-	if (!m_pXmlFile) {
+	if (!xmlFile_) {
 		return pugi::xml_node();
 	}
 
-	auto element = m_pXmlFile->GetElement();
+	auto element = xmlFile_->GetElement();
 	if (!element) {
 		return element;
 	}
@@ -408,7 +404,7 @@ void COptions::SetXmlValue(unsigned int nID, int value)
 
 void COptions::SetXmlValue(unsigned int nID, std::wstring const& value)
 {
-	if (!m_pXmlFile) {
+	if (!xmlFile_) {
 		return;
 	}
 
@@ -557,7 +553,7 @@ std::wstring COptions::Validate(unsigned int nID, std::wstring const& value)
 
 void COptions::SetServer(std::wstring path, ServerWithCredentials const& server)
 {
-	if (!m_pXmlFile) {
+	if (!xmlFile_) {
 		return;
 	}
 
@@ -565,7 +561,7 @@ void COptions::SetServer(std::wstring path, ServerWithCredentials const& server)
 		return;
 	}
 
-	auto element = m_pXmlFile->GetElement();
+	auto element = xmlFile_->GetElement();
 
 	while (!path.empty()) {
 		std::wstring sub;
@@ -596,7 +592,7 @@ void COptions::SetServer(std::wstring path, ServerWithCredentials const& server)
 	}
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
-	m_pXmlFile->Save(true);
+	xmlFile_->Save(true);
 }
 
 bool COptions::GetServer(std::wstring path, ServerWithCredentials& server)
@@ -605,10 +601,10 @@ bool COptions::GetServer(std::wstring path, ServerWithCredentials& server)
 		return false;
 	}
 
-	if (!m_pXmlFile) {
+	if (!xmlFile_) {
 		return false;
 	}
-	auto element = m_pXmlFile->GetElement();
+	auto element = xmlFile_->GetElement();
 
 	while (!path.empty()) {
 		std::wstring sub;
@@ -784,12 +780,12 @@ void COptions::Save()
 		return;
 	}
 
-	if (!m_pXmlFile) {
+	if (!xmlFile_) {
 		return;
 	}
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
-	m_pXmlFile->Save(true);
+	xmlFile_->Save(true);
 }
 
 void COptions::SaveIfNeeded()

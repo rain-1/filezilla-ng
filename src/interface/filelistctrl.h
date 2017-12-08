@@ -80,16 +80,18 @@ public:
 	static int CmpNoCase(std::wstring const& str1, std::wstring const& str2)
 	{
 		int cmp = fz::stricmp(str1, str2);
-		if (cmp)
+		if (cmp) {
 			return cmp;
+		}
 		return str1.compare(str2);
 	}
 
 	static int CmpNoCase(wxString const& str1, wxString const& str2)
 	{
 		int cmp = str1.CmpNoCase(str2);
-		if (cmp)
+		if (cmp) {
 			return cmp;
+		}
 		return str1.Cmp(str2);
 	}
 
@@ -111,38 +113,52 @@ public:
 		for (; *p1 && *p2; ++p1, ++p2) {
 			int diff = static_cast<int>(wxTolower(*p1)) - static_cast<int>(wxTolower(*p2));
 			if (isNumber) {
-				if (res == 0)
+				if (res == 0) {
 					res = diff;
+				}
 				int nbDigits = (wxIsdigit(*p1) ? 1 : 0) + (wxIsdigit(*p2) ? 1 : 0);
 				if (nbDigits == 0 && res == 0) {
-					if (zeroCount)
+					if (zeroCount) {
 						break;
+					}
 					isNumber = false;
-				} else if (nbDigits != 2)
+				}
+				else if (nbDigits != 2) {
 					break;
-			} else if (wxIsdigit(*p1) && wxIsdigit(*p2)) {
+				}
+			}
+			else if (wxIsdigit(*p1) && wxIsdigit(*p2)) {
 				zeroCount = 0;
-				for(; *p1 == '0' && *(p1+1) && wxIsdigit(*(p1+1)); ++p1)
+				for (; *p1 == '0' && *(p1 + 1) && wxIsdigit(*(p1 + 1)); ++p1) {
 					zeroCount++;
-				for(; *p2 == '0' && *(p2+1) && wxIsdigit(*(p2+1)); ++p2)
+				}
+				for (; *p2 == '0' && *(p2 + 1) && wxIsdigit(*(p2 + 1)); ++p2) {
 					zeroCount--;
+				}
 				res = *p1 - *p2;
 				isNumber = true;
-			} else if (diff)
+			}
+			else if (diff) {
 				return diff;
+			}
 		}
 
-		if (res == 0 && isNumber)
+		if (res == 0 && isNumber) {
 			res = zeroCount;
+		}
 
-		if (!*p1 && !*p2)
+		if (!*p1 && !*p2) {
 			return res;
-		if (!isNumber || res == 0)
-			 return !*p1 ? -1 : 1;
-		if (*p1 && wxIsdigit(*p1))
+		}
+		if (!isNumber || res == 0) {
+			return !*p1 ? -1 : 1;
+		}
+		if (*p1 && wxIsdigit(*p1)) {
 			return 1;       //more digits
-		if (*p2 && wxIsdigit(*p2))
+		}
+		if (*p2 && wxIsdigit(*p2)) {
 			return -1;      //fewer digits
+		}
 		return res;         //same length, compare first different digit in the sequence
 	}
 
@@ -201,29 +217,37 @@ public:
 		default:
 		case dirsort_ontop:
 			if (data1.is_dir()) {
-				if (!data2.is_dir())
+				if (!data2.is_dir()) {
 					return -1;
-				else
+				}
+				else {
 					return 0;
+				}
 			}
 			else {
-				if (data2.is_dir())
+				if (data2.is_dir()) {
 					return 1;
-				else
+				}
+				else {
 					return 0;
+				}
 			}
 		case dirsort_onbottom:
 			if (data1.is_dir()) {
-				if (!data2.is_dir())
+				if (!data2.is_dir()) {
 					return 1;
-				else
+				}
+				else {
 					return 0;
+				}
 			}
 			else {
-				if (data2.is_dir())
+				if (data2.is_dir()) {
 					return -1;
-				else
+				}
+				else {
 					return 0;
+				}
 			}
 		case dirsort_inline:
 			return 0;
@@ -239,12 +263,15 @@ public:
 	inline int CmpSize(const value_type &data1, const value_type &data2) const
 	{
 		int64_t const diff = data1.size - data2.size;
-		if (diff < 0)
+		if (diff < 0) {
 			return -1;
-		else if (diff > 0)
+		}
+		else if (diff > 0) {
 			return 1;
-		else
+		}
+		else {
 			return 0;
+		}
 	}
 
 	inline int CmpStringNoCase(const wxString &data1, const wxString &data2) const
@@ -254,10 +281,10 @@ public:
 
 	inline int CmpTime(const value_type &data1, const value_type &data2) const
 	{
-		if( data1.time < data2.time ) {
+		if (data1.time < data2.time) {
 			return -1;
 		}
-		else if( data1.time > data2.time ) {
+		else if (data1.time > data2.time) {
 			return 1;
 		}
 		else {
@@ -446,10 +473,12 @@ public:
 		typename Listing::value_type const& data1 = this->m_listing[a];
 		typename Listing::value_type const& data2 = this->m_listing[b];
 
-		if (data1.path < data2.path)
+		if (data1.path < data2.path) {
 			return true;
-		if (data1.path != data2.path)
+		}
+		if (data1.path != data2.path) {
 			return false;
+		}
 
 		CMP_LESS(CmpName, data1, data2);
 	}
@@ -474,10 +503,12 @@ public:
 		CMP(CmpDir, data1, data2);
 		CMP(CmpName, data1, data2);
 
-		if (data1.path < data2.path)
+		if (data1.path < data2.path) {
 			return true;
-		if (data1.path != data2.path)
+		}
+		if (data1.path != data2.path) {
 			return false;
+		}
 
 		CMP_LESS(CmpName, data1, data2);
 	}
