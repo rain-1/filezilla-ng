@@ -10,8 +10,14 @@ CWindowStateManager::CWindowStateManager(wxTopLevelWindow* pWindow)
 {
 	m_pWindow = pWindow;
 
+	m_lastMaximized = false;
+
 	m_pWindow->Connect(wxID_ANY, wxEVT_SIZE, wxSizeEventHandler(CWindowStateManager::OnSize), 0, this);
 	m_pWindow->Connect(wxID_ANY, wxEVT_MOVE, wxMoveEventHandler(CWindowStateManager::OnMove), 0, this);
+
+#ifdef __WXGTK__
+	m_maximize_requested = 0;
+#endif
 }
 
 CWindowStateManager::~CWindowStateManager()
@@ -29,7 +35,7 @@ void CWindowStateManager::Remember(unsigned int optionId)
 	wxString posString;
 
 	// is_maximized
-	posString += wxString::Format(_T("%d "), m_lastMaximized);
+	posString += wxString::Format(_T("%d "), m_lastMaximized ? 1 : 0);
 
 	// pos_x pos_y
 	posString += wxString::Format(_T("%d %d "), m_lastWindowPosition.x, m_lastWindowPosition.y);
@@ -40,14 +46,14 @@ void CWindowStateManager::Remember(unsigned int optionId)
 	COptions::Get()->SetOption(optionId, posString.ToStdWstring());
 }
 
-bool CWindowStateManager::ReadDefaults(const unsigned int optionId, int& maximized, wxPoint& position, wxSize& size)
+bool CWindowStateManager::ReadDefaults(const unsigned int optionId, bool& maximized, wxPoint& position, wxSize& size)
 {
 	if (wxGetKeyState(WXK_SHIFT) && wxGetKeyState(WXK_ALT) && wxGetKeyState(WXK_CONTROL)) {
 		return false;
 	}
 
 	// Fields:
-	// - maximized (2 fullscreen, 1 maximized, or 0 normal)
+	// - maximized (1 or 0)
 	// - x position
 	// - y position
 	// - width
@@ -90,7 +96,7 @@ bool CWindowStateManager::ReadDefaults(const unsigned int optionId, int& maximiz
 		position.y = screen_size.GetTop();
 	}
 
-	maximized = values[0];
+	maximized = values[0] != 0;
 
 	return true;
 }
@@ -99,7 +105,7 @@ bool CWindowStateManager::Restore(const unsigned int optionId, const wxSize& def
 {
 	wxPoint position(-1, -1);
 	wxSize size = default_size;
-	int maximized{};
+	bool maximized = false;
 
 	bool read = ReadDefaults(optionId, maximized, position, size);
 
@@ -121,16 +127,10 @@ bool CWindowStateManager::Restore(const unsigned int optionId, const wxSize& def
 #ifdef __WXMSW__
 		m_pWindow->Show();
 #endif
-		if (maximized == 2) {
-			m_pWindow->ShowFullScreen(true);
-		}
-		else {
-			m_pWindow->Maximize();
-		}
+		m_pWindow->Maximize();
 #ifdef __WXGTK__
-		if (!m_pWindow->IsMaximized()) {
+		if (!m_pWindow->IsMaximized())
 			m_maximize_requested = 4;
-		}
 #endif //__WXGTK__
 	}
 	else {
@@ -164,17 +164,7 @@ void CWindowStateManager::OnSize(wxSizeEvent& event)
 	}
 #endif
 	if (!m_pWindow->IsIconized()) {
-
-#ifdef __WXMAC__
-		if (m_pWindow->IsFullScreen()) {
-			m_lastMaximized = 2;
-		}
-		else
-#endif
-		{
-			m_lastMaximized = m_pWindow->IsMaximized() ? 1 : 0;
-		}
-
+		m_lastMaximized = m_pWindow->IsMaximized();
 		if (!m_lastMaximized) {
 			m_lastWindowPosition = m_pWindow->GetPosition();
 			m_lastWindowSize = m_pWindow->GetClientSize();
