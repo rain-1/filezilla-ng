@@ -1620,7 +1620,7 @@ void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent&)
 		if (fzpg.LoadKeyFile(keyFilePath, false, keyFileComment, keyFileData)) {
 			XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFilePath);
 #if USE_MAC_SANDBOX
-			OSXSandboxUserdirs::AddFile(keyFilePath);
+			OSXSandboxUserdirs::Get().AddFile(keyFilePath);
 #endif
 
 		}
