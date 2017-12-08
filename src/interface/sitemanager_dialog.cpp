@@ -18,6 +18,9 @@
 #include "storj_key_interface.h"
 #endif
 #include "xrc_helper.h"
+#if USE_MAC_SANDBOX
+#include "osx_sandbox_userdirs.h"
+#endif
 
 #include <wx/dcclient.h>
 #include <wx/dnd.h>
@@ -1616,6 +1619,10 @@ void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent&)
 		std::wstring keyFileComment, keyFileData;
 		if (fzpg.LoadKeyFile(keyFilePath, false, keyFileComment, keyFileData)) {
 			XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFilePath);
+#if USE_MAC_SANDBOX
+			OSXSandboxUserdirs::AddFile(keyFilePath);
+#endif
+
 		}
 		else {
 			xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);

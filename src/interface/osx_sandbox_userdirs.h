@@ -20,6 +20,8 @@ public:
 
 	bool Add();
 
+	bool AddFile(std::wstring const& file);
+
 	void Remove(std::wstring const& dir);
 
 	std::vector<std::wstring> GetDirs() const;
@@ -30,7 +32,14 @@ private:
 
 	bool Save();
 
-	std::map<std::wstring, std::pair<wxCFDataRef, wxCFRef<CFURLRef>>> userdirs_;
+	struct Data
+	{
+		bool dir{true};
+		wxCFDataRef bookmark;
+		wxCFRef<CFURLRef> url;
+	};
+
+	std::map<std::wstring, Data> userdirs_;
 };
 
 class OSXSandboxUserdirsDialog final : public wxDialogEx
