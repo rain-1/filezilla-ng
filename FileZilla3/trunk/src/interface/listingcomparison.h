@@ -7,7 +7,7 @@ class CComparableListing
 	friend class CComparisonManager;
 public:
 	CComparableListing(wxWindow* pParent);
-	virtual ~CComparableListing() {}
+	virtual ~CComparableListing() = default;
 
 	enum t_fileEntryFlags
 	{
