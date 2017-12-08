@@ -18,7 +18,9 @@ enum ServerProtocol
 
 	STORJ,
 
-	MAX_VALUE = STORJ
+	WEBDAV,
+
+	MAX_VALUE = WEBDAV
 };
 
 enum ServerType

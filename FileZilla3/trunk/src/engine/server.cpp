@@ -17,16 +17,17 @@ struct t_protocolInfo
 };
 
 static const t_protocolInfo protocolInfos[] = {
-	{ FTP,          L"ftp",   false, 21,  true,  fztranslate_mark("FTP - File Transfer Protocol with optional encryption"), true  },
-	{ SFTP,         L"sftp",  true,  22,  false, "SFTP - SSH File Transfer Protocol",                                       false },
-	{ HTTP,         L"http",  true,  80,  false, "HTTP - Hypertext Transfer Protocol",                                      false },
-	{ HTTPS,        L"https", true, 443,  true,  fztranslate_mark("HTTPS - HTTP over TLS"),                                 false },
-	{ FTPS,         L"ftps",  true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true  },
-	{ FTPES,        L"ftpes", true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true  },
-	{ INSECURE_FTP, L"ftp",   false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true  },
-	{ S3,           L"s3",    true, 443,  false,  "S3 - Amazon Simple Storage Service",	                                false },
-	{ STORJ,        L"storj", true, 443,  true,  fztranslate_mark("Storj - Decentralized Cloud Storage"),                   false },
-	{ UNKNOWN,      L"",      false, 21,  false, "", false }
+	{ FTP,          L"ftp",    false, 21,  true,  fztranslate_mark("FTP - File Transfer Protocol with optional encryption"), true  },
+	{ SFTP,         L"sftp",   true,  22,  false, "SFTP - SSH File Transfer Protocol",                                       false },
+	{ HTTP,         L"http",   true,  80,  false, "HTTP - Hypertext Transfer Protocol",                                      false },
+	{ HTTPS,        L"https",  true, 443,  true,  fztranslate_mark("HTTPS - HTTP over TLS"),                                 false },
+	{ FTPS,         L"ftps",   true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true  },
+	{ FTPES,        L"ftpes",  true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true  },
+	{ INSECURE_FTP, L"ftp",    false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true  },
+	{ S3,           L"s3",     true, 443,  false, "S3 - Amazon Simple Storage Service",                                      false },
+	{ STORJ,        L"storj",  true, 443,  true,  fztranslate_mark("Storj - Decentralized Cloud Storage"),                   false },
+	{ WEBDAV,       L"webdav", true, 443,  true,  "WebDAV",                                                                  false },
+	{ UNKNOWN,      L"",       false, 21,  false, "", false }
 };
 
 static std::vector<ServerProtocol> const defaultProtocols = {
