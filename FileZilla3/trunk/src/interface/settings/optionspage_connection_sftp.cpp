@@ -6,6 +6,9 @@
 #include "../filezillaapp.h"
 #include "../fzputtygen_interface.h"
 #include "../inputdialog.h"
+#if USE_MAC_SANDBOX
+#include "../osx_sandbox_userdirs.h"
+#endif
 
 BEGIN_EVENT_TABLE(COptionsPageConnectionSFTP, COptionsPage)
 EVT_BUTTON(XRCID("ID_ADDKEY"), COptionsPageConnectionSFTP::OnAdd)
@@ -80,9 +83,13 @@ void COptionsPageConnectionSFTP::OnAdd(wxCommandEvent&)
 		return;
 	}
 
-	wxString const file = dlg.GetPath();
+	std::wstring const file = dlg.GetPath().ToStdWstring();
 
-	AddKey(dlg.GetPath().ToStdWstring(), false);
+	if (AddKey(dlg.GetPath().ToStdWstring(), false)) {
+#if USE_MAC_SANDBOX
+		OSXSandboxUserdirs::Get().AddFile(file);
+#endif
+	}
 }
 
 void COptionsPageConnectionSFTP::OnRemove(wxCommandEvent&)

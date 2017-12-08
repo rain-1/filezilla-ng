@@ -15,7 +15,7 @@ OSXSandboxUserdirs::OSXSandboxUserdirs()
 OSXSandboxUserdirs::~OSXSandboxUserdirs()
 {
 	for (auto const& dir : userdirs_) {
-		CFURLStopAccessingSecurityScopedResource(dir.second.second.get());
+		CFURLStopAccessingSecurityScopedResource(dir.second.url.get());
 	}
 }
 
@@ -103,11 +103,16 @@ void OSXSandboxUserdirs::Load()
 			continue;
 		}
 
+		bool dir = xdir.attribute("dir").value() != std::string("false");
+		if (dir && path.back() != '/') {
+			path += '/';
+		}
+
 		auto it = userdirs_.find(path);
 		if (it != userdirs_.end()) {
-			CFURLStopAccessingSecurityScopedResource(it->second.second.get());
+			CFURLStopAccessingSecurityScopedResource(it->second.url.get());
 		}
-		userdirs_[path] = std::make_pair(bookmark, url);
+		userdirs_[path] = Data{dir, bookmark, url};
 	}
 
 	if (!error.empty()) {
@@ -136,11 +141,12 @@ bool OSXSandboxUserdirs::Save()
 
 	for (auto const& dir : userdirs_) {
 		std::vector<uint8_t> data;
-		data.resize(dir.second.first.GetLength());
-		dir.second.first.GetBytes(CFRangeMake(0, data.size()), data.data());
+		data.resize(dir.second.bookmark.GetLength());
+		dir.second.bookmark.GetBytes(CFRangeMake(0, data.size()), data.data());
 
 		auto child = xml.append_child("dir");
 		child.append_attribute("path") = fz::to_utf8(dir.first).c_str();
+		child.append_attribute("dir") = dir.second.dir ? "true" : "false";
 		child.text().set(fz::hex_encode<std::string>(data).c_str());
 	}
 
@@ -177,11 +183,54 @@ bool OSXSandboxUserdirs::Add()
 		return false;
 	}
 
-	auto it = userdirs_.find(path);
-	if (it != userdirs_.end()) {
-		CFURLStopAccessingSecurityScopedResource(it->second.second.get());
+	if (actualPath.back() != '/') {
+		actualPath += '/';
 	}
-	userdirs_[actualPath] = std::make_pair(bookmark, url);
+
+	auto it = userdirs_.find(actualPath);
+	if (it != userdirs_.end()) {
+		CFURLStopAccessingSecurityScopedResource(it->second.url.get());
+	}
+	userdirs_[actualPath] = Data{true, bookmark, url};
+
+	CInterProcessMutex mutex(MUTEX_MAC_SANDBOX_USERDIRS);
+
+	return Save();
+}
+
+bool OSXSandboxUserdirs::AddFile(std::wstring const& file)
+{
+	if (file.empty() || file.back() == '/') {
+		return false;
+	}
+
+	wxCFStringRef pathref(file);
+	wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(0, pathref.get(), kCFURLPOSIXPathStyle, true));
+	if (!url) {
+		wxMessageBox(wxString::Format(_("Could not create CFURL from path %s"), file));
+		return false;
+	}
+
+	CFErrorRef errorRef = 0;
+	wxCFDataRef bookmark(CFURLCreateBookmarkData(0, url.get(), kCFURLBookmarkCreationWithSecurityScope, 0, 0, &errorRef));
+	if (!bookmark) {
+		wxString error;
+		append(error, errorRef, L"CFURLCreateBookmarkData");
+		wxMessageBox(_("Could not create security-scoped bookmark from URL:") + error);
+		return false;
+	}
+
+	std::wstring actualPath = GetPath(url.get());
+	if (actualPath.empty()) {
+		wxMessageBox(_("Could not get path from URL"));
+		return false;
+	}
+
+	auto it = userdirs_.find(actualPath);
+	if (it != userdirs_.end()) {
+		CFURLStopAccessingSecurityScopedResource(it->second.url.get());
+	}
+	userdirs_[actualPath] = Data{false, bookmark, url};
 
 	CInterProcessMutex mutex(MUTEX_MAC_SANDBOX_USERDIRS);
 
@@ -202,7 +251,7 @@ void OSXSandboxUserdirs::Remove(std::wstring const& dir)
 {
 	auto it = userdirs_.find(dir);
 	if (it != userdirs_.cend()) {
-		CFURLStopAccessingSecurityScopedResource(it->second.second.get());
+		CFURLStopAccessingSecurityScopedResource(it->second.url.get());
 		userdirs_.erase(it);
 	}
 
