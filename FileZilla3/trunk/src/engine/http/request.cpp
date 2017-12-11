@@ -165,6 +165,7 @@ int CHttpRequestOpData::OnReceive()
 		int read = controlSocket_.m_pBackend->Read(recv_buffer_.get(recv_size), recv_size, error);
 		if (read <= -1) {
 			if (error != EAGAIN) {
+				LogMessage(MessageType::Error, _("Could not read from socket: %s"), fz::socket::error_description(error));
 				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 			}
 			return FZ_REPLY_WOULDBLOCK;
@@ -175,6 +176,7 @@ int CHttpRequestOpData::OnReceive()
 
 		if (!got_header_) {
 			if (!read) {
+				LogMessage(MessageType::Error, _("Connection closed by server"));
 				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 			}
 
@@ -185,6 +187,7 @@ int CHttpRequestOpData::OnReceive()
 		}
 		else if (transfer_encoding_ == chunked) {
 			if (!read) {
+				LogMessage(MessageType::Error, _("Connection closed by server"));
 				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 			}
 			int res = ParseChunkedData();
@@ -197,7 +200,8 @@ int CHttpRequestOpData::OnReceive()
 				assert(recv_buffer_.empty());
 
 				if (responseContentLength_ != -1 && receivedData_ != responseContentLength_) {
-					return FZ_REPLY_ERROR;
+					LogMessage(MessageType::Error, _("Connection closed by server"));
+					return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 				}
 				else {
 					return FZ_REPLY_OK;
