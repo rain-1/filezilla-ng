@@ -266,7 +266,7 @@ int CHttpRequestOpData::ParseHeader()
 		}
 
 		if (!response_.code_) {
-			if (recv_buffer_.size() < 16 || memcmp(recv_buffer_.get(), "HTTP/1.", 7)) {
+			if (recv_buffer_.size() < 15 || memcmp(recv_buffer_.get(), "HTTP/1.", 7)) {
 				// Invalid HTTP Status-Line
 				LogMessage(MessageType::Error, _("Invalid HTTP Response"));
 				return FZ_REPLY_ERROR;
