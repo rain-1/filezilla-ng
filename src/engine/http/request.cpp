@@ -66,7 +66,12 @@ int CHttpRequestOpData::Send()
 
 			for (auto const& header : request_.headers_) {
 				std::string line = fz::sprintf("%s: %s", header.first, header.second);
-				LogMessage(MessageType::Command, "%s", line);
+				if (header.first == "Authorization") {
+					LogMessage(MessageType::Command, "%s: %s", header.first, std::string(header.second.size(), '*'));
+				}
+				else {
+					LogMessage(MessageType::Command, "%s", line);
+				}
 				command += line + "\r\n";
 			}
 
