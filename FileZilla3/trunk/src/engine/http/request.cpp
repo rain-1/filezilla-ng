@@ -323,13 +323,26 @@ int CHttpRequestOpData::ParseHeader()
 
 			std::string line(recv_buffer_.get(), recv_buffer_.get() + i);
 
-			auto pos = line.find(": ");
-			if (pos == std::string::npos || !pos) {
+			auto delim_pos = line.find(':');
+			if (delim_pos == std::string::npos || !delim_pos) {
 				LogMessage(MessageType::Error, _("Malformed response header: %s"), _("Invalid line"));
 				return FZ_REPLY_ERROR;
 			}
 
-			response_.headers_[line.substr(0, pos)] = line.substr(pos + 2);
+			std::string value;
+			auto value_start = line.find_first_not_of(" \t", delim_pos + 1);
+			if (value_start != std::string::npos) {
+				int value_stop = line.find_last_not_of(" \t"); // Cannot fail
+				value = line.substr(value_start, value_stop - value_start + 1);
+			}
+
+			auto & header = response_.headers_[line.substr(0, delim_pos)];
+			if (header.empty()) {
+				header = value;
+			}
+			else if (!value.empty()) {
+				header += ", " + value;
+			}
 		}
 
 		recv_buffer_.consume(i + 2);
