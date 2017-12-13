@@ -113,7 +113,7 @@ int CStorjFileTransferOpData::ParseResponse()
 		return controlSocket_.result_;
 	}
 
-	LogMessage(MessageType::Debug_Warning, L"FileTransferParseResponse called at inproper time: %d", opState);
+	LogMessage(MessageType::Debug_Warning, L"FileTransferParseResponse called at improper time: %d", opState);
 	return FZ_REPLY_INTERNALERROR;
 }
 

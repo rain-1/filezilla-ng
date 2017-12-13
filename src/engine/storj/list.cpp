@@ -102,7 +102,7 @@ int CStorjListOpData::ParseResponse()
 		return FZ_REPLY_OK;
 	}
 
-	LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at inproper time: %d", opState);
+	LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at improper time: %d", opState);
 	return FZ_REPLY_INTERNALERROR;
 }
 
@@ -133,7 +133,7 @@ int CStorjListOpData::SubcommandResult(int prevResult, COpData const&)
 int CStorjListOpData::ParseEntry(std::wstring && name, std::wstring const& size, std::wstring && id, std::wstring const& created)
 {
 	if (opState != list_list) {
-		LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at inproper time: %d", opState);
+		LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at improper time: %d", opState);
 		return FZ_REPLY_INTERNALERROR;
 	}
 
