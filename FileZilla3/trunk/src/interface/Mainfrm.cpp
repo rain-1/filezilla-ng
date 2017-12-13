@@ -2301,7 +2301,7 @@ void CMainFrame::OnToolbarComparison(wxCommandEvent&)
 			return;
 		}
 
-		if (controls->pLocalListSearchPanel->IsShown() || controls->pLocalListSearchPanel->IsShown()) {
+		if (controls->pLocalListSearchPanel->IsShown() || controls->pRemoteListSearchPanel->IsShown()) {
 			CConditionalDialog dlg(this, CConditionalDialog::quick_search, CConditionalDialog::yesno);
 			dlg.SetTitle(_("Directory comparison"));
 			dlg.AddText(_("To compare directories quick search must be closed."));
