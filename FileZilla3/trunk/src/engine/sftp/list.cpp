@@ -85,7 +85,7 @@ int CSftpListOpData::ParseResponse()
 		return FZ_REPLY_OK;
 	}
 
-	LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at inproper time: %d", opState);
+	LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at improper time: %d", opState);
 	return FZ_REPLY_INTERNALERROR;
 }
 
@@ -121,7 +121,7 @@ int CSftpListOpData::ParseEntry(std::wstring && entry, std::wstring const& stime
 {
 	if (opState != list_list) {
 		controlSocket_.LogMessageRaw(MessageType::RawList, entry);
-		LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at inproper time: %d", opState);
+		LogMessage(MessageType::Debug_Warning, L"ListParseResponse called at improper time: %d", opState);
 		return FZ_REPLY_INTERNALERROR;
 	}
 
