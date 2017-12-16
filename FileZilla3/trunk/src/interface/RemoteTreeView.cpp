@@ -320,6 +320,8 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 		return;
 	}
 
+	bool const wasEmpty = GetChildrenCount(GetRootItem()) == 0;
+
 #ifndef __WXMSW__
 	Freeze();
 #endif
@@ -332,19 +334,21 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 		return;
 	}
 
-	if (!IsExpanded(parent) && parent != m_ExpandAfterList)
-	{
+	if (wasEmpty && GetItemParent(parent) == GetRootItem() && !m_ExpandAfterList) {
+		m_ExpandAfterList = parent;
+	}
+
+	if (!IsExpanded(parent) && parent != m_ExpandAfterList) {
 		DeleteChildren(parent);
 		CFilterManager filter;
-		if (HasSubdirs(*pListing, filter))
+		if (HasSubdirs(*pListing, filter)) {
 			AppendItem(parent, _T(""), -1, -1);
+		}
 	}
-	else
-	{
+	else {
 		RefreshItem(parent, *pListing, !modified);
 
-		if (m_ExpandAfterList == parent)
-		{
+		if (m_ExpandAfterList == parent) {
 #ifndef __WXMSW__
 			// Prevent CalculatePositions from being called
 			wxGenericTreeItem *anchor = m_anchor;
@@ -363,11 +367,13 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 #ifndef __WXMSW__
 	Thaw();
 #endif
-	if (!modified)
+	if (!modified) {
 		SafeSelectItem(parent);
+	}
 #ifndef __WXMSW__
-	else
+	else {
 		Refresh();
+	}
 #endif
 
 	m_busy = false;
@@ -375,11 +381,11 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 
 wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 {
-	std::vector<wxString> pieces;
+	std::vector<std::wstring> pieces;
 	pieces.reserve(path.SegmentCount() + 1);
 	while (path.HasParent()) {
 		pieces.push_back(path.GetLastSegment());
-		path = path.GetParent();
+		path.MakeParent();
 	}
 	wxASSERT(!path.GetPath().empty());
 	pieces.push_back(path.GetPath());
@@ -387,9 +393,9 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 	const wxTreeItemId root = GetRootItem();
 	wxTreeItemId parent = root;
 
-	for (std::vector<wxString>::const_reverse_iterator iter = pieces.rbegin(); iter != pieces.rend(); ++iter) {
+	for (auto iter = pieces.crbegin(); iter != pieces.crend(); ++iter) {
 		if (iter != pieces.rbegin()) {
-			path.AddSegment(iter->ToStdWstring());
+			path.AddSegment(*iter);
 		}
 
 		wxTreeItemIdValue cookie;
@@ -397,13 +403,15 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 		if (child && GetItemText(child).empty()) {
 			Delete(child);
 			child = wxTreeItemId();
-			if (parent != root)
+			if (parent != root) {
 				ListExpand(parent);
+			}
 		}
 		for (child = GetFirstChild(parent, cookie); child; child = GetNextSibling(child)) {
 			const wxString& text = GetItemText(child);
-			if (text == *iter)
+			if (text == *iter) {
 				break;
+			}
 		}
 		if (!child) {
 			CDirectoryListing listing;
@@ -420,8 +428,9 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 
 			auto nextIter = iter;
 			++nextIter;
-			if (nextIter != pieces.rend())
+			if (nextIter != pieces.rend()) {
 				DisplayItem(child, listing);
+			}
 		}
 		if (select && iter != pieces.rbegin()) {
 #ifndef __WXMSW__
@@ -493,20 +502,23 @@ void CRemoteTreeView::CreateImageList()
 
 bool CRemoteTreeView::HasSubdirs(const CDirectoryListing& listing, const CFilterManager& filter)
 {
-	if (!listing.has_dirs())
+	if (!listing.has_dirs()) {
 		return false;
+	}
 
-	if (!filter.HasActiveFilters())
+	if (!filter.HasActiveFilters()) {
 		return true;
+	}
 
 	const wxString path = listing.path.GetPath();
-	for (unsigned int i = 0; i < listing.GetCount(); i++)
-	{
-		if (!listing[i].is_dir())
+	for (unsigned int i = 0; i < listing.GetCount(); ++i) {
+		if (!listing[i].is_dir()) {
 			continue;
+		}
 
-		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time))
+		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time)) {
 			continue;
+		}
 
 		return true;
 	}
@@ -522,11 +534,13 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 
 	CFilterDialog filter;
 	for (unsigned int i = 0; i < listing.GetCount(); ++i) {
-		if (!listing[i].is_dir())
+		if (!listing[i].is_dir()) {
 			continue;
+		}
 
-		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time))
+		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time)) {
 			continue;
+		}
 
 		std::wstring const& name = listing[i].name;
 		CServerPath subdir = listing.path;
@@ -538,8 +552,9 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 			wxTreeItemId child = AppendItem(parent, name, 0, 2, 0);
 			SetItemImages(child, false);
 
-			if (HasSubdirs(subListing, filter))
+			if (HasSubdirs(subListing, filter)) {
 				AppendItem(child, _T(""), -1, -1);
+			}
 		}
 		else {
 			wxTreeItemId child = AppendItem(parent, name, 1, 3, 0);
