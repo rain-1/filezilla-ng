@@ -91,12 +91,13 @@ int CStorjListOpData::ParseResponse()
 		if (controlSocket_.result_ != FZ_REPLY_OK) {
 			return controlSocket_.result_;
 		}
-		directoryListing_.path = path_;
+		CDirectoryListing listing;
+		listing.path = path_;
+		listing.m_firstListTime = fz::monotonic_clock::now();
+		listing.Assign(std::move(entries_));
 
-		directoryListing_.m_firstListTime = fz::monotonic_clock::now();
-
-		engine_.GetDirectoryCache().Store(directoryListing_, currentServer_);
-		controlSocket_.SendDirectoryListingNotification(directoryListing_.path, topLevel_, false);
+		engine_.GetDirectoryCache().Store(listing, currentServer_);
+		controlSocket_.SendDirectoryListingNotification(listing.path, topLevel_, false);
 
 		currentPath_ = path_;
 		return FZ_REPLY_OK;
@@ -168,7 +169,7 @@ int CStorjListOpData::ParseEntry(std::wstring && name, std::wstring const& size,
 	entry.time.set(created, fz::datetime::utc);
 
 	if (!entry.name.empty()) {
-		directoryListing_.Append(std::move(entry));
+		entries_.emplace_back(std::move(entry));
 	}
 
 	return FZ_REPLY_WOULDBLOCK;
