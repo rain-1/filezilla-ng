@@ -62,15 +62,14 @@ CDirentry& CDirectoryListing::get(unsigned int index)
 	return m_entries.get()[index].get();
 }
 
-void CDirectoryListing::Assign(std::deque<fz::shared_value<CDirentry>> &entries)
+void CDirectoryListing::Assign(std::vector<fz::shared_value<CDirentry>> && entries)
 {
-	std::vector<fz::shared_value<CDirentry> >& own_entries = m_entries.get();
-	own_entries.clear();
-	own_entries.reserve(entries.size());
+	std::vector<fz::shared_value<CDirentry>> & own_entries = m_entries.get();
+	own_entries = std::move(entries);
 
 	m_flags &= ~(listing_has_dirs | listing_has_perms | listing_has_usergroup);
 
-	for (auto & entry : entries) {
+	for (auto const& entry : own_entries) {
 		if (entry->is_dir()) {
 			m_flags |= listing_has_dirs;
 		}
@@ -80,7 +79,6 @@ void CDirectoryListing::Assign(std::deque<fz::shared_value<CDirentry>> &entries)
 		if (!entry->ownerGroup->empty()) {
 			m_flags |= listing_has_usergroup;
 		}
-		own_entries.emplace_back(std::move(entry));
 	}
 
 	m_searchmap_case.clear();
