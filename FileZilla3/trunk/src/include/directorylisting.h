@@ -126,7 +126,7 @@ public:
 	bool has_perms() const { return (m_flags & listing_has_perms) != 0; }
 	bool has_usergroup() const { return (m_flags & listing_has_usergroup) != 0; }
 
-	void Assign(std::deque<fz::shared_value<CDirentry>> & entries);
+	void Assign(std::vector<fz::shared_value<CDirentry>> && entries);
 
 	bool RemoveEntry(unsigned int index);
 

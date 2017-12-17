@@ -712,18 +712,19 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 	}
 
 	if (!m_fileList.empty()) {
-		assert(m_entryList.empty());
+		assert(entries_.empty());
 
+		entries_.reserve(m_fileList.size());
 		for (auto const& file : m_fileList) {
 			CDirentry entry;
 			entry.name = file;
 			entry.flags = 0;
 			entry.size = -1;
-			m_entryList.emplace_back(std::move(entry));
+			entries_.emplace_back(std::move(entry));
 		}
 	}
 
-	listing.Assign(m_entryList);
+	listing.Assign(std::move(entries_));
 
 	return listing;
 }
@@ -842,8 +843,9 @@ done:
 	m_fileListOnly = false;
 
 	// Don't add . or ..
-	if (entry.name == L"." || entry.name == L"..")
+	if (entry.name == L"." || entry.name == L"..") {
 		return true;
+	}
 
 	if (serverType == VMS && entry.is_dir()) {
 		// Trim version information from directories
@@ -859,7 +861,7 @@ done:
 		}
 	}
 
-	m_entryList.emplace_back(std::move(refEntry));
+	entries_.emplace_back(std::move(refEntry));
 
 skip:
 	m_maybeMultilineVms = false;
@@ -873,8 +875,9 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 {
 	int index = 0;
 	CToken token;
-	if (!line.GetToken(index, token))
+	if (!line.GetToken(index, token)) {
 		return false;
+	}
 
 	wchar_t chr = token[0];
 	if (chr != 'b' &&
@@ -2823,7 +2826,7 @@ void CDirectoryListingParser::Reset()
 	delete m_prevLine;
 	m_prevLine = nullptr;
 
-	m_entryList.clear();
+	entries_.clear();
 	m_fileList.clear();
 	m_currentOffset = 0;
 	m_fileListOnly = true;
