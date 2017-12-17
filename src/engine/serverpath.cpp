@@ -204,20 +204,26 @@ bool CServerPath::HasParent() const
 
 CServerPath CServerPath::GetParent() const
 {
-	if (empty() || !HasParent()) {
-		return CServerPath();
-	}
-
 	CServerPath parent(*this);
-	CServerPathData& parent_data = parent.m_data.get();
+	parent.MakeParent();
+	return parent;
+}
 
-	parent_data.m_segments.pop_back();
+CServerPath& CServerPath::MakeParent()
+{
+	if (empty() || !HasParent()) {
+		clear();
+	}
+	else {
+		CServerPathData& data = m_data.get();
+		data.m_segments.pop_back();
 
-	if (m_type == MVS) {
-		parent_data.m_prefix = fz::sparse_optional<std::wstring>(L".");
+		if (m_type == MVS) {
+			data.m_prefix = fz::sparse_optional<std::wstring>(L".");
+		}
 	}
 
-	return parent;
+	return *this;
 }
 
 std::wstring CServerPath::GetFirstSegment() const
