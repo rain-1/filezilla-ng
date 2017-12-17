@@ -27,7 +27,7 @@ private:
 	CServerPath path_;
 	std::wstring subDir_;
 
-	CDirectoryListing directoryListing_;
+	std::vector<fz::shared_value<CDirentry>> entries_;
 
 	fz::monotonic_clock time_before_locking_;
 
