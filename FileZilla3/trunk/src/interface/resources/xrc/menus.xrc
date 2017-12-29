@@ -631,6 +631,12 @@
     <object class="wxMenuItem" name="ID_MENU_SEARCH_GETURL_PASSWORD">
       <label>C&amp;opy URL(s) with password to clipboard</label>
     </object>
+    <object class="wxMenuItem" name="ID_MENU_SEARCH_OPEN">
+      <label>O&amp;pen</label>
+    </object>
+    <object class="wxMenuItem" name="ID_MENU_SEARCH_FILEMANAGER">
+      <label>Show in file &amp;manager</label>
+    </object>
   </object>
   <object class="wxMenu" name="ID_MENU_TABCONTEXT">
     <object class="wxMenuItem" name="ID_TABCONTEXT_NEW">
