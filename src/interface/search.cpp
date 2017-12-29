@@ -5,6 +5,7 @@
 #include "search.h"
 #include "commandqueue.h"
 #include "filelistctrl.h"
+#include "file_utils.h"
 #include "ipcmutex.h"
 #include "Options.h"
 #include "queue.h"
@@ -51,10 +52,12 @@ inline int DoCmpName(CRemoteSearchFileData const& data1, CRemoteSearchFileData c
 	}
 
 	if (!res) {
-		if (data1.path < data2.path)
+		if (data1.path < data2.path) {
 			res = -1;
-		else if (data2.path < data1.path)
+		}
+		else if (data2.path < data1.path) {
 			res = 1;
+		}
 	}
 
 	return res;
@@ -79,10 +82,12 @@ inline int DoCmpName(CLocalSearchFileData const& data1, CLocalSearchFileData con
 	}
 
 	if (!res) {
-		if (data1.path < data2.path)
+		if (data1.path < data2.path) {
 			res = -1;
-		else if (data2.path < data1.path)
+		}
+		else if (data2.path < data1.path) {
 			res = 1;
+		}
 	}
 
 	return res;
@@ -276,8 +281,9 @@ std::unique_ptr<CFileListCtrlSortBase> CSearchDialogFileList::GetSortComparisonO
 
 wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 {
-	if (item < 0 || item >= (int)m_indexMapping.size())
+	if (item < 0 || item >= (int)m_indexMapping.size()) {
 		return wxString();
+	}
 	int index = m_indexMapping[item];
 
 	if (mode_ == CSearchDialog::search_mode::local) {
@@ -353,14 +359,16 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 int CSearchDialogFileList::OnGetItemImage(long item) const
 {
 	CSearchDialogFileList *pThis = const_cast<CSearchDialogFileList *>(this);
-	if (item < 0 || item >= (int)m_indexMapping.size())
+	if (item < 0 || item >= (int)m_indexMapping.size()) {
 		return -1;
+	}
 	int index = m_indexMapping[item];
 
 	int &icon = pThis->m_fileData[index].icon;
 
-	if (icon != -2)
+	if (icon != -2) {
 		return icon;
+	}
 
 	if (mode_ == CSearchDialog::search_mode::local) {
 		auto const& file = localFileData_[index];
@@ -403,6 +411,8 @@ EVT_MENU(XRCID("ID_MENU_SEARCH_EDIT"), CSearchDialog::OnEdit)
 EVT_MENU(XRCID("ID_MENU_SEARCH_DELETE"), CSearchDialog::OnDelete)
 EVT_MENU(XRCID("ID_MENU_SEARCH_GETURL"), CSearchDialog::OnGetUrl)
 EVT_MENU(XRCID("ID_MENU_SEARCH_GETURL_PASSWORD"), CSearchDialog::OnGetUrl)
+EVT_MENU(XRCID("ID_MENU_SEARCH_OPEN"), CSearchDialog::OnOpen)
+EVT_MENU(XRCID("ID_MENU_SEARCH_FILEMANAGER"), CSearchDialog::OnOpen)
 EVT_CHAR_HOOK(CSearchDialog::OnCharHook)
 EVT_RADIOBUTTON(XRCID("ID_LOCAL_SEARCH"), CSearchDialog::OnChangeSearchMode)
 EVT_RADIOBUTTON(XRCID("ID_REMOTE_SEARCH"), CSearchDialog::OnChangeSearchMode)
@@ -425,8 +435,9 @@ CSearchDialog::~CSearchDialog()
 
 bool CSearchDialog::Load()
 {
-	if (!wxDialogEx::Load(m_parent, _T("ID_SEARCH")))
+	if (!wxDialogEx::Load(m_parent, _T("ID_SEARCH"))) {
 		return false;
+	}
 
 	// XRCed complains if adding a status bar to a dialog, so do it here instead
 	CFilelistStatusBar* pStatusBar = new CFilelistStatusBar(this);
@@ -435,8 +446,9 @@ bool CSearchDialog::Load()
 
 	GetSizer()->Add(pStatusBar, 0, wxGROW);
 
-	if (!CreateListControl(filter_name | filter_size | filter_path | filter_date))
+	if (!CreateListControl(filter_name | filter_size | filter_path | filter_date)) {
 		return false;
+	}
 
 	m_results = new CSearchDialogFileList(this, 0);
 	ReplaceControl(XRCCTRL(*this, "ID_RESULTS", wxWindow), m_results);
@@ -543,12 +555,14 @@ void CSearchDialog::OnStateChange(t_statechange_notifications notification, cons
 
 void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> const& listing)
 {
-	if (!listing || listing->failed())
+	if (!listing || listing->failed()) {
 		return;
+	}
 
 	// Do not process same directory multiple times
-	if (!m_visited.insert(listing->path).second)
+	if (!m_visited.insert(listing->path).second) {
 		return;
+	}
 
 	int old_count = m_results->m_fileData.size();
 	int added_count = 0;
@@ -592,10 +606,12 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 			added_indexes.insert(added_indexes_insert_pos, added_index);
 		}
 
-		if (entry.is_dir())
+		if (entry.is_dir()) {
 			m_results->GetFilelistStatusBar()->AddDirectory();
-		else
+		}
+		else {
 			m_results->GetFilelistStatusBar()->AddFile(entry.size);
+		}
 	}
 
 	if (added_count) {
@@ -811,20 +827,23 @@ void CSearchDialog::OnContextMenu(wxContextMenuEvent& event)
 	if (!m_state.IsRemoteIdle() || !m_state.IsRemoteConnected()) {
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_UPLOAD"), false);
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_DOWNLOAD"), false);
-		pMenu->Enable(XRCID("ID_MENU_SEARCH_DELETE"), false);
+		if (m_results->mode_ == search_mode::remote) {
+			pMenu->Enable(XRCID("ID_MENU_SEARCH_DELETE"), false);
+		}
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_EDIT"), false);
 	}
 
 	bool const localSearch = m_results->mode_ == search_mode::local;
 	if (localSearch) {
 		pMenu->Delete(XRCID("ID_MENU_SEARCH_DOWNLOAD"));
-		pMenu->Delete(XRCID("ID_MENU_SEARCH_DELETE"));
 		pMenu->Delete(XRCID("ID_MENU_SEARCH_EDIT"));
 		pMenu->Delete(XRCID("ID_MENU_SEARCH_GETURL"));
 		pMenu->Delete(XRCID("ID_MENU_SEARCH_GETURL_PASSWORD"));
 	}
 	else {
 		pMenu->Delete(XRCID("ID_MENU_SEARCH_UPLOAD"));
+		pMenu->Delete(XRCID("ID_MENU_SEARCH_OPEN"));
+		pMenu->Delete(XRCID("ID_MENU_SEARCH_FILEMANAGER"));
 		pMenu->Delete(XRCID(wxGetKeyState(WXK_SHIFT) ? "ID_MENU_SEARCH_GETURL" : "ID_MENU_SEARCH_GETURL_PASSWORD"));
 	}
 
@@ -841,14 +860,17 @@ public:
 	{
 		download_ = download;
 
-		if (!Load(parent, download ? _T("ID_SEARCH_DOWNLOAD") : _T("ID_SEARCH_UPLOAD")))
+		if (!Load(parent, download ? _T("ID_SEARCH_DOWNLOAD") : _T("ID_SEARCH_UPLOAD"))) {
 			return false;
+		}
 
 		wxString desc;
-		if (!count_dirs)
+		if (!count_dirs) {
 			desc.Printf(wxPLURAL("Selected %d file for transfer.", "Selected %d files for transfer.", count_files), count_files);
-		else if (!count_files)
+		}
+		else if (!count_files) {
 			desc.Printf(wxPLURAL("Selected %d directory with its contents for transfer.", "Selected %d directories with their contents for transfer.", count_dirs), count_dirs);
+		}
 		else {
 			wxString files = wxString::Format(wxPLURAL("%d file", "%d files", count_files), count_files);
 			wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", count_dirs), count_dirs);
@@ -863,8 +885,9 @@ public:
 			XRCCTRL(*this, "ID_REMOTEPATH", wxTextCtrl)->ChangeValue(path);
 		}
 
-		if (ShowModal() != wxID_OK)
+		if (ShowModal() != wxID_OK) {
 			return false;
+		}
 
 		return true;
 	}
@@ -948,13 +971,15 @@ void ProcessSelection(std::list<int> &selected_files, std::deque<Path> &selected
 		if (fileData[index].is_dir()) {
 			Path path = fileData[index].path;
 			path.ChangePath(fileData[index].name);
-			if (path.empty())
+			if (path.empty()) {
 				continue;
+			}
 
 			dirs.push_back(path);
 		}
-		else
+		else {
 			selected_files.push_back(index);
+		}
 	}
 
 	// Make sure that selected_dirs does not contain
@@ -978,8 +1003,9 @@ void ProcessSelection(std::list<int> &selected_files, std::deque<Path> &selected
 				break;
 			}
 		}
-		if (path_iter == selected_dirs.end())
+		if (path_iter == selected_dirs.end()) {
 			selected_files_new.push_back(sel_file);
+		}
 	}
 	selected_files.swap(selected_files_new);
 
@@ -1196,8 +1222,9 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 		dlg.SetTitle(_("Confirmation needed"));
 		dlg.AddText(_("You have selected more than 10 files for editing, do you really want to continue?"));
 
-		if (!dlg.Run())
+		if (!dlg.Run()) {
 			return;
+		}
 	}
 
 	for (auto const& item : selected_files) {
@@ -1210,59 +1237,78 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 
 void CSearchDialog::OnDelete(wxCommandEvent&)
 {
-	if (!m_state.IsRemoteIdle()) {
-		return;
-	}
+	if (m_results->mode_ == search_mode::remote) {
+		if (!m_state.IsRemoteIdle()) {
+			return;
+		}
 
-	if (m_results->mode_ != search_mode::remote) {
-		return;
-	}
+		// Find all selected files and directories
+		std::deque<CServerPath> selected_dirs;
+		std::list<int> selected_files;
+		ProcessSelection(selected_files, selected_dirs, m_results->remoteFileData_, m_results);
 
-	// Find all selected files and directories
-	std::deque<CServerPath> selected_dirs;
-	std::list<int> selected_files;
-	ProcessSelection(selected_files, selected_dirs, m_results->remoteFileData_, m_results);
+		if (selected_files.empty() && selected_dirs.empty()) {
+			return;
+		}
 
-	if (selected_files.empty() && selected_dirs.empty()) {
-		return;
-	}
+		wxString question;
+		if (selected_dirs.empty()) {
+			question.Printf(wxPLURAL("Really delete %d file from the server?", "Really delete %d files from the server?", selected_files.size()), selected_files.size());
+		}
+		else if (selected_files.empty()) {
+			question.Printf(wxPLURAL("Really delete %d directory with its contents from the server?", "Really delete %d directories with their contents from the server?", selected_dirs.size()), selected_dirs.size());
+		}
+		else {
+			wxString files = wxString::Format(wxPLURAL("%d file", "%d files", selected_files.size()), selected_files.size());
+			wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", selected_dirs.size()), selected_dirs.size());
+			question.Printf(_("Really delete %s and %s from the server?"), files, dirs);
+		}
 
-	wxString question;
-	if (selected_dirs.empty()) {
-		question.Printf(wxPLURAL("Really delete %d file from the server?", "Really delete %d files from the server?", selected_files.size()), selected_files.size());
-	}
-	else if (selected_files.empty()) {
-		question.Printf(wxPLURAL("Really delete %d directory with its contents from the server?", "Really delete %d directories with their contents from the server?", selected_dirs.size()), selected_dirs.size());
+		if (wxMessageBoxEx(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES) {
+			return;
+		}
+
+		for (auto const& file : selected_files) {
+			CRemoteSearchFileData const& entry = m_results->remoteFileData_[file];
+			std::deque<std::wstring> files_to_delete;
+			files_to_delete.push_back(entry.name);
+			m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(entry.path, std::move(files_to_delete)));
+		}
+
+		for (auto path : selected_dirs) {
+			std::wstring segment;
+			if (path.HasParent()) {
+				segment = path.GetLastSegment();
+				path = path.GetParent();
+			}
+			recursion_root root(path, !path.HasParent());
+			root.add_dir_to_visit(path, segment);
+			m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
+		}
+		ActiveFilters const filters; // Empty, recurse into everything
+		m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
 	}
 	else {
-		wxString files = wxString::Format(wxPLURAL("%d file", "%d files", selected_files.size()), selected_files.size());
-		wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", selected_dirs.size()), selected_dirs.size());
-		question.Printf(_("Really delete %s and %s from the server?"), files, dirs);
-	}
+		std::deque<CLocalPath> selected_dirs;
+		std::list<int> selected_files;
+		ProcessSelection(selected_files, selected_dirs, m_results->localFileData_, m_results);
 
-	if (wxMessageBoxEx(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES) {
-		return;
-	}
-
-	for (auto const& file : selected_files) {
-		CDirentry const& entry = m_results->remoteFileData_[file];
-		std::deque<std::wstring> files_to_delete;
-		files_to_delete.push_back(entry.name);
-		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->remoteFileData_[file].path, std::move(files_to_delete)));
-	}
-
-	for (auto path : selected_dirs) {
-		std::wstring segment;
-		if (path.HasParent()) {
-			segment = path.GetLastSegment();
-			path = path.GetParent();
+		if (selected_files.empty() && selected_dirs.empty()) {
+			return;
 		}
-		recursion_root root(path, !path.HasParent());
-		root.add_dir_to_visit(path, segment);
-		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
+
+		std::list<fz::native_string> pathsToDelete;
+		for (auto const& file : selected_files) {
+			CLocalSearchFileData const& entry = m_results->localFileData_[file];
+			pathsToDelete.push_back(fz::to_native(entry.path.GetPath() + entry.name));
+		}
+		for (auto path : selected_dirs) {
+			pathsToDelete.push_back(fz::to_native(path.GetPath()));
+		}
+
+		gui_recursive_remove rmd(this);
+		rmd.remove(pathsToDelete);
 	}
-	ActiveFilters const filters; // Empty, recurse into everything
-	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
 }
 
 void CSearchDialog::OnCharHook(wxKeyEvent& event)
@@ -1309,8 +1355,9 @@ void CSearchDialog::LoadConditions()
 	if (!filter)
 		return;
 
-	if (!CFilterManager::LoadFilter(filter, m_search_filter))
+	if (!CFilterManager::LoadFilter(filter, m_search_filter)) {
 		m_search_filter = CFilter();
+	}
 }
 
 void CSearchDialog::SaveConditions()
@@ -1409,4 +1456,83 @@ void CSearchDialog::OnGetUrl(wxCommandEvent& event)
 
 	wxTheClipboard->Flush();
 	wxTheClipboard->Close();
+}
+
+void CSearchDialog::OnOpen(wxCommandEvent & event)
+{
+	std::list<CLocalSearchFileData> selected_item_list;
+
+	int sel = -1;
+	while ((sel = m_results->GetNextItem(sel, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
+		if (static_cast<size_t>(sel) >= m_results->indexMapping().size()) {
+			continue;
+		}
+		int index = m_results->indexMapping()[sel];
+
+		selected_item_list.push_back(m_results->localFileData_[index]);
+	}
+
+	CEditHandler* pEditHandler = CEditHandler::Get();
+	if (!pEditHandler) {
+		wxBell();
+		return;
+	}
+
+	if (selected_item_list.empty()) {
+		wxBell();
+		return;
+	}
+
+	if (selected_item_list.size() > 10) {
+		CConditionalDialog dlg(this, CConditionalDialog::many_selected_for_edit, CConditionalDialog::yesno);
+		dlg.SetTitle(_("Confirmation needed"));
+		dlg.AddText(_("You have selected more than 10 files or directories to open, do you really want to continue?"));
+
+		if (!dlg.Run()) {
+			return;
+		}
+	}
+
+	bool const open = event.GetId() == XRCID("ID_MENU_SEARCH_OPEN");
+
+	for (auto const& data : selected_item_list) {
+
+		std::wstring const fn = data.path.GetPath() + data.name;
+		if (data.dir) {
+			OpenInFileManager(fn);
+			continue;
+		}
+
+		if (!open) {
+			OpenInFileManager(data.path.GetPath());
+			continue;
+		}
+
+		if (wxLaunchDefaultApplication(fn, 0)) {
+			continue;
+		}
+		bool program_exists = false;
+		wxString cmd = GetSystemOpenCommand(fn, program_exists);
+		if (cmd.empty()) {
+			auto pos = data.name.find('.');
+			if (pos == std::wstring::npos || (pos == 0 && data.name.find('.', 1) == std::wstring::npos)) {
+				cmd = pEditHandler->GetOpenCommand(fn, program_exists);
+			}
+		}
+		if (cmd.empty()) {
+			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn), _("Opening failed"), wxICON_EXCLAMATION);
+			continue;
+		}
+		if (!program_exists) {
+			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fn, cmd);
+			wxMessageBoxEx(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
+			continue;
+		}
+
+		if (wxExecute(cmd)) {
+			continue;
+		}
+
+		wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn), _("Opening failed"), wxICON_EXCLAMATION);
+	}
 }
