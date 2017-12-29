@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.30.0-rc1 (2017-12-29)
+
++ In the search dialog local files can now be deleted or opened
++ The root node in the remote directory tree is now expanded by default
+- Fix uploading from search dialog
+- Fix formatting of filename in rename dialog
+- MSW: Fix installer crash if an update installation is started with the updated version having been installed
+
 3.29.0 (2017-11-06)
 
 - Fix activity indicators not working after the update check has been run
