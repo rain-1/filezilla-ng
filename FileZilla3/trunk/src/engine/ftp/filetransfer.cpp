@@ -128,7 +128,10 @@ int CFtpFileTransferOpData::Send()
 									LogMessage(MessageType::Debug_Warning, L"Could not preallocate the file");
 								}
 							}
-							pFile->seek(oldPos, fz::file::begin);
+							if (pFile->seek(oldPos, fz::file::begin) != oldPos) {
+								LogMessage(MessageType::Error, _("Could not seek to offset %d within file"), oldPos);
+								return FZ_REPLY_ERROR;
+							}
 						}
 					}
 				}
@@ -167,10 +170,8 @@ int CFtpFileTransferOpData::Send()
 							return FZ_REPLY_OK;
 						}
 
-						// Assume native 64 bit type exists
 						if (pFile->seek(startOffset, fz::file::begin) == -1) {
-							std::wstring const s = std::to_wstring(startOffset);
-							LogMessage(MessageType::Error, _("Could not seek to offset %s within file"), s);
+							LogMessage(MessageType::Error, _("Could not seek to offset %d within file"), startOffset);
 							return FZ_REPLY_ERROR;
 						}
 					}
