@@ -1,10 +1,10 @@
 #ifdef FZ_WINDOWS
   // IE 7 or higher
   #ifndef _WIN32_IE
-    #define _WIN32_IE 0x0700
-  #elif _WIN32_IE <= 0x0700
+    #define _WIN32_IE 0x0900
+  #elif _WIN32_IE <= 0x0900
     #undef _WIN32_IE
-    #define _WIN32_IE 0x0700
+    #define _WIN32_IE 0x0900
   #endif
 
   // Windows Vista or higher
