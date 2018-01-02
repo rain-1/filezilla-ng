@@ -71,9 +71,9 @@ int main(int argc, char **argv)
     char* fingerprint = 0;
 
     printf("fzputtygen\n");
-    printf("Copyright (C) 2008-2017  Tim Kosse\n");
+    printf("Copyright (C) 2008-2018  Tim Kosse\n");
     printf("Based on PuTTY's puttygen\n");
-    printf("Copyright (C) 1997-2017  Simon Tatham and the PuTTY team\n");
+    printf("Copyright (C) 1997-2018  Simon Tatham and the PuTTY team\n");
     printf("Converts private SSH keys into PuTTY's format.\n");
     printf("This program is used by FileZilla and not intended to be used directly.\n");
     printf("Use the puttygen tool from PuTTY for a human-usable tool.\n");
