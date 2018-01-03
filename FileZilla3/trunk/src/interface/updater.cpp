@@ -123,8 +123,8 @@ CUpdater* CUpdater::GetInstance()
 void CUpdater::AutoRunIfNeeded()
 {
 #if FZ_AUTOUPDATECHECK
-	if( state_ == UpdaterState::failed || state_ == UpdaterState::idle ) {
-		if( !COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK) != 0 && LongTimeSinceLastCheck() ) {
+	if (state_ == UpdaterState::failed || state_ == UpdaterState::idle) {
+		if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK) != 0 && LongTimeSinceLastCheck()) {
 			Run();
 		}
 	}
@@ -134,9 +134,9 @@ void CUpdater::AutoRunIfNeeded()
 void CUpdater::RunIfNeeded()
 {
 	build const b = AvailableBuild();
-	if( state_ == UpdaterState::idle || state_ == UpdaterState::failed ||
+	if (state_ == UpdaterState::idle || state_ == UpdaterState::failed ||
 		LongTimeSinceLastCheck() || (state_ == UpdaterState::newversion && !b.url_.empty()) ||
-		(state_ == UpdaterState::newversion_ready && !VerifyChecksum( DownloadedFile(), b.size_, b.hash_ ) ) )
+		(state_ == UpdaterState::newversion_ready && !VerifyChecksum(DownloadedFile(), b.size_, b.hash_ )))
 	{
 		Run();
 	}
@@ -234,8 +234,8 @@ std::wstring CUpdater::GetUrl()
 
 bool CUpdater::Run()
 {
-	if( state_ != UpdaterState::idle && state_ != UpdaterState::failed &&
-		state_ != UpdaterState::newversion && state_ != UpdaterState::newversion_ready )
+	if (state_ != UpdaterState::idle && state_ != UpdaterState::failed &&
+		state_ != UpdaterState::newversion && state_ != UpdaterState::newversion_ready)
 	{
 		return false;
 	}
@@ -558,14 +558,14 @@ void CUpdater::ProcessData(CDataNotification& dataNotification)
 	}
 
 	if (raw_version_information_.size() + len > 0x40000) {
-		log_ += _("Received version information is too large");
+		log_ += _("Received version information is too large") + L"\n";
 		engine_->Cancel();
 		SetState(UpdaterState::failed);
 	}
 	else {
 		for (int i = 0; i < len; ++i) {
 			if (data[i] < 10 || (unsigned char)data[i] > 127) {
-				log_ += _("Received invalid character in version information");
+				log_ += _("Received invalid character in version information") + L"\n";
 				SetState(UpdaterState::failed);
 				engine_->Cancel();
 				break;
@@ -656,47 +656,47 @@ void CUpdater::ParseData()
 		}
 
 		build* b = 0;
-		if( type == _T("nightly") && UpdatableBuild() ) {
+		if (type == _T("nightly") && UpdatableBuild()) {
 			b = &version_information_.nightly_;
 		}
-		else if( type == _T("release") ) {
+		else if (type == _T("release")) {
 			b = &version_information_.stable_;
 		}
-		else if( type == _T("beta") ) {
+		else if (type == _T("beta")) {
 			b = &version_information_.beta_;
 		}
 
-		if( b ) {
+		if (b) {
 			b->version_ = versionOrDate;
 
-			if( UpdatableBuild() && tokens.CountTokens() == 4 ) {
+			if (UpdatableBuild() && tokens.CountTokens() == 4) {
 				wxString const url = tokens.GetNextToken();
 				wxString const sizestr = tokens.GetNextToken();
 				wxString const hash_algo = tokens.GetNextToken();
 				wxString const hash = tokens.GetNextToken();
 
-				if( GetFilename(url).empty() ) {
+				if (GetFilename(url).empty()) {
 					if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
 						log_ += wxString::Format(_T("Could not extract filename from URL: %s\n"), url);
 					}
 					continue;
 				}
 
-				if( hash_algo.CmpNoCase(_T("sha512")) ) {
+				if (hash_algo.CmpNoCase(_T("sha512"))) {
 					continue;
 				}
 
 				unsigned long long l = 0;
-				if( !sizestr.ToULongLong(&l) ) {
-					if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
-						log_ += wxString::Format(_T("Could not parse size: %s"), sizestr);
+				if (!sizestr.ToULongLong(&l)) {
+					if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
+						log_ += wxString::Format(_T("Could not parse size: %s"), sizestr) + L"\n";
 					}
 					continue;
 				}
 
 				b->url_ = url;
 				b->size_ = l;
-				b->hash_ = hash;
+				b->hash_ = fz::str_tolower_ascii(hash.ToStdWstring());
 
 				// @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
 				log_ += wxString::Format(_("Found new %s %s\n"), type, b->version_);
@@ -714,14 +714,19 @@ void CUpdater::OnTimer(wxTimerEvent&)
 	AutoRunIfNeeded();
 }
 
-bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const& checksum)
+bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, std::wstring const& checksum)
 {
 	if (file.empty() || checksum.empty()) {
 		return false;
 	}
 
 	auto filesize = fz::local_filesys::get_size(fz::to_native(file));
-	if (filesize < 0 || filesize != size) {
+	if (filesize < 0) {
+		log_ += wxString::Format(_("Could not obtain size of '%s'"), file) + L"\n";
+		return false;
+	}
+	else if (filesize != size) {
+		log_ += fz::sprintf(_("Local size of '%s' does not match expected size: %d != %d"), file, filesize, size) + L"\n";
 		return false;
 	}
 
@@ -731,6 +736,7 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const
 	{
 		fz::file f(fz::to_native(file), fz::file::reading);
 		if (!f.opened()) {
+			log_ += wxString::Format(_("Could not open '%s'"), file) + L"\n";
 			return false;
 		}
 		unsigned char buffer[65536];
@@ -739,30 +745,18 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const
 			sha512_update(&state, static_cast<size_t>(read), buffer);
 		}
 		if (read < 0) {
+			log_ += wxString::Format(_("Could not read from '%s'"), file) + L"\n";
 			return false;
 		}
 	}
 
-	unsigned char raw_digest[64];
-	sha512_digest(&state, 64, raw_digest);
+	std::string raw_digest;
+	raw_digest.resize(64);
+	sha512_digest(&state, 64, reinterpret_cast<uint8_t*>(raw_digest.data()));
 
-	wxString digest;
-	for (unsigned int i = 0; i < sizeof(raw_digest); ++i) {
-		unsigned char l = raw_digest[i] >> 4;
-		unsigned char r = raw_digest[i] & 0x0F;
+	auto const digest = fz::hex_encode<std::wstring>(raw_digest);
 
-		if (l > 9)
-			digest += 'a' + l - 10;
-		else
-			digest += '0' + l;
-
-		if (r > 9)
-			digest += 'a' + r - 10;
-		else
-			digest += '0' + r;
-	}
-
-	if (checksum.CmpNoCase(digest)) {
+	if (digest != checksum) {
 		log_ += wxString::Format(_("Checksum mismatch on file %s\n"), file);
 		return false;
 	}
@@ -773,7 +767,7 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const
 
 std::wstring CUpdater::GetTempFile() const
 {
-	wxASSERT( !version_information_.available_.hash_.empty() );
+	wxASSERT(!version_information_.available_.hash_.empty());
 	std::wstring ret = wxFileName::GetTempDir().ToStdWstring();
 	if (!ret.empty()) {
 		if (ret.back() != wxFileName::GetPathSeparator()) {
@@ -806,16 +800,16 @@ wxString CUpdater::GetFilename(wxString const& url) const
 
 void CUpdater::SetState( UpdaterState s )
 {
-	if( s != state_ ) {
+	if (s != state_) {
 		state_ = s;
 
 		if (s != UpdaterState::checking && s != UpdaterState::newversion_downloading) {
 			pending_commands_.clear();
 		}
 		build b = version_information_.available_;
-		for (auto const& handler : handlers_ ) {
-			if( handler ) {
-				handler->UpdaterStateChanged( s, b );
+		for (auto const& handler : handlers_) {
+			if (handler) {
+				handler->UpdaterStateChanged(s, b);
 			}
 		}
 	}
@@ -824,21 +818,21 @@ void CUpdater::SetState( UpdaterState s )
 wxString CUpdater::DownloadedFile() const
 {
 	wxString ret;
-	if( state_ == UpdaterState::newversion_ready ) {
+	if (state_ == UpdaterState::newversion_ready) {
 		ret = local_file_;
 	}
 	return ret;
 }
 
-void CUpdater::AddHandler( CUpdateHandler& handler )
+void CUpdater::AddHandler(CUpdateHandler& handler)
 {
-	for( auto const& h : handlers_ ) {
+	for (auto const& h : handlers_) {
 		if (h == &handler) {
 			return;
 		}
 	}
-	for( auto& h : handlers_ ) {
-		if( !h ) {
+	for (auto& h : handlers_) {
+		if (!h) {
 			h = &handler;
 			return;
 		}
@@ -846,7 +840,7 @@ void CUpdater::AddHandler( CUpdateHandler& handler )
 	handlers_.push_back(&handler);
 }
 
-void CUpdater::RemoveHandler( CUpdateHandler& handler )
+void CUpdater::RemoveHandler(CUpdateHandler& handler)
 {
 	for (auto& h : handlers_) {
 		if (h == &handler) {
