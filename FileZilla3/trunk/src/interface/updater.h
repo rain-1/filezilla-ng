@@ -49,7 +49,7 @@ enum class UpdaterState
 class CUpdateHandler
 {
 public:
-	virtual void UpdaterStateChanged( UpdaterState s, build const& v ) = 0;
+	virtual void UpdaterStateChanged(UpdaterState s, build const& v) = 0;
 };
 
 class CFileZillaEngineContext;
@@ -102,7 +102,7 @@ protected:
 	UpdaterState ProcessFinishedDownload();
 	UpdaterState ProcessFinishedData(bool can_download);
 
-	bool VerifyChecksum(wxString const& file, int64_t size, wxString const& checksum);
+	bool VerifyChecksum(wxString const& file, int64_t size, std::wstring const& checksum);
 
 	std::wstring GetTempFile() const;
 	wxString GetFilename(wxString const& url) const;
