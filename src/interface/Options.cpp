@@ -23,7 +23,8 @@ COptions* COptions::m_theOptions = 0;
 enum Type
 {
 	string,
-	number
+	number,
+	xml
 };
 
 enum Flags
@@ -36,7 +37,7 @@ enum Flags
 
 struct t_Option
 {
-	const char name[30];
+	const char name[40];
 	const Type type;
 	const std::wstring defaultValue; // Default values are stored as string even for numerical options
 	const Flags flags; // internal items won't get written to settings file nor loaded from there
@@ -226,6 +227,14 @@ t_OptionsCache& t_OptionsCache::operator=(int v)
 	return *this;
 }
 
+t_OptionsCache& t_OptionsCache::operator=(std::unique_ptr<pugi::xml_document> const& v)
+{
+	xmlValue = std::make_unique<pugi::xml_document>();
+	xmlValue->append_copy(v->first_child());
+
+	return *this;
+}
+
 COptions::COptions()
 {
 	m_theOptions = this;
@@ -289,6 +298,18 @@ std::wstring COptions::GetOption(unsigned int nID)
 	return m_optionsCache[nID].strValue;
 }
 
+std::unique_ptr<pugi::xml_document> COptions::GetOptionXml(unsigned int nID)
+{
+	if (nID >= OPTIONS_NUM) {
+		return nullptr;
+	}
+
+	auto value = std::make_unique<pugi::xml_document>();
+	value->append_copy(m_optionsCache[nID].xmlValue->first_child());
+
+	return std::move(value);
+}
+
 bool COptions::SetOption(unsigned int nID, int value)
 {
 	if (nID >= OPTIONS_NUM) {
@@ -314,6 +335,24 @@ bool COptions::SetOption(unsigned int nID, std::wstring const& value)
 	}
 
 	ContinueSetOption(nID, value);
+	return true;
+}
+
+bool COptions::SetOptionXml(unsigned int nID, std::unique_ptr<pugi::xml_document> const& value)
+{
+	if (nID >= OPTIONS_NUM) {
+		return false;
+	}
+
+	if (options[nID].type != xml) {
+		return false;
+	}
+
+	auto doc = std::make_unique<pugi::xml_document>();
+	doc->append_copy(value->first_child());
+
+	ContinueSetOption(nID, doc);
+
 	return true;
 }
 
@@ -389,6 +428,9 @@ pugi::xml_node COptions::CreateSettingsXmlElement()
 		if (options[i].type == string) {
 			SetXmlValue(i, GetOption(i));
 		}
+		else if (options[i].type == xml) {
+			SetXmlValue(i, GetOptionXml(i));
+		}
 		else {
 			SetXmlValue(i, GetOptionVal(i));
 		}
@@ -428,6 +470,34 @@ void COptions::SetXmlValue(unsigned int nID, std::wstring const& value)
 			SetTextAttribute(setting, "name", options[nID].name);
 		}
 		setting.text() = utf8.c_str();
+	}
+}
+
+void COptions::SetXmlValue(unsigned int nID, std::unique_ptr<pugi::xml_document> const& value)
+{
+	if (!xmlFile_) {
+		return;
+	}
+
+	auto settings = CreateSettingsXmlElement();
+	if (settings) {
+		pugi::xml_node setting;
+		for (setting = settings.child("Setting"); setting; setting = setting.next_sibling("Setting")) {
+			const char *attribute = setting.attribute("name").value();
+			if (!attribute) {
+				continue;
+			}
+			if (!strcmp(attribute, options[nID].name)) {
+				break;
+			}
+		}
+		if (setting) {
+			settings.remove_child(setting);
+		}
+		setting = settings.append_child("Setting");
+		SetTextAttribute(setting, "name", options[nID].name);
+
+		setting.append_copy(value->first_child());
 	}
 }
 
@@ -549,6 +619,14 @@ std::wstring COptions::Validate(unsigned int nID, std::wstring const& value)
 		}
 	}
 	return value;
+}
+
+std::unique_ptr<pugi::xml_document> COptions::Validate(unsigned int nID, std::unique_ptr<pugi::xml_document> const& value)
+{
+	auto res = std::make_unique<pugi::xml_document>();
+	res->append_copy(value->first_child());
+
+	return std::move(res);
 }
 
 void COptions::SetServer(std::wstring path, ServerWithCredentials const& server)
@@ -735,10 +813,17 @@ void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string
 			fz::scoped_lock l(m_sync_);
 			m_optionsCache[iter->second] = numValue;
 		}
-		else {
+		else if (options[iter->second].type == string) {
 			value = Validate(iter->second, value);
 			fz::scoped_lock l(m_sync_);
 			m_optionsCache[iter->second] = value;
+		}
+		else {
+			fz::scoped_lock l(m_sync_);
+			if (!option.first_child().empty()) {
+				m_optionsCache[iter->second].xmlValue = std::make_unique<pugi::xml_document>();
+				m_optionsCache[iter->second].xmlValue->append_copy(option.first_child());
+			}
 		}
 	}
 }
@@ -938,7 +1023,13 @@ void COptions::SetDefaultValues()
 {
 	fz::scoped_lock l(m_sync_);
 	for (int i = 0; i < OPTIONS_NUM; ++i) {
-		m_optionsCache[i] = options[i].defaultValue;
 		m_optionsCache[i].from_default = false;
+		if (options[i].type == xml) {
+			m_optionsCache[i].xmlValue = std::make_unique<pugi::xml_document>();
+			m_optionsCache[i].xmlValue->load_string(fz::to_string(options[i].defaultValue).c_str());
+		}
+		else {
+			m_optionsCache[i] = options[i].defaultValue;
+		}
 	}
 }

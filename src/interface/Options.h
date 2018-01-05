@@ -116,12 +116,15 @@ struct t_OptionsCache
 {
 	bool operator==(std::wstring const& v) const { return strValue == v; }
 	bool operator==(int v) const { return numValue == v; }
+	bool operator==(std::unique_ptr<pugi::xml_document> const& v) const { return *xmlValue == *v; }
 	t_OptionsCache& operator=(std::wstring const& v);
 	t_OptionsCache& operator=(int v);
+	t_OptionsCache& operator=(std::unique_ptr<pugi::xml_document> const& v);
 
 	bool from_default;
 	int numValue;
 	std::wstring strValue;
+	std::unique_ptr<pugi::xml_document> xmlValue;
 };
 
 class CXmlFile;
@@ -130,9 +133,11 @@ class COptions final : public wxEvtHandler, public COptionsBase
 public:
 	virtual int GetOptionVal(unsigned int nID);
 	virtual std::wstring GetOption(unsigned int nID);
+	virtual std::unique_ptr<pugi::xml_document> GetOptionXml(unsigned int nID);
 
 	virtual bool SetOption(unsigned int nID, int value);
 	virtual bool SetOption(unsigned int nID, std::wstring const& value);
+	virtual bool SetOptionXml(unsigned int nID, std::unique_ptr<pugi::xml_document> const& value);
 
 	bool OptionFromFzDefaultsXml(unsigned int nID);
 
@@ -156,10 +161,12 @@ protected:
 
 	int Validate(unsigned int nID, int value);
 	std::wstring Validate(unsigned int nID, std::wstring const& value);
+	std::unique_ptr<pugi::xml_document> Validate(unsigned int nID, std::unique_ptr<pugi::xml_document> const& value);
 
 	template<typename T> void ContinueSetOption(unsigned int nID, T const& value);
 	void SetXmlValue(unsigned int nID, int value);
 	void SetXmlValue(unsigned int nID, std::wstring const& value);
+	void SetXmlValue(unsigned int nID, std::unique_ptr<pugi::xml_document> const& value);
 
 	// path is element path below document root, separated by slashes
 	void SetServer(std::wstring path, ServerWithCredentials const& server);
