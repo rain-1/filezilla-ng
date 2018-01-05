@@ -1286,7 +1286,7 @@
                   <label>D&amp;o not save passwords</label>
                 </object>
               </object>
-	      <object class="sizeritem">
+              <object class="sizeritem">
                 <object class="wxRadioButton" name="ID_PASSWORDS_USEMASTERPASSWORD">
                   <label>Sa&amp;ve passwords protected by a master password</label>
                 </object>

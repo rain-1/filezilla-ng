@@ -84,15 +84,21 @@ enum engineOptions
 	OPTIONS_ENGINE_NUM
 };
 
+namespace pugi {
+class xml_document;
+}
+
 class COptionsBase
 {
 public:
 	inline virtual ~COptionsBase() {};
 	virtual int GetOptionVal(unsigned int nID) = 0;
 	virtual std::wstring GetOption(unsigned int nID) = 0;
+	virtual std::unique_ptr<pugi::xml_document> GetOptionXml(unsigned int nID) = 0;
 
 	virtual bool SetOption(unsigned int nID, int value) = 0;
 	virtual bool SetOption(unsigned int nID, std::wstring const& value) = 0;
+	virtual bool SetOptionXml(unsigned int nID, std::unique_ptr<pugi::xml_document> const& value) = 0;
 };
 
 #endif
