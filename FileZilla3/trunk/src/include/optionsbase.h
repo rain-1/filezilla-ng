@@ -7,6 +7,8 @@
 // Since COptionsBase is virtual, the user of the engine has to create a
 // derived class which handles settings-reading and writing.
 
+#include <memory>
+
 enum engineOptions
 {
 	OPTION_USEPASV,			// Use passive mode unless overridden by
