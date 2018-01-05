@@ -752,7 +752,7 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, std::wstring c
 
 	std::string raw_digest;
 	raw_digest.resize(64);
-	sha512_digest(&state, 64, reinterpret_cast<uint8_t*>(raw_digest.data()));
+	sha512_digest(&state, 64, reinterpret_cast<uint8_t*>(&raw_digest[0]));
 
 	auto const digest = fz::hex_encode<std::wstring>(raw_digest);
 
