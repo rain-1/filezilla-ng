@@ -61,13 +61,13 @@ PqQuF7sJR6POArUVYkRD/2LIWsB7\n\
 
 void version_information::update_available()
 {
-	if( !nightly_.url_.empty() && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) == 2 ) {
+	if (!nightly_.url_.empty() && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) == 2) {
 		available_ = nightly_;
 	}
-	else if( !beta_.version_.empty() && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) != 0 ) {
+	else if (!beta_.version_.empty() && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) != 0) {
 		available_ = beta_;
 	}
-	else if( !stable_.version_.empty() ) {
+	else if (!stable_.version_.empty()) {
 		available_ = stable_;
 	}
 	else {
@@ -91,7 +91,7 @@ void CUpdater::Init()
 		return;
 	}
 
-	raw_version_information_ = COptions::Get()->GetOption( OPTION_UPDATECHECK_NEWVERSION );
+	raw_version_information_ = COptions::Get()->GetOption(OPTION_UPDATECHECK_NEWVERSION);
 
 	UpdaterState s = ProcessFinishedData(FZ_AUTOUPDATECHECK);
 
@@ -102,16 +102,18 @@ void CUpdater::Init()
 	update_timer_.SetOwner(this);
 	update_timer_.Start(1000 * 3600);
 
-	if( !instance ) {
+	if (!instance) {
 		instance = this;
 	}
 }
 
 CUpdater::~CUpdater()
 {
-	if( instance == this ) {
-		instance  =0;
+	if (instance == this) {
+		instance = 0;
+	
 	}
+
 	delete engine_;
 }
 
@@ -136,7 +138,7 @@ void CUpdater::RunIfNeeded()
 	build const b = AvailableBuild();
 	if (state_ == UpdaterState::idle || state_ == UpdaterState::failed ||
 		LongTimeSinceLastCheck() || (state_ == UpdaterState::newversion && !b.url_.empty()) ||
-		(state_ == UpdaterState::newversion_ready && !VerifyChecksum(DownloadedFile(), b.size_, b.hash_ )))
+		(state_ == UpdaterState::newversion_ready && !VerifyChecksum(DownloadedFile(), b.size_, b.hash_)))
 	{
 		Run();
 	}
@@ -144,23 +146,27 @@ void CUpdater::RunIfNeeded()
 
 bool CUpdater::LongTimeSinceLastCheck() const
 {
-	wxString const lastCheckStr = COptions::Get()->GetOption(OPTION_UPDATECHECK_LASTDATE);
-	if (lastCheckStr.empty())
+	std::wstring const lastCheckStr = COptions::Get()->GetOption(OPTION_UPDATECHECK_LASTDATE);
+	if (lastCheckStr.empty()) {
 		return true;
+	}
 
-	fz::datetime lastCheck(lastCheckStr.ToStdWstring(), fz::datetime::utc);
-	if (lastCheck.empty())
+	fz::datetime lastCheck(lastCheckStr, fz::datetime::utc);
+	if (lastCheck.empty()) {
 		return true;
+	}
 
 	auto const span = fz::datetime::now() - lastCheck;
 
-	if (span.get_seconds() < 0)
+	if (span.get_seconds() < 0) {
 		// Last check in future
 		return true;
+	}
 
 	int days = 1;
-	if (!CBuildInfo::IsUnstable())
+	if (!CBuildInfo::IsUnstable()) {
 		days = COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_INTERVAL);
+	}
 	return span.get_days() >= days;
 }
 
@@ -247,7 +253,7 @@ bool CUpdater::Run()
 	log_ = wxString::Format(_("Started update check on %s\n"), t.format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::local));
 
 	wxString build = CBuildInfo::GetBuildType();
-	if( build.empty() ) {
+	if (build.empty())  {
 		build = _("custom");
 	}
 	log_ += wxString::Format(_("Own build type: %s\n"), build);
@@ -334,7 +340,7 @@ void CUpdater::DoOnEngineEvent(CFileZillaEngine* engine)
 	}
 
 	std::unique_ptr<CNotification> notification;
-	while( (notification = engine_->GetNextNotification()) ) {
+	while ((notification = engine_->GetNextNotification())) {
 		ProcessNotification(std::move(notification));
 	}
 }
@@ -369,7 +375,7 @@ void CUpdater::ProcessNotification(std::unique_ptr<CNotification> && notificatio
 						std::vector<uint8_t> ca_data = ca.GetRawData();
 
 						std::string updater_root = fz::base64_decode(s_update_cert);
-						if (ca_data.size() == updater_root.size() && !memcmp(&ca_data[0], updater_root.c_str(), ca_data.size()) ) {
+						if (ca_data.size() == updater_root.size() && !memcmp(&ca_data[0], updater_root.c_str(), ca_data.size())) {
 							certNotification.m_trusted = true;
 						}
 					}
@@ -429,7 +435,7 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 				if (size >= 0 && size >= version_information_.available_.size_) {
 					s = ProcessFinishedDownload();
 				}
-				else if (!can_download || Download(version_information_.available_.url_, temp) != FZ_REPLY_WOULDBLOCK ) {
+				else if (!can_download || Download(version_information_.available_.url_, temp) != FZ_REPLY_WOULDBLOCK) {
 					s = UpdaterState::newversion;
 				}
 			}
@@ -499,9 +505,9 @@ UpdaterState CUpdater::ProcessFinishedDownload()
 		wxString local_file = GetLocalFile(version_information_.available_, false);
 
 		wxLogNull log;
-		if (local_file.empty() || !wxRenameFile( temp, local_file, false ) ) {
+		if (local_file.empty() || !wxRenameFile(temp, local_file, false)) {
 			s = UpdaterState::newversion;
-			wxRemoveFile( temp );
+			wxRemoveFile(temp);
 			log_ += wxString::Format(_("Could not create local file %s\n"), local_file);
 		}
 		else {
@@ -514,7 +520,7 @@ UpdaterState CUpdater::ProcessFinishedDownload()
 
 wxString CUpdater::GetLocalFile(build const& b, bool allow_existing)
 {
-	wxString const fn = GetFilename( b.url_ );
+	wxString const fn = GetFilename(b.url_);
 	wxString const dl = GetDownloadDir().GetPath();
 
 	int i = 1;
@@ -588,7 +594,7 @@ void CUpdater::ParseData()
 
 	log_ += wxString::Format(_("Parsing %d bytes of version information.\n"), static_cast<int>(raw_version_information.size()));
 
-	while( !raw_version_information.empty() ) {
+	while (!raw_version_information.empty()) {
 		wxString line;
 		int pos = raw_version_information.Find('\n');
 		if (pos != -1) {
@@ -600,7 +606,7 @@ void CUpdater::ParseData()
 			raw_version_information.clear();
 		}
 
-		wxStringTokenizer tokens(line, _T(" \t\n"),  wxTOKEN_STRTOK);
+		wxStringTokenizer tokens(line, _T(" \t\n"), wxTOKEN_STRTOK);
 		if (!tokens.CountTokens()) {
 			// After empty line, changelog follows
 			version_information_.changelog_ = raw_version_information;
@@ -643,7 +649,7 @@ void CUpdater::ParseData()
 
 			fz::datetime buildDate = CBuildInfo::GetBuildDate();
 			if (buildDate.empty() || nightlyDate.empty() || nightlyDate <= buildDate) {
-				if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+				if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
 					log_ += _T("Nightly isn't newer\n");
 				}
 				continue;
@@ -651,56 +657,66 @@ void CUpdater::ParseData()
 		}
 		else {
 			int64_t v = CBuildInfo::ConvertToVersionNumber(versionOrDate.c_str());
-			if (v <= ownVersionNumber)
+			if (v <= ownVersionNumber) {
 				continue;
+			}
 		}
 
-		build* b = 0;
+		build b;
+		b.version_ = versionOrDate;
+
+		if (UpdatableBuild() && tokens.CountTokens() == 4) {
+			wxString const url = tokens.GetNextToken();
+			wxString const sizestr = tokens.GetNextToken();
+			wxString const hash_algo = tokens.GetNextToken();
+			wxString const hash = tokens.GetNextToken();
+
+			if (GetFilename(url).empty()) {
+				if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
+					log_ += wxString::Format(_T("Could not extract filename from URL: %s\n"), url);
+				}
+				continue;
+			}
+
+			if (hash_algo.CmpNoCase(_T("sha512"))) {
+				continue;
+			}
+
+			unsigned long long l = 0;
+			if (!sizestr.ToULongLong(&l)) {
+				if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
+					log_ += wxString::Format(_T("Could not parse size: %s"), sizestr) + L"\n";
+				}
+				continue;
+			}
+
+			b.url_ = url;
+			b.size_ = l;
+			b.hash_ = fz::str_tolower_ascii(hash.ToStdWstring());
+			bool valid_hash = true;
+			for (auto const& c : b.hash_) {
+				if ((c < 'a' || c > 'f') && (c < '0' || c > '9')) {
+					valid_hash = false;
+					break;
+				}
+			}
+			if (!valid_hash) {
+				log_ += wxString::Format(_("Invalid hash: %s\n"), hash);
+				continue;
+			}
+
+			// @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
+			log_ += wxString::Format(_("Found new %s %s\n"), type, b.version_);
+		}
+
 		if (type == _T("nightly") && UpdatableBuild()) {
-			b = &version_information_.nightly_;
+			version_information_.nightly_ = b;
 		}
 		else if (type == _T("release")) {
-			b = &version_information_.stable_;
+			version_information_.stable_ = b;
 		}
 		else if (type == _T("beta")) {
-			b = &version_information_.beta_;
-		}
-
-		if (b) {
-			b->version_ = versionOrDate;
-
-			if (UpdatableBuild() && tokens.CountTokens() == 4) {
-				wxString const url = tokens.GetNextToken();
-				wxString const sizestr = tokens.GetNextToken();
-				wxString const hash_algo = tokens.GetNextToken();
-				wxString const hash = tokens.GetNextToken();
-
-				if (GetFilename(url).empty()) {
-					if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
-						log_ += wxString::Format(_T("Could not extract filename from URL: %s\n"), url);
-					}
-					continue;
-				}
-
-				if (hash_algo.CmpNoCase(_T("sha512"))) {
-					continue;
-				}
-
-				unsigned long long l = 0;
-				if (!sizestr.ToULongLong(&l)) {
-					if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
-						log_ += wxString::Format(_T("Could not parse size: %s"), sizestr) + L"\n";
-					}
-					continue;
-				}
-
-				b->url_ = url;
-				b->size_ = l;
-				b->hash_ = fz::str_tolower_ascii(hash.ToStdWstring());
-
-				// @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
-				log_ += wxString::Format(_("Found new %s %s\n"), type, b->version_);
-			}
+			version_information_.beta_ = b;
 		}
 	}
 
@@ -788,7 +804,7 @@ wxString CUpdater::GetFilename(wxString const& url) const
 		ret = url.Mid(pos + 1);
 	}
 	size_t p = ret.find_first_of(_T("?#"));
-	if( p != std::string::npos ) {
+	if (p != std::string::npos) {
 		ret = ret.substr(0, p);
 	}
 #ifdef __WXMSW__
@@ -798,7 +814,7 @@ wxString CUpdater::GetFilename(wxString const& url) const
 	return ret;
 }
 
-void CUpdater::SetState( UpdaterState s )
+void CUpdater::SetState(UpdaterState s)
 {
 	if (s != state_) {
 		state_ = s;
