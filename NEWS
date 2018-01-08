@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.30.0 (2018-01-08)
+
+- Add additional logging if autoupdate mechanism fails
+
 3.30.0-rc1 (2017-12-29)
 
 + In the search dialog local files can now be deleted or opened
