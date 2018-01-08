@@ -1301,25 +1301,25 @@
                     <object class="wxStaticText">
                       <label>Master password:</label>
                     </object>
-                   <flag>wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxALIGN_CENTER_VERTICAL</flag>
                   </object>
                   <object class="sizeritem">
                     <object class="wxTextCtrl" name="ID_MASTERPASSWORD">
                       <style>wxTE_PASSWORD</style>
                     </object>
-                   <flag>wxGROW</flag>
+                    <flag>wxGROW</flag>
                   </object>
                   <object class="sizeritem">
                     <object class="wxStaticText">
                       <label>Repeat password:</label>
                     </object>
-                   <flag>wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxALIGN_CENTER_VERTICAL</flag>
                   </object>
                   <object class="sizeritem">
                     <object class="wxTextCtrl" name="ID_MASTERPASSWORD_REPEAT">
                       <style>wxTE_PASSWORD</style>
                     </object>
-                   <flag>wxGROW</flag>
+                    <flag>wxGROW</flag>
                   </object>
                 </object>
                 <border>10d</border>
@@ -1817,25 +1817,25 @@
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
-                <object class="sizeritem">
-                  <object class="wxStaticText">
-                    <label>_Name sorting mode:</label>
-                  </object>
-                  <flag>wxALIGN_CENTRE_VERTICAL</flag>
+              <object class="sizeritem">
+                <object class="wxStaticText">
+                  <label>_Name sorting mode:</label>
                 </object>
-                  <object class="sizeritem">
-                    <object class="wxChoice" name="ID_NAMESORTMODE">
-                      <selection>0</selection>
-                      <content>
-                        <item platform="win">Case insensitive (default)</item>
-                        <item platform="mac|unix">Case insensitive</item>
-                        <item platform="win">Case sensitive</item>
-                        <item platform="mac|unix">Case sensitive (default)</item>
-                        <item>Natural sort</item>
-                      </content>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                <flag>wxALIGN_CENTRE_VERTICAL</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxChoice" name="ID_NAMESORTMODE">
+                  <selection>0</selection>
+                  <content>
+                    <item platform="win">Case insensitive (default)</item>
+                    <item platform="mac|unix">Case insensitive</item>
+                    <item platform="win">Case sensitive</item>
+                    <item platform="mac|unix">Case sensitive (default)</item>
+                    <item>Natural sort</item>
+                  </content>
                 </object>
+                <flag>wxALIGN_CENTRE_VERTICAL</flag>
+              </object>
               <vgap>5</vgap>
               <hgap>5</hgap>
             </object>

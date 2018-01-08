@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
   <object class="wxDialog" name="ID_STORJ_GENERATED_KEY">
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
