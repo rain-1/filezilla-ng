@@ -21,16 +21,20 @@ int CFtpRemoveDirOpData::Send()
 		return FZ_REPLY_CONTINUE;
 	}
 	else if (opState == rmd_rmd) {
-		engine_.GetDirectoryCache().InvalidateFile(currentServer_, path_, subDir_);
-
 		CServerPath path(engine_.GetPathCache().Lookup(currentServer_, path_, subDir_));
 		if (path.empty()) {
 			path = path;
-			path.AddSegment(subDir_);
+			if (!path.AddSegment(subDir_)) {
+				LogMessage(MessageType::Error, _("Path cannot be constructed for directory %s and subdir %s"), path_.GetPath(), subDir_);
+				return FZ_REPLY_ERROR;
+			}
 		}
-		engine_.InvalidateCurrentWorkingDirs(path);
 
-		engine_.GetPathCache().InvalidatePath(currentServer_, path, subDir_);
+		engine_.GetDirectoryCache().InvalidateFile(currentServer_, path_, subDir_);
+
+		engine_.GetPathCache().InvalidatePath(currentServer_, path_, subDir_);
+
+		engine_.InvalidateCurrentWorkingDirs(path);
 
 		if (omitPath_) {
 			return controlSocket_.SendCommand(L"RMD " + subDir_);
