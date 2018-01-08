@@ -23,7 +23,7 @@ int CFtpRemoveDirOpData::Send()
 	else if (opState == rmd_rmd) {
 		CServerPath path(engine_.GetPathCache().Lookup(currentServer_, path_, subDir_));
 		if (path.empty()) {
-			path = path;
+			path = path_;
 			if (!path.AddSegment(subDir_)) {
 				LogMessage(MessageType::Error, _("Path cannot be constructed for directory %s and subdir %s"), path_.GetPath(), subDir_);
 				return FZ_REPLY_ERROR;
