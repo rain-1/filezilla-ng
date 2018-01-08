@@ -142,7 +142,7 @@
               <object class="spacer">
                 <option>1</option>
               </object>
-                <object class="sizeritem">
+              <object class="sizeritem">
                 <object class="wxHyperlinkCtrl" name="ID_SHOW_DETAILS_DL">
                   <label>Show details</label>
                 </object>
