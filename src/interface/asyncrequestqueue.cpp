@@ -19,17 +19,15 @@ EVT_TIMER(wxID_ANY, CAsyncRequestQueue::OnTimer)
 END_EVENT_TABLE()
 
 CAsyncRequestQueue::CAsyncRequestQueue(CMainFrame *pMainFrame)
+	: m_pMainFrame(pMainFrame)
+	, certStore_(std::make_unique<CertStore>())
+	, verifyCertDlg_(std::make_unique<CVerifyCertDialog>(*certStore_))
 {
-	m_pMainFrame = pMainFrame;
-	m_pQueueView = 0;
-	m_pVerifyCertDlg = new CVerifyCertDialog;
-	m_inside_request = false;
 	m_timer.SetOwner(this);
 }
 
 CAsyncRequestQueue::~CAsyncRequestQueue()
 {
-	delete m_pVerifyCertDlg;
 }
 
 bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, std::unique_ptr<CAsyncRequestNotification> & pNotification)
@@ -43,25 +41,30 @@ bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, std::unique_
 
 			// Get the action, go up the hierarchy till one is found
 			CFileExistsNotification::OverwriteAction action = pFileExistsNotification->overwriteAction;
-			if (action == CFileExistsNotification::unknown)
+			if (action == CFileExistsNotification::unknown) {
 				action = CDefaultFileExistsDlg::GetDefault(pFileExistsNotification->download);
+			}
 			if (action == CFileExistsNotification::unknown) {
 				int option = COptions::Get()->GetOptionVal(pFileExistsNotification->download ? OPTION_FILEEXISTS_DOWNLOAD : OPTION_FILEEXISTS_UPLOAD);
-				if (option < CFileExistsNotification::unknown || option >= CFileExistsNotification::ACTION_COUNT)
+				if (option < CFileExistsNotification::unknown || option >= CFileExistsNotification::ACTION_COUNT) {
 					action = CFileExistsNotification::unknown;
-				else
+				}
+				else {
 					action = static_cast<CFileExistsNotification::OverwriteAction>(option);
+				}
 			}
 
 			// Ask and rename options require user interaction
-			if (action == CFileExistsNotification::unknown || action == CFileExistsNotification::ask || action == CFileExistsNotification::rename)
+			if (action == CFileExistsNotification::unknown || action == CFileExistsNotification::ask || action == CFileExistsNotification::rename) {
 				break;
+			}
 
 			if (action == CFileExistsNotification::resume && pFileExistsNotification->ascii) {
 				// Check if resuming ascii files is allowed
-				if (!COptions::Get()->GetOptionVal(OPTION_ASCIIRESUME))
+				if (!COptions::Get()->GetOptionVal(OPTION_ASCIIRESUME)) {
 					// Overwrite instead
 					action = CFileExistsNotification::overwrite;
+				}
 			}
 
 			pFileExistsNotification->overwriteAction = action;
@@ -75,8 +78,9 @@ bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, std::unique_
 		{
 			auto & hostKeyNotification = static_cast<CHostKeyNotification&>(*pNotification.get());
 
-			if (!CVerifyHostkeyDialog::IsTrusted(hostKeyNotification))
+			if (!CVerifyHostkeyDialog::IsTrusted(hostKeyNotification)) {
 				break;
+			}
 
 			hostKeyNotification.m_trust = true;
 			hostKeyNotification.m_alwaysTrust = false;
@@ -89,8 +93,9 @@ bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, std::unique_
 		{
 			auto & certNotification = static_cast<CCertificateNotification&>(*pNotification.get());
 
-			if (!m_pVerifyCertDlg->IsTrusted(certNotification))
+			if (!certStore_->IsTrusted(certNotification)) {
 				break;
+			}
 
 			certNotification.m_trusted = true;
 			pEngine->SetAsyncRequestReply(std::move(pNotification));
@@ -109,8 +114,9 @@ bool CAsyncRequestQueue::AddRequest(CFileZillaEngine *pEngine, std::unique_ptr<C
 {
 	ClearPending(pEngine);
 
-	if (ProcessDefaults(pEngine, pNotification))
+	if (ProcessDefaults(pEngine, pNotification)) {
 		return false;
+	}
 
 	m_requestList.emplace_back(pEngine, std::move(pNotification));
 
@@ -190,7 +196,7 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 		}
 
 		auto & notification = static_cast<CCertificateNotification&>(*entry.pNotification.get());
-		m_pVerifyCertDlg->ShowVerificationDialog(notification);
+		verifyCertDlg_->ShowVerificationDialog(notification);
 
 		entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification));
 	}
@@ -210,19 +216,23 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 
 	// Get the action, go up the hierarchy till one is found
 	CFileExistsNotification::OverwriteAction action = notification.overwriteAction;
-	if (action == CFileExistsNotification::unknown)
+	if (action == CFileExistsNotification::unknown) {
 		action = CDefaultFileExistsDlg::GetDefault(notification.download);
+	}
 	if (action == CFileExistsNotification::unknown) {
 		int option = COptions::Get()->GetOptionVal(notification.download ? OPTION_FILEEXISTS_DOWNLOAD : OPTION_FILEEXISTS_UPLOAD);
-		if (option <= CFileExistsNotification::unknown || option >= CFileExistsNotification::ACTION_COUNT)
+		if (option <= CFileExistsNotification::unknown || option >= CFileExistsNotification::ACTION_COUNT) {
 			action = CFileExistsNotification::ask;
-		else
+		}
+		else {
 			action = static_cast<CFileExistsNotification::OverwriteAction>(option);
+		}
 	}
 
 	if (action == CFileExistsNotification::ask) {
-		if (!CheckWindowState())
+		if (!CheckWindowState()) {
 			return false;
+		}
 
 		CFileExistsDlg dlg(&notification);
 		dlg.Create(m_pMainFrame);
@@ -234,58 +244,70 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 			bool directionOnly, queueOnly;
 			if (dlg.Always(directionOnly, queueOnly)) {
 				if (!queueOnly) {
-					if (notification.download || !directionOnly)
+					if (notification.download || !directionOnly) {
 						CDefaultFileExistsDlg::SetDefault(true, action);
+					}
 
-					if (!notification.download || !directionOnly)
+					if (!notification.download || !directionOnly) {
 						CDefaultFileExistsDlg::SetDefault(false, action);
+					}
 				}
 				else {
 					// For the notifications already in the request queue, we have to set the queue action directly
 					for (auto iter = ++m_requestList.begin(); iter != m_requestList.end(); ++iter) {
-						if (!iter->pNotification || iter->pNotification->GetRequestID() != reqId_fileexists)
+						if (!iter->pNotification || iter->pNotification->GetRequestID() != reqId_fileexists) {
 							continue;
+						}
 						auto & p = static_cast<CFileExistsNotification&>(*iter->pNotification.get());
 
-						if (!directionOnly || notification.download == p.download)
+						if (!directionOnly || notification.download == p.download) {
 							p.overwriteAction = CFileExistsNotification::OverwriteAction(action);
+						}
 					}
 
 					TransferDirection direction;
 					if (directionOnly) {
-						if (notification.download)
+						if (notification.download) {
 							direction = TransferDirection::download;
-						else
+						}
+						else {
 							direction = TransferDirection::upload;
+						}
 					}
-					else
+					else {
 						direction = TransferDirection::both;
+					}
 
-					if (m_pQueueView)
+					if (m_pQueueView) {
 						m_pQueueView->SetDefaultFileExistsAction(action, direction);
+					}
 				}
 			}
 		}
-		else
+		else {
 			action = CFileExistsNotification::skip;
+		}
 	}
 
-	if (action == CFileExistsNotification::unknown || action == CFileExistsNotification::ask)
+	if (action == CFileExistsNotification::unknown || action == CFileExistsNotification::ask) {
 		action = CFileExistsNotification::skip;
+	}
 
 	if (action == CFileExistsNotification::resume && notification.ascii) {
 		// Check if resuming ascii files is allowed
-		if (!COptions::Get()->GetOptionVal(OPTION_ASCIIRESUME))
+		if (!COptions::Get()->GetOptionVal(OPTION_ASCIIRESUME)) {
 			// Overwrite instead
 			action = CFileExistsNotification::overwrite;
+		}
 	}
 
 	switch (action)
 	{
 		case CFileExistsNotification::rename:
 		{
-			if (!CheckWindowState())
+			if (!CheckWindowState()) {
 				return false;
+			}
 
 			wxString msg;
 			std::wstring defaultName;
@@ -307,32 +329,38 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 			for (;;) {
 				int res = dlg.ShowModal();
 				if (res == wxID_OK) {
-					if (dlg.GetValue().empty())
+					if (dlg.GetValue().empty()) {
 						continue; // Disallow empty names
+					}
 					if (dlg.GetValue() == defaultName) {
 						wxMessageDialog dlg2(m_pMainFrame, _("You did not enter a new name for the file. Overwrite the file instead?"), _("Filename unchanged"),
 							wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION | wxCANCEL);
 						int res2 = dlg2.ShowModal();
 
-						if (res2 == wxID_CANCEL)
+						if (res2 == wxID_CANCEL) {
 							notification.overwriteAction = CFileExistsNotification::skip;
-						else if (res2 == wxID_NO)
+						}
+						else if (res2 == wxID_NO) {
 							continue;
-						else
+						}
+						else {
 							notification.overwriteAction = CFileExistsNotification::skip;
+						}
 					}
 					else {
 						notification.overwriteAction = CFileExistsNotification::rename;
 						notification.newName = dlg.GetValue();
 
 						// If request got processed successfully, notify queue about filename change
-						if (entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification)) && m_pQueueView)
+						if (entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification)) && m_pQueueView) {
 							m_pQueueView->RenameFileInTransfer(entry.pEngine, dlg.GetValue(), notification.download);
+						}
 						return true;
 					}
 				}
-				else
+				else {
 					notification.overwriteAction = CFileExistsNotification::skip;
+				}
 				break;
 			}
 		}
@@ -348,8 +376,9 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 
 void CAsyncRequestQueue::ClearPending(const CFileZillaEngine *pEngine)
 {
-	if (m_requestList.empty())
+	if (m_requestList.empty()) {
 		return;
+	}
 
 	// Remove older requests coming from the same engine, but never the first
 	// entry in the list as that one displays a dialog at this moment.
@@ -366,8 +395,9 @@ void CAsyncRequestQueue::ClearPending(const CFileZillaEngine *pEngine)
 
 void CAsyncRequestQueue::RecheckDefaults()
 {
-	if (m_requestList.size() <= 1)
+	if (m_requestList.size() <= 1) {
 		return;
+	}
 
 	std::list<t_queueEntry>::iterator cur, next;
 	cur = ++m_requestList.begin();
@@ -375,8 +405,9 @@ void CAsyncRequestQueue::RecheckDefaults()
 		next = cur;
 		++next;
 
-		if (ProcessDefaults(cur->pEngine, cur->pNotification))
+		if (ProcessDefaults(cur->pEngine, cur->pNotification)) {
 			m_requestList.erase(cur);
+		}
 		cur = next;
 	}
 }
@@ -388,8 +419,9 @@ void CAsyncRequestQueue::SetQueue(CQueueView *pQueue)
 
 void CAsyncRequestQueue::OnProcessQueue(wxCommandEvent &)
 {
-	if (m_inside_request)
+	if (m_inside_request) {
 		return;
+	}
 
 	m_inside_request = true;
 	bool success = ProcessNextRequest();
@@ -402,8 +434,9 @@ void CAsyncRequestQueue::OnProcessQueue(wxCommandEvent &)
 
 void CAsyncRequestQueue::TriggerProcessing()
 {
-	if (m_inside_request)
+	if (m_inside_request) {
 		return;
+	}
 
 	QueueEvent(new wxCommandEvent(fzEVT_PROCESSASYNCREQUESTQUEUE));
 }
@@ -428,10 +461,12 @@ bool CAsyncRequestQueue::CheckWindowState()
 	}
 
 	wxWindow* pFocus = m_pMainFrame->FindFocus();
-	while (pFocus && pFocus != m_pMainFrame)
+	while (pFocus && pFocus != m_pMainFrame) {
 		pFocus = pFocus->GetParent();
-	if (!pFocus)
+	}
+	if (!pFocus) {
 		m_pMainFrame->RequestUserAttention();
+	}
 #endif
 
 	return true;

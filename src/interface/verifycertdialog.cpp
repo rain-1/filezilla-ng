@@ -11,10 +11,187 @@
 #include <wx/statbox.h>
 #include <wx/tokenzr.h>
 
-CVerifyCertDialog::CVerifyCertDialog()
+CertStore::CertStore()
 	: m_xmlFile(wxGetApp().GetSettingsFile(_T("trustedcerts")))
 {
 }
+
+
+bool CertStore::IsTrusted(CCertificateNotification const& notification)
+{
+	if (notification.GetAlgorithmWarnings() != 0) {
+		// These certs are never trusted.
+		return false;
+	}
+
+	LoadTrustedCerts();
+
+	CCertificate cert = notification.GetCertificates()[0];
+
+	return IsTrusted(notification.GetHost(), notification.GetPort(), cert.GetRawData(), false);
+}
+
+bool CertStore::DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<CertStore::t_certData> const& trustedCerts)
+{
+	if (!data.size()) {
+		return false;
+	}
+
+	for (auto const& cert : trustedCerts) {
+		if (port != cert.port) {
+			continue;
+		}
+
+		if (std::find(cert.hosts.cbegin(), cert.hosts.cend(), host) == cert.hosts.cend()) {
+			continue;
+		}
+
+		if (cert.data == data) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CertStore::IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly)
+{
+	bool trusted = DoIsTrusted(host, port, data, trustedCerts_);
+	if (!trusted && !permanentOnly) {
+		trusted = DoIsTrusted(host, port, data, sessionTrustedCerts_);
+	}
+
+	return trusted;
+}
+
+void CertStore::LoadTrustedCerts()
+{
+	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
+	if (!m_xmlFile.Modified()) {
+		return;
+	}
+
+	auto element = m_xmlFile.Load();
+	if (!element) {
+		return;
+	}
+
+	trustedCerts_.clear();
+
+	if (!(element = element.child("TrustedCerts"))) {
+		return;
+	}
+
+	bool modified = false;
+
+	auto const processEntry = [&](pugi::xml_node const& cert)
+	{
+		std::wstring value = GetTextElement(cert, "Data");
+
+		pugi::xml_node remove;
+
+		t_certData data;
+		data.data = fz::hex_decode(value);
+		if (data.data.empty()) {
+			return false;
+		}
+
+		std::wstring host = GetTextElement(cert, "Host");
+		data.port = GetTextElementInt(cert, "Port");
+		if (host.empty() || data.port < 1 || data.port > 65535) {
+			return false;
+		}
+		data.hosts.push_back(host);
+
+		fz::datetime const now = fz::datetime::now();
+		int64_t activationTime = GetTextElementInt(cert, "ActivationTime", 0);
+		if (activationTime == 0 || activationTime > now.get_time_t()) {
+			return false;
+		}
+
+		int64_t expirationTime = GetTextElementInt(cert, "ExpirationTime", 0);
+		if (expirationTime == 0 || expirationTime < now.get_time_t()) {
+			return false;
+		}
+
+		// Weed out duplicates
+		if (IsTrusted(data.hosts[0], data.port, data.data, true)) {
+			return false;
+		}
+
+		trustedCerts_.emplace_back(std::move(data));
+
+		return true;
+	};
+
+	auto cert = element.child("Certificate");
+	while (cert) {
+
+		auto nextCert = cert.next_sibling("Certificate");
+		if (!processEntry(cert)) {
+			modified = true;
+			element.remove_child(cert);
+		}
+		cert = nextCert;
+	}
+
+	if (modified) {
+		m_xmlFile.Save(false);
+	}
+}
+
+void CertStore::SetTrusted(CCertificateNotification const& notification, bool permanent)
+{
+	const CCertificate certificate = notification.GetCertificates()[0];
+
+	t_certData cert;
+	cert.hosts.push_back(notification.GetHost());
+	cert.port = notification.GetPort();
+	cert.data = certificate.GetRawData();
+
+	if (!permanent) {
+		t_certData cert;
+		sessionTrustedCerts_.emplace_back(std::move(cert));
+
+		return;
+	}
+
+	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
+	LoadTrustedCerts();
+
+	if (IsTrusted(cert.hosts[0], cert.port, cert.data, true)) {
+		return;
+	}
+
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 2) {
+		auto element = m_xmlFile.GetElement();
+		if (element) {
+			auto certs = element.child("TrustedCerts");
+			if (!certs) {
+				certs = element.append_child("TrustedCerts");
+			}
+
+			auto xCert = certs.append_child("Certificate");
+			AddTextElementUtf8(xCert, "Data", fz::hex_encode<std::string>(cert.data));
+			AddTextElement(xCert, "ActivationTime", static_cast<int64_t>(certificate.GetActivationTime().get_time_t()));
+			AddTextElement(xCert, "ExpirationTime", static_cast<int64_t>(certificate.GetExpirationTime().get_time_t()));
+			AddTextElement(xCert, "Host", cert.hosts[0]);
+			AddTextElement(xCert, "Port", cert.port);
+
+			m_xmlFile.Save(true);
+		}
+	}
+	trustedCerts_.emplace_back(std::move(cert));
+}
+
+
+
+
+CVerifyCertDialog::CVerifyCertDialog(CertStore & certStore)
+	: certStore_(certStore)
+{
+}
+
 
 bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 {
@@ -117,10 +294,8 @@ bool CVerifyCertDialog::DisplayAlgorithm(int controlId, wxString name, bool inse
 	return insecure;
 }
 
-void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notification, bool displayOnly /*=false*/)
+void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notification, bool displayOnly)
 {
-	LoadTrustedCerts();
-
 	m_pDlg = new wxDialogEx;
 	if (!m_pDlg->Load(0, _T("ID_VERIFYCERT"))) {
 		wxBell();
@@ -207,21 +382,14 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 
 	if (!displayOnly) {
 		if (res == wxID_OK) {
-			wxASSERT(!IsTrusted(notification));
-
 			notification.m_trusted = true;
 
 			if (!notification.GetAlgorithmWarnings()) {
+				bool permanent = false;
 				if (!warning && XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->GetValue()) {
-					SetPermanentlyTrusted(notification);
+					permanent = true;
 				}
-				else {
-					t_certData cert;
-					cert.host = notification.GetHost();
-					cert.port = notification.GetPort();
-					cert.data = m_certificates[0].GetRawData();
-					m_sessionTrustedCerts.emplace_back(std::move(cert));
-				}
+				certStore_.SetTrusted(notification, true);
 			}
 		}
 		else {
@@ -318,161 +486,6 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxWindow* parent, std::list<wxString>&
 		pSizer->Add(new wxStaticText(parent, wxID_ANY, name));
 		pSizer->Add(new wxStaticText(parent, wxID_ANY, value));
 	}
-}
-
-bool CVerifyCertDialog::IsTrusted(CCertificateNotification const& notification)
-{
-	if (notification.GetAlgorithmWarnings() != 0) {
-		// These certs are never trusted.
-		return false;
-	}
-
-	LoadTrustedCerts();
-
-	CCertificate cert = notification.GetCertificates()[0];
-
-	return IsTrusted(notification.GetHost(), notification.GetPort(), cert.GetRawData(), false);
-}
-
-bool CVerifyCertDialog::DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<CVerifyCertDialog::t_certData> const& trustedCerts)
-{
-	if (!data.size()) {
-		return false;
-	}
-
-	for (auto const& cert : trustedCerts) {
-		if (host != cert.host) {
-			continue;
-		}
-
-		if (port != cert.port) {
-			continue;
-		}
-
-		if (cert.data == data) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-bool CVerifyCertDialog::IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly)
-{
-	bool trusted = DoIsTrusted(host, port, data, m_trustedCerts);
-	if (!trusted && !permanentOnly) {
-		trusted = DoIsTrusted(host, port, data, m_sessionTrustedCerts);
-	}
-
-	return trusted;
-}
-
-void CVerifyCertDialog::LoadTrustedCerts()
-{
-	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
-	if (!m_xmlFile.Modified()) {
-		return;
-	}
-
-	auto element = m_xmlFile.Load();
-	if (!element) {
-		return;
-	}
-
-	m_trustedCerts.clear();
-
-	if (!(element = element.child("TrustedCerts"))) {
-		return;
-	}
-
-	bool modified = false;
-
-	auto cert = element.child("Certificate");
-	while (cert) {
-		std::wstring value = GetTextElement(cert, "Data");
-
-		pugi::xml_node remove;
-
-		t_certData data;
-		data.data = fz::hex_decode(value);
-		if (data.data.empty()) {
-			remove = cert;
-		}
-
-		data.host = GetTextElement(cert, "Host");
-		data.port = GetTextElementInt(cert, "Port");
-		if (data.host.empty() || data.port < 1 || data.port > 65535) {
-			remove = cert;
-		}
-
-		fz::datetime const now = fz::datetime::now();
-		int64_t activationTime = GetTextElementInt(cert, "ActivationTime", 0);
-		if (activationTime == 0 || activationTime > now.get_time_t()) {
-			remove = cert;
-		}
-
-		int64_t expirationTime = GetTextElementInt(cert, "ExpirationTime", 0);
-		if (expirationTime == 0 || expirationTime < now.get_time_t()) {
-			remove = cert;
-		}
-
-		// Weed out duplicates
-		if (IsTrusted(data.host, data.port, data.data, true)) {
-			remove = cert;
-		}
-
-		if (!remove) {
-			m_trustedCerts.emplace_back(std::move(data));
-		}
-
-		cert = cert.next_sibling("Certificate");
-
-		if (remove) {
-			modified = true;
-			element.remove_child(remove);
-		}
-	}
-
-	if (modified) {
-		m_xmlFile.Save(false);
-	}
-}
-
-void CVerifyCertDialog::SetPermanentlyTrusted(CCertificateNotification const& notification)
-{
-	const CCertificate certificate = notification.GetCertificates()[0];
-
-	t_certData cert;
-	cert.host = notification.GetHost();
-	cert.port = notification.GetPort();
-	cert.data = certificate.GetRawData();
-
-	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
-	LoadTrustedCerts();
-
-	if (IsTrusted(cert.host, cert.port, cert.data, true))	{
-		return;
-	}
-
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 2) {
-		auto element = m_xmlFile.GetElement();
-		if (element) {
-			auto certs = element.child("TrustedCerts");
-			if (!certs) {
-				certs = element.append_child("TrustedCerts");
-			}
-
-			auto xCert = certs.append_child("Certificate");
-			AddTextElementUtf8(xCert, "Data", fz::hex_encode<std::string>(cert.data));
-			AddTextElement(xCert, "ActivationTime", static_cast<int64_t>(certificate.GetActivationTime().get_time_t()));
-			AddTextElement(xCert, "ExpirationTime", static_cast<int64_t>(certificate.GetExpirationTime().get_time_t()));
-			AddTextElement(xCert, "Host", cert.host);
-			AddTextElement(xCert, "Port", cert.port);
-
-			m_xmlFile.Save(true);
-		}
-	}
-	m_trustedCerts.emplace_back(std::move(cert));
 }
 
 wxString CVerifyCertDialog::DecodeValue(const wxString& value)

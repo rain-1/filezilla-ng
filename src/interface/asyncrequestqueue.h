@@ -3,6 +3,9 @@
 
 #include <wx/timer.h>
 
+#include <memory>
+
+class CertStore;
 class CMainFrame;
 class CQueueView;
 class CVerifyCertDialog;
@@ -27,9 +30,10 @@ protected:
 	// Request attention if needed
 	bool CheckWindowState();
 
-	CMainFrame *m_pMainFrame;
-	CQueueView *m_pQueueView;
-	CVerifyCertDialog *m_pVerifyCertDlg;
+	CMainFrame *m_pMainFrame{};
+	CQueueView *m_pQueueView{};
+	std::unique_ptr<CertStore> certStore_;
+	std::unique_ptr<CVerifyCertDialog> verifyCertDlg_;
 
 	bool ProcessNextRequest();
 	bool ProcessDefaults(CFileZillaEngine *pEngine, std::unique_ptr<CAsyncRequestNotification> & pNotification);
@@ -54,7 +58,7 @@ protected:
 	void OnTimer(wxTimerEvent& event);
 
 	// Reentrancy guard
-	bool m_inside_request;
+	bool m_inside_request{};
 
 	wxTimer m_timer;
 };
