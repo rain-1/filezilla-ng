@@ -1250,8 +1250,6 @@ std::list<wxString> CLocalListView::RememberSelectedItems(wxString& focused)
 		if (data.comparison_flags != fill) {
 			focused = data.name;
 		}
-
-		SetItemState(item, 0, wxLIST_STATE_FOCUSED);
 	}
 
 	return selectedNames;
@@ -1259,6 +1257,10 @@ std::list<wxString> CLocalListView::RememberSelectedItems(wxString& focused)
 
 void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxString focused, bool ensureVisible)
 {
+	if (!GetItemCount()) {
+		return;
+	}
+
 	// Reselect previous items if neccessary.
 	// Sorting direction did not change. We just have to scan through items once
 
