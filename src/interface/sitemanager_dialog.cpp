@@ -1286,24 +1286,28 @@ void CSiteManagerDialog::OnRename(wxCommandEvent&)
 void CSiteManagerDialog::OnDelete(wxCommandEvent&)
 {
 	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk() || item == pTree->GetRootItem() || item == m_ownSites || IsPredefinedItem(item))
+	if (!item.IsOk() || item == pTree->GetRootItem() || item == m_ownSites || IsPredefinedItem(item)) {
 		return;
+	}
 
 	CConditionalDialog dlg(this, CConditionalDialog::sitemanager_confirmdelete, CConditionalDialog::yesno);
 	dlg.SetTitle(_("Delete Site Manager entry"));
 
 	dlg.AddText(_("Do you really want to delete selected entry?"));
 
-	if (!dlg.Run())
+	if (!dlg.Run()) {
 		return;
+	}
 
 	wxTreeItemId parent = pTree->GetItemParent(item);
-	if (pTree->GetChildrenCount(parent) == 1)
+	if (pTree->GetChildrenCount(parent) == 1) {
 		pTree->Collapse(parent);
+	}
 
 	m_is_deleting = true;
 
@@ -1317,12 +1321,14 @@ void CSiteManagerDialog::OnDelete(wxCommandEvent&)
 
 void CSiteManagerDialog::OnSelChanging(wxTreeEvent& event)
 {
-	if (m_is_deleting)
+	if (m_is_deleting) {
 		return;
+	}
 
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	if (!Verify()) {
 		event.Veto();
@@ -1632,16 +1638,19 @@ void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent&)
 void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return;
+	}
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!data)
+	if (!data) {
 		return;
+	}
 
 	wxDirDialog dlg(this, _("Choose the default local directory"), XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->GetValue(), wxDD_NEW_DIR_BUTTON);
 	if (dlg.ShowModal() == wxID_OK) {
@@ -1652,16 +1661,22 @@ void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent&)
 void CSiteManagerDialog::OnItemActivated(wxTreeEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return;
+	}
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!data)
+	if (!data) {
+		if (item != pTree->GetRootItem() || !pTree->IsExpanded(item)) {
+			pTree->Toggle(item);
+		}
 		return;
+	}
 
 	wxCommandEvent cmdEvent;
 	OnConnect(cmdEvent);
