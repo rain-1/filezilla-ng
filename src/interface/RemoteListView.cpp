@@ -1897,8 +1897,6 @@ std::list<wxString> CRemoteListView::RememberSelectedItems(wxString& focused)
 				focused = (*m_pDirectoryListing)[index].name;
 			}
 		}
-
-		SetItemState(item, 0, wxLIST_STATE_FOCUSED);
 	}
 
 	return selectedNames;
