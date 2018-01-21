@@ -14,6 +14,14 @@
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/uri.hpp>
 
+void HttpResponse::reset()
+{
+	flags_ = 0;
+	code_ = 0;
+	headers_.clear();
+
+}
+
 CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate & engine)
 	: CRealControlSocket(engine)
 {

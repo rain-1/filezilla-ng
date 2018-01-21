@@ -59,6 +59,17 @@ public:
 	unsigned int code_{};
 	HttpHeaders headers_;
 
+	enum flags {
+		flag_got_code = 0x01,
+		flag_got_header = 0x02,
+		flag_got_body = 0x04
+	};
+	int flags_{};
+
+	bool got_code() const { return flags_ & flag_got_code; }
+	bool got_header() const { return flags_ & flag_got_header; }
+	bool got_body() const { return flags_ & flag_got_body; }
+
 	// Called once the complete header has been received.
 	std::function<int()> on_header_;
 
@@ -82,6 +93,8 @@ public:
 	bool code_prohobits_body() const {
 		return (code_ >= 100 && code_ < 200) || code_ == 304 || code_ == 204;
 	}
+
+	void reset();
 };
 
 class CTlsSocket;

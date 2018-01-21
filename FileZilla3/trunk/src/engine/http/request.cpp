@@ -15,6 +15,8 @@ int CHttpRequestOpData::Send()
 	switch (opState) {
 	case request_init:
 		{
+			response_.reset();
+
 			if (request_.verb_.empty()) {
 				LogMessage(MessageType::Debug_Warning, L"No request verb");
 				return FZ_REPLY_INTERNALERROR;
@@ -45,9 +47,6 @@ int CHttpRequestOpData::Send()
 				LogMessage(MessageType::Debug_Warning, L"(dataToSend_ > 0) && !request_.data_request_");
 				return FZ_REPLY_INTERNALERROR;
 			}
-
-			response_.code_ = 0;
-			response_.headers_.clear();
 
 			opState = request_wait_connect;
 
@@ -179,7 +178,7 @@ int CHttpRequestOpData::OnReceive()
 
 		controlSocket_.SetActive(CFileZillaEngine::recv);
 
-		if (!got_header_) {
+		if (!response_.got_header()) {
 			if (!read) {
 				LogMessage(MessageType::Error, _("Connection closed by server"));
 				return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
@@ -209,6 +208,7 @@ int CHttpRequestOpData::OnReceive()
 					return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 				}
 				else {
+					response_.flags_ |= HttpResponse::flag_got_body;
 					return FZ_REPLY_OK;
 				}
 			}
@@ -265,7 +265,7 @@ int CHttpRequestOpData::ParseHeader()
 			controlSocket_.LogMessageRaw(MessageType::Response, wline);
 		}
 
-		if (!response_.code_) {
+		if (!response_.got_code()) {
 			if (recv_buffer_.size() < 15 || memcmp(recv_buffer_.get(), "HTTP/1.", 7)) {
 				// Invalid HTTP Status-Line
 				LogMessage(MessageType::Error, _("Invalid HTTP Response"));
@@ -282,6 +282,7 @@ int CHttpRequestOpData::ParseHeader()
 			}
 
 			response_.code_ = (recv_buffer_[9] - '0') * 100 + (recv_buffer_[10] - '0') * 10 + recv_buffer_[11] - '0';
+			response_.flags_ |= HttpResponse::flag_got_code;
 		}
 		else {
 			if (!i) {
@@ -293,7 +294,7 @@ int CHttpRequestOpData::ParseHeader()
 					return res;
 				}
 
-				if (!got_header_) {
+				if (!response_.got_header()) {
 					// In case we got 100 Continue
 					continue;
 				}
@@ -305,6 +306,7 @@ int CHttpRequestOpData::ParseHeader()
 					if (recv_buffer_.empty()) {
 						if (!responseContentLength_) {
 							opState = request_done;
+							response_.flags_ |= HttpResponse::flag_got_body;
 							return FZ_REPLY_OK;
 						}
 						else {
@@ -361,12 +363,11 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 
 	if (response_.code_ == 100) {
 		// 100 Continue header. Ignore it and start over.
-		response_.code_ = 0;
-		response_.headers_.clear();
+		response_.reset();
 		return FZ_REPLY_CONTINUE;
 	}
 
-	got_header_ = true;
+	response_.flags_ |= HttpResponse::flag_got_header;
 
 	auto const te = fz::str_tolower_ascii(response_.get_header("Transfer-Encoding"));
 	if (te == "chunked") {
@@ -402,6 +403,7 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 			}
 			else {
 				opState = request_done;
+				response_.flags_ |= HttpResponse::flag_got_body;
 				return FZ_REPLY_OK;
 			}
 		}
@@ -416,7 +418,7 @@ int CHttpRequestOpData::ParseChunkedData()
 		if (chunk_data_.size != 0) {
 			size_t dataLen = recv_buffer_.size();
 			if (chunk_data_.size < recv_buffer_.size()) {
-				dataLen = chunk_data_.size;
+				dataLen = static_cast<size_t>(chunk_data_.size);
 			}
 			int res = ProcessData(recv_buffer_.get(), dataLen);
 			if (res != FZ_REPLY_CONTINUE) {
@@ -471,6 +473,7 @@ int CHttpRequestOpData::ParseChunkedData()
 
 				recv_buffer_.consume(2);
 
+				response_.flags_ |= HttpResponse::flag_got_body;
 				return FZ_REPLY_OK;
 			}
 
@@ -522,6 +525,7 @@ int CHttpRequestOpData::ProcessData(unsigned char* data, unsigned int len)
 
 	if (res == FZ_REPLY_CONTINUE && receivedData_ == responseContentLength_) {
 		opState = request_done;
+		response_.flags_ |= HttpResponse::flag_got_body;
 		res = FZ_REPLY_OK;
 	}
 
@@ -537,7 +541,7 @@ int CHttpRequestOpData::OnClose()
 		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 	}
 
-	if (!got_header_) {
+	if (!response_.got_header()) {
 		LogMessage(MessageType::Debug_Verbose, L"Socket closed before headers got received");
 		return FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED;
 	}
