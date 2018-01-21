@@ -2992,7 +2992,7 @@ bool CDirectoryListingParser::GetMonthFromName(const std::wstring& name, int &mo
 	return true;
 }
 
-char ebcdic_table[256] = {
+char const ebcdic_table[256] = {
 	' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // 0
 	' ',  ' ',  ' ',  ' ',  ' ',  '\n', ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  '\n', // 1
 	' ',  ' ',  ' ',  ' ',  ' ',  '\n', ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // 2
