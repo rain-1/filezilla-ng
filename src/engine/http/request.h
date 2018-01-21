@@ -45,7 +45,6 @@ private:
 	HttpResponse & response_;
 
 	fz::buffer recv_buffer_;
-	bool got_header_{};
 
 	enum transferEncodings
 	{
