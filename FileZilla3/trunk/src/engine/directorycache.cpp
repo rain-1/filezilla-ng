@@ -74,7 +74,7 @@ bool CDirectoryCache::Lookup(CDirectoryListing &listing, CServer const& server, 
 
 bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, CServerPath const& path, bool allowUnsureEntries, bool& is_outdated)
 {
-	static CCacheEntry dummy;
+	CCacheEntry dummy;
 	dummy.listing.path = path;
 	cacheIter = sit->cacheList.lower_bound(dummy);
 
