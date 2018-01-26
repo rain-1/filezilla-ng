@@ -9,17 +9,18 @@ public:
 	CertStore();
 
 	bool IsTrusted(CCertificateNotification const& notification);
-	void SetTrusted(CCertificateNotification const& notification, bool permanent);
+	void SetTrusted(CCertificateNotification const& notification, bool permanent, bool trustAllHostnames);
 
 private:
 	struct t_certData {
-		std::vector<std::wstring> hosts;
+		std::wstring host;
+		std::vector<std::wstring> sans;
 		unsigned int port{};
 		std::vector<uint8_t> data;
 	};
 
-	bool IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly);
-	bool DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<t_certData> const& trustedCerts);
+	bool IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly, bool checkSans);
+	bool DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<t_certData> const& trustedCerts, bool checkSans);
 
 	void LoadTrustedCerts();
 
