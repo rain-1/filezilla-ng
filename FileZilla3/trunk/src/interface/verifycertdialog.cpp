@@ -18,7 +18,6 @@ CertStore::CertStore()
 {
 }
 
-
 bool CertStore::IsTrusted(CCertificateNotification const& notification)
 {
 	if (notification.GetAlgorithmWarnings() != 0) {
@@ -33,49 +32,14 @@ bool CertStore::IsTrusted(CCertificateNotification const& notification)
 	return IsTrusted(notification.GetHost(), notification.GetPort(), cert.GetRawData(), false, !notification.MismatchedHostname());
 }
 
-namespace {
-bool MatchHostname(std::vector<std::wstring> const& hosttokens, std::wstring const& san)
-{
-	auto const santokens = fz::strtok(san, L".");
-	if (hosttokens.size() != santokens.size()) {
-		return false;
-	}
-
-	for (size_t i = 0; i < hosttokens.size(); ++i) {
-		if (hosttokens[i] == santokens[i]) {
-			continue;
-		}
-
-		// Wildcard not allowed in last two parts
-		if (santokens[i] != '*' || i + 2 >= santokens.size()) {
-			return false;
-		}
-	}
-
-	return true;
-}
-
-bool MatchHostnames(std::vector<std::wstring> const& hosttokens, std::vector<std::wstring> const& sans)
-{
-	for (auto const& san : sans) {
-		if (MatchHostname(hosttokens, san)) {
-			return true;
-		}
-	}
-	return false;
-}
-}
-
-bool CertStore::DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<CertStore::t_certData> const& trustedCerts, bool checkSans)
+bool CertStore::DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<CertStore::t_certData> const& trustedCerts, bool allowSans)
 {
 	if (!data.size()) {
 		return false;
 	}
 
 	bool dnsname = fz::get_address_type(host) == fz::address_type::unknown;
-
-	auto const hosttokens = fz::strtok(fz::str_tolower_ascii(host), L".");
-
+	
 	for (auto const& cert : trustedCerts) {
 		if (port != cert.port) {
 			continue;
@@ -86,11 +50,7 @@ bool CertStore::DoIsTrusted(std::wstring const& host, unsigned int port, std::ve
 		}
 
 		if (host != cert.host) {
-			if (!dnsname || !checkSans) {
-				continue;
-			}
-
-			if (!MatchHostnames(hosttokens, cert.sans)) {
+			if (!dnsname || !allowSans || !cert.trustSans) {
 				continue;
 			}
 		}
@@ -101,11 +61,11 @@ bool CertStore::DoIsTrusted(std::wstring const& host, unsigned int port, std::ve
 	return false;
 }
 
-bool CertStore::IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly, bool checkSans)
+bool CertStore::IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly, bool allowSans)
 {
-	bool trusted = DoIsTrusted(host, port, data, trustedCerts_, checkSans);
+	bool trusted = DoIsTrusted(host, port, data, trustedCerts_, allowSans);
 	if (!trusted && !permanentOnly) {
-		trusted = DoIsTrusted(host, port, data, sessionTrustedCerts_, checkSans);
+		trusted = DoIsTrusted(host, port, data, sessionTrustedCerts_, allowSans);
 	}
 
 	return trusted;
@@ -160,12 +120,7 @@ void CertStore::LoadTrustedCerts()
 			return false;
 		}
 
-		for (auto subjectAltName = cert.child("SubjectAltName"); subjectAltName; subjectAltName = subjectAltName.next_sibling("SubjectAltName")) {
-			std::wstring name = GetTextElement(subjectAltName);
-			if (!name.empty()) {
-				data.sans.push_back(name);
-			}
-		}
+		data.trustSans = GetTextElementBool(cert, "TrustSANs");
 
 		// Weed out duplicates
 		if (IsTrusted(data.host, data.port, data.data, true, false)) {
@@ -203,11 +158,7 @@ void CertStore::SetTrusted(CCertificateNotification const& notification, bool pe
 	cert.data = certificate.GetRawData();
 
 	if (trustAllHostnames) {
-		for (auto san : certificate.GetAltSubjectNames()) {
-			if (san.isDns) {
-				cert.sans.push_back(fz::str_tolower_ascii(san.name));
-			}
-		}
+		cert.trustSans = true;
 	}
 
 	if (!permanent) {
@@ -238,10 +189,7 @@ void CertStore::SetTrusted(CCertificateNotification const& notification, bool pe
 			AddTextElement(xCert, "ExpirationTime", static_cast<int64_t>(certificate.GetExpirationTime().get_time_t()));
 			AddTextElement(xCert, "Host", cert.host);
 			AddTextElement(xCert, "Port", cert.port);
-
-			for (auto const& san : cert.sans) {
-				AddTextElement(xCert, "SubjectAltName", san);
-			}
+			AddTextElement(xCert, "TrustSANs", cert.trustSans ? L"1" : L"0");
 
 			m_xmlFile.Save(true);
 		}
@@ -450,11 +398,12 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 			notification.m_trusted = true;
 
 			if (!notification.GetAlgorithmWarnings()) {
+				bool trustSANs = false;
 				bool permanent = false;
 				if (!warning && XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->GetValue()) {
 					permanent = true;
 				}
-				certStore_.SetTrusted(notification, true, false);
+				certStore_.SetTrusted(notification, permanent, trustSANs);
 			}
 		}
 		else {
