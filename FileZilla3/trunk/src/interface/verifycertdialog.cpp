@@ -251,7 +251,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	if (!altNames.empty()) {
 		wxString str;
 		for (auto const& altName : altNames) {
-			str += altName + _T("\n");
+			str += altName.name + _T("\n");
 		}
 		str.RemoveLast();
 		m_pSubjectSizer->Add(new wxStaticText(subjectPanel, wxID_ANY, wxPLURAL("Alternative name:", "Alternative names:", altNames.size())));

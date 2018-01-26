@@ -326,6 +326,13 @@ protected:
 class CCertificate final
 {
 public:
+	class SubjectName final
+	{
+	public:
+		std::wstring name;
+		bool isDns{};
+	};
+
 	CCertificate() = default;
 	CCertificate(CCertificate const& op) = default;
 
@@ -339,7 +346,7 @@ public:
 		std::wstring const& fingerprint_sha1,
 		std::wstring const& issuer,
 		std::wstring const& subject,
-		std::vector<std::wstring> const& altSubjectNames);
+		std::vector<SubjectName> const& altSubjectNames);
 
 	CCertificate(
 		std::vector<uint8_t> && rawdata,
@@ -351,7 +358,7 @@ public:
 		std::wstring const& fingerprint_sha1,
 		std::wstring const& issuer,
 		std::wstring const& subject,
-		std::vector<std::wstring> && altSubjectNames);
+		std::vector<SubjectName> && altSubjectNames);
 
 
 	std::vector<uint8_t> GetRawData() const { return m_rawData; }
@@ -370,7 +377,7 @@ public:
 	std::wstring const& GetSubject() const { return m_subject; }
 	std::wstring const& GetIssuer() const { return m_issuer; }
 
-	std::vector<std::wstring> const& GetAltSubjectNames() const { return m_altSubjectNames; }
+	std::vector<SubjectName> const& GetAltSubjectNames() const { return m_altSubjectNames; }
 
 private:
 	fz::datetime m_activationTime;
@@ -390,7 +397,7 @@ private:
 	std::wstring m_issuer;
 	std::wstring m_subject;
 
-	std::vector<std::wstring> m_altSubjectNames;
+	std::vector<SubjectName> m_altSubjectNames;
 };
 
 class CCertificateNotification final : public CAsyncRequestNotification
