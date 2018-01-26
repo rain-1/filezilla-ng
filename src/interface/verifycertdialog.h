@@ -14,13 +14,13 @@ public:
 private:
 	struct t_certData {
 		std::wstring host;
-		std::vector<std::wstring> sans;
+		bool trustSans{};
 		unsigned int port{};
 		std::vector<uint8_t> data;
 	};
 
-	bool IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly, bool checkSans);
-	bool DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<t_certData> const& trustedCerts, bool checkSans);
+	bool IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly, bool allowSans);
+	bool DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<t_certData> const& trustedCerts, bool allowSans);
 
 	void LoadTrustedCerts();
 
