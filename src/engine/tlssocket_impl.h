@@ -86,7 +86,7 @@ protected:
 	bool GetSortedPeerCertificates(gnutls_x509_crt_t *& certs, unsigned int & certs_size);
 
 	bool ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out);
-	std::vector<std::wstring> GetCertSubjectAltNames(gnutls_x509_crt_t cert);
+	std::vector<CCertificate::SubjectName> GetCertSubjectAltNames(gnutls_x509_crt_t cert);
 
 	void PrintVerificationError(int status);
 

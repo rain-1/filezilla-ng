@@ -88,7 +88,7 @@ CCertificate::CCertificate(
 		std::wstring const& fingerprint_sha1,
 		std::wstring const& issuer,
 		std::wstring const& subject,
-		std::vector<std::wstring> const& altSubjectNames)
+		std::vector<SubjectName> const& altSubjectNames)
 	: m_activationTime(activationTime)
 	, m_expirationTime(expirationTime)
 	, m_rawData(rawData)
@@ -114,7 +114,7 @@ CCertificate::CCertificate(
 	std::wstring const& fingerprint_sha1,
 	std::wstring const& issuer,
 	std::wstring const& subject,
-	std::vector<std::wstring> && altSubjectNames)
+	std::vector<SubjectName> && altSubjectNames)
 	: m_activationTime(activationTime)
 	, m_expirationTime(expirationTime)
 	, m_rawData(rawData)

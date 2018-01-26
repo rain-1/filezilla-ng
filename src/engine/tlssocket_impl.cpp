@@ -1047,7 +1047,7 @@ bool CTlsSocketImpl::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& ou
 		return false;
 	}
 
-	std::vector<std::wstring> alt_subject_names = GetCertSubjectAltNames(cert);
+	std::vector<CCertificate::SubjectName> alt_subject_names = GetCertSubjectAltNames(cert);
 
 	size = 0;
 	res = gnutls_x509_crt_get_issuer_dn(cert, nullptr, &size);
@@ -1109,9 +1109,9 @@ bool CTlsSocketImpl::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& ou
 }
 
 
-std::vector<std::wstring> CTlsSocketImpl::GetCertSubjectAltNames(gnutls_x509_crt_t cert)
+std::vector<CCertificate::SubjectName> CTlsSocketImpl::GetCertSubjectAltNames(gnutls_x509_crt_t cert)
 {
-	std::vector<std::wstring> ret;
+	std::vector<CCertificate::SubjectName> ret;
 
 	char san[4096];
 	for (unsigned int i = 0; i < 10000; ++i) { // I assume this is a sane limit
@@ -1127,13 +1127,13 @@ std::vector<std::wstring> CTlsSocketImpl::GetCertSubjectAltNames(gnutls_x509_crt
 		if (type_or_error == GNUTLS_SAN_DNSNAME || type_or_error == GNUTLS_SAN_RFC822NAME) {
 			std::wstring dns = fz::to_wstring_from_utf8(san);
 			if (!dns.empty()) {
-				ret.emplace_back(std::move(dns));
+				ret.emplace_back(CCertificate::SubjectName{std::move(dns), type_or_error == GNUTLS_SAN_DNSNAME});
 			}
 		}
 		else if (type_or_error == GNUTLS_SAN_IPADDRESS) {
 			std::wstring ip = fz::to_wstring(fz::socket::address_to_string(san, san_size));
 			if (!ip.empty()) {
-				ret.emplace_back(std::move(ip));
+				ret.emplace_back(CCertificate::SubjectName{std::move(ip), false});
 			}
 		}
 	}
