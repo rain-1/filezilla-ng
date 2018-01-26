@@ -7,6 +7,8 @@
 #include "timeformatting.h"
 #include "xrc_helper.h"
 
+#include <libfilezilla/iputils.hpp>
+
 #include <wx/scrolwin.h>
 #include <wx/statbox.h>
 #include <wx/tokenzr.h>
@@ -28,37 +30,82 @@ bool CertStore::IsTrusted(CCertificateNotification const& notification)
 
 	CCertificate cert = notification.GetCertificates()[0];
 
-	return IsTrusted(notification.GetHost(), notification.GetPort(), cert.GetRawData(), false);
+	return IsTrusted(notification.GetHost(), notification.GetPort(), cert.GetRawData(), false, !notification.MismatchedHostname());
 }
 
-bool CertStore::DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<CertStore::t_certData> const& trustedCerts)
+namespace {
+bool MatchHostname(std::vector<std::wstring> const& hosttokens, std::wstring const& san)
+{
+	auto const santokens = fz::strtok(san, L".");
+	if (hosttokens.size() != santokens.size()) {
+		return false;
+	}
+
+	for (size_t i = 0; i < hosttokens.size(); ++i) {
+		if (hosttokens[i] == santokens[i]) {
+			continue;
+		}
+
+		// Wildcard not allowed in last two parts
+		if (santokens[i] != '*' || i + 2 >= santokens.size()) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool MatchHostnames(std::vector<std::wstring> const& hosttokens, std::vector<std::wstring> const& sans)
+{
+	for (auto const& san : sans) {
+		if (MatchHostname(hosttokens, san)) {
+			return true;
+		}
+	}
+	return false;
+}
+}
+
+bool CertStore::DoIsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, std::list<CertStore::t_certData> const& trustedCerts, bool checkSans)
 {
 	if (!data.size()) {
 		return false;
 	}
+
+	bool dnsname = fz::get_address_type(host) == fz::address_type::unknown;
+
+	auto const hosttokens = fz::strtok(fz::str_tolower_ascii(host), L".");
 
 	for (auto const& cert : trustedCerts) {
 		if (port != cert.port) {
 			continue;
 		}
 
-		if (std::find(cert.hosts.cbegin(), cert.hosts.cend(), host) == cert.hosts.cend()) {
+		if (cert.data != data) {
 			continue;
 		}
 
-		if (cert.data == data) {
-			return true;
+		if (host != cert.host) {
+			if (!dnsname || !checkSans) {
+				continue;
+			}
+
+			if (!MatchHostnames(hosttokens, cert.sans)) {
+				continue;
+			}
 		}
+
+		return true;
 	}
 
 	return false;
 }
 
-bool CertStore::IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly)
+bool CertStore::IsTrusted(std::wstring const& host, unsigned int port, std::vector<uint8_t> const& data, bool permanentOnly, bool checkSans)
 {
-	bool trusted = DoIsTrusted(host, port, data, trustedCerts_);
+	bool trusted = DoIsTrusted(host, port, data, trustedCerts_, checkSans);
 	if (!trusted && !permanentOnly) {
-		trusted = DoIsTrusted(host, port, data, sessionTrustedCerts_);
+		trusted = DoIsTrusted(host, port, data, sessionTrustedCerts_, checkSans);
 	}
 
 	return trusted;
@@ -96,12 +143,11 @@ void CertStore::LoadTrustedCerts()
 			return false;
 		}
 
-		std::wstring host = GetTextElement(cert, "Host");
+		data.host = GetTextElement(cert, "Host");
 		data.port = GetTextElementInt(cert, "Port");
-		if (host.empty() || data.port < 1 || data.port > 65535) {
+		if (data.host.empty() || data.port < 1 || data.port > 65535) {
 			return false;
 		}
-		data.hosts.push_back(host);
 
 		fz::datetime const now = fz::datetime::now();
 		int64_t activationTime = GetTextElementInt(cert, "ActivationTime", 0);
@@ -114,8 +160,15 @@ void CertStore::LoadTrustedCerts()
 			return false;
 		}
 
+		for (auto subjectAltName = cert.child("SubjectAltName"); subjectAltName; subjectAltName = subjectAltName.next_sibling("SubjectAltName")) {
+			std::wstring name = GetTextElement(subjectAltName);
+			if (!name.empty()) {
+				data.sans.push_back(name);
+			}
+		}
+
 		// Weed out duplicates
-		if (IsTrusted(data.hosts[0], data.port, data.data, true)) {
+		if (IsTrusted(data.host, data.port, data.data, true, false)) {
 			return false;
 		}
 
@@ -140,14 +193,22 @@ void CertStore::LoadTrustedCerts()
 	}
 }
 
-void CertStore::SetTrusted(CCertificateNotification const& notification, bool permanent)
+void CertStore::SetTrusted(CCertificateNotification const& notification, bool permanent, bool trustAllHostnames)
 {
 	const CCertificate certificate = notification.GetCertificates()[0];
 
 	t_certData cert;
-	cert.hosts.push_back(notification.GetHost());
+	cert.host = notification.GetHost();
 	cert.port = notification.GetPort();
 	cert.data = certificate.GetRawData();
+
+	if (trustAllHostnames) {
+		for (auto san : certificate.GetAltSubjectNames()) {
+			if (san.isDns) {
+				cert.sans.push_back(fz::str_tolower_ascii(san.name));
+			}
+		}
+	}
 
 	if (!permanent) {
 		t_certData cert;
@@ -159,7 +220,7 @@ void CertStore::SetTrusted(CCertificateNotification const& notification, bool pe
 	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
 	LoadTrustedCerts();
 
-	if (IsTrusted(cert.hosts[0], cert.port, cert.data, true)) {
+	if (IsTrusted(cert.host, cert.port, cert.data, true, false)) {
 		return;
 	}
 
@@ -175,8 +236,12 @@ void CertStore::SetTrusted(CCertificateNotification const& notification, bool pe
 			AddTextElementUtf8(xCert, "Data", fz::hex_encode<std::string>(cert.data));
 			AddTextElement(xCert, "ActivationTime", static_cast<int64_t>(certificate.GetActivationTime().get_time_t()));
 			AddTextElement(xCert, "ExpirationTime", static_cast<int64_t>(certificate.GetExpirationTime().get_time_t()));
-			AddTextElement(xCert, "Host", cert.hosts[0]);
+			AddTextElement(xCert, "Host", cert.host);
 			AddTextElement(xCert, "Port", cert.port);
+
+			for (auto const& san : cert.sans) {
+				AddTextElement(xCert, "SubjectAltName", san);
+			}
 
 			m_xmlFile.Save(true);
 		}
@@ -389,7 +454,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 				if (!warning && XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->GetValue()) {
 					permanent = true;
 				}
-				certStore_.SetTrusted(notification, true);
+				certStore_.SetTrusted(notification, true, false);
 			}
 		}
 		else {
