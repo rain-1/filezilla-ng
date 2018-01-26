@@ -242,6 +242,11 @@
                   <label>&amp;Always trust certificate in future sessions.</label>
                 </object>
               </object>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="ID_TRUST_SANS">
+                  <label>&amp;Trust this certificate on the listed alternative hostnames.</label>
+                </object>
+              </object>
               <cols>1</cols>
               <vgap>3d</vgap>
               <growablecols>0</growablecols>

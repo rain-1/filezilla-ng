@@ -38,7 +38,7 @@ bool CertStore::DoIsTrusted(std::wstring const& host, unsigned int port, std::ve
 		return false;
 	}
 
-	bool dnsname = fz::get_address_type(host) == fz::address_type::unknown;
+	bool const dnsname = fz::get_address_type(host) == fz::address_type::unknown;
 	
 	for (auto const& cert : trustedCerts) {
 		if (port != cert.port) {
@@ -321,6 +321,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 		xrc_call(*m_pDlg, "ID_DESC", &wxWindow::Hide);
 		xrc_call(*m_pDlg, "ID_ALWAYS_DESC", &wxWindow::Hide);
 		xrc_call(*m_pDlg, "ID_ALWAYS", &wxWindow::Hide);
+		xrc_call(*m_pDlg, "ID_TRUST_SANS", &wxWindow::Hide);
 		xrc_call(*m_pDlg, "wxID_CANCEL", &wxWindow::Hide);
 		m_pDlg->SetTitle(_T("Certificate details"));
 	}
@@ -388,6 +389,10 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 		XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->Enable(false);
 	}
 
+	bool const dnsname = fz::get_address_type(notification.GetHost()) == fz::address_type::unknown;
+	bool const sanTrustAllowed = !warning && dnsname && !notification.MismatchedHostname();
+		XRCCTRL(*m_pDlg, "ID_TRUST_SANS", wxCheckBox)->Enable(sanTrustAllowed);
+
 	m_pDlg->GetSizer()->Fit(m_pDlg);
 	m_pDlg->GetSizer()->SetSizeHints(m_pDlg);
 
@@ -398,11 +403,8 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 			notification.m_trusted = true;
 
 			if (!notification.GetAlgorithmWarnings()) {
-				bool trustSANs = false;
-				bool permanent = false;
-				if (!warning && XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->GetValue()) {
-					permanent = true;
-				}
+				bool trustSANs = sanTrustAllowed && xrc_call(*m_pDlg, "ID_TRUST_SANS", &wxCheckBox::GetValue);
+				bool permanent = !warning && xrc_call(*m_pDlg, "ID_ALWAYS", &wxCheckBox::GetValue);
 				certStore_.SetTrusted(notification, permanent, trustSANs);
 			}
 		}
