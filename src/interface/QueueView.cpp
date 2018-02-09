@@ -1493,7 +1493,13 @@ void CQueueView::UpdateStatusLinePositions()
 #endif
 
 	for (auto pCtrl : m_statusLineList) {
-		int index = GetItemIndex(pCtrl->GetItem()) + 1;
+		CFileItem const* pItem = pCtrl->GetItem();
+		if (!pItem) {
+			pCtrl->Show(false);
+			continue;
+		}
+
+		int index = GetItemIndex(pItem) + 1;
 		if (index < m_lastTopItem || index > bottomItem) {
 			pCtrl->Show(false);
 			continue;
