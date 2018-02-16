@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.31.0-rc1 (20180-02-16)
+
++ Allow trusting all subject alternative names (SAN) in a certificate if the current hostname matches the certificate
+- OS X: Fix file lists becoming inresponsive when a file rename edit box is discarded by clicking to the right of the last column in the file list
+- Fix rare crash during directory removal
+- Fix rare crash in the transfer queue
+
 3.30.0 (2018-01-08)
 
 - Add additional logging if autoupdate mechanism fails
