@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2017-10-30 18:09+0100\n"
-"PO-Revision-Date: 2017-10-10 16:22+0300\n"
+"POT-Creation-Date: 2018-02-16 14:59+0100\n"
+"PO-Revision-Date: 2018-01-10 10:15+0200\n"
 "Last-Translator: Igor Chomko <igor.chomko@gmail.com>\n"
 "Language-Team: Igor Chomko <igorchomko@gmail.com>\n"
 "Language: uk_UA\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.0.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 948,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
@@ -52,8 +52,8 @@ msgstr[1] "%d каталоги"
 msgstr[2] "%d каталогів"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1425
-#: ../../locales/../src/interface/search.cpp:854
-#: ../../locales/../src/interface/search.cpp:1239
+#: ../../locales/../src/interface/search.cpp:876
+#: ../../locales/../src/interface/search.cpp:1263
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
@@ -64,8 +64,8 @@ msgstr[2] "%d каталогів зі своїм вмістом"
 #: ../../locales/../src/interface/filelist_statusbar.cpp:50
 #: ../../locales/../src/interface/filelist_statusbar.cpp:75
 #: ../../locales/../src/interface/RemoteListView.cpp:1424
-#: ../../locales/../src/interface/search.cpp:853
-#: ../../locales/../src/interface/search.cpp:1238
+#: ../../locales/../src/interface/search.cpp:875
+#: ../../locales/../src/interface/search.cpp:1262
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
@@ -132,12 +132,12 @@ msgstr "%s (%s/s)"
 msgid "%s (? B/s)"
 msgstr "%s (? Б/с)"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:39
+#: ../../locales/../src/interface/verifycertdialog.cpp:229
 #, c-format
 msgid "%s - Certificate expired!"
 msgstr "%s - Дія сертифікату вичерпана!"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:24
+#: ../../locales/../src/interface/verifycertdialog.cpp:214
 #, c-format
 msgid "%s - Not yet valid!"
 msgstr "%s - Все ще не дійсний!"
@@ -165,7 +165,7 @@ msgstr[0] "%s байт"
 msgstr[1] "%s байти"
 msgstr[2] "%s байт"
 
-#: ../../locales/../src/interface/FileZilla.cpp:629
+#: ../../locales/../src/interface/FileZilla.cpp:639
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, %s will not "
@@ -179,7 +179,7 @@ msgstr ""
 "Завантажте FileZilla повторно. Якщо проблема не зникає, надішліть звіт про "
 "помилку."
 
-#: ../../locales/../src/interface/FileZilla.cpp:719
+#: ../../locales/../src/interface/FileZilla.cpp:729
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, %s will not "
@@ -196,12 +196,12 @@ msgstr ""
 "змінної середовища.\n"
 "- Встановіть повний шлях до %s у %s змінної середовища."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:59
+#: ../../locales/../src/interface/verifycertdialog.cpp:249
 #, c-format
 msgid "%s with %d bits"
 msgstr "%s з %d бітами"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:164
+#: ../../locales/../src/interface/verifycertdialog.cpp:353
 #, c-format
 msgid "%s:%d - Hostname does not match certificate"
 msgstr "%s:%d - Ім'я хоста не збігається з сертифікатом"
@@ -354,7 +354,7 @@ msgstr "&Закрити FileZilla"
 msgid "&Close FileZilla once"
 msgstr "&Закрити FileZilla один раз"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:657
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:663
 msgid "&Configure speed limits..."
 msgstr "&Конфігурувати обмеження швидкості..."
 
@@ -382,7 +382,7 @@ msgstr "&Скопіювати до буферу обміну"
 msgid "&Create directory"
 msgstr "&Створити каталог"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:637
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:643
 msgid "&Create new tab"
 msgstr "&Створити нову вкладку"
 
@@ -502,7 +502,7 @@ msgstr "&Редагувати правила фільтрування..."
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:76
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:163
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:543
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:653
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:659
 msgid "&Enable"
 msgstr "&Розблокувати"
 
@@ -762,7 +762,7 @@ msgstr "&Новий"
 msgid "&New Site"
 msgstr "&Новий сайт"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1765
+#: ../../locales/../src/interface/Mainfrm.cpp:1763
 msgid "&New version available!"
 msgstr "&Доступна нова версія!"
 
@@ -860,7 +860,7 @@ msgid "&Reconnect information"
 msgstr "&Інформація повторного з'єднання"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:65
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:648
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:654
 msgid "&Refresh"
 msgstr "&Оновити"
 
@@ -1067,6 +1067,11 @@ msgstr "&Почерговість передачі"
 msgid "&Treat dotfiles as ASCII files"
 msgstr "&Трактувати файли з розширенням .dot як файли ASCII"
 
+#: ../../locales/../src/interface/resources/xrc/certificate.xrc:247
+#, fuzzy
+msgid "&Trust this certificate on the listed alternative hostnames."
+msgstr "Довіряти цьому сертифікату і продовжити з'єднання?"
+
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2140
 msgid "&Unedit"
 msgstr "&Відмінити редагування"
@@ -1127,7 +1132,7 @@ msgstr "&Користувач:"
 msgid "&Username:"
 msgstr "&Ім'я користувача:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1759
+#: ../../locales/../src/interface/Mainfrm.cpp:1757
 #, c-format
 msgid "&Version %s"
 msgstr "&Версія %s"
@@ -1179,7 +1184,7 @@ msgid "'%s' is not a supported protocol."
 msgstr "'%s' не є підтримуваним протоколом."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:419
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:995
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:998
 msgid "'Account' logontype not supported by selected protocol"
 msgstr ""
 "'Обліковий запис' за типом входження не підтримується вибраним протоколом"
@@ -1192,7 +1197,7 @@ msgstr ""
 "Типи входу 'Звичайний' і 'Обліковий запис' відсутні; використовуйте 'Запит "
 "паролю', натомість."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1012
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1015
 msgid ""
 "'Normal' and 'Account' logontypes are not available. Your entry has been "
 "changed to 'Ask for password'."
@@ -1200,7 +1205,7 @@ msgstr ""
 "Типи входу 'Нормальний' і 'Обліковий запис' відсутні. Ваш вхід було змінено "
 "на 'Запит паролю'."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:642
+#: ../../locales/../src/interface/Mainfrm.cpp:640
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
@@ -1277,7 +1282,7 @@ msgstr "--:--:-- залишилось"
 
 #: ../../locales/../src/interface/cmdline.cpp:88
 msgid "-c cannot be used together with an FTP URL."
-msgstr "-c не може використовуватись з FTP URL."
+msgstr "-c не може використовуватись з адресою FTP."
 
 #: ../../locales/../src/interface/cmdline.cpp:97
 msgid "-l can only be used together with an FTP URL."
@@ -1289,7 +1294,7 @@ msgstr "-s та -c не можуть співіснувати одночасно
 
 #: ../../locales/../src/interface/cmdline.cpp:82
 msgid "-s cannot be used together with an FTP URL."
-msgstr "-s не можна використовувати разом з FTP URL."
+msgstr "-s не можна використовувати разом з адресою FTP."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2324
 msgid "0 - None"
@@ -1372,7 +1377,7 @@ msgstr ""
 "Файл з таким іменем знаходиться у процесі редагування. Закрийте його і "
 "повторіить спробу."
 
-#: ../../locales/../src/interface/FileZilla.cpp:595
+#: ../../locales/../src/interface/FileZilla.cpp:605
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1399,7 +1404,7 @@ msgstr ""
 msgid "A new version of FileZilla is available:"
 msgstr "Доступна нова версія FileZilla:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:713
+#: ../../locales/../src/interface/Mainfrm.cpp:711
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1466,12 +1471,12 @@ msgstr "Про FileZilla"
 msgid "Above the file lists"
 msgstr "Над списками файлу"
 
-#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:114
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:119
 msgid "Access to some local directories could not be restored:"
 msgstr "Неможливо відновити доступ до деяких локальних каталогів:"
 
-#: ../../locales/../src/engine/server.cpp:581
-#: ../../locales/../src/engine/server.cpp:604
+#: ../../locales/../src/engine/server.cpp:582
+#: ../../locales/../src/engine/server.cpp:605
 #: ../../locales/../src/interface/manual_transfer.cpp:148
 #: ../../locales/../src/interface/manual_transfer.cpp:149
 #: ../../locales/../src/interface/manual_transfer.cpp:185
@@ -1581,7 +1586,7 @@ msgstr "Зав&жди виконувати цю дію"
 msgid "Algorithm:"
 msgstr "Алгоритм:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2652
+#: ../../locales/../src/interface/QueueView.cpp:2658
 msgid "All files have been successfully transferred"
 msgstr "Усі файли були успішно передані"
 
@@ -1590,7 +1595,7 @@ msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr ""
 "Усі порти в заданому діапазоні повинні знаходитись в межах від 1024 до 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2648
+#: ../../locales/../src/interface/QueueView.cpp:2654
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1610,7 +1615,7 @@ msgstr "Дозволити звернутися до іншого режиму �
 msgid "Already connected"
 msgstr "Існуюче з'єднання"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:80
+#: ../../locales/../src/interface/verifycertdialog.cpp:270
 msgid "Alternative name:"
 msgid_plural "Alternative names:"
 msgstr[0] "Альтернативне ім'я:"
@@ -1641,7 +1646,7 @@ msgstr ""
 "В якості альтернативи, ви, також, можете завантажити останню версію "
 "FileZilla з веб сайту:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1656
+#: ../../locales/../src/interface/QueueView.cpp:1662
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1650,7 +1655,7 @@ msgstr ""
 "Помилка при завантаженні черги передачі з \"%s\".\n"
 "Деякі елементи черги неможливо відновити."
 
-#: ../../locales/../src/interface/QueueView.cpp:1549
+#: ../../locales/../src/interface/QueueView.cpp:1555
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1663,7 +1668,7 @@ msgstr ""
 msgid "An issuer in the certificate chain is not a certificate authority"
 msgstr "Видавець у ланцюжку сертифікатів не є центром сертифікації"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2254
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2276
 msgid ""
 "An item with the same name as the dragged item already exists at the target "
 "location."
@@ -1671,12 +1676,12 @@ msgstr ""
 "Елемент, що перетягується, позначений схожим іменем з елементом, який вже "
 "існує на вказаній позиції."
 
-#: ../../locales/../src/engine/server.cpp:606
+#: ../../locales/../src/engine/server.cpp:607
 #: ../../locales/../src/interface/manual_transfer.cpp:147
 #: ../../locales/../src/interface/manual_transfer.cpp:188
 #: ../../locales/../src/interface/manual_transfer.cpp:203
 #: ../../locales/../src/interface/manual_transfer.cpp:534
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1709
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1731
 msgid "Anonymous"
 msgstr "Анонімний"
 
@@ -1686,7 +1691,7 @@ msgid ""
 msgstr ""
 "Виконується ще один віддалений процес, зараз зміна директорії неможлива."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:845
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:848
 msgid "Any changes made in the Site Manager could not be saved."
 msgstr "Внесення будь-яких змін в Сайт Менеджері не може бути збереженим."
 
@@ -1734,8 +1739,8 @@ msgstr "Як вкладка в панелі черги передачі"
 msgid "Ask for action"
 msgstr "Запит на виконання"
 
-#: ../../locales/../src/engine/server.cpp:572
-#: ../../locales/../src/engine/server.cpp:598
+#: ../../locales/../src/engine/server.cpp:573
+#: ../../locales/../src/engine/server.cpp:599
 #: ../../locales/../src/interface/manual_transfer.cpp:179
 msgid "Ask for password"
 msgstr "Запит на пароль"
@@ -1828,7 +1833,7 @@ msgstr "Синій"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:271
 #: ../../locales/../src/interface/menu_bar.cpp:321
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:390
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:393
 msgid "Bookmark"
 msgstr "Закладка"
 
@@ -1845,9 +1850,9 @@ msgid "Browse..."
 msgstr "Перегляд..."
 
 #: ../../locales/../src/engine/storj/resolve.cpp:70
-#: ../../locales/../src/engine/storj/resolve.cpp:150
-#: ../../locales/../src/engine/storj/resolve.cpp:218
-#: ../../locales/../src/engine/storj/resolve.cpp:291
+#: ../../locales/../src/engine/storj/resolve.cpp:158
+#: ../../locales/../src/engine/storj/resolve.cpp:226
+#: ../../locales/../src/engine/storj/resolve.cpp:299
 msgid "Bucket not found"
 msgstr "Сегмента пам’яті не знайдено"
 
@@ -1859,7 +1864,7 @@ msgstr "Дата створення:"
 msgid "Build information"
 msgstr "Інформація по конструкції"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:249
+#: ../../locales/../src/interface/verifycertdialog.cpp:433
 msgid "Business category:"
 msgstr "Бізнес категорія:"
 
@@ -1925,7 +1930,7 @@ msgstr "Не можу записати дані в файл."
 msgid "Can't write data to file: %s"
 msgstr "Не можу записати дані в файл: %s"
 
-#: ../../locales/../src/interface/resources/xrc/certificate.xrc:269
+#: ../../locales/../src/interface/resources/xrc/certificate.xrc:274
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:239
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:565
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:757
@@ -1964,7 +1969,7 @@ msgstr "Скасовує поточну операцію"
 msgid "Cannot access '%s', no media inserted or drive not ready."
 msgstr "Нема доступу '%s', не встановлені носії або диск не готовий."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:613
+#: ../../locales/../src/interface/Mainfrm.cpp:611
 msgid "Cannot add server to Site Manager"
 msgstr "Неможливо додати сервер до Сайт Менеджера"
 
@@ -2000,16 +2005,17 @@ msgstr "Неможливо створити новий фільтр"
 
 #: ../../locales/../src/interface/edithandler.cpp:1626
 #: ../../locales/../src/interface/edithandler.cpp:1674
-#: ../../locales/../src/interface/LocalListView.cpp:1780
-#: ../../locales/../src/interface/search.cpp:1184
+#: ../../locales/../src/interface/LocalListView.cpp:1837
+#: ../../locales/../src/interface/search.cpp:1210
+#: ../../locales/../src/interface/search.cpp:1528
 msgid "Cannot edit file"
 msgstr "Неможливо редагувати файл"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1661
+#: ../../locales/../src/interface/LocalListView.cpp:1713
 msgid "Cannot edit file, not connected to any server."
 msgstr "Редагування файлу неможливе; нема підключення до жодного серверу."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1670
+#: ../../locales/../src/interface/LocalListView.cpp:1722
 msgid "Cannot edit file, remote path unknown."
 msgstr "Неможливо редагувати файл, невідомий віддалений шлях."
 
@@ -2021,11 +2027,11 @@ msgstr ""
 "Неможливо встановити з'єднання з SFTP сервером. Виберіть,будь-ласка,"
 "властивий протокол."
 
-#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:119
+#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:126
 msgid "Cannot load key file"
 msgstr "Неможливо завантажити файл ключа"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1079
+#: ../../locales/../src/interface/Mainfrm.cpp:1077
 msgid "Cannot load toolbar from resource file"
 msgstr "Неможливо завантажити панель інструментів з вихідного файлу"
 
@@ -2034,7 +2040,7 @@ msgid "Cannot remember password"
 msgstr "Неможливо запам'ятати пароль"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:732
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1261
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1264
 msgid "Cannot rename entry"
 msgstr "Неможливо перейменувати компонент"
 
@@ -2095,7 +2101,7 @@ msgstr "Чутливий до регістру (типово)"
 msgid "Categories to clear"
 msgstr "Категорії, щоб очистити"
 
-#: ../../locales/../src/interface/statusbar.cpp:514
+#: ../../locales/../src/interface/statusbar.cpp:515
 msgid "Certificate and session data are not available yet."
 msgstr "Сертифікату і даних по з'єднанню ще немає."
 
@@ -2128,7 +2134,7 @@ msgstr "Змінити дозволи для файлу."
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr "Зміна налаштувань файлу журналу вимагає перезавантаження FileZilla."
 
-#: ../../locales/../src/interface/FileZilla.cpp:595
+#: ../../locales/../src/interface/FileZilla.cpp:605
 msgid "Character encoding issue"
 msgstr "Подача кодування символів"
 
@@ -2180,31 +2186,31 @@ msgstr "Перевірка правильності зовнішньої ІР а
 msgid "Checking for updates..."
 msgstr "Перевірка оновлень..."
 
-#: ../../locales/../src/interface/updater.cpp:755
+#: ../../locales/../src/interface/updater.cpp:780
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Контрольна сума співпадає у файлі %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:751
+#: ../../locales/../src/interface/updater.cpp:776
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Контрольна сума не співпадає у файлі %s\n"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1608
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1617
 msgid "Choose a key file"
 msgstr "Вибрати файл ключа"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1639
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1655
 msgid "Choose the default local directory"
 msgstr "Виберіть типовий локальний каталог"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:134
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:386
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2495
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2517
 msgid "Choose the local directory"
 msgstr "Вибрати локальний каталог"
 
-#: ../../locales/../src/engine/http/request.cpp:437
+#: ../../locales/../src/engine/http/request.cpp:464
 msgid "Chunk data improperly terminated"
 msgstr "Частину даних завершено неправильно"
 
@@ -2213,7 +2219,7 @@ msgid "Cipher:"
 msgstr "Шифр:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:21
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:641
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:647
 msgid "Cl&ose tab"
 msgstr "За&крити вкладку"
 
@@ -2262,13 +2268,13 @@ msgstr "Клієнт для серверного шифру:"
 msgid "Close"
 msgstr "Закрити"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:644
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:650
 msgid "Close &all other tabs"
 msgstr "Закрити &усі інші вкладки"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1232
-#: ../../locales/../src/interface/Mainfrm.cpp:1253
+#: ../../locales/../src/interface/Mainfrm.cpp:1230
+#: ../../locales/../src/interface/Mainfrm.cpp:1251
 msgid "Close FileZilla"
 msgstr "Закрити FileZilla"
 
@@ -2276,7 +2282,7 @@ msgstr "Закрити FileZilla"
 msgid "Close all running instances of FileZilla"
 msgstr "Закрити всі діючі екземпляри FileZilla"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2310
+#: ../../locales/../src/interface/Mainfrm.cpp:2308
 msgid "Close quick search and continue comparing?"
 msgstr "Закрити швидкий пошук і продовжити порівняння?"
 
@@ -2321,11 +2327,11 @@ msgstr "Команда не підтримується даним протоко
 msgid "Command:"
 msgstr "Команда:"
 
-#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:33
+#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:36
 msgid "Comment"
 msgstr "Коментар"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:247
+#: ../../locales/../src/interface/verifycertdialog.cpp:431
 msgid "Common name:"
 msgstr "Спільне ім'я:"
 
@@ -2398,16 +2404,17 @@ msgstr "Конфігурувати діапазон портів"
 msgid "Configuring FileZilla and your network"
 msgstr "Конфігурування FileZilla та вашої мережі"
 
-#: ../../locales/../src/interface/search.cpp:1243
+#: ../../locales/../src/interface/search.cpp:1267
 msgid "Confirm deletion"
 msgstr "Підтвердити видалення"
 
 #: ../../locales/../src/interface/edithandler.cpp:1638
 #: ../../locales/../src/interface/file_utils.h:45
-#: ../../locales/../src/interface/LocalListView.cpp:1743
+#: ../../locales/../src/interface/LocalListView.cpp:1799
 #: ../../locales/../src/interface/RemoteListView.cpp:1429
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1070
-#: ../../locales/../src/interface/search.cpp:1196
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1085
+#: ../../locales/../src/interface/search.cpp:1222
+#: ../../locales/../src/interface/search.cpp:1488
 msgid "Confirmation needed"
 msgstr "Необхідне підтвердження"
 
@@ -2436,7 +2443,7 @@ msgstr "З'єднати в новій вкладці"
 msgid "Connect to specified Site Manager site"
 msgstr "Під'єднати до сайту вказаного Сайт Менеджером"
 
-#: ../../locales/../src/interface/queue.cpp:340
+#: ../../locales/../src/interface/queue.cpp:353
 msgid "Connecting"
 msgstr "Під'єднання"
 
@@ -2468,7 +2475,7 @@ msgstr "Під'єднання"
 msgid "Connection aborted"
 msgstr "З'єднання перервано"
 
-#: ../../locales/../src/interface/queue.cpp:341
+#: ../../locales/../src/interface/queue.cpp:354
 msgid "Connection attempt failed"
 msgstr "Невдала спроба під'єднання"
 
@@ -2499,15 +2506,18 @@ msgstr "З'єднання завершено"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1036
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:75
+#: ../../locales/../src/engine/http/request.cpp:183
+#: ../../locales/../src/engine/http/request.cpp:194
+#: ../../locales/../src/engine/http/request.cpp:207
 msgid "Connection closed by server"
 msgstr "З'єднання завершено сервером"
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:185
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:113
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:121
 msgid "Connection established, initializing TLS..."
 msgstr "З'єднання встановлено, ініціюється TLS..."
 
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:136
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:144
 msgid "Connection established, sending HTTP request"
 msgstr "З'єднання встановлено, надсилається запит HTTP"
 
@@ -2555,7 +2565,7 @@ msgstr[2] "Час очікування вичерпано після %d секу
 msgid "Connection timed out."
 msgstr "Час з 'єднання вичерпано."
 
-#: ../../locales/../src/interface/search.cpp:708
+#: ../../locales/../src/interface/search.cpp:724
 msgid "Connection to server lost."
 msgstr "З'єднання з сервером втрачено."
 
@@ -2576,13 +2586,13 @@ msgid "Convert key file"
 msgstr "Конвертувати файл ключа"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:676
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2055
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2077
 #, c-format
 msgid "Copy (%d) of %s"
 msgstr "Копія (%d) з %s"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:655
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2034
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2056
 #, c-format
 msgid "Copy of %s"
 msgstr "Копія з %s"
@@ -2642,9 +2652,9 @@ msgstr "Неможливо сконвертувати команду до сер
 msgid "Could not convert private key"
 msgstr "Неможливо сконвертувати приватний ключ"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2579
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1412
-#: ../../locales/../src/interface/search.cpp:1372
+#: ../../locales/../src/interface/RemoteListView.cpp:2584
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1427
+#: ../../locales/../src/interface/search.cpp:1419
 msgid "Could not copy URLs"
 msgstr "Неможливо скопіювати адреси"
 
@@ -2656,7 +2666,8 @@ msgstr "Неможливо скопіювати сертифікат"
 msgid "Could not copy data"
 msgstr "Неможливо скопіювати дані"
 
-#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:161
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:167
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:210
 #, c-format
 msgid "Could not create CFURL from path %s"
 msgstr "Неможливо створити CFURL із шляху %s"
@@ -2665,7 +2676,7 @@ msgstr "Неможливо створити CFURL із шляху %s"
 msgid "Could not create URI for this transfer."
 msgstr "Не вдалося створити ідентифікатор URI для цієї передачі."
 
-#: ../../locales/../src/interface/updater.cpp:490
+#: ../../locales/../src/interface/updater.cpp:511
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "Неможливо створити локальний файл %s\n"
@@ -2675,12 +2686,13 @@ msgstr "Неможливо створити локальний файл %s\n"
 msgid "Could not create logging mutex: %s"
 msgstr "Неможливо створити реєстраційний об’єкт-взаємовиключення: %s"
 
-#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:170
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:176
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:219
 msgid "Could not create security-scoped bookmark from URL:"
 msgstr "Неможливо створити безпечну закладку з адреси URL:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2224
-#: ../../locales/../src/interface/RemoteTreeView.cpp:866
+#: ../../locales/../src/interface/RemoteListView.cpp:2229
+#: ../../locales/../src/interface/RemoteTreeView.cpp:881
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
 "Either the shell extension is not installed properly or you didn't drop the "
@@ -2694,7 +2706,7 @@ msgstr ""
 msgid "Could not establish connection to server"
 msgstr "Неможливо встановити з'єднання з сервером"
 
-#: ../../locales/../src/interface/FileZilla.cpp:441
+#: ../../locales/../src/interface/FileZilla.cpp:451
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2739,7 +2751,8 @@ msgstr "Неможливо отримати повний віддалений ш
 msgid "Could not get native path from CFURL"
 msgstr "Неможливо отримати власний шлях з CFURL"
 
-#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:176
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:182
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:225
 msgid "Could not get path from URL"
 msgstr "Неможливо отримати шлях з адреси URL"
 
@@ -2749,7 +2762,7 @@ msgid "Could not get reply from fzputtygen."
 msgstr "Неможливо отримати відповідь від fzputtygen."
 
 #: ../../locales/../src/interface/edithandler.cpp:1626
-#: ../../locales/../src/interface/search.cpp:1184
+#: ../../locales/../src/interface/search.cpp:1210
 msgid "Could not get temporary directory to download file into."
 msgstr "Неможливо отримати тимчасовий каталог для завантаження файлів."
 
@@ -2817,10 +2830,20 @@ msgstr ""
 "'%s'.\n"
 "Синхронізований перегляд вимкнуто."
 
+#: ../../locales/../src/interface/updater.cpp:741
+#, c-format
+msgid "Could not obtain size of '%s'"
+msgstr "Неможливо отримати розмір '%s'"
+
+#: ../../locales/../src/interface/updater.cpp:755
+#, c-format
+msgid "Could not open '%s'"
+msgstr "Неможливо відкрити '%s'"
+
 #: ../../locales/../src/interface/aboutdialog.cpp:220
-#: ../../locales/../src/interface/RemoteListView.cpp:2579
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1412
-#: ../../locales/../src/interface/search.cpp:1372
+#: ../../locales/../src/interface/RemoteListView.cpp:2584
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1427
+#: ../../locales/../src/interface/search.cpp:1419
 msgid "Could not open clipboard"
 msgstr "Неможливо відкрити буфер обміну"
 
@@ -2841,11 +2864,17 @@ msgstr "Аналіз віддаленого шляху неможливий."
 msgid "Could not parse server address:"
 msgstr "Неможливо визначити адресу сервера :"
 
+#: ../../locales/../src/interface/updater.cpp:764
+#, c-format
+msgid "Could not read from '%s'"
+msgstr "Неможливо читати з '%s'"
+
 #: ../../locales/../src/interface/netconfwizard.cpp:1002
 msgid "Could not read from data socket."
 msgstr "Неможливо читати з гнізда даних."
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:64
+#: ../../locales/../src/engine/http/request.cpp:172
 #, c-format
 msgid "Could not read from socket: %s"
 msgstr "Неможливо читати з гнізда проксі: %s"
@@ -2858,14 +2887,15 @@ msgstr "Читання елементу сервера неможливе."
 msgid "Could not receive data from server."
 msgstr "Неможливо отримати дані сервера."
 
-#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:117
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:122
 msgid "Could not restore directory access"
 msgstr "Неможливо відновити доступ до каталогу"
 
-#: ../../locales/../src/engine/ftp/filetransfer.cpp:173
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:132
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:174
 #, c-format
-msgid "Could not seek to offset %s within file"
-msgstr "Неможливо знайти початковий номер %s у файлі"
+msgid "Could not seek to offset %d within file"
+msgstr "Неможливо добитися зміщення %d у файлі"
 
 #: ../../locales/../src/engine/http/filetransfer.cpp:119
 #: ../../locales/../src/engine/http/filetransfer.cpp:174
@@ -2889,7 +2919,7 @@ msgstr "Неможливо надіслати команду до fzstorj."
 msgid "Could not sort peer certificates"
 msgstr "Неможливо відсортувати сертифікати кінцевого користувача"
 
-#: ../../locales/../src/engine/ftp/filetransfer.cpp:201
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:202
 msgid "Could not spawn IO thread"
 msgstr "Неможливо створити процес IO"
 
@@ -2898,12 +2928,12 @@ msgstr "Неможливо створити процес IO"
 msgid "Could not start proxy handshake: %s"
 msgstr "Неможливо розпочати обмін вітаннями з проксі: %s"
 
-#: ../../locales/../src/interface/queue.cpp:346
+#: ../../locales/../src/interface/queue.cpp:359
 msgid "Could not start transfer"
 msgstr "Неможливо розпочати передачу"
 
 #: ../../locales/../src/interface/sitemanager.cpp:633
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:866
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:869
 #, c-format
 msgid ""
 "Could not write \"%s\", any changes to the Site Manager could not be saved: "
@@ -2922,7 +2952,7 @@ msgstr "Неможливо записати \"%s\", дану закладку д
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "Неможливо записати \"%s\"; глобальні закладки зберегти неможливо: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1580
+#: ../../locales/../src/interface/QueueView.cpp:1586
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2933,12 +2963,12 @@ msgstr ""
 
 #: ../../locales/../src/interface/sitemanager.cpp:758
 #: ../../locales/../src/interface/sitemanager.cpp:815
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2473
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2495
 #, c-format
 msgid "Could not write \"%s\", the selected sites could not be exported: %s"
 msgstr "Неможливо записати \"%s\"; обрані сайти експортувати неможливо : %s"
 
-#: ../../locales/../src/interface/xmlfunctions.cpp:150
+#: ../../locales/../src/interface/xmlfunctions.cpp:151
 #, c-format
 msgid "Could not write \"%s\":"
 msgstr "Неможливо писати \"%s\":"
@@ -2948,7 +2978,7 @@ msgstr "Неможливо писати \"%s\":"
 msgid "Could not write key file: %s"
 msgstr "Неможливо записати файл ключа: %s"
 
-#: ../../locales/../src/interface/queue.cpp:345
+#: ../../locales/../src/interface/queue.cpp:358
 msgid "Could not write to local file"
 msgstr "Неможливо записати в локальний файл"
 
@@ -2960,12 +2990,12 @@ msgstr "Неможливо записати у файл журналу: %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:913
 #: ../../locales/../src/engine/ControlSocket.cpp:1008
-#: ../../locales/../src/engine/http/request.cpp:113
+#: ../../locales/../src/engine/http/request.cpp:119
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Неможливо записати в сокет: %s"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:252
+#: ../../locales/../src/interface/verifycertdialog.cpp:436
 msgid "Country:"
 msgstr "Країна:"
 
@@ -3006,18 +3036,18 @@ msgstr "Створити новий, порожній файл в поточно
 msgid "Create director&y and enter it"
 msgstr "Створити катало&г і увійти до нього"
 
-#: ../../locales/../src/interface/LocalListView.cpp:944
+#: ../../locales/../src/interface/LocalListView.cpp:954
 #: ../../locales/../src/interface/LocalTreeView.cpp:1181
 #: ../../locales/../src/interface/RemoteListView.cpp:1327
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1252
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1267
 msgid "Create directory"
 msgstr "Створити каталог"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2668
+#: ../../locales/../src/interface/RemoteListView.cpp:2673
 msgid "Create empty file"
 msgstr "Створити порожній файл"
 
-#: ../../locales/../src/interface/queue.cpp:348
+#: ../../locales/../src/interface/queue.cpp:361
 msgid "Creating directory"
 msgstr "Створення каталогу"
 
@@ -3130,7 +3160,7 @@ msgstr "Дія по&двійного клацання на каталогах:"
 msgid "D&uplicate"
 msgstr "Д&ублювати"
 
-#: ../../locales/../src/engine/server.cpp:52
+#: ../../locales/../src/engine/server.cpp:53
 msgid "DOS-like with virtual paths"
 msgstr "DOS- подібний з віртуальними шляхами"
 
@@ -3138,7 +3168,7 @@ msgstr "DOS- подібний з віртуальними шляхами"
 msgid "Dangerous filetype"
 msgstr "Небезпечний тип файлу"
 
-#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:34
+#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:37
 msgid "Data"
 msgstr "Дані"
 
@@ -3175,7 +3205,7 @@ msgstr "Налаштування відлагодження"
 msgid "Default &local directory:"
 msgstr "Типовий &локальний каталог:"
 
-#: ../../locales/../src/engine/server.cpp:44
+#: ../../locales/../src/engine/server.cpp:45
 msgid "Default (Autodetect)"
 msgstr "Типово (Атовизначення)"
 
@@ -3193,7 +3223,7 @@ msgstr "Типова дія щодо існуючого файлу"
 msgid "Default r&emote directory:"
 msgstr "Типовий віддалений ка&талог:"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1142
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1145
 msgid ""
 "Default remote path cannot be parsed. Make sure it is a valid absolute path "
 "for the selected server type."
@@ -3243,7 +3273,7 @@ msgstr[2] ""
 "Затримка з'єднання на %d секунд пов'язана з попередньо невдалою спробою "
 "з'єднання..."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1294
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1299
 msgid "Delete Site Manager entry"
 msgstr "Видалити введені дані з Сайт Менеджера"
 
@@ -3285,7 +3315,7 @@ msgid "Details for new key:"
 msgstr "Подробиці стосовно нового ключа:"
 
 #: ../../locales/../src/interface/import.cpp:66
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:790
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:793
 msgid "Detected newer version of FileZilla"
 msgstr "Виявлено наявність новішої версії FileZilla"
 
@@ -3293,7 +3323,7 @@ msgstr "Виявлено наявність новішої версії FileZill
 msgid "Dire&ctories"
 msgstr "Ка&талоги"
 
-#: ../../locales/../src/interface/queue.cpp:1163
+#: ../../locales/../src/interface/queue.cpp:1214
 msgid "Direction"
 msgstr "Напрямок"
 
@@ -3301,7 +3331,7 @@ msgstr "Напрямок"
 msgid "Directories:"
 msgstr "Каталоги:"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:269
+#: ../../locales/../src/interface/filelistctrl.cpp:273
 msgid "Directory"
 msgstr "Каталог"
 
@@ -3313,9 +3343,9 @@ msgstr "Дозволи доступу до каталогу"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:541
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1850
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:429
-#: ../../locales/../src/interface/filelistctrl.cpp:469
-#: ../../locales/../src/interface/Mainfrm.cpp:2308
-#: ../../locales/../src/interface/Mainfrm.cpp:2325
+#: ../../locales/../src/interface/filelistctrl.cpp:477
+#: ../../locales/../src/interface/Mainfrm.cpp:2306
+#: ../../locales/../src/interface/Mainfrm.cpp:2323
 #: ../../locales/../src/interface/toolbar.cpp:51
 #: ../../locales/../src/interface/view.cpp:109
 msgid "Directory comparison"
@@ -3337,7 +3367,7 @@ msgstr "&Фільтри списку каталога..."
 msgid "Directory listing aborted by user"
 msgstr "Список каталогів припинено користувачем"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2056
+#: ../../locales/../src/interface/RemoteListView.cpp:2061
 msgid "Directory listing failed"
 msgstr "Невдалий список каталогів"
 
@@ -3364,7 +3394,7 @@ msgid ""
 msgstr ""
 "Вимкнути синхронізований перегляд і продовжити зміни у віддаленому каталозі?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:715
+#: ../../locales/../src/interface/Mainfrm.cpp:713
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -3379,18 +3409,18 @@ msgstr "Від'єднати від сервера"
 #: ../../locales/../src/engine/ControlSocket.cpp:914
 #: ../../locales/../src/engine/ControlSocket.cpp:1010
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
-#: ../../locales/../src/engine/http/request.cpp:114
-#: ../../locales/../src/interface/queue.cpp:339
+#: ../../locales/../src/engine/http/request.cpp:120
+#: ../../locales/../src/interface/queue.cpp:352
 msgid "Disconnected from server"
 msgstr "Від'єднано від сервера"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1039
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:189
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:197
 #, c-format
 msgid "Disconnected from server: %s"
 msgstr "Від'єднано від сервера: %s"
 
-#: ../../locales/../src/interface/queue.cpp:338
+#: ../../locales/../src/interface/queue.cpp:351
 #: ../../locales/../src/interface/statuslinectrl.cpp:250
 msgid "Disconnecting from previous server"
 msgstr "Від'єднати від попереднього сервера"
@@ -3412,8 +3442,8 @@ msgstr "Не &використовувати типовий редактор"
 msgid "Do the same with &all selected files already being edited"
 msgstr "Повторіть дію з &усіма обраними файлами, що уже редагуються"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1235
-#: ../../locales/../src/interface/Mainfrm.cpp:1257
+#: ../../locales/../src/interface/Mainfrm.cpp:1233
+#: ../../locales/../src/interface/Mainfrm.cpp:1255
 msgid "Do you really want to close FileZilla?"
 msgstr "Ви дійсно бажаєте закрити FileZilla?"
 
@@ -3427,7 +3457,7 @@ msgstr ""
 msgid "Do you really want to delete all Site Manager entries?"
 msgstr "Ви дійсно бажаєте видалити усі записи в Сайт Менеджері?"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1296
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1301
 msgid "Do you really want to delete selected entry?"
 msgstr "Ви дійсно бажаєте видалити вибраний запис?"
 
@@ -3435,7 +3465,7 @@ msgstr "Ви дійсно бажаєте видалити вибраний за�
 msgid "Do you really want to delete the transfer queue?"
 msgstr "Ви дійсно бажаєте видалити чергу передач?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:643
+#: ../../locales/../src/interface/Mainfrm.cpp:641
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "Ви дійсно бажаєте надіслати '%s' до сервера?"
@@ -3471,18 +3501,18 @@ msgstr "Завантажити"
 msgid "Download &limit:"
 msgstr "Обмеження &завантаження:"
 
-#: ../../locales/../src/interface/statusbar.cpp:597
+#: ../../locales/../src/interface/statusbar.cpp:598
 #, c-format
 msgid "Download limit: %s/s"
 msgstr "Обмеження завантаження: %s/s"
 
-#: ../../locales/../src/interface/statusbar.cpp:600
+#: ../../locales/../src/interface/statusbar.cpp:601
 msgid "Download limit: none"
 msgstr "Обмеження завантаження: жодного"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3380
-#: ../../locales/../src/interface/search.cpp:904
-#: ../../locales/../src/interface/search.cpp:909
+#: ../../locales/../src/interface/search.cpp:927
+#: ../../locales/../src/interface/search.cpp:932
 msgid "Download search results"
 msgstr "Завантажити результати пошуку"
 
@@ -3494,7 +3524,7 @@ msgstr "Завантажити обраний каталог"
 msgid "Download selected files and directories"
 msgstr "Завантажити обрані файли і каталоги"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1051
+#: ../../locales/../src/interface/Mainfrm.cpp:1049
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3507,7 +3537,7 @@ msgstr ""
 msgid "Downloading"
 msgstr "Завантаження"
 
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:148
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:156
 #, c-format
 msgid "Downloading %s"
 msgstr "Завантаження %s"
@@ -3565,7 +3595,7 @@ msgstr "Ви&йти"
 msgid "E&xport..."
 msgstr "Е&кспорт..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:258
+#: ../../locales/../src/interface/verifycertdialog.cpp:442
 msgid "E-Mail:"
 msgstr "Ел. пошта:"
 
@@ -3584,16 +3614,16 @@ msgstr ""
 "Редагувати файл з відконфігурованим редактором і відвантажити зміни на "
 "сервер."
 
-#: ../../locales/../src/interface/search.cpp:1172
+#: ../../locales/../src/interface/search.cpp:1198
 msgid "Editing directories is not supported"
 msgstr "Редагування каталогів не підтримується"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1661
-#: ../../locales/../src/interface/LocalListView.cpp:1670
+#: ../../locales/../src/interface/LocalListView.cpp:1713
+#: ../../locales/../src/interface/LocalListView.cpp:1722
 msgid "Editing failed"
 msgstr "Невдале редагування"
 
-#: ../../locales/../src/interface/search.cpp:1172
+#: ../../locales/../src/interface/search.cpp:1198
 msgid "Editing search results"
 msgstr "Редагування результатів пошуку"
 
@@ -3601,7 +3631,7 @@ msgstr "Редагування результатів пошуку"
 msgid "Email:"
 msgstr "Ел. пошта:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1873
+#: ../../locales/../src/interface/QueueView.cpp:1879
 msgid "Empty command"
 msgstr "Порожня команда"
 
@@ -3609,7 +3639,7 @@ msgstr "Порожня команда"
 msgid "Empty command."
 msgstr "Порожня команда."
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2058
+#: ../../locales/../src/interface/RemoteListView.cpp:2063
 msgid "Empty directory listing"
 msgstr "Порожній список каталогів"
 
@@ -3663,7 +3693,7 @@ msgstr "&Ключ шифрування:"
 msgid "Encryption details"
 msgstr "Подробиці кодування"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:471
+#: ../../locales/../src/interface/filelistctrl.cpp:479
 msgid "End comparison and change sorting order?"
 msgstr "Завершити порівняння та змінити порядок сортування?"
 
@@ -3679,11 +3709,11 @@ msgstr "Ввести &настроювану команду ..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Введіть 0 для необмеженої швидкості."
 
-#: ../../locales/../src/interface/QueueView.cpp:1867
+#: ../../locales/../src/interface/QueueView.cpp:1873
 msgid "Enter command"
 msgstr "Ввести команду"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:625
+#: ../../locales/../src/interface/Mainfrm.cpp:623
 msgid "Enter custom command"
 msgstr "Ввести настроювану команду"
 
@@ -3784,7 +3814,7 @@ msgstr "Помилка експорту налаштувань"
 msgid "Error importing"
 msgstr "Помилка імпорту"
 
-#: ../../locales/../src/interface/QueueView.cpp:1657
+#: ../../locales/../src/interface/QueueView.cpp:1663
 msgid "Error loading queue"
 msgstr "Помилка завантаження черги"
 
@@ -3797,25 +3827,25 @@ msgstr "Помилка завантаження черги"
 #: ../../locales/../src/interface/filter.cpp:1005
 #: ../../locales/../src/interface/import.cpp:118
 #: ../../locales/../src/interface/import.cpp:309
-#: ../../locales/../src/interface/Options.cpp:247
+#: ../../locales/../src/interface/Options.cpp:255
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:65
-#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:131
-#: ../../locales/../src/interface/QueueView.cpp:1561
-#: ../../locales/../src/interface/search.cpp:1304
-#: ../../locales/../src/interface/search.cpp:1323
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:136
+#: ../../locales/../src/interface/QueueView.cpp:1567
+#: ../../locales/../src/interface/search.cpp:1350
+#: ../../locales/../src/interface/search.cpp:1370
 #: ../../locales/../src/interface/sitemanager.cpp:91
 #: ../../locales/../src/interface/sitemanager.cpp:525
 #: ../../locales/../src/interface/sitemanager.cpp:585
 #: ../../locales/../src/interface/sitemanager.cpp:694
 #: ../../locales/../src/interface/sitemanager.cpp:782
 #: ../../locales/../src/interface/sitemanager.cpp:884
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:783
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:846
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:786
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:849
 #: ../../locales/../src/interface/wrapengine.cpp:935
 msgid "Error loading xml file"
 msgstr "Помилка завантаження файлу xml"
 
-#: ../../locales/../src/interface/QueueView.cpp:1550
+#: ../../locales/../src/interface/QueueView.cpp:1556
 msgid "Error saving queue"
 msgstr "Помилка збереження черги"
 
@@ -3828,13 +3858,13 @@ msgstr "Помилка запуску програми"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:332
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:883
-#: ../../locales/../src/interface/QueueView.cpp:1581
+#: ../../locales/../src/interface/QueueView.cpp:1587
 #: ../../locales/../src/interface/sitemanager.cpp:634
 #: ../../locales/../src/interface/sitemanager.cpp:759
 #: ../../locales/../src/interface/sitemanager.cpp:816
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:867
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2474
-#: ../../locales/../src/interface/xmlfunctions.cpp:151
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:870
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2496
+#: ../../locales/../src/interface/xmlfunctions.cpp:152
 msgid "Error writing xml file"
 msgstr "Помилка запису файлу xml"
 
@@ -3890,7 +3920,7 @@ msgstr "І&м'я фільтру:"
 msgid "FTP"
 msgstr "FTP"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:513
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:516
 msgid "FTP - File Transfer Protocol"
 msgstr "FTP - Протокол Передачі Файлів"
 
@@ -3935,10 +3965,10 @@ msgstr "FTPES - FTP над явною TLS"
 msgid "FTPS - FTP over implicit TLS"
 msgstr "FTPS - FTP по неявній TLS"
 
-#: ../../locales/../src/interface/LocalListView.cpp:542
-#: ../../locales/../src/interface/LocalListView.cpp:615
-#: ../../locales/../src/interface/LocalListView.cpp:931
-#: ../../locales/../src/interface/LocalListView.cpp:1864
+#: ../../locales/../src/interface/LocalListView.cpp:545
+#: ../../locales/../src/interface/LocalListView.cpp:618
+#: ../../locales/../src/interface/LocalListView.cpp:941
+#: ../../locales/../src/interface/LocalListView.cpp:1921
 #: ../../locales/../src/interface/LocalTreeView.cpp:871
 #: ../../locales/../src/interface/LocalTreeView.cpp:1154
 #: ../../locales/../src/interface/viewheader.cpp:499
@@ -3955,11 +3985,11 @@ msgstr "Помилка зміни мови"
 msgid "Failed to convert command to 8 bit charset"
 msgstr "Помилка конвертації команди у 8-бітний набір символів"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2254
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2276
 msgid "Failed to copy or move sites"
 msgstr "Помилка копіювання або переміщення сайтів"
 
-#: ../../locales/../src/interface/xmlfunctions.cpp:330
+#: ../../locales/../src/interface/xmlfunctions.cpp:238
 msgid "Failed to create backup copy of xml file"
 msgstr "Помилка створення резервної копії файлу xml"
 
@@ -4003,7 +4033,7 @@ msgstr "Помилка ініціалізації двигуна FTP"
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:193
 #: ../../locales/../src/engine/ftp/logon.cpp:257
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:120
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:128
 msgid "Failed to initialize TLS."
 msgstr "Помилка ініціалізації TLS."
 
@@ -4025,7 +4055,7 @@ msgstr "Помилка завантаження приватного ключа:
 msgid "Failed to open \"%s\" for appending/writing"
 msgstr "Помилка відкривання \"%s\" для додавання/запису"
 
-#: ../../locales/../src/engine/ftp/filetransfer.cpp:138
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:141
 #, c-format
 msgid "Failed to open \"%s\" for reading"
 msgstr "Помилка відкривання \"%s\" для читання"
@@ -4122,7 +4152,7 @@ msgstr "Помилка перевірки сертифікату вузла ке
 msgid "Failed to write to file %s"
 msgstr "Помилка запису у файл %s"
 
-#: ../../locales/../src/interface/xmlfunctions.cpp:373
+#: ../../locales/../src/interface/xmlfunctions.cpp:281
 msgid "Failed to write xml file"
 msgstr "Помилка запису файлу xml"
 
@@ -4142,7 +4172,7 @@ msgstr "Фай&л:"
 msgid "Fil&es"
 msgstr "Фай&ли"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:268
+#: ../../locales/../src/interface/filelistctrl.cpp:272
 msgid "File"
 msgstr "Файл"
 
@@ -4178,18 +4208,18 @@ msgstr "Файл змінився"
 msgid "File lists"
 msgstr "Списки файлів"
 
-#: ../../locales/../src/engine/storj/resolve.cpp:105
-#: ../../locales/../src/engine/storj/resolve.cpp:176
+#: ../../locales/../src/engine/storj/resolve.cpp:113
+#: ../../locales/../src/engine/storj/resolve.cpp:184
 #: ../../locales/../src/interface/edithandler.cpp:1602
-#: ../../locales/../src/interface/FileZilla.cpp:630
-#: ../../locales/../src/interface/FileZilla.cpp:720
+#: ../../locales/../src/interface/FileZilla.cpp:640
+#: ../../locales/../src/interface/FileZilla.cpp:730
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "Файл не знайдено"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3376
-#: ../../locales/../src/interface/search.cpp:723
-#: ../../locales/../src/interface/search.cpp:728
+#: ../../locales/../src/interface/search.cpp:739
+#: ../../locales/../src/interface/search.cpp:744
 #: ../../locales/../src/interface/toolbar.cpp:53
 msgid "File search"
 msgstr "Пошук файлу"
@@ -4225,7 +4255,7 @@ msgstr "Файл передано успішно"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Файл передано успішно, передано %s до %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1234
+#: ../../locales/../src/interface/Mainfrm.cpp:1232
 msgid "File transfers still in progress."
 msgstr "Передачі файлів усе ще виконуються."
 
@@ -4237,7 +4267,7 @@ msgstr "Файл пропонує свою передачу через тип д
 msgid "File would transfer with binary data type."
 msgstr "Файл пропонує свою передачу через бінарний тип даних."
 
-#: ../../locales/../src/interface/FileZilla.cpp:442
+#: ../../locales/../src/interface/FileZilla.cpp:452
 #: ../../locales/../src/interface/quickconnectbar.cpp:99
 msgid "FileZilla Error"
 msgstr "Помилка FilеZilla"
@@ -4254,7 +4284,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla уже підключено до сервера."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1541
+#: ../../locales/../src/interface/Mainfrm.cpp:1539
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "FileZilla потребує перезавантаження для того, щоб зміни у виборі мови набули "
@@ -4270,10 +4300,10 @@ msgstr "Секції статусу списку &файлів"
 
 #: ../../locales/../src/interface/edithandler.cpp:1136
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:101
-#: ../../locales/../src/interface/LocalListView.cpp:288
+#: ../../locales/../src/interface/LocalListView.cpp:287
 #: ../../locales/../src/interface/RemoteListView.cpp:395
-#: ../../locales/../src/interface/search.cpp:154
-#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:32
+#: ../../locales/../src/interface/search.cpp:159
+#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:35
 msgid "Filename"
 msgstr "Ім'я файлу"
 
@@ -4287,7 +4317,7 @@ msgstr "Для каталогу %s та імені файлу %s неможли�
 msgid "Filename invalid"
 msgstr "Ім'я файлу не дійсне"
 
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:313
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:336
 msgid "Filename unchanged"
 msgstr "Ім'я файлу не змінено"
 
@@ -4317,14 +4347,14 @@ msgstr "Файли зараз редагуються"
 msgid "Files matching a filter rule are removed from directory listings."
 msgstr "Файли, що співпадають з фільтром вилучаються із списків каталогу."
 
-#: ../../locales/../src/engine/storj/resolve.cpp:313
+#: ../../locales/../src/engine/storj/resolve.cpp:321
 msgid "Files not found"
 msgstr "Файлів не знайдено"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:105
-#: ../../locales/../src/interface/LocalListView.cpp:289
+#: ../../locales/../src/interface/LocalListView.cpp:288
 #: ../../locales/../src/interface/RemoteListView.cpp:396
-#: ../../locales/../src/interface/search.cpp:156
+#: ../../locales/../src/interface/search.cpp:161
 msgid "Filesize"
 msgstr "Розмір файлу"
 
@@ -4332,9 +4362,9 @@ msgstr "Розмір файлу"
 msgid "Filesize format"
 msgstr "Формат розміру файлу"
 
-#: ../../locales/../src/interface/LocalListView.cpp:290
+#: ../../locales/../src/interface/LocalListView.cpp:289
 #: ../../locales/../src/interface/RemoteListView.cpp:397
-#: ../../locales/../src/interface/search.cpp:157
+#: ../../locales/../src/interface/search.cpp:162
 msgid "Filetype"
 msgstr "Тип файлу"
 
@@ -4427,7 +4457,7 @@ msgstr ""
 msgid "For reliability you should specify a range of at least 10 ports."
 msgstr "Задля надійності вам необхідно вказати діапазон щонайменше 10 портів."
 
-#: ../../locales/../src/interface/Options.cpp:246
+#: ../../locales/../src/interface/Options.cpp:254
 msgid ""
 "For this session the default settings will be used. Any changes to the "
 "settings will not be saved."
@@ -4443,7 +4473,7 @@ msgstr "Примусове &UTF-8"
 msgid "Force showing &hidden files"
 msgstr "Примусити показ &прихованих файлів"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:710
+#: ../../locales/../src/interface/Mainfrm.cpp:708
 msgid "Force showing hidden files"
 msgstr "Примусити показ прихованих файлів"
 
@@ -4458,7 +4488,7 @@ msgstr ""
 "аргументи."
 
 #. @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
-#: ../../locales/../src/interface/updater.cpp:687
+#: ../../locales/../src/interface/updater.cpp:709
 #, c-format
 msgid "Found new %s %s\n"
 msgstr "Знайдено новий %s %s\n"
@@ -4555,13 +4585,13 @@ msgid "Hidden"
 msgstr "Прихований"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:964
-#: ../../locales/../src/interface/queue.cpp:892
-#: ../../locales/../src/interface/queue.cpp:948
+#: ../../locales/../src/interface/queue.cpp:936
+#: ../../locales/../src/interface/queue.cpp:998
 msgid "High"
 msgstr "Високий"
 
-#: ../../locales/../src/interface/queue.cpp:894
-#: ../../locales/../src/interface/queue.cpp:950
+#: ../../locales/../src/interface/queue.cpp:938
+#: ../../locales/../src/interface/queue.cpp:1000
 msgid "Highest"
 msgstr "Найвищий"
 
@@ -4752,7 +4782,7 @@ msgstr ""
 "Якщо ви натисните кнопку тест, FileZilla з'єднається з probe.filezilla-"
 "project.org і виконає кілька простих тестів."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1256
+#: ../../locales/../src/interface/Mainfrm.cpp:1254
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Якщо ви закриєте FileZilla,ваші зміни будуть втрачені."
 
@@ -4874,7 +4904,7 @@ msgstr ""
 "FileZilla запитує у сервера порт і під'єднується до нього.Це не вимагає "
 "великого конфігурування."
 
-#: ../../locales/../src/interface/queue.cpp:336
+#: ../../locales/../src/interface/queue.cpp:349
 msgid "Incorrect password"
 msgstr "Неправильний пароль"
 
@@ -4890,7 +4920,7 @@ msgstr ""
 msgid "Initializing TLS..."
 msgstr "Ініціалазація TLS..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:107
+#: ../../locales/../src/interface/verifycertdialog.cpp:297
 msgid "Insecure algorithm!"
 msgstr "Вразливий алгоритм!"
 
@@ -4898,8 +4928,8 @@ msgstr "Вразливий алгоритм!"
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "Незахищений сервер, він не підтримує FTP через TLS."
 
-#: ../../locales/../src/engine/server.cpp:578
-#: ../../locales/../src/engine/server.cpp:602
+#: ../../locales/../src/engine/server.cpp:579
+#: ../../locales/../src/engine/server.cpp:603
 #: ../../locales/../src/interface/manual_transfer.cpp:182
 msgid "Interactive"
 msgstr "Інтерактивний"
@@ -4913,16 +4943,16 @@ msgid "Interrupted by signal"
 msgstr "Перервано сигналом"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:216
-#: ../../locales/../src/interface/queue.cpp:342
+#: ../../locales/../src/interface/queue.cpp:355
 msgid "Interrupted by user"
 msgstr "Перервано користувачем"
 
-#: ../../locales/../src/engine/http/request.cpp:36
-#: ../../locales/../src/engine/http/request.cpp:363
+#: ../../locales/../src/engine/http/request.cpp:40
+#: ../../locales/../src/engine/http/request.cpp:388
 msgid "Invalid Content-Length"
 msgstr "Недійсна довжина вмісту"
 
-#: ../../locales/../src/engine/http/request.cpp:260
+#: ../../locales/../src/engine/http/request.cpp:271
 msgid "Invalid HTTP Response"
 msgstr "Недійсний відгук HTTP"
 
@@ -4938,7 +4968,7 @@ msgstr ""
 "Отримано недійсну послідовність знаків, вимкнення UTF-8. В Сайт Менеджері "
 "виберіть опцію UTF-8, щоб примусити UTF-8."
 
-#: ../../locales/../src/engine/http/request.cpp:470
+#: ../../locales/../src/engine/http/request.cpp:498
 msgid "Invalid chunk size"
 msgstr "Недійсний розмір чанку"
 
@@ -4949,8 +4979,8 @@ msgstr "Недійсний розмір чанку"
 msgid "Invalid data received"
 msgstr "Отримано недійсні дані"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:34
-#: ../../locales/../src/interface/verifycertdialog.cpp:49
+#: ../../locales/../src/interface/verifycertdialog.cpp:224
+#: ../../locales/../src/interface/verifycertdialog.cpp:239
 msgid "Invalid date"
 msgstr "Недійсні дані"
 
@@ -4958,6 +4988,11 @@ msgstr "Недійсні дані"
 #: ../../locales/../src/interface/file_utils.cpp:315
 msgid "Invalid filename"
 msgstr "Недійсне ім'я файлу"
+
+#: ../../locales/../src/interface/updater.cpp:704
+#, c-format
+msgid "Invalid hash: %s\n"
+msgstr "Неприпустимий геш: %s\n"
 
 #: ../../locales/../src/interface/serverdata.cpp:108
 msgid "Invalid host, after closing bracket only colon and port may follow."
@@ -4978,7 +5013,7 @@ msgstr "Недійсне ім'я хосту: %s"
 msgid "Invalid input"
 msgstr "Недійсне введення"
 
-#: ../../locales/../src/engine/http/request.cpp:317
+#: ../../locales/../src/engine/http/request.cpp:330
 msgid "Invalid line"
 msgstr "Неприпустимий рядок"
 
@@ -5019,15 +5054,15 @@ msgstr ""
 msgid "Invalid regular expression"
 msgstr "Недійсний сталий вираз"
 
-#: ../../locales/../src/interface/search.cpp:728
+#: ../../locales/../src/interface/search.cpp:744
 msgid "Invalid regular expression in search conditions."
 msgstr "Недійсний звичайний вираз в умовах пошуку."
 
-#: ../../locales/../src/engine/http/request.cpp:269
+#: ../../locales/../src/engine/http/request.cpp:280
 msgid "Invalid response code"
 msgstr "Недійсний код відгуку"
 
-#: ../../locales/../src/interface/search.cpp:723
+#: ../../locales/../src/interface/search.cpp:739
 #, c-format
 msgid "Invalid search conditions: %s"
 msgstr "Недійсні умови пошуку: %s"
@@ -5059,15 +5094,15 @@ msgstr "Недійсне значення підказки"
 msgid "Invert Filter"
 msgstr "Обернути фільтр"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:260
+#: ../../locales/../src/interface/verifycertdialog.cpp:444
 msgid "Jurisdiction country:"
 msgstr "Країна юрисдикції:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:262
+#: ../../locales/../src/interface/verifycertdialog.cpp:446
 msgid "Jurisdiction locality:"
 msgstr "Розташування юрисдикції:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:261
+#: ../../locales/../src/interface/verifycertdialog.cpp:445
 msgid "Jurisdiction state or province:"
 msgstr "Штат або провінція юрисдикції:"
 
@@ -5075,7 +5110,7 @@ msgstr "Штат або провінція юрисдикції:"
 msgid "Keep directories on top"
 msgstr "Каталоги тримати зверху"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:714
+#: ../../locales/../src/interface/Mainfrm.cpp:712
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -5094,8 +5129,8 @@ msgstr "Обмін ключами"
 msgid "Key exchange:"
 msgstr "Обмін ключами:"
 
-#: ../../locales/../src/engine/server.cpp:575
-#: ../../locales/../src/engine/server.cpp:600
+#: ../../locales/../src/engine/server.cpp:576
+#: ../../locales/../src/engine/server.cpp:601
 msgid "Key file"
 msgstr "Файл ключа"
 
@@ -5113,13 +5148,13 @@ msgstr "Най&нижчий"
 msgid "Language"
 msgstr "Мова"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1541
+#: ../../locales/../src/interface/Mainfrm.cpp:1539
 msgid "Language changed"
 msgstr "Зміна мови"
 
-#: ../../locales/../src/interface/LocalListView.cpp:291
+#: ../../locales/../src/interface/LocalListView.cpp:290
 #: ../../locales/../src/interface/RemoteListView.cpp:398
-#: ../../locales/../src/interface/search.cpp:158
+#: ../../locales/../src/interface/search.cpp:163
 msgid "Last modified"
 msgstr "Востаннє модифіковано"
 
@@ -5129,7 +5164,7 @@ msgstr "Формат"
 
 #. @translator: Keep this string as short as possible
 #: ../../locales/../src/interface/settings/optionspage_interface.cpp:67
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1803
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1825
 msgid "Leave empty to keep existing password."
 msgstr "Залишити порожнім, щоб зберегти існуючі паролі."
 
@@ -5153,7 +5188,7 @@ msgstr "Обмежити розмір файлу журналу"
 msgid "Limit:"
 msgstr "Обмежити:"
 
-#: ../../locales/../src/engine/http/request.cpp:427
+#: ../../locales/../src/engine/http/request.cpp:453
 msgid "Line length exceeded"
 msgstr "Перевищено довжину лінійки"
 
@@ -5197,8 +5232,8 @@ msgstr "Локальний файл"
 msgid "Local file does not exist."
 msgstr "Локальний файл не існує."
 
-#: ../../locales/../src/interface/updater.cpp:401
-#: ../../locales/../src/interface/updater.cpp:494
+#: ../../locales/../src/interface/updater.cpp:422
+#: ../../locales/../src/interface/updater.cpp:515
 #, c-format
 msgid "Local file is %s\n"
 msgstr "Локальним файлом є %s\n"
@@ -5211,8 +5246,8 @@ msgstr "Локальний файл є каталогом, а не просто 
 msgid "Local file is not a valid filename."
 msgstr "Локальний файл має недійсне ім'я."
 
-#: ../../locales/../src/interface/search.cpp:686
-#: ../../locales/../src/interface/search.cpp:692
+#: ../../locales/../src/interface/search.cpp:702
+#: ../../locales/../src/interface/search.cpp:708
 msgid "Local file search"
 msgstr "Пошук локального файлу"
 
@@ -5228,7 +5263,12 @@ msgstr "Обробка локального шляху:"
 msgid "Local site:"
 msgstr "Локальний сайт:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:254
+#: ../../locales/../src/interface/updater.cpp:745
+#, c-format
+msgid "Local size of '%s' does not match expected size: %d != %d"
+msgstr "Локальний розмір '%s' не співпадає з очікуваним розміром: %d != %d"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:438
 msgid "Locality:"
 msgstr "Розташування:"
 
@@ -5282,13 +5322,13 @@ msgstr ""
 "Тип входу може бути використаним лише через адресу FTP. Аргумент повинен "
 "бути або '%s' або '%s'"
 
-#: ../../locales/../src/interface/queue.cpp:887
-#: ../../locales/../src/interface/queue.cpp:943
+#: ../../locales/../src/interface/queue.cpp:931
+#: ../../locales/../src/interface/queue.cpp:993
 msgid "Low"
 msgstr "Низький"
 
-#: ../../locales/../src/interface/queue.cpp:885
-#: ../../locales/../src/interface/queue.cpp:941
+#: ../../locales/../src/interface/queue.cpp:929
+#: ../../locales/../src/interface/queue.cpp:991
 msgid "Lowest"
 msgstr "Найнижчий"
 
@@ -5304,40 +5344,40 @@ msgstr "MAC:"
 msgid "Magenta"
 msgstr "Малиновий"
 
-#: ../../locales/../src/interface/xmlfunctions.cpp:39
+#: ../../locales/../src/interface/xmlfunctions.cpp:40
 msgid "Make sure the file can be accessed and is a well-formed XML document."
 msgstr ""
 "Переконайтесь, що цей файл є доступним і правильно оформленим документом XML."
 
-#: ../../locales/../src/engine/http/request.cpp:414
-#: ../../locales/../src/engine/http/request.cpp:427
-#: ../../locales/../src/engine/http/request.cpp:437
-#: ../../locales/../src/engine/http/request.cpp:470
+#: ../../locales/../src/engine/http/request.cpp:440
+#: ../../locales/../src/engine/http/request.cpp:453
+#: ../../locales/../src/engine/http/request.cpp:464
+#: ../../locales/../src/engine/http/request.cpp:498
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Погано сформовані дані чанку: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:36
+#: ../../locales/../src/engine/http/request.cpp:40
 #, c-format
 msgid "Malformed request header: %s"
 msgstr "Неправильний формат запиту заголовків: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:489
+#: ../../locales/../src/engine/http/request.cpp:517
 #, c-format
 msgid "Malformed response body: %s"
 msgstr "Неправильний формат тіла відповіді : %s"
 
-#: ../../locales/../src/engine/http/request.cpp:230
-#: ../../locales/../src/engine/http/request.cpp:236
-#: ../../locales/../src/engine/http/request.cpp:317
-#: ../../locales/../src/engine/http/request.cpp:355
-#: ../../locales/../src/engine/http/request.cpp:363
-#: ../../locales/../src/engine/http/request.cpp:420
+#: ../../locales/../src/engine/http/request.cpp:241
+#: ../../locales/../src/engine/http/request.cpp:247
+#: ../../locales/../src/engine/http/request.cpp:330
+#: ../../locales/../src/engine/http/request.cpp:380
+#: ../../locales/../src/engine/http/request.cpp:388
+#: ../../locales/../src/engine/http/request.cpp:446
 #, c-format
 msgid "Malformed response header: %s"
 msgstr "Неправильний формат заголовка відповіді : %s"
 
-#: ../../locales/../src/engine/http/request.cpp:376
+#: ../../locales/../src/engine/http/request.cpp:401
 msgid ""
 "Malformed response: Server sent response body with a request verb or "
 "response code that disallows a response body."
@@ -5392,7 +5432,7 @@ msgid "Memory allocation failure"
 msgstr "Помилка виділення пам'яті"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:435
-#: ../../locales/../src/interface/Mainfrm.cpp:1856
+#: ../../locales/../src/interface/Mainfrm.cpp:1854
 msgid "Message log"
 msgstr "Журнал повідомлень"
 
@@ -5429,8 +5469,8 @@ msgid "My Documents"
 msgstr "Мої Документи"
 
 #: ../../locales/../src/interface/sitemanager.cpp:342
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:769
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:772
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:775
 msgid "My Sites"
 msgstr "Мої Сайти"
 
@@ -5444,7 +5484,7 @@ msgid "Name"
 msgstr "Ім'я"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:732
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1261
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1264
 msgid "Name already exists"
 msgstr "Ім'я вже існує"
 
@@ -5466,15 +5506,15 @@ msgstr "Звичайне сортування"
 msgid "Need to enter filter name"
 msgstr "Потрібно ввести ім'я фільтру"
 
-#: ../../locales/../src/interface/search.cpp:686
+#: ../../locales/../src/interface/search.cpp:702
 msgid "Need to enter valid local path"
 msgstr "Потрібно ввести дійсний локальний шлях"
 
-#: ../../locales/../src/interface/search.cpp:713
+#: ../../locales/../src/interface/search.cpp:729
 msgid "Need to enter valid remote path"
 msgstr "Потрібно ввести дійсний віддалений шлях"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1046
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1049
 msgid "Need to specify a character encoding"
 msgstr "Потрібно вказати спосіб кодування знаків"
 
@@ -5525,13 +5565,13 @@ msgstr "Нова Заклад&ка"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:600
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:853
 #: ../../locales/../src/interface/sitemanager.cpp:725
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2412
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2434
 msgid "New bookmark"
 msgstr "Нова закладка"
 
 #: ../../locales/../src/interface/LocalTreeView.cpp:1185
 #: ../../locales/../src/interface/RemoteListView.cpp:1340
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1265
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1280
 msgid "New directory"
 msgstr "Нова директорія"
 
@@ -5544,13 +5584,13 @@ msgstr "Нові функції та вдосконалення в %s"
 msgid "New filter"
 msgstr "Новий фільтр"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:950
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:953
 msgid "New folder"
 msgstr "Нова папка"
 
 #: ../../locales/../src/interface/sitemanager.cpp:605
 #: ../../locales/../src/interface/sitemanager.cpp:619
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2385
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2407
 msgid "New site"
 msgstr "Новий сайт"
 
@@ -5570,7 +5610,7 @@ msgstr "Відсутня адреса асоційована з nodename"
 msgid "No category to export selected"
 msgstr "Не обрано категорії для експортування"
 
-#: ../../locales/../src/interface/QueueView.cpp:1873
+#: ../../locales/../src/interface/QueueView.cpp:1879
 msgid "No command given, aborting."
 msgstr "Відсутня команда, аварійне завершення."
 
@@ -5616,7 +5656,7 @@ msgstr ""
 msgid "No route to host"
 msgstr "Нема шляху до хоста"
 
-#: ../../locales/../src/interface/search.cpp:433
+#: ../../locales/../src/interface/search.cpp:444
 msgid "No search results"
 msgstr "Нема результатів пошуку"
 
@@ -5635,7 +5675,7 @@ msgstr "Не задано імені користувача."
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1905
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1924
 #: ../../locales/../src/interface/sitemanager.cpp:17
-#: ../../locales/../src/interface/verifycertdialog.cpp:56
+#: ../../locales/../src/interface/verifycertdialog.cpp:246
 msgid "None"
 msgstr "Жодного"
 
@@ -5648,13 +5688,13 @@ msgid "Nonrecoverable failure in name resolution"
 msgstr "Невиправна помилка в визначенні імен"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:963
-#: ../../locales/../src/engine/server.cpp:569
-#: ../../locales/../src/engine/server.cpp:596
+#: ../../locales/../src/engine/server.cpp:570
+#: ../../locales/../src/engine/server.cpp:597
 #: ../../locales/../src/interface/manual_transfer.cpp:148
 #: ../../locales/../src/interface/manual_transfer.cpp:176
 #: ../../locales/../src/interface/manual_transfer.cpp:535
-#: ../../locales/../src/interface/queue.cpp:890
-#: ../../locales/../src/interface/queue.cpp:946
+#: ../../locales/../src/interface/queue.cpp:934
+#: ../../locales/../src/interface/queue.cpp:996
 msgid "Normal"
 msgstr "Звичайний"
 
@@ -5668,11 +5708,11 @@ msgstr "Не всі елементи можна повторно постави�
 msgid "Not connected"
 msgstr "Не з'єднано"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2054
+#: ../../locales/../src/interface/RemoteListView.cpp:2059
 msgid "Not connected to any server"
 msgstr "Нема під'єднання до жодного серверу"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:613
+#: ../../locales/../src/interface/Mainfrm.cpp:611
 msgid "Not connected to any server."
 msgstr "Нема під'єднання до жодного серверу."
 
@@ -5684,7 +5724,7 @@ msgstr "Не з'єднано."
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Не ініціалізовано, потрібно викликати WSAStartup"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:712
+#: ../../locales/../src/interface/Mainfrm.cpp:710
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr ""
 "Зауважте, що даний елемент підтримується лише при використанні протоколу FTP."
@@ -5703,11 +5743,10 @@ msgstr ""
 "Примітка: Використання загального проксі форсує пасивний режим при "
 "з'єднаннях FTP."
 
-#: ../../locales/../src/engine/http/request.cpp:236
-#: ../../locales/../src/engine/http/request.cpp:420
-#, fuzzy
+#: ../../locales/../src/engine/http/request.cpp:247
+#: ../../locales/../src/engine/http/request.cpp:446
 msgid "Null character in line"
-msgstr "Фільтрувати недійсні символи в іменах файлів"
+msgstr "Символ з Null-значенням у рядку"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1718
 msgid "Number of decimal places:"
@@ -5717,7 +5756,11 @@ msgstr "Кількість десяткових розташувань:"
 msgid "Number of retries has to be between 0 and 99."
 msgstr "Кількість повторів повинна знаходитись у проміжку між 0 та 99."
 
-#: ../../locales/../src/interface/resources/xrc/certificate.xrc:263
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:635
+msgid "O&pen"
+msgstr "Від&крити"
+
+#: ../../locales/../src/interface/resources/xrc/certificate.xrc:268
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:233
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:559
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:751
@@ -5774,7 +5817,7 @@ msgstr "Раз в день"
 msgid "Once a week"
 msgstr "Раз в тиждень"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:541
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:544
 msgid "Only use plain FTP (insecure)"
 msgstr "Використовувати лише простий FTP (незахищений)"
 
@@ -5822,8 +5865,10 @@ msgstr "Відкрито як:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1668
 #: ../../locales/../src/interface/edithandler.cpp:1785
-#: ../../locales/../src/interface/LocalListView.cpp:1775
-#: ../../locales/../src/interface/LocalListView.cpp:1787
+#: ../../locales/../src/interface/LocalListView.cpp:1832
+#: ../../locales/../src/interface/LocalListView.cpp:1845
+#: ../../locales/../src/interface/search.cpp:1523
+#: ../../locales/../src/interface/search.cpp:1536
 msgid "Opening failed"
 msgstr "Невдале відкриття"
 
@@ -5866,7 +5911,7 @@ msgstr "Параметри"
 msgid "Orange"
 msgstr "Оранжевий"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:248
+#: ../../locales/../src/interface/verifycertdialog.cpp:432
 msgid "Organization:"
 msgstr "Організація:"
 
@@ -5878,7 +5923,7 @@ msgstr "Інші налаштування SFTP"
 msgid "Other system error"
 msgstr "Помилка іншої системи"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:270
+#: ../../locales/../src/interface/verifycertdialog.cpp:454
 msgid "Other:"
 msgstr "Інше:"
 
@@ -5931,7 +5976,7 @@ msgstr "Переписати, якщо розмір &відрізняється"
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Переписати, якщо роз&мір відрізняється або джерело новіше"
 
-#: ../../locales/../src/interface/updater.cpp:245
+#: ../../locales/../src/interface/updater.cpp:259
 #, c-format
 msgid "Own build type: %s\n"
 msgstr "Власний тип збірки: %s\n"
@@ -5941,7 +5986,7 @@ msgid "Owner permissions"
 msgstr "Дозволи власника"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:400
-#: ../../locales/../src/interface/search.cpp:160
+#: ../../locales/../src/interface/search.cpp:165
 msgid "Owner/Group"
 msgstr "Власник/Група"
 
@@ -5966,11 +6011,11 @@ msgstr "Команда ПОРТА заблокована маршрутизат�
 msgid "Pa&ssive (recommended)"
 msgstr "Па&сивний (рекомендовано)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2486
+#: ../../locales/../src/interface/Mainfrm.cpp:2484
 msgid "Parameter not a valid URL"
 msgstr "Значення параметру - це недійсна URL адреса"
 
-#: ../../locales/../src/interface/updater.cpp:574
+#: ../../locales/../src/interface/updater.cpp:595
 #, c-format
 msgid "Parsing %d bytes of version information.\n"
 msgstr "Аналіз %d байт інформації версії.\n"
@@ -6010,17 +6055,18 @@ msgid "Passwords"
 msgstr "Паролі"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:117
-#: ../../locales/../src/interface/search.cpp:155
+#: ../../locales/../src/interface/search.cpp:160
 msgid "Path"
 msgstr "Шлях"
 
-#: ../../locales/../src/engine/ftp/rmd.cpp:40
+#: ../../locales/../src/engine/ftp/rmd.cpp:28
+#: ../../locales/../src/engine/ftp/rmd.cpp:44
 #: ../../locales/../src/engine/sftp/rmd.cpp:16
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Для каталогу %s та підкаталогу %s шлях створити неможливо"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2441
+#: ../../locales/../src/interface/Mainfrm.cpp:2439
 msgid "Path not found:"
 msgstr "Шляху не знайдено:"
 
@@ -6045,7 +6091,7 @@ msgid "Permission denied"
 msgstr "Не дозволено"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:399
-#: ../../locales/../src/interface/search.cpp:159
+#: ../../locales/../src/interface/search.cpp:164
 msgid "Permissions"
 msgstr "Дозволи"
 
@@ -6066,7 +6112,7 @@ msgstr ""
 "Перевірте https://filezilla-project.org/probe.php чи сервер працює і ще раз "
 "уважно перевірте свої налаштування."
 
-#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:116
+#: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:121
 msgid ""
 "Please check the granted permissions and re-add any missing local "
 "directories you are working with in the dialog that follows."
@@ -6187,7 +6233,7 @@ msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
 msgstr ""
 "Введіть значення обмеження швидкості відвантаження більшим або рівним 0 %s/s."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:625
+#: ../../locales/../src/interface/Mainfrm.cpp:623
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
@@ -6195,7 +6241,7 @@ msgstr ""
 "Введіть пряму FTP команду.\n"
 "Використання прямих ftp команд очистить каше каталогу."
 
-#: ../../locales/../src/interface/QueueView.cpp:1867
+#: ../../locales/../src/interface/QueueView.cpp:1873
 msgid ""
 "Please enter the complete path of a program and its arguments. This command "
 "will be executed when the queue has finished processing.\n"
@@ -6210,14 +6256,14 @@ msgstr ""
 "При наявності пробілів, команди та їхні аргументи повинні бути правильно "
 "відтворені ."
 
-#: ../../locales/../src/interface/LocalListView.cpp:944
+#: ../../locales/../src/interface/LocalListView.cpp:954
 #: ../../locales/../src/interface/LocalTreeView.cpp:1181
 #: ../../locales/../src/interface/RemoteListView.cpp:1327
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1252
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1267
 msgid "Please enter the name of the directory which should be created:"
 msgstr "Введіть ім'я каталогу, який необхідно створити:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2668
+#: ../../locales/../src/interface/RemoteListView.cpp:2673
 msgid "Please enter the name of the file which should be created:"
 msgstr "Введіть ім'я файлу, який необхідно створити:"
 
@@ -6302,7 +6348,7 @@ msgstr ""
 "що використовується троянами або іншими шкідливими програмами. Це може "
 "викликати хибну тривогу, яку ви можете безпечно скасувати."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:752
+#: ../../locales/../src/interface/Mainfrm.cpp:750
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -6391,8 +6437,8 @@ msgstr ""
 msgid "Positio&n of the message log:"
 msgstr "Розташуванн&я журналу повідомлень:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:255
-#: ../../locales/../src/interface/verifycertdialog.cpp:256
+#: ../../locales/../src/interface/verifycertdialog.cpp:439
+#: ../../locales/../src/interface/verifycertdialog.cpp:440
 msgid "Postal code:"
 msgstr "Поштовий індекс:"
 
@@ -6405,11 +6451,11 @@ msgid "Preallocation"
 msgstr "Попереднє виділення"
 
 #: ../../locales/../src/interface/sitemanager.cpp:341
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2113
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2135
 msgid "Predefined Sites"
 msgstr "Попередньо вказані Сайти"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:751
+#: ../../locales/../src/interface/Mainfrm.cpp:749
 msgid "Preserving file timestamps"
 msgstr "Збереження файлу часових позначок"
 
@@ -6433,7 +6479,7 @@ msgstr "Надрукувати інформацію версії на обран
 msgid "Prioritize directories (default)"
 msgstr "Визначення пріоритетних каталогів (типових)"
 
-#: ../../locales/../src/interface/queue.cpp:1163
+#: ../../locales/../src/interface/queue.cpp:1214
 msgid "Priority"
 msgstr "Пріоритет"
 
@@ -6543,7 +6589,7 @@ msgstr "Алгоритм публічного ключа:"
 msgid "Public permissions"
 msgstr "Публічні дозволи"
 
-#: ../../locales/../src/interface/QueueView.cpp:2773
+#: ../../locales/../src/interface/QueueView.cpp:2779
 msgid "Queue has been fully processed"
 msgstr "Черга опрацьована не повністю"
 
@@ -6592,7 +6638,7 @@ msgstr "Від&далене дерево каталогів"
 msgid "R&eset and requeue selected files"
 msgstr "С&кинути і поновити чергу обраних файлів"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:640
+#: ../../locales/../src/interface/Mainfrm.cpp:638
 msgid "Raw FTP command"
 msgstr "Проста команда FTP"
 
@@ -6625,12 +6671,12 @@ msgstr "Чи&тати"
 msgid "Read-only"
 msgstr "Лише читати"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1116
+#: ../../locales/../src/interface/Mainfrm.cpp:1114
 msgid "Really cancel current operation?"
 msgstr "Дійсно скасувати дану операцію?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1421
-#: ../../locales/../src/interface/search.cpp:1235
+#: ../../locales/../src/interface/search.cpp:1259
 #, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
@@ -6640,7 +6686,7 @@ msgstr[1] "Дійсно видалити %d каталоги з усім їхн�
 msgstr[2] "Дійсно видалити %d каталогів з усім їхнім вмістом з сервера?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1418
-#: ../../locales/../src/interface/search.cpp:1232
+#: ../../locales/../src/interface/search.cpp:1256
 #, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
@@ -6649,12 +6695,12 @@ msgstr[1] "Дійсно видалити %d файли з сервера?"
 msgstr[2] "Дійсно видалити %d файлів з сервера?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1426
-#: ../../locales/../src/interface/search.cpp:1240
+#: ../../locales/../src/interface/search.cpp:1264
 #, c-format
 msgid "Really delete %s and %s from the server?"
 msgstr "Дійсно видалити %s і %s з сервера?"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1070
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1085
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr "Дійсно видалити усі вибрані файли та/або каталоги з сервера?"
 
@@ -6662,11 +6708,11 @@ msgstr "Дійсно видалити усі вибрані файли та/аб
 msgid "Really delete all selected files and/or directories from your computer?"
 msgstr "Дійсно видалити усі вибрані файли та/або каталоги з вашого комп'ютера?"
 
-#: ../../locales/../src/interface/queue.cpp:1163
+#: ../../locales/../src/interface/queue.cpp:1214
 msgid "Reason"
 msgstr "Причина"
 
-#: ../../locales/../src/interface/QueueView.cpp:2766
+#: ../../locales/../src/interface/QueueView.cpp:2772
 msgid "Reboot now"
 msgstr "Перезавантажити зараз"
 
@@ -6679,12 +6725,12 @@ msgstr "Про&ектувати в підкаталоги"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Отримано оповіщення TLS з сервера: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:3075
+#: ../../locales/../src/engine/directorylistingparser.cpp:3078
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Отримано перелік файлів каталогу і схоже він закодований EBCDIC."
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2057
-#: ../../locales/../src/engine/directorylistingparser.cpp:2074
+#: ../../locales/../src/engine/directorylistingparser.cpp:2060
+#: ../../locales/../src/engine/directorylistingparser.cpp:2077
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Отримано рядок, що перевищує 10000 символів, аварійне завершення."
 
@@ -6701,7 +6747,7 @@ msgstr ""
 msgid "Received data tainted"
 msgstr "Отримані дані заблоковано"
 
-#: ../../locales/../src/interface/updater.cpp:553
+#: ../../locales/../src/interface/updater.cpp:574
 msgid "Received invalid character in version information"
 msgstr "Отримано неприпустимий символ в інформації версії"
 
@@ -6710,7 +6756,7 @@ msgstr "Отримано неприпустимий символ в інформ
 msgid "Received unknown TLS alert %d from the server"
 msgstr "Від сервера отримано невідоме повідомлення TLS %d"
 
-#: ../../locales/../src/interface/updater.cpp:546
+#: ../../locales/../src/interface/updater.cpp:567
 msgid "Received version information is too large"
 msgstr "Отримана інформація версії завелика"
 
@@ -6773,12 +6819,12 @@ msgid "Remote certificate not trusted."
 msgstr "Не довіряти віддаленому сертифікату."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2517
-#: ../../locales/../src/interface/queue.cpp:1163
+#: ../../locales/../src/interface/queue.cpp:1214
 msgid "Remote file"
 msgstr "Віддалений файл"
 
-#: ../../locales/../src/interface/search.cpp:708
-#: ../../locales/../src/interface/search.cpp:713
+#: ../../locales/../src/interface/search.cpp:724
+#: ../../locales/../src/interface/search.cpp:729
 msgid "Remote file search"
 msgstr "Пошук віддаленого файлу"
 
@@ -6799,7 +6845,7 @@ msgstr ""
 "Віддалений шлях не піддається аналізу. Переконайтесь, що це дійсний "
 "абсолютний шлях і він підтримується поточним типом серверу сайту (%s)."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1174
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1177
 #, c-format
 msgid ""
 "Remote path cannot be parsed. Make sure it is a valid absolute path and is "
@@ -6811,7 +6857,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:445
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:450
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1177
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1180
 msgid "Remote path cannot be parsed. Make sure it is a valid absolute path."
 msgstr ""
 "Віддалений шлях не піддається аналізу. Переконайтесь, що це дійсний "
@@ -6847,7 +6893,7 @@ msgstr "Видалити &обране"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1639
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1193
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1214
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:304
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:326
 msgid "Rename file"
 msgstr "Перейменувати файл"
 
@@ -6892,11 +6938,11 @@ msgstr ""
 msgid "Request rejected or failed"
 msgstr "Запит відхилено або невдалий"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:539
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:542
 msgid "Require explicit FTP over TLS"
 msgstr "Потрібне явне FTP через TLS"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:540
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:543
 msgid "Require implicit FTP over TLS"
 msgstr "Потрібне неявне FTP через TLS"
 
@@ -6990,7 +7036,7 @@ msgstr "С&инхронізована навігація"
 msgid "SFTP"
 msgstr "SFTP"
 
-#: ../../locales/../src/interface/FileZilla.cpp:606
+#: ../../locales/../src/interface/FileZilla.cpp:616
 msgid "SFTP support"
 msgstr "Підтримка SFTP"
 
@@ -7028,12 +7074,12 @@ msgid "Save settings?"
 msgstr "Зберегти налаштування?"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:429
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1006
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1009
 msgid "Saving of password has been disabled by your system administrator."
 msgstr "Збереження паролів вимкнуто вашим системним адміністратором."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:432
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1009
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1012
 msgid "Saving of passwords has been disabled by you."
 msgstr "Збереження паролів вимкнуто вами."
 
@@ -7061,7 +7107,7 @@ msgstr "Пошук файлів на сервері"
 msgid "Search type:"
 msgstr "Тип пошуку:"
 
-#: ../../locales/../src/interface/statusbar.cpp:514
+#: ../../locales/../src/interface/statusbar.cpp:515
 msgid "Security information"
 msgstr "Інформація безпеки"
 
@@ -7110,7 +7156,7 @@ msgstr ""
 "Обрати типову дію стосовно існуючого файлу лише для поточно обраних файлів у "
 "черзі."
 
-#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:78
+#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:81
 msgid "Select file containing private key"
 msgstr "Обрати файл, що містить приватний ключ"
 
@@ -7123,7 +7169,7 @@ msgid "Select file for exported filters"
 msgstr "Обрати файл для експортованих фільтрів"
 
 #: ../../locales/../src/interface/export.cpp:39
-#: ../../locales/../src/interface/queue.cpp:1431
+#: ../../locales/../src/interface/queue.cpp:1500
 msgid "Select file for exported queue"
 msgstr "Обрати файл для експортованої черги"
 
@@ -7132,7 +7178,7 @@ msgid "Select file for exported settings"
 msgstr "Обрати файл для експортованих налаштувань"
 
 #: ../../locales/../src/interface/export.cpp:36
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2457
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2479
 msgid "Select file for exported sites"
 msgstr "Обрати файл для експортованих сайтів"
 
@@ -7152,7 +7198,7 @@ msgstr "Обрати ім'я файлу для конвертованого фа
 msgid "Select how these files should be opened."
 msgstr "Обрати спосіб, щоб відкрити ці файли."
 
-#: ../../locales/../src/interface/search.cpp:892
+#: ../../locales/../src/interface/search.cpp:915
 msgid "Select target download directory"
 msgstr "Обрати кінцевий каталог завантаження"
 
@@ -7168,7 +7214,7 @@ msgstr "Обрати категорії для експорту:"
 msgid "Select the private data you would like to delete."
 msgstr "Оберіть свої приватні дані для видалення."
 
-#: ../../locales/../src/interface/search.cpp:851
+#: ../../locales/../src/interface/search.cpp:872
 #, c-format
 msgid "Selected %d directory with its contents for transfer."
 msgid_plural "Selected %d directories with their contents for transfer."
@@ -7184,7 +7230,7 @@ msgstr[0] "Обрано %d каталог."
 msgstr[1] "Обрано %d каталоги."
 msgstr[2] "Обрано %d каталогів."
 
-#: ../../locales/../src/interface/search.cpp:849
+#: ../../locales/../src/interface/search.cpp:869
 #, c-format
 msgid "Selected %d file for transfer."
 msgid_plural "Selected %d files for transfer."
@@ -7208,7 +7254,7 @@ msgstr[0] "Обрано %d файл. Загальний розмір: Прина
 msgstr[1] "Обрано %d файли. Загальний розмір: Принаймні %s"
 msgstr[2] "Обрано %d файлів. Загальний розмір: Принаймні %s"
 
-#: ../../locales/../src/interface/search.cpp:855
+#: ../../locales/../src/interface/search.cpp:877
 #, c-format
 msgid "Selected %s and %s for transfer."
 msgstr "Обрано %s і %s для передачі."
@@ -7234,7 +7280,7 @@ msgstr "Обраного редактора не існує."
 msgid "Selected file already being edited"
 msgstr "Обраний файл уже редагується"
 
-#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:119
+#: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:126
 msgid "Selected file is already loaded"
 msgstr "Обраний файл уже завантажений"
 
@@ -7277,7 +7323,7 @@ msgid "Sending keep-alive command"
 msgstr "Надсилання команди keep-alive"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:65
-#: ../../locales/../src/interface/verifycertdialog.cpp:259
+#: ../../locales/../src/interface/verifycertdialog.cpp:443
 msgid "Serial number:"
 msgstr "Серійний номер:"
 
@@ -7294,12 +7340,12 @@ msgstr "Сервер неправильно завершив з'єднання T
 msgid "Server does not support non-ASCII characters."
 msgstr "Сервер не підтримує символи, які не належать до набору ASCII."
 
-#: ../../locales/../src/engine/ftp/filetransfer.cpp:269
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:270
 #, c-format
 msgid "Server does not support resume of files > %d GB."
 msgstr "Сервер не підтримує відновлення файлів > %d GB."
 
-#: ../../locales/../src/engine/ftp/filetransfer.cpp:266
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:267
 #, c-format
 msgid ""
 "Server does not support resume of files > %d GB. End transfer since file "
@@ -7308,11 +7354,11 @@ msgstr ""
 "Сервер не підтримує відновлення файлів > %d Гб. Завершення передачі, "
 "оскільки розміри файлів співпадають."
 
-#: ../../locales/../src/engine/ftp/filetransfer.cpp:528
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:529
 msgid "Server does not support resume of files > 2GB."
 msgstr "Сервер не підтримує відновлення файлів > 2GB."
 
-#: ../../locales/../src/engine/ftp/filetransfer.cpp:524
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:525
 msgid "Server does not support resume of files > 4GB."
 msgstr "Сервер не підтримує відновлення файлів > 4GB."
 
@@ -7320,7 +7366,7 @@ msgstr "Сервер не підтримує відновлення файлів
 msgid "Server host key"
 msgstr "Ключ хоста сервера"
 
-#: ../../locales/../src/engine/ftp/filetransfer.cpp:277
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:278
 #, c-format
 msgid ""
 "Server may not support resume of files > %d GB. End transfer since file "
@@ -7337,7 +7383,7 @@ msgstr ""
 "Сервер може вимагати обліковий запис. Спробуйте уточнити обліковий запис, "
 "використовуючи Сайт Менеджер"
 
-#: ../../locales/../src/engine/http/request.cpp:230
+#: ../../locales/../src/engine/http/request.cpp:241
 msgid "Server not sending proper line endings"
 msgstr "Сервер не надсилає правильні закінчення рядка"
 
@@ -7367,7 +7413,7 @@ msgstr ""
 "Сервер надіслав пасивну відповідь з ІP-адресою без підтримки маршрутизації. "
 "Натомість використовується адреса сервера."
 
-#: ../../locales/../src/engine/http/request.cpp:489
+#: ../../locales/../src/engine/http/request.cpp:517
 msgid "Server sent too much data."
 msgstr "Сервер надіслав занадто багато даних."
 
@@ -7402,7 +7448,7 @@ msgstr "Сервер до клієнтських символів:"
 msgid "Server&type:"
 msgstr "Тип &сервера:"
 
-#: ../../locales/../src/interface/queue.cpp:1163
+#: ../../locales/../src/interface/queue.cpp:1214
 msgid "Server/Local file"
 msgstr "Сервер/Локальний файл"
 
@@ -7445,7 +7491,7 @@ msgstr "Показати список &простих каталогів"
 msgid "Show &welcome dialog..."
 msgstr "Показати діалог &привітання..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2328
+#: ../../locales/../src/interface/Mainfrm.cpp:2326
 msgid "Show both directory trees and continue comparing?"
 msgstr "Показати обидва дерева каталогів і продовжити порівняння?"
 
@@ -7458,6 +7504,10 @@ msgstr "Показати подробиці"
 msgid "Show details about custom date and time formats"
 msgstr "Показати подробиці форматів настроюваних дати і часу"
 
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:638
+msgid "Show in file &manager"
+msgstr "Показати у файловому &менеджері"
+
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:451
 msgid "Shows available TLS ciphers"
 msgstr "Показати наявні шифри TLS"
@@ -7466,7 +7516,7 @@ msgstr "Показати наявні шифри TLS"
 msgid "Shows this help dialog"
 msgstr "Показує цей діалог допомоги"
 
-#: ../../locales/../src/interface/QueueView.cpp:2762
+#: ../../locales/../src/interface/QueueView.cpp:2768
 msgid "Shutdown now"
 msgstr "Вимкнути негайно"
 
@@ -7486,7 +7536,7 @@ msgstr "Введені дані &в Сайт Менеджер"
 msgid "Site Manager"
 msgstr "Сайт Менеджер"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1016
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1019
 msgid "Site Manager - Cannot remember password"
 msgstr "Сайт Менеджер - Неможливо запам'ятати пароль"
 
@@ -7494,25 +7544,25 @@ msgstr "Сайт Менеджер - Неможливо запам'ятати п�
 msgid "Site Manager - Generated key"
 msgstr "Сайт Менеджер - Згенерований ключ"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:982
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:995
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1029
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1046
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1059
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1074
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1084
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1092
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1117
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1126
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1142
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1151
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1179
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1188
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1195
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:985
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:998
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1032
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1049
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1062
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1077
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1087
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1095
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1120
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1129
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1145
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1154
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1182
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1191
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1198
 msgid "Site Manager - Invalid data"
 msgstr "Сайт Менеджер - Недійсні дані"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:300
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:303
 msgid "Site Manager already open"
 msgstr "Сайт Менеджер вже відкрито"
 
@@ -7549,7 +7599,7 @@ msgstr ""
 "Для збереження типових закладок використовуйте Сайт Менеджер.\n"
 "Додати поточне з'єднання до Сайт Менеджера?"
 
-#: ../../locales/../src/interface/queue.cpp:1163
+#: ../../locales/../src/interface/queue.cpp:1214
 msgid "Size"
 msgstr "Розмір"
 
@@ -7609,7 +7659,7 @@ msgstr "Сокет не з'єднано"
 msgid "Socket type not supported for address family"
 msgstr "Тип сокету не підтримується родиною адрес"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1255
+#: ../../locales/../src/interface/Mainfrm.cpp:1253
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Деякі файли усе ще редагуються або потребують оновлення."
 
@@ -7626,7 +7676,7 @@ msgstr ""
 msgid "Sort directories inline"
 msgstr "Сортувати каталоги у тексті"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:470
+#: ../../locales/../src/interface/filelistctrl.cpp:478
 msgid "Sort order cannot be changed if comparing directories."
 msgstr "Послідовність сортування неможливо змінити при порівнянні каталогів."
 
@@ -7664,11 +7714,11 @@ msgstr "Обмеження швидкості"
 msgid "Speed limits"
 msgstr "Обмеження швидкості"
 
-#: ../../locales/../src/interface/statusbar.cpp:591
+#: ../../locales/../src/interface/statusbar.cpp:592
 msgid "Speed limits are disabled, click to change."
 msgstr "Обмеження швидкості вимкнуто, клацніть, щоб змінити."
 
-#: ../../locales/../src/interface/statusbar.cpp:594
+#: ../../locales/../src/interface/statusbar.cpp:595
 msgid "Speed limits are enabled, click to change."
 msgstr "Обмеження швидкості увімкнуто, клацніть, щоб змінити."
 
@@ -7692,7 +7742,7 @@ msgstr "Розпочати передачу &негайно"
 msgid "Start with opened Site Manager"
 msgstr "Розпочати з відкритим Сайт Менеджером"
 
-#: ../../locales/../src/interface/updater.cpp:239
+#: ../../locales/../src/interface/updater.cpp:253
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "Розпочато перевірку оновлення на %s\n"
@@ -7715,12 +7765,12 @@ msgstr "Розпочинаємо відвантаження %s"
 msgid "Starts the local site in the given path"
 msgstr "Запускає локальний сайт за вказаним шляхом"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:253
+#: ../../locales/../src/interface/verifycertdialog.cpp:437
 msgid "State or province:"
 msgstr "Штат, або провінція:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1139
-#: ../../locales/../src/interface/queue.cpp:1163
+#: ../../locales/../src/interface/queue.cpp:1214
 msgid "Status"
 msgstr "Статус"
 
@@ -7742,11 +7792,11 @@ msgstr "Зупинити рекурсивну операцію"
 msgid "Storj - Decentralized Cloud Storage"
 msgstr "Storj - Децентралізоване Хмарне Сховище"
 
-#: ../../locales/../src/interface/FileZilla.cpp:613
+#: ../../locales/../src/interface/FileZilla.cpp:623
 msgid "Storj support"
 msgstr "Підтримка Storj"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:257
+#: ../../locales/../src/interface/verifycertdialog.cpp:441
 msgid "Street:"
 msgstr "Вулиця:"
 
@@ -7762,7 +7812,7 @@ msgstr "Успішні передачі"
 msgid "Summary of test results:"
 msgstr "Підсумок результатів тесту:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2770
+#: ../../locales/../src/interface/QueueView.cpp:2776
 msgid "Suspend now"
 msgstr "Призупинити зараз"
 
@@ -7809,8 +7859,8 @@ msgstr "Помилка синтаксису"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2443
-#: ../../locales/../src/interface/Mainfrm.cpp:2488
+#: ../../locales/../src/interface/Mainfrm.cpp:2441
+#: ../../locales/../src/interface/Mainfrm.cpp:2486
 msgid "Syntax error in command line"
 msgstr "Помилка синтаксису у командній лінійці"
 
@@ -7834,7 +7884,7 @@ msgstr "Невдала підсистема мережі системи"
 msgid "T&oolbar"
 msgstr "П&анель інструментів"
 
-#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:131
+#: ../../locales/../src/engine/http/httpcontrolsocket.cpp:139
 msgid "TLS connection established, sending HTTP request"
 msgstr "З'єднання TLS встановлено, надсилається запит HTTP"
 
@@ -7858,7 +7908,7 @@ msgstr "Кінцевий файл уже існує"
 msgid "Target file:"
 msgstr "Кінцевий файл:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2686
+#: ../../locales/../src/interface/RemoteListView.cpp:2691
 msgid "Target filename already exists!"
 msgstr "Ім'я кінцевого файлу вже існує!"
 
@@ -7878,7 +7928,7 @@ msgstr "Успішне завершення тесту"
 msgid "Test results"
 msgstr "Результати тестування"
 
-#: ../../locales/../src/engine/ftp/filetransfer.cpp:281
+#: ../../locales/../src/engine/ftp/filetransfer.cpp:282
 msgid "Testing resume capabilities of server"
 msgstr "Спроможність сервера до відновлення тестування"
 
@@ -7886,11 +7936,11 @@ msgstr "Спроможність сервера до відновлення те
 msgid "The &following files are currently being edited:"
 msgstr "Наст&упні файли зараз редагуються:"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:782
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:785
 msgid "The Site Manager cannot be used unless the file gets repaired."
 msgstr "Перед використанням Сайт Менеджера відновіть ЦП."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:299
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:302
 msgid ""
 "The Site Manager is opened in another instance of FileZilla 3.\n"
 "Do you want to continue? Any changes made in the Site Manager won't be saved "
@@ -7991,8 +8041,8 @@ msgstr "Введені паролі не співпадають."
 msgid "The extension '%s' does already exist in the list"
 msgstr "Розширення '%s' таки існує в цьому списку"
 
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:293
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:301
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:315
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:323
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -8002,7 +8052,8 @@ msgstr ""
 "Введіть нове ім'я:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1673
-#: ../../locales/../src/interface/LocalListView.cpp:1779
+#: ../../locales/../src/interface/LocalListView.cpp:1836
+#: ../../locales/../src/interface/search.cpp:1527
 #, c-format
 msgid ""
 "The file '%s' cannot be opened:\n"
@@ -8027,13 +8078,14 @@ msgstr ""
 msgid "The file '%s' could not be loaded or does not contain a private key."
 msgstr "Файл '%s' неможливо завантажити, або він не містить приватного ключа."
 
-#: ../../locales/../src/interface/xmlfunctions.cpp:37
+#: ../../locales/../src/interface/xmlfunctions.cpp:38
 #, c-format
 msgid "The file '%s' could not be loaded."
 msgstr "Файл '%s' неможливо завантажити."
 
 #: ../../locales/../src/interface/edithandler.cpp:1668
-#: ../../locales/../src/interface/LocalListView.cpp:1775
+#: ../../locales/../src/interface/LocalListView.cpp:1832
+#: ../../locales/../src/interface/search.cpp:1523
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -8043,7 +8095,8 @@ msgstr ""
 "У вашій системі жодна програма не асоціюється з даним типом файлів."
 
 #: ../../locales/../src/interface/edithandler.cpp:1785
-#: ../../locales/../src/interface/LocalListView.cpp:1787
+#: ../../locales/../src/interface/LocalListView.cpp:1845
+#: ../../locales/../src/interface/search.cpp:1536
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -8053,7 +8106,7 @@ msgstr ""
 "Помилкова асоційована команда"
 
 #: ../../locales/../src/interface/import.cpp:65
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:789
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:792
 #, c-format
 msgid ""
 "The file '%s' has been created by a more recent version of FileZilla.\n"
@@ -8085,7 +8138,7 @@ msgid ""
 "password will be imported.\n"
 "Continue with the import?"
 msgstr ""
-"Обраний вами файл вміщує дані Сайт Менеджера згідно попередньої версії "
+"Обраний вами файл містить дані Сайт Менеджера згідно попередньої версії "
 "FileZilla.\n"
 "У відповідності до різниці у форматі накопичення лише хост, порт, ім'я "
 "користувача і пароль будуть імпортованими.\n"
@@ -8175,7 +8228,7 @@ msgstr "Нову версію завантажити було неможливо
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Нову версію було збережено у вашому каталозі завантажень."
 
-#: ../../locales/../src/interface/QueueView.cpp:1560
+#: ../../locales/../src/interface/QueueView.cpp:1566
 msgid "The queue will not be saved."
 msgstr "Чергу не буде збережено."
 
@@ -8286,12 +8339,12 @@ msgstr "Вказана родина адрес не підтримується"
 msgid "The specified network name is no longer available"
 msgstr "Вказана мережа більше недоступна"
 
-#: ../../locales/../src/interface/QueueView.cpp:2765
+#: ../../locales/../src/interface/QueueView.cpp:2771
 msgid "The system will soon reboot unless you click Cancel."
 msgstr ""
 "Система незабаром перезавантажиться; для відміни натисніть кнопку Скасувати."
 
-#: ../../locales/../src/interface/QueueView.cpp:2761
+#: ../../locales/../src/interface/QueueView.cpp:2767
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Система незабаром вимкнеться; для відміни натисніть кнопку Скасувати."
 
@@ -8307,7 +8360,7 @@ msgstr ""
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr "Тест не досяг успіху. Ви дійсно бажаєте зберегти налаштування?"
 
-#: ../../locales/../src/interface/xmlfunctions.cpp:82
+#: ../../locales/../src/interface/xmlfunctions.cpp:83
 #, c-format
 msgid "The valid backup file %s could not be restored"
 msgstr "Дійсний файл резервної копії '%s' неможливо відновити"
@@ -8348,7 +8401,7 @@ msgstr ""
 "Цей майстер допоможе вам правильно сконфігурувати будь-який ваш "
 "маршрутизатор чи файєрвол та перевірити їхню конфігурацію."
 
-#: ../../locales/../src/interface/queue.cpp:1163
+#: ../../locales/../src/interface/queue.cpp:1214
 msgid "Time"
 msgstr "Час"
 
@@ -8361,24 +8414,24 @@ msgid "Time&out in seconds:"
 msgstr "Час &очікування в секундах:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:126
-#: ../../locales/../src/interface/queue.cpp:337
+#: ../../locales/../src/interface/queue.cpp:350
 msgid "Timeout"
 msgstr "Час вичерпано"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:435
 msgid "Title:"
 msgstr "Назва:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2309
+#: ../../locales/../src/interface/Mainfrm.cpp:2307
 msgid "To compare directories quick search must be closed."
 msgstr "Для того, щоб порівняти каталоги необхідно закрити швидкий пошук."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2326
+#: ../../locales/../src/interface/Mainfrm.cpp:2324
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Для того, щоб порівняти каталоги, обидва списки файлів необхідно вирівняти."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2327
+#: ../../locales/../src/interface/Mainfrm.cpp:2325
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Для того, щоб це зробити, необхідно, щоб обидва дерева каталогів були або "
@@ -8439,7 +8492,7 @@ msgstr "Переключити відображення віддаленого �
 msgid "Toggles the display of the transfer queue"
 msgstr "Переключити відображення черги передачі"
 
-#: ../../locales/../src/engine/http/request.cpp:243
+#: ../../locales/../src/engine/http/request.cpp:254
 msgid "Too long header line"
 msgstr "Занадто довга лінійка заголовку"
 
@@ -8488,7 +8541,7 @@ msgstr "Під'єднання перервано: %s"
 msgid "Transferred data got tainted."
 msgstr "Передані дані пошкоджено."
 
-#: ../../locales/../src/interface/queue.cpp:347
+#: ../../locales/../src/interface/queue.cpp:360
 #: ../../locales/../src/interface/statuslinectrl.cpp:259
 msgid "Transferring"
 msgstr "Передача"
@@ -8497,7 +8550,7 @@ msgstr "Передача"
 msgid "Transfers"
 msgstr "Передачі"
 
-#: ../../locales/../src/interface/QueueView.cpp:2644
+#: ../../locales/../src/interface/QueueView.cpp:2650
 msgid "Transfers finished"
 msgstr "Передачі завершено"
 
@@ -8574,7 +8627,7 @@ msgstr "КОРИСТУВАЧ@&ХОСТ"
 msgid "Unassigned error code %d"
 msgstr "Неініціалізоаний код помилки %d"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:250
+#: ../../locales/../src/interface/verifycertdialog.cpp:434
 msgid "Unit:"
 msgstr "Модуль:"
 
@@ -8626,13 +8679,13 @@ msgid ""
 msgstr ""
 "Невідома версія протоколу обміну автентифікації SOCKS Користувач / Пароль: %d"
 
-#: ../../locales/../src/interface/xmlfunctions.cpp:283
+#: ../../locales/../src/interface/xmlfunctions.cpp:191
 msgid ""
 "Unknown root element, the file does not appear to be generated by FileZilla."
 msgstr ""
 "Невідомий елемент вузла; не схоже, щоб даний файл був згенерованим FileZilla."
 
-#: ../../locales/../src/engine/http/request.cpp:355
+#: ../../locales/../src/engine/http/request.cpp:380
 msgid "Unknown transfer encoding"
 msgstr "Невідоме кодування передачі"
 
@@ -8678,17 +8731,17 @@ msgstr "Відвантаження"
 msgid "Upload failed"
 msgstr "Невдале відвантаження"
 
-#: ../../locales/../src/interface/statusbar.cpp:604
+#: ../../locales/../src/interface/statusbar.cpp:605
 #, c-format
 msgid "Upload limit: %s/s"
 msgstr "Обмеження відвантаження: %s/s"
 
-#: ../../locales/../src/interface/statusbar.cpp:607
+#: ../../locales/../src/interface/statusbar.cpp:608
 msgid "Upload limit: none"
 msgstr "Обмеження відвантаження: жодного"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3481
-#: ../../locales/../src/interface/search.cpp:918
+#: ../../locales/../src/interface/search.cpp:941
 msgid "Upload search results"
 msgstr "Відвантажити результати пошуку"
 
@@ -8756,7 +8809,7 @@ msgstr ""
 msgid "Use default action"
 msgstr "Використати типову дію"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:538
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:541
 msgid "Use explicit FTP over TLS if available"
 msgstr "Використовувати явне FTP через TLS, якщо доступно"
 
@@ -8809,7 +8862,7 @@ msgid "User:"
 msgstr "Користувач:"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:491
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1074
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1077
 msgid "Username cannot be a series of spaces"
 msgstr "Ім'я користувача не може складатися з серії пробілів"
 
@@ -8856,11 +8909,11 @@ msgstr "Видимі стовпці"
 msgid "W&rite"
 msgstr "Пи&сати"
 
-#: ../../locales/../src/interface/queue.cpp:343
+#: ../../locales/../src/interface/queue.cpp:356
 msgid "Waiting for browsing connection"
 msgstr "Очікування на перегляд зв'язку"
 
-#: ../../locales/../src/interface/queue.cpp:344
+#: ../../locales/../src/interface/queue.cpp:357
 msgid "Waiting for password"
 msgstr "Очікування на пароль"
 
@@ -8945,7 +8998,7 @@ msgstr "Пи&сати"
 msgid "Wrong external IP address"
 msgstr "Неправильна зовнішня ІР адреса"
 
-#: ../../locales/../src/engine/http/request.cpp:414
+#: ../../locales/../src/engine/http/request.cpp:440
 msgid "Wrong line endings"
 msgstr "Неправильні закінчення лінійки"
 
@@ -9005,7 +9058,7 @@ msgstr ""
 "Ви можете використати значок x у будь-якій позиції, щоб зберегти дозвіл, "
 "яким володіють оригінальні файли."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1117
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1120
 msgid ""
 "You cannot change password and encryption key individually if using a master "
 "password."
@@ -9029,7 +9082,7 @@ msgstr ""
 msgid "You cannot upload files into the root directory."
 msgstr "Неможливо відвантажити файли до кореневого каталогу."
 
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:313
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:336
 msgid "You did not enter a new name for the file. Overwrite the file instead?"
 msgstr ""
 "Ви не ввели нове ім'я для цього файлу. Бажаєте переписати цей файл натомість?"
@@ -9039,14 +9092,15 @@ msgid "You have selected at least one symbolic link."
 msgstr "Ви обрали принаймні одне символічне посилання."
 
 #: ../../locales/../src/interface/edithandler.cpp:1639
-#: ../../locales/../src/interface/search.cpp:1197
+#: ../../locales/../src/interface/search.cpp:1223
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
 "continue?"
 msgstr ""
 "Ви обрали більше, ніж 10 файлів для редагування. Дійсно бажаєте продовжити?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1744
+#: ../../locales/../src/interface/LocalListView.cpp:1800
+#: ../../locales/../src/interface/search.cpp:1489
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
@@ -9055,19 +9109,19 @@ msgstr ""
 "бажаєте продовжити?"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:407
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:982
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:985
 msgid "You have to enter a hostname."
 msgstr "Необхідно ввести ім'я хоста."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1092
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1095
 msgid "You have to enter a key file path"
 msgstr "Необхідно ввести шлях файла ключа"
 
-#: ../../locales/../src/interface/search.cpp:904
+#: ../../locales/../src/interface/search.cpp:927
 msgid "You have to enter a local directory."
 msgstr "Необхідно ввести локальний каталог."
 
-#: ../../locales/../src/interface/search.cpp:918
+#: ../../locales/../src/interface/search.cpp:941
 msgid "You have to enter a remote directory."
 msgstr "Необхідно ввести віддалений каталог."
 
@@ -9076,21 +9130,21 @@ msgstr "Необхідно ввести віддалений каталог."
 msgid "You have to enter a valid IPv4 address."
 msgstr "Необхідно ввести дійсну IPv4 адресу."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1126
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1129
 msgid "You have to enter a valid encryption key"
 msgstr "Необхідно ввести дійсний ключ шифрування"
 
-#: ../../locales/../src/interface/search.cpp:909
+#: ../../locales/../src/interface/search.cpp:932
 msgid "You have to enter a writable local directory."
 msgstr "Необхідно ввести локальний каталог, придатний для запису."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:502
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1084
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1087
 msgid "You have to enter an account name"
 msgstr "Необхідно ввести ім'я облікового запису"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:476
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1059
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1062
 msgid "You have to specify a user name"
 msgstr "Необхідно вказати ім'я користувача"
 
@@ -9127,14 +9181,14 @@ msgstr "Потрібно ввести порт проксі в межах від
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:79
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:460
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1188
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1191
 msgid "You need to enter at least one path, empty bookmarks are not supported."
 msgstr ""
 "Потрібно ввести принаймні один шлях; порожні закладки не підтримуються."
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:85
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:466
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1195
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1198
 msgid ""
 "You need to enter both a local and a remote path to enable synchronized "
 "browsing for this bookmark."
@@ -9142,7 +9196,7 @@ msgstr ""
 "Щоб увімкнути синхронізовану навігацію для цієї закладки, необхідно ввести "
 "як локальний, так і віддалений шляхи."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1151
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1154
 msgid ""
 "You need to enter both a local and a remote path to enable synchronized "
 "browsing for this site."
@@ -9182,7 +9236,7 @@ msgstr ""
 "У вас не повинно виникнути проблем у з'єднанні з іншими серверами. Передачі "
 "файлів повинні працювати правильно."
 
-#: ../../locales/../src/interface/QueueView.cpp:2769
+#: ../../locales/../src/interface/QueueView.cpp:2775
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "Ваш комп'ютер призупиниться, якщо не натиснути Скасувати."
 
@@ -9207,7 +9261,7 @@ msgstr "байти"
 msgid "contains"
 msgstr "вміщує"
 
-#: ../../locales/../src/interface/updater.cpp:243
+#: ../../locales/../src/interface/updater.cpp:257
 msgid "custom"
 msgstr "додатково"
 
@@ -9229,10 +9283,10 @@ msgstr "завершується з"
 msgid "equals"
 msgstr "дорівнює"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:545
-#: ../../locales/../src/interface/filelistctrl.cpp:563
-#: ../../locales/../src/interface/filelistctrl.cpp:593
-#: ../../locales/../src/interface/filelistctrl.cpp:608
+#: ../../locales/../src/interface/filelistctrl.cpp:557
+#: ../../locales/../src/interface/filelistctrl.cpp:575
+#: ../../locales/../src/interface/filelistctrl.cpp:605
+#: ../../locales/../src/interface/filelistctrl.cpp:620
 msgid "file"
 msgstr "файл"
 
@@ -9326,7 +9380,7 @@ msgstr "менше, ніж"
 msgid "matches regex"
 msgstr "співпадає з regex"
 
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:296
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:318
 msgid "new name"
 msgstr "нове ім'я"
 
