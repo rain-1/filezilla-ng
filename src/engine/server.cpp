@@ -27,6 +27,8 @@ static const t_protocolInfo protocolInfos[] = {
 	{ S3,           L"s3",     true, 443,  false, "S3 - Amazon Simple Storage Service",                                      false },
 	{ STORJ,        L"storj",  true, 443,  true,  fztranslate_mark("Storj - Decentralized Cloud Storage"),                   false },
 	{ WEBDAV,       L"webdav", true, 443,  true,  "WebDAV",                                                                  false },
+	{ AZURE_FILE,   L"azfile", true, 443,  false, "Microsoft Azure File Storage Service",                                         false },
+	{ AZURE_BLOB,   L"azblob", true, 443,  false, "Microsoft Azure Blob Storage Service",                                         false },
 	{ UNKNOWN,      L"",       false, 21,  false, "", false }
 };
 

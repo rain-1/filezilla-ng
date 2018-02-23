@@ -20,7 +20,10 @@ enum ServerProtocol
 
 	WEBDAV,
 
-	MAX_VALUE = WEBDAV
+	AZURE_FILE,
+	AZURE_BLOB,
+
+	MAX_VALUE = AZURE_BLOB
 };
 
 enum ServerType
