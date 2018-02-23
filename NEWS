@@ -10,7 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
-3.31.0-rc1 (20180-02-16)
+3.10.0 (2018-02-23)
+
+- Building and running FileZilla now depends on libfilezilla >= 0.12.1 (https://lib.filezilla-project.org/)
+
+3.31.0-rc1 (2018-02-16)
 
 + Allow trusting all subject alternative names (SAN) in a certificate if the current hostname matches the certificate
 - OS X: Fix file lists becoming inresponsive when a file rename edit box is discarded by clicking to the right of the last column in the file list
