@@ -311,6 +311,7 @@ void CFilterEditDialog::OnFilterSelect(wxCommandEvent&)
 
 void CFilterEditDialog::SetCtrlState(bool enabled)
 {
+	XRCCTRL(*this, "ID_CASE", wxCheckBox)->Enable(enabled);
 	XRCCTRL(*this, "ID_FILES", wxCheckBox)->Enable(enabled);
 	XRCCTRL(*this, "ID_DIRS", wxCheckBox)->Enable(enabled);
 }
