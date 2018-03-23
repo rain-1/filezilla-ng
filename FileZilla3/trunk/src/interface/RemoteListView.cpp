@@ -33,6 +33,9 @@
 #include "commctrl.h"
 #endif
 
+std::map<ServerProtocol, CRemoteListView::ChmodHandler> CRemoteListView::chmodHandlers = {
+};
+
 class CRemoteListViewDropTarget final : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:
@@ -1169,6 +1172,9 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 		else {
 			if (selectedDir) {
 				pMenu->Enable(XRCID("ID_EDIT"), false);
+				if (!CServer::ProtocolHasFeature(m_state.GetServer().server.GetProtocol(), ProtocolFeature::DirectoryRename)) {
+					pMenu->Enable(XRCID("ID_RENAME"), false);
+				}
 			}
 			else {
 				pMenu->Delete(XRCID("ID_ENTER"));
@@ -1651,6 +1657,9 @@ bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 
 void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 {
+	auto const& server = m_state.GetServer();
+	auto protocol = server.server.GetProtocol();
+	
 	if (!m_state.IsRemoteConnected() || !m_state.IsRemoteIdle()) {
 		wxBell();
 		return;
@@ -1658,7 +1667,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 
 	int fileCount = 0;
 	int dirCount = 0;
-	wxString name;
+	std::wstring name;
 
 	char permissions[9] = {};
 
@@ -1700,12 +1709,32 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 		return;
 	}
 
-	for (int i = 0; i < 9; i++)
-		if (permissions[i] == -1)
+	for (int i = 0; i < 9; i++) {
+		if (permissions[i] == -1) {
 			permissions[i] = 0;
+		}
+	}
 
+	ChmodUICommand cmd = {
+		this,
+		permissions,
+		fileCount,
+		dirCount,
+		name
+	};
+	auto handler = chmodHandlers[protocol];
+	if (handler) {
+		handler(cmd, m_state);
+	}
+	else {
+		HandleGenericChmod(cmd);
+	}
+}
+
+void CRemoteListView::HandleGenericChmod(ChmodUICommand &command)
+{
 	CChmodDialog* pChmodDlg = new CChmodDialog;
-	if (!pChmodDlg->Create(this, fileCount, dirCount, name, permissions)) {
+	if (!pChmodDlg->Create(command.parentWindow, command.fileCount, command.dirCount, command.name, command.permissions)) {
 		pChmodDlg->Destroy();
 		return;
 	}
@@ -1728,7 +1757,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 	wxASSERT(pRecursiveOperation);
 	recursion_root root(m_pDirectoryListing->path, false);
 
-	item = -1;
+	long item = -1;
 	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)

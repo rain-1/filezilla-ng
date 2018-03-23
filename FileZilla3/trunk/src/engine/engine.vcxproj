@@ -102,6 +102,7 @@
     <ClCompile Include="ftp\rename.cpp" />
     <ClCompile Include="ftp\rmd.cpp" />
     <ClCompile Include="ftp\transfersocket.cpp" />
+    <ClCompile Include="http\digest.cpp" />
     <ClCompile Include="http\filetransfer.cpp" />
     <ClCompile Include="http\httpcontrolsocket.cpp" />
     <ClCompile Include="http\internalconnect.cpp" />
@@ -136,6 +137,15 @@
     <ClCompile Include="socket.cpp">
       <PrecompiledHeader />
     </ClCompile>
+    <ClCompile Include="storj\connect.cpp" />
+    <ClCompile Include="storj\delete.cpp" />
+    <ClCompile Include="storj\file_transfer.cpp" />
+    <ClCompile Include="storj\input_thread.cpp" />
+    <ClCompile Include="storj\list.cpp" />
+    <ClCompile Include="storj\mkd.cpp" />
+    <ClCompile Include="storj\resolve.cpp" />
+    <ClCompile Include="storj\rmd.cpp" />
+    <ClCompile Include="storj\storjcontrolsocket.cpp" />
     <ClCompile Include="tlssocket.cpp" />
     <ClCompile Include="tlssocket_impl.cpp" />
     <ClCompile Include="xmlutils.cpp" />
@@ -166,6 +176,7 @@
     <ClInclude Include="ftp\rmd.h" />
     <ClInclude Include="ftp\transfersocket.h" />
     <ClInclude Include="http\connect.h" />
+    <ClInclude Include="http\digest.h" />
     <ClInclude Include="http\filetransfer.h" />
     <ClInclude Include="http\httpcontrolsocket.h" />
     <ClInclude Include="http\internalconnect.h" />
@@ -201,6 +212,16 @@
     <ClInclude Include="sftp\rename.h" />
     <ClInclude Include="sftp\rmd.h" />
     <ClInclude Include="sftp\sftpcontrolsocket.h" />
+    <ClInclude Include="storj\connect.h" />
+    <ClInclude Include="storj\delete.h" />
+    <ClInclude Include="storj\event.h" />
+    <ClInclude Include="storj\file_transfer.h" />
+    <ClInclude Include="storj\input_thread.h" />
+    <ClInclude Include="storj\list.h" />
+    <ClInclude Include="storj\mkd.h" />
+    <ClInclude Include="storj\resolve.h" />
+    <ClInclude Include="storj\rmd.h" />
+    <ClInclude Include="storj\storjcontrolsocket.h" />
     <ClInclude Include="tlssocket.h" />
     <ClInclude Include="tlssocket_impl.h" />
   </ItemGroup>

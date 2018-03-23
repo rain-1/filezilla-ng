@@ -4,7 +4,7 @@
 #include "serverdata.h"
 #include "Options.h"
 
-bool ServerWithCredentials::ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path)
+bool ServerWithCredentials::ParseUrl(std::wstring const& host, std::wstring const& port, std::wstring const& user, std::wstring const& pass, std::wstring &error, CServerPath &path, ServerProtocol const hint)
 {
 	unsigned int nPort = 0;
 	if (!port.empty()) {
@@ -16,10 +16,10 @@ bool ServerWithCredentials::ParseUrl(std::wstring const& host, std::wstring cons
 			return false;
 		}
 	}
-	return ParseUrl(host, nPort, user, pass, error, path);
+	return ParseUrl(host, nPort, user, pass, error, path, hint);
 }
 
-bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::wstring user, std::wstring pass, std::wstring &error, CServerPath &path)
+bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::wstring user, std::wstring pass, std::wstring &error, CServerPath &path, ServerProtocol const hint)
 {
 	server.SetType(DEFAULT);
 
@@ -35,7 +35,7 @@ bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::
 		if (protocol.substr(0, 3) == L"fz_") {
 			protocol = protocol.substr(3);
 		}
-		auto p = CServer::GetProtocolFromPrefix(protocol);
+		auto p = CServer::GetProtocolFromPrefix(protocol, hint);
 		if (p == UNKNOWN) {
 			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
 			return false;

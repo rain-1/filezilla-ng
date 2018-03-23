@@ -142,7 +142,7 @@ protected:
 
 	// Todo: More fine-grained locking, a global mutex isn't nice
 	static fz::mutex global_mutex_;
-	
+
 	// General mutex for operations on this engine
 	mutable fz::mutex mutex_;
 

@@ -345,20 +345,20 @@
                   </object>
                   <object class="notebookpage">
                     <label>Advanced</label>
-                    <object class="wxPanel">
+                    <object class="wxPanel" name="ID_ADVANCED_PANEL">
                       <object class="wxBoxSizer">
                         <orient>wxVERTICAL</orient>
                         <object class="sizeritem">
                           <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
-                            <object class="sizeritem">
+                            <object class="sizeritem" name="ID_SERVERTYPE_LABEL_SIZERITEM">
                               <object class="wxStaticText">
                                 <label>Server &amp;Type:</label>
                               </object>
                               <flag>wxALL|wxALIGN_CENTRE_VERTICAL</flag>
                               <border>5</border>
                             </object>
-                            <object class="sizeritem">
+                            <object class="sizeritem" name="ID_SERVERTYPE_CHOICE_SIZERITEM">
                               <object class="wxChoice" name="ID_SERVERTYPE">
                                 <content/>
                                 <selection>0</selection>
@@ -490,14 +490,14 @@
                     <object class="wxPanel">
                       <object class="wxBoxSizer">
                         <orient>wxVERTICAL</orient>
-                        <object class="sizeritem">
-                          <object class="wxStaticText">
+                        <object class="sizeritem" name="ID_TRANSFERMODE_LABEL_SIZERITEM">
+                          <object class="wxStaticText" name="ID_TRANSFERMODE_LABEL">
                             <label>&amp;Transfer mode:</label>
                           </object>
                           <flag>wxALL</flag>
                           <border>5</border>
                         </object>
-                        <object class="sizeritem">
+                        <object class="sizeritem" name="ID_TRANSFERMODE_GROUP_SIZERITEM">
                           <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
@@ -559,7 +559,7 @@
                   </object>
                   <object class="notebookpage">
                     <label>Charset</label>
-                    <object class="wxPanel">
+                    <object class="wxPanel" name="ID_CHARSET_PANEL">
                       <object class="wxBoxSizer">
                         <orient>wxVERTICAL</orient>
                         <object class="sizeritem">

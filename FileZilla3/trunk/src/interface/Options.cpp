@@ -621,7 +621,7 @@ std::wstring COptions::Validate(unsigned int nID, std::wstring const& value)
 	return value;
 }
 
-std::unique_ptr<pugi::xml_document> COptions::Validate(unsigned int nID, std::unique_ptr<pugi::xml_document> const& value)
+std::unique_ptr<pugi::xml_document> COptions::Validate(unsigned int, std::unique_ptr<pugi::xml_document> const& value)
 {
 	auto res = std::make_unique<pugi::xml_document>();
 	res->append_copy(value->first_child());

@@ -25,13 +25,13 @@ int CHttpFileTransferOpData::Send()
 		}
 
 		// TODO: Ordinarily we need to percent-encode the filename. With the current API we then however would not be able to pass the query part of the URL
-		req_.uri_ = fz::uri(fz::to_utf8(currentServer_.Format(ServerFormat::url)) + fz::to_utf8(remotePath_.FormatFilename(remoteFile_)));
-		if (req_.uri_.empty()) {
+		rr_.request_.uri_ = fz::uri(fz::to_utf8(currentServer_.Format(ServerFormat::url)) + fz::to_utf8(remotePath_.FormatFilename(remoteFile_)));
+		if (rr_.request_.uri_.empty()) {
 			LogMessage(MessageType::Error, _("Could not create URI for this transfer."));
 			return FZ_REPLY_ERROR;
 		}
 
-		req_.verb_ = "GET";
+		rr_.request_.verb_ = "GET";
 
 		opState = filetransfer_waitfileexists;
 		if (!localFile_.empty()) {
@@ -54,15 +54,15 @@ int CHttpFileTransferOpData::Send()
 		return FZ_REPLY_CONTINUE;
 	case filetransfer_transfer:
 		if (resume_) {
-			req_.headers_["Range"] = fz::sprintf("bytes=%d-", localFileSize_);
+			rr_.request_.headers_["Range"] = fz::sprintf("bytes=%d-", localFileSize_);
 		}
 
-		response_ = HttpResponse();
-		response_.on_header_ = [this]() { return this->OnHeader(); };
-		response_.on_data_ = [this](auto data, auto len) { return this->OnData(data, len); };
+		rr_.response_ = HttpResponse();
+		rr_.response_.on_header_ = [this]() { return this->OnHeader(); };
+		rr_.response_.on_data_ = [this](auto data, auto len) { return this->OnData(data, len); };
 
 		opState = filetransfer_waittransfer;
-		controlSocket_.Request(req_, response_);
+		controlSocket_.Request(make_simple_rr(&rr_));
 		return FZ_REPLY_CONTINUE;
 	default:
 		break;
@@ -109,11 +109,7 @@ int CHttpFileTransferOpData::OnHeader()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpFileTransferOpData::OnHeader");
 
-	if (response_.code_ < 200 || response_.code_ >= 400) {
-		return FZ_REPLY_ERROR;
-	}
-
-	if (response_.code_ == 416 && resume_) {
+	if (rr_.response_.code_ == 416 && resume_) {
 		assert(file_.opened());
 		if (file_.seek(0, fz::file::begin) != 0) {
 			LogMessage(MessageType::Error, _("Could not seek to the beginning of the file"));
@@ -125,22 +121,26 @@ int CHttpFileTransferOpData::OnHeader()
 		return FZ_REPLY_ERROR;
 	}
 
+	if (rr_.response_.code_ < 200 || rr_.response_.code_ >= 400) {
+		return FZ_REPLY_ERROR;
+	}
+
 	// Handle any redirects
-	if (response_.code_ >= 300) {
+	if (rr_.response_.code_ >= 300) {
 
 		if (++redirectCount_ >= 6) {
 			LogMessage(MessageType::Error, _("Too many redirects"));
 			return FZ_REPLY_ERROR;
 		}
 
-		if (response_.code_ == 305) {
+		if (rr_.response_.code_ == 305) {
 			LogMessage(MessageType::Error, _("Unsupported redirect"));
 			return FZ_REPLY_ERROR;
 		}
 
-		fz::uri location = fz::uri(response_.get_header("Location"));
+		fz::uri location = fz::uri(rr_.response_.get_header("Location"));
 		if (!location.empty()) {
-			location.resolve(req_.uri_);
+			location.resolve(rr_.request_.uri_);
 		}
 		
 		if (location.scheme_.empty() || location.host_.empty() || !location.is_absolute()) {
@@ -161,14 +161,14 @@ int CHttpFileTransferOpData::OnHeader()
 			return FZ_REPLY_ERROR;
 		}
 
-		req_.uri_ = location;
+		rr_.request_.uri_ = location;
 
 		opState = filetransfer_transfer;
-		return FZ_REPLY_ERROR;
+		return FZ_REPLY_OK;
 	}
 
 	// Check if the server disallowed resume
-	if (resume_ && response_.code_ != 206) {
+	if (resume_ && rr_.response_.code_ != 206) {
 		assert(file_.opened());
 		if (file_.seek(0, fz::file::begin) != 0) {
 			LogMessage(MessageType::Error, _("Could not seek to the beginning of the file"));
@@ -177,7 +177,7 @@ int CHttpFileTransferOpData::OnHeader()
 		resume_ = false;
 	}
 
-	int64_t totalSize = fz::to_integral<int64_t>(response_.get_header("Content-Length"), -1);
+	int64_t totalSize = fz::to_integral<int64_t>(rr_.response_.get_header("Content-Length"), -1);
 	if (totalSize == -1) {
 		if (remoteFileSize_ != -1) {
 			totalSize = remoteFileSize_;

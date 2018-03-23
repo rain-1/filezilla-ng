@@ -18,7 +18,7 @@ END_EVENT_TABLE()
 CLed::CLed(wxWindow *parent, unsigned int index)
 	: m_index(index ? 1 : 0)
 {
-#ifdef __WXGTK__
+#if defined(__WXGTK20__) && !defined(__WXGTK3__)
 	SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
 #endif
 

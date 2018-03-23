@@ -327,6 +327,12 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	pTree->AssignImageList(pImageList);
 
 	m_pNotebook_Site = XRCCTRL(*this, "ID_NOTEBOOK", wxNotebook);
+	m_totalPages = m_pNotebook_Site->GetPageCount();
+	m_pCharsetPage = XRCCTRL(*this, "ID_CHARSET_PANEL", wxPanel);
+	if (m_pCharsetPage) {
+		m_charsetPageIndex = m_pNotebook_Site->FindPage(m_pCharsetPage);
+		m_charsetPageText = m_pNotebook_Site->GetPageText(m_charsetPageIndex);
+	}
 
 #ifdef __WXMSW__
 	// Make pages at least wide enough to fit all tabs
@@ -1027,7 +1033,7 @@ bool CSiteManagerDialog::Verify()
 		std::wstring port = xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue).ToStdWstring();
 		CServerPath path;
 		std::wstring error;
-		if (!server.ParseUrl(host, port, std::wstring(), std::wstring(), error, path)) {
+		if (!server.ParseUrl(host, port, std::wstring(), std::wstring(), error, path, protocol)) {
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(error, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
@@ -1850,19 +1856,21 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call<wxSpinCtrl, int>(*this, "ID_TIMEZONE_MINUTES", &wxSpinCtrl::SetValue, data->m_site->server_.server.GetTimezoneOffset() % 60);
 		xrc_call(*this, "ID_TIMEZONE_MINUTES", &wxWindow::Enable, !predefined);
 
-		PasvMode pasvMode = data->m_site->server_.server.GetPasvMode();
-		if (pasvMode == MODE_ACTIVE) {
-			xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxRadioButton::SetValue, true);
+		if (CServer::ProtocolHasFeature(data->m_site->server_.server.GetProtocol(), ProtocolFeature::TransferMode)) {
+			PasvMode pasvMode = data->m_site->server_.server.GetPasvMode();
+			if (pasvMode == MODE_ACTIVE) {
+				xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxRadioButton::SetValue, true);
+			}
+			else if (pasvMode == MODE_PASSIVE) {
+				xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxRadioButton::SetValue, true);
+			}
+			else {
+				xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxRadioButton::SetValue, true);
+			}
+			xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxWindow::Enable, !predefined);
+			xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxWindow::Enable, !predefined);
+			xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxWindow::Enable, !predefined);
 		}
-		else if (pasvMode == MODE_PASSIVE) {
-			xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxRadioButton::SetValue, true);
-		}
-		else {
-			xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxRadioButton::SetValue, true);
-		}
-		xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxWindow::Enable, !predefined);
-		xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxWindow::Enable, !predefined);
-		xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxWindow::Enable, !predefined);
 
 		int maxMultiple = data->m_site->server_.server.MaximumMultipleConnections();
 		xrc_call(*this, "ID_LIMITMULTIPLE", &wxCheckBox::SetValue, maxMultiple != 0);
@@ -2016,6 +2024,57 @@ void CSiteManagerDialog::SetControlVisibility(ServerProtocol protocol, LogonType
 	if (encryptionkeySizer) {
 		encryptionkeySizer->CalcMin();
 		encryptionkeySizer->Layout();
+	}
+
+	auto serverTypeSizer = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetContainingSizer();
+	if (serverTypeSizer) {
+		auto labelSizerItem = serverTypeSizer->GetItemById(XRCID("ID_SERVERTYPE_LABEL_SIZERITEM"));
+		auto choiceSizerItem = serverTypeSizer->GetItemById(XRCID("ID_SERVERTYPE_CHOICE_SIZERITEM"));
+		if (labelSizerItem && choiceSizerItem) {
+			if (CServer::ProtocolHasFeature(protocol, ProtocolFeature::ServerType)) {
+				labelSizerItem->Show(true);
+				choiceSizerItem->Show(true);
+			}
+			else {
+				labelSizerItem->Show(false);
+				choiceSizerItem->Show(false);
+			}
+			serverTypeSizer->CalcMin();
+			serverTypeSizer->Layout();
+			xrc_call(*this, "ID_ADVANCED_PANEL", &wxPanel::Layout);
+		}
+	}
+
+	auto transferModeSizer = XRCCTRL(*this, "ID_TRANSFERMODE_LABEL", wxStaticText)->GetContainingSizer();
+	if (transferModeSizer) {
+		auto labelSizerItem = transferModeSizer->GetItemById(XRCID("ID_TRANSFERMODE_LABEL_SIZERITEM"));
+		auto groupSizerItem = transferModeSizer->GetItemById(XRCID("ID_TRANSFERMODE_GROUP_SIZERITEM"));
+		if (labelSizerItem && groupSizerItem) {
+			if (CServer::ProtocolHasFeature(protocol, ProtocolFeature::TransferMode)) {
+				labelSizerItem->Show(true);
+				groupSizerItem->Show(true);
+			}
+			else {
+				labelSizerItem->Show(false);
+				groupSizerItem->Show(false);
+			}
+			transferModeSizer->CalcMin();
+			transferModeSizer->Layout();
+		}
+	}
+
+	if (CServer::ProtocolHasFeature(protocol, ProtocolFeature::Charset)) {
+		if (m_pNotebook_Site->GetPageCount() != m_totalPages) {
+			m_pNotebook_Site->AddPage(m_pCharsetPage, m_charsetPageText);
+			m_pNotebook_Site->Layout();
+			Layout();
+		}
+	}
+	else {
+		if (m_pNotebook_Site->GetPageCount() == m_totalPages) {
+			m_pNotebook_Site->RemovePage(m_charsetPageIndex);
+			m_pNotebook_Site->Layout();
+		}
 	}
 }
 

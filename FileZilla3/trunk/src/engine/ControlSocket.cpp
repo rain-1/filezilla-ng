@@ -202,10 +202,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 						LogMessage(MessageType::Debug_Warning, L"currentServer_ is empty");
 					}
 					else {
-						bool updated = engine_.GetDirectoryCache().UpdateFile(currentServer_, data.remotePath_, data.remoteFile_, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? data.localFileSize_ : -1);
-						if (updated) {
-							SendDirectoryListingNotification(data.remotePath_, false, false);
-						}
+						UpdateCache(data, data.remotePath_, data.remoteFile_, (nErrorCode == FZ_REPLY_OK) ? data.localFileSize_ : -1);
 					}
 				}
 				LogTransferResultMessage(nErrorCode, &data);
@@ -229,6 +226,14 @@ int CControlSocket::ResetOperation(int nErrorCode)
 	}
 
 	return engine_.ResetOperation(nErrorCode);
+}
+
+void CControlSocket::UpdateCache(COpData const &, CServerPath const& serverPath, std::wstring const& remoteFile, int64_t fileSize)
+{
+	bool updated = engine_.GetDirectoryCache().UpdateFile(currentServer_, serverPath, remoteFile, true, CDirectoryCache::file, fileSize);
+	if (updated) {
+		SendDirectoryListingNotification(serverPath, false, false);
+	}
 }
 
 int CControlSocket::DoClose(int nErrorCode)

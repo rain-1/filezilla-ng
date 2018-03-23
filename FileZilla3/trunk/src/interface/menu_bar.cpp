@@ -482,7 +482,23 @@ void CMenuBar::UpdateMenubarState()
 	Enable(XRCID("ID_MENU_SERVER_RECONNECT"), canReconnect);
 
 	wxMenuItem* pItem = FindItem(XRCID("ID_MENU_TRANSFER_TYPE"));
-	if (!server || CServer::ProtocolHasDataTypeConcept(server.server.GetProtocol())) {
+	if (!server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::DataTypeConcept)) {
+		pItem->Enable(true);
+	}
+	else {
+		pItem->Enable(false);
+	}
+
+	pItem = FindItem(XRCID("ID_MENU_TRANSFER_PRESERVETIMES"));
+	if (!server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::PreserveTimestamp)) {
+		pItem->Enable(true);
+	}
+	else {
+		pItem->Enable(false);
+	}
+
+	pItem = FindItem(XRCID("ID_MENU_SERVER_CMD"));
+	if (!server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::EnterCommand)) {
 		pItem->Enable(true);
 	}
 	else {

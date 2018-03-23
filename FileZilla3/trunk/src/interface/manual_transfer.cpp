@@ -450,7 +450,7 @@ bool CManualTransfer::VerifyServer()
 
 	CServerPath path;
 	std::wstring error;
-	if (!server.ParseUrl(host, xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue).ToStdWstring(), std::wstring(), std::wstring(), error, path)) {
+	if (!server.ParseUrl(host, xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue).ToStdWstring(), std::wstring(), std::wstring(), error, path, protocol)) {
 		xrc_call(*this, "ID_HOST", &wxTextCtrl::SetFocus);
 		wxMessageBoxEx(error);
 		return false;
