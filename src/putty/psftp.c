@@ -1133,8 +1133,6 @@ int sftp_cmd_ls(struct sftp_command *cmd)
 {
     struct fxp_handle *dirh;
     struct fxp_names *names;
-    struct fxp_name **ournames;
-    int nnames, namesize;
     const char *dir;
     char *cdir, *unwcdir, *wildcard;
     struct sftp_packet *pktin;
@@ -1195,9 +1193,6 @@ int sftp_cmd_ls(struct sftp_command *cmd)
 	fzprintf(sftpError, "Unable to open %s: %s", dir, fxp_error());
 	ret = 1;
     } else {
-	nnames = namesize = 0;
-	ournames = NULL;
-
 	while (1) {
 
 	    req = fxp_readdir_send(dirh);
@@ -1215,14 +1210,17 @@ int sftp_cmd_ls(struct sftp_command *cmd)
 		break;
 	    }
 
-	    if (nnames + names->nnames >= namesize) {
-		namesize += names->nnames + 128;
-		ournames = sresize(ournames, namesize, struct fxp_name *);
+	    for (i = 0; i < names->nnames; i++) {
+		if (!wildcard || wc_match(wildcard, names->names[i].filename)) {
+		    unsigned long mtime = 0;
+		    if (names->names[i].attrs.flags & SSH_FILEXFER_ATTR_ACMODTIME) {
+			mtime = names->names[i].attrs.mtime;
+		    }
+		    fzprintf_raw_untrusted(sftpListentry, "%s", names->names[i].longname);
+		    fzprintf_raw_untrusted(sftpUnknown, "%lu", mtime);
+		    fzprintf_raw_untrusted(sftpUnknown, "%s", names->names[i].filename);
+		}
 	    }
-
-	    for (i = 0; i < names->nnames; i++)
-		if (!wildcard || wc_match(wildcard, names->names[i].filename))
-		    ournames[nnames++] = fxp_dup_name(&names->names[i]);
 
 	    fxp_free_names(names);
 	}
@@ -1230,27 +1228,6 @@ int sftp_cmd_ls(struct sftp_command *cmd)
         pktin = sftp_wait_for_reply(req);
 	fxp_close_recv(pktin, req);
 
-	/*
-	 * Now we have our filenames. Sort them by actual file
-	 * name, and then output the longname parts.
-	 */
-        /*if (nnames > 0)
-            qsort(ournames, nnames, sizeof(*ournames), sftp_name_compare);*/
-
-	/*
-	 * And print them.
-	 */
-	for (i = 0; i < nnames; ++i) {
-	    unsigned long mtime = 0;
-	    if (ournames[i]->attrs.flags & SSH_FILEXFER_ATTR_ACMODTIME) {
-		mtime = ournames[i]->attrs.mtime;
-	    }
-	    fzprintf_raw_untrusted(sftpListentry, "%s", ournames[i]->longname);
-	    fzprintf_raw_untrusted(sftpUnknown, "%lu", mtime);
-	    fzprintf_raw_untrusted(sftpUnknown, "%s", ournames[i]->filename);
-	    fxp_free_name(ournames[i]);
-	}
-	sfree(ournames);
 	ret = 0;
     }
 
