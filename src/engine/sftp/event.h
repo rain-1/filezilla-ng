@@ -38,7 +38,7 @@ enum class sftpEvent {
 struct sftp_message
 {
 	sftpEvent type;
-	mutable std::wstring text[3];
+	mutable std::wstring text[2];
 };
 
 struct sftp_event_type;
