@@ -111,6 +111,11 @@ protected:
 	wxNotebook *m_pNotebook_Site{};
 	wxNotebook *m_pNotebook_Bookmark{};
 
+	wxNotebookPage *m_pCharsetPage{};
+	wxString m_charsetPageText;
+	size_t m_charsetPageIndex = -1;
+	size_t m_totalPages = -1;
+
 	std::vector<_connected_site> *m_connected_sites{};
 
 	bool m_is_deleting{};

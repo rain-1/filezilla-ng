@@ -14,22 +14,23 @@ struct t_protocolInfo
 	bool const translateable;
 	char const* const name;
 	bool supportsPostlogin;
+	std::wstring const alternative_prefix;
 };
 
 static const t_protocolInfo protocolInfos[] = {
-	{ FTP,          L"ftp",    false, 21,  true,  fztranslate_mark("FTP - File Transfer Protocol with optional encryption"), true  },
-	{ SFTP,         L"sftp",   true,  22,  false, "SFTP - SSH File Transfer Protocol",                                       false },
-	{ HTTP,         L"http",   true,  80,  false, "HTTP - Hypertext Transfer Protocol",                                      false },
-	{ HTTPS,        L"https",  true, 443,  true,  fztranslate_mark("HTTPS - HTTP over TLS"),                                 false },
-	{ FTPS,         L"ftps",   true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true  },
-	{ FTPES,        L"ftpes",  true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true  },
-	{ INSECURE_FTP, L"ftp",    false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true  },
-	{ S3,           L"s3",     true, 443,  false, "S3 - Amazon Simple Storage Service",                                      false },
-	{ STORJ,        L"storj",  true, 443,  true,  fztranslate_mark("Storj - Decentralized Cloud Storage"),                   false },
-	{ WEBDAV,       L"webdav", true, 443,  true,  "WebDAV",                                                                  false },
-	{ AZURE_FILE,   L"azfile", true, 443,  false, "Microsoft Azure File Storage Service",                                         false },
-	{ AZURE_BLOB,   L"azblob", true, 443,  false, "Microsoft Azure Blob Storage Service",                                         false },
-	{ UNKNOWN,      L"",       false, 21,  false, "", false }
+	{ FTP,          L"ftp",    false, 21,  true,  fztranslate_mark("FTP - File Transfer Protocol with optional encryption"), true,  L"" },
+	{ SFTP,         L"sftp",   true,  22,  false, "SFTP - SSH File Transfer Protocol",                                       false, L"" },
+	{ HTTP,         L"http",   true,  80,  false, "HTTP - Hypertext Transfer Protocol",                                      false, L"" },
+	{ HTTPS,        L"https",  true, 443,  true,  fztranslate_mark("HTTPS - HTTP over TLS"),                                 false, L"" },
+	{ FTPS,         L"ftps",   true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true,  L"" },
+	{ FTPES,        L"ftpes",  true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true,  L"" },
+	{ INSECURE_FTP, L"ftp",    false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true,  L"" },
+	{ S3,           L"s3",     true, 443,  false, "S3 - Amazon Simple Storage Service",                                      false, L"" },
+	{ STORJ,        L"storj",  true, 443,  true,  fztranslate_mark("Storj - Decentralized Cloud Storage"),                   false, L"" },
+	{ WEBDAV,       L"webdav", true, 443,  true,  "WebDAV",                                                                  false, L"https" },
+	{ AZURE_FILE,   L"azfile", true, 443,  false, "Microsoft Azure File Storage Service",                                    false, L"https" },
+	{ AZURE_BLOB,   L"azblob", true, 443,  false, "Microsoft Azure Blob Storage Service",                                    false, L"https" },
+	{ UNKNOWN,      L"",       false, 21,  false, "", false, L"" }
 };
 
 static std::vector<ServerProtocol> const defaultProtocols = {
@@ -506,9 +507,17 @@ bool CServer::SupportsPostLoginCommands(ServerProtocol const protocol)
 	return protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP;
 }
 
-ServerProtocol CServer::GetProtocolFromPrefix(std::wstring const& prefix)
+ServerProtocol CServer::GetProtocolFromPrefix(std::wstring const& prefix, ServerProtocol const hint)
 {
-	std::wstring lower = fz::str_tolower_ascii(prefix);
+	std::wstring const lower = fz::str_tolower_ascii(prefix);
+
+	if (hint != UNKNOWN && !lower.empty()) {
+		auto const& info = GetProtocolInfo(hint);
+		if (info.prefix == lower || info.alternative_prefix == lower) {
+			return hint;
+		}
+	}
+
 	for (unsigned int i = 0; protocolInfos[i].protocol != UNKNOWN; ++i) {
 		if (protocolInfos[i].prefix == lower) {
 			return protocolInfos[i].protocol;
@@ -540,12 +549,35 @@ bool CServer::GetBypassProxy() const
 	return m_bypassProxy;
 }
 
-bool CServer::ProtocolHasDataTypeConcept(const ServerProtocol protocol)
+bool CServer::ProtocolHasFeature(ServerProtocol const protocol, ProtocolFeature const feature)
 {
-	if (protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP) {
-		return true;
+	switch (feature) {
+	case ProtocolFeature::DataTypeConcept:
+	case ProtocolFeature::TransferMode:
+	case ProtocolFeature::PreserveTimestamp:
+	case ProtocolFeature::EnterCommand:
+		if (protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP) {
+			return true;
+		}
+		break;
+	case ProtocolFeature::Charset:
+		if (protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP ||
+			protocol == STORJ || protocol == SFTP) {
+			return true;
+		}
+		break;
+	case ProtocolFeature::ServerType:
+		if (protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP ||
+			protocol == SFTP) {
+			return true;
+		}
+		break;
+	case ProtocolFeature::DirectoryRename:
+		if (protocol != AZURE_BLOB && protocol != AZURE_FILE) {
+			return true;
+		}
+		break;
 	}
-
 	return false;
 }
 

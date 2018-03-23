@@ -30,6 +30,7 @@ libengine_a_SOURCES = \
 		ftp/rename.cpp \
 		ftp/rmd.cpp \
 		ftp/transfersocket.cpp \
+		http/digest.cpp \
 		http/filetransfer.cpp \
 		http/httpcontrolsocket.cpp \
 		http/internalconnect.cpp \
@@ -84,6 +85,7 @@ noinst_HEADERS = backend.h \
 		ftp/rmd.h \
 		ftp/transfersocket.h \
 		http/connect.h \
+		http/digest.h \
 		http/filetransfer.h \
 		http/httpcontrolsocket.h \
 		http/internalconnect.h \

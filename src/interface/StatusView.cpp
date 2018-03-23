@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "StatusView.h"
 #include "Options.h"
+#include "state.h"
 
 #include <wx/dcclient.h>
 
@@ -417,6 +418,19 @@ void CStatusView::OnContextMenu(wxContextMenuEvent&)
 	}
 
 	pMenu->Check(XRCID("ID_SHOW_DETAILED_LOG"), COptions::Get()->GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) != 0);
+
+	ServerWithCredentials server;
+	CState* pState = CContextManager::Get()->GetCurrentContext();
+	if (pState) {
+		auto pItem = pMenu->FindItem(XRCID("ID_MENU_SERVER_CMD"));
+		server = pState->GetServer();
+		if (!server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::EnterCommand)) {
+			pItem->Enable(true);
+		}
+		else {
+			pItem->Enable(false);
+		}
+	}
 
 	PopupMenu(pMenu);
 

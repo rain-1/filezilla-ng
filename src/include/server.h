@@ -66,6 +66,17 @@ enum CharsetEncoding
 	ENCODING_CUSTOM
 };
 
+enum class ProtocolFeature
+{
+	DataTypeConcept,		// Some protocol distinguish between ASCII and binary files for line-ending conversion.
+	TransferMode,
+	PreserveTimestamp,
+	Charset,
+	ServerType,
+	EnterCommand,
+	DirectoryRename
+};
+
 class Credentials;
 class CServerPath;
 class CServer final
@@ -118,13 +129,11 @@ public:
 	static std::wstring GetProtocolName(ServerProtocol protocol);
 	static ServerProtocol GetProtocolFromName(std::wstring const& name);
 
-	static ServerProtocol GetProtocolFromPrefix(std::wstring const& prefix);
+	static ServerProtocol GetProtocolFromPrefix(std::wstring const& prefix, ServerProtocol const hint = UNKNOWN);
 	static std::wstring GetPrefixFromProtocol(ServerProtocol const protocol);
 	static std::vector<ServerProtocol> const& GetDefaultProtocols();
 
-	// Some protocol distinguish between ASCII and binary files for line-ending
-	// conversion.
-	static bool ProtocolHasDataTypeConcept(ServerProtocol const protocol);
+	static bool ProtocolHasFeature(ServerProtocol const protocol, ProtocolFeature const feature);
 
 	// These commands will be executed after a successful login.
 	std::vector<std::wstring> const& GetPostLoginCommands() const { return m_postLoginCommands; }

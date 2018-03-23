@@ -237,6 +237,7 @@
     <ClCompile Include="statusbar.cpp" />
     <ClCompile Include="statuslinectrl.cpp" />
     <ClCompile Include="StatusView.cpp" />
+    <ClCompile Include="storj_key_interface.cpp" />
     <ClCompile Include="systemimagelist.cpp" />
     <ClCompile Include="textctrlex.cpp" />
     <ClCompile Include="themeprovider.cpp" />
@@ -358,6 +359,7 @@
     <ClInclude Include="statusbar.h" />
     <ClInclude Include="statuslinectrl.h" />
     <ClInclude Include="StatusView.h" />
+    <ClInclude Include="storj_key_interface.h" />
     <ClInclude Include="systemimagelist.h" />
     <ClInclude Include="textctrlex.h" />
     <ClInclude Include="themeprovider.h" />

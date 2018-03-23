@@ -23,8 +23,7 @@ private:
 	int OnHeader();
 	int OnData(unsigned char const* data, unsigned int len);
 
-	HttpRequest req_;
-	HttpResponse response_;
+	HttpRequestResponse rr_;
 	fz::file file_;
 
 	int redirectCount_{};

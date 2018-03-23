@@ -385,7 +385,7 @@ void CStatusBar::DisplayDataType()
 		server = pState->GetServer();
 	}
 
-	if (!server || !CServer::ProtocolHasDataTypeConcept(server.server.GetProtocol())) {
+	if (!server || !CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::DataTypeConcept)) {
 		if (m_pDataTypeIndicator) {
 			RemoveField(widget_datatype);
 			m_pDataTypeIndicator->Destroy();
@@ -452,10 +452,11 @@ void CStatusBar::DisplayEncrypted()
 	bool encrypted = false;
 	if (server) {
 		CCertificateNotification* info;
-		if (server.server.GetProtocol() == FTPS || server.server.GetProtocol() == FTPES || server.server.GetProtocol() == SFTP) {
+		auto const protocol = server.server.GetProtocol();
+		if (protocol == FTPS || protocol == FTPES || protocol == SFTP || protocol == S3 || protocol == WEBDAV || protocol == AZURE_BLOB || protocol == AZURE_FILE) {
 			encrypted = true;
 		}
-		else if (server.server.GetProtocol() == FTP && pState->GetSecurityInfo(info)) {
+		else if (protocol == FTP && pState->GetSecurityInfo(info)) {
 			encrypted = true;
 		}
 	}

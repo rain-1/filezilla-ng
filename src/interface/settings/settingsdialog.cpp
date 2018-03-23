@@ -97,7 +97,7 @@ bool CSettingsDialog::LoadPages()
 	AddPage(_("SFTP"), new COptionsPageConnectionSFTP, 1);
 	AddPage(_("Generic proxy"), new COptionsPageProxy, 1);
 	AddPage(_("Transfers"), new COptionsPageTransfer, 0);
-	AddPage(_("File Types"), new COptionsPageFiletype, 1);
+	AddPage(_("FTP: File Types"), new COptionsPageFiletype, 1);
 	AddPage(_("File exists action"), new COptionsPageFileExists, 1);
 	AddPage(_("Interface"), new COptionsPageInterface, 0);
 	AddPage(_("Themes"), new COptionsPageThemes, 1);

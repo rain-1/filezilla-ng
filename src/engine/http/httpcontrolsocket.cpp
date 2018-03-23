@@ -14,12 +14,92 @@
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/uri.hpp>
 
-void HttpResponse::reset()
+#include <string.h>
+
+int simple_body::data_request(unsigned char* data, unsigned int & len)
+{
+	len = std::min(static_cast<size_t>(len), body_.size() - written_);
+	memcpy(data, body_.c_str() + written_, len);
+	written_ += len;
+	return FZ_REPLY_CONTINUE;
+}
+
+
+file_body::file_body(fz::file & file, uint64_t start, uint64_t size, CLogging & logger)
+	: file_(file)
+	, start_(start)
+	, size_(size)
+	, logger_(logger)
+{
+}
+
+int file_body::data_request(unsigned char* data, unsigned int & len)
+{
+	assert(size_ >= written_);
+	assert(len > 0);
+	len = static_cast<unsigned int>(std::min(static_cast<uint64_t>(len), size_ - written_));
+	auto bytes_read = file_.read(data, len);
+	if (bytes_read < 0) {
+		len = 0;
+		logger_.LogMessage(MessageType::Error, _("Reading from local file failed"));
+		return FZ_REPLY_ERROR;
+	}
+	else if (bytes_read == 0) {
+		len = 0;
+		return FZ_REPLY_ERROR;
+	}
+
+	if (progress_callback_) {
+		progress_callback_(bytes_read);
+	}
+
+	len = static_cast<unsigned int>(bytes_read);
+	written_ += len;
+	return FZ_REPLY_CONTINUE;
+}
+
+int file_body::rewind()
+{
+	if (progress_callback_) {
+		progress_callback_(-static_cast<int64_t>(written_));
+	}
+	written_ = 0;
+
+	int64_t s = static_cast<int64_t>(start_);
+	if (file_.seek(s, fz::file::begin) != s) {
+		if (!start_) {
+			logger_.LogMessage(MessageType::Error, _("Could not seek to the beginning of the file"));
+		}
+		else {
+			logger_.LogMessage(MessageType::Error, _("Could not seek to offset %d within file"), start_);
+		}
+		return FZ_REPLY_ERROR;
+	}
+
+	return FZ_REPLY_CONTINUE;
+}
+
+
+int HttpRequest::reset()
+{
+	flags_ = 0;
+
+	if (body_) {
+		int res = body_->rewind();
+		if (res != FZ_REPLY_CONTINUE) {
+			return res;
+		}
+	}
+	return FZ_REPLY_CONTINUE;
+}
+
+int HttpResponse::reset()
 {
 	flags_ = 0;
 	code_ = 0;
 	headers_.clear();
 
+	return FZ_REPLY_CONTINUE;
 }
 
 CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate & engine)
@@ -159,28 +239,50 @@ void CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath
 	Push(std::make_unique<CHttpFileTransferOpData>(*this, download, localFile, remoteFile, remotePath));
 }
 
-void CHttpControlSocket::Request(HttpRequest & request, HttpResponse & response)
+void CHttpControlSocket::Request(std::shared_ptr<HttpRequestResponseInterface> const& request)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::Request()");
-	Push(std::make_unique<CHttpRequestOpData>(*this, request, response));
+
+	auto op = dynamic_cast<CHttpRequestOpData*>(operations_.empty() ? nullptr : operations_.back().get());
+	if (op) {
+		op->AddRequest(request);
+	}
+	else {
+		Push(std::make_unique<CHttpRequestOpData>(*this, request));
+	}
 }
 
-void CHttpControlSocket::InternalConnect(std::wstring const& host, unsigned short port, bool tls)
+void CHttpControlSocket::Request(std::deque<std::shared_ptr<HttpRequestResponseInterface>> && requests)
+{
+	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::Request()");
+	Push(std::make_unique<CHttpRequestOpData>(*this, std::move(requests)));
+}
+
+int CHttpControlSocket::InternalConnect(std::wstring const& host, unsigned short port, bool tls, bool allowDisconnect)
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpControlSocket::InternalConnect()");
 
-	if (Connected() && m_pBackend && host == connected_host_ && port == connected_port_ && tls == connected_tls_) {
-		LogMessage(MessageType::Debug_Verbose, L"Reusing an existing connection");
-		is_reusing_ = true;
+	if (!Connected()) {
+		return FZ_REPLY_INTERNALERROR;
 	}
-	else {
-		ResetSocket();
-		connected_host_ = host;
-		connected_port_ = port;
-		connected_tls_ = tls;
-		Push(std::make_unique<CHttpInternalConnectOpData>(*this, ConvertDomainName(host), port, tls));
-		is_reusing_ = false;
+
+	if (m_pBackend) {
+		if (host == connected_host_ && port == connected_port_ && tls == connected_tls_) {
+			LogMessage(MessageType::Debug_Verbose, L"Reusing an existing connection");
+			return FZ_REPLY_OK;
+		}
+		if (!allowDisconnect) {
+			return FZ_REPLY_WOULDBLOCK;
+		}
 	}
+
+	ResetSocket();
+	connected_host_ = host;
+	connected_port_ = port;
+	connected_tls_ = tls;
+	Push(std::make_unique<CHttpInternalConnectOpData>(*this, ConvertDomainName(host), port, tls));
+
+	return FZ_REPLY_CONTINUE;
 }
 
 void CHttpControlSocket::OnClose(int error)
@@ -202,7 +304,12 @@ void CHttpControlSocket::OnClose(int error)
 	if (!operations_.empty() && operations_.back()->opId == PrivCommand::http_request) {
 		auto & data = static_cast<CHttpRequestOpData&>(*operations_.back());
 		int res = data.OnClose();
-		ResetOperation(res);
+		if (res == FZ_REPLY_CONTINUE) {
+			SendNextCommand();
+		}
+		else {
+			ResetOperation(res);
+		}
 	}
 	else {
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
@@ -234,12 +341,11 @@ void CHttpControlSocket::Connect(CServer const& server, Credentials const&)
 	Push(std::make_unique<CHttpConnectOpData>(*this));
 }
 
-
 int CHttpControlSocket::OnSend()
 {
 	int res = CRealControlSocket::OnSend();
 	if (res == FZ_REPLY_CONTINUE) {
-		if (!operations_.empty() && operations_.back()->opId == PrivCommand::http_request && operations_.back()->opState == request_send) {
+		if (!operations_.empty() && operations_.back()->opId == PrivCommand::http_request && (operations_.back()->opState & request_send_mask)) {
 			return SendNextCommand();
 		}
 	}

@@ -161,7 +161,7 @@ void CListSearchPanel::OnPaint(wxPaintEvent&)
 	dc.DrawLine(wxPoint(0, 0), wxPoint(s.GetWidth(), 0));
 }
 
-void CListSearchPanel::OnText(wxCommandEvent& ev)
+void CListSearchPanel::OnText(wxCommandEvent&)
 {
 	wxString text = m_textCtrl->GetValue();
 
@@ -177,7 +177,7 @@ void CListSearchPanel::OnText(wxCommandEvent& ev)
 	}
 }
 
-void CListSearchPanel::OnOptions(wxCommandEvent& ev)
+void CListSearchPanel::OnOptions(wxCommandEvent&)
 {
 	if (!m_optionsMenu) {
 		m_optionsMenu = new wxMenu;

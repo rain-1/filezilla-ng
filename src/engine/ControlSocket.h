@@ -236,6 +236,7 @@ protected:
 	bool m_closed{};
 
 	virtual int ResetOperation(int nErrorCode);
+	virtual void UpdateCache(COpData const& data, CServerPath const& serverPath, std::wstring const& remoteFile, int64_t fileSize);
 
 	void LogTransferResultMessage(int nErrorCode, CFileTransferOpData *pData);
 
