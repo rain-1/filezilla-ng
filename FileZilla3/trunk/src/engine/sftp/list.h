@@ -20,7 +20,7 @@ public:
 	virtual int ParseResponse() override;
 	virtual int SubcommandResult(int prevResult, COpData const& previousOperation) override;
 
-	int ParseEntry(std::wstring && entry, std::wstring const& stime, std::wstring && name);
+	int ParseEntry(std::wstring && entry, uint64_t mtime, std::wstring && name);
 
 private:
 	std::unique_ptr<CDirectoryListingParser> listing_parser_;

@@ -44,6 +44,16 @@ struct sftp_message
 struct sftp_event_type;
 typedef fz::simple_event<sftp_event_type, sftp_message> CSftpEvent;
 
+struct sftp_list_message
+{
+	mutable std::wstring text;
+	mutable std::wstring name;
+	uint64_t mtime;
+};
+
+struct sftp_list_event_type;
+typedef fz::simple_event<sftp_list_event_type, sftp_list_message> CSftpListEvent;
+
 struct terminate_event_type;
 typedef fz::simple_event<terminate_event_type, std::wstring> CTerminateEvent;
 

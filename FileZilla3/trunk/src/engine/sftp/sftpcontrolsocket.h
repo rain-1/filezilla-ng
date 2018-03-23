@@ -11,6 +11,7 @@ class process;
 
 class CSftpInputThread;
 struct sftp_message;
+struct sftp_list_message;
 
 class CSftpControlSocket final : public CControlSocket, public CRateLimiterObject
 {
@@ -59,6 +60,7 @@ protected:
 
 	virtual void operator()(fz::event_base const& ev) override;
 	void OnSftpEvent(sftp_message const& message);
+	void OnSftpListEvent(sftp_list_message const& message);
 	void OnTerminate(std::wstring const& error);
 
 	std::wstring m_requestPreamble;

@@ -20,8 +20,11 @@ public:
 protected:
 
 	std::wstring ReadLine(std::wstring &error);
+	uint64_t ReadUInt(std::wstring &error);
 
 	void entry();
+
+	void processEvent(sftpEvent eventType, std::wstring & error);
 
 	fz::process& process_;
 	CSftpControlSocket& owner_;

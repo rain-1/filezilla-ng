@@ -25,6 +25,41 @@ bool CSftpInputThread::spawn(fz::thread_pool & pool)
 	return thread_.operator bool();
 }
 
+uint64_t CSftpInputThread::ReadUInt(std::wstring &error)
+{
+	uint64_t ret{};
+
+	while (true) {
+		char c;
+		int read = process_.read(&c, 1);
+		if (read != 1) {
+			if (!read) {
+				error = L"Unexpected EOF.";
+			}
+			else {
+				error = L"Unknown error reading from process";
+			}
+			return 0;
+		}
+
+		if (c == '\n') {
+			break;
+		}
+		if (c == '\r') {
+			continue;
+		}
+
+		if (c < '0' || c > '9') {
+			error = L"Unexpected character";
+			return 0;
+		}
+		ret *= 10;
+		ret += c - '0';
+	}
+
+	return ret;
+}
+
 std::wstring CSftpInputThread::ReadLine(std::wstring &error)
 {
 	int len = 0;
@@ -68,6 +103,78 @@ std::wstring CSftpInputThread::ReadLine(std::wstring &error)
 	return line;
 }
 
+void CSftpInputThread::processEvent(sftpEvent eventType, std::wstring & error)
+{
+	int lines{};
+	switch (eventType)
+	{
+	case sftpEvent::count:
+	case sftpEvent::Unknown:
+		error = fz::sprintf(L"Unknown eventType");
+		return;
+	case sftpEvent::Recv:
+	case sftpEvent::Send:
+	case sftpEvent::UsedQuotaRecv:
+	case sftpEvent::UsedQuotaSend:
+		break;
+	case sftpEvent::Reply:
+	case sftpEvent::Done:
+	case sftpEvent::Error:
+	case sftpEvent::Verbose:
+	case sftpEvent::Info:
+	case sftpEvent::Status:
+	case sftpEvent::Transfer:
+	case sftpEvent::AskPassword:
+	case sftpEvent::RequestPreamble:
+	case sftpEvent::RequestInstruction:
+	case sftpEvent::KexAlgorithm:
+	case sftpEvent::KexHash:
+	case sftpEvent::KexCurve:
+	case sftpEvent::CipherClientToServer:
+	case sftpEvent::CipherServerToClient:
+	case sftpEvent::MacClientToServer:
+	case sftpEvent::MacServerToClient:
+	case sftpEvent::Hostkey:
+		lines = 1;
+		break;
+	case sftpEvent::AskHostkey:
+	case sftpEvent::AskHostkeyChanged:
+	case sftpEvent::AskHostkeyBetteralg:
+		lines = 2;
+		break;
+	case sftpEvent::Listentry:
+		{
+			auto msg = new CSftpListEvent;
+			auto & message = std::get<0>(msg->v_);
+			message.text = ReadLine(error);
+			message.mtime = ReadUInt(error);
+			message.name = ReadLine(error);
+
+			if (error.empty()) {
+				owner_.send_event(msg);
+			}
+			else {
+				delete msg;
+			}
+		}
+		return;
+	};
+
+	auto msg = new CSftpEvent;
+	auto & message = std::get<0>(msg->v_);
+	message.type = eventType;
+	for (int i = 0; i < lines && error.empty(); ++i) {
+		message.text[i] = ReadLine(error);
+	}
+
+	if (!error.empty()) {
+		delete msg;
+		return;
+	}
+
+	owner_.send_event(msg);
+}
+
 void CSftpInputThread::entry()
 {
 	std::wstring error;
@@ -87,61 +194,7 @@ void CSftpInputThread::entry()
 
 		sftpEvent eventType = static_cast<sftpEvent>(readType);
 
-		int lines{};
-		switch (eventType)
-		{
-		case sftpEvent::count:
-		case sftpEvent::Unknown:
-			error = fz::sprintf(L"Unknown eventType %d", readType);
-			break;
-		case sftpEvent::Recv:
-		case sftpEvent::Send:
-		case sftpEvent::UsedQuotaRecv:
-		case sftpEvent::UsedQuotaSend:
-			break;
-		case sftpEvent::Reply:
-		case sftpEvent::Done:
-		case sftpEvent::Error:
-		case sftpEvent::Verbose:
-		case sftpEvent::Info:
-		case sftpEvent::Status:
-		case sftpEvent::Transfer:
-		case sftpEvent::AskPassword:
-		case sftpEvent::RequestPreamble:
-		case sftpEvent::RequestInstruction:
-		case sftpEvent::KexAlgorithm:
-		case sftpEvent::KexHash:
-		case sftpEvent::KexCurve:
-		case sftpEvent::CipherClientToServer:
-		case sftpEvent::CipherServerToClient:
-		case sftpEvent::MacClientToServer:
-		case sftpEvent::MacServerToClient:
-		case sftpEvent::Hostkey:
-			lines = 1;
-			break;
-		case sftpEvent::AskHostkey:
-		case sftpEvent::AskHostkeyChanged:
-		case sftpEvent::AskHostkeyBetteralg:
-			lines = 2;
-			break;
-		case sftpEvent::Listentry:
-			lines = 3;
-			break;
-		};
-
-		auto msg = new CSftpEvent;
-		auto & message = std::get<0>(msg->v_);
-		message.type = eventType;
-		for (int i = 0; i < lines && error.empty(); ++i) {
-			message.text[i] = ReadLine(error);
-		}
-
-		if (!error.empty()) {
-			delete msg;
-			break;
-		}
-
-		owner_.send_event(msg);
+		processEvent(eventType, error);
 	}
 
 	owner_.send_event<CTerminateEvent>(error);
