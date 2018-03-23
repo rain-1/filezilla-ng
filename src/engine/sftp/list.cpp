@@ -117,7 +117,7 @@ int CSftpListOpData::SubcommandResult(int prevResult, COpData const&)
 	return FZ_REPLY_CONTINUE;
 }
 
-int CSftpListOpData::ParseEntry(std::wstring && entry, std::wstring const& stime, std::wstring && name)
+int CSftpListOpData::ParseEntry(std::wstring && entry, uint64_t mtime, std::wstring && name)
 {
 	if (opState != list_list) {
 		controlSocket_.LogMessageRaw(MessageType::RawList, entry);
@@ -132,11 +132,8 @@ int CSftpListOpData::ParseEntry(std::wstring && entry, std::wstring const& stime
 	}
 
 	fz::datetime time;
-	if (!stime.empty()) {
-		int64_t t = std::wcstoll(stime.c_str(), nullptr, 10);
-		if (t > 0) {
-			time = fz::datetime(static_cast<time_t>(t), fz::datetime::seconds);
-		}
+	if (mtime) {
+		time = fz::datetime(static_cast<time_t>(mtime), fz::datetime::seconds);
 	}
 	listing_parser_->AddLine(std::move(entry), std::move(name), time);
 

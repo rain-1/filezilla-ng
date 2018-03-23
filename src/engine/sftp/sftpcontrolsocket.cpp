@@ -130,18 +130,6 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 	case sftpEvent::Send:
 		SetActive(CFileZillaEngine::send);
 		break;
-	case sftpEvent::Listentry:
-		if (operations_.empty() || operations_.back()->opId != Command::list) {
-			LogMessage(MessageType::Debug_Warning, L"sftpEvent::Listentry outside list operation, ignoring.");
-			break;
-		}
-		else {
-			int res = static_cast<CSftpListOpData&>(*operations_.back()).ParseEntry(std::move(message.text[0]), message.text[1], std::move(message.text[2]));
-			if (res != FZ_REPLY_WOULDBLOCK) {
-				ResetOperation(res);
-			}
-		}
-		break;
 	case sftpEvent::Transfer:
 		{
 			auto value = fz::to_integral<int64_t>(message.text[0]);
@@ -291,6 +279,28 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 	default:
 		LogMessage(MessageType::Debug_Warning, L"Message type %d not handled", message.type);
 		break;
+	}
+}
+
+void CSftpControlSocket::OnSftpListEvent(sftp_list_message const& message)
+{
+	if (!currentServer_) {
+		return;
+	}
+
+	if (!input_thread_) {
+		return;
+	}
+
+	if (operations_.empty() || operations_.back()->opId != Command::list) {
+		LogMessage(MessageType::Debug_Warning, L"sftpEvent::Listentry outside list operation, ignoring.");
+		return;
+	}
+	else {
+		int res = static_cast<CSftpListOpData&>(*operations_.back()).ParseEntry(std::move(message.text), message.mtime, std::move(message.name));
+		if (res != FZ_REPLY_WOULDBLOCK) {
+			ResetOperation(res);
+		}
 	}
 }
 
@@ -650,8 +660,9 @@ void CSftpControlSocket::OnQuotaRequest(CRateLimiter::rate_direction direction)
 
 void CSftpControlSocket::operator()(fz::event_base const& ev)
 {
-	if (fz::dispatch<CSftpEvent, CTerminateEvent>(ev, this,
+	if (fz::dispatch<CSftpEvent, CSftpListEvent, CTerminateEvent>(ev, this,
 		&CSftpControlSocket::OnSftpEvent,
+		&CSftpControlSocket::OnSftpListEvent,
 		&CSftpControlSocket::OnTerminate)) {
 		return;
 	}
