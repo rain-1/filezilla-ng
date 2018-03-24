@@ -72,10 +72,13 @@ public:
 		return m_pToken;
 	}
 
-	unsigned int GetLength() const
-	{
+	unsigned size() const {
 		return m_len;
 	}
+
+	explicit operator bool() const { return m_len != 0; }
+
+	wchar_t operator[](unsigned int i) const { return m_pToken[i]; }
 
 	std::wstring GetString() const
 	{
@@ -270,15 +273,6 @@ public:
 		}
 	}
 
-	wchar_t operator[](unsigned int n) const
-	{
-		if (n >= m_len) {
-			return 0;
-		}
-
-		return m_pToken[n];
-	}
-
 protected:
 	wchar_t const* m_pToken{};
 	unsigned int m_len{};
@@ -359,7 +353,7 @@ public:
 				CToken ref;
 				if (!GetToken(prev, ref))
 					return false;
-				wchar_t const* p = ref.GetToken() + ref.GetLength() + 1;
+				wchar_t const* p = ref.GetToken() + ref.size() + 1;
 
 				auto const newLen = line_.size() - (p - line_.c_str());
 				if (newLen <= 0) {
@@ -901,7 +895,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 
 	// Check for netware servers, which split the permissions into two parts
 	bool netware = false;
-	if (token.GetLength() == 1) {
+	if (token.size() == 1) {
 		if (!line.GetToken(++index, token))
 			return false;
 		permissions += L" " + token.GetString();
@@ -970,7 +964,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 		entry.name = token.GetString();
 
 		// Filter out special chars at the end of the filenames
-		chr = token[token.GetLength() - 1];
+		chr = token[token.size() - 1];
 		if (chr == '/' ||
 			chr == '|' ||
 			chr == '*')
@@ -1023,7 +1017,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		if (pos2 == -1) {
 			if (token[pos] != '.') {
 				// something like 26-05 2002
-				day = token.GetNumber(pos + 1, token.GetLength() - pos - 1);
+				day = token.GetNumber(pos + 1, token.size() - pos - 1);
 				if (day < 1 || day > 31) {
 					return false;
 				}
@@ -1068,7 +1062,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		}
 	}
 	else {
-		if (token.IsLeftNumeric() && (unsigned int)token[token.GetLength() - 1] > 127 &&
+		if (token.IsLeftNumeric() && (unsigned int)token[token.size() - 1] > 127 &&
 			token.GetNumber() > 1000)
 		{
 			if (token.GetNumber() > 10000)
@@ -1099,18 +1093,18 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			int offset = 0;
 			if (dateMonth.GetString().back() == '.')
 				++offset;
-			if (!dateMonth.IsNumeric(0, dateMonth.GetLength() - offset))
+			if (!dateMonth.IsNumeric(0, dateMonth.size() - offset))
 				return false;
-			dateDay = dateMonth.GetNumber(0, dateMonth.GetLength() - offset);
+			dateDay = dateMonth.GetNumber(0, dateMonth.size() - offset);
 			dateMonth = token;
 		}
-		else if( token.GetLength() == 5 && token[2] == ':' && token.IsRightNumeric() ) {
+		else if( token.size() == 5 && token[2] == ':' && token.IsRightNumeric() ) {
 			// This is a time. We consumed too much already.
 			return false;
 		}
 		else {
 			dateDay = token.GetNumber();
-			if (token[token.GetLength() - 1] == ',') {
+			if (token[token.size() - 1] == ',') {
 				bHasYearAndTime = true;
 			}
 		}
@@ -1151,7 +1145,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	pos = token.Find(L":.-");
 	if (pos != -1 && mayHaveTime) {
 		// token is a time
-		if (!pos || static_cast<size_t>(pos) == (token.GetLength() - 1)) {
+		if (!pos || static_cast<size_t>(pos) == (token.size() - 1)) {
 			return false;
 		}
 
@@ -1208,10 +1202,10 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 				return false;
 			}
 
-			if (token.Find(':') == 2 && token.GetLength() == 5 && token.IsLeftNumeric() && token.IsRightNumeric()) {
+			if (token.Find(':') == 2 && token.size() == 5 && token.IsLeftNumeric() && token.IsRightNumeric()) {
 				pos = token.Find(':');
 				// token is a time
-				if (!pos || static_cast<size_t>(pos) == (token.GetLength() - 1)) {
+				if (!pos || static_cast<size_t>(pos) == (token.size() - 1)) {
 					return false;
 				}
 
@@ -1248,7 +1242,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 
 bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bool saneFieldOrder)
 {
-	if (token.GetLength() < 1)
+	if (token.size() < 1)
 		return false;
 
 	bool gotYear = false;
@@ -1324,7 +1318,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	int pos2 = token.Find(L"-./", pos + 1);
 	if (pos2 == -1 || (pos2 - pos) == 1)
 		return false;
-	if (static_cast<size_t>(pos2) == (token.GetLength() - 1))
+	if (static_cast<size_t>(pos2) == (token.size() - 1))
 		return false;
 
 	// If we already got the month and the second field is not numeric,
@@ -1358,7 +1352,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 		gotDay = true;
 	}
 
-	int64_t value = token.GetNumber(pos2 + 1, token.GetLength() - pos2 - 1);
+	int64_t value = token.GetNumber(pos2 + 1, token.size() - pos2 - 1);
 	if (gotYear) {
 		// Day field in yyy-mm-dd
 		if (value <= 0 || value > 31)
@@ -1427,7 +1421,7 @@ bool CDirectoryListingParser::ParseAsDos(CLine &line, CDirentry &entry)
 	else if (token.IsNumeric() || token.IsLeftNumeric()) {
 		// Convert size, filter out separators
 		int64_t size = 0;
-		int len = token.GetLength();
+		int len = token.size();
 		for (int i = 0; i < len; ++i) {
 			auto const chr = token[i];
 			if (chr == ',' || chr == '.') {
@@ -1466,7 +1460,7 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 		return false;
 
 	int pos = token.Find(':');
-	if (pos < 1 || static_cast<unsigned int>(pos) >= (token.GetLength() - 1))
+	if (pos < 1 || static_cast<unsigned int>(pos) >= (token.size() - 1))
 		return false;
 
 	int64_t hour = token.GetNumber(0, pos);
@@ -1498,7 +1492,7 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 
 	// Convert to 24h format
 	if (!token.IsRightNumeric()) {
-		if (token[token.GetLength() - 2] == 'P') {
+		if (token[token.size() - 2] == 'P') {
 			if (hour < 12)
 				hour += 12;
 		}
@@ -1520,7 +1514,7 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 		return false;
 
 	int pos = token.Find('\t');
-	if (pos == -1 || static_cast<size_t>(pos) == (token.GetLength() - 1))
+	if (pos == -1 || static_cast<size_t>(pos) == (token.size() - 1))
 		return false;
 
 	entry.name = token.GetString().substr(pos + 1);
@@ -1629,7 +1623,7 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 	// This field can either be the filesize, a username (at least that's what I think) enclosed in [] or a date.
 	if (!token.IsNumeric() && !token.IsLeftNumeric()) {
 		// Must be username
-		const int len = token.GetLength();
+		const int len = token.size();
 		if (len < 3 || token[0] != '[' || token[len - 1] != ']')
 			return false;
 		ownerGroup = token.GetString().substr(1, len - 2);
@@ -1680,7 +1674,7 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 		return true;
 
 	if (!ParseTime(token, entry)) {
-		int len = token.GetLength();
+		int len = token.size();
 		if (token[0] == '[' && token[len - 1] != ']')
 			return false;
 		if (token[0] == '(' && token[len - 1] != ')')
@@ -1715,7 +1709,7 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 
 	// Owner / group and permissions
 	while (line.GetToken(++index, token)) {
-		const int len = token.GetLength();
+		const int len = token.size();
 		if (len > 2 && token[0] == '(' && token[len - 1] == ')') {
 			if (!permissions.empty())
 				permissions += L" ";
@@ -1780,7 +1774,7 @@ bool CDirectoryListingParser::ParseAsIbm(CLine &line, CDirentry &entry)
 		return false;
 
 	entry.name = token.GetString();
-	if (token[token.GetLength() - 1] == '/') {
+	if (token[token.size() - 1] == '/') {
 		entry.name.pop_back();
 		entry.flags |= CDirentry::flag_dir;
 	}
@@ -1818,7 +1812,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 	// If token is a number, than it's the numerical Unix style format,
 	// else it's the VShell, OS/2 or nortel.VxWorks format
 	if (token.IsNumeric()) {
-		if (firstToken.GetLength() >= 2 && firstToken[1] == '4') {
+		if (firstToken.size() >= 2 && firstToken[1] == '4') {
 			entry.flags |= CDirentry::flag_dir;
 		}
 
@@ -1974,7 +1968,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			}
 
 			entry.name = token.GetString();
-			auto const chr = token[token.GetLength() - 1];
+			auto const chr = token[token.size() - 1];
 			if (chr == '/' || chr == '\\') {
 				entry.flags |= CDirentry::flag_dir;
 				entry.name.pop_back();
@@ -2246,7 +2240,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 	if (!token.IsNumeric())
 		return false;
 
-	int prevLen = token.GetLength();
+	int prevLen = token.size();
 
 	// used
 	if (!line.GetToken(index++, token))
@@ -2450,7 +2444,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS2(CLine &line, CDirentry &entry)
 		if (!line.GetToken(i, token)) {
 			return false;
 		}
-		int len = token.GetLength();
+		int len = token.size();
 		for (int j = 0; j < len; ++j)
 			if (token[j] < 'A' || token[j] > 'Z')
 				return false;
@@ -2503,7 +2497,7 @@ bool CDirectoryListingParser::ParseComplexFileSize(CToken& token, int64_t& size,
 		return true;
 	}
 
-	int len = token.GetLength();
+	int len = token.size();
 
 	auto last = token[len - 1];
 	if (last == 'B' || last == 'b') {
@@ -2761,13 +2755,13 @@ bool CDirectoryListingParser::ParseAsOS9(CLine &line, CDirentry &entry)
 
 	// Make sure it's number.number
 	int pos = ownerGroupToken.Find('.');
-	if (pos == -1 || !pos || pos == ((int)ownerGroupToken.GetLength() - 1))
+	if (pos == -1 || !pos || pos == ((int)ownerGroupToken.size() - 1))
 		return false;
 
 	if (!ownerGroupToken.IsNumeric(0, pos))
 		return false;
 
-	if (!ownerGroupToken.IsNumeric(pos + 1, ownerGroupToken.GetLength() - pos - 1))
+	if (!ownerGroupToken.IsNumeric(pos + 1, ownerGroupToken.size() - pos - 1))
 		return false;
 
 	entry.flags = 0;
@@ -2958,7 +2952,7 @@ bool CDirectoryListingParser::ParseAsHPNonstop(CLine &line, CDirentry &entry)
 		return false;
 	std::wstring ownerGroup = token.GetString();
 
-	if (token[token.GetLength() - 1] == ',') {
+	if (token[token.size() - 1] == ',') {
 		// Owner, part 2
 		if (!line.GetToken(++index, token))
 			return false;
