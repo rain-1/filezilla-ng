@@ -1667,14 +1667,14 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 		return wxString();
 	}
 
-	if (!column && 0) {
+	if (!column) {
 #ifdef __WXMSW__
 		return data->label ? *data->label : data->name;
 #else
 		return data->name;
 #endif
 	}
-	else if (column <= 1) {
+	else if (column == 1) {
 		if (data->size < 0) {
 			return wxString();
 		}
