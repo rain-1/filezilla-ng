@@ -1137,6 +1137,7 @@ int sftp_cmd_ls(struct sftp_command *cmd)
     char *cdir, *unwcdir, *wildcard;
     struct sftp_packet *pktin;
     struct sftp_request *req;
+    struct sftp_request *reqs[4];
     int i;
     int ret;
 
@@ -1193,11 +1194,16 @@ int sftp_cmd_ls(struct sftp_command *cmd)
 	fzprintf(sftpError, "Unable to open %s: %s", dir, fxp_error());
 	ret = 1;
     } else {
+	reqs[0] = fxp_readdir_send(dirh);
+	reqs[1] = fxp_readdir_send(dirh);
+	reqs[2] = fxp_readdir_send(dirh);
+	reqs[3] = fxp_readdir_send(dirh);
+	int ri = 0;
 	while (1) {
 
-	    req = fxp_readdir_send(dirh);
-            pktin = sftp_wait_for_reply(req);
-	    names = fxp_readdir_recv(pktin, req);
+            pktin = sftp_wait_for_reply(reqs[ri]);
+	    names = fxp_readdir_recv(pktin, reqs[ri]);
+	    reqs[ri] = NULL;
 
 	    if (names == NULL) {
 		if (fxp_error_type() == SSH_FX_EOF)
@@ -1223,6 +1229,17 @@ int sftp_cmd_ls(struct sftp_command *cmd)
 	    }
 
 	    fxp_free_names(names);
+	    reqs[ri++] = fxp_readdir_send(dirh);
+	    ri %= 4;
+	}
+	for (i = 0; i < 4; ++i) {
+		if (reqs[ri]) {
+	            pktin = sftp_wait_for_reply(reqs[ri]);
+		    sfree(reqs[ri]);
+		    sfree(pktin);
+		}
+		++ri;
+		ri %= 4;
 	}
 	req = fxp_close_send(dirh);
         pktin = sftp_wait_for_reply(req);
