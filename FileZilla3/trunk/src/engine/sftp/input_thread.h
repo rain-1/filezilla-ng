@@ -3,6 +3,7 @@
 
 class CSftpControlSocket;
 
+#include <libfilezilla/buffer.hpp>
 #include <libfilezilla/thread_pool.hpp>
 
 namespace fz {
@@ -19,8 +20,9 @@ public:
 
 protected:
 
-	std::wstring ReadLine(std::wstring &error);
-	uint64_t ReadUInt(std::wstring &error);
+	bool readFromProcess(std::wstring & error);
+	std::wstring ReadLine(std::wstring & error);
+	uint64_t ReadUInt(std::wstring & error);
 
 	void entry();
 
@@ -30,6 +32,8 @@ protected:
 	CSftpControlSocket& owner_;
 
 	fz::async_task thread_;
+
+	fz::buffer recv_buffer_;
 };
 
 #endif

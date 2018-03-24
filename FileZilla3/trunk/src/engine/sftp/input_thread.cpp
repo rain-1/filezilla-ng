@@ -30,34 +30,34 @@ uint64_t CSftpInputThread::ReadUInt(std::wstring &error)
 	uint64_t ret{};
 
 	while (true) {
-		char c;
-		int read = process_.read(&c, 1);
-		if (read != 1) {
-			if (!read) {
-				error = L"Unexpected EOF.";
-			}
-			else {
-				error = L"Unknown error reading from process";
-			}
+		if (!readFromProcess(error)) {
 			return 0;
 		}
 
-		if (c == '\n') {
-			break;
-		}
-		if (c == '\r') {
-			continue;
-		}
+		auto const* p = recv_buffer_.get();
+		size_t i;
+		for (i = 0; i < recv_buffer_.size(); ++i) {
+			unsigned char const c = p[i];
+			if (c == '\n') {
+				recv_buffer_.consume(i + 1);
+				return ret;
+			}
+			if (c == '\r') {
+				continue;
+			}
 
-		if (c < '0' || c > '9') {
-			error = L"Unexpected character";
-			return 0;
+			if (c < '0' || c > '9') {
+				error = L"Unexpected character";
+				return 0;
+			}
+			ret *= 10;
+			ret += c - '0';
+
 		}
-		ret *= 10;
-		ret += c - '0';
+		recv_buffer_.clear();
 	}
 
-	return ret;
+	return 0;
 }
 
 std::wstring CSftpInputThread::ReadLine(std::wstring &error)
@@ -67,40 +67,62 @@ std::wstring CSftpInputThread::ReadLine(std::wstring &error)
 	char buffer[buffersize];
 
 	while (true) {
-		char c;
-		int read = process_.read(&c, 1);
-		if (read != 1) {
+		if (!readFromProcess(error)) {
+			return std::wstring();
+		}
+
+		auto const* p = recv_buffer_.get();
+		size_t i;
+		for (i = 0; i < recv_buffer_.size(); ++i) {
+			unsigned char const c = p[i];
+
+			if (c == '\n') {
+				recv_buffer_.consume(i + 1);
+
+				while (len && buffer[len - 1] == '\r') {
+					--len;
+				}
+
+				std::wstring const line = owner_.ConvToLocal(buffer, len);
+				if (len && line.empty()) {
+					error = L"Failed to convert reply to local character set.";
+				}
+
+				return line;
+			}
+
+			if (len >= buffersize - 1) {
+				// Cap string length
+				continue;
+			}
+
+			buffer[len++] = c;
+		}
+		recv_buffer_.clear();
+	}
+
+	return std::wstring();
+}
+
+bool CSftpInputThread::readFromProcess(std::wstring & error)
+{
+	if (recv_buffer_.empty()) {
+		int read = process_.read(reinterpret_cast<char *>(recv_buffer_.get(1024)), 1024);
+		if (read > 0) {
+			recv_buffer_.add(read);
+		}
+		else {
 			if (!read) {
 				error = L"Unexpected EOF.";
 			}
 			else {
 				error = L"Unknown error reading from process";
 			}
-			return std::wstring();
+			return false;
 		}
-
-		if (c == '\n') {
-			break;
-		}
-
-		if (len == buffersize - 1) {
-			// Cap string length
-			continue;
-		}
-
-		buffer[len++] = c;
 	}
 
-	while (len && buffer[len - 1] == '\r') {
-		--len;
-	}
-
-	std::wstring const line = owner_.ConvToLocal(buffer, len);
-	if (len && line.empty()) {
-		error = L"Failed to convert reply to local character set.";
-	}
-
-	return line;
+	return true;
 }
 
 void CSftpInputThread::processEvent(sftpEvent eventType, std::wstring & error)
@@ -179,15 +201,16 @@ void CSftpInputThread::entry()
 {
 	std::wstring error;
 	while (error.empty()) {
-		char readType = 0;
-		int read = process_.read(&readType, 1);
-		if (read != 1) {
+		if (!readFromProcess(error)) {
 			break;
 		}
 
+		unsigned char readType = *recv_buffer_.get();
+		recv_buffer_.consume(1);
+
 		readType -= '0';
 
-		if (readType < 0 || readType >= static_cast<char>(sftpEvent::count)) {
+		if (readType >= static_cast<unsigned char>(sftpEvent::count)) {
 			error = fz::sprintf(L"Unknown eventType %d", readType);
 			break;
 		}
