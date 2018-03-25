@@ -30,7 +30,7 @@ uint64_t CSftpInputThread::ReadUInt(std::wstring &error)
 	uint64_t ret{};
 
 	while (true) {
-		if (!readFromProcess(error)) {
+		if (!readFromProcess(error, true)) {
 			return 0;
 		}
 
@@ -67,7 +67,7 @@ std::wstring CSftpInputThread::ReadLine(std::wstring &error)
 	char buffer[buffersize];
 
 	while (true) {
-		if (!readFromProcess(error)) {
+		if (!readFromProcess(error, true)) {
 			return std::wstring();
 		}
 
@@ -104,7 +104,7 @@ std::wstring CSftpInputThread::ReadLine(std::wstring &error)
 	return std::wstring();
 }
 
-bool CSftpInputThread::readFromProcess(std::wstring & error)
+bool CSftpInputThread::readFromProcess(std::wstring & error, bool eof_is_error)
 {
 	if (recv_buffer_.empty()) {
 		int read = process_.read(reinterpret_cast<char *>(recv_buffer_.get(1024)), 1024);
@@ -113,7 +113,9 @@ bool CSftpInputThread::readFromProcess(std::wstring & error)
 		}
 		else {
 			if (!read) {
-				error = L"Unexpected EOF.";
+				if (eof_is_error) {
+					error = L"Unexpected EOF.";
+				}
 			}
 			else {
 				error = L"Unknown error reading from process";
@@ -201,7 +203,7 @@ void CSftpInputThread::entry()
 {
 	std::wstring error;
 	while (error.empty()) {
-		if (!readFromProcess(error)) {
+		if (!readFromProcess(error, false)) {
 			break;
 		}
 

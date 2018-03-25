@@ -20,7 +20,7 @@ public:
 
 protected:
 
-	bool readFromProcess(std::wstring & error);
+	bool readFromProcess(std::wstring & error, bool eof_is_error);
 	std::wstring ReadLine(std::wstring & error);
 	uint64_t ReadUInt(std::wstring & error);
 
