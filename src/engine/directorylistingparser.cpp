@@ -46,6 +46,15 @@ ObjectCache objcache;
 class CToken final
 {
 protected:
+	enum flags : unsigned char {
+		numeric_left = 0x01,
+		non_numeric_left = 0x02,
+		numeric_right = 0x04,
+		non_numeric_right = 0x08,
+		numeric  = 0x10,
+		non_numeric = 0x20
+	};
+
 	enum TokenInformation
 	{
 		Unknown,
@@ -96,16 +105,16 @@ public:
 		{
 		case decimal:
 		default:
-			if (m_numeric == Unknown) {
-				m_numeric = Yes;
+			if (!(flags_ & (numeric | non_numeric))) {
+				flags_ |= numeric;
 				for (unsigned int i = 0; i < m_len; ++i) {
 					if (m_pToken[i] < '0' || m_pToken[i] > '9') {
-						m_numeric = No;
+						flags_ ^= numeric | non_numeric;
 						break;
 					}
 				}
 			}
-			return m_numeric == Yes;
+			return flags_ & numeric;
 		case hex:
 			for (unsigned int i = 0; i < m_len; ++i) {
 				auto const c = m_pToken[i];
@@ -129,34 +138,28 @@ public:
 
 	bool IsLeftNumeric()
 	{
-		if (m_leftNumeric == Unknown) {
-			if (m_len < 2) {
-				m_leftNumeric = No;
-			}
-			else if (m_pToken[0] < '0' || m_pToken[0] > '9') {
-				m_leftNumeric = No;
+		if (!(flags_ & (numeric_left | non_numeric_left))) {
+			if (m_len < 2 || m_pToken[0] < '0' || m_pToken[0] > '9') {
+				flags_ |= non_numeric_left;
 			}
 			else {
-				m_leftNumeric = Yes;
+				flags_ |= numeric_left;
 			}
 		}
-		return m_leftNumeric == Yes;
+		return flags_ & numeric_left;
 	}
 
 	bool IsRightNumeric()
 	{
-		if (m_rightNumeric == Unknown) {
-			if (m_len < 2) {
-				m_rightNumeric = No;
-			}
-			else if (m_pToken[m_len - 1] < '0' || m_pToken[m_len - 1] > '9') {
-				m_rightNumeric = No;
+		if (!(flags_ & (numeric_right | non_numeric_right))) {
+			if (m_len < 2 || m_pToken[m_len - 1] < '0' || m_pToken[m_len - 1] > '9') {
+				flags_ |= non_numeric_right;
 			}
 			else {
-				m_rightNumeric = Yes;
+				flags_ |= numeric_right;
 			}
 		}
-		return m_rightNumeric == Yes;
+		return flags_ & numeric_right;
 	}
 
 	int Find(const wchar_t* chr, int start = 0) const
@@ -274,13 +277,13 @@ public:
 	}
 
 protected:
+	int64_t m_number{-1};
+
 	wchar_t const* m_pToken{};
+
 	unsigned int m_len{};
 
-	TokenInformation m_numeric{Unknown};
-	TokenInformation m_leftNumeric{Unknown};
-	TokenInformation m_rightNumeric{Unknown};
-	int64_t m_number{-1};
+	unsigned char flags_{};
 };
 
 class CLine final
@@ -611,14 +614,18 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 			// January could be 1 or 0, depends how the server counts
 			combo[fz::sprintf(L"%s%02d", iter->first, iter->second)] = iter->second;
 			combo[fz::sprintf(L"%s%02d", iter->first, iter->second - 1)] = iter->second;
-			if (iter->second < 10)
+			if (iter->second < 10) {
 				combo[fz::sprintf(L"%s%d", iter->first, iter->second)] = iter->second;
-			else
+			}
+			else {
 				combo[fz::sprintf(L"%s%d", iter->first, iter->second % 10)] = iter->second;
-			if (iter->second <= 10)
+			}
+			if (iter->second <= 10) {
 				combo[fz::sprintf(L"%s%d", iter->first, iter->second - 1)] = iter->second;
-			else
+			}
+			else {
 				combo[fz::sprintf(L"%s%d", iter->first, (iter->second - 1) % 10)] = iter->second;
+			}
 		}
 		m_MonthNamesMap.insert(combo.begin(), combo.end());
 
@@ -2391,8 +2398,9 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS2(CLine &line, CDirentry &entry)
 {
 	int index = 0;
 	CToken token;
-	if (!line.GetToken(index, token))
+	if (!line.GetToken(index, token)) {
 		return false;
+	}
 
 	entry.name = token.GetString();
 
@@ -2401,53 +2409,64 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS2(CLine &line, CDirentry &entry)
 	entry.permissions = entry.ownerGroup;
 	entry.size = -1;
 
-	if (!line.GetToken(++index, token))
+	if (!line.GetToken(++index, token)) {
 		return true;
+	}
 
 	entry.size = token.GetNumber(CToken::hex);
-	if (entry.size == -1)
+	if (entry.size == -1) {
 		return false;
+	}
 
 	// Unused hexadecimal token
-	if (!line.GetToken(++index, token))
+	if (!line.GetToken(++index, token)) {
 		return false;
-	if (!token.IsNumeric(CToken::hex))
+	}
+	if (!token.IsNumeric(CToken::hex)) {
 		return false;
+	}
 
 	// Unused numeric token
-	if (!line.GetToken(++index, token))
+	if (!line.GetToken(++index, token)) {
 		return false;
-	if (!token.IsNumeric())
+	}
+	if (!token.IsNumeric()) {
 		return false;
+	}
 
 	int start = ++index;
 	while (line.GetToken(index, token)) {
 		++index;
 	}
-	if ((index - start < 2))
+	if ((index - start < 2)) {
 		return false;
+	}
 	--index;
 
 	if (!line.GetToken(index, token)) {
 		return false;
 	}
-	if (!token.IsNumeric() && (token.GetString() != L"ANY"))
+	if (!token.IsNumeric() && (token.GetString() != L"ANY")) {
 		return false;
+	}
 
 	if (!line.GetToken(index - 1, token)) {
 		return false;
 	}
-	if (!token.IsNumeric() && (token.GetString() != L"ANY"))
+	if (!token.IsNumeric() && (token.GetString() != L"ANY")) {
 		return false;
+	}
 
 	for (int i = start; i < index - 1; ++i) {
 		if (!line.GetToken(i, token)) {
 			return false;
 		}
 		int len = token.size();
-		for (int j = 0; j < len; ++j)
-			if (token[j] < 'A' || token[j] > 'Z')
+		for (int j = 0; j < len; ++j) {
+			if (token[j] < 'A' || token[j] > 'Z') {
 				return false;
+			}
+		}
 	}
 
 	return true;
@@ -2459,20 +2478,24 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Tape(CLine &line, CDirentry &entry)
 	CToken token;
 
 	// volume
-	if (!line.GetToken(index++, token))
+	if (!line.GetToken(index++, token)) {
 		return false;
+	}
 
 	// unit
-	if (!line.GetToken(index++, token))
+	if (!line.GetToken(index++, token)) {
 		return false;
+	}
 
 	std::wstring s = fz::str_tolower_ascii(token.GetString());
-	if (s != L"tape")
+	if (s != L"tape") {
 		return false;
+	}
 
 	// dsname
-	if (!line.GetToken(index++, token))
+	if (!line.GetToken(index++, token)) {
 		return false;
+	}
 
 	entry.name = token.GetString();
 	entry.flags = 0;
@@ -2480,8 +2503,9 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Tape(CLine &line, CDirentry &entry)
 	entry.permissions = objcache.get(std::wstring());
 	entry.size = -1;
 
-	if (line.GetToken(index++, token))
+	if (line.GetToken(index++, token)) {
 		return false;
+	}
 
 	return true;
 }
