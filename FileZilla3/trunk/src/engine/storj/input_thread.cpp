@@ -69,6 +69,29 @@ std::wstring CStorjInputThread::ReadLine(std::wstring &error)
 	return std::wstring();
 }
 
+bool CStorjInputThread::readFromProcess(std::wstring & error, bool eof_is_error)
+{
+	if (recv_buffer_.empty()) {
+		int read = process_.read(reinterpret_cast<char *>(recv_buffer_.get(1024)), 1024);
+		if (read > 0) {
+			recv_buffer_.add(read);
+		}
+		else {
+			if (!read) {
+				if (eof_is_error) {
+					error = L"Unexpected EOF.";
+				}
+			}
+			else {
+				error = L"Unknown error reading from process";
+			}
+			return false;
+		}
+	}
+
+	return true;
+}
+
 void CStorjInputThread::processEvent(storjEvent eventType, std::wstring &error)
 {
 	int lines{};
