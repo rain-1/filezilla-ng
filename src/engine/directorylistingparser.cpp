@@ -302,104 +302,103 @@ public:
 
 	~CLine()
 	{
-		std::vector<CToken *>::iterator iter;
-		for (iter = m_Tokens.begin(); iter != m_Tokens.end(); ++iter)
-			delete *iter;
-		for (iter = m_LineEndTokens.begin(); iter != m_LineEndTokens.end(); ++iter)
-			delete *iter;
 	}
 
-	bool GetToken(unsigned int n, CToken &token, bool toEnd = false, bool include_whitespace = false)
+	CToken GetToken(unsigned int n)
 	{
-		if (!toEnd) {
-			if (m_Tokens.size() > n) {
-				token = *(m_Tokens[n]);
-				return true;
-			}
+		if (m_Tokens.size() > n) {
+			return m_Tokens[n];
+		}
 
-			size_t start = m_parsePos;
-			while (m_parsePos < line_.size()) {
-				if (line_[m_parsePos] == ' ' || line_[m_parsePos] == '\t') {
-					CToken *pToken = new CToken(line_.c_str() + start, m_parsePos - start);
-					m_Tokens.push_back(pToken);
+		size_t start = m_parsePos;
+		while (m_parsePos < line_.size()) {
+			if (line_[m_parsePos] == ' ' || line_[m_parsePos] == '\t') {
+				m_Tokens.emplace_back(line_.c_str() + start, m_parsePos - start);
 
-					while (m_parsePos < line_.size() && (line_[m_parsePos] == ' ' || line_[m_parsePos] == '\t'))
-						++m_parsePos;
+				while (m_parsePos < line_.size() && (line_[m_parsePos] == ' ' || line_[m_parsePos] == '\t'))
+					++m_parsePos;
 
-					if (m_Tokens.size() > n) {
-						token = *(m_Tokens[n]);
-						return true;
-					}
-
-					start = m_parsePos;
+				if (m_Tokens.size() > n) {
+					return m_Tokens[n];
 				}
-				++m_parsePos;
+
+				start = m_parsePos;
 			}
-			if (m_parsePos != start) {
-				CToken *pToken = new CToken(line_.c_str() + start, m_parsePos - start);
-				m_Tokens.push_back(pToken);
+			++m_parsePos;
+		}
+		if (m_parsePos != start) {
+			m_Tokens.emplace_back(line_.c_str() + start, m_parsePos - start);
+		}
+
+		if (m_Tokens.size() > n) {
+			return m_Tokens[n];
+		}
+
+		return CToken();
+	}
+
+	CToken GetEndToken(unsigned int n, bool include_whitespace = false)
+	{
+		if (include_whitespace) {
+			int prev = n;
+			if (prev) {
+				--prev;
 			}
 
-			if (m_Tokens.size() > n) {
-				token = *(m_Tokens[n]);
-				return true;
+			CToken ref = GetToken(prev);
+			if (!ref) {
+				return ref;
 			}
+			wchar_t const* p = ref.GetToken() + ref.size() + 1;
 
-			return false;
+			auto const newLen = line_.size() - (p - line_.c_str());
+			if (newLen <= 0) {
+				return CToken();
+			}
+			return CToken(p, newLen);
+		}
+
+		if (m_LineEndTokens.size() > n) {
+			return m_LineEndTokens[n];
+		}
+
+		if (m_Tokens.size() <= n) {
+			if (!GetToken(n)) {
+				return CToken();
+			}
+		}
+
+		if (trailing_whitespace_ == -1) {
+			trailing_whitespace_ = 0;
+			size_t i = line_.size() - 1;
+			while (i < line_.size() && (line_[i] == ' ' || line_[i] == '\t')) {
+				--i;
+				++trailing_whitespace_;
+			}
+		}
+
+		for (unsigned int i = static_cast<unsigned int>(m_LineEndTokens.size()); i <= n; ++i) {
+			CToken const& refToken = m_Tokens[i];
+			const wchar_t* p = refToken.GetToken();
+			auto const newLen = line_.size() - (p - line_.c_str()) - trailing_whitespace_;
+			if (newLen <= 0) {
+				return CToken();
+			}
+			m_LineEndTokens.emplace_back(p, newLen);
+		}
+		return m_LineEndTokens[n];
+	}
+
+	bool GetToken(unsigned int n, CToken & token, bool to_end = false, bool include_whitespace = false)
+	{
+		if (to_end) {
+			token = GetEndToken(n, include_whitespace);
 		}
 		else {
-			if (include_whitespace) {
-				int prev = n;
-				if (prev)
-					--prev;
-
-				CToken ref;
-				if (!GetToken(prev, ref))
-					return false;
-				wchar_t const* p = ref.GetToken() + ref.size() + 1;
-
-				auto const newLen = line_.size() - (p - line_.c_str());
-				if (newLen <= 0) {
-					return false;
-				}
-				token = CToken(p, newLen);
-				return true;
-			}
-
-			if (m_LineEndTokens.size() > n) {
-				token = *(m_LineEndTokens[n]);
-				return true;
-			}
-
-			if (m_Tokens.size() <= n) {
-				if (!GetToken(n, token)) {
-					return false;
-				}
-			}
-
-			if (trailing_whitespace_ == -1) {
-				trailing_whitespace_ = 0;
-				size_t i = line_.size() - 1;
-				while (i < line_.size() && (line_[i] == ' ' || line_[i] == '\t')) {
-					--i;
-					++trailing_whitespace_;
-				}
-			}
-
-			for (unsigned int i = static_cast<unsigned int>(m_LineEndTokens.size()); i <= n; ++i) {
-				const CToken *refToken = m_Tokens[i];
-				const wchar_t* p = refToken->GetToken();
-				auto const newLen = line_.size() - (p - line_.c_str()) - trailing_whitespace_;
-				if (newLen <= 0) {
-					return false;
-				}
-				CToken *pToken = new CToken(p, newLen);
-				m_LineEndTokens.push_back(pToken);
-			}
-			token = *(m_LineEndTokens[n]);
-			return true;
+			token = GetToken(n);
 		}
-	};
+		return token.operator bool();
+	}
 
 	CLine *Concat(CLine const* pLine) const
 	{
@@ -412,8 +411,8 @@ public:
 	}
 
 protected:
-	std::vector<CToken *> m_Tokens;
-	std::vector<CToken *> m_LineEndTokens;
+	std::vector<CToken> m_Tokens;
+	std::vector<CToken> m_LineEndTokens;
 	size_t m_parsePos{};
 	int trailing_whitespace_;
 	std::wstring const line_;
@@ -740,67 +739,85 @@ bool CDirectoryListingParser::ParseLine(CLine &line, ServerType const serverType
 
 	if (serverType == ZVM) {
 		res = ParseAsZVM(line, entry);
-		if (res)
+		if (res) {
 			goto done;
+		}
 	}
 	else if (serverType == HPNONSTOP) {
 		res = ParseAsHPNonstop(line, entry);
-		if (res)
+		if (res) {
 			goto done;
+		}
 	}
 
 	ires = ParseAsMlsd(line, entry);
-	if (ires == 1)
+	if (ires == 1) {
 		goto done;
-	else if (ires == 2)
+	}
+	else if (ires == 2) {
 		goto skip;
+	}
 	res = ParseAsUnix(line, entry, true); // Common 'ls -l'
-	if (res)
+	if (res) {
 		goto done;
+	}
 	res = ParseAsDos(line, entry);
-	if (res)
+	if (res) {
 		goto done;
+	}
 	res = ParseAsEplf(line, entry);
-	if (res)
+	if (res) {
 		goto done;
+	}
 	res = ParseAsVms(line, entry);
-	if (res)
+	if (res) {
 		goto done;
+	}
 	res = ParseOther(line, entry);
-	if (res)
+	if (res) {
 		goto done;
+	}
 	res = ParseAsIbm(line, entry);
-	if (res)
+	if (res) {
 		goto done;
+	}
 	res = ParseAsWfFtp(line, entry);
-	if (res)
+	if (res) {
 		goto done;
+	}
 	res = ParseAsIBM_MVS(line, entry);
-	if (res)
+	if (res) {
 		goto done;
+	}
 	res = ParseAsIBM_MVS_PDS(line, entry);
-	if (res)
+	if (res) {
 		goto done;
+	}
 	res = ParseAsOS9(line, entry);
-	if (res)
+	if (res) {
 		goto done;
+	}
 #ifndef LISTDEBUG_MVS
 	if (serverType == MVS)
 #endif //LISTDEBUG_MVS
 	{
 		res = ParseAsIBM_MVS_Migrated(line, entry);
-		if (res)
+		if (res) {
 			goto done;
+		}
 		res = ParseAsIBM_MVS_PDS2(line, entry);
-		if (res)
+		if (res) {
 			goto done;
+		}
 		res = ParseAsIBM_MVS_Tape(line, entry);
-		if (res)
+		if (res) {
 			goto done;
+		}
 	}
 	res = ParseAsUnix(line, entry, false); // 'ls -l' but without the date/time
-	if (res)
+	if (res) {
 		goto done;
+	}
 
 	// Some servers just send a list of filenames. If a line could not be parsed,
 	// check if it's a filename. If that's the case, store it for later, else clear
@@ -809,20 +826,22 @@ bool CDirectoryListingParser::ParseLine(CLine &line, ServerType const serverType
 	// contained a space, assume it's a raw filelisting.
 
 	if (!concatenated) {
-		CToken token;
-		if (!line.GetToken(0, token, true) || token.Find(' ') != -1) {
+		CToken token = line.GetEndToken(0);
+		if (!token || token.Find(' ') != -1) {
 			m_maybeMultilineVms = false;
 			m_fileList.clear();
 			m_fileListOnly = false;
 		}
 		else {
 			m_maybeMultilineVms = token.Find(';') != -1;
-			if (m_fileListOnly)
+			if (m_fileListOnly) {
 				m_fileList.emplace_back(token.GetString());
+			}
 		}
 	}
-	else
+	else {
 		m_maybeMultilineVms = false;
+	}
 
 	if (!override || override->name.empty()) {
 		return false;
@@ -875,12 +894,12 @@ skip:
 bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool expect_date)
 {
 	int index = 0;
-	CToken token;
-	if (!line.GetToken(index, token)) {
+	CToken permissionToken = line.GetToken(index);
+	if (!permissionToken) {
 		return false;
 	}
 
-	wchar_t chr = token[0];
+	wchar_t chr = permissionToken[0];
 	if (chr != 'b' &&
 		chr != 'c' &&
 		chr != 'd' &&
@@ -888,35 +907,44 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 		chr != 'p' &&
 		chr != 's' &&
 		chr != '-')
+	{
 		return false;
+	}
 
-	std::wstring permissions = token.GetString();
+	std::wstring permissions = permissionToken.GetString();
 
 	entry.flags = 0;
 
-	if (chr == 'd' || chr == 'l')
+	if (chr == 'd' || chr == 'l') {
 		entry.flags |= CDirentry::flag_dir;
+	}
 
-	if (chr == 'l')
+	if (chr == 'l') {
 		entry.flags |= CDirentry::flag_link;
+	}
 
 	// Check for netware servers, which split the permissions into two parts
 	bool netware = false;
-	if (token.size() == 1) {
-		if (!line.GetToken(++index, token))
+	if (permissionToken.size() == 1) {
+		CToken cont_perm = line.GetToken(++index);
+		if (!cont_perm) {
 			return false;
-		permissions += L" " + token.GetString();
+		}
+		permissions += L" " + cont_perm.GetString();
 		netware = true;
 	}
 
 	int numOwnerGroup = 3;
 	if (!netware) {
 		// Filter out link count, we don't need it
-		if (!line.GetToken(++index, token))
+		CToken linkCount = line.GetToken(++index);
+		if (!linkCount) {
 			return false;
+		}
 
-		if (!token.IsNumeric())
+		if (!linkCount.IsNumeric()) {
 			--index;
+		}
 	}
 
 	// Repeat until numOwnerGroup is 0 since not all servers send every possible field
@@ -927,33 +955,41 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 
 		std::wstring ownerGroup;
 		for (int i = 0; i < numOwnerGroup; ++i) {
-			if (!line.GetToken(++index, token))
+			CToken ownerGroupToken = line.GetToken(++index);
+			if (!ownerGroupToken) {
 				return false;
-			if (i)
+			}
+			if (i) {
 				ownerGroup += L" ";
-			ownerGroup += token.GetString();
+			}
+			ownerGroup += ownerGroupToken.GetString();
 		}
 
-		if (!line.GetToken(++index, token))
+
+		CToken sizeToken = line.GetToken(++index);
+		if (!sizeToken) {
 			return false;
+		}
 
 		// Check for concatenated groupname and size fields
-		if (!ParseComplexFileSize(token, entry.size)) {
-			if (!token.IsRightNumeric())
+		if (!ParseComplexFileSize(sizeToken, entry.size)) {
+			if (!sizeToken.IsRightNumeric()) {
 				continue;
-			entry.size = token.GetNumber();
-		}
+			}
+			entry.size = sizeToken.GetNumber();
 
-		// Append missing group to ownerGroup
-		if (!token.IsNumeric() && token.IsRightNumeric()) {
-			if (!ownerGroup.empty())
+			// Append missing group to ownerGroup
+			if (!ownerGroup.empty()) {
 				ownerGroup += L" ";
+			}
 
-			std::wstring const group = token.GetString();
+			std::wstring const group = sizeToken.GetString();
 			int i;
 			for (i = group.size() - 1;
 				 i >= 0 && group[i] >= '0' && group[i] <= '9';
-				 --i) {}
+				 --i)
+			{
+			}
 
 			ownerGroup += group.substr(0, i + 1);
 		}
@@ -965,17 +1001,21 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 		}
 
 		// Get the filename
-		if (!line.GetToken(++index, token, 1))
+		CToken nameToken = line.GetEndToken(++index);
+		if (!nameToken) {
 			continue;
+		}
 
-		entry.name = token.GetString();
+		entry.name = nameToken.GetString();
 
 		// Filter out special chars at the end of the filenames
-		chr = token[token.size() - 1];
+		chr = nameToken[nameToken.size() - 1];
 		if (chr == '/' ||
 			chr == '|' ||
 			chr == '*')
+		{
 			entry.name.pop_back();
+		}
 
 		if (entry.is_link()) {
 			size_t pos;
@@ -1001,11 +1041,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	bool mayHaveTime = true;
 	bool bHasYearAndTime = false;
 
-	CToken token;
-
 	// Get the month date field
-	CToken dateMonth;
-	if (!line.GetToken(++index, token)) {
+	CToken token = line.GetToken(++index);
+	if (!token) {
 		return false;
 	}
 
@@ -1014,6 +1052,8 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	int day = -1;
 	long hour = -1;
 	long minute = -1;
+
+	CToken dateMonth;
 
 	// Some servers use the following date formats:
 	// 26-05 2002, 2002-10-14, 01-jun-99 or 2004.07.15
@@ -1059,7 +1099,8 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			// 2) 2005 13 3
 			// assume first one.
 			year = token.GetNumber();
-			if (!line.GetToken(++index, dateMonth)) {
+			dateMonth = line.GetToken(++index);
+			if (!dateMonth) {
 				return false;
 			}
 			mayHaveTime = false;
@@ -1072,12 +1113,15 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		if (token.IsLeftNumeric() && (unsigned int)token[token.size() - 1] > 127 &&
 			token.GetNumber() > 1000)
 		{
-			if (token.GetNumber() > 10000)
+			if (token.GetNumber() > 10000) {
 				return false;
+			}
 
 			// Asian date format: 2005xxx 5xx 20xxx with some non-ascii characters following
 			year = token.GetNumber();
-			if (!line.GetToken(++index, dateMonth)) {
+
+			dateMonth = line.GetToken(++index);
+			if (!dateMonth) {
 				return false;
 			}
 			mayHaveTime = false;
@@ -1089,29 +1133,32 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 
 	if (day < 1) {
 		// Get day field
-		if (!line.GetToken(++index, token)) {
+		CToken dayToken = line.GetToken(++index);
+		if (!dayToken) {
 			return false;
 		}
 
 		int dateDay;
 
 		// Check for non-numeric day
-		if (!token.IsNumeric() && !token.IsLeftNumeric()) {
+		if (!dayToken.IsNumeric() && !dayToken.IsLeftNumeric()) {
 			int offset = 0;
-			if (dateMonth.GetString().back() == '.')
+			if (dateMonth.GetString().back() == '.') {
 				++offset;
-			if (!dateMonth.IsNumeric(0, dateMonth.size() - offset))
+			}
+			if (!dateMonth.IsNumeric(0, dateMonth.size() - offset)) {
 				return false;
+			}
 			dateDay = dateMonth.GetNumber(0, dateMonth.size() - offset);
-			dateMonth = token;
+			dateMonth = dayToken;
 		}
-		else if( token.size() == 5 && token[2] == ':' && token.IsRightNumeric() ) {
+		else if (dayToken.size() == 5 && dayToken[2] == ':' && dayToken.IsRightNumeric() ) {
 			// This is a time. We consumed too much already.
 			return false;
 		}
 		else {
-			dateDay = token.GetNumber();
-			if (token[token.size() - 1] == ',') {
+			dateDay = dayToken.GetNumber();
+			if (dayToken[dayToken.size() - 1] == ',') {
 				bHasYearAndTime = true;
 			}
 		}
@@ -1145,18 +1192,19 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	}
 
 	// Get time/year field
-	if (!line.GetToken(++index, token)) {
+	CToken timeOrYearToken = line.GetToken(++index);
+	if (!timeOrYearToken) {
 		return false;
 	}
 
-	pos = token.Find(L":.-");
+	pos = timeOrYearToken.Find(L":.-");
 	if (pos != -1 && mayHaveTime) {
 		// token is a time
-		if (!pos || static_cast<size_t>(pos) == (token.size() - 1)) {
+		if (!pos || static_cast<size_t>(pos) == (timeOrYearToken.size() - 1)) {
 			return false;
 		}
 
-		std::wstring str = token.GetString();
+		std::wstring str = timeOrYearToken.GetString();
 		hour = fz::to_integral<int>(str.substr(0, pos), -1);
 		minute = fz::to_integral<int>(str.substr(pos + 1), -1);
 
@@ -1191,11 +1239,11 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	}
 	else if (year <= 0) {
 		// token is a year
-		if (!token.IsNumeric() && !token.IsLeftNumeric()) {
+		if (!timeOrYearToken.IsNumeric() && !timeOrYearToken.IsLeftNumeric()) {
 			return false;
 		}
 
-		year = token.GetNumber();
+		year = timeOrYearToken.GetNumber();
 
 		if (year > 3000) {
 			return false;
@@ -1205,18 +1253,19 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		}
 
 		if (bHasYearAndTime) {
-			if (!line.GetToken(++index, token)) {
+			CToken timeToken = line.GetToken(++index);
+			if (!timeToken) {
 				return false;
 			}
 
-			if (token.Find(':') == 2 && token.size() == 5 && token.IsLeftNumeric() && token.IsRightNumeric()) {
-				pos = token.Find(':');
+			if (timeToken.Find(':') == 2 && timeToken.size() == 5 && timeToken.IsLeftNumeric() && timeToken.IsRightNumeric()) {
+				pos = timeToken.Find(':');
 				// token is a time
-				if (!pos || static_cast<size_t>(pos) == (token.size() - 1)) {
+				if (!pos || static_cast<size_t>(pos) == (timeToken.size() - 1)) {
 					return false;
 				}
 
-				std::wstring str = token.GetString();
+				std::wstring str = timeToken.GetString();
 
 				hour = fz::to_integral<int>(str.substr(0, pos), -1);
 				minute = fz::to_integral<int>(str.substr(pos + 1), -1);
@@ -1249,8 +1298,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 
 bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bool saneFieldOrder)
 {
-	if (token.size() < 1)
+	if (token.size() < 1) {
 		return false;
+	}
 
 	bool gotYear = false;
 	bool gotMonth = false;
@@ -1262,52 +1312,60 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	int day = 0;
 
 	int pos = token.Find(L"-./");
-	if (pos < 1)
+	if (pos < 1) {
 		return false;
+	}
 
 	if (!token.IsNumeric(0, pos)) {
 		// Seems to be monthname-dd-yy
 
 		// Check month name
 		std::wstring const dateMonth = token.GetString().substr(0, pos);
-		if (!GetMonthFromName(dateMonth, month))
+		if (!GetMonthFromName(dateMonth, month)) {
 			return false;
+		}
 		gotMonth = true;
 		gotMonthName = true;
 	}
 	else if (pos == 4) {
 		// Seems to be yyyy-mm-dd
 		year = token.GetNumber(0, pos);
-		if (year < 1900 || year > 3000)
+		if (year < 1900 || year > 3000) {
 			return false;
+		}
 		gotYear = true;
 	}
 	else if (pos <= 2) {
 		int64_t value = token.GetNumber(0, pos);
 		if (token[pos] == '.') {
 			// Maybe dd.mm.yyyy
-			if (value < 1 || value > 31)
+			if (value < 1 || value > 31) {
 				return false;
+			}
 			day = value;
 			gotDay = true;
 		}
 		else {
 			if (saneFieldOrder) {
 				year = value;
-				if (year < 50)
+				if (year < 50) {
 					year += 2000;
-				else
+				}
+				else {
 					year += 1900;
+				}
 				gotYear = true;
 			}
 			else {
 				// Detect mm-dd-yyyy or mm/dd/yyyy and
 				// dd-mm-yyyy or dd/mm/yyyy
-				if (value < 1)
+				if (value < 1) {
 					return false;
+				}
 				if (value > 12) {
-					if (value > 31)
+					if (value > 31) {
 						return false;
+					}
 
 					day = value;
 					gotDay = true;
@@ -1319,23 +1377,28 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 			}
 		}
 	}
-	else
+	else {
 		return false;
+	}
 
 	int pos2 = token.Find(L"-./", pos + 1);
-	if (pos2 == -1 || (pos2 - pos) == 1)
+	if (pos2 == -1 || (pos2 - pos) == 1) {
 		return false;
-	if (static_cast<size_t>(pos2) == (token.size() - 1))
+	}
+	if (static_cast<size_t>(pos2) == (token.size() - 1)) {
 		return false;
+	}
 
 	// If we already got the month and the second field is not numeric,
 	// change old month into day and use new token as month
 	if (!token.IsNumeric(pos + 1, pos2 - pos - 1) && gotMonth) {
-		if (gotMonthName)
+		if (gotMonthName) {
 			return false;
+		}
 
-		if (gotDay)
+		if (gotDay) {
 			return false;
+		}
 
 		gotDay = true;
 		gotMonth = false;
@@ -1346,15 +1409,17 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 		// Month field in yyyy-mm-dd or dd-mm-yyyy
 		// Check month name
 		std::wstring dateMonth = token.GetString().substr(pos + 1, pos2 - pos - 1);
-		if (!GetMonthFromName(dateMonth, month))
+		if (!GetMonthFromName(dateMonth, month)) {
 			return false;
+		}
 		gotMonth = true;
 	}
 	else {
 		int64_t value = token.GetNumber(pos + 1, pos2 - pos - 1);
 		// Day field in mm-dd-yyyy
-		if (value < 1 || value > 31)
+		if (value < 1 || value > 31) {
 			return false;
+		}
 		day = value;
 		gotDay = true;
 	}
@@ -1362,19 +1427,23 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	int64_t value = token.GetNumber(pos2 + 1, token.size() - pos2 - 1);
 	if (gotYear) {
 		// Day field in yyy-mm-dd
-		if (value <= 0 || value > 31)
+		if (value <= 0 || value > 31) {
 			return false;
+		}
 		day = value;
 		gotDay = true;
 	}
 	else {
-		if (value < 0 || value > 9999)
+		if (value < 0 || value > 9999) {
 			return false;
+		}
 
-		if (value < 50)
+		if (value < 50) {
 			value += 2000;
-		else if (value < 1000)
+		}
+		else if (value < 1000) {
 			value += 1900;
+		}
 		year = value;
 
 		gotYear = true;
@@ -2609,9 +2678,8 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 
 	// Parsing is done strict, abort on slightest error.
 
-	CToken token;
-
-	if (!line.GetToken(0, token)) {
+	CToken token = line.GetToken(0);
+	if (!token) {
 		return 0;
 	}
 
@@ -2757,11 +2825,12 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 		ownerGroup += L" " + gid;
 	}
 
-	if (!line.GetToken(1, token, true, true)) {
+	CToken nameToken = line.GetEndToken(1, true);
+	if (!nameToken) {
 		return 0;
 	}
 
-	entry.name = token.GetString();
+	entry.name = nameToken.GetString();
 	entry.ownerGroup = objcache.get(ownerGroup);
 	entry.permissions = objcache.get(permissions);
 
