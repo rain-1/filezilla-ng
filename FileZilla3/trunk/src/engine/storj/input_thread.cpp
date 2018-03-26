@@ -76,7 +76,7 @@ void CStorjInputThread::processEvent(storjEvent eventType, std::wstring &error)
 	{
 	case storjEvent::count:
 	case storjEvent::Unknown:
-		error = fz::sprintf(L"Unknown eventType %d", readType);
+		error = fz::sprintf(L"Unknown eventType");
 		break;
 	case storjEvent::Done:
 	case storjEvent::Recv:
