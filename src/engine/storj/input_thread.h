@@ -25,7 +25,7 @@ protected:
 
 	void entry();
 
-	void processEvent(sftpEvent eventType, std::wstring & error);
+	void processEvent(storjEvent eventType, std::wstring & error);
 
 	fz::process& process_;
 	CStorjControlSocket& owner_;
