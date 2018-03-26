@@ -69,7 +69,7 @@ std::wstring CStorjInputThread::ReadLine(std::wstring &error)
 	return std::wstring();
 }
 
-void CStorjInputThread::processEvent(sftpEvent eventType, std::wstring &error)
+void CStorjInputThread::processEvent(storjEvent eventType, std::wstring &error)
 {
 	int lines{};
 	switch (eventType)
