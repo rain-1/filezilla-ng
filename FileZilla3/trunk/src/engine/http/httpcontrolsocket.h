@@ -141,6 +141,16 @@ public:
 	virtual int reset();
 };
 
+class HttpResponse;
+class HttpRequestResponseInterface
+{
+public:
+	virtual ~HttpRequestResponseInterface() = default;
+
+	virtual HttpRequest & request() = 0;
+	virtual HttpResponse & response() = 0;
+};
+
 class HttpResponse : public WithHeaders
 {
 public:
@@ -166,7 +176,7 @@ public:
 	//   FZ_REPLY_CONTINUE: All is well
 	//   FZ_REPLY_OK: We're not interested in the request body, but continue
 	//   FZ_REPLY_ERROR: Abort connection
-	std::function<int()> on_header_;
+	std::function<int(std::shared_ptr<HttpRequestResponseInterface> const&)> on_header_;
 
 	// Is only called after the on_header_ callback.
 	// Callback must return FZ_REPLY_CONTINUE or FZ_REPLY_ERROR
@@ -181,15 +191,6 @@ public:
 	}
 
 	virtual int reset();
-};
-
-class HttpRequestResponseInterface
-{
-public:
-	virtual ~HttpRequestResponseInterface() = default;
-
-	virtual HttpRequest & request() = 0;
-	virtual HttpResponse & response() = 0;
 };
 
 template<typename Request, typename Response>

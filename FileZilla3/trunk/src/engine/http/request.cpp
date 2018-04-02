@@ -547,8 +547,9 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpRequestOpData::ParseHeader()");
 
-	auto & request = requests_.front()->request();
-	auto & response = requests_.front()->response();
+	auto & srr = requests_.front();
+	auto & request = srr->request();
+	auto & response = srr->response();
 	if (response.code_ == 100) {
 		// 100 Continue header. Ignore it and start over.
 		response.reset();
@@ -594,13 +595,13 @@ int CHttpRequestOpData::ProcessCompleteHeader()
 
 	int res = FZ_REPLY_CONTINUE;
 	if (response.on_header_) {
-		res = response.on_header_();
+		res = response.on_header_(srr);
 
 		if (res != FZ_REPLY_CONTINUE) {
 			response.flags_ |= HttpResponse::flag_ignore_body;
 			if (res == FZ_REPLY_OK) {
 				// Clear the pointer, we no longer need the request to finish, all needed information is in read_state_
-				requests_.front().reset();
+				srr.reset();
 				res = FZ_REPLY_CONTINUE;
 			}
 		}
