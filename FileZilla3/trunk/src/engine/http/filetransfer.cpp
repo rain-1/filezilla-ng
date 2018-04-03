@@ -58,7 +58,7 @@ int CHttpFileTransferOpData::Send()
 		}
 
 		rr_.response_ = HttpResponse();
-		rr_.response_.on_header_ = [this](auto const&) { return OnHeader(); };
+		rr_.response_.on_header_ = [this](auto const&) { return this->OnHeader(); };
 		rr_.response_.on_data_ = [this](auto data, auto len) { return this->OnData(data, len); };
 
 		opState = filetransfer_waittransfer;
