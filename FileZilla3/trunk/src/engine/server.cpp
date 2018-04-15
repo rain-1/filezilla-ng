@@ -493,18 +493,13 @@ ServerProtocol CServer::GetProtocolFromName(std::wstring const& name)
 
 bool CServer::SetPostLoginCommands(const std::vector<std::wstring>& postLoginCommands)
 {
-	if (!SupportsPostLoginCommands(m_protocol)) {
+	if (!ProtocolHasFeature(m_protocol, ProtocolFeature::PostLoginCommands)) {
 		m_postLoginCommands.clear();
 		return false;
 	}
 
 	m_postLoginCommands = postLoginCommands;
 	return true;
-}
-
-bool CServer::SupportsPostLoginCommands(ServerProtocol const protocol)
-{
-	return protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP;
 }
 
 ServerProtocol CServer::GetProtocolFromPrefix(std::wstring const& prefix, ServerProtocol const hint)
@@ -554,8 +549,8 @@ bool CServer::ProtocolHasFeature(ServerProtocol const protocol, ProtocolFeature 
 	switch (feature) {
 	case ProtocolFeature::DataTypeConcept:
 	case ProtocolFeature::TransferMode:
-	case ProtocolFeature::PreserveTimestamp:
 	case ProtocolFeature::EnterCommand:
+	case ProtocolFeature::PostLoginCommands:
 		if (protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP) {
 			return true;
 		}
@@ -566,6 +561,7 @@ bool CServer::ProtocolHasFeature(ServerProtocol const protocol, ProtocolFeature 
 			return true;
 		}
 		break;
+	case ProtocolFeature::PreserveTimestamp:
 	case ProtocolFeature::ServerType:
 		if (protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP ||
 			protocol == SFTP) {

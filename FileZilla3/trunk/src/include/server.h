@@ -74,7 +74,8 @@ enum class ProtocolFeature
 	Charset,
 	ServerType,
 	EnterCommand,
-	DirectoryRename
+	DirectoryRename,
+	PostLoginCommands
 };
 
 class Credentials;
@@ -138,7 +139,6 @@ public:
 	// These commands will be executed after a successful login.
 	std::vector<std::wstring> const& GetPostLoginCommands() const { return m_postLoginCommands; }
 	bool SetPostLoginCommands(std::vector<std::wstring> const& postLoginCommands);
-	static bool SupportsPostLoginCommands(ServerProtocol const protocol);
 
 	void SetBypassProxy(bool val);
 

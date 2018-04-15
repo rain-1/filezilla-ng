@@ -413,7 +413,7 @@ bool GetServer(pugi::xml_node node, ServerWithCredentials & server)
 		server.server.SetEncodingType(ENCODING_AUTO);
 	}
 
-	if (CServer::SupportsPostLoginCommands(server.server.GetProtocol())) {
+	if (CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::PostLoginCommands)) {
 		std::vector<std::wstring> postLoginCommands;
 		auto element = node.child("PostLoginCommands");
 		if (element) {
@@ -517,7 +517,7 @@ void SetServer(pugi::xml_node node, ServerWithCredentials const& server)
 		break;
 	}
 
-	if (CServer::SupportsPostLoginCommands(server.server.GetProtocol())) {
+	if (CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::PostLoginCommands)) {
 		std::vector<std::wstring> const& postLoginCommands = server.server.GetPostLoginCommands();
 		if (!postLoginCommands.empty()) {
 			auto element = node.append_child("PostLoginCommands");
