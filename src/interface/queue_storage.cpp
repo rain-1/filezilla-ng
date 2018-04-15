@@ -688,7 +688,7 @@ bool CQueueStorage::Impl::SaveServer(CServerItem const& item)
 		break;
 	}
 
-	if (CServer::SupportsPostLoginCommands(server.server.GetProtocol())) {
+	if (CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::PostLoginCommands)) {
 		std::vector<std::wstring> const& postLoginCommands = server.server.GetPostLoginCommands();
 		if (!postLoginCommands.empty()) {
 			std::wstring commands;
@@ -989,7 +989,7 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(ServerWithCredentials& server)
 		}
 	}
 
-	if (CServer::SupportsPostLoginCommands(server.server.GetProtocol())) {
+	if (CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::PostLoginCommands)) {
 		std::wstring const commands = GetColumnText(selectServersQuery_, server_table_column_names::post_login_commands);
 		std::vector<std::wstring> postLoginCommands = fz::strtok(commands, '\n');
 		if (!server.server.SetPostLoginCommands(postLoginCommands)) {
