@@ -8,6 +8,7 @@
 #include "QueueView.h"
 #include "sitemanager.h"
 #include "state.h"
+
 #if USE_MAC_SANDBOX
 #include "osx_sandbox_userdirs.h"
 #endif
@@ -36,38 +37,150 @@ CMenuBar::~CMenuBar()
 
 CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 {
-	CMenuBar* menubar = dynamic_cast<CMenuBar*>(wxXmlResource::Get()->LoadMenuBar(_T("ID_MENUBAR")));
-	if (!menubar)
-		return 0;
-
+	CMenuBar* menubar = new CMenuBar();
 	menubar->m_pMainFrame = pMainFrame;
 
+	wxMenu* file = new wxMenu;
+	menubar->Append(file, _("&File"));
+
+	wxAcceleratorEntry accel;
+
+	accel.FromString(L"CTRL+S");
+	file->Append(XRCID("ID_MENU_FILE_SITEMANAGER"), _("&Site Manager..."), _("Opens the Site Manager"))->SetAccel(&accel);
+	file->Append(XRCID("ID_MENU_FILE_COPYSITEMANAGER"), _("&Copy current connection to Site Manager..."));
+	file->AppendSeparator();
+	accel.FromString(L"CTRL+T");
+	file->Append(XRCID("ID_MENU_FILE_NEWTAB"), _("New &tab"), _("Opens a new tab"))->SetAccel(&accel);
+	accel.FromString(L"CTRL+W");
+	file->Append(XRCID("ID_MENU_FILE_CLOSETAB"), _("Cl&ose tab"), _("Closes current tab"))->SetAccel(&accel);
+	file->AppendSeparator();
+	file->Append(XRCID("ID_EXPORT"), _("&Export..."));
+	file->Append(XRCID("ID_IMPORT"), _("&Import..."));
+	file->AppendSeparator();
+	accel.FromString(L"CTRL+E");
+	file->Append(XRCID("ID_MENU_FILE_EDITED"), _("S&how files currently being edited..."))->SetAccel(&accel);
+	file->AppendSeparator();
+	accel.FromString(L"CTRL+Q");
+	file->Append(XRCID("wxID_EXIT"), _("E&xit"), _("Close FileZilla"))->SetAccel(&accel);
+
+
+	wxMenu* edit = new wxMenu;
+	menubar->Append(edit, _("&Edit"));
+	edit->Append(XRCID("ID_MENU_EDIT_NETCONFWIZARD"), _("&Network configuration wizard..."));
+	edit->Append(XRCID("ID_MENU_EDIT_CLEARPRIVATEDATA"), _("&Clear private data..."));
+	edit->AppendSeparator();
+	edit->Append(XRCID("wxID_PREFERENCES"), _("&Settings..."), _("Open the settings dialog of FileZilla"));
+#ifdef FZ_MAC
+	edit->Append(XRCID("ID_MENU_EDIT_SANDBOX_DIRECTORIES", _("&Directory access permissions..."), _("Open the directory access permissions dialog to configure the local directories FileZilla has access to."));
+#endif
+
+	wxMenu* view = new wxMenu;
+	menubar->Append(view, _("&View"));
+	accel.FromString(L"F5");
+	view->Append(XRCID("ID_REFRESH"), _("&Refresh"))->SetAccel(&accel);
+	view->AppendSeparator();
+	accel.FromString(L"Ctrl+I");
+	view->Append(XRCID("ID_MENU_VIEW_FILTERS"), _("Directory listing &filters..."))->SetAccel(&accel);
+
+	wxMenu * comparison = new wxMenu;
+	view->AppendSubMenu(comparison, _("&Directory comparison"));
+
+	accel.FromString(L"CTRL+O");
+	comparison->Append(XRCID("ID_TOOLBAR_COMPARISON"), _("&Enable"), L"", wxITEM_CHECK)->SetAccel(&accel);
+	comparison->AppendSeparator();
+	comparison->Append(XRCID("ID_COMPARE_SIZE"), _("Compare file&size"), L"", wxITEM_RADIO);
+	comparison->Append(XRCID("ID_COMPARE_DATE"), _("Compare &modification time"), L"", wxITEM_RADIO);
+	comparison->AppendSeparator();
+	comparison->Append(XRCID("ID_COMPARE_HIDEIDENTICAL"), _("&Hide identical files"), L"", wxITEM_CHECK);
+
+	accel.FromString(L"CTRL+Y");
+	view->Append(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), _("S&ynchronized browsing"), L"", wxITEM_CHECK)->SetAccel(&accel);
+	view->Append(XRCID("ID_MENU_VIEW_FILELISTSTATUSBAR"), _("Filelist status &bars"), L"", wxITEM_CHECK);
+	view->AppendSeparator();
+	view->Append(XRCID("ID_VIEW_TOOLBAR"), _("T&oolbar"), L"", wxITEM_CHECK);
+	view->Append(XRCID("ID_VIEW_QUICKCONNECT"), _("&Quickconnect bar"), L"", wxITEM_CHECK);
+	view->Append(XRCID("ID_VIEW_MESSAGELOG"), _("&Message log"), L"", wxITEM_CHECK);
+	view->Append(XRCID("ID_VIEW_LOCALTREE"), _("&Local directory tree"), L"", wxITEM_CHECK);
+	view->Append(XRCID("ID_VIEW_REMOTETREE"), _("R&emote directory tree"), L"", wxITEM_CHECK);
+	view->Append(XRCID("ID_VIEW_QUEUE"), _("&Transfer queue"), L"", wxITEM_CHECK);
+
+	wxMenu * transfer = new wxMenu;
+	menubar->Append(transfer, _("&Transfer"));
+
+	accel.FromString(L"CTRL+P");
+	transfer->Append(XRCID("ID_MENU_TRANSFER_PROCESSQUEUE"), _("Process &Queue"), L"", wxITEM_CHECK)->SetAccel(&accel);
+	transfer->AppendSeparator();
+	transfer->Append(XRCID("ID_MENU_TRANSFER_FILEEXISTS"), _("&Default file exists action..."));
+
+	wxMenu * type = new wxMenu;
+	transfer->Append(XRCID("ID_MENU_TRANSFER_TYPE"), _("Transfer &type"), type);
+
+	type->Append(XRCID("ID_MENU_TRANSFER_TYPE_AUTO"), _("&Auto"), L"", wxITEM_RADIO);
+	type->Append(XRCID("ID_MENU_TRANSFER_TYPE_ASCII"), _("A&SCII"), L"", wxITEM_RADIO);
+	type->Append(XRCID("ID_MENU_TRANSFER_TYPE_BINARY"), _("&Binary"), L"", wxITEM_RADIO);
+	accel.FromString(L"CTRL+U");
+
+	transfer->Append(XRCID("ID_MENU_TRANSFER_PRESERVETIMES"), _("&Preserve timestamps of transferred files"), L"", wxITEM_CHECK)->SetAccel(&accel);
+
+	wxMenu * speed = new wxMenu;
+	transfer->AppendSubMenu(speed, _("&Speed limits"));
+
+	speed->Append(XRCID("ID_MENU_TRANSFER_SPEEDLIMITS_ENABLE"), _("&Enable"), L"", wxITEM_CHECK);
+	speed->Append(XRCID("ID_MENU_TRANSFER_SPEEDLIMITS_CONFIGURE"), _("&Configure..."));
+
+	transfer->AppendSeparator();
+	accel.FromString(L"CTRL+M");
+	transfer->Append(XRCID("ID_MENU_TRANSFER_MANUAL"), _("&Manual transfer..."))->SetAccel(&accel);
+
+	wxMenu * server = new wxMenu;
+	menubar->Append(server, _("&Server"));
+	accel.FromString(L"CTRL+.");
+	server->Append(XRCID("ID_CANCEL"), _("C&ancel current operation"))->SetAccel(&accel);
+	server->AppendSeparator();
+	accel.FromString(L"CTRL+R");
+	server->Append(XRCID("ID_MENU_SERVER_RECONNECT"), _("&Reconnect"))->SetAccel(&accel);
+	accel.FromString(L"CTRL+D");
+	server->Append(XRCID("ID_MENU_SERVER_DISCONNECT"), _("&Disconnect"))->SetAccel(&accel);
+	server->AppendSeparator();
+	accel.FromString(L"F3");
+	server->Append(XRCID("ID_MENU_SERVER_SEARCH"), _("&Search remote files..."), _("Search server for files"))->SetAccel(&accel);
+	server->Append(XRCID("ID_MENU_SERVER_CMD"), _("Enter &custom command..."), _("Send custom command to the server otherwise not available"));
+	server->Append(XRCID("ID_MENU_SERVER_VIEWHIDDEN"), _("Force showing &hidden files"), L"", wxITEM_CHECK);
+
+	wxMenu * bookmarks = new wxMenu;
+	menubar->Append(bookmarks, _("&Bookmarks"));
+
+	accel.FromString(L"CTRL+B");
+	bookmarks->Append(XRCID("ID_BOOKMARK_ADD"), _("&Add bookmark..."))->SetAccel(&accel);
+	accel.FromString(L"CTRL+SHIFT+B");
+	bookmarks->Append(XRCID("ID_BOOKMARK_MANAGE"), _("&Manage bookmarks..."))->SetAccel(&accel);
+
+	wxMenu * help = new wxMenu;
+#ifdef FZ_MAC
+	menubar->Append(help, _("?"));
+#else
+	menubar->Append(help, _("&Help"));
+#endif
 
 #if FZ_MANUALUPDATECHECK
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK))
-#endif
-	{
-		wxMenu *helpMenu;
-
-		wxMenuItem* pUpdateItem = menubar->FindItem(XRCID("ID_CHECKFORUPDATES"), &helpMenu);
-		if (pUpdateItem) {
-			// Get rid of separator
-			unsigned int count = helpMenu->GetMenuItemCount();
-			for (unsigned int i = 0; i < count - 1; ++i) {
-				if (helpMenu->FindItemByPosition(i) == pUpdateItem) {
-					helpMenu->Delete(helpMenu->FindItemByPosition(i + 1));
-					break;
-				}
-			}
-
-			helpMenu->Delete(pUpdateItem);
-		}
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) == 0) {
+		help->Append(XRCID("ID_CHECKFORUPDATES"), _("Check for &updates..."), _("Check for newer versions of FileZilla"));
+		help->AppendSeparator();
 	}
+#endif
+	help->Append(XRCID("ID_MENU_HELP_WELCOME"), _("Show &welcome dialog..."));
+	help->Append(XRCID("ID_MENU_HELP_GETTINGHELP"), _("&Getting help..."));
+	help->Append(XRCID("ID_MENU_HELP_BUGREPORT"), _("&Report a bug..."));
+
+#ifndef FZ_MAC
+	help->Append(XRCID("wxID_ABOUT"), _("&About..."), _("Display about dialog"));
+#endif
 
 	if (COptions::Get()->GetOptionVal(OPTION_DEBUG_MENU)) {
 		wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_DEBUG"));
-		if (pMenu)
+		if (pMenu) {
 			menubar->Append(pMenu, _("&Debug"));
+		}
 	}
 
 	menubar->UpdateBookmarkMenu();
@@ -481,29 +594,9 @@ void CMenuBar::UpdateMenubarState()
 	}
 	Enable(XRCID("ID_MENU_SERVER_RECONNECT"), canReconnect);
 
-	wxMenuItem* pItem = FindItem(XRCID("ID_MENU_TRANSFER_TYPE"));
-	if (!server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::DataTypeConcept)) {
-		pItem->Enable(true);
-	}
-	else {
-		pItem->Enable(false);
-	}
-
-	pItem = FindItem(XRCID("ID_MENU_TRANSFER_PRESERVETIMES"));
-	if (!server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::PreserveTimestamp)) {
-		pItem->Enable(true);
-	}
-	else {
-		pItem->Enable(false);
-	}
-
-	pItem = FindItem(XRCID("ID_MENU_SERVER_CMD"));
-	if (!server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::EnterCommand)) {
-		pItem->Enable(true);
-	}
-	else {
-		pItem->Enable(false);
-	}
+	Enable(XRCID("ID_MENU_TRANSFER_TYPE"), !server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::DataTypeConcept));
+	Enable(XRCID("ID_MENU_TRANSFER_PRESERVETIMES"), !server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::PreserveTimestamp));
+	Enable(XRCID("ID_MENU_SERVER_CMD"), !server || CServer::ProtocolHasFeature(server.server.GetProtocol(), ProtocolFeature::EnterCommand));
 }
 
 bool CMenuBar::ShowItem(int id)
