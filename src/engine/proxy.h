@@ -4,6 +4,8 @@
 #include "backend.h"
 #include "socket.h"
 
+#include <libfilezilla/buffer.hpp>
+
 class CControlSocket;
 class CProxySocket final : protected fz::event_handler, public CBackend
 {
@@ -59,8 +61,7 @@ protected:
 
 	int m_handshakeState{};
 
-	char* m_pSendBuffer{};
-	int m_sendBufferLen{};
+	fz::buffer sendBuffer_;
 
 	char* m_pRecvBuffer{};
 	int m_recvBufferPos{};

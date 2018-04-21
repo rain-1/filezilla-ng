@@ -47,7 +47,6 @@ CProxySocket::~CProxySocket()
 	if (socket_) {
 		socket_->set_event_handler(nullptr);
 	}
-	delete [] m_pSendBuffer;
 	delete [] m_pRecvBuffer;
 }
 
@@ -99,13 +98,11 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, std::wstring const& ho
 
 		// Bit oversized, but be on the safe side
 		std::string host_raw = fz::to_utf8(host);
-		m_pSendBuffer = new char[70 + host_raw.size() * 2 + 2*5 + auth.size() + 23];
-
-		m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\n%sUser-Agent: %s\r\n\r\n",
-			host_raw.c_str(), port,
-			host_raw.c_str(), port,
-			auth.c_str(),
-			fz::replaced_substrings(PACKAGE_STRING, " ", "/").c_str());
+		sendBuffer_.append(fz::sprintf("CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\n%sUser-Agent: %s\r\n\r\n",
+			host_raw, port,
+			host_raw, port,
+			auth,
+			fz::replaced_substrings(PACKAGE_STRING, " ", "/")));
 
 		m_pRecvBuffer = new char[4096];
 		m_recvBufferLen = 4096;
@@ -143,25 +140,24 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, std::wstring const& ho
 
 		m_pOwner->LogMessage(MessageType::Status, _("SOCKS4 proxy will connect to: %s"), ip);
 
-		m_pSendBuffer = new char[9];
-		m_pSendBuffer[0] = 4; // Protocol version
-		m_pSendBuffer[1] = 1; // Stream mode
-		m_pSendBuffer[2] = (m_port >> 8) & 0xFF; // Port in network order
-		m_pSendBuffer[3] = m_port & 0xFF;
-		unsigned char *buf = (unsigned char*)m_pSendBuffer + 4;
+		unsigned char* out = sendBuffer_.get(9);
+		out[0] = 4; // Protocol version
+		out[1] = 1; // Stream mode
+		out[2] = (m_port >> 8) & 0xFF; // Port in network order
+		out[3] = m_port & 0xFF;
 		int i = 0;
-		memset(buf, 0, 4);
+		memset(out + 4, 0, 5);
 		for (auto p = ip.c_str(); *p && i < 4; ++p) {
 			auto const& c = *p;
 			if (c == '.') {
 				++i;
 				continue;
 			}
-			buf[i] *= 10;
-			buf[i] += c - '0';
+			out[i + 4] *= 10;
+			out[i + 4] += c - '0';
 		}
-		m_pSendBuffer[8] = 0;
-		m_sendBufferLen = 9;
+		sendBuffer_.add(9);
+
 		m_pRecvBuffer = new char[8];
 		m_recvBufferLen = 8;
 		m_recvBufferPos = 0;
@@ -173,18 +169,18 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, std::wstring const& ho
 			return EINVAL;
 		}
 
-		m_pSendBuffer = new char[4];
-		m_pSendBuffer[0] = 5; // Protocol version
+		unsigned char* out = sendBuffer_.get(4);
+		out[0] = 5; // Protocol version
 		if (!user.empty()) {
-			m_pSendBuffer[1] = 2; // # auth methods supported
-			m_pSendBuffer[2] = 0; // Method: No auth
-			m_pSendBuffer[3] = 2; // Method: Username and password
-			m_sendBufferLen = 4;
+			out[1] = 2; // # auth methods supported
+			out[2] = 0; // Method: No auth
+			out[3] = 2; // Method: Username and password
+			sendBuffer_.add(4);
 		}
 		else {
-			m_pSendBuffer[1] = 1; // # auth methods supported
-			m_pSendBuffer[2] = 0; // Method: No auth
-			m_sendBufferLen = 3;
+			out[1] = 1; // # auth methods supported
+			out[2] = 0; // Method: No auth
+			sendBuffer_.add(3);
 		}
 
 		m_pRecvBuffer = new char[1024];
@@ -288,7 +284,7 @@ void CProxySocket::OnReceive()
 					m_pEvtHandler->send_event<fz::socket_event>(this, fz::socket_event_flag::close, ECONNABORTED);
 					return;
 				}
-				if (m_pSendBuffer) {
+				if (sendBuffer_) {
 					m_proxyState = noconn;
 					m_pOwner->LogMessage(MessageType::Debug_Warning, L"Incoming data before request fully sent");
 					m_pEvtHandler->send_event<fz::socket_event>(this, fz::socket_event_flag::close, ECONNABORTED);
@@ -401,7 +397,7 @@ void CProxySocket::OnReceive()
 	case socks5_request:
 	case socks5_request_addrtype:
 	case socks5_request_address:
-		if (m_pSendBuffer) {
+		if (sendBuffer_) {
 			return;
 		}
 		while (m_recvBufferLen && m_can_read && m_proxyState == handshake) {
@@ -566,13 +562,13 @@ void CProxySocket::OnReceive()
 				{
 					auto ulen = static_cast<unsigned char>(std::min(m_user.size(), size_t(255)));
 					auto plen = static_cast<unsigned char>(std::min(m_pass.size(), size_t(255)));
-					m_sendBufferLen = ulen + plen + 3;
-					m_pSendBuffer = new char[m_sendBufferLen];
-					m_pSendBuffer[0] = 1;
-					m_pSendBuffer[1] = ulen;
-					memcpy(m_pSendBuffer + 2, m_user.c_str(), ulen);
-					m_pSendBuffer[ulen + 2] = plen;
-					memcpy(m_pSendBuffer + ulen + 3, m_pass.c_str(), plen);
+					unsigned char* out = sendBuffer_.get(ulen + plen + 3);
+					out[0] = 1;
+					out[1] = ulen;
+					memcpy(out + 2, m_user.c_str(), ulen);
+					out[ulen + 2] = plen;
+					memcpy(out + ulen + 3, m_pass.c_str(), plen);
+					sendBuffer_.add(ulen + plen + 3);
 					m_recvBufferLen = 2;
 				}
 				break;
@@ -581,52 +577,51 @@ void CProxySocket::OnReceive()
 					std::string host = fz::to_utf8(m_host);
 					size_t addrlen = std::max(host.size(), size_t(16));
 
-					m_pSendBuffer = new char[7 + addrlen];
-					m_pSendBuffer[0] = 5;
-					m_pSendBuffer[1] = 1; // CONNECT
-					m_pSendBuffer[2] = 0; // Reserved
+					unsigned char * out = sendBuffer_.get(7 + addrlen);
+					out[0] = 5;
+					out[1] = 1; // CONNECT
+					out[2] = 0; // Reserved
 
 					auto const type = fz::get_address_type(host);
 					if (type == fz::address_type::ipv6) {
 						auto ipv6 = fz::get_ipv6_long_form(host);
 						addrlen = 16;
 						for (auto i = 0; i < 16; ++i) {
-							m_pSendBuffer[4 + i] = (fz::hex_char_to_int(ipv6[i * 2 + i / 2]) << 4) + fz::hex_char_to_int(ipv6[i * 2 + 1 + i / 2]);
+							out[4 + i] = (fz::hex_char_to_int(ipv6[i * 2 + i / 2]) << 4) + fz::hex_char_to_int(ipv6[i * 2 + 1 + i / 2]);
 						}
 
-						m_pSendBuffer[3] = 4; // IPv6
+						out[3] = 4; // IPv6
 					}
 					else if (type == fz::address_type::ipv4) {
-						unsigned char *buf = (unsigned char*)m_pSendBuffer + 4;
 						int i = 0;
-						memset(buf, 0, 4);
+						memset(out + 4, 0, 4);
 						for (auto p = host.c_str(); *p && i < 4; ++p) {
 							auto const& c = *p;
 							if (c == '.') {
 								++i;
 								continue;
 							}
-							buf[i] *= 10;
-							buf[i] += c - '0';
+							out[i + 4] *= 10;
+							out[i + 4] += c - '0';
 						}
 
 						addrlen = 4;
 
-						m_pSendBuffer[3] = 1; // IPv4
+						out[3] = 1; // IPv4
 					}
 					else {
-						m_pSendBuffer[3] = 3; // Domain name
+						out[3] = 3; // Domain name
 
 						auto hlen = static_cast<unsigned char>(std::min(host.size(), size_t(255)));
-						m_pSendBuffer[4] = hlen;
-						memcpy(m_pSendBuffer + 5, host.c_str(), hlen);
+						out[4] = hlen;
+						memcpy(out + 5, host.c_str(), hlen);
 						addrlen = hlen + 1;
 					}
 
-					m_pSendBuffer[addrlen + 4] = (m_port >> 8) & 0xFF; // Port in network order
-					m_pSendBuffer[addrlen + 5] = m_port & 0xFF;
+					out[addrlen + 4] = (m_port >> 8) & 0xFF; // Port in network order
+					out[addrlen + 5] = m_port & 0xFF;
 
-					m_sendBufferLen = 6 + addrlen;
+					sendBuffer_.add(6 + addrlen);
 					m_recvBufferLen = 2;
 				}
 				break;
@@ -638,7 +633,7 @@ void CProxySocket::OnReceive()
 				assert(false);
 				break;
 			}
-			if (m_pSendBuffer && m_can_write) {
+			if (sendBuffer_ && m_can_write) {
 				OnSend();
 			}
 		}
@@ -654,13 +649,13 @@ void CProxySocket::OnReceive()
 void CProxySocket::OnSend()
 {
 	m_can_write = true;
-	if (m_proxyState != handshake || !m_pSendBuffer) {
+	if (m_proxyState != handshake || !sendBuffer_) {
 		return;
 	}
 
 	for (;;) {
 		int error;
-		int written = socket_->write(m_pSendBuffer, m_sendBufferLen, error);
+		int written = socket_->write(sendBuffer_.get(), sendBuffer_.size(), error);
 		if (written == -1) {
 			if (error != EAGAIN) {
 				m_proxyState = noconn;
@@ -673,17 +668,13 @@ void CProxySocket::OnSend()
 			return;
 		}
 
-		if (written == m_sendBufferLen) {
-			delete [] m_pSendBuffer;
-			m_pSendBuffer = nullptr;
-
+		sendBuffer_.consume(written);
+		if (sendBuffer_.empty()) {
 			if (m_can_read) {
 				OnReceive();
 			}
 			return;
 		}
-		memmove(m_pSendBuffer, m_pSendBuffer + written, m_sendBufferLen - written);
-		m_sendBufferLen -= written;
 	}
 }
 
