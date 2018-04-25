@@ -198,6 +198,9 @@ EVT_MENU(XRCID("ID_PRIORITY_LOWEST"), CQueueView::OnSetPriority)
 EVT_COMMAND(wxID_ANY, fzEVT_GRANTEXCLUSIVEENGINEACCESS, CQueueView::OnExclusiveEngineRequestGranted)
 
 EVT_SIZE(CQueueView::OnSize)
+
+EVT_LIST_COL_CLICK(wxID_ANY, CQueueView::OnColumnClicked)
+
 END_EVENT_TABLE()
 
 CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsyncRequestQueue *pAsyncRequestQueue)
@@ -3178,4 +3181,17 @@ void CQueueView::OnStateChange(CState*, t_statechange_notifications notification
 			SaveColumnSettings(OPTION_QUEUE_COLUMN_WIDTHS, -1, -1);
 		}
 	}
+}
+
+void CQueueView::OnColumnClicked(wxListEvent &event)
+{
+	int const col = event.GetColumn();
+	bool const reverse = wxGetKeyState(WXK_SHIFT);
+
+	for (auto * serverItem : m_serverList) {
+		serverItem->Sort(col, reverse);
+	}
+
+	RefreshListOnly();
+	UpdateStatusLinePositions();
 }

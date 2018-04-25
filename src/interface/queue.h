@@ -117,6 +117,8 @@ public:
 
 	const std::vector<CQueueItem*>& GetChildren() const { return m_children; }
 
+	void Sort(int col, bool reverse);
+
 protected:
 	void AddFileItemToList(CFileItem* pItem);
 	void RemoveFileItemFromList(CFileItem* pItem, bool forward);
@@ -169,19 +171,23 @@ public:
 	inline bool queued() const { return (flags & flag_queued) != 0; }
 	inline void set_queued(bool q)
 	{
-		if (q)
+		if (q) {
 			flags |= flag_queued;
-		else
+		}
+		else {
 			flags &= ~flag_queued;
+		}
 	}
 
 	inline bool pending_remove() const { return (flags & flag_remove) != 0; }
 	inline void set_pending_remove(bool remove)
 	{
-		if (remove)
+		if (remove) {
 			flags |= flag_remove;
-		else
+		}
+		else {
 			flags &= ~flag_remove;
+		}
 	}
 
 	virtual QueueItemType GetType() const { return QueueItemType::File; }
@@ -242,10 +248,12 @@ public:
 	inline bool made_progress() const { return (flags & flag_made_progress) != 0; }
 	inline void set_made_progress(bool made_progress)
 	{
-		if (made_progress)
+		if (made_progress) {
 			flags |= flag_made_progress;
-		else
+		}
+		else {
 			flags &= ~flag_made_progress;
+		}
 	}
 
 	bool Ascii() const { return (flags & flag_ascii) != 0; }
@@ -286,8 +294,8 @@ public:
 class CStatusItem final : public CQueueItem
 {
 public:
-	CStatusItem() {}
-	virtual ~CStatusItem() {}
+	CStatusItem() = default;
+	virtual ~CStatusItem() = default;
 
 	virtual QueueItemType GetType() const { return QueueItemType::Status; }
 
