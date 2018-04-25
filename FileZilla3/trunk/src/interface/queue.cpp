@@ -488,6 +488,71 @@ void CServerItem::SetDefaultFileExistsAction(CFileExistsNotification::OverwriteA
 	}
 }
 
+void CServerItem::Sort(int col, bool reverse)
+{
+	auto const cmpLocalName = [](CFileItem const& l, CFileItem const& r) {
+		return std::tie(l.GetLocalPath(), l.GetLocalFile()) < std::tie(r.GetLocalPath(), r.GetLocalFile());
+	};
+	auto const cmpRemoteName = [](CFileItem const& l, CFileItem const& r) {
+		return std::tie(l.GetRemotePath(), l.GetRemoteFile()) < std::tie(r.GetRemotePath(), r.GetRemoteFile());
+	};
+	auto const cmpSize = [](CFileItem const& l, CFileItem const& r) {
+		return l.GetSize() < r.GetSize();
+	};
+	auto const cmpDirection = [](CFileItem const& l, CFileItem const& r) {
+		return l.Download() < r.Download();
+	};
+	auto const cmpStatus = [](CFileItem const& l, CFileItem const& r) {
+		return l.GetStatusMessage() < r.GetStatusMessage();
+	};
+
+	bool (*cmp)(CFileItem const&, CFileItem const&);
+	switch (col) {
+	case 0:
+		cmp = cmpLocalName;
+		break;
+	case 1:
+		cmp = cmpDirection;
+		break;
+	case 2:
+		cmp = cmpRemoteName;
+		break;
+	case 3:
+		cmp = cmpSize;
+		break;
+	case 4:
+		cmp = cmpStatus;
+		break;
+	default:
+		return;
+	}
+
+	std::function<bool(CQueueItem *, CQueueItem *)> fn;
+	if (reverse) {
+		fn = [&cmp](CQueueItem * l, CQueueItem * r) { return cmp(static_cast<CFileItem const&>(*r), static_cast<CFileItem const&>(*l)); };
+	}
+	else {
+		fn = [&cmp](CQueueItem * l, CQueueItem * r) { return cmp(static_cast<CFileItem const&>(*l), static_cast<CFileItem const&>(*r)); };
+	}
+
+
+	std::stable_sort(m_children.begin() + m_removed_at_front, m_children.end(), fn);
+
+	m_lookupCache.clear();
+	m_maxCachedIndex = -1;
+
+	// Rebuild m_fileList
+	for (size_t i = 0; i < static_cast<size_t>(QueuePriority::count); ++i) {
+		m_fileList[0][i].clear();
+		m_fileList[1][i].clear();
+	}
+
+	for (auto it = m_children.cbegin() + m_removed_at_front; it != m_children.cend(); ++it) {
+		CFileItem *pItem = static_cast<CFileItem*>(*it);
+		m_fileList[pItem->queued() ? 0 : 1][static_cast<int>(pItem->GetPriority())].push_back(pItem);
+	}
+}
+
 CQueueItem* CServerItem::GetChild(unsigned int item, bool recursive)
 {
 	std::vector<CQueueItem*>::iterator iter;
@@ -820,8 +885,9 @@ CQueueViewBase::~CQueueViewBase()
 CQueueItem* CQueueViewBase::GetQueueItem(unsigned int item) const
 {
 	for (auto iter = m_serverList.cbegin(); iter != m_serverList.cend(); ++iter) {
-		if (!item)
+		if (!item) {
 			return *iter;
+		}
 
 		unsigned int count = (*iter)->GetChildrenCount(true);
 		if (item > count) {

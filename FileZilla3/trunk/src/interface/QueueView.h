@@ -320,6 +320,8 @@ protected:
 	void OnActionAfterTimerTick();
 
 	void OnSize(wxSizeEvent& event);
+
+	void OnColumnClicked(wxListEvent &event);
 };
 
 #endif
