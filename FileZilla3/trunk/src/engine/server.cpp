@@ -30,6 +30,8 @@ static const t_protocolInfo protocolInfos[] = {
 	{ WEBDAV,       L"webdav", true, 443,  true,  "WebDAV",                                                                  false, L"https" },
 	{ AZURE_FILE,   L"azfile", true, 443,  false, "Microsoft Azure File Storage Service",                                    false, L"https" },
 	{ AZURE_BLOB,   L"azblob", true, 443,  false, "Microsoft Azure Blob Storage Service",                                    false, L"https" },
+	{ SWIFT,        L"swift",  true, 443,  false, "OpenStack Swift",                                                         false, L"https" },
+	{ GOOGLE,       L"swift",  true, 443,  false, "Google Cloud Storage",                                                    false, L"https" },
 	{ UNKNOWN,      L"",       false, 21,  false, "", false, L"" }
 };
 
