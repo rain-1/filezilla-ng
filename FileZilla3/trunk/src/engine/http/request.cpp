@@ -50,7 +50,9 @@ void CHttpRequestOpData::AddRequest(std::shared_ptr<HttpRequestResponseInterface
 		}
 		else {
 			opState |= request_init;
-			controlSocket_.send_event<fz::socket_event>(controlSocket_.m_pBackend, fz::socket_event_flag::write, 0);
+			if (controlSocket_.m_pBackend) {
+				controlSocket_.send_event<fz::socket_event>(controlSocket_.m_pBackend, fz::socket_event_flag::write, 0);
+			}
 		}
 	}
 	rr->request().flags_ = 0;
@@ -808,7 +810,9 @@ int CHttpRequestOpData::Reset(int result)
 		controlSocket_.ResetSocket();
 	}
 	else {
-		controlSocket_.send_event<fz::socket_event>(controlSocket_.m_pBackend, fz::socket_event_flag::read, 0);
+		if (controlSocket_.m_pBackend) {
+			controlSocket_.send_event<fz::socket_event>(controlSocket_.m_pBackend, fz::socket_event_flag::read, 0);
+		}
 	}
 
 	return result;

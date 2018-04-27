@@ -167,12 +167,12 @@ void CHttpControlSocket::OnReceive()
 		}
 		else if (read == -1) {
 			if (error != EAGAIN) {
-				LogMessage(MessageType::Debug_Warning, L"OnReceive called while not processing http request");
+				LogMessage(MessageType::Debug_Warning, L"OnReceive called while not processing http request. Reading fails with error %d, closing socket.", error);
 				ResetSocket();
 			}
 		}
 		else if (read) {
-			LogMessage(MessageType::Debug_Warning, L"Server sent data while not in an active HTTP request");
+			LogMessage(MessageType::Debug_Warning, L"Server sent data while not in an active HTTP request, closing socket.");
 			ResetSocket();
 		}
 		return;
