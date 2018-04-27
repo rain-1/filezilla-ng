@@ -23,7 +23,11 @@ enum ServerProtocol
 	AZURE_FILE,
 	AZURE_BLOB,
 
-	MAX_VALUE = AZURE_BLOB
+	SWIFT,
+
+	GOOGLE,
+
+	MAX_VALUE = GOOGLE
 };
 
 enum ServerType
