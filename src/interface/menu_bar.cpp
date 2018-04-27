@@ -71,7 +71,7 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 	edit->AppendSeparator();
 	edit->Append(XRCID("wxID_PREFERENCES"), _("&Settings..."), _("Open the settings dialog of FileZilla"));
 #ifdef FZ_MAC
-	edit->Append(XRCID("ID_MENU_EDIT_SANDBOX_DIRECTORIES", _("&Directory access permissions..."), _("Open the directory access permissions dialog to configure the local directories FileZilla has access to."));
+	edit->Append(XRCID("ID_MENU_EDIT_SANDBOX_DIRECTORIES"), _("&Directory access permissions..."), _("Open the directory access permissions dialog to configure the local directories FileZilla has access to."));
 #endif
 
 	wxMenu* view = new wxMenu;
