@@ -626,7 +626,7 @@ std::unique_ptr<pugi::xml_document> COptions::Validate(unsigned int, std::unique
 	auto res = std::make_unique<pugi::xml_document>();
 	res->append_copy(value->first_child());
 
-	return std::move(res);
+	return res;
 }
 
 void COptions::SetServer(std::wstring path, ServerWithCredentials const& server)
