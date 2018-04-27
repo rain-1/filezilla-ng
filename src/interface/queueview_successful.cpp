@@ -11,8 +11,7 @@ END_EVENT_TABLE()
 CQueueViewSuccessful::CQueueViewSuccessful(CQueue* parent, int index)
 	: CQueueViewFailed(parent, index, _("Successful transfers"))
 {
-	std::list<ColumnId> extraCols;
-	extraCols.push_back(colTime);
+	std::vector<ColumnId> extraCols({colTime});
 	CreateColumns(extraCols);
 
 	m_autoClear = COptions::Get()->GetOptionVal(OPTION_QUEUE_SUCCESSFUL_AUTOCLEAR) ? true : false;
@@ -21,8 +20,9 @@ CQueueViewSuccessful::CQueueViewSuccessful(CQueue* parent, int index)
 void CQueueViewSuccessful::OnContextMenu(wxContextMenuEvent&)
 {
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_QUEUE_SUCCESSFUL"));
-	if (!pMenu)
+	if (!pMenu) {
 		return;
+	}
 
 	bool has_selection = HasSelection();
 

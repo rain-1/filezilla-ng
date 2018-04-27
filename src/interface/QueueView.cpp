@@ -208,6 +208,8 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	m_pMainFrame(pMainFrame),
 	m_pAsyncRequestQueue(pAsyncRequestQueue)
 {
+	wxGetApp().AddStartupProfileRecord("CQueueView::CQueueView");
+
 	if (m_pAsyncRequestQueue) {
 		m_pAsyncRequestQueue->SetQueue(this);
 	}
@@ -221,8 +223,7 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	}
 	m_actionAfterState = static_cast<ActionAfterState::type>(action);
 
-	std::list<ColumnId> extraCols;
-	extraCols.push_back(colTransferStatus);
+	std::vector<ColumnId> extraCols({colTransferStatus});
 	CreateColumns(extraCols);
 
 	RegisterOption(OPTION_NUMTRANSFERS);
@@ -1593,6 +1594,7 @@ void CQueueView::LoadQueueFromXML()
 
 void CQueueView::LoadQueue()
 {
+	wxGetApp().AddStartupProfileRecord("CQueueView::LoadQueue");
 	// We have to synchronize access to queue.xml so that multiple processed don't write
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_QUEUE);
