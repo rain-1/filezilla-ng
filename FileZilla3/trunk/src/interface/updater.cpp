@@ -179,8 +179,8 @@ std::wstring CUpdater::GetUrl()
 
 	std::wstring version = CBuildInfo::GetVersion();
 	fz::replace_substrings(version, L" ", L"%20");
-	host = L"x86_64-w64-mingw32";
-	std::wstring url = fz::sprintf(L"https://update.filezilla-project.org/update.php?platform=%s&version=%s&test_cc=FR", host, version);
+
+	std::wstring url = fz::sprintf(L"https://update.filezilla-project.org/update.php?platform=%s&version=%s", host, version);
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	// Makes not much sense to submit OS version on Linux, *BSD and the likes, too many flavours.
 	url += fz::sprintf(L"&osversion=%d.%d", wxPlatformInfo::Get().GetOSMajorVersion(), wxPlatformInfo::Get().GetOSMinorVersion());
