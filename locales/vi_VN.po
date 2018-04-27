@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: filezilla 3.31.0\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2018-03-23 15:52+0100\n"
-"PO-Revision-Date: 2018-03-11 15:02+0700\n"
+"POT-Creation-Date: 2018-04-27 14:20+0200\n"
+"PO-Revision-Date: 2018-04-07 14:06+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
 "Language: vi_VN\n"
@@ -204,7 +204,7 @@ msgstr "%w - Mật khẩu máy chủ ủy nhiệm"
 msgid "&Abort previous connection and connect in current tab"
 msgstr "&Bãi bỏ kết nối trước đó và kết nối vào tab hiện hành."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:237
+#: ../../locales/../src/interface/menu_bar.cpp:176
 msgid "&About..."
 msgstr "&Giới thiệu…"
 
@@ -219,7 +219,7 @@ msgstr "Tà&i khoản:"
 msgid "&Active"
 msgstr "&Tích cực"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:210
+#: ../../locales/../src/interface/menu_bar.cpp:154
 msgid "&Add bookmark..."
 msgstr "&Thêm đánh dấu…"
 
@@ -227,8 +227,8 @@ msgstr "&Thêm đánh dấu…"
 msgid "&Add directory..."
 msgstr "&Thêm thư mục…"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:249
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:295
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:10
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:56
 msgid "&Add files to queue"
 msgstr "&Thêm tập tin vào hàng đợi"
 
@@ -236,8 +236,8 @@ msgstr "&Thêm tập tin vào hàng đợi"
 msgid "&Add key file..."
 msgstr "&Thêm tập tin khóa…"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:505
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:568
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:266
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:329
 msgid "&Add to queue"
 msgstr "&Thêm vào hàng đợi"
 
@@ -270,9 +270,9 @@ msgstr "&Luôn dùng hành động này"
 msgid "&Ask your operating system for the external IP address"
 msgstr "&Lấy địa chỉ IP từ hệ điều hành của bạn"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:144
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:603
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:364
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1055
+#: ../../locales/../src/interface/menu_bar.cpp:118
 msgid "&Auto"
 msgstr "&Tự động"
 
@@ -284,9 +284,9 @@ msgstr "&Tự dò tìm"
 msgid "&Background color:"
 msgstr "Mà&u nền:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:152
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:611
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:372
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1070
+#: ../../locales/../src/interface/menu_bar.cpp:120
 msgid "&Binary"
 msgstr "Nhị &phân"
 
@@ -294,7 +294,7 @@ msgstr "Nhị &phân"
 msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes)"
 msgstr "Tiền tố &nhị phân dùng ký hiệu hệ SI. (ví dụ 1 KB = 1024 bytes)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:208
+#: ../../locales/../src/interface/menu_bar.cpp:151
 msgid "&Bookmarks"
 msgstr "&Dấu trang"
 
@@ -323,7 +323,7 @@ msgstr "&Khoảng chấp nhận:"
 msgid "&Cancel"
 msgstr "&Thôi"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:50
+#: ../../locales/../src/interface/menu_bar.cpp:70
 msgid "&Clear private data..."
 msgstr "&Xóa các dữ liệu riêng…"
 
@@ -331,19 +331,19 @@ msgstr "&Xóa các dữ liệu riêng…"
 msgid "&Close"
 msgstr "Đó&ng"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:397
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:158
 msgid "&Close FileZilla"
 msgstr "Đón&g FileZilla"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:409
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:170
 msgid "&Close FileZilla once"
 msgstr "Đón&g FileZilla một lần"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:663
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:424
 msgid "&Configure speed limits..."
 msgstr "Đặt giới hạn tố&c độ…"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:167
+#: ../../locales/../src/interface/menu_bar.cpp:129
 msgid "&Configure..."
 msgstr "&Cấu hình…"
 
@@ -351,27 +351,27 @@ msgstr "&Cấu hình…"
 msgid "&Connect"
 msgstr "&Kết nối"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:12
+#: ../../locales/../src/interface/menu_bar.cpp:50
 msgid "&Copy current connection to Site Manager..."
 msgstr "&Chép kết nối hiện tại vào Quản lý địa chỉ…"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:985
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:439
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:200
 msgid "&Copy to clipboard"
 msgstr "&Chép vào clipboard"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:268
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:308
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:511
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:579
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:29
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:69
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:272
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:340
 msgid "&Create directory"
 msgstr "Tạo thư mụ&c"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:643
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:404
 msgid "&Create new tab"
 msgstr "&Tạo tab mới"
 
-#: ../../locales/../src/interface/menu_bar.cpp:70
+#: ../../locales/../src/interface/menu_bar.cpp:182
 msgid "&Debug"
 msgstr "&Gỡ lỗi"
 
@@ -383,8 +383,8 @@ msgstr "&Gỡ lỗi bằng sổ nhật ký:"
 msgid "&Default editor:"
 msgstr "Trình soạn thảo &mặc định:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:139
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:357
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:118
+#: ../../locales/../src/interface/menu_bar.cpp:113
 msgid "&Default file exists action..."
 msgstr "Hành động &mặc định khi tập tin đã có sẵn…"
 
@@ -395,8 +395,8 @@ msgstr "Thời gian &nghỉ giữa các lần đăng nhập sai:"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1271
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1440
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3078
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:280
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:588
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:41
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:349
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:59
 msgid "&Delete"
 msgstr "&Xóa bỏ"
@@ -405,11 +405,11 @@ msgstr "&Xóa bỏ"
 msgid "&Delete symlink"
 msgstr "&Xóa liên kết mềm"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:58
+#: ../../locales/../src/interface/menu_bar.cpp:74
 msgid "&Directory access permissions..."
 msgstr "Quyền truy cập thư &mục…"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:74
+#: ../../locales/../src/interface/menu_bar.cpp:86
 msgid "&Directory comparison"
 msgstr "So sánh &thư mục"
 
@@ -429,7 +429,7 @@ msgstr ""
 "&Loại bỏ tập tin trên máy nội bộ sau đó tải và biên tập một tập tin một lần "
 "nữa"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:189
+#: ../../locales/../src/interface/menu_bar.cpp:143
 msgid "&Disconnect"
 msgstr "&Ngắt kết nối"
 
@@ -453,8 +453,8 @@ msgstr "&Không dùng địa chỉ IP mạng cho kết nối nội bộ."
 msgid "&Double-click action on files:"
 msgstr "Hành động khi bấm đú&p chuột vào tập tin:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:290
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:500
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:51
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:261
 msgid "&Download"
 msgstr "Tải &xuống"
 
@@ -462,7 +462,7 @@ msgstr "Tải &xuống"
 msgid "&Download to:"
 msgstr "Tải &xuống:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:617
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:378
 msgid "&Download..."
 msgstr "Tải &xuống…"
 
@@ -471,8 +471,8 @@ msgstr "Tải &xuống…"
 msgid "&Downloads:"
 msgstr "Tải &xuống:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:45
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:263
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:24
+#: ../../locales/../src/interface/menu_bar.cpp:68
 msgid "&Edit"
 msgstr "&Sửa"
 
@@ -480,10 +480,10 @@ msgstr "&Sửa"
 msgid "&Edit filter rules..."
 msgstr "Chỉnh &sửa qui tắc lọc…"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:76
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:163
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:543
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:659
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:304
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:420
+#: ../../locales/../src/interface/menu_bar.cpp:89
+#: ../../locales/../src/interface/menu_bar.cpp:128
 msgid "&Enable"
 msgstr "&Bật"
 
@@ -504,7 +504,7 @@ msgstr "&Bộ mã:"
 msgid "&Encryption:"
 msgstr "&Mã hóa:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:431
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:192
 msgid "&Enter custom command..."
 msgstr "&Nhập vào dòng lệnh của bạn…"
 
@@ -520,8 +520,8 @@ msgstr "&Thực hiện"
 msgid "&Export Site Manager entries"
 msgstr "&Xuất ra các đề mục từ Quản lý địa chỉ"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:27
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:598
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:359
+#: ../../locales/../src/interface/menu_bar.cpp:57
 msgid "&Export..."
 msgstr "&Xuất ra…"
 
@@ -529,15 +529,15 @@ msgstr "&Xuất ra…"
 msgid "&Fall back to active mode"
 msgstr "&Quay lại chế độ tích cực"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:5
+#: ../../locales/../src/interface/menu_bar.cpp:44
 msgid "&File"
 msgstr "&Chính"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:536
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:297
 msgid "&File Attributes..."
 msgstr "&Thuộc tính tập tin…"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:340
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:101
 msgid "&File permissions..."
 msgstr "&Quyền truy cập tập tin…"
 
@@ -589,7 +589,7 @@ msgstr "&Theo liên kết mềm, xóa nội dung thư mục đích"
 msgid "&Get external IP address from the following URL:"
 msgstr "&Lấy địa chỉ IP từ URL sau đây:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:230
+#: ../../locales/../src/interface/menu_bar.cpp:172
 msgid "&Getting help..."
 msgstr "&Tìm trợ giúp…"
 
@@ -601,16 +601,16 @@ msgstr "&Dấu trang toàn cục"
 msgid "&HTTP/1.1 using CONNECT method"
 msgstr "&HTTP/1.1 dùng phương thức CONNECT"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:220
+#: ../../locales/../src/interface/menu_bar.cpp:162
 msgid "&Help"
 msgstr "&Trợ giúp"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:91
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:557
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:318
+#: ../../locales/../src/interface/menu_bar.cpp:94
 msgid "&Hide identical files"
 msgstr "Ẩ&n các tập tin đồng nhất"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:362
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:123
 msgid "&Highest"
 msgstr "Cao n&hất"
 
@@ -632,7 +632,7 @@ msgstr "Tiền tố nhị phân theo chuẩn &IEC (ví dụ 1 KiB = 1024 byte)"
 msgid "&ISO 8601 (example: 2007-09-15)"
 msgstr "Tiêu chuẩn &ISO 8601 (ví dụ: 2007-09-15)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:30
+#: ../../locales/../src/interface/menu_bar.cpp:58
 msgid "&Import..."
 msgstr "&Nhập vào…"
 
@@ -668,7 +668,7 @@ msgstr "Giới hạn cổng trên máy nội bộ dùng bởi FileZi&lla"
 msgid "&Limit number of simultaneous connections"
 msgstr "&Giới hạn kết nối đồng thời"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:118
+#: ../../locales/../src/interface/menu_bar.cpp:103
 msgid "&Local directory tree"
 msgstr "&Cây thư mục trên máy nội bộ"
 
@@ -693,15 +693,15 @@ msgstr "Kiểu đăng &nhập:"
 msgid "&Logontype:"
 msgstr "Kiểu đăng &nhập:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:374
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:135
 msgid "&Low"
 msgstr "Mức thấ&p"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:214
+#: ../../locales/../src/interface/menu_bar.cpp:156
 msgid "&Manage bookmarks..."
 msgstr "&Quản lý dấu trang…"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:173
+#: ../../locales/../src/interface/menu_bar.cpp:133
 msgid "&Manual transfer..."
 msgstr "Truyền thủ &công…"
 
@@ -713,7 +713,7 @@ msgstr "Số kết nối &tối đa:"
 msgid "&Maximum number of retries:"
 msgstr "Số lần thử lại &tối đa:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:114
+#: ../../locales/../src/interface/menu_bar.cpp:102
 msgid "&Message log"
 msgstr "&Nhật ký"
 
@@ -729,7 +729,7 @@ msgstr "Tê&n chế độ xắp xếp:"
 msgid "&Name:"
 msgstr "Tê&n:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:47
+#: ../../locales/../src/interface/menu_bar.cpp:69
 msgid "&Network configuration wizard..."
 msgstr "Giúp đỡ kết &nối trực quan…"
 
@@ -754,13 +754,13 @@ msgstr "&Tiếp theo >"
 msgid "&No"
 msgstr "Khô&ng"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:385
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:146
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:459
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:720
 msgid "&None"
 msgstr "Khô&ng"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:370
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:131
 msgid "&Normal"
 msgstr "Bì&nh thường"
 
@@ -779,8 +779,8 @@ msgstr "Đồn&g ý"
 msgid "&OPEN"
 msgstr "&MỞ"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:259
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:574
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:20
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:335
 msgid "&Open"
 msgstr "&Mở"
 
@@ -796,7 +796,7 @@ msgstr "&Thụ động"
 msgid "&Password:"
 msgstr "Mật khẩ&u:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:405
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:166
 msgid "&Play sound"
 msgstr "&Mở một đoạn âm thanh"
 
@@ -806,7 +806,7 @@ msgstr "&Mở một đoạn âm thanh"
 msgid "&Port:"
 msgstr "Cổn&g:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:157
+#: ../../locales/../src/interface/menu_bar.cpp:123
 msgid "&Preserve timestamps of transferred files"
 msgstr "Lưu &giữ dấu thời gian của tập tin đã truyền"
 
@@ -818,7 +818,7 @@ msgstr "&Hàng đợi"
 msgid "&Quickconnect"
 msgstr "&Kết nối nhanh"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:110
+#: ../../locales/../src/interface/menu_bar.cpp:101
 msgid "&Quickconnect bar"
 msgstr "&Thanh kết nối nhanh"
 
@@ -830,7 +830,7 @@ msgstr "Lịch sử &kết nối nhanh"
 msgid "&Read"
 msgstr "Đọ&c"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:185
+#: ../../locales/../src/interface/menu_bar.cpp:141
 msgid "&Reconnect"
 msgstr "Kết nối &lại"
 
@@ -838,8 +838,8 @@ msgstr "Kết nối &lại"
 msgid "&Reconnect information"
 msgstr "Thông tin kết nối &lại"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:65
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:654
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:415
+#: ../../locales/../src/interface/menu_bar.cpp:80
 msgid "&Refresh"
 msgstr "&Làm tươi lại"
 
@@ -873,16 +873,16 @@ msgid "&Remove key"
 msgstr "&Xóa bỏ khóa"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4212
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:354
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:115
 msgid "&Remove selected"
 msgstr "&Xóa mục đã chọn"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1446
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3072
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:284
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:328
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:524
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:592
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:45
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:89
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:285
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:353
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:53
 msgid "&Rename"
 msgstr "Đổi tê&n"
@@ -899,15 +899,15 @@ msgstr "Mở &lại tập tin trên máy nội bộ"
 msgid "&Replace invalid characters with:"
 msgstr "&Thay thế ký tự không hợp lệ bằng:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:233
+#: ../../locales/../src/interface/menu_bar.cpp:173
 msgid "&Report a bug..."
 msgstr "&Báo cáo lỗi…"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:154
 msgid "&Request attention"
 msgstr "&Yêu cầu chú ý"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:462
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:223
 msgid "&Reset and requeue all"
 msgstr "Đặt &và xếp lại toàn bộ hàng đợi"
 
@@ -919,7 +919,7 @@ msgstr "&Khởi động lại thuật sĩ"
 msgid "&Resume"
 msgstr "&Phục hồi lại"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:401
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:162
 msgid "&Run command..."
 msgstr "&Thực hiện lệnh…"
 
@@ -947,7 +947,7 @@ msgstr "&Ghi lại bằng tên mới…"
 msgid "&Search"
 msgstr "&Tìm kiếm"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:194
+#: ../../locales/../src/interface/menu_bar.cpp:146
 msgid "&Search remote files..."
 msgstr "&Tìm kiếm tập tin từ máy mạng…"
 
@@ -964,7 +964,7 @@ msgid "&Select the columns that should be displayed:"
 msgstr "&Chọn các cột sẽ hiển thị:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2565
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:178
+#: ../../locales/../src/interface/menu_bar.cpp:136
 msgid "&Server"
 msgstr "&Máy chủ"
 
@@ -972,7 +972,7 @@ msgstr "&Máy chủ"
 msgid "&Settings"
 msgstr "&Cài đặt"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:54
+#: ../../locales/../src/interface/menu_bar.cpp:72
 msgid "&Settings..."
 msgstr "&Cài đặt…"
 
@@ -980,7 +980,7 @@ msgstr "&Cài đặt…"
 msgid "&Show debug menu"
 msgstr "&Hiển thị trình đơn gỡ rối"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:435
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:196
 msgid "&Show detailed log"
 msgstr "&Hiển thị chi tiết nhật ký"
 
@@ -992,7 +992,7 @@ msgstr "&Hiển thị dấu thời gian trong nhật ký thông tin"
 msgid "&Site Manager entries"
 msgstr "Các &mục Danh bạ"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:7
+#: ../../locales/../src/interface/menu_bar.cpp:49
 msgid "&Site Manager..."
 msgstr "&Quản lý Địa chỉ…"
 
@@ -1004,7 +1004,7 @@ msgstr "&Gắn với trang mạng"
 msgid "&Skip"
 msgstr "Bỏ &qua"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:169
+#: ../../locales/../src/interface/menu_bar.cpp:126
 msgid "&Speed limits"
 msgstr "&Giới hạn tốc độ"
 
@@ -1017,7 +1017,7 @@ msgstr "Bắt đầu truyền ngay &lập tức"
 msgid "&Swap local and remote panes"
 msgstr "&Hoán đổi cửa sổ điều khiển máy trên máy nội bộ và máy mạng"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:450
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:211
 msgid "&TLS Ciphers"
 msgstr "Kiểu mã hóa &TLS"
 
@@ -1029,7 +1029,7 @@ msgstr "Kiểm &tra"
 msgid "&Theme:"
 msgstr "&Kiểu dáng cửa sổ:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:131
+#: ../../locales/../src/interface/menu_bar.cpp:108
 msgid "&Transfer"
 msgstr "&Truyền"
 
@@ -1038,7 +1038,7 @@ msgid "&Transfer mode:"
 msgstr "Chế độ &truyền:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1728
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:126
+#: ../../locales/../src/interface/menu_bar.cpp:105
 msgid "&Transfer queue"
 msgstr "Hàng đợi &truyền"
 
@@ -1059,8 +1059,8 @@ msgstr "&Không biên tập"
 msgid "&Update cached key for this host"
 msgstr "&Cập nhật bộ nhớ đệm khóa cho máy chủ này"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:244
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:563
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:5
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:324
 msgid "&Upload"
 msgstr "Tải &lên"
 
@@ -1068,7 +1068,7 @@ msgstr "Tải &lên"
 msgid "&Upload to:"
 msgstr "Tải &lên:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:620
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:381
 msgid "&Upload..."
 msgstr "Tải &lên…"
 
@@ -1116,12 +1116,12 @@ msgstr "Tên tài kh&oản:"
 msgid "&Version %s"
 msgstr "&Phiên bản %s"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:63
+#: ../../locales/../src/interface/menu_bar.cpp:78
 msgid "&View"
 msgstr "&Xem"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:304
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:623
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:65
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:384
 msgid "&View/Edit"
 msgstr "&Xem/Sửa"
 
@@ -1302,7 +1302,7 @@ msgstr "Hệ thống 64-bít"
 msgid "< &Back"
 msgstr "< &Quay lại"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:219
+#: ../../locales/../src/interface/menu_bar.cpp:160
 msgid "?"
 msgstr "?"
 
@@ -1403,9 +1403,9 @@ msgstr ""
 "Một thao tác đang thực hiện và chức năng duyệt đồng bộ đang được bật.\n"
 "Bạn có muốn tắt chức năng duyệt đồng bộ và tiếp tục đổi thư mục?"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:148
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:607
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:368
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1063
+#: ../../locales/../src/interface/menu_bar.cpp:119
 msgid "A&SCII"
 msgstr "A&SCII"
 
@@ -1429,7 +1429,7 @@ msgstr "Chỉ chấ&p nhận tải lên"
 msgid "A&pply to all files and directories"
 msgstr "Chấ&p nhận tất cả các tập tin và thư mục"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:491
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:252
 msgid "A&utomatically remove successful transfers"
 msgstr "Tự độn&g xóa các chuyển tác thành công"
 
@@ -1449,8 +1449,8 @@ msgstr "Trên danh sách tập tin"
 msgid "Access to some local directories could not be restored:"
 msgstr "Truy cập vào một số thư mục nội bộ có thể không thể phục hồi lại:"
 
-#: ../../locales/../src/engine/server.cpp:616
-#: ../../locales/../src/engine/server.cpp:639
+#: ../../locales/../src/engine/server.cpp:614
+#: ../../locales/../src/engine/server.cpp:637
 #: ../../locales/../src/interface/manual_transfer.cpp:148
 #: ../../locales/../src/interface/manual_transfer.cpp:149
 #: ../../locales/../src/interface/manual_transfer.cpp:185
@@ -1459,7 +1459,7 @@ msgstr "Truy cập vào một số thư mục nội bộ có thể không thể 
 msgid "Account"
 msgstr "Tài khoản"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:383
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:144
 msgid "Action after queue &completion"
 msgstr "Thao tá&c sau khi hàng đợi hoàn thành"
 
@@ -1515,13 +1515,13 @@ msgstr "Kích hoạt ở chế độ IP"
 msgid "Add files to &queue only"
 msgstr "Chỉ thêm tập tin vào &hàng đợi"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:507
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:570
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:268
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:331
 msgid "Add selected directory to the transfer queue"
 msgstr "Đặt thư mục đã chọn vào hàng đợi truyền"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:251
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:297
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:12
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:58
 msgid "Add selected files and folders to the transfer queue"
 msgstr "Đặt tập tin và thư mục đã chọn vào hàng đợi truyền"
 
@@ -1530,7 +1530,7 @@ msgstr "Đặt tập tin và thư mục đã chọn vào hàng đợi truyền"
 msgid "Add to queue"
 msgstr "Thêm vào hàng đợi"
 
-#: ../../locales/../src/engine/proxy.cpp:513
+#: ../../locales/../src/engine/proxy.cpp:509
 msgid "Address type not supported"
 msgstr "Kiểu địa chỉ không được hỗ trợ"
 
@@ -1561,7 +1561,7 @@ msgstr "&Luôn dùng hành động này"
 msgid "Algorithm:"
 msgstr "Thuật toán:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2658
+#: ../../locales/../src/interface/QueueView.cpp:2663
 msgid "All files have been successfully transferred"
 msgstr "Tất cả các tập tin được truyền đi thành công"
 
@@ -1569,7 +1569,7 @@ msgstr "Tất cả các tập tin được truyền đi thành công"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "Tất cả các cổng phải nằm giữa 1024 và 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2654
+#: ../../locales/../src/interface/QueueView.cpp:2659
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1617,7 +1617,7 @@ msgstr ""
 "Thay vì thế, bạn cũng có thể tải phiên bản mới nhất về từ trang thông tin "
 "điện tử của FileZilla:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1662
+#: ../../locales/../src/interface/QueueView.cpp:1667
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1626,7 +1626,7 @@ msgstr ""
 "Đã xảy ra lỗi khi tải lên hàng đợi từ \"%s\".\n"
 "Một số phần tử hàng đợi có lẽ không phục hồi được."
 
-#: ../../locales/../src/interface/QueueView.cpp:1555
+#: ../../locales/../src/interface/QueueView.cpp:1559
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1647,7 +1647,7 @@ msgid ""
 "location."
 msgstr "Một mục cùng tên với mục kéo thả đã sẵn có trong vị trí đích."
 
-#: ../../locales/../src/engine/server.cpp:641
+#: ../../locales/../src/engine/server.cpp:639
 #: ../../locales/../src/interface/manual_transfer.cpp:147
 #: ../../locales/../src/interface/manual_transfer.cpp:188
 #: ../../locales/../src/interface/manual_transfer.cpp:203
@@ -1710,8 +1710,8 @@ msgstr "Như một tab trong bảng điều khiển của hàng đợi truyền"
 msgid "Ask for action"
 msgstr "Hỏi thao tác"
 
-#: ../../locales/../src/engine/server.cpp:607
-#: ../../locales/../src/engine/server.cpp:633
+#: ../../locales/../src/engine/server.cpp:605
+#: ../../locales/../src/engine/server.cpp:631
 #: ../../locales/../src/interface/manual_transfer.cpp:179
 msgid "Ask for password"
 msgstr "Hỏi mật khẩu"
@@ -1803,7 +1803,7 @@ msgid "Blue"
 msgstr "Xanh dương"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:271
-#: ../../locales/../src/interface/menu_bar.cpp:321
+#: ../../locales/../src/interface/menu_bar.cpp:434
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:399
 msgid "Bookmark"
 msgstr "Dấu trang"
@@ -1849,23 +1849,23 @@ msgstr ""
 "tích cực. Nếu bạn muốn giới hạn FileZilla chỉ dùng một vùng cổng nhỏ, xin "
 "hãy nhập vào vùng cổng bên dưới."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:180
+#: ../../locales/../src/interface/menu_bar.cpp:138
 msgid "C&ancel current operation"
 msgstr "&Hủy công việc hiện hành"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:442
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:203
 msgid "C&lear all"
 msgstr "&Xóa tất cả"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:332
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:528
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:629
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:93
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:289
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:390
 msgid "C&opy URL(s) to clipboard"
 msgstr "Sa&o chép URL vào clipboard"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:336
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:532
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:632
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:97
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:293
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
 msgid "C&opy URL(s) with password to clipboard"
 msgstr "Sa&o chép URL cùng với mật khẩu vào clipboard"
 
@@ -2020,7 +2020,7 @@ msgstr "Không thể đổi tên đề mục"
 msgid "Cannot rename file"
 msgstr "Không thể đổi tên tập tin"
 
-#: ../../locales/../src/engine/proxy.cpp:139
+#: ../../locales/../src/engine/proxy.cpp:136
 msgid "Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."
 msgstr ""
 "Không thể phân giải tên máy chủ sang địa chỉ IPv4 để dùng cho máy chủ ủy "
@@ -2097,8 +2097,8 @@ msgstr "Việc khó khăn:"
 msgid "Change file attributes"
 msgstr "Thay đổi thuộc tính tập tin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:341
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:537
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:102
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:298
 msgid "Change the file permissions."
 msgstr "Thay đổi quyền truy cập tập tin."
 
@@ -2114,7 +2114,7 @@ msgstr "Dạng ký tự mã hóa"
 msgid "Charset"
 msgstr "Tên bảng mã"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:222
+#: ../../locales/../src/interface/menu_bar.cpp:167
 msgid "Check for &updates..."
 msgstr "Kiểm tra phiên bản &mới…"
 
@@ -2126,7 +2126,7 @@ msgstr "Kiểm tra &cập nhật FileZilla tự động:"
 msgid "Check for Updates"
 msgstr "Kiểm tra phiên bản mới"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:223
+#: ../../locales/../src/interface/menu_bar.cpp:167
 msgid "Check for newer versions of FileZilla"
 msgstr "Kiểm tra phiên bản mới hơn của FileZilla"
 
@@ -2182,7 +2182,7 @@ msgstr "Chọn thư mục nội bộ mặc định"
 msgid "Choose the local directory"
 msgstr "Chọn thư mục nội bộ"
 
-#: ../../locales/../src/engine/http/request.cpp:667
+#: ../../locales/../src/engine/http/request.cpp:670
 msgid "Chunk data improperly terminated"
 msgstr "Tổng kiểm tra dữ liệu tận cùng không đúng"
 
@@ -2190,8 +2190,8 @@ msgstr "Tổng kiểm tra dữ liệu tận cùng không đúng"
 msgid "Cipher:"
 msgstr "Kiểu mã hóa:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:21
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:647
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:408
+#: ../../locales/../src/interface/menu_bar.cpp:55
 msgid "Cl&ose tab"
 msgstr "Đón&g tab lại"
 
@@ -2199,11 +2199,11 @@ msgstr "Đón&g tab lại"
 msgid "Classic"
 msgstr "Cổ điển"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:447
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:208
 msgid "Clear &layout cache"
 msgstr "Xóa bộ đệm &giao diện"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:454
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:215
 msgid "Clear auto&update data"
 msgstr "Xóa dữ liệu lư&u phần cập nhật"
 
@@ -2240,13 +2240,13 @@ msgstr "Kiểu mã hóa từ máy khách tới máy chủ:"
 msgid "Close"
 msgstr "Đóng"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:650
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:411
 msgid "Close &all other tabs"
 msgstr "Đóng tất cả các t&ab khác"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:40
 #: ../../locales/../src/interface/Mainfrm.cpp:1230
 #: ../../locales/../src/interface/Mainfrm.cpp:1251
+#: ../../locales/../src/interface/menu_bar.cpp:64
 msgid "Close FileZilla"
 msgstr "Đóng FileZilla"
 
@@ -2258,7 +2258,7 @@ msgstr "Đóng tất cả các ứng dụng FileZilla đang chạy"
 msgid "Close quick search and continue comparing?"
 msgstr "Đóng tìm kiếm nhanh và tiếp tục so sánh?"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:23
+#: ../../locales/../src/interface/menu_bar.cpp:55
 msgid "Closes current tab"
 msgstr "Đóng tab hiện hành lại"
 
@@ -2285,7 +2285,7 @@ msgstr "Lệnh và tham số phải được trích dẫn đúng."
 msgid "Command failed"
 msgstr "Lệnh gặp lỗi"
 
-#: ../../locales/../src/engine/proxy.cpp:510
+#: ../../locales/../src/engine/proxy.cpp:506
 msgid "Command not supported"
 msgstr "Lệnh không được hỗ trợ"
 
@@ -2312,13 +2312,13 @@ msgstr "Tên thông thường:"
 msgid "Communication tainted by router or firewall"
 msgstr "Kết nối hỏng vì bộ định tuyến router hay tường lửa firewall"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:86
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:552
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:313
+#: ../../locales/../src/interface/menu_bar.cpp:92
 msgid "Compare &modification time"
 msgstr "So sánh thời gia&n chỉnh sửa"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:82
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:548
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:309
+#: ../../locales/../src/interface/menu_bar.cpp:91
 msgid "Compare file&size"
 msgstr "&So sánh kích thước tập tin"
 
@@ -2431,7 +2431,7 @@ msgid "Connecting to %s through %s proxy"
 msgstr "Đang kết nối tới %s thông qua máy chủ ủy nhiệm %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:995
-#: ../../locales/../src/engine/proxy.cpp:240
+#: ../../locales/../src/engine/proxy.cpp:236
 #: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:43
 #: ../../locales/../src/engine/storj/storjcontrolsocket.cpp:42
 #, c-format
@@ -2451,7 +2451,7 @@ msgid "Connection attempt failed"
 msgstr "Cố gắng kết nối gặp lỗi"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:957
-#: ../../locales/../src/engine/proxy.cpp:212
+#: ../../locales/../src/engine/proxy.cpp:208
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "Cố gắng kết nối với \"%s\" gặp lỗi, đang thử địa chỉ tiếp theo."
@@ -2476,10 +2476,10 @@ msgstr "Kết nối đã đóng"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1041
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:75
-#: ../../locales/../src/engine/http/request.cpp:303
-#: ../../locales/../src/engine/http/request.cpp:316
-#: ../../locales/../src/engine/http/request.cpp:327
-#: ../../locales/../src/engine/http/request.cpp:338
+#: ../../locales/../src/engine/http/request.cpp:305
+#: ../../locales/../src/engine/http/request.cpp:318
+#: ../../locales/../src/engine/http/request.cpp:329
+#: ../../locales/../src/engine/http/request.cpp:340
 msgid "Connection closed by server"
 msgstr "Kết nối đã đóng bởi máy chủ"
 
@@ -2504,11 +2504,11 @@ msgstr "Kết nối đã thiết lập, đang đợi thông điệp từ máy ch
 msgid "Connection lost"
 msgstr "Mất kết nối"
 
-#: ../../locales/../src/engine/proxy.cpp:495
+#: ../../locales/../src/engine/proxy.cpp:491
 msgid "Connection not allowed by ruleset"
 msgstr "Kết nối không cho phép bởi qui tắc đã đặt"
 
-#: ../../locales/../src/engine/proxy.cpp:504
+#: ../../locales/../src/engine/proxy.cpp:500
 msgid "Connection refused"
 msgstr "Kết nối đã bị từ chối"
 
@@ -2538,7 +2538,7 @@ msgstr "Kết nối bị lỗi quá thời gian."
 msgid "Connection to server lost."
 msgstr "Mất kết nối tới máy chủ dịch vụ."
 
-#: ../../locales/../src/engine/proxy.cpp:223
+#: ../../locales/../src/engine/proxy.cpp:219
 msgid "Connection with proxy established, performing handshake..."
 msgstr ""
 "Kết nối với máy chủ ủy nhiệm đã thiết lập, đang thi hành kết nối bắt tay…"
@@ -2567,15 +2567,15 @@ msgstr "Sao chép (%d) trên %s"
 msgid "Copy of %s"
 msgstr "Bản sao của %s"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:337
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:533
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:98
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:294
 msgid "Copy the URLs of the selected items to clipboard, including password."
 msgstr ""
 "Sao chép địa chỉ URL của mục đã chọn vào bộ nhớ clipboard, bao gồm cả mật "
 "khẩu."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:333
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:529
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:94
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:290
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "Sao chép địa chỉ URL của mục đã chọn vào bộ nhớ clipboard."
 
@@ -2840,7 +2840,7 @@ msgid "Could not read from data socket."
 msgstr "Không thể đọc từ ổ cắm mạng dữ liệu."
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:64
-#: ../../locales/../src/engine/http/request.cpp:380
+#: ../../locales/../src/engine/http/request.cpp:382
 #, c-format
 msgid "Could not read from socket: %s"
 msgstr "Không thể đọc gói mạng: %s"
@@ -2919,7 +2919,7 @@ msgstr "Không thể ghi \"%s\", dấu trang không thể ghi thêm: %s"
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "Không thể ghi \"%s\", dấu sách toàn cục sẽ không được ghi lại: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1586
+#: ../../locales/../src/interface/QueueView.cpp:1590
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2957,7 +2957,7 @@ msgstr "Không thể ghi vào tập tin nhật ký: %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:918
 #: ../../locales/../src/engine/ControlSocket.cpp:1013
-#: ../../locales/../src/engine/http/request.cpp:235
+#: ../../locales/../src/engine/http/request.cpp:237
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Không thể ghi vào gói mạng: %s"
@@ -2966,7 +2966,7 @@ msgstr "Không thể ghi vào gói mạng: %s"
 msgid "Country:"
 msgstr "Quốc gia:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:316
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:77
 msgid "Crea&te new file"
 msgstr "&Tạo tập tin mới"
 
@@ -2978,28 +2978,28 @@ msgstr "Tạo thư &mục nội bộ còn thiếu và vào nó"
 msgid "Create &missing remote directory and enter it"
 msgstr "Tạo thư &mục trên máy phục vụ còn thiếu và vào nó"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:269
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:309
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:512
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:580
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:30
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:70
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:273
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:341
 msgid "Create a new subdirectory in the current directory"
 msgstr "Tạo thư mục mới cho thư mục hiện hành"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:273
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:313
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:516
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:584
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:34
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:74
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:277
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:345
 msgid "Create a new subdirectory in the current directory and change into it"
 msgstr "Tạo thư mục mới cho thư mục hiện hành rồi chuyển vào đó"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:317
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:78
 msgid "Create a new, empty file in the current directory"
 msgstr "Tạo tập tin mới, trống rỗng trong thư mục hiện hành"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:272
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:312
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:515
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:583
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:33
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:73
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:276
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:344
 msgid "Create director&y and enter it"
 msgstr "Tạo thư &mục mới và vào nó"
 
@@ -3097,9 +3097,9 @@ msgstr "Tiền tố thập phân dùng ký hiệu SI (ví dụ 1 KB = 1000 byt&e
 msgid "D&efault"
 msgstr "Mặ&c định"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:324
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:520
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:626
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:85
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:281
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:387
 msgid "D&elete"
 msgstr "&Xóa"
 
@@ -3125,7 +3125,7 @@ msgstr "Hành động khi kích đúp chuột trên thư &mục:"
 msgid "D&uplicate"
 msgstr "&Nhân bản"
 
-#: ../../locales/../src/engine/server.cpp:56
+#: ../../locales/../src/engine/server.cpp:58
 msgid "DOS-like with virtual paths"
 msgstr "Tương tự DOS với kiểu đường dẫn ảo"
 
@@ -3170,7 +3170,7 @@ msgstr "Cài đặt gỡ lỗi"
 msgid "Default &local directory:"
 msgstr "Thư mục mặc định trên máy nội &bộ:"
 
-#: ../../locales/../src/engine/server.cpp:48
+#: ../../locales/../src/engine/server.cpp:50
 msgid "Default (Autodetect)"
 msgstr "Mặc định (Tự dò tìm)"
 
@@ -3232,13 +3232,13 @@ msgstr[0] "Làm trễ kết nối %d giây bởi vì cố gắng kết nối l�
 msgid "Delete Site Manager entry"
 msgstr "&Xóa đề mục trong Danh bạ"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:521
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:589
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:282
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:350
 msgid "Delete selected directory"
 msgstr "Xóa thư mục đã chọn"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:281
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:325
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:42
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:86
 msgid "Delete selected files and directories"
 msgstr "Xóa thư mục và tập tin đã chọn"
 
@@ -3278,7 +3278,7 @@ msgstr "Tìm thấy phiên bản mới hơn của FileZilla"
 msgid "Dire&ctories"
 msgstr "Các &thư mục"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Direction"
 msgstr "Hướng"
 
@@ -3295,7 +3295,7 @@ msgid "Directory access permissions"
 msgstr "Các quyền truy cập thư mục"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3025
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:541
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:302
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1850
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:429
 #: ../../locales/../src/interface/filelistctrl.cpp:477
@@ -3315,7 +3315,7 @@ msgid "Directory containing the logfile does not exist or filename is invalid."
 msgstr ""
 "Thư mục chứ tập tin nhật ký không sẵn có hoặc tên tập tin không hợp lệ."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:70
+#: ../../locales/../src/interface/menu_bar.cpp:83
 msgid "Directory listing &filters..."
 msgstr "Bộ &lọc danh sách thư mục…"
 
@@ -3364,7 +3364,7 @@ msgstr "Ngắt kết nối khỏi máy chủ"
 #: ../../locales/../src/engine/ControlSocket.cpp:919
 #: ../../locales/../src/engine/ControlSocket.cpp:1015
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
-#: ../../locales/../src/engine/http/request.cpp:236
+#: ../../locales/../src/engine/http/request.cpp:238
 #: ../../locales/../src/interface/queue.cpp:352
 msgid "Disconnected from server"
 msgstr "Đã ngắt kết nối khỏi máy chủ"
@@ -3384,7 +3384,7 @@ msgstr "Đã ngắt kết nối từ máy chủ dịch vụ trước đó"
 msgid "Disconnects from the currently visible server"
 msgstr "Đã ngắt kết nối từ máy chủ dịch vụ hiện hành"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:238
+#: ../../locales/../src/interface/menu_bar.cpp:176
 msgid "Display about dialog"
 msgstr "Hiển thị hộp thoại giới thiệu về ứng dụng"
 
@@ -3470,11 +3470,11 @@ msgstr "Giới hạn tải xuống: không"
 msgid "Download search results"
 msgstr "Tải về kết quả tìm kiếm"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:502
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:263
 msgid "Download selected directory"
 msgstr "Tải về thư mục đã chọn"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:292
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:53
 msgid "Download selected files and directories"
 msgstr "Tải về các tập tin và thư mục đã chọn"
 
@@ -3528,8 +3528,8 @@ msgstr "Nhân &bản"
 msgid "E&nable all"
 msgstr "&Bật tất cả"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:254
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:300
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:15
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:61
 msgid "E&nter directory"
 msgstr "Mở thư &mục"
 
@@ -3537,13 +3537,13 @@ msgstr "Mở thư &mục"
 msgid "E&xecute"
 msgstr "Th&i hành"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:39
+#: ../../locales/../src/interface/menu_bar.cpp:64
 msgid "E&xit"
 msgstr "Thoát r&a"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:426
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:472
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:495
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:187
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:233
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:256
 msgid "E&xport..."
 msgstr "&Xuất ra…"
 
@@ -3559,7 +3559,7 @@ msgstr "Mỗi bộ lọc cần ít nhất một điều kiện."
 msgid "Edit filters"
 msgstr "Sửa các bộ lọc"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:264
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:25
 msgid ""
 "Edit the file with the configured editor and upload changes to the server."
 msgstr "Biên tập tập tin với bộ biên tập cấu hình và tải thay đổi lên máy chủ."
@@ -3581,7 +3581,7 @@ msgstr "Kết quả tìm kiếm những thứ sửa"
 msgid "Email:"
 msgstr "Thư điện tử:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1879
+#: ../../locales/../src/interface/QueueView.cpp:1884
 msgid "Empty command"
 msgstr "Lệnh rỗng"
 
@@ -3651,7 +3651,7 @@ msgstr "Kết thúc so sánh và thay đổi thứ tự sắp xếp?"
 msgid "End comparison and open quick search?"
 msgstr "Kết thúc so sánh và mở tìm kiếm nhanh?"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:199
+#: ../../locales/../src/interface/menu_bar.cpp:147
 msgid "Enter &custom command..."
 msgstr "Nhập vào &lệnh tùy ý…"
 
@@ -3659,7 +3659,7 @@ msgstr "Nhập vào &lệnh tùy ý…"
 msgid "Enter 0 for unlimited speed."
 msgstr "Nhập 0 để không giới hạn tốc độ"
 
-#: ../../locales/../src/interface/QueueView.cpp:1873
+#: ../../locales/../src/interface/QueueView.cpp:1878
 msgid "Enter command"
 msgstr "Nhập lệnh vào"
 
@@ -3694,8 +3694,8 @@ msgstr "Nhập tên mới bộ lọc muốn đặt"
 msgid "Enter password"
 msgstr "Nhập mật khẩu"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:255
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:301
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:16
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:62
 msgid "Enter selected directory"
 msgstr "Vào thư mục đã chọn"
 
@@ -3764,7 +3764,7 @@ msgstr "Lỗi xuất cài đặt"
 msgid "Error importing"
 msgstr "Lỗi nhập vào"
 
-#: ../../locales/../src/interface/QueueView.cpp:1663
+#: ../../locales/../src/interface/QueueView.cpp:1668
 msgid "Error loading queue"
 msgstr "Lỗi khi tải hàng đợi"
 
@@ -3780,7 +3780,7 @@ msgstr "Lỗi khi tải hàng đợi"
 #: ../../locales/../src/interface/Options.cpp:255
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:65
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:136
-#: ../../locales/../src/interface/QueueView.cpp:1567
+#: ../../locales/../src/interface/QueueView.cpp:1571
 #: ../../locales/../src/interface/search.cpp:1350
 #: ../../locales/../src/interface/search.cpp:1370
 #: ../../locales/../src/interface/sitemanager.cpp:91
@@ -3795,7 +3795,7 @@ msgstr "Lỗi khi tải hàng đợi"
 msgid "Error loading xml file"
 msgstr "Lỗi tải tập tin xml"
 
-#: ../../locales/../src/interface/QueueView.cpp:1556
+#: ../../locales/../src/interface/QueueView.cpp:1560
 msgid "Error saving queue"
 msgstr "Lỗi ghi lại hàng đợi"
 
@@ -3808,7 +3808,7 @@ msgstr "Lỗi khởi động chương trình"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:332
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:883
-#: ../../locales/../src/interface/QueueView.cpp:1587
+#: ../../locales/../src/interface/QueueView.cpp:1591
 #: ../../locales/../src/interface/sitemanager.cpp:634
 #: ../../locales/../src/interface/sitemanager.cpp:759
 #: ../../locales/../src/interface/sitemanager.cpp:816
@@ -3908,9 +3908,8 @@ msgstr ""
 "này có thể được thiết lập bằng hai cách."
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:100
-#, fuzzy
 msgid "FTP: File Types"
-msgstr "Kiểu tập tin"
+msgstr "FTP: Kiểu tập tin"
 
 #: ../../locales/../src/engine/server.cpp:26
 msgid "FTPES - FTP over explicit TLS"
@@ -4237,7 +4236,7 @@ msgstr "FileZilla cần phải khởi động lại để thay đổi ngôn ng�
 msgid "FileZilla updates"
 msgstr "Cập nhật FileZilla"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:101
+#: ../../locales/../src/interface/menu_bar.cpp:98
 msgid "Filelist status &bars"
 msgstr "Danh sách tập tin trên t&hanh trạng thái"
 
@@ -4409,7 +4408,7 @@ msgstr ""
 msgid "Force &UTF-8"
 msgstr "Buộc dùng bộ mã &UTF-8"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:203
+#: ../../locales/../src/interface/menu_bar.cpp:148
 msgid "Force showing &hidden files"
 msgstr "&Hiển thị tập tin ẩn"
 
@@ -4446,7 +4445,7 @@ msgstr "Nhiều tài liệu khác"
 msgid "General"
 msgstr "Chung"
 
-#: ../../locales/../src/engine/proxy.cpp:492
+#: ../../locales/../src/engine/proxy.cpp:488
 msgid "General SOCKS server failure"
 msgstr "GÓI MẠNG máy chủ chung gặp lỗi"
 
@@ -4510,7 +4509,7 @@ msgstr "Xanh lá"
 msgid "Group permissions"
 msgstr "Quyền của nhóm"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:366
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:127
 msgid "H&igh"
 msgstr "C&ao"
 
@@ -4527,13 +4526,13 @@ msgid "Hidden"
 msgstr "Ẩn"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:964
-#: ../../locales/../src/interface/queue.cpp:936
-#: ../../locales/../src/interface/queue.cpp:998
+#: ../../locales/../src/interface/queue.cpp:1002
+#: ../../locales/../src/interface/queue.cpp:1064
 msgid "High"
 msgstr "Cao"
 
-#: ../../locales/../src/interface/queue.cpp:938
-#: ../../locales/../src/interface/queue.cpp:1000
+#: ../../locales/../src/interface/queue.cpp:1004
+#: ../../locales/../src/interface/queue.cpp:1066
 msgid "Highest"
 msgstr "Cao nhất"
 
@@ -4563,7 +4562,7 @@ msgstr "Khóa máy chủ không khớp"
 msgid "Host starts with '[' but no closing bracket found."
 msgstr "Máy chủ bắt đầu với “[” nhưng không đóng bằng dấu ngoặc."
 
-#: ../../locales/../src/engine/proxy.cpp:501
+#: ../../locales/../src/engine/proxy.cpp:497
 msgid "Host unreachable"
 msgstr "Máy không thể tiếp cận"
 
@@ -4593,7 +4592,7 @@ msgstr "Tôi đã &quên mật khẩu chính. Xóa mọi mật khẩu đã lưu 
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (ví dụ: 15:47)"
 
-#: ../../locales/../src/engine/proxy.cpp:118
+#: ../../locales/../src/engine/proxy.cpp:115
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
 msgstr "Địa chỉ IPv6 không hỗ trợ với máy chủ ủy nhiệm SOCKS4"
 
@@ -4864,8 +4863,8 @@ msgstr "Thuật không an toàn!"
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "Máy chủ không an toàn, không hỗ trợ FTP thông qua TLS."
 
-#: ../../locales/../src/engine/server.cpp:613
-#: ../../locales/../src/engine/server.cpp:637
+#: ../../locales/../src/engine/server.cpp:611
+#: ../../locales/../src/engine/server.cpp:635
 #: ../../locales/../src/interface/manual_transfer.cpp:182
 msgid "Interactive"
 msgstr "Tính tương tác"
@@ -4883,12 +4882,12 @@ msgstr "Bị ngắt bởi tín hiệu"
 msgid "Interrupted by user"
 msgstr "Bị ngắt bởi người dùng"
 
-#: ../../locales/../src/engine/http/request.cpp:159
-#: ../../locales/../src/engine/http/request.cpp:581
+#: ../../locales/../src/engine/http/request.cpp:161
+#: ../../locales/../src/engine/http/request.cpp:584
 msgid "Invalid Content-Length"
 msgstr "Độ dài của nội dung không hợp lệ"
 
-#: ../../locales/../src/engine/http/request.cpp:488
+#: ../../locales/../src/engine/http/request.cpp:490
 msgid "Invalid HTTP Response"
 msgstr "Trả lời HTTP không hợp lệ"
 
@@ -4904,7 +4903,7 @@ msgstr ""
 "Chuỗi ký tự liên tiếp nhận được không hợp lệ, UTF-8 bị đình chỉ. Chọn tùy "
 "chọn UTF-8 trong Danh bạ để bắt buộc UTF-8."
 
-#: ../../locales/../src/engine/http/request.cpp:702
+#: ../../locales/../src/engine/http/request.cpp:705
 msgid "Invalid chunk size"
 msgstr "Tổng kiểm tra kích thước không đúng"
 
@@ -4950,7 +4949,7 @@ msgstr "Tên máy không hợp lệ: %s"
 msgid "Invalid input"
 msgstr "Nguồn vào không hợp lệ"
 
-#: ../../locales/../src/engine/http/request.cpp:516
+#: ../../locales/../src/engine/http/request.cpp:518
 msgid "Invalid line"
 msgstr "Dòng không hợp lệ"
 
@@ -4995,7 +4994,7 @@ msgstr "Biểu thức chính quy không hợp lệ"
 msgid "Invalid regular expression in search conditions."
 msgstr "Biểu thức chính quy trong điều kiện tìm kiếm không hợp lệ."
 
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:499
 msgid "Invalid response code"
 msgstr "Mã đáp ứng sai"
 
@@ -5066,8 +5065,8 @@ msgstr "Trao đổi khóa"
 msgid "Key exchange:"
 msgstr "Trao đổi khóa:"
 
-#: ../../locales/../src/engine/server.cpp:610
-#: ../../locales/../src/engine/server.cpp:635
+#: ../../locales/../src/engine/server.cpp:608
+#: ../../locales/../src/engine/server.cpp:633
 msgid "Key file"
 msgstr "Tập tin khóa"
 
@@ -5076,7 +5075,7 @@ msgstr "Tập tin khóa"
 msgid "Key identifier:"
 msgstr "Định danh khóa:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:378
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:139
 msgid "L&owest"
 msgstr "Thấp &nhất"
 
@@ -5125,7 +5124,7 @@ msgstr "Giới hạn kích thước của tập tin nhật ký"
 msgid "Limit:"
 msgstr "Giới hạn:"
 
-#: ../../locales/../src/engine/http/request.cpp:656
+#: ../../locales/../src/engine/http/request.cpp:659
 msgid "Line length exceeded"
 msgstr "Vượt quá độ dài dòng"
 
@@ -5260,13 +5259,13 @@ msgstr ""
 "Kiểu đăng nhập, có thể chỉ dùng cùng với địa chỉ FTP. Tham số phải là “%s” "
 "hay “%s”"
 
-#: ../../locales/../src/interface/queue.cpp:931
-#: ../../locales/../src/interface/queue.cpp:993
+#: ../../locales/../src/interface/queue.cpp:997
+#: ../../locales/../src/interface/queue.cpp:1059
 msgid "Low"
 msgstr "Thấp"
 
-#: ../../locales/../src/interface/queue.cpp:929
-#: ../../locales/../src/interface/queue.cpp:991
+#: ../../locales/../src/interface/queue.cpp:995
+#: ../../locales/../src/interface/queue.cpp:1057
 msgid "Lowest"
 msgstr "Thấp nhất"
 
@@ -5288,36 +5287,36 @@ msgstr ""
 "Hãy chắc chắn rằng tập tin có thể được phép truy cập và hợp chuẩn tài liệu "
 "dạng XML."
 
-#: ../../locales/../src/engine/http/request.cpp:643
-#: ../../locales/../src/engine/http/request.cpp:649
-#: ../../locales/../src/engine/http/request.cpp:656
-#: ../../locales/../src/engine/http/request.cpp:667
-#: ../../locales/../src/engine/http/request.cpp:702
+#: ../../locales/../src/engine/http/request.cpp:646
+#: ../../locales/../src/engine/http/request.cpp:652
+#: ../../locales/../src/engine/http/request.cpp:659
+#: ../../locales/../src/engine/http/request.cpp:670
+#: ../../locales/../src/engine/http/request.cpp:705
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Mẩu dữ liệu sai dạng: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:159
+#: ../../locales/../src/engine/http/request.cpp:161
 #, c-format
 msgid "Malformed request header: %s"
 msgstr "Phần đầu yêu cầu sai dạng: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:457
-#: ../../locales/../src/engine/http/request.cpp:463
-#: ../../locales/../src/engine/http/request.cpp:516
-#: ../../locales/../src/engine/http/request.cpp:571
-#: ../../locales/../src/engine/http/request.cpp:581
+#: ../../locales/../src/engine/http/request.cpp:459
+#: ../../locales/../src/engine/http/request.cpp:465
+#: ../../locales/../src/engine/http/request.cpp:518
+#: ../../locales/../src/engine/http/request.cpp:574
+#: ../../locales/../src/engine/http/request.cpp:584
 #, c-format
 msgid "Malformed response header: %s"
 msgstr "Phần đầu trả về sai dạng: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:404
-#: ../../locales/../src/engine/http/request.cpp:418
-#: ../../locales/../src/engine/http/request.cpp:436
-#: ../../locales/../src/engine/http/request.cpp:780
-#, fuzzy, c-format
+#: ../../locales/../src/engine/http/request.cpp:406
+#: ../../locales/../src/engine/http/request.cpp:420
+#: ../../locales/../src/engine/http/request.cpp:438
+#: ../../locales/../src/engine/http/request.cpp:783
+#, c-format
 msgid "Malformed response: %s"
-msgstr "Phần thân trả về sai dạng: %s"
+msgstr "Phần đáp ứng sai dạng: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2824
 #: ../../locales/../src/interface/manual_transfer.cpp:288
@@ -5462,7 +5461,7 @@ msgid ""
 "family"
 msgstr "Mạng máy chủ không có địa chỉ mạng nào trong họ địa chỉ đã yêu cầu"
 
-#: ../../locales/../src/engine/proxy.cpp:498
+#: ../../locales/../src/engine/proxy.cpp:494
 #: ../../locales/../src/engine/socket.cpp:1076
 msgid "Network unreachable"
 msgstr "Mạng máy tính không kết nối tới"
@@ -5475,7 +5474,7 @@ msgstr "Không bao giờ"
 msgid "New &Folder"
 msgstr "Thư &mục mới"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:16
+#: ../../locales/../src/interface/menu_bar.cpp:53
 msgid "New &tab"
 msgstr "&Tab mới"
 
@@ -5544,7 +5543,7 @@ msgstr "Chưa có địa chỉ tổ hợp với tên nốt này"
 msgid "No category to export selected"
 msgstr "Không có thể loại nào để xuất ra được chọn"
 
-#: ../../locales/../src/interface/QueueView.cpp:1879
+#: ../../locales/../src/interface/QueueView.cpp:1884
 msgid "No command given, aborting."
 msgstr "Không có lệnh nào được đưa ra nên bãi bỏ."
 
@@ -5598,7 +5597,7 @@ msgstr "Không tìm thấy"
 msgid "No sites available"
 msgstr "Chưa có địa chỉ nào có thể dùng"
 
-#: ../../locales/../src/engine/proxy.cpp:470
+#: ../../locales/../src/engine/proxy.cpp:466
 msgid "No supported SOCKS5 auth method"
 msgstr "Không hỗ trợ phương thức xác minh SOCKS5"
 
@@ -5622,18 +5621,18 @@ msgid "Nonrecoverable failure in name resolution"
 msgstr "Gặp lỗi nghiêm trọng không thể phục hồi trong phân giải tên"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:963
-#: ../../locales/../src/engine/server.cpp:604
-#: ../../locales/../src/engine/server.cpp:631
+#: ../../locales/../src/engine/server.cpp:602
+#: ../../locales/../src/engine/server.cpp:629
 #: ../../locales/../src/interface/manual_transfer.cpp:148
 #: ../../locales/../src/interface/manual_transfer.cpp:176
 #: ../../locales/../src/interface/manual_transfer.cpp:535
-#: ../../locales/../src/interface/queue.cpp:934
-#: ../../locales/../src/interface/queue.cpp:996
+#: ../../locales/../src/interface/queue.cpp:1000
+#: ../../locales/../src/interface/queue.cpp:1062
 msgid "Normal"
 msgstr "Bình thường"
 
-#: ../../locales/../src/interface/queueview_failed.cpp:310
-#: ../../locales/../src/interface/queueview_failed.cpp:335
+#: ../../locales/../src/interface/queueview_failed.cpp:309
+#: ../../locales/../src/interface/queueview_failed.cpp:334
 msgid "Not all items could be requeued for transfer."
 msgstr "Không phải tất cả các mục tin đều có thể yêu cầu truyền."
 
@@ -5675,8 +5674,8 @@ msgid "Note: Using a generic proxy forces passive mode on FTP connections."
 msgstr ""
 "Chú ý: Dùng máy chủ ủy nhiệm chung áp đặt kết nối FTP trong chế độ thụ động."
 
-#: ../../locales/../src/engine/http/request.cpp:463
-#: ../../locales/../src/engine/http/request.cpp:649
+#: ../../locales/../src/engine/http/request.cpp:465
+#: ../../locales/../src/engine/http/request.cpp:652
 msgid "Null character in line"
 msgstr "Lọc các ký tự null trong dòng"
 
@@ -5688,7 +5687,7 @@ msgstr "Số chữ số thập phân:"
 msgid "Number of retries has to be between 0 and 99."
 msgstr "Số lần thử lại phải nằm giữa 0 và 99."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:635
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:396
 msgid "O&pen"
 msgstr "&Mở"
 
@@ -5757,7 +5756,7 @@ msgstr "Chỉ dùng FTP thường (không an toàn)"
 msgid "Op&en file"
 msgstr "&Mở tập tin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:575
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:336
 msgid "Open directory in system's file manager"
 msgstr "Mở thư mục trong bộ quản lý tập tin hệ thống"
 
@@ -5774,7 +5773,7 @@ msgstr "Mở sổ địa chỉ."
 msgid "Open the Site Manager. Right-click for a list of sites."
 msgstr "Mở Quản lý địa chỉ. Bấm chuột phải để liệt kê các địa chỉ."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:59
+#: ../../locales/../src/interface/menu_bar.cpp:74
 msgid ""
 "Open the directory access permissions dialog to configure the local "
 "directories FileZilla has access to."
@@ -5782,11 +5781,11 @@ msgstr ""
 "Mở hộp thoại phân quyền truy cập thư mục để cấu hình các thư mục nội bộ mà "
 "FileZilla có quyền truy cập đến đó."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:260
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:21
 msgid "Open the file."
 msgstr "Mở tập tin."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:55
+#: ../../locales/../src/interface/menu_bar.cpp:72
 msgid "Open the settings dialog of FileZilla"
 msgstr "Mở hộp thoại cài đặt của FileZilla"
 
@@ -5803,11 +5802,11 @@ msgstr "Mở như là:"
 msgid "Opening failed"
 msgstr "Mở bị lỗi"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:18
+#: ../../locales/../src/interface/menu_bar.cpp:53
 msgid "Opens a new tab"
 msgstr "Mở một tab mới"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:9
+#: ../../locales/../src/interface/menu_bar.cpp:49
 msgid "Opens the Site Manager"
 msgstr "Mở Danh bạ"
 
@@ -6167,7 +6166,7 @@ msgstr ""
 "Xin nhập dòng lệnh thô của giao thức FTP.\n"
 "Dùng dòng lệnh thô sẽ xóa bộ đệm dữ liệu thư mục."
 
-#: ../../locales/../src/interface/QueueView.cpp:1873
+#: ../../locales/../src/interface/QueueView.cpp:1878
 msgid ""
 "Please enter the complete path of a program and its arguments. This command "
 "will be executed when the queue has finished processing.\n"
@@ -6400,7 +6399,7 @@ msgstr "In thông tin về phiên bản ra stdout rồi thoát"
 msgid "Prioritize directories (default)"
 msgstr "Thư mục ưu tiên (mặc định)"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Priority"
 msgstr "Quyền ưu tiên"
 
@@ -6425,8 +6424,8 @@ msgstr "Giao &thức:"
 msgid "Pro&xy password:"
 msgstr "Mật &khẩu máy chủ ủy nhiệm:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:133
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:346
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:107
+#: ../../locales/../src/interface/menu_bar.cpp:111
 msgid "Process &Queue"
 msgstr "Xử lý &hàng đợi"
 
@@ -6461,7 +6460,7 @@ msgstr "Cổng máy chủ ủ&y nhiệm:"
 msgid "Proxy &user:"
 msgstr "Tài khoả&n máy chủ ủy nhiệm:"
 
-#: ../../locales/../src/engine/proxy.cpp:479
+#: ../../locales/../src/engine/proxy.cpp:475
 msgid "Proxy authentication failed"
 msgstr "Sự xác thực máy chủ ủy nhiệm bị lỗi."
 
@@ -6475,22 +6474,22 @@ msgstr "Kết nối bắt tay với máy chủ ủy nhiệm bị lỗi: %s"
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr "Máy chủ bắt đầu với “[” nhưng không tìm thấy dấu ngoặc đóng."
 
-#: ../../locales/../src/engine/proxy.cpp:333
+#: ../../locales/../src/engine/proxy.cpp:329
 #, c-format
 msgid "Proxy reply: %s"
 msgstr "Máy chủ ủy nhiệm trả lời: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:520
+#: ../../locales/../src/engine/proxy.cpp:516
 #, c-format
 msgid "Proxy request failed. Reply from proxy: %s"
 msgstr "Gặp lỗi khi yêu cầu máy chủ ủy nhiệm. Trả lời từ máy ủy nhiệm: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:390
+#: ../../locales/../src/engine/proxy.cpp:386
 #, c-format
 msgid "Proxy request failed: %s"
 msgstr "Gặp lỗi khi yêu cầu máy chủ ủy nhiệm: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:544
+#: ../../locales/../src/engine/proxy.cpp:540
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr ""
 "Gặp lỗi khi yêu cầu máy chủ ủy nhiệm: Không rõ kiểu địa chỉ trong trả lời "
@@ -6512,7 +6511,7 @@ msgstr "Thuật toán Khóa Công:"
 msgid "Public permissions"
 msgstr "Cho phép tất cả mọi người"
 
-#: ../../locales/../src/interface/QueueView.cpp:2779
+#: ../../locales/../src/interface/QueueView.cpp:2784
 msgid "Queue has been fully processed"
 msgstr "Hàng đợi đã đầy"
 
@@ -6531,7 +6530,7 @@ msgstr "Hàng đợi: %s%s"
 msgid "Queue: empty"
 msgstr "Hàng đợi: rỗng"
 
-#: ../../locales/../src/interface/QueueView.cpp:204
+#: ../../locales/../src/interface/QueueView.cpp:207
 msgid "Queued files"
 msgstr "Hàng đợi các tập tin"
 
@@ -6548,16 +6547,16 @@ msgstr "Tìm nhanh:"
 msgid "Quick search cannot be opened if comparing directories."
 msgstr "Không thể mở tìm kiếm nhanh nếu đang so sánh các thư mục."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:413
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:174
 msgid "R&eboot system once"
 msgstr "&Khởi động lại hệ thống"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:122
+#: ../../locales/../src/interface/menu_bar.cpp:104
 msgid "R&emote directory tree"
 msgstr "Cây thư mụ&c máy mạng"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:469
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:487
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:230
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:248
 msgid "R&eset and requeue selected files"
 msgstr "Đặt và xếp &lại hàng đợi với các tập tin đã chọn"
 
@@ -6569,8 +6568,8 @@ msgstr "Lệnh FTP thô"
 msgid "Re&ad"
 msgstr "Đọ&c"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:276
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:320
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:37
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:81
 msgid "Re&fresh"
 msgstr "Làm &tươi"
 
@@ -6596,7 +6595,7 @@ msgstr "Chỉ đọc"
 
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:44
 msgid "Reading from local file failed"
-msgstr ""
+msgstr "Gặp lỗi khi đọc từ tập tin nội bộ"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1114
 msgid "Really cancel current operation?"
@@ -6636,29 +6635,29 @@ msgstr ""
 "Bạn có thực sự muốn xóa tất cả tập tin và/hoặc thư mục đã chọn từ máy tính "
 "của mình không?"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Reason"
 msgstr "Lý do"
 
-#: ../../locales/../src/interface/QueueView.cpp:2772
+#: ../../locales/../src/interface/QueueView.cpp:2777
 msgid "Reboot now"
 msgstr "Khởi động lại ngay"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:716
 msgid "Rec&urse into subdirectories"
-msgstr "Rec&urse vào thư mục con"
+msgstr "Đệ q&uy vào các thư mục con"
 
 #: ../../locales/../src/engine/tlssocket_impl.cpp:329
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Nhận được cảnh báo TLS từ máy phục vụ: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:3078
+#: ../../locales/../src/engine/directorylistingparser.cpp:3165
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Đã nhận về danh sách thư mục mà nó có vẻ được mã hóa trong EBCDIC."
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2060
-#: ../../locales/../src/engine/directorylistingparser.cpp:2077
+#: ../../locales/../src/engine/directorylistingparser.cpp:2130
+#: ../../locales/../src/engine/directorylistingparser.cpp:2147
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Nhận được vượt quá 10000 ký tự một dòng, đang bãi bỏ."
 
@@ -6748,7 +6747,7 @@ msgid "Remote certificate not trusted."
 msgstr "Thông tin xác nhận máy mạng không tin cậy."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2517
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Remote file"
 msgstr "Tập tin máy mạng"
 
@@ -6805,13 +6804,13 @@ msgstr "Đường dẫn máy mạng:"
 msgid "Remote site:"
 msgstr "Địa chỉ máy mạng:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:459
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:477
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:220
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:238
 msgid "Remove &all"
 msgstr "L&oại bỏ tất cả"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:466
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:484
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:227
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:245
 msgid "Remove &selected"
 msgstr "Loại bỏ phần đã &chọn"
 
@@ -6823,13 +6822,13 @@ msgstr "Loại bỏ phần đã &chọn"
 msgid "Rename file"
 msgstr "Đổi tên tập tin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:525
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:593
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:286
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:354
 msgid "Rename selected directory"
 msgstr "Đổi tên thư mục đã chọn"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:285
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:329
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:46
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:90
 msgid "Rename selected files and directories"
 msgstr "Đổi tên tập tin và thư mục đã chọn"
 
@@ -6848,20 +6847,20 @@ msgstr "Lặp lại mật khẩu:"
 msgid "Reporting bugs and feature requests"
 msgstr "Cách báo cáo lỗi và yêu cầu các đặc tính mới"
 
-#: ../../locales/../src/engine/proxy.cpp:381
+#: ../../locales/../src/engine/proxy.cpp:377
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
 "Yêu cầu gặp lỗi - máy khách không chạy “identd” (hoặc là không thể kết nối "
 "từ máy chủ)"
 
-#: ../../locales/../src/engine/proxy.cpp:384
+#: ../../locales/../src/engine/proxy.cpp:380
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr ""
 "Yêu cầu gặp lỗi - “identd” của máy khách không thể xác nhận chuỗi định danh "
 "(ID) tài khoản"
 
-#: ../../locales/../src/engine/proxy.cpp:378
+#: ../../locales/../src/engine/proxy.cpp:374
 msgid "Request rejected or failed"
 msgstr "Yêu cầu bị từ chối hay gặp lỗi"
 
@@ -6873,7 +6872,7 @@ msgstr "Yêu cầu FTP thông qua TLS tường minh"
 msgid "Require implicit FTP over TLS"
 msgstr "Yêu cầu FTP thông qua TLS ngầm định"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:480
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:241
 msgid "Reset and requeue &all"
 msgstr "Đặt và xếp lại toàn &bộ hàng đợi"
 
@@ -6935,7 +6934,7 @@ msgstr "Đang nhận danh sách thư mục…"
 msgid "Retrieving external IP address from %s"
 msgstr "Nhận địa chỉ IP từ %s"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:34
+#: ../../locales/../src/interface/menu_bar.cpp:61
 msgid "S&how files currently being edited..."
 msgstr "&Hiển thị tập tin đang sửa…"
 
@@ -6943,7 +6942,7 @@ msgstr "&Hiển thị tập tin đang sửa…"
 msgid "S&how the Site Manager on startup"
 msgstr "Mở cửa sổ quản lý dan&h bạ khi khởi động"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:417
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:178
 msgid "S&hutdown system once"
 msgstr "Tắt &hệ thống một lần"
 
@@ -6951,11 +6950,11 @@ msgstr "Tắt &hệ thống một lần"
 msgid "S&top"
 msgstr "&Dừng lại"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:421
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:182
 msgid "S&uspend system once"
 msgstr "Ngừng &hệ thống một lần"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:96
+#: ../../locales/../src/interface/menu_bar.cpp:97
 msgid "S&ynchronized browsing"
 msgstr "&Duyệt đồng bộ"
 
@@ -6971,12 +6970,12 @@ msgstr "Hỗ trợ SFTP"
 msgid "SOC&KS 4"
 msgstr "SOC&KS 4"
 
-#: ../../locales/../src/engine/proxy.cpp:144
+#: ../../locales/../src/engine/proxy.cpp:141
 #, c-format
 msgid "SOCKS4 proxy will connect to: %s"
 msgstr "Máy chủ ủy nhiệm SOCKS4 sẽ kết nối đến: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:172
+#: ../../locales/../src/engine/proxy.cpp:168
 msgid ""
 "SOCKS5 does not support usernames or passwords longer than 255 characters."
 msgstr "SOCKS5 không hỗ trợ tài khoản và mật khẩu dài hơn 255 ký tự."
@@ -7025,7 +7024,7 @@ msgstr "&Thư mục tìm kiếm:"
 msgid "Search for files recursively."
 msgstr "Tìm kiếm đệ qui tập tin."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:195
+#: ../../locales/../src/interface/menu_bar.cpp:146
 msgid "Search server for files"
 msgstr "Tìm kiếm tập tin trên máy chủ"
 
@@ -7095,7 +7094,7 @@ msgid "Select file for exported filters"
 msgstr "Chọn tập tin để xuất bộ lọc ra"
 
 #: ../../locales/../src/interface/export.cpp:39
-#: ../../locales/../src/interface/queue.cpp:1500
+#: ../../locales/../src/interface/queue.cpp:1566
 msgid "Select file for exported queue"
 msgstr "Chọn tập tin cho hàng đợi xuất ra"
 
@@ -7212,7 +7211,7 @@ msgstr "Tập tin đã chọn vẫn còn bị chỉnh sửa"
 msgid "Selected filter only works for local files."
 msgstr "Chọn bộ lọc chỉ làm việc cho tập tin nội bộ."
 
-#: ../../locales/../src/interface/menu_bar.cpp:321
+#: ../../locales/../src/interface/menu_bar.cpp:434
 msgid ""
 "Selected global bookmark and current server use a different server type.\n"
 "Use site-specific bookmarks for this server."
@@ -7228,7 +7227,7 @@ msgstr "Chọn cổng thường dùng bởi các giao thức khác."
 msgid "Send FTP &keep-alive commands"
 msgstr "Gửi các &lệnh duy trì FTP"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:200
+#: ../../locales/../src/interface/menu_bar.cpp:147
 msgid "Send custom command to the server otherwise not available"
 msgstr "Gửi lệnh từ người dùng đến máy chủ nếu không thì không có hiệu lực"
 
@@ -7297,7 +7296,7 @@ msgstr ""
 "Máy chủ có thể yêu cầu tài khoản dùng. Thử ghi rõ một tài khoản dùng trong "
 "Danh bạ"
 
-#: ../../locales/../src/engine/http/request.cpp:457
+#: ../../locales/../src/engine/http/request.cpp:459
 msgid "Server not sending proper line endings"
 msgstr "Máy chủ không gửi ký tự xuống dòng thích hợp"
 
@@ -7305,11 +7304,12 @@ msgstr "Máy chủ không gửi ký tự xuống dòng thích hợp"
 #, c-format
 msgid "Server requested unsupported digest authentication algorithm: %s"
 msgstr ""
+"Máy phục vụ đã yêu cầu thuật toán xác thực tóm lược không được hỗ trợ: %s"
 
 #: ../../locales/../src/engine/http/digest.cpp:287
 #, c-format
 msgid "Server requested unsupported quality-of-protection: %s"
-msgstr ""
+msgstr "Máy phục vụ đã yêu cầu chất-lượng-bảo-vệ không được hỗ trợ: %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:347
 msgid "Server returned empty path."
@@ -7322,9 +7322,9 @@ msgid ""
 msgstr ""
 "Máy chủ gửi một lời nhắc đăng nhập. Bạn cần dùng đăng nhập kiểu tương tác."
 
-#: ../../locales/../src/engine/http/request.cpp:307
+#: ../../locales/../src/engine/http/request.cpp:309
 msgid "Server sent data even before request headers were sent"
-msgstr ""
+msgstr "Máy phục vụ gửi dữ liệu trước cả khi phần đầu yêu cầu được gửi"
 
 #: ../../locales/../src/engine/ftp/rawtransfer.cpp:347
 msgid "Server sent passive reply with unroutable address. Passive mode failed."
@@ -7340,10 +7340,10 @@ msgstr ""
 "Máy chủ gửi trả lời thụ động với địa chỉ không đầy đủ. Dùng địa chỉ máy chủ "
 "để thay thế."
 
-#: ../../locales/../src/engine/http/request.cpp:404
-#: ../../locales/../src/engine/http/request.cpp:418
-#: ../../locales/../src/engine/http/request.cpp:436
-#: ../../locales/../src/engine/http/request.cpp:780
+#: ../../locales/../src/engine/http/request.cpp:406
+#: ../../locales/../src/engine/http/request.cpp:420
+#: ../../locales/../src/engine/http/request.cpp:438
+#: ../../locales/../src/engine/http/request.cpp:783
 msgid "Server sent too much data."
 msgstr "Máy phục vụ gửi quá nhiều dữ liệu."
 
@@ -7376,7 +7376,7 @@ msgstr "Kiểu mã hóa từ máy chủ tới máy khách:"
 msgid "Server&type:"
 msgstr "&Kiểu máy chủ:"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Server/Local file"
 msgstr "Tập tin Máy chủ/Máy nội bộ"
 
@@ -7389,7 +7389,7 @@ msgstr "Máy chủ:"
 msgid "Session details"
 msgstr "Thông tin chi tiết phiên làm việc"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:360
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:121
 msgid "Set &Priority"
 msgstr "T&hiết lập quyền ưu tiên"
 
@@ -7407,7 +7407,7 @@ msgstr "Cài đặt"
 msgid "Settings directory:"
 msgstr "Thư mục lưu cài đặt:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:389
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:150
 msgid "Sh&ow notification bubble"
 msgstr "&Hiển thị nổi thông báo"
 
@@ -7415,7 +7415,7 @@ msgstr "&Hiển thị nổi thông báo"
 msgid "Show &raw directory listing"
 msgstr "Hiển thị danh sách thư mục &thô"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:227
+#: ../../locales/../src/interface/menu_bar.cpp:171
 msgid "Show &welcome dialog..."
 msgstr "Hiển thị hộp thoại &chào mừng…"
 
@@ -7433,11 +7433,11 @@ msgid "Show details about custom date and time formats"
 msgstr ""
 "Hiển thị thông tin chi tiết về định dạng ngày tháng và thời gian tùy chỉnh"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:638
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:399
 msgid "Show in file &manager"
 msgstr "Hiển thị trong bộ &quản lý tập tin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:451
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:212
 msgid "Shows available TLS ciphers"
 msgstr "Hiển thị các kiểu mã hóa TLS sẵn dùng"
 
@@ -7445,7 +7445,7 @@ msgstr "Hiển thị các kiểu mã hóa TLS sẵn dùng"
 msgid "Shows this help dialog"
 msgstr "Hiển thị hộp thoại trợ giúp"
 
-#: ../../locales/../src/interface/QueueView.cpp:2768
+#: ../../locales/../src/interface/QueueView.cpp:2773
 msgid "Shutdown now"
 msgstr "Tắt ngay bây giờ"
 
@@ -7528,7 +7528,7 @@ msgstr ""
 "Dấu trang gắn với trang mạng yêu cầu máy chủ phải được lưu trong danh bạ.\n"
 "Thêm kết nối hiện tại vào danh bạ?"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Size"
 msgstr "Kích thước"
 
@@ -7699,7 +7699,7 @@ msgid "State or province:"
 msgstr "Bang hoặc tỉnh:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1139
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Status"
 msgstr "Tình trạng"
 
@@ -7709,7 +7709,7 @@ msgstr "Tình trạng"
 msgid "Status:"
 msgstr "Tình trạng:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:350
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:111
 msgid "Stop and remove &all"
 msgstr "Dừng và xóa tất &cả"
 
@@ -7741,7 +7741,7 @@ msgstr "Các lần truyền thành công"
 msgid "Summary of test results:"
 msgstr "Tổng hợp kết quả kiểm tra:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2776
+#: ../../locales/../src/interface/QueueView.cpp:2781
 msgid "Suspend now"
 msgstr "Ngừng ngay bây giờ"
 
@@ -7809,7 +7809,7 @@ msgstr "Đã chạm đến giới hạn số lượng tập tin mở của hệ 
 msgid "System's network subsystem has failed"
 msgstr "Hệ thống mạng con hệ thống bị lỗi"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:106
+#: ../../locales/../src/interface/menu_bar.cpp:100
 msgid "T&oolbar"
 msgstr "Thanh côn&g cụ"
 
@@ -7825,7 +7825,7 @@ msgstr "Kết nối TLS đã được thiết lập, xin chờ thông tin từ m
 msgid "TLS connection established."
 msgstr "Kết nối TLS đã được thiết lập."
 
-#: ../../locales/../src/engine/proxy.cpp:507
+#: ../../locales/../src/engine/proxy.cpp:503
 msgid "TTL expired"
 msgstr "TTL đã hết hiệu lực"
 
@@ -8158,7 +8158,7 @@ msgstr "Không thể tải phiên bản mới về, vui lòng thử lại sau."
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Phiên bản mới nhất đã được lưu lại tại thư mục Tải về của bạn."
 
-#: ../../locales/../src/interface/QueueView.cpp:1566
+#: ../../locales/../src/interface/QueueView.cpp:1570
 msgid "The queue will not be saved."
 msgstr "Hàng đợi sẽ không được ghi lại."
 
@@ -8268,11 +8268,11 @@ msgstr "Họ địa chỉ đã cho không được hỗ trợ"
 msgid "The specified network name is no longer available"
 msgstr "Tên mạng đã chỉ định không còn được sử dụng nữa"
 
-#: ../../locales/../src/interface/QueueView.cpp:2771
+#: ../../locales/../src/interface/QueueView.cpp:2776
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "Hệ thống sẽ khởi động lại trừ khi bạn bấm vào Thôi."
 
-#: ../../locales/../src/interface/QueueView.cpp:2767
+#: ../../locales/../src/interface/QueueView.cpp:2772
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Hệ thống sẽ tắt ngay trừ khi bạn bấm vào Thôi."
 
@@ -8329,7 +8329,7 @@ msgstr ""
 "Chương trình thuật sĩ sẽ giúp bạn cấu hình một cách đúng đắn tất cả các bộ "
 "định tuyến router và tường lửa firewall bạn có và kiểm tra cấu hình của bạn."
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Time"
 msgstr "Thời gian"
 
@@ -8416,7 +8416,7 @@ msgstr "Bật tắt việc hiển thị của cây thư mục máy mạng"
 msgid "Toggles the display of the transfer queue"
 msgstr "Bật tắt việc hiển thị của hàng đợi truyền"
 
-#: ../../locales/../src/engine/http/request.cpp:470
+#: ../../locales/../src/engine/http/request.cpp:472
 msgid "Too long header line"
 msgstr "Đầu đề quá dài"
 
@@ -8439,7 +8439,7 @@ msgstr "&Truyền"
 msgid "Transfer &direction"
 msgstr "Hướng tru&yền"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:142
+#: ../../locales/../src/interface/menu_bar.cpp:116
 msgid "Transfer &type"
 msgstr "Kiểu &truyền"
 
@@ -8474,7 +8474,7 @@ msgstr "Đang truyền"
 msgid "Transfers"
 msgstr "Truyền"
 
-#: ../../locales/../src/interface/QueueView.cpp:2650
+#: ../../locales/../src/interface/QueueView.cpp:2655
 msgid "Transfers finished"
 msgstr "Việc truyền đã hoàn thành"
 
@@ -8545,8 +8545,8 @@ msgstr "&Dùng trình soạn thảo tập tin văn bản mặc định cho ngôn
 msgid "USER@&HOST"
 msgstr "TÀIK&HOẢN@MÁYCHỦ"
 
-#: ../../locales/../src/engine/proxy.cpp:387
-#: ../../locales/../src/engine/proxy.cpp:516
+#: ../../locales/../src/engine/proxy.cpp:383
+#: ../../locales/../src/engine/proxy.cpp:512
 #, c-format
 msgid "Unassigned error code %d"
 msgstr "Mã lỗi sai không xác định %d"
@@ -8572,7 +8572,7 @@ msgstr ""
 "Không rõ máy chủ ủy nhiệm cho giao thức FTP, không thể tạo đăng nhập liên "
 "tiếp."
 
-#: ../../locales/../src/engine/proxy.cpp:438
+#: ../../locales/../src/engine/proxy.cpp:434
 #, c-format
 msgid "Unknown SOCKS protocol version: %d"
 msgstr "Không rõ phiên bản giao thức SOCKS: %d"
@@ -8596,7 +8596,7 @@ msgstr "Lỗi chưa biết %u"
 msgid "Unknown host key"
 msgstr "Không rõ khóa máy chủ"
 
-#: ../../locales/../src/engine/proxy.cpp:446
+#: ../../locales/../src/engine/proxy.cpp:442
 #, c-format
 msgid ""
 "Unknown protocol version of SOCKS Username/Password Authentication "
@@ -8610,7 +8610,7 @@ msgid ""
 "Unknown root element, the file does not appear to be generated by FileZilla."
 msgstr "Không hiểu nút gốc, tập tin không được tạo ra bởi FileZilla."
 
-#: ../../locales/../src/engine/http/request.cpp:571
+#: ../../locales/../src/engine/http/request.cpp:574
 msgid "Unknown transfer encoding"
 msgstr "Không hiểu bộ mã bộ truyền"
 
@@ -8670,11 +8670,11 @@ msgstr "Giới hạn tải lên: không"
 msgid "Upload search results"
 msgstr "Tải lên kết quả tìm kiếm"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:565
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:326
 msgid "Upload selected directory"
 msgstr "Tải lên thư mục đã chọn"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:246
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:7
 msgid "Upload selected files and directories"
 msgstr "Tải lên các thư mục và tập tin đã chọn"
 
@@ -8918,7 +8918,7 @@ msgstr "&Ghi"
 msgid "Wrong external IP address"
 msgstr "Sai địa chỉ IP"
 
-#: ../../locales/../src/engine/http/request.cpp:643
+#: ../../locales/../src/engine/http/request.cpp:646
 msgid "Wrong line endings"
 msgstr "Xuống dòng sai"
 
@@ -9155,7 +9155,7 @@ msgstr ""
 "Bạn có thể không có vấn đề với việc kết nối tới các máy chủ khác, việc "
 "truyền tập tin có thể làm việc một cách đúng đắn."
 
-#: ../../locales/../src/interface/QueueView.cpp:2775
+#: ../../locales/../src/interface/QueueView.cpp:2780
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "Máy tính của bạn sẽ ngừng trừ khi bạn bấm vào Thôi."
 
@@ -9315,7 +9315,7 @@ msgstr "người sở hữu được phép đọc"
 msgid "owner writeable"
 msgstr "người sở hữu được phép ghi"
 
-#: ../../locales/../src/engine/proxy.cpp:64
+#: ../../locales/../src/engine/proxy.cpp:63
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1454
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1470
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1486
