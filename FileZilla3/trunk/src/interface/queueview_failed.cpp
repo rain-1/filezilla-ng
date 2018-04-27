@@ -15,9 +15,7 @@ END_EVENT_TABLE()
 CQueueViewFailed::CQueueViewFailed(CQueue* parent, int index)
 	: CQueueViewBase(parent, index, _("Failed transfers"))
 {
-	std::list<ColumnId> extraCols;
-	extraCols.push_back(colTime);
-	extraCols.push_back(colErrorReason);
+	std::vector<ColumnId> extraCols({colTime, colErrorReason});
 	CreateColumns(extraCols);
 }
 
@@ -29,8 +27,9 @@ CQueueViewFailed::CQueueViewFailed(CQueue* parent, int index, const wxString& ti
 void CQueueViewFailed::OnContextMenu(wxContextMenuEvent&)
 {
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_QUEUE_FAILED"));
-	if (!pMenu)
+	if (!pMenu) {
 		return;
+	}
 
 #ifndef __WXMSW__
 	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)

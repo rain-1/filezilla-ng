@@ -1283,7 +1283,7 @@ void CQueueViewBase::AddQueueColumn(ColumnId id)
 	m_columns.push_back(id);
 }
 
-void CQueueViewBase::CreateColumns(std::list<ColumnId> const& extraColumns)
+void CQueueViewBase::CreateColumns(std::vector<ColumnId> const& extraColumns)
 {
 	AddQueueColumn(colLocalName);
 	AddQueueColumn(colDirection);
@@ -1291,8 +1291,8 @@ void CQueueViewBase::CreateColumns(std::list<ColumnId> const& extraColumns)
 	AddQueueColumn(colSize);
 	AddQueueColumn(colPriority);
 
-	for (std::list<ColumnId>::const_iterator it = extraColumns.begin(); it != extraColumns.end(); ++it) {
-		AddQueueColumn(*it);
+	for (auto id : extraColumns) {
+		AddQueueColumn(id);
 	}
 
 	LoadColumnSettings(OPTION_QUEUE_COLUMN_WIDTHS, -1, -1);

@@ -340,7 +340,7 @@ public:
 
 protected:
 
-	void CreateColumns(std::list<ColumnId> const& extraColumns = std::list<ColumnId>());
+	void CreateColumns(std::vector<ColumnId> const& extraColumns = std::vector<ColumnId>());
 	void AddQueueColumn(ColumnId id);
 
 	// Gets item for given server
