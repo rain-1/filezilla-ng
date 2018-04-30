@@ -45,13 +45,14 @@ public:
 	struct t_fileInfo
 	{
 		std::wstring name;
-		bool dir;
 		int64_t size;
+		bool dir;
 		bool link;
 	};
 
-	const std::list<t_fileInfo>& GetFiles() const { return m_fileList; }
+	const std::vector<t_fileInfo>& GetFiles() const { return m_fileList; }
 
+	void Reserve(size_t count);
 	void AddFile(const wxString& name, bool dir, int64_t size, bool link);
 
 protected:
@@ -64,7 +65,7 @@ protected:
 
 	int m_processId;
 
-	std::list<t_fileInfo> m_fileList;
+	std::vector<t_fileInfo> m_fileList;
 
 	mutable size_t m_expectedSize{};
 };

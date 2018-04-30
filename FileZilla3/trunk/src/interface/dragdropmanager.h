@@ -22,7 +22,6 @@ public:
 	const wxWindow* pDropTarget;
 
 	CLocalPath localParent;
-	std::list<wxString> m_localFiles;
 
 	ServerWithCredentials server;
 	CServerPath remoteParent;

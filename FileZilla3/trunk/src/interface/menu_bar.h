@@ -18,7 +18,7 @@ public:
 
 	void UpdateBookmarkMenu();
 
-	std::list<int> m_bookmark_menu_ids;
+	std::vector<int> m_bookmark_menu_ids;
 	std::map<int, wxString> m_bookmark_menu_id_map_global;
 	std::map<int, wxString> m_bookmark_menu_id_map_site;
 

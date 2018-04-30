@@ -309,6 +309,7 @@ void CMenuBar::UpdateBookmarkMenu()
 			if (ids == m_bookmark_menu_ids.end()) {
 				id = wxNewId();
 				m_bookmark_menu_ids.push_back(id);
+				ids = m_bookmark_menu_ids.end();
 			}
 			else {
 				id = *ids;
@@ -345,6 +346,7 @@ void CMenuBar::UpdateBookmarkMenu()
 		if (ids == m_bookmark_menu_ids.end()) {
 			id = wxNewId();
 			m_bookmark_menu_ids.push_back(id);
+			ids = m_bookmark_menu_ids.end();
 		}
 		else {
 			id = *ids;

@@ -13,10 +13,10 @@ public:
 protected:
 	struct t_keyData
 	{
-		wxString host;
-		wxString fingerprint;
+		std::wstring host;
+		std::wstring fingerprint;
 	};
-	static std::list<t_keyData> m_sessionTrustedKeys;
+	static std::vector<t_keyData> m_sessionTrustedKeys;
 };
 
 #endif

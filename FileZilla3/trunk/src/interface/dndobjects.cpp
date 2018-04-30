@@ -234,18 +234,20 @@ void CRemoteDataObject::Finalize()
 
 	AddTextElement(element, "ProcessId", m_processId);
 
+	AddTextElement(element, "Count", m_fileList.size());
+
 	auto xServer = element.append_child("Server");
 	SetServer(xServer, server_);
 
 	AddTextElement(element, "Path", m_path.GetSafePath());
 
 	auto files = element.append_child("Files");
-	for (std::list<t_fileInfo>::const_iterator iter = m_fileList.begin(); iter != m_fileList.end(); ++iter) {
+	for (auto const& info : m_fileList) {
 		auto file = files.append_child("File");
-		AddTextElement(file, "Name", iter->name);
-		AddTextElement(file, "Dir", iter->dir ? 1 : 0);
-		AddTextElement(file, "Size", iter->size);
-		AddTextElement(file, "Link", iter->link ? 1 : 0);
+		AddTextElement(file, "Name", info.name);
+		AddTextElement(file, "Dir", info.dir ? 1 : 0);
+		AddTextElement(file, "Size", info.size);
+		AddTextElement(file, "Link", info.link ? 1 : 0);
 	}
 }
 
@@ -268,6 +270,16 @@ bool CRemoteDataObject::SetData(size_t len, const void* buf)
 	m_processId = GetTextElementInt(element, "ProcessId", -1);
 	if (m_processId == -1) {
 		return false;
+	}
+
+	int64_t count = GetTextElementInt(element, "Count", -1);
+	if (count > 0) {
+		try {
+			m_fileList.reserve(static_cast<size_t>(count));
+		}
+		catch(std::exception const&) {
+			return false;
+		}
 	}
 
 	auto serverElement = element.child("Server");
@@ -310,6 +322,11 @@ bool CRemoteDataObject::SetData(size_t len, const void* buf)
 	}
 
 	return true;
+}
+
+void CRemoteDataObject::Reserve(size_t count)
+{
+	m_fileList.reserve(count);
 }
 
 void CRemoteDataObject::AddFile(const wxString& name, bool dir, int64_t size, bool link)
