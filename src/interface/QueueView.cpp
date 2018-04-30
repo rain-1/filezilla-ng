@@ -323,7 +323,7 @@ bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, c
 {
 	CServerItem* pServerItem = CreateServerItem(dataObject.GetServer());
 
-	const std::list<CRemoteDataObject::t_fileInfo>& files = dataObject.GetFiles();
+	std::vector<CRemoteDataObject::t_fileInfo> const& files = dataObject.GetFiles();
 
 	for (auto const& fileInfo : files) {
 		if (fileInfo.dir) {

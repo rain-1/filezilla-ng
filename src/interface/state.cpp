@@ -940,7 +940,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 {
 	bool hasDirs = false;
 	bool hasFiles = false;
-	const std::list<CRemoteDataObject::t_fileInfo>& files = pRemoteDataObject->GetFiles();
+	std::vector<CRemoteDataObject::t_fileInfo> const& files = pRemoteDataObject->GetFiles();
 	for (auto const& fileInfo : files) {
 		if (fileInfo.dir) {
 			hasDirs = true;

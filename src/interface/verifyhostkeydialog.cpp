@@ -3,7 +3,9 @@
 #include "dialogex.h"
 #include "ipcmutex.h"
 
-std::list<CVerifyHostkeyDialog::t_keyData> CVerifyHostkeyDialog::m_sessionTrustedKeys;
+#include <libfilezilla/format.hpp>
+
+std::vector<CVerifyHostkeyDialog::t_keyData> CVerifyHostkeyDialog::m_sessionTrustedKeys;
 
 void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNotification& notification)
 {
@@ -24,13 +26,13 @@ void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNoti
 
 	dlg.WrapText(&dlg, XRCID("ID_DESC"), 400);
 
-	const wxString host = wxString::Format(_T("%s:%d"), notification.GetHost(), notification.GetPort());
+	std::wstring const host = fz::sprintf(L"%s:%d", notification.GetHost(), notification.GetPort());
 	dlg.SetChildLabel(XRCID("ID_HOST"), host);
 
 	if (!notification.hostKeyAlgorithm.empty()) {
 		dlg.SetChildLabel(XRCID("ID_HOSTKEYALGO"), notification.hostKeyAlgorithm);
 	}
-	std::wstring fingerprints = fz::sprintf(L"SHA256: %s\nMD5: %s", notification.hostKeyFingerprintSHA256, notification.hostKeyFingerprintMD5);
+	std::wstring const fingerprints = fz::sprintf(L"SHA256: %s\nMD5: %s", notification.hostKeyFingerprintSHA256, notification.hostKeyFingerprintMD5);
 	dlg.SetChildLabel(XRCID("ID_FINGERPRINT"), fingerprints);
 
 	dlg.GetSizer()->Fit(&dlg);
@@ -55,7 +57,7 @@ void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNoti
 
 bool CVerifyHostkeyDialog::IsTrusted(CHostKeyNotification const& notification)
 {
-	const wxString host = wxString::Format(_T("%s:%d"), notification.GetHost(), notification.GetPort());
+	std::wstring const host = fz::sprintf(L"%s:%d", notification.GetHost(), notification.GetPort());
 
 	for (auto const& trusted : m_sessionTrustedKeys) {
 		if (trusted.host == host && trusted.fingerprint == notification.hostKeyFingerprintSHA256) {

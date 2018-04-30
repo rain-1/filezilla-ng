@@ -154,9 +154,8 @@ public:
 			return wxDragNone;
 		}
 
-		const std::list<CRemoteDataObject::t_fileInfo>& files = m_pRemoteDataObject->GetFiles();
-		for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
-			const CRemoteDataObject::t_fileInfo& info = *iter;
+		const std::vector<CRemoteDataObject::t_fileInfo>& files = m_pRemoteDataObject->GetFiles();
+		for (auto const& info : files) {
 			if (info.dir) {
 				CServerPath dir = m_pRemoteDataObject->GetServerPath();
 				dir.AddSegment(info.name);
@@ -170,8 +169,7 @@ public:
 			}
 		}
 
-		for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
-			const CRemoteDataObject::t_fileInfo& info = *iter;
+		for (auto const& info : files) {
 			m_pRemoteListView->m_state.m_pCommandQueue->ProcessCommand(
 				new CRenameCommand(m_pRemoteDataObject->GetServerPath(), info.name, target, info.name)
 				);

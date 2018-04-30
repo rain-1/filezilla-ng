@@ -1387,7 +1387,6 @@ void CLocalListView::OnBeginDrag(wxListEvent&)
 		}
 
 		wxString const name = m_dir.GetPath() + data->name;
-		pDragDropManager->m_localFiles.push_back(name);
 		obj.AddFile(name);
 	}
 

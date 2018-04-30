@@ -111,7 +111,7 @@ public:
 				return wxDragNone;
 			}
 
-			std::list<CRemoteDataObject::t_fileInfo> const& files = m_pRemoteDataObject->GetFiles();
+			std::vector<CRemoteDataObject::t_fileInfo> const& files = m_pRemoteDataObject->GetFiles();
 			for (auto const& info : files) {
 				if (info.dir) {
 					CServerPath dir = m_pRemoteDataObject->GetServerPath();
