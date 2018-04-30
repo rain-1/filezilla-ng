@@ -491,8 +491,9 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 		if (entry.is_dir()) {
 			data.icon = m_dirIcon;
 #ifndef __WXMSW__
-			if (entry.is_link())
+			if (entry.is_link()) {
 				data.icon += 3;
+			}
 #endif
 		}
 		m_fileData.push_back(data);
@@ -502,10 +503,12 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 		}
 
 		if (m_pFilelistStatusBar) {
-			if (entry.is_dir())
+			if (entry.is_dir()) {
 				m_pFilelistStatusBar->AddDirectory();
-			else
+			}
+			else {
 				m_pFilelistStatusBar->AddFile(entry.size);
+			}
 		}
 
 		// Find correct position in index mapping
@@ -2120,7 +2123,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 	bool idle = m_state.m_pCommandQueue->Idle();
 
 	long item = -1;
-	int count = 0;
+	size_t count = 0;
 	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -2156,6 +2159,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 	CServerPath const path = m_pDirectoryListing->path;
 
 	CRemoteDataObject *pRemoteDataObject = new CRemoteDataObject(server, m_pDirectoryListing->path);
+	pRemoteDataObject->Reserve(count);
 
 	CDragDropManager* pDragDropManager = CDragDropManager::Init();
 	pDragDropManager->pDragSource = this;
