@@ -13,26 +13,25 @@ struct t_protocolInfo
 	unsigned int defaultPort;
 	bool const translateable;
 	char const* const name;
-	bool supportsPostlogin;
 	std::wstring const alternative_prefix;
 };
 
 static const t_protocolInfo protocolInfos[] = {
-	{ FTP,          L"ftp",    false, 21,  true,  fztranslate_mark("FTP - File Transfer Protocol with optional encryption"), true,  L"" },
-	{ SFTP,         L"sftp",   true,  22,  false, "SFTP - SSH File Transfer Protocol",                                       false, L"" },
-	{ HTTP,         L"http",   true,  80,  false, "HTTP - Hypertext Transfer Protocol",                                      false, L"" },
-	{ HTTPS,        L"https",  true, 443,  true,  fztranslate_mark("HTTPS - HTTP over TLS"),                                 false, L"" },
-	{ FTPS,         L"ftps",   true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          true,  L"" },
-	{ FTPES,        L"ftpes",  true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         true,  L"" },
-	{ INSECURE_FTP, L"ftp",    false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 true,  L"" },
-	{ S3,           L"s3",     true, 443,  false, "S3 - Amazon Simple Storage Service",                                      false, L"" },
-	{ STORJ,        L"storj",  true, 443,  true,  fztranslate_mark("Storj - Decentralized Cloud Storage"),                   false, L"" },
-	{ WEBDAV,       L"webdav", true, 443,  true,  "WebDAV",                                                                  false, L"https" },
-	{ AZURE_FILE,   L"azfile", true, 443,  false, "Microsoft Azure File Storage Service",                                    false, L"https" },
-	{ AZURE_BLOB,   L"azblob", true, 443,  false, "Microsoft Azure Blob Storage Service",                                    false, L"https" },
-	{ SWIFT,        L"swift",  true, 443,  false, "OpenStack Swift",                                                         false, L"https" },
-	{ GOOGLE,       L"swift",  true, 443,  false, "Google Cloud Storage",                                                    false, L"https" },
-	{ UNKNOWN,      L"",       false, 21,  false, "", false, L"" }
+	{ FTP,          L"ftp",    false, 21,  true,  fztranslate_mark("FTP - File Transfer Protocol with optional encryption"), L"" },
+	{ SFTP,         L"sftp",   true,  22,  false, "SFTP - SSH File Transfer Protocol",                                       L"" },
+	{ HTTP,         L"http",   true,  80,  false, "HTTP - Hypertext Transfer Protocol",                                      L"" },
+	{ HTTPS,        L"https",  true, 443,  true,  fztranslate_mark("HTTPS - HTTP over TLS"),                                 L"" },
+	{ FTPS,         L"ftps",   true, 990,  true,  fztranslate_mark("FTPS - FTP over implicit TLS"),                          L"" },
+	{ FTPES,        L"ftpes",  true,  21,  true,  fztranslate_mark("FTPES - FTP over explicit TLS"),                         L"" },
+	{ INSECURE_FTP, L"ftp",    false, 21,  true,  fztranslate_mark("FTP - Insecure File Transfer Protocol"),                 L"" },
+	{ S3,           L"s3",     true, 443,  false, "S3 - Amazon Simple Storage Service",                                      L"" },
+	{ STORJ,        L"storj",  true, 443,  true,  fztranslate_mark("Storj - Decentralized Cloud Storage"),                   L"" },
+	{ WEBDAV,       L"webdav", true, 443,  true,  "WebDAV",                                                                  L"https" },
+	{ AZURE_FILE,   L"azfile", true, 443,  false, "Microsoft Azure File Storage Service",                                    L"https" },
+	{ AZURE_BLOB,   L"azblob", true, 443,  false, "Microsoft Azure Blob Storage Service",                                    L"https" },
+	{ SWIFT,        L"swift",  true, 443,  false, "OpenStack Swift",                                                         L"https" },
+	{ GOOGLE,       L"swift",  true, 443,  false, "Google Cloud Storage",                                                    L"https" },
+	{ UNKNOWN,      L"",       false, 21,  false, "", L"" }
 };
 
 static std::vector<ServerProtocol> const defaultProtocols = {
@@ -259,7 +258,7 @@ void CServer::SetProtocol(ServerProtocol serverProtocol)
 {
 	assert(serverProtocol != UNKNOWN);
 
-	if (!GetProtocolInfo(serverProtocol).supportsPostlogin) {
+	if (!ProtocolHasFeature(serverProtocol, ProtocolFeature::PostLoginCommands)) {
 		m_postLoginCommands.clear();
 	}
 
