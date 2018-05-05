@@ -5,7 +5,6 @@
 #define _UNICODE
 #endif
 
-
 //---------------------------------------------------------------------------
 #ifdef _MSC_VER
 	#include <objbase.h>
@@ -52,17 +51,21 @@
 #include <cstddef>
 #include <cstdint>
 
+#include <utility>
+
 //---------------------------------------------------------------------------
 #ifdef DEBUG
 #define DEBUG_MSG(MSG) Debug(MSG)
 #define DEBUG_MSG_W(MSG) DebugW(MSG)
 #define DEBUG_LOG_VERSION(MSG) LogVersion(MSG)
 #define DEBUG_INIT(KEY) DebugInit(KEY)
+#define DEBUG_MSG_PRINTF(FMT, ...) DebugPrintf(FMT, __VA_ARGS__)
 #else
 #define DEBUG_MSG(MSG)
 #define DEBUG_MSG_W(MSG)
 #define DEBUG_LOG_VERSION(MSG)
 #define DEBUG_INIT(KEY)
+#define DEBUG_MSG_PRINTF(FMT, ...)
 #endif
 
 //---------------------------------------------------------------------------
@@ -175,12 +178,14 @@ HANDLE GLogMutex = 0;
 
 void Debug(const char* Message)
 {
-	if (!GLogOn)
+	if (!GLogOn) {
 		return;
+	}
 
 	unsigned long WaitResult = WaitForSingleObject(GLogMutex, 1000);
-	if (WaitResult == WAIT_TIMEOUT)
+	if (WaitResult == WAIT_TIMEOUT) {
 		return;
+	}
 
 	if (GLogHandle == NULL) {
 		if (strlen(GLogFile) == 0) {
@@ -214,8 +219,9 @@ void Debug(const char* Message)
 
 void DebugW(const wchar_t* Message)
 {
-	if (!GLogOn)
+	if (!GLogOn) {
 		return;
+	}
 
 	int bytes = WideCharToMultiByte(CP_UTF8, 0, Message, -1, 0, 0, 0, 0);
 	if (bytes <= 0) {
@@ -225,21 +231,34 @@ void DebugW(const wchar_t* Message)
 	char *buffer = new char[bytes + 1];
 	if (buffer) {
 		int written = WideCharToMultiByte(CP_UTF8, 0, Message, -1, buffer, bytes, 0, 0);
-		if (!written)
+		if (!written) {
 			DEBUG_MSG("WideCharToMultiByte failed");
+		}
 		else {
 			buffer[written] = 0;
 			Debug(buffer);
 		}
-		delete[] buffer;
+		delete [] buffer;
 	}
+}
+
+template<typename ... Args>
+void DebugPrintf(char const* fmt, Args&&... args)
+{
+	char buffer[100];
+	for (unsigned int i = 0; i < 100; ++i) {
+		buffer[i] = 0;
+	}
+	snprintf(buffer, 99, fmt, std::forward<Args>(args)...);
+	Debug(buffer);
 }
 
 //---------------------------------------------------------------------------
 void LogVersion(HINSTANCE HInstance)
 {
-	if (!GLogOn)
+	if (!GLogOn) {
 		return;
+	}
 
 	char FileName[MAX_PATH];
 	if (!GetModuleFileNameA(HInstance, FileName, sizeof(FileName))) {
@@ -802,7 +821,7 @@ STDMETHODIMP CShellExt::Initialize(LPCITEMIDLIST IDFolder,
 }
 
 //---------------------------------------------------------------------------
-STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
+STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT wFlags,
 											LPCTSTR SrcFile, DWORD SrcAttribs, LPCTSTR DestFile, DWORD DestAttribs)
 {
 	UINT Result = IDYES;
@@ -813,9 +832,7 @@ STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
 	}
 
 	if (wFunc != FO_COPY && wFunc != FO_MOVE) {
-		char buffer[100];
-		sprintf(buffer, "CShellExt::CopyCallback return: wFunc is %u, NOT FO_COPY nor FO_MOVE", (unsigned int)wFunc);
-		DEBUG_MSG(buffer);
+		DEBUG_MSG_PRINTF("CShellExt::CopyCallback return: wFunc is %u, NOT FO_COPY nor FO_MOVE", static_cast<unsigned int>(wFunc));
 		return Result;
 	}
 	else if (wFunc == FO_COPY) {
@@ -824,6 +841,8 @@ STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
 	else {
 		DEBUG_MSG("CShellExt::CopyCallback: wFunc is FO_MOVE");
 	}
+
+	DEBUG_MSG_PRINTF("CShellExt::CopyCallback: wFlags is %u", static_cast<unsigned int>(wFlags));
 
 	unsigned long Ticks = GetTickCount();
 	if ((Ticks - FLastTicks) < 100 && FLastTicks <= Ticks) {
