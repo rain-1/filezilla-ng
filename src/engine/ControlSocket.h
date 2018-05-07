@@ -162,6 +162,15 @@ enum class TransferEndReason
 	failed_resumetest
 };
 
+enum class locking_reason
+{
+	unknown = -1,
+	list,
+	mkdir,
+
+	private1
+};
+
 class CBackend;
 class CTransferStatus;
 class CControlSocket: public CLogging, public fz::event_handler
@@ -269,26 +278,19 @@ protected:
 	// Begin cache locking stuff
 	// -------------------------
 
-	enum locking_reason
-	{
-		lock_unknown = -1,
-		lock_list,
-		lock_mkdir
-	};
-
 	// Tries to obtain lock. Returns true on success.
 	// On failure, caller has to pass control.
 	// SendNextCommand will be called once the lock gets available
 	// and engine could obtain it.
 	// Lock is recursive. Lock counter increases on suboperations.
-	bool TryLockCache(locking_reason reason, CServerPath const& directory);
+	bool TryLock(locking_reason reason, CServerPath const& directory);
 	bool IsLocked(locking_reason reason, CServerPath const& directory);
 
 	// Unlocks the cache. Can be called if not holding the lock
 	// Doesn't need reason as one engine can at most hold one lock
-	void UnlockCache();
+	void ReleaseLock();
 
-	// Called from the fzOBTAINLOCK event.
+	// Called from the obtain_lock_event_type event.
 	// Returns reason != unknown iff engine is the first waiting engine
 	// and obtains the lock.
 	// On failure, the engine was not waiting for a lock.

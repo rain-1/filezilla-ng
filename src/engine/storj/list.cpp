@@ -118,7 +118,7 @@ int CStorjListOpData::SubcommandResult(int prevResult, COpData const&)
 	switch (opState) {
 	case list_waitresolve:
 		opState = list_waitlock;
-		if (!controlSocket_.TryLockCache(CStorjControlSocket::lock_list, path_)) {
+		if (!controlSocket_.TryLock(locking_reason::list, path_)) {
 			time_before_locking_ = fz::monotonic_clock::now();
 			return FZ_REPLY_WOULDBLOCK;
 		}

@@ -17,7 +17,7 @@ int CFtpMkdirOpData::Send()
 	LogMessage(MessageType::Debug_Verbose, L"CFtpMkdirOpData::Send() in state %d", opState);
 
 	if (!holdsLock_) {
-		if (!controlSocket_.TryLockCache(CFtpControlSocket::lock_mkdir, path_)) {
+		if (!controlSocket_.TryLock(locking_reason::mkdir, path_)) {
 			return FZ_REPLY_WOULDBLOCK;
 		}
 	}
