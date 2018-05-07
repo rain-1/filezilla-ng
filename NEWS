@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.33.0 (2018-05-07)
+
+- MSW: Microsoft broke the ICopyHook interface in Windows 1803. Until Microsoft fixes the bug in Windows, drag & drop from FileZilla into Explorer will not work on Windows 1803.
+
 3.33.0-rc1 (2018-04-27)
 
 + The contents of the transfer queue can now be sorted
