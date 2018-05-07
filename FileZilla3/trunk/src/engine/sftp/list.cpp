@@ -46,7 +46,7 @@ int CSftpListOpData::Send()
 		}
 
 		if (!holdsLock_) {
-			if (!controlSocket_.TryLockCache(CSftpControlSocket::lock_list, currentPath_)) {
+			if (!controlSocket_.TryLock(locking_reason::list, currentPath_)) {
 				time_before_locking_ = fz::monotonic_clock::now();
 				return FZ_REPLY_WOULDBLOCK;
 			}

@@ -133,12 +133,12 @@ int CControlSocket::ResetOperation(int nErrorCode)
 	std::unique_ptr<COpData> oldOperation;
 	if (!operations_.empty()) {
 		if (operations_.back()->holdsLock_) {
-			UnlockCache();
+			ReleaseLock();
 		}
 		oldOperation = std::move(operations_.back());
 		operations_.pop_back();
 
-		oldOperation->Reset(nErrorCode);
+		nErrorCode = oldOperation->Reset(nErrorCode);
 	}
 	if (!operations_.empty()) {
 		int ret;
@@ -632,7 +632,7 @@ const std::list<CControlSocket::t_lockInfo>::iterator CControlSocket::GetLockSta
 	return iter;
 }
 
-bool CControlSocket::TryLockCache(locking_reason reason, CServerPath const& directory)
+bool CControlSocket::TryLock(locking_reason reason, CServerPath const& directory)
 {
 	assert(currentServer_);
 	assert(!operations_.empty());
@@ -713,7 +713,7 @@ bool CControlSocket::IsLocked(locking_reason reason, CServerPath const& director
 	return false;
 }
 
-void CControlSocket::UnlockCache()
+void CControlSocket::ReleaseLock()
 {
 	if (operations_.empty() || !operations_.back()->holdsLock_) {
 		return;
@@ -741,12 +741,12 @@ void CControlSocket::UnlockCache()
 
 	// Find other instance waiting for the lock
 	if (!currentServer_) {
-		LogMessage(MessageType::Debug_Warning, L"UnlockCache called with !currentServer_");
+		LogMessage(MessageType::Debug_Warning, L"ReleaseLock called with !currentServer_");
 		return;
 	}
 	for (auto & lockInfo : m_lockInfoList) {
 		if (!lockInfo.pControlSocket->currentServer_) {
-			LogMessage(MessageType::Debug_Warning, L"UnlockCache found other instance with !currentServer_");
+			LogMessage(MessageType::Debug_Warning, L"ReleaseLock found other instance with !currentServer_");
 			continue;
 		}
 
@@ -768,19 +768,19 @@ void CControlSocket::UnlockCache()
 	}
 }
 
-CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
+locking_reason CControlSocket::ObtainLockFromEvent()
 {
 	if (operations_.empty()) {
-		return lock_unknown;
+		return locking_reason::unknown;
 	}
 
 	std::list<t_lockInfo>::iterator own = GetLockStatus();
 	if (own == m_lockInfoList.end()) {
-		return lock_unknown;
+		return locking_reason::unknown;
 	}
 
 	if (!own->waiting) {
-		return lock_unknown;
+		return locking_reason::unknown;
 	}
 
 	for (auto iter = m_lockInfoList.cbegin(); iter != own; ++iter) {
@@ -797,7 +797,7 @@ CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 		}
 
 		// Another instance comes before us
-		return lock_unknown;
+		return locking_reason::unknown;
 	}
 
 	own->waiting = false;
@@ -808,20 +808,21 @@ CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 
 void CControlSocket::OnObtainLock()
 {
-	if (ObtainLockFromEvent() == lock_unknown) {
+	if (ObtainLockFromEvent() == locking_reason::unknown) {
 		return;
 	}
 
 	SendNextCommand();
 
-	UnlockCache();
+	ReleaseLock();
 }
 
 bool CControlSocket::IsWaitingForLock()
 {
 	std::list<t_lockInfo>::iterator own = GetLockStatus();
-	if (own == m_lockInfoList.end())
+	if (own == m_lockInfoList.end()) {
 		return false;
+	}
 
 	return own->waiting == true;
 }
