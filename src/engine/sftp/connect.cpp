@@ -77,7 +77,10 @@ int CSftpConnectOpData::Send()
 	case connect_keys:
 		return controlSocket_.SendCommand(L"keyfile \"" + *(keyfile_++) + L"\"");
 	case connect_open:
-		return controlSocket_.SendCommand(fz::sprintf(L"open \"%s@%s\" %d", currentServer_.GetUser(), controlSocket_.ConvertDomainName(currentServer_.GetHost()), currentServer_.GetPort()));
+		{
+			std::wstring user = (credentials_.logonType_ == LogonType::anonymous) ? L"anonymous" : currentServer_.GetUser();
+			return controlSocket_.SendCommand(fz::sprintf(L"open \"%s@%s\" %d", user, controlSocket_.ConvertDomainName(currentServer_.GetHost()), currentServer_.GetPort()));
+		}
 	default:
 		LogMessage(MessageType::Debug_Warning, L"Unknown op state: %d", opState);
 		break;

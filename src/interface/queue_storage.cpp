@@ -7,6 +7,8 @@
 
 #include <unordered_map>
 
+#include <libfilezilla/uri.hpp>
+
 #define INVALID_DATA -1
 
 enum class Column_type
@@ -48,7 +50,8 @@ namespace server_table_column_names
 		encoding,
 		bypass_proxy,
 		post_login_commands,
-		name
+		name,
+		parameters
 	};
 }
 
@@ -69,7 +72,8 @@ _column server_table_columns[] = {
 	{ "encoding", Column_type::text, 0 },
 	{ "bypass_proxy", Column_type::integer, 0 },
 	{ "post_login_commands", Column_type::text, 0 },
-	{ "name", Column_type::text, 0 }
+	{ "name", Column_type::text, 0 },
+	{ "parameters", Column_type::text, 0 }
 };
 
 namespace file_table_column_names
@@ -120,7 +124,7 @@ _column path_table_columns[] = {
 	{ "path", Column_type::text, not_null }
 };
 
-class CQueueStorage::Impl
+class CQueueStorage::Impl final
 {
 public:
 	void CreateTables();
@@ -147,10 +151,12 @@ public:
 	bool Bind(sqlite3_stmt* statement, int index, int value);
 	bool Bind(sqlite3_stmt* statement, int index, int64_t value);
 	bool Bind(sqlite3_stmt* statement, int index, std::wstring const& value);
+	bool Bind(sqlite3_stmt* statement, int index, std::string const& value);
 	bool Bind(sqlite3_stmt* statement, int index, const char* const value);
 	bool BindNull(sqlite3_stmt* statement, int index);
 
 	std::wstring GetColumnText(sqlite3_stmt* statement, int index);
+	std::string GetColumnTextUtf8(sqlite3_stmt* statement, int index);
 	int64_t GetColumnInt64(sqlite3_stmt* statement, int index, int64_t def = 0);
 	int GetColumnInt(sqlite3_stmt* statement, int index, int def = 0);
 
@@ -286,17 +292,20 @@ bool CQueueStorage::Impl::MigrateSchema()
 	bool ret = sqlite3_exec(db_, "PRAGMA user_version", int_callback, &version, 0) == SQLITE_OK;
 
 	if (ret) {
-		if (version > 3) {
+		if (version > 4) {
 			ret = false;
 		}
 		else if (version > 0) {
 			// Do the schema changes
 			if (ret && version < 2) {
-				ret = sqlite3_exec(db_, "ALTER TABLE servers ADD COLUMN keyfile TEXT", int_callback, &version, 0) == SQLITE_OK;
+				ret = sqlite3_exec(db_, "ALTER TABLE servers ADD COLUMN keyfile TEXT", 0, 0, 0) == SQLITE_OK;
+			}
+			if (ret && version < 4) {
+				ret = sqlite3_exec(db_, "ALTER TABLE servers ADD COLUMN parameters TEXT", 0, 0, 0) == SQLITE_OK;
 			}
 		}
-		if (ret && version != 3) {
-			ret = sqlite3_exec(db_, "PRAGMA user_version = 3", 0, 0, 0) == SQLITE_OK;
+		if (ret && version != 4) {
+			ret = sqlite3_exec(db_, "PRAGMA user_version = 4", 0, 0, 0) == SQLITE_OK;
 		}
 	}
 
@@ -577,6 +586,11 @@ bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, std::wstring 
 }
 
 
+bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, std::string const& value)
+{
+	return sqlite3_bind_text(statement, index, value.c_str(), value.size(), SQLITE_TRANSIENT) == SQLITE_OK;
+}
+
 bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, const char* const value)
 {
 	return sqlite3_bind_text(statement, index, value, -1, SQLITE_TRANSIENT) == SQLITE_OK;
@@ -714,6 +728,15 @@ bool CQueueStorage::Impl::SaveServer(CServerItem const& item)
 	}
 	else {
 		BindNull(insertServerQuery_, server_table_column_names::name);
+	}
+
+	auto const& parameters = server.server.GetExtraParameters();
+	if (!parameters.empty()) {
+		fz::query_string qs;
+		for (auto const& parameter : parameters) {
+			qs[parameter.first] = fz::to_utf8(parameter.second);
+		}
+		Bind(insertServerQuery_, server_table_column_names::parameters, qs.to_string(false));
 	}
 
 	int res;
@@ -866,6 +889,17 @@ std::wstring CQueueStorage::Impl::GetColumnText(sqlite3_stmt* statement, int ind
 	return ret;
 }
 
+std::string CQueueStorage::Impl::GetColumnTextUtf8(sqlite3_stmt* statement, int index)
+{
+	char const* text = reinterpret_cast<char const*>(sqlite3_column_text(statement, index));
+	int len = sqlite3_column_bytes(statement, index);
+	if (text) {
+		return std::string(text, len);
+	}
+
+	return std::string();
+}
+
 int64_t CQueueStorage::Impl::GetColumnInt64(sqlite3_stmt* statement, int index, int64_t def)
 {
 	if (sqlite3_column_type(statement, index) == SQLITE_NULL) {
@@ -1000,6 +1034,11 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(ServerWithCredentials& server)
 
 	server.server.SetBypassProxy(GetColumnInt(selectServersQuery_, server_table_column_names::bypass_proxy) == 1 );
 	server.server.SetName(GetColumnText(selectServersQuery_, server_table_column_names::name));
+
+	fz::query_string qs = fz::query_string(GetColumnTextUtf8(selectServersQuery_, server_table_column_names::parameters));
+	for (auto const& pair : qs.pairs()) {
+		server.server.SetExtraParameter(pair.first, fz::to_wstring_from_utf8(pair.second));
+	}
 
 	return GetColumnInt64(selectServersQuery_, server_table_column_names::id);
 }

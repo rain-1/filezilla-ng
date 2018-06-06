@@ -157,6 +157,11 @@ public:
 	bool empty() const { return m_host.empty(); }
 	explicit operator bool() const { return !empty(); }
 
+	void ClearExtraParameters();
+	std::wstring GetExtraParameter(std::string const& name) const;
+	std::map<std::string, std::wstring> const& GetExtraParameters() const;
+	void SetExtraParameter(std::string const& name, std::wstring const& value);
+
 protected:
 	ServerProtocol m_protocol{UNKNOWN};
 	ServerType m_type{DEFAULT};
@@ -172,6 +177,8 @@ protected:
 
 	std::vector<std::wstring> m_postLoginCommands;
 	bool m_bypassProxy{};
+
+	std::map<std::string, std::wstring> extraParameters_;
 };
 
 
@@ -189,6 +196,38 @@ enum class LogonType
 std::wstring GetNameFromLogonType(LogonType type);
 LogonType GetLogonTypeFromName(std::wstring const& name);
 
+std::vector<LogonType> GetSupportedLogonTypes(ServerProtocol protocol);
+
+
+namespace ParameterSection {
+    enum type {
+		host,
+		user,
+		credentials,
+		extra,
+
+		section_count
+	};
+}
+
+struct ParameterTraits
+{
+	std::string name_;
+
+	ParameterSection::type section_;
+
+	enum flags : unsigned char {
+		optional = 0x01,
+		numeric = 0x02
+	};
+	unsigned char flags_;
+	std::wstring default_;
+	std::wstring hint_;
+};
+
+std::vector<ParameterTraits> const& ExtraServerParameterTraits(ServerProtocol protocol);
+
+std::tuple<std::wstring, std::wstring> GetDefaultHost(ServerProtocol protocol);
 
 class Credentials
 {
@@ -210,8 +249,14 @@ public:
 	std::wstring account_;
 	std::wstring keyFile_;
 
+	void ClearExtraParameters();
+	std::wstring GetExtraParameter(std::string const& name) const;
+	std::map<std::string, std::wstring> const& GetExtraParameters() const;
+	void SetExtraParameter(ServerProtocol protocol, std::string const& name, std::wstring const& value);
+
 protected:
 	std::wstring password_;
+	std::map<std::string, std::wstring> extraParameters_;
 };
 
 #endif

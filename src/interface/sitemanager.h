@@ -23,6 +23,8 @@ public:
 class Site final
 {
 public:
+	explicit operator bool() const { return server_.operator bool(); }
+
 	bool empty() const { return !server_; }
 	bool operator==(Site const& s) const;
 	bool operator!=(Site const& s) const { return !(*this == s); }

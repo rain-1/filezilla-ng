@@ -9,7 +9,7 @@ CConnectCommand::CConnectCommand(CServer const& server, Credentials const& crede
 
 bool CConnectCommand::valid() const
 {
-	if (!server_ || server_.GetUser().empty()) {
+	if (!server_) {
 		return false;
 	}
 	return true;

@@ -589,6 +589,7 @@ void CFileZillaEnginePrivate::operator()(fz::event_base const& ev)
 int CFileZillaEnginePrivate::CheckCommandPreconditions(CCommand const& command, bool checkBusy)
 {
 	if (!command.valid()) {
+		m_pLogging->LogMessage(MessageType::Debug_Warning, L"Command not valid");
 		return FZ_REPLY_SYNTAXERROR;
 	}
 	else if (checkBusy && IsBusy()) {

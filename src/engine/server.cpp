@@ -110,6 +110,7 @@ CServer& CServer::operator=(const CServer &op)
 	m_postLoginCommands = op.m_postLoginCommands;
 	m_bypassProxy = op.m_bypassProxy;
 	m_name = op.m_name;
+	extraParameters_ = op.extraParameters_;
 
 	return *this;
 }
@@ -149,6 +150,9 @@ bool CServer::operator==(const CServer &op) const
 		return false;
 	}
 	if (m_bypassProxy != op.m_bypassProxy) {
+		return false;
+	}
+	if (extraParameters_ != op.extraParameters_) {
 		return false;
 	}
 
@@ -230,6 +234,14 @@ bool CServer::operator<(const CServer &op) const
 	else if (m_bypassProxy > op.m_bypassProxy) {
 		return false;
 	}
+
+	if (extraParameters_ < op.extraParameters_) {
+		return true;
+	}
+	else if (extraParameters_ > op.extraParameters_) {
+		return false;
+	}
+
 
 	// Do not compare number of allowed multiple connections
 
@@ -354,7 +366,7 @@ std::wstring CServer::Format(ServerFormat formatType, Credentials const& credent
 	}
 
 	auto user = GetUser();
-	if (user != L"anonymous" || credentials.logonType_ != LogonType::anonymous) {
+	if (credentials.logonType_ != LogonType::anonymous) {
 		// For now, only escape if formatting for URL.
 		// Open question: Do we need some form of escapement for presentation within the GUI,
 		// that deals e.g. with whitespace but does not touch Unicode characters?
@@ -596,6 +608,46 @@ ServerType CServer::GetServerTypeFromName(std::wstring const& name)
 	return DEFAULT;
 }
 
+void CServer::ClearExtraParameters()
+{
+	extraParameters_.clear();
+}
+
+std::wstring CServer::GetExtraParameter(std::string const& name) const
+{
+	auto it = extraParameters_.find(name);
+	if (it != extraParameters_.cend()) {
+		return it->second;
+	}
+	return std::wstring();
+}
+
+std::map<std::string, std::wstring> const& CServer::GetExtraParameters() const
+{
+	return extraParameters_;
+}
+
+void CServer::SetExtraParameter(std::string const& name, std::wstring const& value)
+{
+	if (value.empty()) {
+		extraParameters_.erase(name);
+	}
+	else {
+		bool found = false;
+		auto const& traits  = ExtraServerParameterTraits(m_protocol);
+		for (auto const& trait : traits) {
+			if (trait.section_ != ParameterSection::credentials && name == trait.name_) {
+				found = true;
+				break;
+			}
+		}
+
+		if (found) {
+			extraParameters_[name] = value;
+		}
+	}
+}
+
 LogonType GetLogonTypeFromName(std::wstring const& name)
 {
 	if (name == _("Normal")) {
@@ -649,9 +701,124 @@ void Credentials::SetPass(std::wstring const& password)
 std::wstring Credentials::GetPass() const
 {
 	if (logonType_ == LogonType::anonymous) {
-		return L"anonymous@example.com";
+		return L"";
 	}
 	else {
 		return password_;
 	}
+}
+
+void Credentials::ClearExtraParameters()
+{
+	extraParameters_.clear();
+}
+
+std::wstring Credentials::GetExtraParameter(std::string const& name) const
+{
+	auto it = extraParameters_.find(name);
+	if (it != extraParameters_.cend()) {
+		return it->second;
+	}
+	return std::wstring();
+}
+
+std::map<std::string, std::wstring> const& Credentials::GetExtraParameters() const
+{
+	return extraParameters_;
+}
+
+void Credentials::SetExtraParameter(ServerProtocol protocol, std::string const& name, std::wstring const& value)
+{
+	bool found = false;
+	auto const& traits = ExtraServerParameterTraits(protocol);
+	for (auto const& trait : traits) {
+		if (trait.section_ != ParameterSection::credentials && name == trait.name_) {
+			found = true;
+			break;
+		}
+	}
+
+	if (found) {
+		extraParameters_[name] = value;
+	}
+}
+
+
+std::vector<LogonType> GetSupportedLogonTypes(ServerProtocol protocol)
+{
+	switch (protocol) {
+	case FTP:
+	case HTTP:
+	case FTPS:
+	case FTPES:
+	case INSECURE_FTP:
+		return {LogonType::anonymous, LogonType::normal, LogonType::ask, LogonType::interactive, LogonType::account};
+	case SFTP:
+		return {LogonType::anonymous, LogonType::normal, LogonType::ask, LogonType::interactive, LogonType::key};
+	case S3:
+		return {LogonType::anonymous, LogonType::normal, LogonType::ask};
+	case STORJ:
+	case AZURE_FILE:
+	case AZURE_BLOB:
+	case SWIFT:
+		return {LogonType::normal, LogonType::ask};
+	case WEBDAV:
+		return {LogonType::anonymous, LogonType::normal, LogonType::ask};
+	case GOOGLE:
+		return {LogonType::interactive};
+	case HTTPS:
+	case UNKNOWN:
+		return {LogonType::anonymous};
+	}
+
+	return {LogonType::anonymous};
+}
+
+std::vector<ParameterTraits> const& ExtraServerParameterTraits(ServerProtocol protocol)
+{
+	switch (protocol) {
+	case GOOGLE:
+		{
+			static std::vector<ParameterTraits> ret = []() {
+				std::vector<ParameterTraits> ret;
+				ret.emplace_back(ParameterTraits{"email", ParameterSection::user, ParameterTraits::optional, std::wstring(), std::wstring()});
+				return ret;
+			}();
+			return ret;
+		}
+	case SWIFT:
+		{
+			static std::vector<ParameterTraits> ret = []() {
+				std::vector<ParameterTraits> ret;
+				ret.emplace_back(ParameterTraits{"identpath", ParameterSection::host, 0, std::wstring(), _("Path of identity service")});
+				ret.emplace_back(ParameterTraits{"identuser", ParameterSection::user, ParameterTraits::optional, std::wstring(), std::wstring()});
+				return ret;
+			}();
+			return ret;
+		}
+	default:
+		break;
+	}
+
+	static std::vector<ParameterTraits> empty;
+	return empty;
+}
+
+std::tuple<std::wstring, std::wstring> GetDefaultHost(ServerProtocol protocol)
+{
+	switch (protocol)
+	{
+	case AZURE_FILE:
+		return {L"file.core.windows.net", L""};
+	case AZURE_BLOB:
+		return {L"blob.core.windows.net", L""};
+	case GOOGLE:
+		return {L"storage.googleapis.com", L""};
+	case S3:
+		return {L"s3.amazonaws.com", L""};
+	default:
+		break;
+	}
+
+	return {};
 }

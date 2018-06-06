@@ -215,7 +215,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 					return;
 				}
 
-				std::wstring const pass = data.credentials_.GetPass();
+				std::wstring const pass = (data.credentials_.logonType_ == LogonType::anonymous) ? L"anonymous@example.com" : data.credentials_.GetPass();
 				std::wstring show = L"Pass: ";
 				show.append(pass.size(), '*');
 				SendCommand(pass, show);

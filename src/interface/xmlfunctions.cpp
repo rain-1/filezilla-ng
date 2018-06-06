@@ -436,6 +436,10 @@ bool GetServer(pugi::xml_node node, ServerWithCredentials & server)
 		server.server.SetName(GetTextElement_Trimmed(node));
 	}
 
+	for (auto parameter = node.child("Parameter"); parameter; parameter = parameter.next_sibling("Parameter")) {
+		server.server.SetExtraParameter(parameter.attribute("Name").value(), GetTextElement(parameter));
+	}
+
 	return true;
 }
 
@@ -449,9 +453,11 @@ void SetServer(pugi::xml_node node, ServerWithCredentials const& server)
 		node.remove_child(child);
 	}
 
+	ServerProtocol const protocol = server.server.GetProtocol();
+
 	AddTextElement(node, "Host", server.server.GetHost());
 	AddTextElement(node, "Port", server.server.GetPort());
-	AddTextElement(node, "Protocol", server.server.GetProtocol());
+	AddTextElement(node, "Protocol", protocol);
 	AddTextElement(node, "Type", server.server.GetType());
 
 	ProtectedCredentials credentials = server.credentials;
@@ -531,6 +537,11 @@ void SetServer(pugi::xml_node node, ServerWithCredentials const& server)
 	std::wstring const& name = server.server.GetName();
 	if (!name.empty()) {
 		AddTextElement(node, "Name", name);
+	}
+
+	for (auto const& parameter : server.server.GetExtraParameters()) {
+		auto element = AddTextElement(node, "Parameter", parameter.second);
+		SetTextAttribute(element, "Name", parameter.first);
 	}
 }
 
