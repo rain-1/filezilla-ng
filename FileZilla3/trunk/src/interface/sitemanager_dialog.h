@@ -7,6 +7,8 @@
 class CInterProcessMutex;
 class CWindowStateManager;
 class CSiteManagerDropTarget;
+class CSiteManagerSite;
+
 class CSiteManagerDialog final : public wxDialogEx
 {
 	friend class CSiteManagerDropTarget;
@@ -31,23 +33,16 @@ public:
 	bool GetServer(Site& data, Bookmark& bookmark);
 
 protected:
-	// Creates the controls and sizers
-	void CreateControls(wxWindow* parent);
 
 	bool Verify();
 	bool UpdateItem();
-	bool UpdateServer(Site &server, wxString const& name);
 	bool UpdateBookmark(Bookmark &bookmark, ServerWithCredentials const& server);
 	bool Load();
 	bool Save(pugi::xml_node element = pugi::xml_node(), wxTreeItemId treeId = wxTreeItemId());
 	bool SaveChild(pugi::xml_node element, wxTreeItemId child);
+	void UpdateServer(Site &server, wxString const& name);
 	void SetCtrlState();
-	void SetLogonTypeCtrlState();
 	bool LoadDefaultSites();
-
-	void SetProtocol(ServerProtocol protocol);
-	ServerProtocol GetProtocol() const;
-	LogonType GetLogonType() const;
 
 	bool IsPredefinedItem(wxTreeItemId item);
 
@@ -76,12 +71,7 @@ protected:
 	void OnEndLabelEdit(wxTreeEvent& event);
 	void OnSelChanging(wxTreeEvent& event);
 	void OnSelChanged(wxTreeEvent& event);
-	void OnLogontypeSelChanged(wxCommandEvent& event);
-	void OnRemoteDirBrowse(wxCommandEvent& event);
 	void OnItemActivated(wxTreeEvent& event);
-	void OnLimitMultipleConnectionsChanged(wxCommandEvent& event);
-	void OnCharsetChange(wxCommandEvent& event);
-	void OnProtocolSelChanged(wxCommandEvent& event);
 	void OnBeginDrag(wxTreeEvent& event);
 	void OnChar(wxKeyEvent& event);
 	void OnCopySite(wxCommandEvent& event);
@@ -89,10 +79,6 @@ protected:
 	void OnExportSelected(wxCommandEvent&);
 	void OnNewBookmark(wxCommandEvent&);
 	void OnBookmarkBrowse(wxCommandEvent&);
-	void OnKeyFileBrowse(wxCommandEvent&);
-	void OnGenerateEncryptionKey(wxCommandEvent&);
-
-	void SetControlVisibility(ServerProtocol protocol, LogonType type);
 
 	CInterProcessMutex* m_pSiteManagerMutex{};
 
@@ -108,19 +94,12 @@ protected:
 protected:
 	CWindowStateManager* m_pWindowStateManager{};
 
-	wxNotebook *m_pNotebook_Site{};
+	CSiteManagerSite *m_pNotebook_Site{};
 	wxNotebook *m_pNotebook_Bookmark{};
-
-	wxNotebookPage *m_pCharsetPage{};
-	wxString m_charsetPageText;
-	size_t m_charsetPageIndex = -1;
-	size_t m_totalPages = -1;
 
 	std::vector<_connected_site> *m_connected_sites{};
 
 	bool m_is_deleting{};
-
-	std::map<ServerProtocol, int> mainProtocolListIndex_;
 };
 
 #endif

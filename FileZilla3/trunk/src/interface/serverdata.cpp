@@ -83,11 +83,6 @@ bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::
 	else {
 		// Remove leading and trailing whitespace
 		fz::trim(user);
-
-		if (user.empty() && credentials.logonType_ != LogonType::ask && credentials.logonType_ != LogonType::interactive) {
-			user = L"anonymous";
-			pass = L"anonymous@example.com";
-		}
 	}
 
 	pos = host.find('/');
@@ -168,6 +163,10 @@ bool ServerWithCredentials::ParseUrl(std::wstring host, unsigned int port, std::
 			credentials.logonType_ = LogonType::normal;
 		}
 	}
+	if (credentials.logonType_ == LogonType::anonymous) {
+		user.clear();
+		pass.clear();
+	}
 	server.SetUser(user);
 	credentials.SetPass(pass);
 
@@ -182,17 +181,14 @@ void ServerWithCredentials::SetLogonType(LogonType logonType)
 {
 	credentials.logonType_ = logonType;
 	if (logonType == LogonType::anonymous) {
-		server.SetUser(L"anonymous");
-	}
-	if (server.GetUser().empty() && logonType != LogonType::ask && logonType != LogonType::interactive) {
-		server.SetUser(L"anonymous");
+		server.SetUser(L"");
 	}
 }
 
 void ServerWithCredentials::SetUser(std::wstring const& user)
 {
 	if (credentials.logonType_ == LogonType::anonymous) {
-		server.SetUser(L"anonymous");
+		server.SetUser(L"");
 	}
 	else {
 		server.SetUser(user);

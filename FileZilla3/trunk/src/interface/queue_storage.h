@@ -7,13 +7,13 @@ class CFileItem;
 class CServerItem;
 class ServerWithCredentials;
 
-class CQueueStorage
+class CQueueStorage final
 {
 	class Impl;
 
 public:
 	CQueueStorage();
-	virtual ~CQueueStorage();
+	~CQueueStorage();
 
 	CQueueStorage(CQueueStorage const&) = delete;
 	CQueueStorage& operator=(CQueueStorage const&) = delete;
@@ -43,4 +43,4 @@ private:
 	Impl* d_;
 };
 
-#endif //__QUEUE_STORAGE_H__
+#endif

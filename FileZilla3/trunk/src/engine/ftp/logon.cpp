@@ -124,7 +124,8 @@ int CFtpLogonOpData::Send()
 				}
 
 				if (cmd.command.empty()) {
-					return controlSocket_.SendCommand(L"USER " + currentServer_.GetUser());
+					std::wstring const user = (credentials_.logonType_ == LogonType::anonymous) ? L"anonymous" : currentServer_.GetUser();
+					return controlSocket_.SendCommand(L"USER " + user);
 				}
 				else {
 					return controlSocket_.SendCommand(cmd.command);
@@ -140,17 +141,18 @@ int CFtpLogonOpData::Send()
 
 					return FZ_REPLY_WOULDBLOCK;
 				}
-
-				if (cmd.command.empty()) {
-					return controlSocket_.SendCommand(L"PASS " + credentials_.GetPass(), true);
-				}
 				else {
-					std::wstring c = cmd.command;
-					std::wstring pass = credentials_.GetPass();
-					fz::replace_substrings(pass, L"%", L"%%");
-					fz::replace_substrings(c, L"%p", pass);
-					fz::replace_substrings(c, L"%%", L"%");
-					return controlSocket_.SendCommand(c, true);
+					std::wstring pass = (credentials_.logonType_ == LogonType::anonymous) ? L"anonymous@example.com" : credentials_.GetPass();
+					if (cmd.command.empty()) {
+						return controlSocket_.SendCommand(L"PASS " + pass, true);
+					}
+					else {
+						std::wstring c = cmd.command;
+						fz::replace_substrings(pass, L"%", L"%%");
+						fz::replace_substrings(c, L"%p", pass);
+						fz::replace_substrings(c, L"%%", L"%");
+						return controlSocket_.SendCommand(c, true);
+					}
 				}
 				break;
 			case loginCommandType::account:
@@ -591,7 +593,8 @@ bool CFtpLogonOpData::PrepareLoginSequence()
 			loginSequence.push_back(cmd);
 		}
 		// User@host
-		t_loginCommand cmd = {false, false, loginCommandType::user, fz::sprintf(L"USER %s@%s", currentServer_.GetUser(), currentServer_.Format(ServerFormat::with_optional_port, credentials_))};
+		std::wstring const user = (credentials_.logonType_ == LogonType::anonymous) ? L"anonymous" : currentServer_.GetUser();
+		t_loginCommand cmd = {false, false, loginCommandType::user, fz::sprintf(L"USER %s@%s", user, currentServer_.Format(ServerFormat::with_optional_port, credentials_))};
 		loginSequence.push_back(cmd);
 
 		// Password
@@ -652,7 +655,7 @@ bool CFtpLogonOpData::PrepareLoginSequence()
 		std::wstring proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		std::wstring proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
 		std::wstring host = currentServer_.Format(ServerFormat::with_optional_port, credentials_);
-		std::wstring user = currentServer_.GetUser();
+		std::wstring user = user = (credentials_.logonType_ == LogonType::anonymous) ? L"anonymous" : currentServer_.GetUser();
 		std::wstring account = credentials_.account_;
 		fz::replace_substrings(proxyUser, L"%", L"%%");
 		fz::replace_substrings(proxyPass, L"%", L"%%");
