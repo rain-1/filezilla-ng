@@ -3,13 +3,13 @@
 # Wylmer Wang <wantinghard@gmail.com>, 2011, 2012, 2013, 2014.
 # Jeff Bai <jeffbaichina@members.fsf.org>, 2014.
 # Sun Junwen <sunjw8888@gmail.com>, 2010, 2015.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2018-03-23 15:52+0100\n"
-"PO-Revision-Date: 2018-03-03 18:58+0800\n"
+"POT-Creation-Date: 2018-06-06 14:34+0200\n"
+"PO-Revision-Date: 2018-05-18 12:29+0800\n"
 "Last-Translator: Sun Junwen <sunjw8888@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -47,7 +47,7 @@ msgid "%d directory"
 msgid_plural "%d directories"
 msgstr[0] "%d 个目录"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1431
+#: ../../locales/../src/interface/RemoteListView.cpp:1432
 #: ../../locales/../src/interface/search.cpp:876
 #: ../../locales/../src/interface/search.cpp:1263
 #, c-format
@@ -57,7 +57,7 @@ msgstr[0] "%d 个目录及其内容"
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:50
 #: ../../locales/../src/interface/filelist_statusbar.cpp:75
-#: ../../locales/../src/interface/RemoteListView.cpp:1430
+#: ../../locales/../src/interface/RemoteListView.cpp:1431
 #: ../../locales/../src/interface/search.cpp:875
 #: ../../locales/../src/interface/search.cpp:1262
 #, c-format
@@ -197,7 +197,7 @@ msgstr "%w - 代理服务器密码"
 msgid "&Abort previous connection and connect in current tab"
 msgstr "放弃之前的连接并在当前标签中连接(&A)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:237
+#: ../../locales/../src/interface/menu_bar.cpp:176
 msgid "&About..."
 msgstr "关于(&A)..."
 
@@ -212,7 +212,7 @@ msgstr "帐号(&A):"
 msgid "&Active"
 msgstr "主动(&A)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:210
+#: ../../locales/../src/interface/menu_bar.cpp:154
 msgid "&Add bookmark..."
 msgstr "添加书签(&A)..."
 
@@ -220,8 +220,8 @@ msgstr "添加书签(&A)..."
 msgid "&Add directory..."
 msgstr "添加目录(&A)…"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:249
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:295
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:10
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:56
 msgid "&Add files to queue"
 msgstr "添加文件到队列(&A)"
 
@@ -229,8 +229,8 @@ msgstr "添加文件到队列(&A)"
 msgid "&Add key file..."
 msgstr "添加密钥文件(&A)..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:505
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:568
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:266
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:329
 msgid "&Add to queue"
 msgstr "添加到队列(&A)"
 
@@ -262,9 +262,9 @@ msgstr "总是使用该操作(&A)"
 msgid "&Ask your operating system for the external IP address"
 msgstr "向您的操作系统查询外部 IP 地址(&A)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:144
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:603
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:364
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1055
+#: ../../locales/../src/interface/menu_bar.cpp:118
 msgid "&Auto"
 msgstr "自动(&A)"
 
@@ -276,9 +276,9 @@ msgstr "自动检测(&A)"
 msgid "&Background color:"
 msgstr "背景颜色(&B)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:152
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:611
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:372
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1070
+#: ../../locales/../src/interface/menu_bar.cpp:120
 msgid "&Binary"
 msgstr "二进制(&B)"
 
@@ -286,7 +286,7 @@ msgstr "二进制(&B)"
 msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes)"
 msgstr "使用 SI 式二进制前缀。(例如 1 KB = 1024 bytes)(&B)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:208
+#: ../../locales/../src/interface/menu_bar.cpp:151
 msgid "&Bookmarks"
 msgstr "书签(&B)"
 
@@ -315,7 +315,7 @@ msgstr "允许峰值(&B):"
 msgid "&Cancel"
 msgstr "取消(&C)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:50
+#: ../../locales/../src/interface/menu_bar.cpp:70
 msgid "&Clear private data..."
 msgstr "清除个人信息(&C)..."
 
@@ -323,19 +323,19 @@ msgstr "清除个人信息(&C)..."
 msgid "&Close"
 msgstr "关闭(&C)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:397
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:158
 msgid "&Close FileZilla"
 msgstr "关闭 FileZilla(&C)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:409
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:170
 msgid "&Close FileZilla once"
 msgstr "关闭 FileZilla(&C)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:663
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:424
 msgid "&Configure speed limits..."
 msgstr "设置速度限制(&C)..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:167
+#: ../../locales/../src/interface/menu_bar.cpp:129
 msgid "&Configure..."
 msgstr "配置(&C)..."
 
@@ -343,27 +343,27 @@ msgstr "配置(&C)..."
 msgid "&Connect"
 msgstr "连接(&C)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:12
+#: ../../locales/../src/interface/menu_bar.cpp:50
 msgid "&Copy current connection to Site Manager..."
 msgstr "添加当前连接到站点管理器(&C)..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:985
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:439
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:200
 msgid "&Copy to clipboard"
 msgstr "复制到剪贴板(&C)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:268
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:308
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:511
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:579
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:29
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:69
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:272
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:340
 msgid "&Create directory"
 msgstr "创建目录(&C)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:643
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:404
 msgid "&Create new tab"
 msgstr "创建新标签(&C)"
 
-#: ../../locales/../src/interface/menu_bar.cpp:70
+#: ../../locales/../src/interface/menu_bar.cpp:182
 msgid "&Debug"
 msgstr "调试(&D)"
 
@@ -375,8 +375,8 @@ msgstr "消息记录中的调试信息(&D):"
 msgid "&Default editor:"
 msgstr "默认编辑器(&D):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:139
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:357
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:118
+#: ../../locales/../src/interface/menu_bar.cpp:113
 msgid "&Default file exists action..."
 msgstr "对已存在文件的默认操作(&D)..."
 
@@ -387,8 +387,8 @@ msgstr "登陆重试延时(&D):"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1271
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1440
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3078
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:280
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:588
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:41
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:349
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:59
 msgid "&Delete"
 msgstr "删除(&D)"
@@ -397,11 +397,11 @@ msgstr "删除(&D)"
 msgid "&Delete symlink"
 msgstr "删除符号链接(&D)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:58
+#: ../../locales/../src/interface/menu_bar.cpp:74
 msgid "&Directory access permissions..."
 msgstr "目录访问权限(&D)..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:74
+#: ../../locales/../src/interface/menu_bar.cpp:86
 msgid "&Directory comparison"
 msgstr "目录对比(&D)"
 
@@ -419,7 +419,7 @@ msgstr "停止同步浏览并且继续修改远程目录(&D)？"
 msgid "&Discard local file then download and edit file anew"
 msgstr "放弃本地文件，重新下载并编辑(&D)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:189
+#: ../../locales/../src/interface/menu_bar.cpp:143
 msgid "&Disconnect"
 msgstr "断开连接(&D)"
 
@@ -443,8 +443,8 @@ msgstr "本地连接不使用外部 IP 地址(&D)。"
 msgid "&Double-click action on files:"
 msgstr "双击文件操作(&D):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:290
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:500
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:51
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:261
 msgid "&Download"
 msgstr "下载(&D)"
 
@@ -452,7 +452,7 @@ msgstr "下载(&D)"
 msgid "&Download to:"
 msgstr "下载到(&D):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:617
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:378
 msgid "&Download..."
 msgstr "下载(&D)..."
 
@@ -461,8 +461,8 @@ msgstr "下载(&D)..."
 msgid "&Downloads:"
 msgstr "下载(&D):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:45
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:263
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:24
+#: ../../locales/../src/interface/menu_bar.cpp:68
 msgid "&Edit"
 msgstr "编辑(&E)"
 
@@ -470,10 +470,10 @@ msgstr "编辑(&E)"
 msgid "&Edit filter rules..."
 msgstr "编辑过滤器规则(&E)..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:76
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:163
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:543
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:659
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:304
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:420
+#: ../../locales/../src/interface/menu_bar.cpp:89
+#: ../../locales/../src/interface/menu_bar.cpp:128
 msgid "&Enable"
 msgstr "启用(&E)"
 
@@ -494,7 +494,7 @@ msgstr "编码(&E):"
 msgid "&Encryption:"
 msgstr "加密(&E):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:431
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:192
 msgid "&Enter custom command..."
 msgstr "输入自定义命令(&E)..."
 
@@ -510,8 +510,8 @@ msgstr "执行(&E)"
 msgid "&Export Site Manager entries"
 msgstr "导出站点管理器记录(&E)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:27
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:598
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:359
+#: ../../locales/../src/interface/menu_bar.cpp:57
 msgid "&Export..."
 msgstr "导出(&E)..."
 
@@ -519,15 +519,15 @@ msgstr "导出(&E)..."
 msgid "&Fall back to active mode"
 msgstr "退回到主动模式(&F)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:5
+#: ../../locales/../src/interface/menu_bar.cpp:44
 msgid "&File"
 msgstr "文件(&F)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:536
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:297
 msgid "&File Attributes..."
 msgstr "文件属性(&F)..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:340
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:101
 msgid "&File permissions..."
 msgstr "文件权限(&F)..."
 
@@ -575,7 +575,7 @@ msgstr "跟踪符号链接，删除目标目录内容(&F)"
 msgid "&Get external IP address from the following URL:"
 msgstr "从以下 URL 得到外部 IP 地址(&G):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:230
+#: ../../locales/../src/interface/menu_bar.cpp:172
 msgid "&Getting help..."
 msgstr "获得帮助(&G)..."
 
@@ -587,16 +587,16 @@ msgstr "全局书签(&G)"
 msgid "&HTTP/1.1 using CONNECT method"
 msgstr "&HTTP/1.1 使用 CONNECT 方式"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:220
+#: ../../locales/../src/interface/menu_bar.cpp:162
 msgid "&Help"
 msgstr "帮助(&H)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:91
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:557
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:318
+#: ../../locales/../src/interface/menu_bar.cpp:94
 msgid "&Hide identical files"
 msgstr "隐藏相同的文件(&H)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:362
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:123
 msgid "&Highest"
 msgstr "最高(&H)"
 
@@ -618,7 +618,7 @@ msgstr "&IEC 式二进制前缀 (例如 1 KiB = 1024 bytes)"
 msgid "&ISO 8601 (example: 2007-09-15)"
 msgstr "&ISO 8601 (示例: 2007-09-15)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:30
+#: ../../locales/../src/interface/menu_bar.cpp:58
 msgid "&Import..."
 msgstr "导入(&I)..."
 
@@ -654,7 +654,7 @@ msgstr "限制 FilaZila 使用的本地端口(&L)"
 msgid "&Limit number of simultaneous connections"
 msgstr "限制并发连接数(&L)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:118
+#: ../../locales/../src/interface/menu_bar.cpp:103
 msgid "&Local directory tree"
 msgstr "本地目录树(&L)"
 
@@ -679,15 +679,15 @@ msgstr "登录类型(&L):"
 msgid "&Logontype:"
 msgstr "登录类型(&L):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:374
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:135
 msgid "&Low"
 msgstr "低(&L)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:214
+#: ../../locales/../src/interface/menu_bar.cpp:156
 msgid "&Manage bookmarks..."
 msgstr "管理书签(&M)..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:173
+#: ../../locales/../src/interface/menu_bar.cpp:133
 msgid "&Manual transfer..."
 msgstr "手动传输(&M)..."
 
@@ -699,7 +699,7 @@ msgstr "最大连接数(&M):"
 msgid "&Maximum number of retries:"
 msgstr "最大重试次数(&M):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:114
+#: ../../locales/../src/interface/menu_bar.cpp:102
 msgid "&Message log"
 msgstr "消息日志(&M)"
 
@@ -715,7 +715,7 @@ msgstr "名称排序方式(&N):"
 msgid "&Name:"
 msgstr "名字(&N):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:47
+#: ../../locales/../src/interface/menu_bar.cpp:69
 msgid "&Network configuration wizard..."
 msgstr "网络配置向导(&N)..."
 
@@ -740,13 +740,13 @@ msgstr "下一步(&N) >"
 msgid "&No"
 msgstr "否(&N)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:385
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:146
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:459
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:720
 msgid "&None"
 msgstr "无(&N)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:370
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:131
 msgid "&Normal"
 msgstr "正常(&N)"
 
@@ -765,8 +765,8 @@ msgstr "确定(&O)"
 msgid "&OPEN"
 msgstr "打开(&O)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:259
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:574
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:20
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:335
 msgid "&Open"
 msgstr "打开(&O)"
 
@@ -782,7 +782,7 @@ msgstr "被动(&P)"
 msgid "&Password:"
 msgstr "密码(&P):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:405
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:166
 msgid "&Play sound"
 msgstr "播放声音(&P)"
 
@@ -792,7 +792,7 @@ msgstr "播放声音(&P)"
 msgid "&Port:"
 msgstr "端口(&P):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:157
+#: ../../locales/../src/interface/menu_bar.cpp:123
 msgid "&Preserve timestamps of transferred files"
 msgstr "保留传输文件的时间戳(&P)"
 
@@ -804,7 +804,7 @@ msgstr "队列(&Q)"
 msgid "&Quickconnect"
 msgstr "快速连接(&Q)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:110
+#: ../../locales/../src/interface/menu_bar.cpp:101
 msgid "&Quickconnect bar"
 msgstr "快速连接工具栏(&Q)"
 
@@ -816,7 +816,7 @@ msgstr "快速连接栏历史(&Q)"
 msgid "&Read"
 msgstr "读取(&R)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:185
+#: ../../locales/../src/interface/menu_bar.cpp:141
 msgid "&Reconnect"
 msgstr "重新连接(&R)"
 
@@ -824,8 +824,8 @@ msgstr "重新连接(&R)"
 msgid "&Reconnect information"
 msgstr "重新连接信息(&R)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:65
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:654
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:415
+#: ../../locales/../src/interface/menu_bar.cpp:80
 msgid "&Refresh"
 msgstr "刷新(&R)"
 
@@ -859,16 +859,16 @@ msgid "&Remove key"
 msgstr "移除密钥(&R)"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:4212
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:354
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:115
 msgid "&Remove selected"
 msgstr "移除选定(&R)"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1446
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3072
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:284
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:328
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:524
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:592
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:45
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:89
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:285
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:353
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:53
 msgid "&Rename"
 msgstr "重命名(&R)"
@@ -885,15 +885,15 @@ msgstr "重新打开本地文件(&R)"
 msgid "&Replace invalid characters with:"
 msgstr "将无效字符替换为(&R):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:233
+#: ../../locales/../src/interface/menu_bar.cpp:173
 msgid "&Report a bug..."
 msgstr "报告问题(&R)..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:154
 msgid "&Request attention"
 msgstr "请求用户注意(&R)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:462
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:223
 msgid "&Reset and requeue all"
 msgstr "重置并将所有文件重新加入队列(&R)"
 
@@ -905,7 +905,7 @@ msgstr "重新开始向导(&R)"
 msgid "&Resume"
 msgstr "续传(&R)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:401
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:162
 msgid "&Run command..."
 msgstr "运行命令(&R)..."
 
@@ -933,7 +933,7 @@ msgstr "保存为(&S)..."
 msgid "&Search"
 msgstr "搜索(&S)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:194
+#: ../../locales/../src/interface/menu_bar.cpp:146
 msgid "&Search remote files..."
 msgstr "搜索远程文件(&S)..."
 
@@ -950,7 +950,7 @@ msgid "&Select the columns that should be displayed:"
 msgstr "设置要显示的栏目(&S):"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2565
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:178
+#: ../../locales/../src/interface/menu_bar.cpp:136
 msgid "&Server"
 msgstr "服务器(&S)"
 
@@ -958,7 +958,7 @@ msgstr "服务器(&S)"
 msgid "&Settings"
 msgstr "设置(&S)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:54
+#: ../../locales/../src/interface/menu_bar.cpp:72
 msgid "&Settings..."
 msgstr "设置(&S)..."
 
@@ -966,7 +966,7 @@ msgstr "设置(&S)..."
 msgid "&Show debug menu"
 msgstr "显示调试菜单(&S)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:435
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:196
 msgid "&Show detailed log"
 msgstr "显示详细日志(&S)"
 
@@ -978,7 +978,7 @@ msgstr "在消息日志中显示时间戳(&S)"
 msgid "&Site Manager entries"
 msgstr "站点管理器条目(&S)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:7
+#: ../../locales/../src/interface/menu_bar.cpp:49
 msgid "&Site Manager..."
 msgstr "站点管理器(&S)..."
 
@@ -990,7 +990,7 @@ msgstr "特定站点书签(&S)"
 msgid "&Skip"
 msgstr "跳过(&S)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:169
+#: ../../locales/../src/interface/menu_bar.cpp:126
 msgid "&Speed limits"
 msgstr "速度限制(&S)"
 
@@ -1003,7 +1003,7 @@ msgstr "立即开始传输(&S)"
 msgid "&Swap local and remote panes"
 msgstr "交换本地面板和远程面板(&S)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:450
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:211
 msgid "&TLS Ciphers"
 msgstr "&TLS 密码"
 
@@ -1015,7 +1015,7 @@ msgstr "测试(&T)"
 msgid "&Theme:"
 msgstr "主题(&T):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:131
+#: ../../locales/../src/interface/menu_bar.cpp:108
 msgid "&Transfer"
 msgstr "传输(&T)"
 
@@ -1024,7 +1024,7 @@ msgid "&Transfer mode:"
 msgstr "传输模式(&T):"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1728
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:126
+#: ../../locales/../src/interface/menu_bar.cpp:105
 msgid "&Transfer queue"
 msgstr "传输队列(&T)"
 
@@ -1033,9 +1033,8 @@ msgid "&Treat dotfiles as ASCII files"
 msgstr "把点文件作为 ASCII 文件对待(&T)"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:247
-#, fuzzy
 msgid "&Trust this certificate on the listed alternative hostnames."
-msgstr "信任该证书所列的主机备用名(&T)。"
+msgstr "信任该证书所列的备用主机名(&T)。"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2140
 msgid "&Unedit"
@@ -1045,8 +1044,8 @@ msgstr "放弃修改(&U)"
 msgid "&Update cached key for this host"
 msgstr "更新该主机的缓存密钥(&U)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:244
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:563
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:5
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:324
 msgid "&Upload"
 msgstr "上传(&U)"
 
@@ -1054,7 +1053,7 @@ msgstr "上传(&U)"
 msgid "&Upload to:"
 msgstr "上传至(&U):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:620
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:381
 msgid "&Upload..."
 msgstr "上传(&U)..."
 
@@ -1102,12 +1101,12 @@ msgstr "用户名(&U):"
 msgid "&Version %s"
 msgstr "版本 %s (&V)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:63
+#: ../../locales/../src/interface/menu_bar.cpp:78
 msgid "&View"
 msgstr "查看(&V)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:304
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:623
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:65
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:384
 msgid "&View/Edit"
 msgstr "查看/编辑(&V)"
 
@@ -1283,7 +1282,7 @@ msgstr "64位系统"
 msgid "< &Back"
 msgstr "< 上一步(&B)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:219
+#: ../../locales/../src/interface/menu_bar.cpp:160
 msgid "?"
 msgstr "?"
 
@@ -1300,7 +1299,7 @@ msgstr "证书链中某张证书的签名使用了不安全的算法"
 msgid "A default editor needs to be set."
 msgstr "需要设置默认编辑器。"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:167
+#: ../../locales/../src/interface/RemoteListView.cpp:166
 #: ../../locales/../src/interface/RemoteTreeView.cpp:123
 #: ../../locales/../src/interface/state.cpp:852
 msgid "A directory cannot be dragged into one of its subdirectories."
@@ -1374,9 +1373,9 @@ msgstr ""
 "一个远程操作正在进行并且同步浏览是启用的。\n"
 "关闭同步浏览并且继续修改本地目录？"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:148
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:607
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:368
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1063
+#: ../../locales/../src/interface/menu_bar.cpp:119
 msgid "A&SCII"
 msgstr "A&SCII"
 
@@ -1400,7 +1399,7 @@ msgstr "只对上传起作用(&P)"
 msgid "A&pply to all files and directories"
 msgstr "应用到所有文件和目录(&P)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:491
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:252
 msgid "A&utomatically remove successful transfers"
 msgstr "自动移除成功的传输(&U)"
 
@@ -1420,8 +1419,8 @@ msgstr "在文件列表上面"
 msgid "Access to some local directories could not be restored:"
 msgstr "无法恢复访问某些本地目录:"
 
-#: ../../locales/../src/engine/server.cpp:616
-#: ../../locales/../src/engine/server.cpp:639
+#: ../../locales/../src/engine/server.cpp:613
+#: ../../locales/../src/engine/server.cpp:636
 #: ../../locales/../src/interface/manual_transfer.cpp:148
 #: ../../locales/../src/interface/manual_transfer.cpp:149
 #: ../../locales/../src/interface/manual_transfer.cpp:185
@@ -1430,7 +1429,7 @@ msgstr "无法恢复访问某些本地目录:"
 msgid "Account"
 msgstr "帐号"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:383
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:144
 msgid "Action after queue &completion"
 msgstr "队列完成后执行动作(&C)"
 
@@ -1482,13 +1481,13 @@ msgstr "主动模式 IP"
 msgid "Add files to &queue only"
 msgstr "只添加文件到队列(&Q)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:507
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:570
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:268
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:331
 msgid "Add selected directory to the transfer queue"
 msgstr "添加选中的文件夹到传输队列"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:251
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:297
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:12
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:58
 msgid "Add selected files and folders to the transfer queue"
 msgstr "添加选中的文件和文件夹到传输队列"
 
@@ -1497,7 +1496,7 @@ msgstr "添加选中的文件和文件夹到传输队列"
 msgid "Add to queue"
 msgstr "添加到队列"
 
-#: ../../locales/../src/engine/proxy.cpp:513
+#: ../../locales/../src/engine/proxy.cpp:509
 msgid "Address type not supported"
 msgstr "不支持该地址类型"
 
@@ -1526,7 +1525,7 @@ msgstr "总是进行该操作(&W)"
 msgid "Algorithm:"
 msgstr "算法:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2658
+#: ../../locales/../src/interface/QueueView.cpp:2663
 msgid "All files have been successfully transferred"
 msgstr "所有文件都已经成功传输"
 
@@ -1534,7 +1533,7 @@ msgstr "所有文件都已经成功传输"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "所有指定的端口范围必须在 1024 和 65535 之间。"
 
-#: ../../locales/../src/interface/QueueView.cpp:2654
+#: ../../locales/../src/interface/QueueView.cpp:2659
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1578,7 +1577,7 @@ msgid ""
 "website:"
 msgstr "或者，从 FileZilla 网站下载最新的版本:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1662
+#: ../../locales/../src/interface/QueueView.cpp:1667
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1587,7 +1586,7 @@ msgstr ""
 "在从“%s”加载传输队列时发生了一个错误。\n"
 "队列中的一些项可能没有恢复。"
 
-#: ../../locales/../src/interface/QueueView.cpp:1555
+#: ../../locales/../src/interface/QueueView.cpp:1559
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1606,7 +1605,7 @@ msgid ""
 "location."
 msgstr "目标位置已存在与所拖拽项目同名的文件。"
 
-#: ../../locales/../src/engine/server.cpp:641
+#: ../../locales/../src/engine/server.cpp:638
 #: ../../locales/../src/interface/manual_transfer.cpp:147
 #: ../../locales/../src/interface/manual_transfer.cpp:188
 #: ../../locales/../src/interface/manual_transfer.cpp:203
@@ -1668,8 +1667,8 @@ msgstr "作为传输队列面板中的标签"
 msgid "Ask for action"
 msgstr "询问操作"
 
-#: ../../locales/../src/engine/server.cpp:607
-#: ../../locales/../src/engine/server.cpp:633
+#: ../../locales/../src/engine/server.cpp:604
+#: ../../locales/../src/engine/server.cpp:630
 #: ../../locales/../src/interface/manual_transfer.cpp:179
 msgid "Ask for password"
 msgstr "询问密码"
@@ -1761,7 +1760,7 @@ msgid "Blue"
 msgstr "蓝色"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:271
-#: ../../locales/../src/interface/menu_bar.cpp:321
+#: ../../locales/../src/interface/menu_bar.cpp:436
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:399
 msgid "Bookmark"
 msgstr "书签"
@@ -1806,23 +1805,23 @@ msgstr ""
 "默认情况下使用任何可用的本地端口来进行主动模式传输。如果您想限制 FileZilla 只"
 "使用一个小范围内的端口，请在下面填入端口范围。"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:180
+#: ../../locales/../src/interface/menu_bar.cpp:138
 msgid "C&ancel current operation"
 msgstr "取消当前操作(&C)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:442
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:203
 msgid "C&lear all"
 msgstr "全部清除(&C)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:332
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:528
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:629
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:93
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:289
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:390
 msgid "C&opy URL(s) to clipboard"
 msgstr "复制 URL 到剪贴板(&O)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:336
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:532
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:632
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:97
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:293
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
 msgid "C&opy URL(s) with password to clipboard"
 msgstr "将 URL 和密码一起复制到到剪贴板(&O)"
 
@@ -1930,17 +1929,17 @@ msgstr "无法创建新过滤器"
 
 #: ../../locales/../src/interface/edithandler.cpp:1626
 #: ../../locales/../src/interface/edithandler.cpp:1674
-#: ../../locales/../src/interface/LocalListView.cpp:1837
+#: ../../locales/../src/interface/LocalListView.cpp:1836
 #: ../../locales/../src/interface/search.cpp:1210
 #: ../../locales/../src/interface/search.cpp:1528
 msgid "Cannot edit file"
 msgstr "无法编辑文件"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1713
+#: ../../locales/../src/interface/LocalListView.cpp:1712
 msgid "Cannot edit file, not connected to any server."
 msgstr "无法编辑文件，没有连接到任何服务器。"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1722
+#: ../../locales/../src/interface/LocalListView.cpp:1721
 msgid "Cannot edit file, remote path unknown."
 msgstr "无法编辑文件，未知远程路径。"
 
@@ -1967,11 +1966,11 @@ msgstr "无法记住密码"
 msgid "Cannot rename entry"
 msgstr "无法重命名记录"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1633
+#: ../../locales/../src/interface/RemoteListView.cpp:1634
 msgid "Cannot rename file"
 msgstr "无法重命名文件"
 
-#: ../../locales/../src/engine/proxy.cpp:139
+#: ../../locales/../src/engine/proxy.cpp:136
 msgid "Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."
 msgstr "无法将主机名解析为 IPv4 地址以用于 SOCKS4 代理。"
 
@@ -2046,8 +2045,8 @@ msgstr "需要确认:"
 msgid "Change file attributes"
 msgstr "改变文件属性"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:341
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:537
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:102
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:298
 msgid "Change the file permissions."
 msgstr "改变文件权限。"
 
@@ -2063,7 +2062,7 @@ msgstr "字符编码问题"
 msgid "Charset"
 msgstr "字符集"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:222
+#: ../../locales/../src/interface/menu_bar.cpp:167
 msgid "Check for &updates..."
 msgstr "检查更新(&U)..."
 
@@ -2075,7 +2074,7 @@ msgstr "自动检查 FileZilla 更新(&U):"
 msgid "Check for Updates"
 msgstr "检查更新"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:223
+#: ../../locales/../src/interface/menu_bar.cpp:167
 msgid "Check for newer versions of FileZilla"
 msgstr "检查新版的 FileZilla"
 
@@ -2127,7 +2126,7 @@ msgstr "选择默认的本地目录"
 msgid "Choose the local directory"
 msgstr "选择本地目录"
 
-#: ../../locales/../src/engine/http/request.cpp:667
+#: ../../locales/../src/engine/http/request.cpp:670
 msgid "Chunk data improperly terminated"
 msgstr "块数据错误中止"
 
@@ -2135,8 +2134,8 @@ msgstr "块数据错误中止"
 msgid "Cipher:"
 msgstr "密码:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:21
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:647
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:408
+#: ../../locales/../src/interface/menu_bar.cpp:55
 msgid "Cl&ose tab"
 msgstr "关闭标签(&O)"
 
@@ -2144,11 +2143,11 @@ msgstr "关闭标签(&O)"
 msgid "Classic"
 msgstr "经典"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:447
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:208
 msgid "Clear &layout cache"
 msgstr "清空布局缓存(&L)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:454
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:215
 msgid "Clear auto&update data"
 msgstr "清除自动更新数据(&U)"
 
@@ -2185,13 +2184,13 @@ msgstr "本地至服务器密码:"
 msgid "Close"
 msgstr "关闭"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:650
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:411
 msgid "Close &all other tabs"
 msgstr "关闭所有其它的标签(&A)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:40
 #: ../../locales/../src/interface/Mainfrm.cpp:1230
 #: ../../locales/../src/interface/Mainfrm.cpp:1251
+#: ../../locales/../src/interface/menu_bar.cpp:64
 msgid "Close FileZilla"
 msgstr "关闭 FileZilla"
 
@@ -2203,7 +2202,7 @@ msgstr "关闭所有运行的 FileZilla 实例"
 msgid "Close quick search and continue comparing?"
 msgstr "关闭快速搜索，继续对比？"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:23
+#: ../../locales/../src/interface/menu_bar.cpp:55
 msgid "Closes current tab"
 msgstr "关闭当前标签"
 
@@ -2230,7 +2229,7 @@ msgstr "命令与其参数需要正确的引号包裹。"
 msgid "Command failed"
 msgstr "命令执行失败"
 
-#: ../../locales/../src/engine/proxy.cpp:510
+#: ../../locales/../src/engine/proxy.cpp:506
 msgid "Command not supported"
 msgstr "不支持该命令"
 
@@ -2257,13 +2256,13 @@ msgstr "公用名:"
 msgid "Communication tainted by router or firewall"
 msgstr "通讯已受路由器或防火墙影响"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:86
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:552
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:313
+#: ../../locales/../src/interface/menu_bar.cpp:92
 msgid "Compare &modification time"
 msgstr "比较修改时间(&M)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:82
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:548
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:309
+#: ../../locales/../src/interface/menu_bar.cpp:91
 msgid "Compare file&size"
 msgstr "比较文件大小(&S)"
 
@@ -2326,8 +2325,8 @@ msgstr "确认删除"
 
 #: ../../locales/../src/interface/edithandler.cpp:1638
 #: ../../locales/../src/interface/file_utils.h:45
-#: ../../locales/../src/interface/LocalListView.cpp:1799
-#: ../../locales/../src/interface/RemoteListView.cpp:1435
+#: ../../locales/../src/interface/LocalListView.cpp:1798
+#: ../../locales/../src/interface/RemoteListView.cpp:1436
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1085
 #: ../../locales/../src/interface/search.cpp:1222
 #: ../../locales/../src/interface/search.cpp:1488
@@ -2369,14 +2368,14 @@ msgstr "正在连接"
 msgid "Connecting to %s"
 msgstr "连接到 %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1063
+#: ../../locales/../src/engine/ControlSocket.cpp:1064
 #: ../../locales/../src/engine/ftp/logon.cpp:96
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "连接到 %s，通过代理 %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:995
-#: ../../locales/../src/engine/proxy.cpp:240
+#: ../../locales/../src/engine/ControlSocket.cpp:996
+#: ../../locales/../src/engine/proxy.cpp:236
 #: ../../locales/../src/engine/sftp/sftpcontrolsocket.cpp:43
 #: ../../locales/../src/engine/storj/storjcontrolsocket.cpp:42
 #, c-format
@@ -2395,13 +2394,13 @@ msgstr "连接中止"
 msgid "Connection attempt failed"
 msgstr "连接尝试失败"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:957
-#: ../../locales/../src/engine/proxy.cpp:212
+#: ../../locales/../src/engine/ControlSocket.cpp:958
+#: ../../locales/../src/engine/proxy.cpp:208
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "尝试连接“%s”失败，正在尝试下一个地址。"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:963
+#: ../../locales/../src/engine/ControlSocket.cpp:964
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "尝试连接“%s”失败。"
@@ -2419,12 +2418,12 @@ msgstr "连接尝试超时"
 msgid "Connection closed"
 msgstr "连接关闭"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1041
+#: ../../locales/../src/engine/ControlSocket.cpp:1042
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:75
-#: ../../locales/../src/engine/http/request.cpp:303
-#: ../../locales/../src/engine/http/request.cpp:316
-#: ../../locales/../src/engine/http/request.cpp:327
-#: ../../locales/../src/engine/http/request.cpp:338
+#: ../../locales/../src/engine/http/request.cpp:305
+#: ../../locales/../src/engine/http/request.cpp:318
+#: ../../locales/../src/engine/http/request.cpp:329
+#: ../../locales/../src/engine/http/request.cpp:340
 msgid "Connection closed by server"
 msgstr "连接被服务器关闭"
 
@@ -2449,11 +2448,11 @@ msgstr "连接建立，等待欢迎消息..."
 msgid "Connection lost"
 msgstr "连接丢失"
 
-#: ../../locales/../src/engine/proxy.cpp:495
+#: ../../locales/../src/engine/proxy.cpp:491
 msgid "Connection not allowed by ruleset"
 msgstr "规则设定不允许该连接"
 
-#: ../../locales/../src/engine/proxy.cpp:504
+#: ../../locales/../src/engine/proxy.cpp:500
 msgid "Connection refused"
 msgstr "连接被拒绝"
 
@@ -2483,7 +2482,7 @@ msgstr "连接超时。"
 msgid "Connection to server lost."
 msgstr "与服务器的连接丢失。"
 
-#: ../../locales/../src/engine/proxy.cpp:223
+#: ../../locales/../src/engine/proxy.cpp:219
 msgid "Connection with proxy established, performing handshake..."
 msgstr "与代理连接建立，进行握手..."
 
@@ -2511,13 +2510,13 @@ msgstr "复制 (%d) / %s"
 msgid "Copy of %s"
 msgstr "复制 %s"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:337
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:533
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:98
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:294
 msgid "Copy the URLs of the selected items to clipboard, including password."
 msgstr "复制选中项的 URL 和密码到剪贴板。"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:333
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:529
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:94
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:290
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "复制选中项的 URL 到剪贴板。"
 
@@ -2548,7 +2547,7 @@ msgstr "完成操作"
 msgid "Could not connect to server"
 msgstr "无法连接到服务器"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1096
+#: ../../locales/../src/engine/ControlSocket.cpp:1097
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "无法连接到服务器: %s"
@@ -2565,7 +2564,7 @@ msgstr "无法将命令转换成服务器的编码"
 msgid "Could not convert private key"
 msgstr "无法转换私钥"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2613
+#: ../../locales/../src/interface/RemoteListView.cpp:2615
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1427
 #: ../../locales/../src/interface/search.cpp:1419
 msgid "Could not copy URLs"
@@ -2605,7 +2604,7 @@ msgstr "无法创建日志锁 (logging mutex): %s"
 msgid "Could not create security-scoped bookmark from URL:"
 msgstr "无法从 URL 创建安全书签:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2258
+#: ../../locales/../src/interface/RemoteListView.cpp:2260
 #: ../../locales/../src/interface/RemoteTreeView.cpp:881
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
@@ -2745,7 +2744,7 @@ msgid "Could not open '%s'"
 msgstr "无法打开“%s”"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:220
-#: ../../locales/../src/interface/RemoteListView.cpp:2613
+#: ../../locales/../src/interface/RemoteListView.cpp:2615
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1427
 #: ../../locales/../src/interface/search.cpp:1419
 msgid "Could not open clipboard"
@@ -2778,7 +2777,7 @@ msgid "Could not read from data socket."
 msgstr "无法读取数据套接字。"
 
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:64
-#: ../../locales/../src/engine/http/request.cpp:380
+#: ../../locales/../src/engine/http/request.cpp:382
 #, c-format
 msgid "Could not read from socket: %s"
 msgstr "无法读取套接字: %s"
@@ -2829,7 +2828,7 @@ msgstr "无法排序对等证书"
 msgid "Could not spawn IO thread"
 msgstr "无法生成 IO 线程"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1077
+#: ../../locales/../src/engine/ControlSocket.cpp:1078
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "无法开始代理握手: %s"
@@ -2856,7 +2855,7 @@ msgstr "无法写入“%s”，不能添加该书签: %s"
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "无法写入“%s”，不能添加该全局书签: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1586
+#: ../../locales/../src/interface/QueueView.cpp:1590
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2892,9 +2891,9 @@ msgstr "无法写入本地文件"
 msgid "Could not write to log file: %s"
 msgstr "无法写入日志文件: %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:918
-#: ../../locales/../src/engine/ControlSocket.cpp:1013
-#: ../../locales/../src/engine/http/request.cpp:235
+#: ../../locales/../src/engine/ControlSocket.cpp:919
+#: ../../locales/../src/engine/ControlSocket.cpp:1014
+#: ../../locales/../src/engine/http/request.cpp:237
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "无法写入套接字: %s"
@@ -2903,7 +2902,7 @@ msgstr "无法写入套接字: %s"
 msgid "Country:"
 msgstr "国家:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:316
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:77
 msgid "Crea&te new file"
 msgstr "创建新文件(&T)"
 
@@ -2915,39 +2914,39 @@ msgstr "创建缺失的本地目录并进入该目录(&M)"
 msgid "Create &missing remote directory and enter it"
 msgstr "创建缺失的远程目录并进入该目录(&M)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:269
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:309
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:512
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:580
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:30
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:70
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:273
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:341
 msgid "Create a new subdirectory in the current directory"
 msgstr "在当前目录创建一个新的子目录"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:273
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:313
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:516
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:584
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:34
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:74
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:277
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:345
 msgid "Create a new subdirectory in the current directory and change into it"
 msgstr "在当前目录创建一个新的子目录并进入该目录"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:317
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:78
 msgid "Create a new, empty file in the current directory"
 msgstr "在当前目录创建一个新的空文件"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:272
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:312
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:515
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:583
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:33
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:73
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:276
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:344
 msgid "Create director&y and enter it"
 msgstr "创建目录并进入(&Y)"
 
 #: ../../locales/../src/interface/LocalListView.cpp:954
 #: ../../locales/../src/interface/LocalTreeView.cpp:1181
-#: ../../locales/../src/interface/RemoteListView.cpp:1333
+#: ../../locales/../src/interface/RemoteListView.cpp:1334
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1267
 msgid "Create directory"
 msgstr "创建目录"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2702
+#: ../../locales/../src/interface/RemoteListView.cpp:2704
 msgid "Create empty file"
 msgstr "创建空文件"
 
@@ -3034,9 +3033,9 @@ msgstr "使用 SI 式十进制前缀 (例如 1 KB = 1000 bytes)(&E)"
 msgid "D&efault"
 msgstr "默认(&E)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:324
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:520
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:626
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:85
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:281
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:387
 msgid "D&elete"
 msgstr "删除(&E)"
 
@@ -3062,7 +3061,7 @@ msgstr "双击目录操作(&O):"
 msgid "D&uplicate"
 msgstr "复制(&U)"
 
-#: ../../locales/../src/engine/server.cpp:56
+#: ../../locales/../src/engine/server.cpp:57
 msgid "DOS-like with virtual paths"
 msgstr "带虚拟路径的 DOS 式"
 
@@ -3107,7 +3106,7 @@ msgstr "调试设置"
 msgid "Default &local directory:"
 msgstr "默认本地目录(&L):"
 
-#: ../../locales/../src/engine/server.cpp:48
+#: ../../locales/../src/engine/server.cpp:49
 msgid "Default (Autodetect)"
 msgstr "默认 (自动检测)"
 
@@ -3168,13 +3167,13 @@ msgstr[0] "由于上一次尝试连接失败，将推迟连接 %d 秒..."
 msgid "Delete Site Manager entry"
 msgstr "清除站点管理器记录"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:521
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:589
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:282
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:350
 msgid "Delete selected directory"
 msgstr "删除所选的目录"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:281
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:325
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:42
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:86
 msgid "Delete selected files and directories"
 msgstr "删除选定的文件和目录"
 
@@ -3214,7 +3213,7 @@ msgstr "有新版的 FileZilla"
 msgid "Dire&ctories"
 msgstr "目录(&C)"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Direction"
 msgstr "方向"
 
@@ -3231,7 +3230,7 @@ msgid "Directory access permissions"
 msgstr "目录访问权限"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3025
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:541
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:302
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1850
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:429
 #: ../../locales/../src/interface/filelistctrl.cpp:477
@@ -3250,7 +3249,7 @@ msgstr "目录对比失败"
 msgid "Directory containing the logfile does not exist or filename is invalid."
 msgstr "保存日志文件的目录不存在或文件名无效。"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:70
+#: ../../locales/../src/interface/menu_bar.cpp:83
 #, fuzzy
 msgid "Directory listing &filters..."
 msgstr "目录列表过滤器"
@@ -3259,7 +3258,7 @@ msgstr "目录列表过滤器"
 msgid "Directory listing aborted by user"
 msgstr "目录列表被用户终止"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2090
+#: ../../locales/../src/interface/RemoteListView.cpp:2091
 msgid "Directory listing failed"
 msgstr "目录列表失败"
 
@@ -3296,15 +3295,15 @@ msgid "Disconnect from server"
 msgstr "从服务器断开"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:52
-#: ../../locales/../src/engine/ControlSocket.cpp:919
-#: ../../locales/../src/engine/ControlSocket.cpp:1015
+#: ../../locales/../src/engine/ControlSocket.cpp:920
+#: ../../locales/../src/engine/ControlSocket.cpp:1016
 #: ../../locales/../src/engine/ftp/ftpcontrolsocket.cpp:66
-#: ../../locales/../src/engine/http/request.cpp:236
+#: ../../locales/../src/engine/http/request.cpp:238
 #: ../../locales/../src/interface/queue.cpp:352
 msgid "Disconnected from server"
 msgstr "已从服务器断开"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1044
+#: ../../locales/../src/engine/ControlSocket.cpp:1045
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:299
 #, c-format
 msgid "Disconnected from server: %s"
@@ -3319,7 +3318,7 @@ msgstr "正在从上一个服务器断开连接"
 msgid "Disconnects from the currently visible server"
 msgstr "断开当前可见的服务器"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:238
+#: ../../locales/../src/interface/menu_bar.cpp:176
 msgid "Display about dialog"
 msgstr "显示关于对话框"
 
@@ -3403,11 +3402,11 @@ msgstr "下载限制: 无"
 msgid "Download search results"
 msgstr "下载搜索结果"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:502
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:263
 msgid "Download selected directory"
 msgstr "下载选定的目录"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:292
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:53
 msgid "Download selected files and directories"
 msgstr "下载选定的文件和目录"
 
@@ -3459,8 +3458,8 @@ msgstr "复制(&I)"
 msgid "E&nable all"
 msgstr "全部启用(&N)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:254
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:300
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:15
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:61
 msgid "E&nter directory"
 msgstr "进入目录(&N)"
 
@@ -3468,13 +3467,13 @@ msgstr "进入目录(&N)"
 msgid "E&xecute"
 msgstr "执行(&X)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:39
+#: ../../locales/../src/interface/menu_bar.cpp:64
 msgid "E&xit"
 msgstr "退出(&X)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:426
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:472
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:495
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:187
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:233
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:256
 msgid "E&xport..."
 msgstr "导出(&X)..."
 
@@ -3490,7 +3489,7 @@ msgstr "每个过滤器至少要有一个条件。"
 msgid "Edit filters"
 msgstr "编辑过滤器"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:264
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:25
 msgid ""
 "Edit the file with the configured editor and upload changes to the server."
 msgstr "使用设置的编辑器编辑文件并上传修改后的文件到服务器。"
@@ -3499,8 +3498,8 @@ msgstr "使用设置的编辑器编辑文件并上传修改后的文件到服务
 msgid "Editing directories is not supported"
 msgstr "不支持编辑目录。"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1713
-#: ../../locales/../src/interface/LocalListView.cpp:1722
+#: ../../locales/../src/interface/LocalListView.cpp:1712
+#: ../../locales/../src/interface/LocalListView.cpp:1721
 msgid "Editing failed"
 msgstr "编辑失败"
 
@@ -3512,7 +3511,7 @@ msgstr "编辑搜索结果"
 msgid "Email:"
 msgstr "电子邮件:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1879
+#: ../../locales/../src/interface/QueueView.cpp:1884
 msgid "Empty command"
 msgstr "空命令"
 
@@ -3520,7 +3519,7 @@ msgstr "空命令"
 msgid "Empty command."
 msgstr "空命令。"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2092
+#: ../../locales/../src/interface/RemoteListView.cpp:2093
 msgid "Empty directory listing"
 msgstr "空目录列表"
 
@@ -3582,7 +3581,7 @@ msgstr "结束对比并改变排序？"
 msgid "End comparison and open quick search?"
 msgstr "结束对比并打开快速搜索？"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:199
+#: ../../locales/../src/interface/menu_bar.cpp:147
 msgid "Enter &custom command..."
 msgstr "输入自定义命令(&C)..."
 
@@ -3590,7 +3589,7 @@ msgstr "输入自定义命令(&C)..."
 msgid "Enter 0 for unlimited speed."
 msgstr "输入 0 表示无速度限制。"
 
-#: ../../locales/../src/interface/QueueView.cpp:1873
+#: ../../locales/../src/interface/QueueView.cpp:1878
 msgid "Enter command"
 msgstr "输入命令"
 
@@ -3625,8 +3624,8 @@ msgstr "输入过滤器集合新名称"
 msgid "Enter password"
 msgstr "输入密码"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:255
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:301
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:16
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:62
 msgid "Enter selected directory"
 msgstr "进入所选的目录"
 
@@ -3691,7 +3690,7 @@ msgstr "导出设置错误"
 msgid "Error importing"
 msgstr "导入出错"
 
-#: ../../locales/../src/interface/QueueView.cpp:1663
+#: ../../locales/../src/interface/QueueView.cpp:1668
 msgid "Error loading queue"
 msgstr "加载队列出错"
 
@@ -3707,7 +3706,7 @@ msgstr "加载队列出错"
 #: ../../locales/../src/interface/Options.cpp:255
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:65
 #: ../../locales/../src/interface/osx_sandbox_userdirs.cpp:136
-#: ../../locales/../src/interface/QueueView.cpp:1567
+#: ../../locales/../src/interface/QueueView.cpp:1571
 #: ../../locales/../src/interface/search.cpp:1350
 #: ../../locales/../src/interface/search.cpp:1370
 #: ../../locales/../src/interface/sitemanager.cpp:91
@@ -3722,7 +3721,7 @@ msgstr "加载队列出错"
 msgid "Error loading xml file"
 msgstr "导入 XML 文件出错"
 
-#: ../../locales/../src/interface/QueueView.cpp:1556
+#: ../../locales/../src/interface/QueueView.cpp:1560
 msgid "Error saving queue"
 msgstr "保存队列出错"
 
@@ -3735,7 +3734,7 @@ msgstr "启动程序出错"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:332
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:883
-#: ../../locales/../src/interface/QueueView.cpp:1587
+#: ../../locales/../src/interface/QueueView.cpp:1591
 #: ../../locales/../src/interface/sitemanager.cpp:634
 #: ../../locales/../src/interface/sitemanager.cpp:759
 #: ../../locales/../src/interface/sitemanager.cpp:816
@@ -3799,11 +3798,11 @@ msgstr "FTP"
 msgid "FTP - File Transfer Protocol"
 msgstr "FTP - 文件传输协议"
 
-#: ../../locales/../src/engine/server.cpp:21
+#: ../../locales/../src/engine/server.cpp:20
 msgid "FTP - File Transfer Protocol with optional encryption"
 msgstr "FTP - 可选加密的文件传输协议"
 
-#: ../../locales/../src/engine/server.cpp:27
+#: ../../locales/../src/engine/server.cpp:26
 msgid "FTP - Insecure File Transfer Protocol"
 msgstr "FTP - 不安全的文件传输协议"
 
@@ -3831,22 +3830,21 @@ msgid ""
 msgstr "FTP 使用另一些连接来传输数据。这些额外的连接有两种方法来建立。"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:100
-#, fuzzy
 msgid "FTP: File Types"
-msgstr "文件类型"
+msgstr "FTP: 文件类型"
 
-#: ../../locales/../src/engine/server.cpp:26
+#: ../../locales/../src/engine/server.cpp:25
 msgid "FTPES - FTP over explicit TLS"
 msgstr "FTPES - 通过显式 TLS 的 FTP"
 
-#: ../../locales/../src/engine/server.cpp:25
+#: ../../locales/../src/engine/server.cpp:24
 msgid "FTPS - FTP over implicit TLS"
 msgstr "FTPS - 通过隐式 TLS 的 FTP"
 
 #: ../../locales/../src/interface/LocalListView.cpp:545
 #: ../../locales/../src/interface/LocalListView.cpp:618
 #: ../../locales/../src/interface/LocalListView.cpp:941
-#: ../../locales/../src/interface/LocalListView.cpp:1921
+#: ../../locales/../src/interface/LocalListView.cpp:1920
 #: ../../locales/../src/interface/LocalTreeView.cpp:871
 #: ../../locales/../src/interface/LocalTreeView.cpp:1154
 #: ../../locales/../src/interface/viewheader.cpp:499
@@ -4056,7 +4054,7 @@ msgstr "文件中不包含任何可导入的数据。"
 msgid "File editing"
 msgstr "文件编辑"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1645
+#: ../../locales/../src/interface/RemoteListView.cpp:1646
 msgid "File exists"
 msgstr "文件已存在"
 
@@ -4154,14 +4152,14 @@ msgstr "改变语言需要重启 FileZilla 才会生效。"
 msgid "FileZilla updates"
 msgstr "FileZilla 更新"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:101
+#: ../../locales/../src/interface/menu_bar.cpp:98
 msgid "Filelist status &bars"
 msgstr "文件列表状态栏(&B)"
 
 #: ../../locales/../src/interface/edithandler.cpp:1136
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:101
 #: ../../locales/../src/interface/LocalListView.cpp:287
-#: ../../locales/../src/interface/RemoteListView.cpp:398
+#: ../../locales/../src/interface/RemoteListView.cpp:396
 #: ../../locales/../src/interface/search.cpp:159
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:35
 msgid "Filename"
@@ -4173,7 +4171,7 @@ msgstr "文件名"
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr "无法为目录 %s 和文件名 %s 构造文件名"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1633
+#: ../../locales/../src/interface/RemoteListView.cpp:1634
 msgid "Filename invalid"
 msgstr "文件名无效"
 
@@ -4210,7 +4208,7 @@ msgstr "文件未找到"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:105
 #: ../../locales/../src/interface/LocalListView.cpp:288
-#: ../../locales/../src/interface/RemoteListView.cpp:399
+#: ../../locales/../src/interface/RemoteListView.cpp:397
 #: ../../locales/../src/interface/search.cpp:161
 msgid "Filesize"
 msgstr "文件大小"
@@ -4220,7 +4218,7 @@ msgid "Filesize format"
 msgstr "文件大小格式"
 
 #: ../../locales/../src/interface/LocalListView.cpp:289
-#: ../../locales/../src/interface/RemoteListView.cpp:400
+#: ../../locales/../src/interface/RemoteListView.cpp:398
 #: ../../locales/../src/interface/search.cpp:162
 msgid "Filetype"
 msgstr "文件类型"
@@ -4322,7 +4320,7 @@ msgstr "当前会话将使用默认设置，并且任何设置的修改都不会
 msgid "Force &UTF-8"
 msgstr "强制 &UTF-8"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:203
+#: ../../locales/../src/interface/menu_bar.cpp:148
 msgid "Force showing &hidden files"
 msgstr "强制显示隐藏文件(&H)"
 
@@ -4357,7 +4355,7 @@ msgstr "更多文档"
 msgid "General"
 msgstr "常规"
 
-#: ../../locales/../src/engine/proxy.cpp:492
+#: ../../locales/../src/engine/proxy.cpp:488
 msgid "General SOCKS server failure"
 msgstr "常规 SOCKS 服务器故障"
 
@@ -4419,11 +4417,11 @@ msgstr "绿色"
 msgid "Group permissions"
 msgstr "组权限"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:366
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:127
 msgid "H&igh"
 msgstr "高(&I)"
 
-#: ../../locales/../src/engine/server.cpp:24
+#: ../../locales/../src/engine/server.cpp:23
 msgid "HTTPS - HTTP over TLS"
 msgstr "HTTPS - 通过 TLS 的 HTTP"
 
@@ -4436,13 +4434,13 @@ msgid "Hidden"
 msgstr "隐藏"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:964
-#: ../../locales/../src/interface/queue.cpp:936
-#: ../../locales/../src/interface/queue.cpp:998
+#: ../../locales/../src/interface/queue.cpp:1002
+#: ../../locales/../src/interface/queue.cpp:1064
 msgid "High"
 msgstr "高"
 
-#: ../../locales/../src/interface/queue.cpp:938
-#: ../../locales/../src/interface/queue.cpp:1000
+#: ../../locales/../src/interface/queue.cpp:1004
+#: ../../locales/../src/interface/queue.cpp:1066
 msgid "Highest"
 msgstr "最高"
 
@@ -4471,7 +4469,7 @@ msgstr "主机密钥不匹配"
 msgid "Host starts with '[' but no closing bracket found."
 msgstr "主机名以“[”开始，但没有结束符“]”。"
 
-#: ../../locales/../src/engine/proxy.cpp:501
+#: ../../locales/../src/engine/proxy.cpp:497
 msgid "Host unreachable"
 msgstr "无法连接主机"
 
@@ -4501,7 +4499,7 @@ msgstr "我确实忘记了主密码。删除保存在该主密码下的所有密
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (示例: 15:47)"
 
-#: ../../locales/../src/engine/proxy.cpp:118
+#: ../../locales/../src/engine/proxy.cpp:115
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
 msgstr "SOCKS4 代理不支持 IPv6 地址"
 
@@ -4736,8 +4734,8 @@ msgstr "不安全的算法！"
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "不安全的服务器，不支持 FTP over TLS。"
 
-#: ../../locales/../src/engine/server.cpp:613
-#: ../../locales/../src/engine/server.cpp:637
+#: ../../locales/../src/engine/server.cpp:610
+#: ../../locales/../src/engine/server.cpp:634
 #: ../../locales/../src/interface/manual_transfer.cpp:182
 msgid "Interactive"
 msgstr "交互式"
@@ -4755,12 +4753,12 @@ msgstr "被信号量中断"
 msgid "Interrupted by user"
 msgstr "用户终止"
 
-#: ../../locales/../src/engine/http/request.cpp:159
-#: ../../locales/../src/engine/http/request.cpp:581
+#: ../../locales/../src/engine/http/request.cpp:161
+#: ../../locales/../src/engine/http/request.cpp:584
 msgid "Invalid Content-Length"
 msgstr "无效的 Content-Length"
 
-#: ../../locales/../src/engine/http/request.cpp:488
+#: ../../locales/../src/engine/http/request.cpp:490
 msgid "Invalid HTTP Response"
 msgstr "无效的 HTTP 响应"
 
@@ -4774,7 +4772,7 @@ msgid ""
 "site manager to force UTF-8."
 msgstr "收到无效字节，将禁用 UTF-8 编码。请在站点管理器中强制选择 UTF-8 编码。"
 
-#: ../../locales/../src/engine/http/request.cpp:702
+#: ../../locales/../src/engine/http/request.cpp:705
 msgid "Invalid chunk size"
 msgstr "无效的块大小"
 
@@ -4818,7 +4816,7 @@ msgstr "无效的主机名: %s"
 msgid "Invalid input"
 msgstr "无效输入"
 
-#: ../../locales/../src/engine/http/request.cpp:516
+#: ../../locales/../src/engine/http/request.cpp:518
 msgid "Invalid line"
 msgstr "无效的行"
 
@@ -4861,7 +4859,7 @@ msgstr "无效的正则表达式"
 msgid "Invalid regular expression in search conditions."
 msgstr "无效的搜索条件正则表达式。"
 
-#: ../../locales/../src/engine/http/request.cpp:497
+#: ../../locales/../src/engine/http/request.cpp:499
 msgid "Invalid response code"
 msgstr "无效的响应码"
 
@@ -4931,8 +4929,8 @@ msgstr "密钥交换"
 msgid "Key exchange:"
 msgstr "密钥交换:"
 
-#: ../../locales/../src/engine/server.cpp:610
-#: ../../locales/../src/engine/server.cpp:635
+#: ../../locales/../src/engine/server.cpp:607
+#: ../../locales/../src/engine/server.cpp:632
 msgid "Key file"
 msgstr "密钥文件"
 
@@ -4941,7 +4939,7 @@ msgstr "密钥文件"
 msgid "Key identifier:"
 msgstr "密钥标识:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:378
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:139
 msgid "L&owest"
 msgstr "最低(&O)"
 
@@ -4955,7 +4953,7 @@ msgid "Language changed"
 msgstr "语言已经更改"
 
 #: ../../locales/../src/interface/LocalListView.cpp:290
-#: ../../locales/../src/interface/RemoteListView.cpp:401
+#: ../../locales/../src/interface/RemoteListView.cpp:399
 #: ../../locales/../src/interface/search.cpp:163
 msgid "Last modified"
 msgstr "最近修改"
@@ -4990,7 +4988,7 @@ msgstr "限制日志文件大小"
 msgid "Limit:"
 msgstr "限制:"
 
-#: ../../locales/../src/engine/http/request.cpp:656
+#: ../../locales/../src/engine/http/request.cpp:659
 msgid "Line length exceeded"
 msgstr "行长度已超出"
 
@@ -5117,13 +5115,13 @@ msgid ""
 "'%s' or '%s'"
 msgstr "登录类型只能和 FTP URL 一起使用。参数必须是“%s”或“%s”"
 
-#: ../../locales/../src/interface/queue.cpp:931
-#: ../../locales/../src/interface/queue.cpp:993
+#: ../../locales/../src/interface/queue.cpp:997
+#: ../../locales/../src/interface/queue.cpp:1059
 msgid "Low"
 msgstr "低"
 
-#: ../../locales/../src/interface/queue.cpp:929
-#: ../../locales/../src/interface/queue.cpp:991
+#: ../../locales/../src/interface/queue.cpp:995
+#: ../../locales/../src/interface/queue.cpp:1057
 msgid "Lowest"
 msgstr "最低"
 
@@ -5143,36 +5141,36 @@ msgstr "洋红"
 msgid "Make sure the file can be accessed and is a well-formed XML document."
 msgstr "确认该文件可以被存取而且是一个格式正确的 XML 文档。"
 
-#: ../../locales/../src/engine/http/request.cpp:643
-#: ../../locales/../src/engine/http/request.cpp:649
-#: ../../locales/../src/engine/http/request.cpp:656
-#: ../../locales/../src/engine/http/request.cpp:667
-#: ../../locales/../src/engine/http/request.cpp:702
+#: ../../locales/../src/engine/http/request.cpp:646
+#: ../../locales/../src/engine/http/request.cpp:652
+#: ../../locales/../src/engine/http/request.cpp:659
+#: ../../locales/../src/engine/http/request.cpp:670
+#: ../../locales/../src/engine/http/request.cpp:705
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "错误的块数据: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:159
+#: ../../locales/../src/engine/http/request.cpp:161
 #, c-format
 msgid "Malformed request header: %s"
 msgstr "错误的请求头: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:457
-#: ../../locales/../src/engine/http/request.cpp:463
-#: ../../locales/../src/engine/http/request.cpp:516
-#: ../../locales/../src/engine/http/request.cpp:571
-#: ../../locales/../src/engine/http/request.cpp:581
+#: ../../locales/../src/engine/http/request.cpp:459
+#: ../../locales/../src/engine/http/request.cpp:465
+#: ../../locales/../src/engine/http/request.cpp:518
+#: ../../locales/../src/engine/http/request.cpp:574
+#: ../../locales/../src/engine/http/request.cpp:584
 #, c-format
 msgid "Malformed response header: %s"
 msgstr "错误的响应头: %s"
 
-#: ../../locales/../src/engine/http/request.cpp:404
-#: ../../locales/../src/engine/http/request.cpp:418
-#: ../../locales/../src/engine/http/request.cpp:436
-#: ../../locales/../src/engine/http/request.cpp:780
-#, fuzzy, c-format
+#: ../../locales/../src/engine/http/request.cpp:406
+#: ../../locales/../src/engine/http/request.cpp:420
+#: ../../locales/../src/engine/http/request.cpp:438
+#: ../../locales/../src/engine/http/request.cpp:783
+#, c-format
 msgid "Malformed response: %s"
-msgstr "错误的响应数据: %s"
+msgstr "错误的响应: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2824
 #: ../../locales/../src/interface/manual_transfer.cpp:288
@@ -5317,7 +5315,7 @@ msgid ""
 "family"
 msgstr "在请求的地址集中，网络主机没有任何网络地址"
 
-#: ../../locales/../src/engine/proxy.cpp:498
+#: ../../locales/../src/engine/proxy.cpp:494
 #: ../../locales/../src/engine/socket.cpp:1076
 msgid "Network unreachable"
 msgstr "无法连接网络"
@@ -5330,7 +5328,7 @@ msgstr "从不"
 msgid "New &Folder"
 msgstr "新文件夹(&F)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:16
+#: ../../locales/../src/interface/menu_bar.cpp:53
 msgid "New &tab"
 msgstr "新标签(&T)"
 
@@ -5359,7 +5357,7 @@ msgid "New bookmark"
 msgstr "新建书签"
 
 #: ../../locales/../src/interface/LocalTreeView.cpp:1185
-#: ../../locales/../src/interface/RemoteListView.cpp:1346
+#: ../../locales/../src/interface/RemoteListView.cpp:1347
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1280
 msgid "New directory"
 msgstr "创建目录"
@@ -5399,7 +5397,7 @@ msgstr "节点名称没有关联地址"
 msgid "No category to export selected"
 msgstr "没有选定要导出的分类目录"
 
-#: ../../locales/../src/interface/QueueView.cpp:1879
+#: ../../locales/../src/interface/QueueView.cpp:1884
 msgid "No command given, aborting."
 msgstr "没有给出命令，中止操作。"
 
@@ -5451,7 +5449,7 @@ msgstr "没有搜索结果"
 msgid "No sites available"
 msgstr "没有站点可用"
 
-#: ../../locales/../src/engine/proxy.cpp:470
+#: ../../locales/../src/engine/proxy.cpp:466
 msgid "No supported SOCKS5 auth method"
 msgstr "不支持 SOCKS5 认证方式"
 
@@ -5475,18 +5473,18 @@ msgid "Nonrecoverable failure in name resolution"
 msgstr "名字解析中有无法恢复的错误"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:963
-#: ../../locales/../src/engine/server.cpp:604
-#: ../../locales/../src/engine/server.cpp:631
+#: ../../locales/../src/engine/server.cpp:601
+#: ../../locales/../src/engine/server.cpp:628
 #: ../../locales/../src/interface/manual_transfer.cpp:148
 #: ../../locales/../src/interface/manual_transfer.cpp:176
 #: ../../locales/../src/interface/manual_transfer.cpp:535
-#: ../../locales/../src/interface/queue.cpp:934
-#: ../../locales/../src/interface/queue.cpp:996
+#: ../../locales/../src/interface/queue.cpp:1000
+#: ../../locales/../src/interface/queue.cpp:1062
 msgid "Normal"
 msgstr "正常"
 
-#: ../../locales/../src/interface/queueview_failed.cpp:310
-#: ../../locales/../src/interface/queueview_failed.cpp:335
+#: ../../locales/../src/interface/queueview_failed.cpp:309
+#: ../../locales/../src/interface/queueview_failed.cpp:334
 msgid "Not all items could be requeued for transfer."
 msgstr "并非所有项目都可被重新列队以传输。"
 
@@ -5495,7 +5493,7 @@ msgstr "并非所有项目都可被重新列队以传输。"
 msgid "Not connected"
 msgstr "未连接"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2088
+#: ../../locales/../src/interface/RemoteListView.cpp:2089
 msgid "Not connected to any server"
 msgstr "没有连接到任何服务器"
 
@@ -5527,8 +5525,8 @@ msgstr "注意: 只适用于未加密的 FTP 连接。"
 msgid "Note: Using a generic proxy forces passive mode on FTP connections."
 msgstr "注意: 使用代理将强制使用被动模式进行 FTP 连接。"
 
-#: ../../locales/../src/engine/http/request.cpp:463
-#: ../../locales/../src/engine/http/request.cpp:649
+#: ../../locales/../src/engine/http/request.cpp:465
+#: ../../locales/../src/engine/http/request.cpp:652
 msgid "Null character in line"
 msgstr "行中有空字符"
 
@@ -5540,7 +5538,7 @@ msgstr "小数位数:"
 msgid "Number of retries has to be between 0 and 99."
 msgstr "重试的次数必须在 0 和 99 之间。"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:635
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:396
 msgid "O&pen"
 msgstr "打开(&P)"
 
@@ -5607,7 +5605,7 @@ msgstr "只使用普通 FTP (不安全)"
 msgid "Op&en file"
 msgstr "打开文件(&E)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:575
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:336
 msgid "Open directory in system's file manager"
 msgstr "在系统的文件管理器中打开目录"
 
@@ -5624,17 +5622,17 @@ msgstr "打开站点管理器。"
 msgid "Open the Site Manager. Right-click for a list of sites."
 msgstr "打开站点管理器。右击查看站点列表。"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:59
+#: ../../locales/../src/interface/menu_bar.cpp:74
 msgid ""
 "Open the directory access permissions dialog to configure the local "
 "directories FileZilla has access to."
 msgstr "打开目录访问权限对话框调整 FileZilla 的本地目录权限。"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:260
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:21
 msgid "Open the file."
 msgstr "打开文件。"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:55
+#: ../../locales/../src/interface/menu_bar.cpp:72
 msgid "Open the settings dialog of FileZilla"
 msgstr "打开 FileZilla 的设置对话框"
 
@@ -5644,18 +5642,18 @@ msgstr "打开为:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1668
 #: ../../locales/../src/interface/edithandler.cpp:1785
-#: ../../locales/../src/interface/LocalListView.cpp:1832
-#: ../../locales/../src/interface/LocalListView.cpp:1845
+#: ../../locales/../src/interface/LocalListView.cpp:1831
+#: ../../locales/../src/interface/LocalListView.cpp:1844
 #: ../../locales/../src/interface/search.cpp:1523
 #: ../../locales/../src/interface/search.cpp:1536
 msgid "Opening failed"
 msgstr "打开失败"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:18
+#: ../../locales/../src/interface/menu_bar.cpp:53
 msgid "Opens a new tab"
 msgstr "打开一个新的标签"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:9
+#: ../../locales/../src/interface/menu_bar.cpp:49
 msgid "Opens the Site Manager"
 msgstr "打开站点管理器"
 
@@ -5762,7 +5760,7 @@ msgstr "自己的构建类型: %s\n"
 msgid "Owner permissions"
 msgstr "所有者权限"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:403
+#: ../../locales/../src/interface/RemoteListView.cpp:401
 #: ../../locales/../src/interface/search.cpp:165
 msgid "Owner/Group"
 msgstr "所有者/组"
@@ -5865,7 +5863,7 @@ msgstr "权限"
 msgid "Permission denied"
 msgstr "权限不足"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:402
+#: ../../locales/../src/interface/RemoteListView.cpp:400
 #: ../../locales/../src/interface/search.cpp:164
 msgid "Permissions"
 msgstr "权限"
@@ -6001,7 +5999,7 @@ msgstr ""
 "请输入原始 FTP 命令。\n"
 "使用原始的 ftp 命令将会清空目录缓存。"
 
-#: ../../locales/../src/interface/QueueView.cpp:1873
+#: ../../locales/../src/interface/QueueView.cpp:1878
 msgid ""
 "Please enter the complete path of a program and its arguments. This command "
 "will be executed when the queue has finished processing.\n"
@@ -6015,12 +6013,12 @@ msgstr ""
 
 #: ../../locales/../src/interface/LocalListView.cpp:954
 #: ../../locales/../src/interface/LocalTreeView.cpp:1181
-#: ../../locales/../src/interface/RemoteListView.cpp:1333
+#: ../../locales/../src/interface/RemoteListView.cpp:1334
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1267
 msgid "Please enter the name of the directory which should be created:"
 msgstr "请输入将要创建的目录名:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2702
+#: ../../locales/../src/interface/RemoteListView.cpp:2704
 msgid "Please enter the name of the file which should be created:"
 msgstr "请输入将要创建的文件名:"
 
@@ -6211,7 +6209,7 @@ msgstr "打印版本信息至标准输出(stdout)并退出"
 msgid "Prioritize directories (default)"
 msgstr "目录优先(默认)"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Priority"
 msgstr "优先级"
 
@@ -6236,8 +6234,8 @@ msgstr "协议(&T):"
 msgid "Pro&xy password:"
 msgstr "代理密码(&X):"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:133
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:346
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:107
+#: ../../locales/../src/interface/menu_bar.cpp:111
 msgid "Process &Queue"
 msgstr "处理队列(&Q)"
 
@@ -6272,7 +6270,7 @@ msgstr "代理端口(&P):"
 msgid "Proxy &user:"
 msgstr "代理用户(&U):"
 
-#: ../../locales/../src/engine/proxy.cpp:479
+#: ../../locales/../src/engine/proxy.cpp:475
 msgid "Proxy authentication failed"
 msgstr "代理认证失败"
 
@@ -6286,22 +6284,22 @@ msgstr "代理握手失败: %s"
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr "代理主机以“[”开始，但没有闭合括号。"
 
-#: ../../locales/../src/engine/proxy.cpp:333
+#: ../../locales/../src/engine/proxy.cpp:329
 #, c-format
 msgid "Proxy reply: %s"
 msgstr "代理回复: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:520
+#: ../../locales/../src/engine/proxy.cpp:516
 #, c-format
 msgid "Proxy request failed. Reply from proxy: %s"
 msgstr "代理请求失败。代理服务器返回: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:390
+#: ../../locales/../src/engine/proxy.cpp:386
 #, c-format
 msgid "Proxy request failed: %s"
 msgstr "代理请求失败: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:544
+#: ../../locales/../src/engine/proxy.cpp:540
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr "代理请求失败: CONNECT 回复了未知的地址类型"
 
@@ -6321,7 +6319,7 @@ msgstr "公钥算法:"
 msgid "Public permissions"
 msgstr "公共权限"
 
-#: ../../locales/../src/interface/QueueView.cpp:2779
+#: ../../locales/../src/interface/QueueView.cpp:2784
 msgid "Queue has been fully processed"
 msgstr "队列已全部处理"
 
@@ -6340,7 +6338,7 @@ msgstr "队列: %s%s"
 msgid "Queue: empty"
 msgstr "队列: 空"
 
-#: ../../locales/../src/interface/QueueView.cpp:204
+#: ../../locales/../src/interface/QueueView.cpp:207
 msgid "Queued files"
 msgstr "列队的文件"
 
@@ -6357,16 +6355,16 @@ msgstr "快速搜索:"
 msgid "Quick search cannot be opened if comparing directories."
 msgstr "快速搜索无法在目录对比时使用。"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:413
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:174
 msgid "R&eboot system once"
 msgstr "重启系统(&E)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:122
+#: ../../locales/../src/interface/menu_bar.cpp:104
 msgid "R&emote directory tree"
 msgstr "远程目录(&E)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:469
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:487
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:230
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:248
 msgid "R&eset and requeue selected files"
 msgstr "重置并重新请求所选的文件(&E)"
 
@@ -6378,8 +6376,8 @@ msgstr "原始 FTP 命令"
 msgid "Re&ad"
 msgstr "读取(&A)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:276
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:320
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:37
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:81
 msgid "Re&fresh"
 msgstr "刷新(&F)"
 
@@ -6403,13 +6401,13 @@ msgstr "只读"
 
 #: ../../locales/../src/engine/http/httpcontrolsocket.cpp:44
 msgid "Reading from local file failed"
-msgstr ""
+msgstr "读取本地文件失败"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1114
 msgid "Really cancel current operation?"
 msgstr "真的要取消当前操作吗？"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1427
+#: ../../locales/../src/interface/RemoteListView.cpp:1428
 #: ../../locales/../src/interface/search.cpp:1259
 #, c-format
 msgid "Really delete %d directory with its contents from the server?"
@@ -6417,14 +6415,14 @@ msgid_plural ""
 "Really delete %d directories with their contents from the server?"
 msgstr[0] "确实要从服务器上删除 %d 个目录及其内容吗？"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1424
+#: ../../locales/../src/interface/RemoteListView.cpp:1425
 #: ../../locales/../src/interface/search.cpp:1256
 #, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
 msgstr[0] "确实要从服务器上删除 %d 个文件吗？"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1432
+#: ../../locales/../src/interface/RemoteListView.cpp:1433
 #: ../../locales/../src/interface/search.cpp:1264
 #, c-format
 msgid "Really delete %s and %s from the server?"
@@ -6438,11 +6436,11 @@ msgstr "真的要从服务器上删除所有选定的文件和/或目录吗？"
 msgid "Really delete all selected files and/or directories from your computer?"
 msgstr "真的要从您的计算机上删除所有选定的文件和/或目录吗？"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Reason"
 msgstr "原因"
 
-#: ../../locales/../src/interface/QueueView.cpp:2772
+#: ../../locales/../src/interface/QueueView.cpp:2777
 msgid "Reboot now"
 msgstr "马上重启"
 
@@ -6455,12 +6453,12 @@ msgstr "递归处理子目录(&U)"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "收到服务器的 TLS 警告: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:3078
+#: ../../locales/../src/engine/directorylistingparser.cpp:3165
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "收到了一个疑似使用 EBCDIC 编码的目录列表。"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2060
-#: ../../locales/../src/engine/directorylistingparser.cpp:2077
+#: ../../locales/../src/engine/directorylistingparser.cpp:2130
+#: ../../locales/../src/engine/directorylistingparser.cpp:2147
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "接收到超过 1000 个字符的行，中止操作。"
 
@@ -6548,7 +6546,7 @@ msgid "Remote certificate not trusted."
 msgstr "远程证书不被信任。"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2517
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Remote file"
 msgstr "远程文件"
 
@@ -6605,13 +6603,13 @@ msgstr "远程路径:"
 msgid "Remote site:"
 msgstr "远程站点:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:459
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:477
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:220
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:238
 msgid "Remove &all"
 msgstr "删除所有(&A)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:466
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:484
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:227
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:245
 msgid "Remove &selected"
 msgstr "删除选定(&S)"
 
@@ -6623,13 +6621,13 @@ msgstr "删除选定(&S)"
 msgid "Rename file"
 msgstr "重命名文件"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:525
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:593
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:286
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:354
 msgid "Rename selected directory"
 msgstr "重命令选定的文件夹"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:285
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:329
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:46
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:90
 msgid "Rename selected files and directories"
 msgstr "重命令选定的文件和文件夹"
 
@@ -6648,16 +6646,16 @@ msgstr "再次输入密码:"
 msgid "Reporting bugs and feature requests"
 msgstr "报告错误以及请求功能"
 
-#: ../../locales/../src/engine/proxy.cpp:381
+#: ../../locales/../src/engine/proxy.cpp:377
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr "请求失败 - 客户端未运行 identd (或从服务器端无法连通)"
 
-#: ../../locales/../src/engine/proxy.cpp:384
+#: ../../locales/../src/engine/proxy.cpp:380
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr "请求失败 - 客户端的 identd 无法确认用户标识字符串"
 
-#: ../../locales/../src/engine/proxy.cpp:378
+#: ../../locales/../src/engine/proxy.cpp:374
 msgid "Request rejected or failed"
 msgstr "请求被拒或失败"
 
@@ -6669,7 +6667,7 @@ msgstr "要求显式的 FTP over TLS"
 msgid "Require implicit FTP over TLS"
 msgstr "要求隐式的 FTP over TLS"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:480
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:241
 msgid "Reset and requeue &all"
 msgstr "重置并重新请求所有(&A)"
 
@@ -6677,7 +6675,7 @@ msgstr "重置并重新请求所有(&A)"
 msgid "Resolved protocol is unknown"
 msgstr "解析的协议为未知协议"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1086
+#: ../../locales/../src/engine/ControlSocket.cpp:1087
 #, c-format
 msgid "Resolving address of %s"
 msgstr "正在解析 %s 的地址"
@@ -6729,7 +6727,7 @@ msgstr "读取目录列表..."
 msgid "Retrieving external IP address from %s"
 msgstr "从 %s 得到外部 IP 地址"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:34
+#: ../../locales/../src/interface/menu_bar.cpp:61
 msgid "S&how files currently being edited..."
 msgstr "显示正在被编辑的文件(&H)..."
 
@@ -6737,7 +6735,7 @@ msgstr "显示正在被编辑的文件(&H)..."
 msgid "S&how the Site Manager on startup"
 msgstr "启动时显示站点管理器(&H)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:417
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:178
 msgid "S&hutdown system once"
 msgstr "关闭系统(&H)"
 
@@ -6745,11 +6743,11 @@ msgstr "关闭系统(&H)"
 msgid "S&top"
 msgstr "停止(&T)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:421
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:182
 msgid "S&uspend system once"
 msgstr "挂起系统(&U)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:96
+#: ../../locales/../src/interface/menu_bar.cpp:97
 msgid "S&ynchronized browsing"
 msgstr "同步浏览(&Y)"
 
@@ -6765,12 +6763,12 @@ msgstr "支持 SFTP"
 msgid "SOC&KS 4"
 msgstr "SOC&KS 4"
 
-#: ../../locales/../src/engine/proxy.cpp:144
+#: ../../locales/../src/engine/proxy.cpp:141
 #, c-format
 msgid "SOCKS4 proxy will connect to: %s"
 msgstr "SOCKS4 代理将连接到: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:172
+#: ../../locales/../src/engine/proxy.cpp:168
 msgid ""
 "SOCKS5 does not support usernames or passwords longer than 255 characters."
 msgstr "SOCKS5 不支持用户名或密码长度超过 255 个字符。"
@@ -6819,7 +6817,7 @@ msgstr "搜索目录(&D):"
 msgid "Search for files recursively."
 msgstr "递归搜索文件。"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:195
+#: ../../locales/../src/interface/menu_bar.cpp:146
 msgid "Search server for files"
 msgstr "在服务器上搜索文件"
 
@@ -6883,7 +6881,7 @@ msgid "Select file for exported filters"
 msgstr "选择用于导出过滤器的文件"
 
 #: ../../locales/../src/interface/export.cpp:39
-#: ../../locales/../src/interface/queue.cpp:1500
+#: ../../locales/../src/interface/queue.cpp:1566
 msgid "Select file for exported queue"
 msgstr "选择用于导出列队的文件"
 
@@ -7000,7 +6998,7 @@ msgstr "所选文件已在编辑"
 msgid "Selected filter only works for local files."
 msgstr "选择的过滤器只针对本地文件。"
 
-#: ../../locales/../src/interface/menu_bar.cpp:321
+#: ../../locales/../src/interface/menu_bar.cpp:436
 msgid ""
 "Selected global bookmark and current server use a different server type.\n"
 "Use site-specific bookmarks for this server."
@@ -7016,7 +7014,7 @@ msgstr "选择的端口通常是被其他协议使用。"
 msgid "Send FTP &keep-alive commands"
 msgstr "发出 FTP 保持连接指令(&K)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:200
+#: ../../locales/../src/interface/menu_bar.cpp:147
 msgid "Send custom command to the server otherwise not available"
 msgstr "发送自定义命令到服务器，如果可用的话"
 
@@ -7079,19 +7077,19 @@ msgid ""
 "Manager"
 msgstr "服务器可能需要帐号。请尝试在站点管理器里指定一个帐号"
 
-#: ../../locales/../src/engine/http/request.cpp:457
+#: ../../locales/../src/engine/http/request.cpp:459
 msgid "Server not sending proper line endings"
 msgstr "服务器没有发送正确的行结尾"
 
 #: ../../locales/../src/engine/http/digest.cpp:279
-#, c-format
+#, fuzzy, c-format
 msgid "Server requested unsupported digest authentication algorithm: %s"
-msgstr ""
+msgstr "服务器请求不支持的摘要认证算法: %s"
 
 #: ../../locales/../src/engine/http/digest.cpp:287
-#, c-format
+#, fuzzy, c-format
 msgid "Server requested unsupported quality-of-protection: %s"
-msgstr ""
+msgstr "服务器请求不支持的 quality-of-protection (QoP): %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:347
 msgid "Server returned empty path."
@@ -7103,9 +7101,9 @@ msgid ""
 "login type."
 msgstr "服务器传送了一个附加的登录提示。您需要使用交互式的登录方式。"
 
-#: ../../locales/../src/engine/http/request.cpp:307
+#: ../../locales/../src/engine/http/request.cpp:309
 msgid "Server sent data even before request headers were sent"
-msgstr ""
+msgstr "服务器在请求头发送前发送了数据"
 
 #: ../../locales/../src/engine/ftp/rawtransfer.cpp:347
 msgid "Server sent passive reply with unroutable address. Passive mode failed."
@@ -7117,10 +7115,10 @@ msgid ""
 "instead."
 msgstr "服务器发回了不可路由的地址。使用服务器地址代替。"
 
-#: ../../locales/../src/engine/http/request.cpp:404
-#: ../../locales/../src/engine/http/request.cpp:418
-#: ../../locales/../src/engine/http/request.cpp:436
-#: ../../locales/../src/engine/http/request.cpp:780
+#: ../../locales/../src/engine/http/request.cpp:406
+#: ../../locales/../src/engine/http/request.cpp:420
+#: ../../locales/../src/engine/http/request.cpp:438
+#: ../../locales/../src/engine/http/request.cpp:783
 msgid "Server sent too much data."
 msgstr "服务器发送了过多的数据。"
 
@@ -7153,7 +7151,7 @@ msgstr "服务器至本地密码:"
 msgid "Server&type:"
 msgstr "服务器类型(&T):"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Server/Local file"
 msgstr "服务器/本地文件"
 
@@ -7166,7 +7164,7 @@ msgstr "服务器:"
 msgid "Session details"
 msgstr "会话细节"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:360
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:121
 msgid "Set &Priority"
 msgstr "设定优先级(&P)"
 
@@ -7184,7 +7182,7 @@ msgstr "设置"
 msgid "Settings directory:"
 msgstr "设置文件目录:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:389
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:150
 msgid "Sh&ow notification bubble"
 msgstr "显示气泡通知(&O)"
 
@@ -7192,7 +7190,7 @@ msgstr "显示气泡通知(&O)"
 msgid "Show &raw directory listing"
 msgstr "显示目录列表(&R)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:227
+#: ../../locales/../src/interface/menu_bar.cpp:171
 msgid "Show &welcome dialog..."
 msgstr "显示欢迎对话框(&W)..."
 
@@ -7209,11 +7207,11 @@ msgstr "显示细节"
 msgid "Show details about custom date and time formats"
 msgstr "显示有关自定义日期时间格式的详细信息"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:638
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:399
 msgid "Show in file &manager"
 msgstr "在文件管理器中打开(&M)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:451
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:212
 msgid "Shows available TLS ciphers"
 msgstr "显示可用的 TLS 密码"
 
@@ -7221,7 +7219,7 @@ msgstr "显示可用的 TLS 密码"
 msgid "Shows this help dialog"
 msgstr "显示这个帮助对话框"
 
-#: ../../locales/../src/interface/QueueView.cpp:2768
+#: ../../locales/../src/interface/QueueView.cpp:2773
 msgid "Shutdown now"
 msgstr "马上关闭系统"
 
@@ -7304,7 +7302,7 @@ msgstr ""
 "站点特定书签需要将服务器保存在站点管理器中。\n"
 "将当前连接加入站点管理器码？"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Size"
 msgstr "大小"
 
@@ -7323,10 +7321,10 @@ msgstr "大小未知"
 msgid "Skip file"
 msgstr "跳过文件"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1156
-#: ../../locales/../src/engine/ControlSocket.cpp:1173
-#: ../../locales/../src/engine/ControlSocket.cpp:1199
-#: ../../locales/../src/engine/ControlSocket.cpp:1277
+#: ../../locales/../src/engine/ControlSocket.cpp:1157
+#: ../../locales/../src/engine/ControlSocket.cpp:1174
+#: ../../locales/../src/engine/ControlSocket.cpp:1200
+#: ../../locales/../src/engine/ControlSocket.cpp:1278
 #, c-format
 msgid "Skipping download of %s"
 msgstr "跳过下载 %s"
@@ -7336,10 +7334,10 @@ msgstr "跳过下载 %s"
 msgid "Skipping non-existing key file \"%s\""
 msgstr "跳过不存在的密匙文件“%s”"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1159
-#: ../../locales/../src/engine/ControlSocket.cpp:1176
-#: ../../locales/../src/engine/ControlSocket.cpp:1202
-#: ../../locales/../src/engine/ControlSocket.cpp:1280
+#: ../../locales/../src/engine/ControlSocket.cpp:1160
+#: ../../locales/../src/engine/ControlSocket.cpp:1177
+#: ../../locales/../src/engine/ControlSocket.cpp:1203
+#: ../../locales/../src/engine/ControlSocket.cpp:1281
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "跳过上传 %s"
@@ -7473,7 +7471,7 @@ msgid "State or province:"
 msgstr "州或省:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1139
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Status"
 msgstr "状态"
 
@@ -7483,7 +7481,7 @@ msgstr "状态"
 msgid "Status:"
 msgstr "状态:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:350
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:111
 msgid "Stop and remove &all"
 msgstr "停止并删除所有(&A)"
 
@@ -7491,7 +7489,7 @@ msgstr "停止并删除所有(&A)"
 msgid "Stop recursive operation"
 msgstr "停止递归操作"
 
-#: ../../locales/../src/engine/server.cpp:29
+#: ../../locales/../src/engine/server.cpp:28
 msgid "Storj - Decentralized Cloud Storage"
 msgstr "Storj - 去中心化的云端存储"
 
@@ -7515,7 +7513,7 @@ msgstr "成功的传输"
 msgid "Summary of test results:"
 msgstr "测试结果总结:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2776
+#: ../../locales/../src/interface/QueueView.cpp:2781
 msgid "Suspend now"
 msgstr "马上暂停"
 
@@ -7581,7 +7579,7 @@ msgstr "达到了系统打开文件数限制"
 msgid "System's network subsystem has failed"
 msgstr "系统的网络子系统出错"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:106
+#: ../../locales/../src/interface/menu_bar.cpp:100
 msgid "T&oolbar"
 msgstr "工具栏(&O)"
 
@@ -7597,7 +7595,7 @@ msgstr "TLS 连接建立，等待欢迎消息..."
 msgid "TLS connection established."
 msgstr "TLS 连接已建立。"
 
-#: ../../locales/../src/engine/proxy.cpp:507
+#: ../../locales/../src/engine/proxy.cpp:503
 msgid "TTL expired"
 msgstr "TTL 超时"
 
@@ -7609,11 +7607,11 @@ msgstr "目标文件已经存在"
 msgid "Target file:"
 msgstr "目标文件:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2720
+#: ../../locales/../src/interface/RemoteListView.cpp:2722
 msgid "Target filename already exists!"
 msgstr "目标文件名已经存在！"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1645
+#: ../../locales/../src/interface/RemoteListView.cpp:1646
 msgid "Target filename already exists, really continue?"
 msgstr "目标文件名已经存在，是否继续？"
 
@@ -7746,7 +7744,7 @@ msgstr ""
 "请输入一个新的名字:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1673
-#: ../../locales/../src/interface/LocalListView.cpp:1836
+#: ../../locales/../src/interface/LocalListView.cpp:1835
 #: ../../locales/../src/interface/search.cpp:1527
 #, c-format
 msgid ""
@@ -7777,7 +7775,7 @@ msgid "The file '%s' could not be loaded."
 msgstr "文件“%s”无法加载。"
 
 #: ../../locales/../src/interface/edithandler.cpp:1668
-#: ../../locales/../src/interface/LocalListView.cpp:1832
+#: ../../locales/../src/interface/LocalListView.cpp:1831
 #: ../../locales/../src/interface/search.cpp:1523
 #, c-format
 msgid ""
@@ -7788,7 +7786,7 @@ msgstr ""
 "系统中没有设置此类型文件关联的程序。"
 
 #: ../../locales/../src/interface/edithandler.cpp:1785
-#: ../../locales/../src/interface/LocalListView.cpp:1845
+#: ../../locales/../src/interface/LocalListView.cpp:1844
 #: ../../locales/../src/interface/search.cpp:1536
 #, c-format
 msgid ""
@@ -7915,7 +7913,7 @@ msgstr "无法下载新版本，请稍后重试。"
 msgid "The new version has been saved in your Downloads directory."
 msgstr "新版本已经被保存在您的 下载 文件夹。"
 
-#: ../../locales/../src/interface/QueueView.cpp:1566
+#: ../../locales/../src/interface/QueueView.cpp:1570
 msgid "The queue will not be saved."
 msgstr "队列将不会被保存。"
 
@@ -8017,11 +8015,11 @@ msgstr "不支持指定的地址集"
 msgid "The specified network name is no longer available"
 msgstr "指定的网络名称已不可用"
 
-#: ../../locales/../src/interface/QueueView.cpp:2771
+#: ../../locales/../src/interface/QueueView.cpp:2776
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "除非您按下取消，否则系统将会马上重启。"
 
-#: ../../locales/../src/interface/QueueView.cpp:2767
+#: ../../locales/../src/interface/QueueView.cpp:2772
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "除非您按下取消，否则系统将会马上关闭。"
 
@@ -8072,7 +8070,7 @@ msgid ""
 "you have and tests your configuration."
 msgstr "本向导会帮助您正确地配置任何您使用的路由器和防火墙，并且测试您的配置。"
 
-#: ../../locales/../src/interface/queue.cpp:1214
+#: ../../locales/../src/interface/queue.cpp:1280
 msgid "Time"
 msgstr "时间"
 
@@ -8156,7 +8154,7 @@ msgstr "开/关远程目录树显示"
 msgid "Toggles the display of the transfer queue"
 msgstr "开/关传输队列显示"
 
-#: ../../locales/../src/engine/http/request.cpp:470
+#: ../../locales/../src/engine/http/request.cpp:472
 msgid "Too long header line"
 msgstr "标题行太长"
 
@@ -8179,7 +8177,7 @@ msgstr "传输"
 msgid "Transfer &direction"
 msgstr "传输目录(&D)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:142
+#: ../../locales/../src/interface/menu_bar.cpp:116
 msgid "Transfer &type"
 msgstr "传输类型(&T)"
 
@@ -8214,7 +8212,7 @@ msgstr "正在传输"
 msgid "Transfers"
 msgstr "传输"
 
-#: ../../locales/../src/interface/QueueView.cpp:2650
+#: ../../locales/../src/interface/QueueView.cpp:2655
 msgid "Transfers finished"
 msgstr "传输完成"
 
@@ -8285,8 +8283,8 @@ msgstr "为当前语言使用系统默认设置(&S)"
 msgid "USER@&HOST"
 msgstr "USER@&HOST"
 
-#: ../../locales/../src/engine/proxy.cpp:387
-#: ../../locales/../src/engine/proxy.cpp:516
+#: ../../locales/../src/engine/proxy.cpp:383
+#: ../../locales/../src/engine/proxy.cpp:512
 #, c-format
 msgid "Unassigned error code %d"
 msgstr "未知错误代码 %d"
@@ -8310,7 +8308,7 @@ msgstr "未知"
 msgid "Unknown FTP proxy type, cannot generate login sequence."
 msgstr "未知 FTP 代理服务器类型，无法生成登录过程。"
 
-#: ../../locales/../src/engine/proxy.cpp:438
+#: ../../locales/../src/engine/proxy.cpp:434
 #, c-format
 msgid "Unknown SOCKS protocol version: %d"
 msgstr "未知 SOCKS 协议版本: %d"
@@ -8334,7 +8332,7 @@ msgstr "未知错误 %u"
 msgid "Unknown host key"
 msgstr "未定义的快捷键"
 
-#: ../../locales/../src/engine/proxy.cpp:446
+#: ../../locales/../src/engine/proxy.cpp:442
 #, c-format
 msgid ""
 "Unknown protocol version of SOCKS Username/Password Authentication "
@@ -8346,7 +8344,7 @@ msgid ""
 "Unknown root element, the file does not appear to be generated by FileZilla."
 msgstr "未知的根元素，该文件似乎不是由 FileZilla 生成的。"
 
-#: ../../locales/../src/engine/http/request.cpp:571
+#: ../../locales/../src/engine/http/request.cpp:574
 msgid "Unknown transfer encoding"
 msgstr "未知的传输编码方式"
 
@@ -8402,11 +8400,11 @@ msgstr "上传限制: 无"
 msgid "Upload search results"
 msgstr "上传搜索结果"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:565
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:326
 msgid "Upload selected directory"
 msgstr "上传选定的目录"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:246
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:7
 msgid "Upload selected files and directories"
 msgstr "上传选定的文件和目录"
 
@@ -8643,7 +8641,7 @@ msgstr "写入(&I)"
 msgid "Wrong external IP address"
 msgstr "错误的外部 IP 地址"
 
-#: ../../locales/../src/engine/http/request.cpp:643
+#: ../../locales/../src/engine/http/request.cpp:646
 msgid "Wrong line endings"
 msgstr "错误的行结尾"
 
@@ -8730,7 +8728,7 @@ msgid ""
 "continue?"
 msgstr "您选择编辑超过 10 个文件，真的要继续吗？"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1800
+#: ../../locales/../src/interface/LocalListView.cpp:1799
 #: ../../locales/../src/interface/search.cpp:1489
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
@@ -8856,7 +8854,7 @@ msgid ""
 "should work properly."
 msgstr "连接到其它服务应该没有问题，文件传输也能正常工作了。"
 
-#: ../../locales/../src/interface/QueueView.cpp:2775
+#: ../../locales/../src/interface/QueueView.cpp:2780
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "如果不按下 取消，系统将会马上挂起。"
 
@@ -9014,7 +9012,7 @@ msgstr "所有者可读"
 msgid "owner writeable"
 msgstr "所有者可写"
 
-#: ../../locales/../src/engine/proxy.cpp:64
+#: ../../locales/../src/engine/proxy.cpp:63
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1454
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1470
 #: ../../locales/../src/engine/tlssocket_impl.cpp:1486
