@@ -275,6 +275,13 @@ void CServer::SetProtocol(ServerProtocol serverProtocol)
 	}
 
 	m_protocol = serverProtocol;
+
+	// Clear out parameters not supported by the current protocol
+	std::map<std::string, std::wstring> oldParams;
+	std::swap(extraParameters_, oldParams);
+	for (auto const& param : oldParams) {
+		SetExtraParameter(param.first, param.second);
+	}
 }
 
 bool CServer::SetHost(std::wstring const& host, unsigned int port)
