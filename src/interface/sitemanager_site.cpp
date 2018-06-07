@@ -20,6 +20,8 @@
 #include "commctrl.h"
 #endif
 
+#include <array>
+
 BEGIN_EVENT_TABLE(CSiteManagerSite, wxNotebook)
 EVT_CHOICE(XRCID("ID_PROTOCOL"), CSiteManagerSite::OnProtocolSelChanged)
 EVT_CHOICE(XRCID("ID_LOGONTYPE"), CSiteManagerSite::OnLogontypeSelChanged)
@@ -637,6 +639,25 @@ bool CSiteManagerSite::Verify(bool predefined)
 			wxMessageBoxEx(_("You need to enter both a local and a remote path to enable synchronized browsing for this site."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
+	}
+
+	std::vector<std::pair<wxStaticText*, wxTextCtrl*>>::iterator paramIt[ParameterSection::section_count];
+	for (int i = 0; i < ParameterSection::section_count; ++i) {
+		paramIt[i] = extraParameters_[i].begin();
+	}
+
+	std::vector<ParameterTraits> const& parameterTraits = ExtraServerParameterTraits(protocol);
+	for (auto const& trait : parameterTraits) {
+		if (!(trait.flags_ & ParameterTraits::optional)) {
+			auto & controls = *paramIt[trait.section_];
+			if (controls.second->GetValue().empty()) {
+				controls.second->SetFocus();
+				wxMessageBoxEx(_("You need to enter a value."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				return false;
+			}
+		}
+
+		++paramIt[trait.section_];
 	}
 
 	return true;

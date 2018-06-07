@@ -230,6 +230,7 @@
     <ClCompile Include="sftp_crypt_info_dlg.cpp" />
     <ClCompile Include="sitemanager.cpp" />
     <ClCompile Include="sitemanager_dialog.cpp" />
+    <ClCompile Include="sitemanager_site.cpp" />
     <ClCompile Include="sizeformatting.cpp" />
     <ClCompile Include="speedlimits_dialog.cpp" />
     <ClCompile Include="splitter.cpp" />
@@ -352,6 +353,7 @@
     <ClInclude Include="sftp_crypt_info_dlg.h" />
     <ClInclude Include="sitemanager.h" />
     <ClInclude Include="sitemanager_dialog.h" />
+    <ClInclude Include="sitemanager_site.h" />
     <ClInclude Include="sizeformatting.h" />
     <ClInclude Include="speedlimits_dialog.h" />
     <ClInclude Include="splitter.h" />
