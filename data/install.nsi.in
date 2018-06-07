@@ -61,8 +61,11 @@
   !include "WinVer.nsh"
   !include "FileFunc.nsh"
   !include "Memento.nsh"
+  !include "StrFunc.nsh"
   !include "@srcdir@\process_running.nsh"
   !include "@srcdir@\UAC.nsh"
+
+  ${StrRep}
 
 ;--------------------------------
 ; Installer's VersionInfo
@@ -776,7 +779,12 @@ Function RunUninstaller
     StrCpy $R2 "$R2 /S"
   ${EndIf}
 
-  ExecWait '"$R1" $R2 _?=$INSTDIR'
+  StrCpy $R3 $R1 1
+  ${If} $R3 == '"'
+    ExecWait '$R1 $R2 _?=$INSTDIR'
+  ${Else}
+    ExecWait '"$R1" $R2 _?=$INSTDIR'
+  ${EndIf}
 
   IfErrors no_remove_uninstaller
 
@@ -1129,7 +1137,9 @@ Section "FileZilla Client" SecMain
 
   WriteRegDWORD SHCTX "Software\FileZilla Client" "Updated" $PERFORM_UPDATE
 
-  WriteRegExpandStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "UninstallString" "$INSTDIR\uninstall.exe"
+  ${StrRep} $R0 "$INSTDIR\uninstall.exe" '"' '""'
+  WriteRegExpandStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "UninstallString" '"$R0"'
+
   WriteRegExpandStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "InstallLocation" "$INSTDIR"
   WriteRegStr   SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client"   "DisplayName"    "FileZilla Client ${VERSION}"
   WriteRegStr   SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client"   "DisplayIcon"    "$INSTDIR\FileZilla.exe"
