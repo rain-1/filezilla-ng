@@ -198,6 +198,8 @@ void CSiteManagerSite::SetProtocol(ServerProtocol protocol)
 		pProtocol->SetSelection(mainProtocolListIndex_[FTP]);
 	}
 	UpdateHostFromDefaults(GetProtocol());
+
+	previousProtocol_ = protocol;
 }
 
 ServerProtocol CSiteManagerSite::GetProtocol() const
@@ -756,19 +758,24 @@ void CSiteManagerSite::UpdateSite(Site &site)
 		site.server_.server.SetBypassProxy(false);
 	}
 
-	site.server_.server.ClearExtraParameters();
+	UpdateExtraParameters(site.server_.server);
+}
 
+void CSiteManagerSite::UpdateExtraParameters(CServer & server)
+{
+	server.ClearExtraParameters();
+	
 	std::vector<std::pair<wxStaticText*, wxTextCtrl*>>::iterator paramIt[ParameterSection::section_count];
 	for (int i = 0; i < ParameterSection::section_count; ++i) {
 		paramIt[i] = extraParameters_[i].begin();
 	}
-	auto const& traits = ExtraServerParameterTraits(protocol);
+	auto const& traits = ExtraServerParameterTraits(server.GetProtocol());
 	for (auto const& trait : traits) {
 		if (trait.section_ == ParameterSection::credentials) {
 			continue;
 		}
 
-		site.server_.server.SetExtraParameter(trait.name_, paramIt[trait.section_]->second->GetValue().ToStdWstring());
+		server.SetExtraParameter(trait.name_, paramIt[trait.section_]->second->GetValue().ToStdWstring());
 		++paramIt[trait.section_];
 	}
 }
@@ -853,8 +860,6 @@ void CSiteManagerSite::SetSite(Site const& site, bool predefined)
 			}
 		}
 
-		auto const& traits = ExtraServerParameterTraits(protocol);
-
 		if (site.server_.credentials.encrypted_) {
 			xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, wxString());
 			xrc_call(*this, "ID_ENCRYPTIONKEY", &wxTextCtrl::ChangeValue, wxString());
@@ -883,19 +888,7 @@ void CSiteManagerSite::SetSite(Site const& site, bool predefined)
 			}
 		}
 
-
-		std::vector<std::pair<wxStaticText*, wxTextCtrl*>>::iterator paramIt[ParameterSection::section_count];
-		for (int i = 0; i < ParameterSection::section_count; ++i) {
-			paramIt[i] = extraParameters_[i].begin();
-		}
-		for (auto const& trait : traits) {
-			if (trait.section_ == ParameterSection::credentials) {
-				continue;
-			}
-
-			paramIt[trait.section_]->second->ChangeValue(site.server_.server.GetExtraParameter(trait.name_));
-			++paramIt[trait.section_];
-		}
+		SetExtraParameters(site.server_.server);
 
 		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, site.server_.credentials.keyFile_);
 		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, site.m_comments);
@@ -966,13 +959,41 @@ void CSiteManagerSite::SetSite(Site const& site, bool predefined)
 	}
 }
 
+void CSiteManagerSite::SetExtraParameters(CServer const& server)
+{
+	std::vector<std::pair<wxStaticText*, wxTextCtrl*>>::iterator paramIt[ParameterSection::section_count];
+	for (int i = 0; i < ParameterSection::section_count; ++i) {
+		paramIt[i] = extraParameters_[i].begin();
+	}
+	auto const& traits = ExtraServerParameterTraits(server.GetProtocol());
+	for (auto const& trait : traits) {
+		if (trait.section_ == ParameterSection::credentials) {
+			continue;
+		}
+
+		std::wstring value = server.GetExtraParameter(trait.name_);
+		paramIt[trait.section_]->second->ChangeValue(value.empty() ? trait.default_ : value);
+		++paramIt[trait.section_];
+	}
+}
+
 void CSiteManagerSite::OnProtocolSelChanged(wxCommandEvent&)
 {
 	auto const protocol = GetProtocol();
 	UpdateHostFromDefaults(protocol);
 
+	CServer server;
+	if (previousProtocol_ != UNKNOWN) {
+		server.SetProtocol(previousProtocol_);
+		UpdateExtraParameters(server);
+	}
+	server.SetProtocol(protocol);
+	SetExtraParameters(server);
+
 	auto const logonType = GetLogonType();
 	SetControlVisibility(protocol, logonType);
+
+	previousProtocol_ = protocol;
 }
 
 void CSiteManagerSite::OnLogontypeSelChanged(wxCommandEvent&)
@@ -1059,6 +1080,5 @@ void CSiteManagerSite::UpdateHostFromDefaults(ServerProtocol const protocol)
 			xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, std::get<0>(newDefault));
 		}
 		xrc_call(*this, "ID_HOST", &wxTextCtrl::SetHint, std::get<1>(newDefault));
-		previousProtocol_ = protocol;
 	}
 }

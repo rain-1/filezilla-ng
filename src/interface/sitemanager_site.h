@@ -29,6 +29,9 @@ private:
 
 	void UpdateHostFromDefaults(ServerProtocol const protocol);
 
+	void SetExtraParameters(CServer const& server);
+	void UpdateExtraParameters(CServer & server);
+
 	DECLARE_EVENT_TABLE()
 	void OnProtocolSelChanged(wxCommandEvent& event);
 	void OnLogontypeSelChanged(wxCommandEvent& event);
@@ -37,7 +40,6 @@ private:
 	void OnRemoteDirBrowse(wxCommandEvent& event);
 	void OnKeyFileBrowse(wxCommandEvent&);
 	void OnGenerateEncryptionKey(wxCommandEvent&);
-
 
 	CSiteManagerDialog & sitemanager_;
 
