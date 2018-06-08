@@ -375,6 +375,10 @@ void CSiteManagerSite::SetControlVisibility(ServerProtocol protocol, LogonType t
 
 		++it;
 	}
+
+	auto encSizer = xrc_call(*this, "ID_ENCRYPTION", &wxWindow::GetContainingSizer);
+	encSizer->Show(encSizer->GetItemCount() - 1, paramIt[ParameterSection::host] == extraParameters_[ParameterSection::host].cbegin());
+
 	for (int i = 0; i < ParameterSection::section_count; ++i) {
 		for (; paramIt[i] != extraParameters_[i].cend(); ++paramIt[i]) {
 			paramIt[i]->first->Hide();
