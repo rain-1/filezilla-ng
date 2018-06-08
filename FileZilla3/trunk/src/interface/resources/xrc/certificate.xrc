@@ -171,59 +171,73 @@
                   <label>Session details</label>
                   <orient>wxVERTICAL</orient>
                   <object class="sizeritem">
-                    <object class="wxFlexGridSizer">
-                      <cols>2</cols>
+                    <object class="wxGridBagSizer">
                       <vgap>1d</vgap>
                       <hgap>3d</hgap>
                       <object class="sizeritem">
                         <object class="wxStaticText">
                           <label>Host:</label>
                         </object>
+                        <cellpos>0,0</cellpos>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_HOST">
                           <label>&lt;Host:port&gt;</label>
                         </object>
+                        <cellpos>0,1</cellpos>
+                        <cellspan>0,4</cellspan>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
                           <label>Protocol:</label>
                         </object>
+                        <cellpos>1,0</cellpos>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_PROTOCOL">
                           <label>&lt;protocol&gt;</label>
                         </object>
+                        <cellpos>1,1</cellpos>
+                      </object>
+                      <object class="spacer">
+                        <size>5,0d</size>
+                        <cellpos>1,2</cellpos>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
                           <label>Key exchange:</label>
                         </object>
+                        <cellpos>2,0</cellpos>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_KEYEXCHANGE">
                           <label>&lt;key exchange&gt;</label>
                         </object>
+                        <cellpos>2,1</cellpos>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
                           <label>Cipher:</label>
                         </object>
+                        <cellpos>1,3</cellpos>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_CIPHER">
                           <label>&lt;cipher&gt;</label>
                         </object>
+                        <cellpos>1,4</cellpos>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
                           <label>MAC:</label>
                         </object>
+                        <cellpos>2,3</cellpos>
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_MAC">
                           <label>&lt;mac&gt;</label>
                         </object>
+                        <cellpos>2,4</cellpos>
                       </object>
                     </object>
                     <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
