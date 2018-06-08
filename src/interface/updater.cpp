@@ -91,7 +91,9 @@ void CUpdater::Init()
 		return;
 	}
 
-	raw_version_information_ = COptions::Get()->GetOption(OPTION_UPDATECHECK_NEWVERSION);
+	if (!LongTimeSinceLastCheck()) {
+		raw_version_information_ = COptions::Get()->GetOption(OPTION_UPDATECHECK_NEWVERSION);
+	}
 
 	UpdaterState s = ProcessFinishedData(FZ_AUTOUPDATECHECK);
 
