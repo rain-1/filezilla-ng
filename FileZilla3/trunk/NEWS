@@ -10,6 +10,15 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.34.0-rc1 (2018-06-08)
+
++ Refactoring of the Site Manager internals
++ Moved protocol selection to the top in the Site Manager
++ Adjusted spacing in the Site Manager
++ Slightly reduced height of certificate details dialog
+- MSW: Properly quote the uninstall command in the registry
+- Updated builtin pugixml to version 1.9
+
 3.33.0 (2018-05-07)
 
 - MSW: Microsoft broke the ICopyHook interface in Windows 1803. Until Microsoft fixes the bug in Windows, drag & drop from FileZilla into Explorer will not work on Windows 1803.
