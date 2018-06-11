@@ -323,7 +323,7 @@ void DebugInit(HKEY Key)
 
 //---------------------------------------------------------------------------
 extern "C" int APIENTRY
-DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
+DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID)
 {
 	if (Reason == DLL_PROCESS_ATTACH) {
 		GInstance = HInstance;
@@ -433,20 +433,18 @@ bool RegisterServer(bool AllUsers)
 
 	if ((RegOpenKeyEx(RootKey, _T("Software\\Classes"), 0, KEY_WRITE, &HKey) ==
 		ERROR_SUCCESS) &&
-		(RegCreateKeyEx(HKey, _T("CLSID"), 0, NULL,
-		REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &HKey, &Unused) ==
+		(RegCreateKeyEx(HKey, _T("CLSID"), 0, nullptr,
+		REG_OPTION_NON_VOLATILE, KEY_WRITE, nullptr, &HKey, &Unused) ==
 		ERROR_SUCCESS))
 	{
-		if (RegCreateKey(HKey, ClassID, &HKey) == ERROR_SUCCESS)
-		{
-			RegSetValueEx(HKey, NULL, 0, REG_SZ,
+		if (RegCreateKey(HKey, ClassID, &HKey) == ERROR_SUCCESS) {
+			RegSetValueEx(HKey, nullptr, 0, REG_SZ,
 				reinterpret_cast<const unsigned char*>(DRAG_EXT_NAME), sizeof(DRAG_EXT_NAME));
 
-			if (RegCreateKey(HKey, _T("InProcServer32"), &HKey) == ERROR_SUCCESS)
-			{
+			if (RegCreateKey(HKey, _T("InProcServer32"), &HKey) == ERROR_SUCCESS) {
 				wchar_t Filename[MAX_PATH];
 				GetModuleFileName(GInstance, Filename, MAX_PATH);
-				RegSetValueEx(HKey, NULL, 0, REG_SZ,
+				RegSetValueEx(HKey, nullptr, 0, REG_SZ,
 					reinterpret_cast<LPBYTE>(Filename), (_tcslen(Filename) + 1) * sizeof(TCHAR));
 
 				RegSetValueEx(HKey, _T("ThreadingModel"), 0, REG_SZ,
@@ -460,15 +458,15 @@ bool RegisterServer(bool AllUsers)
 			0, KEY_WRITE, &HKey) == ERROR_SUCCESS) &&
 			(RegCreateKeyEx(HKey,
 			_T("directory\\shellex\\CopyHookHandlers\\FileZilla3CopyHook"),
-			0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &HKey,
+			0, nullptr, REG_OPTION_NON_VOLATILE, KEY_WRITE, nullptr, &HKey,
 			&Unused) == ERROR_SUCCESS))
 		{
-			RegSetValueEx(HKey, NULL, 0, REG_SZ,
+			RegSetValueEx(HKey, nullptr, 0, REG_SZ,
 				reinterpret_cast<LPBYTE>(ClassID), (_tcslen(ClassID) + 1) * 2);
 			RegCloseKey(HKey);
 
 			if ((RegCreateKeyEx(RootKey, DRAG_EXT_REG_KEY,
-				0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &HKey,
+				0, nullptr, REG_OPTION_NON_VOLATILE, KEY_WRITE, nullptr, &HKey,
 				&Unused) == ERROR_SUCCESS))
 			{
 				unsigned long Value = 1;
@@ -480,7 +478,7 @@ bool RegisterServer(bool AllUsers)
 				Result = true;
 			}
 
-			SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
+			SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
 		}
 	}
 
@@ -495,10 +493,12 @@ STDEXPORTAPI DllRegisterServer()
 	DEBUG_MSG("DllRegisterServer enter");
 
 	HRESULT Result;
-	if (RegisterServer(true) || RegisterServer(false))
+	if (RegisterServer(true) || RegisterServer(false)) {
 		Result = S_OK;
-	else
+	}
+	else {
 		Result = SELFREG_E_CLASS;
+	}
 
 	DEBUG_MSG("DllRegisterServer leave");
 
@@ -512,19 +512,22 @@ static bool RegDeleteEmptyKey(HKEY root, LPCTSTR name)
 	HKEY key;
 
 	// Can't use SHDeleteEmptyKey, it gives a linking error
-	if (RegOpenKeyEx(root, name, 0, KEY_READ, &key) != ERROR_SUCCESS)
+	if (RegOpenKeyEx(root, name, 0, KEY_READ, &key) != ERROR_SUCCESS) {
 		return false;
+	}
 
 	DWORD subKeys, values;
-	int ret = RegQueryInfoKey(key, 0, 0, 0, &subKeys, 0, 0, &values, 0, 0, 0,0);
+	int ret = RegQueryInfoKey(key, nullptr, nullptr, nullptr, &subKeys, nullptr, nullptr, &values, nullptr, nullptr, nullptr, nullptr);
 
 	RegCloseKey(key);
 
-	if (ret != ERROR_SUCCESS)
+	if (ret != ERROR_SUCCESS) {
 		return false;
+	}
 
-	if (subKeys || values)
+	if (subKeys || values) {
 		return false;
+	}
 
 	RegDeleteKey(root, name);
 
@@ -592,7 +595,7 @@ bool UnregisterServer(bool AllUsers)
 	RegDeleteEmptyKey(RootKey, DRAG_EXT_REG_KEY);
 	RegDeleteEmptyKey(RootKey, DRAG_EXT_REG_KEY_PARENT);
 
-	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
+	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
 
 	DEBUG_MSG("UnregisterServer leave");
 
@@ -696,8 +699,7 @@ STDMETHODIMP CShellExtClassFactory::CreateInstance(LPUNKNOWN UnkOuter,
 	// initialized.
 
 	CShellExt* ShellExt = new CShellExt();  //Create the CShellExt object
-
-	if (NULL == ShellExt) {
+	if (!ShellExt) {
 		return E_OUTOFMEMORY;
 	}
 
@@ -705,7 +707,7 @@ STDMETHODIMP CShellExtClassFactory::CreateInstance(LPUNKNOWN UnkOuter,
 }
 
 //---------------------------------------------------------------------------
-STDMETHODIMP CShellExtClassFactory::LockServer(BOOL Lock)
+STDMETHODIMP CShellExtClassFactory::LockServer(BOOL)
 {
 	DEBUG_MSG("LockServer");
 
@@ -720,7 +722,7 @@ CShellExt::CShellExt()
 
 	FDataObj = NULL;
 
-	FMutex = CreateMutex(NULL, false, DRAG_EXT_MUTEX);
+	FMutex = CreateMutex(nullptr, false, DRAG_EXT_MUTEX);
 
 	GRefThisDll++;
 
@@ -797,15 +799,13 @@ STDMETHODIMP_(ULONG) CShellExt::Release()
 	return 0;
 }
 
-//---------------------------------------------------------------------------
-STDMETHODIMP CShellExt::Initialize(LPCITEMIDLIST IDFolder,
-								   LPDATAOBJECT DataObj, HKEY RegKey)
+STDMETHODIMP CShellExt::Initialize(LPCITEMIDLIST, LPDATAOBJECT DataObj, HKEY)
 {
 	DEBUG_MSG("CShellExt::Initialize enter");
 
-	if (FDataObj != NULL) {
+	if (FDataObj != nullptr) {
 		FDataObj->Release();
-		FDataObj = NULL;
+		FDataObj = nullptr;
 	}
 
 	// duplicate the object pointer and registry handle
@@ -821,9 +821,11 @@ STDMETHODIMP CShellExt::Initialize(LPCITEMIDLIST IDFolder,
 }
 
 //---------------------------------------------------------------------------
-STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT wFlags,
-											LPCTSTR SrcFile, DWORD SrcAttribs, LPCTSTR DestFile, DWORD DestAttribs)
+STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND, UINT wFunc, UINT wFlags,
+											LPCTSTR SrcFile, DWORD, LPCTSTR DestFile, DWORD)
 {
+	(void)wFlags;
+
 	UINT Result = IDYES;
 
 	if (!GEnabled) {
