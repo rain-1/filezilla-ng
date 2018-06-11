@@ -816,16 +816,16 @@ std::tuple<std::wstring, std::wstring> GetDefaultHost(ServerProtocol protocol)
 	switch (protocol)
 	{
 	case AZURE_FILE:
-		return {L"file.core.windows.net", L""};
+		return std::tuple<std::wstring, std::wstring>{L"file.core.windows.net", L""};
 	case AZURE_BLOB:
-		return {L"blob.core.windows.net", L""};
+		return std::tuple<std::wstring, std::wstring>{L"blob.core.windows.net", L""};
 	case GOOGLE:
-		return {L"storage.googleapis.com", L""};
+		return std::tuple<std::wstring, std::wstring>{L"storage.googleapis.com", L""};
 	case S3:
-		return {L"s3.amazonaws.com", L""};
+		return std::tuple<std::wstring, std::wstring>{L"s3.amazonaws.com", L""};
 	default:
 		break;
 	}
 
-	return {};
+	return std::tuple<std::wstring, std::wstring>{};
 }
