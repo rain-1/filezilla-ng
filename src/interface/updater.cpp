@@ -91,7 +91,7 @@ void CUpdater::Init()
 		return;
 	}
 
-	if (!LongTimeSinceLastCheck()) {
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) != 0 || !LongTimeSinceLastCheck()) {
 		raw_version_information_ = COptions::Get()->GetOption(OPTION_UPDATECHECK_NEWVERSION);
 	}
 
