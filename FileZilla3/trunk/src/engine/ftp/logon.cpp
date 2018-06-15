@@ -655,7 +655,7 @@ bool CFtpLogonOpData::PrepareLoginSequence()
 		std::wstring proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		std::wstring proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
 		std::wstring host = currentServer_.Format(ServerFormat::with_optional_port, credentials_);
-		std::wstring user = user = (credentials_.logonType_ == LogonType::anonymous) ? L"anonymous" : currentServer_.GetUser();
+		std::wstring user = (credentials_.logonType_ == LogonType::anonymous) ? L"anonymous" : currentServer_.GetUser();
 		std::wstring account = credentials_.account_;
 		fz::replace_substrings(proxyUser, L"%", L"%%");
 		fz::replace_substrings(proxyPass, L"%", L"%%");
