@@ -318,8 +318,9 @@ bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 
 	CancelLabelEdit();
 
-	wxString focused;
-	std::list<wxString> selectedNames;
+	std::wstring focused;
+	int focusedItem = -1;
+	std::vector<std::wstring> selectedNames;
 	bool ensureVisible = false;
 	if (m_dir != dirname) {
 		ResetSearchPrefix();
@@ -342,7 +343,7 @@ bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 	}
 	else {
 		// Remember which items were selected
-		selectedNames = RememberSelectedItems(focused);
+		selectedNames = RememberSelectedItems(focused, focusedItem);
 	}
 
 	if (m_pFilelistStatusBar) {
@@ -456,7 +457,7 @@ regular_dir:
 		RefreshComparison();
 	}
 
-	ReselectItems(selectedNames, focused, ensureVisible);
+	ReselectItems(selectedNames, focused, focusedItem, ensureVisible);
 
 	RefreshListOnly();
 
@@ -1154,8 +1155,9 @@ void CLocalListView::ApplyCurrentFilter()
 		return;
 	}
 
-	wxString focused;
-	const std::list<wxString>& selectedNames = RememberSelectedItems(focused);
+	int focusedItem = -1;
+	std::wstring focused;
+	std::vector<std::wstring> const& selectedNames = RememberSelectedItems(focused, focusedItem);
 
 	if (m_pFilelistStatusBar) {
 		m_pFilelistStatusBar->UnselectAll();
@@ -1209,16 +1211,16 @@ void CLocalListView::ApplyCurrentFilter()
 		RefreshComparison();
 	}
 
-	ReselectItems(selectedNames, focused);
+	ReselectItems(selectedNames, focused, focusedItem);
 
 	if (!IsComparing()) {
 		RefreshListOnly();
 	}
 }
 
-std::list<wxString> CLocalListView::RememberSelectedItems(wxString& focused)
+std::vector<std::wstring> CLocalListView::RememberSelectedItems(std::wstring& focused, int & focusedItem)
 {
-	std::list<wxString> selectedNames;
+	std::vector<std::wstring> selectedNames;
 	// Remember which items were selected
 #ifndef __WXMSW__
 	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
@@ -1234,28 +1236,30 @@ std::list<wxString> CLocalListView::RememberSelectedItems(wxString& focused)
 			const CLocalFileData &data = m_fileData[m_indexMapping[item]];
 			if (data.comparison_flags != fill) {
 				if (data.dir) {
-					selectedNames.push_back(_T("d") + data.name);
+					selectedNames.push_back(L"d" + data.name);
 				}
 				else {
-					selectedNames.push_back(_T("-") + data.name);
+					selectedNames.push_back(L"-" + data.name);
 				}
 			}
 			SetSelection(item, false);
 		}
 	}
 
+	focusedItem = -1;
 	int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
 	if (item >= 0 && static_cast<size_t>(item) < m_indexMapping.size()) {
 		const CLocalFileData &data = m_fileData[m_indexMapping[item]];
 		if (data.comparison_flags != fill) {
 			focused = data.name;
 		}
+		focusedItem = item;
 	}
 
 	return selectedNames;
 }
 
-void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxString focused, bool ensureVisible)
+void CLocalListView::ReselectItems(const std::vector<std::wstring>& selectedNames, std::wstring focused, int focusedItem, bool ensureVisible)
 {
 	if (!GetItemCount()) {
 		return;
@@ -1278,6 +1282,13 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 				return;
 			}
 		}
+
+		if (focusedItem != -1 && GetItemCount() != 0) {
+			if (focusedItem >= GetItemCount()) {
+				--focusedItem;
+			}
+			SetItemState(focusedItem, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+		}
 		return;
 	}
 
@@ -1293,6 +1304,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 					EnsureVisible(i);
 				}
 				focused.clear();
+				focusedItem = -1;
 			}
 			if (data.dir && selectedName == (_T("d") + data.name)) {
 				if (firstSelected == -1) {
@@ -1324,7 +1336,15 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 			SetItemState(firstSelected, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
 		}
 		else {
-			SetItemState(0, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+			if (focusedItem != -1 && GetItemCount() != 0) {
+				if (focusedItem >= GetItemCount()) {
+					--focusedItem;
+				}
+				SetItemState(focusedItem, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+			}
+			else {
+				SetItemState(0, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+			}
 		}
 	}
 }
@@ -1511,10 +1531,11 @@ void CLocalListView::RefreshFile(const wxString& file)
 		m_pFilelistStatusBar->AddFile(data.size);
 	}
 
-	wxString focused;
-	std::list<wxString> selectedNames;
+	std::wstring focused;
+	int focusedItem = -1;
+	std::vector<std::wstring> selectedNames;
 	if (IsComparing()) {
-		selectedNames = RememberSelectedItems(focused);
+		selectedNames = RememberSelectedItems(focused, focusedItem);
 		if (!m_originalIndexMapping.empty()) {
 			m_indexMapping.clear();
 			m_originalIndexMapping.swap(m_indexMapping);
@@ -1556,7 +1577,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 		if (m_pFilelistStatusBar) {
 			m_pFilelistStatusBar->UnselectAll();
 		}
-		ReselectItems(selectedNames, focused);
+		ReselectItems(selectedNames, focused, focusedItem);
 	}
 }
 

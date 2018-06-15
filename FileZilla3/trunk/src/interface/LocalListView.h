@@ -48,12 +48,12 @@ protected:
 	virtual wxListItemAttr* OnGetItemAttr(long item) const;
 
 	// Clears all selections and returns the list of items that were selected
-	std::list<wxString> RememberSelectedItems(wxString& focused);
+	std::vector<std::wstring> RememberSelectedItems(std::wstring & focused, int & focusedItem);
 
 	// Select a list of items based in their names.
 	// Sort order may not change between call to RememberSelectedItems and
 	// ReselectItems
-	void ReselectItems(const std::list<wxString>& selectedNames, wxString focused, bool ensureVisible = false);
+	void ReselectItems(std::vector<std::wstring> const& selectedNames, std::wstring focused, int focusedItem, bool ensureVisible = false);
 
 #ifdef __WXMSW__
 	void DisplayDrives();
