@@ -271,8 +271,9 @@ bool PathExpand(wxString& cmd)
 
 bool RenameFile(wxWindow* parent, wxString dir, wxString from, wxString to)
 {
-	if (dir.Right(1) != _T("\\") && dir.Right(1) != _T("/"))
+	if (dir.Right(1) != _T("\\") && dir.Right(1) != _T("/")) {
 		dir += wxFileName::GetPathSeparator();
+	}
 
 #ifdef __WXMSW__
 	to = to.Left(255);
@@ -303,7 +304,17 @@ bool RenameFile(wxWindow* parent, wxString dir, wxString from, wxString to)
 	op.hwnd = (HWND)parent->GetHandle();
 	op.wFunc = FO_RENAME;
 	op.fFlags = FOF_ALLOWUNDO;
-	return SHFileOperation(&op) == 0;
+
+	wxWindow * focused = wxWindow::FindFocus();
+
+	bool res = SHFileOperation(&op);
+
+	if (focused) {
+		// Microsoft introduced a bug in Windows 10 1803: Calling SHFileOperation resets focus.
+		focused->SetFocus();
+	}
+	
+	return res;
 #else
 	if ((to.Find('/') != -1) ||
 		(to.Find('*') != -1) ||
