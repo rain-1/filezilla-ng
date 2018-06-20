@@ -80,7 +80,12 @@ int CHttpFileTransferOpData::ParseResponse()
 int CHttpFileTransferOpData::OpenFile()
 {
 	LogMessage(MessageType::Debug_Verbose, L"CHttpFileTransferOpData::OpenFile");
-	file_.close();
+	if (file_.opened()) {
+		if (transferSettings_.fsync) {
+			file_.fsync();
+		}
+		file_.close();
+	}
 
 	controlSocket_.CreateLocalDir(localFile_);
 
@@ -225,5 +230,14 @@ int CHttpFileTransferOpData::SubcommandResult(int prevResult, COpData const&)
 	if (opState == filetransfer_transfer) {
 		return FZ_REPLY_CONTINUE;
 	}
+
+	if (opState == filetransfer_waittransfer) {
+		if (file_.opened()) {
+			if (transferSettings_.fsync) {
+				file_.fsync();
+			}
+		}
+	}
+
 	return prevResult;
 }

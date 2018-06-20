@@ -511,8 +511,7 @@ void CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath
 									std::wstring const& remoteFile, bool download,
 									CFileTransferCommand::t_transferSettings const& transferSettings)
 {
-	auto pData = std::make_unique<CSftpFileTransferOpData>(*this, download, localFile, remoteFile, remotePath);
-	pData->transferSettings_ = transferSettings;
+	auto pData = std::make_unique<CSftpFileTransferOpData>(*this, download, localFile, remoteFile, remotePath, transferSettings);
 	Push(std::move(pData));
 }
 

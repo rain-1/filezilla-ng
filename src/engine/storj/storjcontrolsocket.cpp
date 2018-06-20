@@ -74,8 +74,7 @@ void CStorjControlSocket::FileTransfer(std::wstring const& localFile, CServerPat
 						 std::wstring const& remoteFile, bool download,
 						 CFileTransferCommand::t_transferSettings const& transferSettings)
 {
-	auto pData = std::make_unique<CStorjFileTransferOpData>(*this, download, localFile, remoteFile, remotePath);
-	pData->transferSettings_ = transferSettings;
+	auto pData = std::make_unique<CStorjFileTransferOpData>(*this, download, localFile, remoteFile, remotePath, transferSettings);
 	Push(std::move(pData));
 }
 

@@ -22,7 +22,7 @@ enum filetransferStates
 class CFtpFileTransferOpData final : public CFileTransferOpData, public CFtpTransferOpData, public CFtpOpData
 {
 public:
-	CFtpFileTransferOpData(CFtpControlSocket& controlSocket, bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path);
+	CFtpFileTransferOpData(CFtpControlSocket& controlSocket, bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path, CFileTransferCommand::t_transferSettings const& settings);
 
 	virtual int Send() override;
 	virtual int ParseResponse() override;

@@ -316,6 +316,7 @@ bool CUpdater::CreateConnectCommand(std::wstring const& url)
 bool CUpdater::CreateTransferCommand(std::wstring const& url, std::wstring const& local_file)
 {
 	CFileTransferCommand::t_transferSettings transferSettings;
+	transferSettings.fsync = true;
 
 	ServerWithCredentials s;
 	CServerPath path;

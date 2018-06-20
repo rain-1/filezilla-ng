@@ -97,7 +97,7 @@ public:
 class CFileTransferOpData : public COpData
 {
 public:
-	CFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path);
+	CFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path, CFileTransferCommand::t_transferSettings const& settings);
 
 	// Transfer data
 	std::wstring localFile_, remoteFile_;
