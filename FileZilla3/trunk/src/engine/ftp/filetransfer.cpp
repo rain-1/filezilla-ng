@@ -8,8 +8,8 @@
 #include <libfilezilla/file.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
-CFtpFileTransferOpData::CFtpFileTransferOpData(CFtpControlSocket& controlSocket, bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
-	: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
+CFtpFileTransferOpData::CFtpFileTransferOpData(CFtpControlSocket& controlSocket, bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path, CFileTransferCommand::t_transferSettings const& settings)
+	: CFileTransferOpData(is_download, local_file, remote_file, remote_path, settings)
 	, CFtpOpData(controlSocket)
 {
 }

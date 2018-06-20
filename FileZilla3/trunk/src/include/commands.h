@@ -156,6 +156,7 @@ public:
 	{
 	public:
 		bool binary{true};
+		bool fsync{};
 	};
 
 	// For uploads, set download to false.

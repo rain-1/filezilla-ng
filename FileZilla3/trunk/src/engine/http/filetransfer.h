@@ -8,8 +8,8 @@ class CServerPath;
 class CHttpFileTransferOpData final : public CFileTransferOpData, public CHttpOpData
 {
 public:
-	CHttpFileTransferOpData(CHttpControlSocket & controlSocket, bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
-		: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
+	CHttpFileTransferOpData(CHttpControlSocket & controlSocket, bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path, CFileTransferCommand::t_transferSettings const& settings)
+		: CFileTransferOpData(is_download, local_file, remote_file, remote_path, settings)
 		, CHttpOpData(controlSocket)
 	{}
 

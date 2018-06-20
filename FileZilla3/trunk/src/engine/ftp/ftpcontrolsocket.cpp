@@ -441,8 +441,7 @@ void CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath 
 {
 	LogMessage(MessageType::Debug_Verbose, L"CFtpControlSocket::FileTransfer()");
 
-	auto pData = std::make_unique<CFtpFileTransferOpData>(*this, download, localFile, remoteFile, remotePath);
-	pData->transferSettings_ = transferSettings;
+	auto pData = std::make_unique<CFtpFileTransferOpData>(*this, download, localFile, remoteFile, remotePath, transferSettings);
 	pData->binary = transferSettings.binary;
 	Push(std::move(pData));
 }

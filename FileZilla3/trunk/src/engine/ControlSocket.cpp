@@ -434,10 +434,11 @@ int CControlSocket::CheckOverwriteFile()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-CFileTransferOpData::CFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
+CFileTransferOpData::CFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path, CFileTransferCommand::t_transferSettings const& settings)
 	: COpData(Command::transfer)
 	, localFile_(local_file), remoteFile_(remote_file), remotePath_(remote_path)
 	, download_(is_download)
+	, transferSettings_(settings)
 {
 }
 
