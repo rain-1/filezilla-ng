@@ -1,4 +1,5 @@
 dist_noinst_DATA = install.nsi.in \
+		dllcopy.sh \
 		makezip.sh.in \
 		nsis_appid.dll \
 		nsis_appid.txt \
@@ -14,7 +15,19 @@ if LOCALES
   MAYBE_LANGFILES = installlangfiles.nsh uninstalllangfiles.nsh
 endif
 
-noinst_DATA = $(MAYBE_LANGFILES) libtoolexecutablesubdir.nsh
+noinst_DATA = $(MAYBE_LANGFILES) libtoolexecutablesubdir.nsh dll_install.nsh
+
+dll_install.nsh: Makefile
+	@rm -f dll_install.nsh
+	@rm -f dll_uninstall.nsh
+	@rm -rf dlls
+	@mkdir -p dlls
+	"$(srcdir)/dllcopy.sh" "$(top_builddir)/src/interface" filezilla.exe $(OBJDUMP) $(CXX) $$PATH
+	"$(srcdir)/dllcopy.sh" "$(top_builddir)/src/putty" fzsftp.exe $(OBJDUMP) $(CXX) $$PATH
+	"$(srcdir)/dllcopy.sh" "$(top_builddir)/src/putty" fzputtygen.exe $(OBJDUMP) $(CXX) $$PATH
+	if test -f "${top_builddir}/src/storj/fzstorj.exe"; then \
+		"$(srcdir)/dllcopy.sh" "$(top_builddir)/src/storj" fzstorj.exe $(OBJDUMP) $(CXX) $$PATH; \
+	fi
 
 installlangfiles.nsh: Makefile
 	rm -f $@
@@ -44,7 +57,7 @@ libtoolexecutablesubdir.nsh: Makefile
 	fi
 	rm -f test_libtool_exedir.o test_libtool_exedir.c
 
-CLEANFILES = installlangfiles.nsh uninstalllangfiles.nsh libtoolexecutablesubdir.nsh
+CLEANFILES = installlangfiles.nsh uninstalllangfiles.nsh libtoolexecutablesubdir.nsh dll_install.nsh dll_uninstall.nsh
 
 endif
 
@@ -53,4 +66,7 @@ dist_desktopentry_DATA = filezilla.desktop
 
 appdatadir = $(datadir)/appdata
 dist_appdata_DATA = filezilla.appdata.xml
+
+clean-local:
+	rm -rf dlls
 
