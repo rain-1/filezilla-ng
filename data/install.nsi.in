@@ -1079,6 +1079,8 @@ Section "FileZilla Client" SecMain
   File "${top_srcdir}\NEWS"
   File "${top_srcdir}\AUTHORS"
 
+  !include "dll_install.nsh"
+
   DetailPrint "Installing resource files"
   SetDetailsPrint none
 
@@ -1566,6 +1568,8 @@ Section "Uninstall"
   Delete "$INSTDIR\GPL.html"
   Delete "$INSTDIR\NEWS"
   Delete "$INSTDIR\AUTHORS"
+
+  !include "dll_uninstall.nsh"
 
   DetailPrint "Removing resource files"
   SetDetailsPrint none
