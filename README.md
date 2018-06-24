@@ -1,21 +1,21 @@
-                               FileZilla Client
-                               ----------------
+# filezilla-ng
 
-                      Copyright (C) 2004-2018  Tim Kosse
-                        https://filezilla-project.org/
+* Copyright (C) 2004-2018  Tim Kosse
+* Copyright (C) 2018-      Raymond Nicholson
+* https://github.com/rain-1/filezilla-ng
 
-Overview
---------
+# Overview
 
-FileZilla Client is a free, open source FTP, FTPS and SFTP client.
+filezilla-ng Client is a free, open source FTP, FTPS and SFTP client forked from Filezilla on 24th June 2018.
 
+```
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
+```
 
-Features
---------
+# Features
 
 - Supports FTP, FTP over SSL/TLS (FTPS) and SSH File Transfer Protocol (SFTP)
 - Cross-platform
@@ -37,8 +37,7 @@ Features
 - Remote file search
 - Tabbed interface to connect to multiple servers
 
-Supported systems
------------------
+# Supported systems
 
 FileZilla has been tested on the following platforms:
 - Windows 7, 8.1 and 10 (9x/ME/NT4/2000/XP are not supported)
@@ -52,11 +51,3 @@ Tested architectures:
 - powerpc
 
 FileZilla may be able to run on additional systems and architectures.
-
-Contact
--------
-
-Project website: https://filezilla-project.org
-IRC:             #filezilla on chat.freenode.net
-Project leader:  mailto:tim.kosse@filezilla-project.org (Support requests per
-                 mail will be ignored)
