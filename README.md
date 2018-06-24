@@ -1,5 +1,7 @@
 # filezilla-ng
 
+A fresh and clean fork of the FTP client filezilla
+
 * Copyright (C) 2004-2018  Tim Kosse
 * Copyright (C) 2018-      Raymond Nicholson
 * https://github.com/rain-1/filezilla-ng
